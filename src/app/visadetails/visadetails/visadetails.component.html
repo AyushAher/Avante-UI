@@ -1,0 +1,162 @@
+<layout>
+    <div class="right_col" role="main">
+        <div class="container">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>Visa Details</h3>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+            <div class="col-md-12 col-sm-12 ">
+                <form [formGroup]="travelDetailform" (ngSubmit)="onSubmit()">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <label for="engineername">Distributor</label>
+                            <select formControlName="distId" id="" class="form-control" #distributorid (input)="getservicerequest($event.target.value);getengineers($event.target.value)"
+                                [ngClass]="{'is-invalid':submitted && f.distId.errors }">
+                                <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
+                            </select>
+
+                            <div *ngIf="submitted && f.distId.errors" class="invalid-feedback">
+                                <div *ngIf="f.distId.errors.required">Distributor is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="engineername">Engineer Name</label>
+
+                            <select name="" placeholder="Engineer Name" formControlName="engineerid" id=""
+                                class="form-control" [ngClass]="{'is-invalid':submitted && f.engineerid.errors }">
+                                <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname +" "+ i.lname}}</option>
+                            </select>
+
+                            <div *ngIf="submitted && f.engineerid.errors" class="invalid-feedback">
+                                <div *ngIf="f.engineerid.errors.required">Engineer Name is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label for="name">Service Request No</label>
+                            <select name="" placeholder="Service Request Id" formControlName="servicerequestid" id=""
+                                class="form-control" [ngClass]="{'is-invalid':submitted && f.servicerequestid.errors }">
+                                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
+                            </select>
+
+                            <div *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
+                                <div *ngIf="f.servicerequestid.errors.required">Service Request Id is required</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label for="minor_Unit">Country</label>
+                            <select name="" placeholder="Country" formControlName="country" id="" class="form-control"
+                                [ngClass]="{'is-invalid':submitted && f.country.errors }">
+                                <option *ngFor="let i of country" value="{{i.id}}">{{i.name}}</option>
+                            </select>
+                            <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
+                                <div *ngIf="f.country.errors.required">Country is required</div>
+                            </div>
+
+                        </div>
+
+              
+                        <div class="col-md-4 col-sm-4">
+                            <label for="minor_Unit">Start Date</label>
+                            <input bsDatepicker formControlName="startdate" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.startdate.errors}" />
+
+                            <div *ngIf="submitted && f.startdate.errors" class="invalid-feedback">
+                                <div *ngIf="f.startdate.errors.required">start Date is required</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label for="minor_Unit">End Date</label>
+                            <input type="text" bsDatepicker formControlName="enddate" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.enddate.errors}" />
+
+                            <div *ngIf="submitted && f.enddate.errors" class="invalid-feedback">
+                                <div *ngIf="f.enddate.errors.required">End Date is required</div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-4 col-sm-4">
+                            <label for="travelclass">Visa Type</label>
+
+                            <select placeholder="Travel Class" formControlName="visatypeid" class="form-control"
+                                [ngClass]="{'is-invalid':submitted && f.visatypeid.errors }">
+
+                                <option *ngFor="let i of visatype" value="{{i.listTypeItemId}}">{{i.itemname}}
+                                </option>
+
+                            </select>
+
+                            <div *ngIf="submitted && f.visatypeid.errors" class="invalid-feedback">
+                                <div *ngIf="f.visatypeid.errors.required">Visa Type is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label for="departuredate">Visa Cost</label>
+                            <input type="number" formControlName="visacost" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.visacost.errors }" />
+
+                            <div *ngIf="submitted && f.visacost.errors" class="invalid-feedback">
+                                <div *ngIf="f.visacost.errors.required">Visa Cost is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+
+                            <label for="airline">Request Type</label>
+
+                            <select name="" placeholder="Request Type" formControlName="requesttype" id=""
+                                class="form-control" [ngClass]="{'is-invalid':submitted && f.requesttype.errors }">
+                                <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
+                                </option>
+                            </select>
+
+                            <div *ngIf="submitted && f.requesttype.errors" class="invalid-feedback">
+                                <div *ngIf="f.requesttype.errors.required">Request Type is required</div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-md-4 col-sm-4">
+                            <label for=""></label>
+                            <div class="checkbox">
+                                <label for="isactive" style="font-size:15px; display: none;">
+                                    <input type="checkbox" formControlName="isactive" class="" />
+                                    Active
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6" style="padding:10px;">
+                            <button class="btn btn-primary">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Submit
+                            </button>
+                            <a routerLink="/visadetailslist" class="btn btn-secondary"
+                                style="margin-left: 10px;">Back</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</layout>

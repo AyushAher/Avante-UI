@@ -1,0 +1,71 @@
+
+<!--<div class="right_col" role="main">
+  <div class="container">
+
+  </div>
+</div>-->
+<script src="node_modules/ngx-bootstrap/datepicker/bs-datepicker.css"></script>
+<div class="model" id="model" role="dialog">
+    <div class="model-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Add Enginneer Action</h4>
+          <button type="button"
+                  class="close"
+                  aria-label="Close"
+                  data-dismiss="modal" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="actionForm" (ngSubmit)="onValueSubmit()">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-6 form-group">
+                <label for="engineername">Engineer</label>
+                <select formControlName="engineerid" readonly disabled="disabled" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.engineerid.errors }">
+                  <!--<option value="0">--All--</option>-->
+                  <option *ngFor="let c of engineerlist" value={{c.id}}>
+                    {{c.fname}} {{c.lname}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-sm-6 form-group">
+                <label for="actiondate">Action Date</label>
+                <input bsDatepicker formControlName="actiondate" class="form-control" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <label for="comments">Comments</label>
+                <input type="text" formControlName="comments" class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="actiontaken">Action taken</label>
+                <select formControlName="actiontaken" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }">
+                  <!--<option value="0">--All--</option>-->
+                  <option *ngFor="let st of actiontakenlist" value={{st.listTypeItemId}}>
+                    {{st.itemname}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <label for="teamviewrecording">TeamViewer</label>
+                <input type="text" formControlName="teamviewrecording" class="form-control" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+              <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

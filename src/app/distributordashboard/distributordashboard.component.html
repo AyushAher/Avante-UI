@@ -1,0 +1,226 @@
+<layout>
+    <div class="az-content az-content-dashboard">
+        <div class="container">
+            <div class="az-content-body">
+                <div class="row row-sm mg-b-20">
+                    <div class="col-lg-7 ht-lg-100p">
+                        <div class="card card-dashboard-one">
+                            <div class="card-header">
+                                <div>
+                                    <h6 class="card-title"> Service Contract Revenue</h6>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn active">Day</button>
+                                    <button class="btn">Week</button>
+                                    <button class="btn">Month</button>
+                                </div>
+                            </div><!-- card-header -->
+                            <div class="card-body">
+                                <div class="card-body-top">
+                                    <div>
+                                        <label class="mg-b-0">AMC</label>
+                                        <h2>$10,359</h2>
+                                    </div>
+                                    <div>
+                                        <label class="mg-b-0">Preventive</label>
+                                        <h2>$10,895</h2>
+                                    </div>
+                                    <div>
+                                        <label class="mg-b-0">BreakDown</label>
+                                        <h2>$11,359</h2>
+                                    </div>
+                                    <div>
+                                        <label class="mg-b-0">On Call</label>
+                                        <h2>$13,359</h2>
+                                    </div>
+                                    <div>
+                                        <label class="mg-b-0">Planned</label>
+                                        <h2>$10,396</h2>
+                                    </div>
+                                </div><!-- card-body-top -->
+                                <div class="flot-chart-wrapper">
+                                    <div id="flotChart" class="flot-chart"></div>
+                                </div><!-- flot-chart-wrapper -->
+                            </div><!-- card-body -->
+                        </div><!-- card -->
+                    </div><!-- col -->
+                    <div class="col-lg-5 mg-t-20 mg-lg-t-0">
+                        <div class="row row-sm">
+                            <div class="col-sm-6">
+                                <div class="card card-dashboard-two">
+                                    <div class="card-header">
+                                        <h6>3350 </h6>
+                                        <p> Service Request Raised </p>
+                                    </div><!-- card-header -->
+                                    <div class="card-body">
+                                        <div class="chart-wrapper">
+                                            <div id="flotChart1" class="flot-chart"></div>
+                                        </div><!-- chart-wrapper -->
+                                    </div><!-- card-body -->
+                                </div><!-- card -->
+                            </div><!-- col -->
+                            <div class="col-sm-6 mg-t-20 mg-sm-t-0">
+                                <div class="card card-dashboard-two">
+                                    <div class="card-header">
+                                        <h6>86000</h6>
+                                        <p>Instruments Installed</p>
+                                    </div><!-- card-header -->
+                                    <div class="card-body">
+                                        <div class="chart-wrapper">
+                                            <div id="flotChart2" class="flot-chart"></div>
+                                        </div><!-- chart-wrapper -->
+                                    </div><!-- card-body -->
+                                </div><!-- card -->
+                            </div><!-- col -->
+                            <div class="col-sm-12 mg-t-20">
+                                <div class="card card-dashboard-three">
+                                    <div class="card-header" style="max-width: 100%;">
+                                        <p>Instruments With Highest Service Request</p>
+                                        <h6>16,869 </h6>
+
+                                    </div><!-- card-header -->
+                                    <div class="card-body">
+                                        <div class="chart">
+                                            <canvas id="chartBar5"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- row -->
+                    </div>
+                    <!--col -->
+                </div><!-- row -->
+
+                <div class="row row-sm mg-b-20">
+                    <div class="col-lg-4">
+                        <div class="card card-dashboard-pageviews">
+                            <div class="card-header">
+                                <h6 class="card-title"> Engineers Handing Service Request</h6>
+                            </div><!-- card-header -->
+                            <div class="card-body">
+                                <div class="az-list-item">
+                                    <div>
+                                        <h6>Ayush Aher</h6>
+                                        <span>Forbes</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="tx-primary">55</h6>
+                                        <span>31.74%</span>
+                                    </div>
+                                </div><!-- list-group-item -->
+                                <div class="az-list-item">
+                                    <div>
+                                        <h6>Aditya Aher</h6>
+                                        <span>Dangote</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="tx-primary">15</h6>
+                                        <span>28.53%</span>
+                                    </div>
+                                </div><!-- list-group-item -->
+                                <div class="az-list-item">
+                                    <div>
+                                        <h6>Kishore Gund</h6>
+                                        <span>Lafarage</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="tx-primary">8</h6>
+                                        <span>25.35% </span>
+                                    </div>
+                                </div><!-- list-group-item -->
+                                <div class="az-list-item">
+                                    <div>
+                                        <h6>Ajay</h6>
+                                        <span>OBA Cement</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="tx-primary">35</h6>
+                                        <span>23.17%</span>
+                                    </div>
+                                </div><!-- list-group-item -->
+                                <div class="az-list-item">
+                                    <div>
+                                        <h6>Atul</h6>
+                                        <span>Customer</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="tx-primary">100</h6>
+                                        <span>22.21%</span>
+                                    </div>
+                                </div><!-- list-group-item -->
+                            </div><!-- card-body -->
+                        </div><!-- card -->
+
+                    </div><!-- col -->
+                    <div class="col-lg-8 mg-t-20 mg-lg-t-0">
+                        <div class="card card-dashboard-four">
+                            <div class="card-header">
+                                <h6 class="card-title">Revenue by Customer</h6>
+                            </div><!-- card-header -->
+                            <div class="card-body row">
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <div class="chart">
+                                        <canvas id="chartDonut"></canvas>
+                                    </div>
+                                </div><!-- col -->
+                                <div class="col-md-6 col-lg-5 mg-lg-l-auto mg-t-20 mg-md-t-0">
+                                    <div class="az-traffic-detail-item">
+                                        <div>
+                                            <span>Forbes</span>
+                                            <span>50<span> (25%)</span></span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-purple wd-25p" role="progressbar"
+                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div><!-- progress -->
+                                    </div>
+                                    <div class="az-traffic-detail-item">
+                                        <div>
+                                            <span>Lafarage </span>
+                                            <span>40<span> (20%)</span></span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-primary wd-20p" role="progressbar"
+                                                aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div><!-- progress -->
+                                    </div>
+                                    <div class="az-traffic-detail-item">
+                                        <div>
+                                            <span> OBA Cement</span>
+                                            <span>60<span> (30%)</span></span>
+                                        </div>
+
+                                        <div class="progress">
+                                            <div class="progress-bar bg-info wd-30p" role="progressbar"
+                                                aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div><!-- progress -->
+                                    </div>
+                                    <div class="az-traffic-detail-item">
+                                        <div>
+                                            <span>Dangote </span>
+                                            <span>30<span> (15%)</span></span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-teal wd-15p" role="progressbar"
+                                                aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div><!-- progress -->
+                                    </div>
+                                    <div class="az-traffic-detail-item">
+                                        <div>
+                                            <span> Customer</span>
+                                            <span>20<span> (10%)</span></span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-gray-500 wd-10p" role="progressbar"
+                                                aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div><!-- progress -->
+                                    </div>
+                                </div><!-- col -->
+                            </div><!-- card-body -->
+                        </div><!-- card-dashboard-four -->
+                    </div><!-- col -->
+                </div><!-- row -->
+            </div><!-- az-content-body -->
+        </div>
+    </div><!-- az-content -->
+</layout>

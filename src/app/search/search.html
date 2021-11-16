@@ -1,0 +1,46 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active"
+             id="ex1-tab-3"
+             data-mdb-toggle="tab"
+             routerLink="/search" routerLinkActive="active"
+             role="tab"
+             aria-controls="ex1-tabs-3"
+             aria-selected="false">Search</a>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+      <form ngNoForm [formGroup]="form" #sform (ngSubmit)="onSubmit()">
+        <div class="row" style="margin-left: 0px;">
+          <div class="col-sm-4">
+            <label for="search">Serial No.</label>
+            <input type="text" formControlName="search" class="form-control"
+                   [ngClass]="{ 'is-invalid': submitted && f.search.errors }" />
+            <div *ngIf="f.search.errors" class="invalid-feedback">
+              <div *ngIf="f.search.errors.required">Enter keyword is required</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <label for="search">Customer Site</label>
+            <select formControlName="custSiteId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
+              <option value="0">--Select--</option>
+              <option *ngFor="let config of customersite" value={{config.id}}>
+                {{config.customerSite}}
+              </option>
+            </select>
+          </div><div class="col-sm-4" style="margin-top:25px;">
+            <button class="btn btn-sm btn-success button" style="margin: 10px;" type="submit"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+
+      <div class="col-md-12 col-sm-12" *ngIf="visible">
+        <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                         [columnDefs]="columnDefs" [rowData]="instrumentList" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+      </div>
+    </div>
+  </div>
+</layout>

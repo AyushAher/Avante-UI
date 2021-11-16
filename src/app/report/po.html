@@ -1,0 +1,271 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+
+      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active"
+             id="ex1-tab-1"
+             data-mdb-toggle="tab"
+             routerLink="/po/{{ poid }}" routerLinkActive="active"
+             role="tab"
+             aria-controls="ex1-tabs-1"
+             aria-selected="true">Zoho PO</a>
+        </li>
+        <!--<li class="nav-item" role="presentation">
+          <a class="nav-link" [ngClass]="{ 'disabled': customerId==null }"
+             id="ex1-tab-2"
+             data-mdb-toggle="tab"
+             routerLink="/contactlist/C/{{ customerId }}" routerLinkActive="active"
+             role="tab"
+             aria-controls="ex1-tabs-2"
+             aria-selected="false">Contact</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" [ngClass]="{ 'disabled': customerId==null }"
+             id="ex1-tab-3"
+             data-mdb-toggle="tab"
+             routerLink="/customersitelist/{{ customerId }}" routerLinkActive="active"
+             role="tab"
+             aria-controls="ex1-tabs-3"
+             aria-selected="false">Customer Site</a>
+        </li>-->
+      </ul>
+      <div class="clearfix"></div>
+
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="POform" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="customername">Customer Name</label>
+              <select formControlName="customername" class="form-control" #mySelect (change)="onConfigChange(mySelect.value)" [ngClass]="{ 'is-invalid': submitted && f.configtype.errors }">
+                <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
+                  {{congfig.itemname}}
+                </option>
+              </select><div *ngIf="f.customername.errors.required">customername is required</div>
+            </div>
+
+            <div class="col-md-3 col-sm-3">
+              <label for="purchaseorder">Purchase Order</label>
+              <input type="text" formControlName="purchaseorder" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.purchaseorder.errors }" />
+              <div *ngIf="submitted && f.purchaseorder.errors" class="invalid-feedback">
+                <div *ngIf="f.purchaseorder.errors.required">purchaseorder is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="country">Country</label>
+              <select formControlName="Countryid" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let coutry of countries" value={{coutry.id}}>
+                  {{coutry.name}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
+                <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
+                  <div *ngIf="f.country.errors.required">country is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="purchasedate">Purchase Date</label>
+              <input type="text" formControlName="purchasedate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.purchasedate.errors }" />
+              <div *ngIf="submitted && f.purchasedate.errors" class="invalid-feedback">
+                <div *ngIf="f.purchasedate.errors.required">Purchase Date is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="purchaseordate">Purchase Order Date</label>
+              <input type="text" formControlName="purchaseordate" bsDatepicker class="form-control" [ngClass]="{ 'is-invalid': submitted && f.purchaseordate.errors }" />
+              <div *ngIf="submitted && f.purchaseordate.errors" class="invalid-feedback">
+                <div *ngIf="f.purchaseordate.errors.required">purchaseordate is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="customerreq">Customer Req</label>
+              <input type="text" formControlName="customerreq" bsDatepicker class="form-control" [ngClass]="{ 'is-invalid': submitted && f.customerreq.errors }" />
+              <div *ngIf="submitted && f.customerreq.errors" class="invalid-feedback">
+                <div *ngIf="submitted && f.customerreq.errors" class="invalid-feedback">
+                  <div *ngIf="f.customerreq.errors.required">customerreq is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="purchaseordate">Purchase Order Date</label>
+              <input type="text" formControlName="purchaseordate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.purchaseordate.errors }" />
+              <div *ngIf="submitted && f.purchaseordate.errors" class="invalid-feedback">
+                <div *ngIf="f.purchaseordate.errors.required">purchaseordate is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="quotationRef">Quotation Reference</label>
+              <input type="text" formControlName="quotationRef" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.quotationRef.errors }" />
+              <div *ngIf="submitted && f.quotationRef.errors" class="invalid-feedback">
+                <div *ngIf="f.quotationRef.errors?.required">quotationRef is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="avantgradeinvc">Avantgrade Proforma Invoice</label>
+              <input type="text" formControlName="avantgradeinvc" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.avantgradeinvc.errors }" />
+              <div *ngIf="submitted && f.avantgradeinvc.errors" class="invalid-feedback">
+                <div *ngIf="f.avantgradeinvc.errors.required">avantgradeinvc is required</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="submittedbycountry">Submitted By Country</label>
+              <input type="text" formControlName="submittedbycountry" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.submittedbycountry.errors }" />
+              <div *ngIf="submitted && f.submittedbycountry.errors" class="invalid-feedback">
+                <div *ngIf="f.submittedbycountry.errors.required">submittedbycountry is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="proformainvcdate">Proforma Invoice Date</label>
+              <input type="text" formControlName="proformainvcdate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.proformainvcdate.errors }" />
+              <div *ngIf="submitted && f.proformainvcdate.errors" class="invalid-feedback">
+                <div *ngIf="f.proformainvcdate.errors.required">proformainvcdate is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="projectrefno">Project Ref No</label>
+              <input type="text" formControlName="projectrefno" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.projectrefno.errors }" />
+              <div *ngIf="submitted && f.projectrefno.errors" class="invalid-feedback">
+                <div *ngIf="f.projectrefno.errors?.required">projectrefno is required</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="issuedByCountry">Issued By Country</label>
+              <input type="text" formControlName="issuedByCountry" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.issuedByCountry.errors }" />
+              <div *ngIf="submitted && f.issuedByCountry.errors" class="invalid-feedback">
+                <div *ngIf="f.issuedByCountry.errors.required">issuedByCountry is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="customerpaymentterm">Customer Payment Term</label>
+              <input type="text" formControlName="customerpaymentterm" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.customerpaymentterm.errors }" />
+              <div *ngIf="submitted && f.customerpaymentterm.errors" class="invalid-feedback">
+                <div *ngIf="f.customerpaymentterm.errors.required">customerpaymentterm is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="expectedShipmentdate">Expected Shipment Date</label>
+              <input type="text" formControlName="expectedShipmentdate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.expectedShipmentdate.errors }" />
+              <div *ngIf="submitted && f.expectedShipmentdate.errors" class="invalid-feedback">
+                <div *ngIf="f.expectedShipmentdate.errors.required">expectedShipmentdate is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="amountrecv">Amount Received</label>
+              <input type="text" formControlName="amountrecv" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.amountrecv.errors }" />
+              <div *ngIf="submitted && f.amountrecv.errors" class="invalid-feedback">
+                <div *ngIf="f.amountrecv.errors.required">amountrecv is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="machinemodel">machine Model</label>
+              <input type="text" formControlName="machinemodel" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.machinemodel.errors }" />
+              <div *ngIf="submitted && f.machinemodel.errors" class="invalid-feedback">
+                <div *ngIf="f.machinemodel.errors.required">machinemodel is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="amountpending">Amount Pending</label>
+              <input type="text" formControlName="amountpending" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.amountpending.errors }" />
+              <div *ngIf="submitted && f.amountpending.errors" class="invalid-feedback">
+                <div *ngIf="f.amountpending.errors.required">amountpending is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="thermopo">Thermo PO</label>
+              <input type="text" formControlName="thermopo" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.thermopo.errors }" />
+              <div *ngIf="submitted && f.thermopo.errors" class="invalid-feedback">
+                <div *ngIf="f.thermopo.errors.required">thermopo is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="priorderconfirm">Princopal  Order Confirmation</label>
+              <input type="text" formControlName="priorderconfirm" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.priorderconfirm.errors }" />
+              <div *ngIf="submitted && f.priorderconfirm.errors" class="invalid-feedback">
+                <div *ngIf="f.priorderconfirm.errors.required">priorderconfirm is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="serialno">Serial No</label>
+              <input type="text" formControlName="serialno" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.serialno.errors }" />
+              <div *ngIf="submitted && f.serialno.errors" class="invalid-feedback">
+                <div *ngIf="f.serialno.errors.required">serialno is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="thermopodate">Thermo Po Date</label>
+              <input type="text" formControlName="thermopodate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.thermopodate.errors }" />
+              <div *ngIf="submitted && f.thermopodate.errors" class="invalid-feedback">
+                <div *ngIf="f.thermopodate.errors.required">thermopodate is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="princconfamount">Principal Confirmation Amt</label>
+              <input type="text" formControlName="princconfamount" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.princconfamount.errors }" />
+              <div *ngIf="submitted && f.princconfamount.errors" class="invalid-feedback">
+                <div *ngIf="f.princconfamount.errors.required">princconfamount is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="princshipdate">Principal ShipmentDate</label>
+              <input type="text" formControlName="princshipdate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.princshipdate.errors }" />
+              <div *ngIf="submitted && f.princshipdate.errors" class="invalid-feedback">
+                <div *ngIf="f.princshipdate.errors.required">princshipdate is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="princinv">Principal Invoice</label>
+              <input type="text" formControlName="princinv" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.princinv.errors }" />
+              <div *ngIf="submitted && f.princinv.errors" class="invalid-feedback">
+                <div *ngIf="f.princinv.errors.required">princinv is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="remarks">Remarks</label>
+              <input type="text" formControlName="remarks" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.remarks.errors }" />
+              <div *ngIf="submitted && f.remarks.errors" class="invalid-feedback">
+                <div *ngIf="f.remarks.errors.required">remarks is required</div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <hr />
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px">
+              <button [disabled]="loading" class="btn btn-primary" *ngIf="hasAddAccess==true || hasUpdateAccess==true">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/customerlist" class="btn btn-secondary" style="margin-left:10px;">Back</a>
+            </div>
+          </div>
+        </form>
+    </div>
+  </div>
+  </div>
+</layout>

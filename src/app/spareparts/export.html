@@ -1,0 +1,47 @@
+<layout>
+  <div class="container">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Export/Import Templete</h3>
+      </div>
+    </div>
+    <hr />
+    <div class="clearfix"></div>
+    <div class="col-md-12 col-sm-12 ">
+      <div class="row">
+        <div class="col-sm-4">
+          <label for="configtypeid">Config Type</label>
+          <select class="form-control" #mySelect (change)="onConfigChange(mySelect.value)">
+            <option value="0"></option>
+            <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
+              {{congfig.itemname}}
+            </option>
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <label for="configvalueid">Config Value</label>
+          <select class="form-control" #myConfigVal>
+            <option value="0"></option>
+            <option *ngFor="let congfig of configValueList" value={{congfig.id}}>
+              {{congfig.configValue}}
+            </option>
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <label for=""></label>
+          <button type="button" class="btn btn-primary" style="margin-top: 31px;" (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Export</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8">
+          <label>Upload</label>
+          <input class="form-control" type="file" #fileInput />
+        </div>
+        <div class="col-md-2">
+          <label></label>
+          <button class="btn btn-primary" (click)="uploadFile(fileInput);" style="margin-top:23%">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</layout>

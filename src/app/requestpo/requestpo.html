@@ -1,0 +1,211 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+
+      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active"
+             id="ex1-tab-1"
+             data-mdb-toggle="tab"
+             routerLink="/requestpo/{{ requestid }}" routerLinkActive="active"
+             role="tab"
+             aria-controls="ex1-tabs-1"
+             aria-selected="true">Request PO</a>
+        </li>
+        <!--<li class="nav-item" role="presentation">
+          <a class="nav-link" [ngClass]="{ 'disabled': customerId==null }"
+             id="ex1-tab-2"
+             data-mdb-toggle="tab"
+             routerLink="/contactlist/C/{{ customerId }}" routerLinkActive="active"
+             role="tab"
+             aria-controls="ex1-tabs-2"
+             aria-selected="false">Contact</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" [ngClass]="{ 'disabled': customerId==null }"
+             id="ex1-tab-3"
+             data-mdb-toggle="tab"
+             routerLink="/customersitelist/{{ customerId }}" routerLinkActive="active"
+             role="tab"
+             aria-controls="ex1-tabs-3"
+             aria-selected="false">Customer Site</a>
+        </li>-->
+      </ul>
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="requestpoform" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="configtype">Config Type</label>
+              <select formControlName="configtype" class="form-control" #mySelect (change)="onConfigChange(mySelect.value)" [ngClass]="{ 'is-invalid': submitted && f.configtype.errors }">
+                <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
+                  {{congfig.itemname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.configtype.errors" class="invalid-feedback">
+                <div *ngIf="f.configtype.errors.required">Config Type is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="parttype">Part Type</label>
+              <select formControlName="parttype" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.parttype.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let p of PARTTypes" value={{p.listTypeItemId}}>
+                  {{p.itemname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.parttype.errors" class="invalid-feedback">
+                <div *ngIf="f.parttype.errors.required">parttype is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="configvalue">configvalue</label>
+              <select formControlName="configvalue" class="form-control" #myConfigVal>
+                <option value="0"></option>
+                <option *ngFor="let congfig of configValueList" value={{congfig.id}}>
+                  {{congfig.configValue}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.configvalue.errors" class="invalid-feedback">
+                <div *ngIf="f.configvalue.errors.required">configvalue is required</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="partno">partno</label>
+              <select formControlName="partno" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.partno.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let r of replacementParts" value={{r.id}}>
+                  {{r.partNo}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.partno.errors" class="invalid-feedback">
+                <div *ngIf="f.partno.errors.required">partno is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="qty">Qty</label>
+              <input type="text" formControlName="qty" bsDatepicker class="form-control" [ngClass]="{ 'is-invalid': submitted && f.brand.errors }" />
+              <div *ngIf="submitted && f.qty.errors" class="invalid-feedback">
+                <div *ngIf="f.qty.errors.required">qty is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="price">price</label>
+              <input type="text" formControlName="price" bsDatepicker class="form-control" [ngClass]="{ 'is-invalid': submitted && f.price.errors }" />
+              <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                  <div *ngIf="f.price.errors.required">price is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="distributor">Distributor</label>
+              <select formControlName="distributor" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.distributor.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let distributor of defaultdistributors" value={{distributor.id}}>
+                  {{distributor.distname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.distributor.errors" class="invalid-feedback">
+                <div *ngIf="f.distributor.errors.required">Distributor is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="project">status</label>
+              <input type="text" formControlName="status" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.status.errors }" />
+              <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+                <div *ngIf="f.status.errors?.required">status is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="podate">podate</label>
+              <input type="text" formControlName="podate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.podate.errors }" />
+              <div *ngIf="submitted && f.podate.errors" class="invalid-feedback">
+                <div *ngIf="f.podate.errors.required">podate is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="amount">Amount</label>
+              <input type="text" formControlName="amount" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.amount.errors }" />
+              <div *ngIf="submitted && f.distributor.errors" class="invalid-feedback">
+                <div *ngIf="f.amount.errors.required">amount is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="discount">Discount</label>
+              <input type="text" formControlName="discount" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.discount.errors }" />
+              <div *ngIf="submitted && f.discount.errors" class="invalid-feedback">
+                <div *ngIf="f.discount.errors?.required">discount is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="afterdiscount">After Discount</label>
+              <input type="text" formControlName="afterdiscount" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.afterdiscount.errors }" />
+              <div *ngIf="submitted && f.afterdiscount.errors" class="invalid-feedback">
+                <div *ngIf="f.afterdiscount.errors.required">afterdiscount is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="deliverydate">Delivery Date</label>
+              <input type="text" formControlName="deliverydate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.deliverydate.errors }" />
+              <div *ngIf="submitted && f.deliverydate.errors" class="invalid-feedback">
+                <div *ngIf="f.deliverydate.errors.required">deliverydate is required</div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row" *ngIf="paymentdata">
+            <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine" (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"
+                               [columnDefs]="columnDefs" [rowData]="paymentdata" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="pdf" style="margin-right:15px;margin-top:15px;">Document</label>
+              <input type='file' id="pdfUpload" multiple accept=".pdf" #filePdfInput (change)="uploadPdfFile($event)" />
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="PdffileData" style="margin-top:4%;">
+              <label></label>
+              <button type="button" class="btn btn-link" (click)="download()">{{ PdffileData.fileName }}</button>
+              <!--<a href="pdfBase64" download="PdffileData.fileName">{{ PdffileData.fileName }}</a>-->
+            </div>
+          </div>
+          <div class="row" *ngIf="PdffileData">
+            <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine" (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"
+                               [columnDefs]="pdfcolumnDefs" [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
+            </div>
+          </div>
+          <hr>
+          <hr />
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px">
+              <button [disabled]="loading" class="btn btn-primary" *ngIf="hasAddAccess==true || hasUpdateAccess==true">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/customerlist" class="btn btn-secondary" style="margin-left:10px;">Back</a>
+              /a
+              
+
+            </div>
+            /a
+            
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

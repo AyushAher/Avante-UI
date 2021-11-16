@@ -1,0 +1,97 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>Country</h3>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <hr />
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="countryform" (ngSubmit)="onSubmit()">      
+          <div class="row">
+            <div class="col-sm-4">
+              <label for="name">Country Name</label>
+              <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+              <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                <div *ngIf="f.name.errors.required">Country Name is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="iso_2">ISO Code 2</label>
+              <input type="text" formControlName="iso_2" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.iso_2.errors }" />
+              <div *ngIf="submitted && f.iso_2.errors" class="invalid-feedback">
+                <div *ngIf="f.iso_2.errors.required">ISO Code 2 is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="iso_3">ISO Code 3</label>
+              <input type="text" formControlName="iso_3" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.iso_3.errors }" />
+              <div *ngIf="submitted && f.iso_3.errors" class="invalid-feedback">
+                <div *ngIf="f.iso_3.errors.required">ISO Code 3 is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="formal">Formal Name</label>
+              <input type="text" formControlName="formal" class="form-control" />
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="sub_Region">Sub Region</label>
+              <input type="text" formControlName="sub_Region" class="form-control" />
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="region">Region</label>
+              <input type="text" formControlName="region" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.region.errors }" />
+              <div *ngIf="submitted && f.region.errors" class="invalid-feedback">
+                <div *ngIf="f.region.errors.required">Region is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="capital">Capital</label>
+              <input type="text" formControlName="capital" class="form-control" />
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="continentid">Continent</label>
+              <select formControlName="continentid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.continentid.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let continent of continents" value={{continent.listTypeItemId}}>
+                  {{continent.itemname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.continentid.errors" class="invalid-feedback">
+                <div *ngIf="f.continentid.errors.required">Continent is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="currencyid">Currency</label>
+              <select formControlName="currencyid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.currencyid.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let c of currency" value={{c.id}}>
+                  {{c.name}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.currencyid.errors" class="invalid-feedback">
+                <div *ngIf="f.currencyid.errors.required">Currency is required</div>
+              </div>
+            </div>           
+          </div>
+          <br />
+          <div class="row">
+            <div class="col-md-6 col-sm-6">
+              <button [disabled]="loading" *ngIf="hasAddAccess==true || hasUpdateAccess==true" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/countrylist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

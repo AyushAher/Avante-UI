@@ -1,0 +1,41 @@
+
+<div class="model" id="model" role="dialog">
+    <div class="model-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Add Workdone</h4>
+          <button type="button"
+                  class="close"
+                  aria-label="Close"
+                  data-dismiss="modal" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="workdoneForm" (ngSubmit)="onValueSubmit()">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-6">
+                <label for="workdone">WorkDone</label>
+                <input type="text" formControlName="workdone" class="form-control" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-sm-6">
+
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+              <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

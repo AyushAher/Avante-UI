@@ -1,0 +1,218 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <!--<div class="page-title">
+    <div class="title_left">
+      <h3>Customer Site</h3>
+    </div>
+  </div>-->
+      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active"
+             id="ex1-tab-1"
+             data-mdb-toggle="tab"
+             routerLink="/customersite/{{ customerid }}" routerLinkActive="active"
+             role="tab"
+             aria-controls="ex1-tabs-1"
+             aria-selected="true">Site</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link"
+             id="ex1-tab-1"
+             data-mdb-toggle="tab"
+             routerLink="/contactlist/CS/{{customerid}}/{{ csiteid }}" routerLinkActive="active"
+             role="tab"
+             aria-controls="ex1-tabs-1"
+             aria-selected="true">Site Contact</a>
+        </li>
+      </ul>
+        <div class="clearfix"></div>
+
+        <div class="col-md-12 col-sm-12 ">
+          <form [formGroup]="customersiteform" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="custid">Customer</label>
+                <select formControlName="custid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.custid.errors }">
+                  <!--<option value="0">--All--</option>-->
+                  <option *ngFor="let customer of customers" value={{customer.id}}>
+                    {{customer.custname}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.custid.errors" class="invalid-feedback">
+                  <div *ngIf="f.custid.errors.required">Customer is required</div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for="regname">Region Name</label>
+                <input type="text" formControlName="regname" class="form-control" />
+                <!--<div *ngIf="submitted && f.regname.errors" class="invalid-feedback">
+                  <div *ngIf="f.regname.errors.required">Region Name is required</div>
+                </div>-->
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for="custregname">Site Name</label>
+                <input type="text" formControlName="custregname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.custregname.errors }" />
+                <div *ngIf="submitted && f.custregname.errors" class="invalid-feedback">
+                  <div *ngIf="f.custregname.errors.required">Site Name is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="regionDistributor">Regional Distributor</label>
+                <select formControlName="distid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.distid.errors }">
+                  <!--<option value="0">--All--</option>-->
+                  <option *ngFor="let dist of distRegions" value={{dist.id}}>
+                    {{dist.distregname}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.distid.errors" class="invalid-feedback">
+                  <div *ngIf="f.distid.errors.required">Regional Distributor is required</div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for=""></label>
+                <div class="checkbox">
+                  <label for="">
+                    <input type="checkbox" class="" #chkdisplay (change)="showallDdl(chkdisplay.checked)" />
+                    Display All
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for="paymentTerm">Payment Term</label>
+                <input type="text" formControlName="payterms" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.payterms.errors }" />
+                <div *ngIf="submitted && f.payterms.errors" class="invalid-feedback">
+                  <div *ngIf="f.payterms.errors.required">Payment Term is required</div>
+                </div>
+              </div>
+
+            </div>
+            <div *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true">
+              <div class="row">
+                <div class="col-md-4 col-sm-4">
+                  <label for=""></label>
+                  <div class="checkbox">
+                    <label for="isblocked">
+                      <input type="checkbox" formControlName="isblocked" class="" />
+                      Block Distributer Account
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                  <label for=""></label>
+                  <div class="checkbox">
+                    <label for="isactive">
+                      <input type="checkbox" formControlName="isactive" class="" />
+                      Active
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br />
+            <p><b>Address</b></p>
+            <hr>
+            <div formGroupName="address">
+              <div class="row">
+                <div class="col-sm-4">
+                  <label for="street">Street</label>
+                  <input type="text" formControlName="street" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }" />
+                  <div *ngIf="submitted && a.get('street').errors" class="invalid-feedback">
+                    <div *ngIf="a.get('street').errors.required">Street is required</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="area">Area</label>
+                  <input type="text" formControlName="area" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('area').errors }" />
+                  <div *ngIf="submitted && a.get('area').errors" class="invalid-feedback">
+                    <div *ngIf="a.get('area').errors.required">Area is required</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="place">Place</label>
+                  <input type="text" formControlName="place" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('place').errors }" />
+                  <div *ngIf="submitted && a.get('place').errors" class="invalid-feedback">
+                    <div *ngIf="a.get('place').errors.required">Place is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <label for="city">City</label>
+                  <input type="text" formControlName="city" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('city').errors }" />
+                  <div *ngIf="submitted && a.get('city').errors" class="invalid-feedback">
+                    <div *ngIf="a.get('city').errors.required">City is required</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="countryId">Country</label>
+                  <select formControlName="countryid" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
+                    <!--<option value="0">--All--</option>-->
+                    <option *ngFor="let country of countries" value={{country.id}}>
+                      {{country.name}}
+                    </option>
+                  </select>
+                  <div *ngIf="submitted && a.get('countryid').errors" class="invalid-feedback">
+                    <div *ngIf="a.get('countryid').errors.required">Country is required</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="zip">Zip</label>
+                  <input type="tel" maxlength="10"  formControlName="zip" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('zip').errors }" />
+                  <div *ngIf="submitted && a.get('zip').errors" class="invalid-feedback">
+                    <div *ngIf="a.get('zip').errors.required">Zip is required</div>
+                    <div *ngIf="a.get('zip').errors?.minlength">Min length is 4</div>
+                    <div *ngIf="a.get('zip').errors?.maxlength">Max length is 10</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <label for="geolat">Latitude</label>
+                  <input type="text" formControlName="geolat" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('geolat').errors }" />
+                  <div *ngIf="submitted && a.get('geolat').errors" class="invalid-feedback">
+                    <div *ngIf="a.get('geolat').errors.required">Latitude is required</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="geolong">Longitude</label>
+                  <input type="text" formControlName="geolong" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('geolong').errors }" />
+                  <div *ngIf="submitted && a.get('geolong').errors" class="invalid-feedback">
+                    <div *ngIf="a.get('geolong').errors.required">Longitude is required</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for=""></label>
+                  <div class="checkbox">
+                    <label for="isActive">
+                      <input type="checkbox" formControlName="isActive" class="" />
+                      Active
+                    </label>
+                  </div>
+                  <!--<div *ngIf="submitted && f.addressActive.errors" class="invalid-feedback">
+          <div *ngIf="f.addressActive.errors.required">Active is required</div>
+        </div>-->
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-md-6 col-sm-6" style="padding:10px;">
+                <button [disabled]="loading" *ngIf="hasAddAccess==true || hasUpdateAccess==true" class="btn btn-primary">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                  Submit
+                </button>
+                <a routerLink="/customersitelist/{{customerid}}" class="btn btn-secondary" style="margin-left:10px;">Back</a>
+              </div>
+            </div>
+            <!--<div class="row" *ngIf="isSave">
+
+    <a routerLink="/contact/{{ type }}/{{ csiteid }}" class="btn btn-link">Add Contact</a>
+  </div>-->
+          </form>
+        </div>
+    </div>
+  </div>
+</layout>

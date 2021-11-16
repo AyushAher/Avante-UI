@@ -1,0 +1,474 @@
+<layout>
+
+    <main class="main-content position-relative border-radius-lg ">
+        <div class="container-fluid py-4">
+            <div class="row">
+
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-header p-3 pt-2">
+                            <div
+                                class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
+                                <i class="fas fa-fw fa-user fa-5x"></i>
+                            </div>
+                            <div class="text-end pt-1">
+                                <p class="text-sm mb-0 text-capitalize">Client Name</p>
+                                <h4 class="mb-0">OBA Cement</h4>
+                            </div>
+                        </div>
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-3">
+                            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Nigeria</span>-
+                                Country
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-header p-3 pt-2">
+                            <div
+                                class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                                <i class="fas fa-fw fa-user fa-5x"></i>
+
+                            </div>
+                            <div class="text-end pt-1">
+                                <p class="text-sm mb-0 text-capitalize">Sites</p>
+                                <h4 class="mb-0">Sokoto</h4>
+                            </div>
+                        </div>
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-3">
+                            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Sokoto</span>- Site
+                                Region
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-header p-3 pt-2">
+                            <div
+                                class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                                <i class="fas fa-fw fa-user fa-5x"></i>
+
+                            </div>
+                            <div class="text-end pt-1">
+                                <p class="text-sm mb-0 text-capitalize">Contacts</p>
+                                <h4 class="mb-0">169</h4>
+                            </div>
+                        </div>
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-3">
+                            <p class="mb-0"><span class="text-danger text-sm font-weight-bolder"></span> Inclusive of
+                                all sites
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-header p-3 pt-2">
+                            <div
+                                class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                                <i class="fas fa-fw fa-user fa-5x"></i>
+
+                            </div>
+                            <div class="text-end pt-1">
+                                <p class="text-sm mb-0 text-capitalize">Distributor Name</p>
+                                <h4 class="mb-0">Avantgarde-Dubai</h4>
+                            </div>
+                        </div>
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-3">
+                            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Nigeria</span>-
+                                Country
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-lg-4 col-md-6 mt-4 mb-4">
+                    <div class="card z-index-2 ">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                                <div class="chart">
+                                    <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-0 ">Cost</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-4 mb-4">
+                    <div class="card z-index-2  ">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                            <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
+                                <div class="chart">
+                                    <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-0 "> Service Request Types </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mt-4 mb-3">
+                    <div class="card z-index-2 ">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                            <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
+                                <div class="chart">
+                                    <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-0 ">Spare Inventory</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4 ">
+
+                <div class="col-lg-4 col-md-3 mb-md-0 mb-2">
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <div class="row">
+                                <div class="col-lg-6 col-7">
+                                    <h6>Instruments Down</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body px-2 pb-2">
+                            <div class="table-responsive">
+                                <table class="table align-items-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                SR#
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Instrument
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Engineer
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">SR131</h6>
+
+                                            </td>
+                                            <td>2500W-XY</td>
+
+                                            <td class="align-middle">
+                                                Ayush
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">SR131</h6>
+
+                                            </td>
+                                            <td>2500W-XY</td>
+
+                                            <td class="align-middle">
+                                                Ayush
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">SR131</h6>
+
+                                            </td>
+                                            <td>2500W-XY</td>
+
+                                            <td class="align-middle">
+                                                Ayush
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">SR131</h6>
+
+                                            </td>
+                                            <td>2500W-XY</td>
+
+                                            <td class="align-middle">
+                                                Ayush
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">SR131</h6>
+
+                                            </td>
+                                            <td>2500W-XY</td>
+
+                                            <td class="align-middle">
+                                                Ayush
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">SR131</h6>
+
+                                            </td>
+                                            <td>2500W-XY</td>
+
+                                            <td class="align-middle">
+                                                Ayush
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">SR131</h6>
+
+                                            </td>
+                                            <td>2500W-XY</td>
+
+                                            <td class="align-middle">
+                                                Ayush
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">SR131</h6>
+
+                                            </td>
+                                            <td>2500W-XY</td>
+
+                                            <td class="align-middle">
+                                                Ayush
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">SR131</h6>
+
+                                            </td>
+                                            <td>2500W-XY</td>
+
+                                            <td class="align-middle">
+                                                Ayush
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-3 mb-md-0 mb-2">
+                    <div class="card">
+                        <div class="card-header pb-0">
+
+                            <div class="row">
+                                <div class="col-lg-6 col-7">
+                                    <h6>Purchase Order</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body px-2 pb-2">
+                            <div class="table-responsive">
+                                <table class="table align-items-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Date
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                PO Number
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Amount
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Status
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">10/11/20</h6>
+                                            </td>
+                                            <td>PO#655</td>
+                                            <td class="align-middle">6415</td>
+                                            <td>Inprogress</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">10/12/20</h6>
+                                            </td>
+                                            <td>PO#652</td>
+                                            <td class="align-middle">4612</td>
+                                            <td>Shipped</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">10/1/21</h6>
+                                            </td>
+                                            <td>PO#6532</td>
+                                            <td class="align-middle">946</td>
+                                            <td>Inprogress</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">10/2/21</h6>
+                                            </td>
+                                            <td>PO#65532</td>
+                                            <td class="align-middle">9865</td>
+                                            <td>Shipped</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">10/11/20</h6>
+                                            </td>
+                                            <td>PO#655</td>
+                                            <td class="align-middle">6415</td>
+                                            <td>Inprogress</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">10/12/20</h6>
+                                            </td>
+                                            <td>PO#652</td>
+                                            <td class="align-middle">4612</td>
+                                            <td>Shipped</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">10/1/21</h6>
+                                            </td>
+                                            <td>PO#6532</td>
+                                            <td class="align-middle">946</td>
+                                            <td>Inprogress</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">10/2/21</h6>
+                                            </td>
+                                            <td>PO#65532</td>
+                                            <td class="align-middle">9865</td>
+                                            <td>Shipped</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h6 class="mb-0 text-sm">10/3/21</h6>
+                                            </td>
+                                            <td>PO#6554f</td>
+                                            <td class="align-middle">10453</td>
+                                            <td>Shipped</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header pb-0">
+                            <h6>Spare Recommended</h6>
+                        </div>
+                        <div class="card-body p-3" style="height: 342.6px; overflow-y: auto;">
+
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <h5>Contactor 24VDC/32A<span>(5)</span></h5>
+                                <div class="sub-heading">
+                                    <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
+                                </div>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <h5>Contactor 24VDC/32A<span>(5)</span></h5>
+                                <div class="sub-heading">
+                                    <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
+                                </div>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <h5>Contactor 24VDC/32A<span>(5)</span></h5>
+                                <div class="sub-heading">
+                                    <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
+                                </div>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <h5>Contactor 24VDC/32A<span>(5)</span></h5>
+                                <div class="sub-heading">
+                                    <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
+                                </div>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <h5>Contactor 24VDC/32A<span>(5)</span></h5>
+                                <div class="sub-heading">
+                                    <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
+                                </div>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <script>
+
+    </script>
+    <script>
+    </script>
+</layout>

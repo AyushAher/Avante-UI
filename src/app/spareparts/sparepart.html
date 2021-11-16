@@ -1,0 +1,196 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>Spare Part</h3>
+        </div>
+      </div>
+      <hr />
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="sparepartform" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-4">
+              <label for="configTypeid">Config Type</label>
+              <select formControlName="configTypeid" #configType class="form-control" (change)="onConfigChange(configType.value)" [ngClass]="{ 'is-invalid': submitted && f.configTypeid.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
+                  {{congfig.itemname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.configTypeid.errors" class="invalid-feedback">
+                <div *ngIf="f.configTypeid.errors.required">Config Type is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="configValueid">Config Value</label>
+              <select formControlName="configValueid" class="form-control" #configvalue (change)="onConfigVChange(configType.value,configvalue.value)">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let c of configValueList" value={{c.id}}>
+                  {{c.configValue}}
+                </option>
+              </select>
+              <!--<div *ngIf="submitted && f.configValueid.errors" class="invalid-feedback">
+                <div *ngIf="f.configValueid.errors.required">Config Value is required</div>
+              </div>-->
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="partNo">Part Number</label>
+              <input type="text" #partNo formControlName="partNo" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.partNo.errors }" />
+              <div *ngIf="submitted && f.partNo.errors" class="invalid-feedback">
+                <div *ngIf="f.partNo.errors.required">Part Number is required</div>
+              </div>
+            </div>
+            <div class="col-md-1 col-sm-1">
+              <label for=""></label>
+              <button type="button" class="btn btn-primary" style="margin-top: 31px;" (click)="getSpareByNo(partNo.value,configType.value,configvalue.value)">Get</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="itemDesc">Item Description</label>
+              <input type="text" formControlName="itemDesc" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.itemDesc.errors }" />
+              <div *ngIf="submitted && f.itemDesc.errors" class="invalid-feedback">
+                <div *ngIf="f.itemDesc.errors.required">Item Description is required</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="qty">Qty</label>
+              <input type="number" formControlName="qty" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.qty.errors }" />
+              <div *ngIf="submitted && f.qty.errors" class="invalid-feedback">
+                <div *ngIf="f.qty.errors.required">Qty is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="partType">Part Type</label>
+              <!--<input type="text" formControlName="partType" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.partType.errors }" />-->
+              <select formControlName="partType" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.partType.errors }">
+                <option *ngFor="let congfig of parttypes" value={{congfig.listTypeItemId}}>
+                  {{congfig.itemname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.partType.errors" class="invalid-feedback">
+                <div *ngIf="f.partType.errors.required">Part Type is required</div>
+              </div>
+            </div>
+
+
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="descCatalogue">Desc per Catalogue</label>
+              <input type="text" formControlName="descCatalogue" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.descCatalogue.errors }" />
+              <div *ngIf="submitted && f.descCatalogue.errors" class="invalid-feedback">
+                <div *ngIf="f.descCatalogue.errors.required">Desc per Catalogue is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="hsCode">H.S Code</label>
+              <input type="text" formControlName="hsCode" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.hsCode.errors }" />
+              <div *ngIf="submitted && f.hsCode.errors" class="invalid-feedback">
+                <div *ngIf="f.hsCode.errors.required">H.S Code is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="countryid">Country of Origin</label>
+              <select formControlName="countryid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.countryid.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let country of countries" value={{country.id}}>
+                  {{country.name}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.countryid.errors" class="invalid-feedback">
+                <div *ngIf="f.countryid.errors.required">Country of Origin is required</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="price">List Price</label>
+              <input type="number" formControlName="price" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.price.errors }" />
+              <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                <div *ngIf="f.price.errors.required">List Price is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="replacepPartNoId">Replacement Part</label>
+              <select formControlName="replacepPartNoId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.replacepPartNoId.errors }">
+                <option value="0"></option>
+                <option *ngFor="let congfig of replacementParts" value={{congfig.id}}>
+                  {{congfig.partNo}}
+                </option>
+              </select>
+              <!--<input type="text" formControlName="replacepPartNoId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.replacepPartNoId.errors }" />-->
+              <div *ngIf="submitted && f.replacepPartNoId.errors" class="invalid-feedback">
+                <div *ngIf="f.replacepPartNoId.errors.required">Replacement Part is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4 sparePartImg" *ngIf="imageUrl && imageUrl !== ''">
+              <img [src]="imageUrl" [alt]="" style="width: 200px;height: 200px; padding:10px;">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4" *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true">
+              <label for=""></label>
+              <div class="checkbox">
+                <label for="isActive">
+                  <input type="checkbox" formControlName="isActive" class="" />
+                  Active
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for=""></label>
+              <div class="checkbox">
+                <label for="isObselete">
+                  <input type="checkbox" formControlName="isObselete" class="" />
+                  Is Obselete
+                </label>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="currencyid">Currency</label>
+              <select formControlName="currencyid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.currencyid.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let c of currency" value={{c.id}}>
+                  {{c.name}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.currencyid.errors" class="invalid-feedback">
+                <div *ngIf="f.currencyid.errors.required">Currency is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
+              <input type='file' formControlName="image" id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile($event)" />
+              <div *ngIf="submitted && f.image.errors" class="invalid-feedback">
+                <div *ngIf="f.image.errors.required">Image is required</div>
+              </div>
+            </div>
+
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col-md-6 col-sm-6">
+              <button [disabled]="loading" *ngIf="hasAddAccess==true || hasUpdateAccess==true" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/sparepartlist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+            </div>
+          </div>
+          <!--<div class="row" *ngIf="isSave">
+            <a routerLink="/contact" class="btn btn-link">Add Contact</a>
+          </div>-->
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

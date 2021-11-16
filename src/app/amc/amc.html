@@ -1,0 +1,170 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="page-title">
+        <div class="title_left">
+          <h3 style="padding:15px 0 5px 0">AMC Details</h3>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <hr />
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row">
+
+            <div class="col-md-4 col-sm-4">
+              <label for="billto">Bill To</label>
+              <select id="billto" formControlName="billtoid" class="form-control"
+                [ngClass]="{ ' is -invalid': submitted && f.billtoid.errors}">
+                <option *ngFor="let i of customersList" value="{{i.id}}">{{i.custname}}
+                </option>
+              </select>
+
+              <div Style="display: block" *ngIf="submitted && f.billtoid.errors" class="invalid-feedback">
+                <div *ngIf="f.billtoid.errors.required">
+                  Billto is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="servicequote">Service Quote</label>
+              <input id="servicequote" type="text" formControlName="servicequote" class="form-control"
+                [ngClass]="{ ' is -invalid': submitted && f.servicequote.errors}" />
+              <div Style="display: block" *ngIf="submitted && f.servicequote.errors" class="invalid-feedback">
+                <div *ngIf="f.servicequote.errors.required">
+                  Service Quote is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="sqdate">SQ Date</label>
+              <input id="sqdate" bsDatepicker type="text" formControlName="sqdate" class="form-control"
+                [ngClass]="{ ' is -invalid': submitted && f.sqdate.errors}" />
+              <div Style="display: block" *ngIf="submitted && f.sqdate.errors" class="invalid-feedback">
+                <div *ngIf="f.sqdate.errors.required">
+                  SQ Date is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="project">Project</label>
+              <input id="project" type="text" formControlName="project" class="form-control"
+                [ngClass]="{ ' is -invalid': submitted && f.project.errors}" />
+              <div Style="display: block" *ngIf="submitted && f.project.errors" class="invalid-feedback">
+                <div *ngIf="f.project.errors.required">
+                  Project is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="servicetype">Service Type</label>
+              <select id="servicetype" type="text" formControlName="servicetype" class="form-control"
+                [ngClass]="{ ' is -invalid': submitted && f.servicetype.errors}">
+
+                <option *ngFor="let i of serviceType" value="{{i.listTypeItemId}}">{{i.itemname}}
+                </option>
+
+              </select>
+              <div Style="display: block" *ngIf="submitted && f.servicetype.errors" class="invalid-feedback">
+                <div *ngIf="f.servicetype.errors.required">
+                  Service Type is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="brand">Brand</label>
+              <select id="brand" type="text" formControlName="brand" class="form-control"
+                [ngClass]="{ ' is -invalid': submitted && f.brand.errors}">
+                <option *ngFor="let i of supplierList" value="{{i.listTypeItemId}}">{{i.itemname}}
+                </option>
+              </select>
+              <div Style="display: block" *ngIf="submitted && f.brand.errors" class="invalid-feedback">
+                <div *ngIf="f.brand.errors.required">
+                  Brand is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="zerorate">Zerorate</label>
+              <br>
+              <select id="currency" type="text" style="display:inline-block; width:100px;" formControlName="currency"
+                class="form-control" [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
+
+                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                </option>
+
+              </select>
+
+              <input id="zerorate" type="number" formControlName="zerorate" class="form-control"
+                style="display:inline-block; width:270px; margin-left: 5px;"
+                [ngClass]="{ ' is -invalid': submitted && f.zerorate.errors}" />
+              <div Style="display: block" *ngIf="submitted && f.zerorate.errors" class="invalid-feedback">
+                <div *ngIf="f.zerorate.errors.required">
+                  Zero Rate is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="tnc">TNC</label>
+              <textarea id="tnc" type="text" formControlName="tnc" class="form-control"
+                [ngClass]="{ ' is -invalid': submitted && f.tnc.errors}"></textarea>
+              <div Style="display: block" *ngIf="submitted && f.tnc.errors" class="invalid-feedback">
+                <div *ngIf="f.tnc.errors.required">
+                  TNC is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="isactive">
+                <input id="isactive" type="checkbox" formControlName="isactive">
+                Isactive
+              </label>
+            </div>
+          </div> <br />
+
+          <div class="row">
+            <div class="col-md-9">
+              <label for="search">Search Instruments By Serial No. </label>
+
+              <input (input)="InstrumentSearch($event.target.value)" #instrumentSearch list="browsers" name="browser"
+                id="browser" class="form-control">
+              <datalist id="browsers">
+                <option *ngFor="let i of instrumentAutoComplete" value="{{i.serialnos}}">
+              </datalist>
+            </div>
+
+            <div class="col-md-3" style="margin-top:30px">
+              <button class="btn btn-primary" (click)="AddInstrument(instrumentSearch.value)" type="button"
+                class="btn btn-primary">Add Instrument </button>
+            </div>
+          </div>
+
+          <div class="row">
+
+            <ag-grid-angular style="width: 100%; margin-top: 2.5%; height: 500px;" class="ag-theme-alpine"
+              (cellValueChanged)="onCellValueChanged($event)" (cellClicked)="RemoveInnstrument($event)"
+              (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="instrumentList"
+              rowSelection="single" pagination="true" paginationPageSize=10>
+            </ag-grid-angular>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px;">
+              <button *ngIf="hasAddAccess || hasUpdateAccess" class="btn btn-primary" type="submit"
+                class="btn btn-primary"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit </button>
+              <a routerLink="/amclist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

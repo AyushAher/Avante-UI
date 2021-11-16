@@ -1,0 +1,184 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+  <a class="sidebar-brand d-flex align-items-center " routerlink="/">
+    <!--<div class="sidebar-brand-icon rotate-n-15">
+      <i class="fas fa-laugh-wink"> </i>
+    </div>
+    <div class="sidebar-brand-text mx-3"> Supplier</div>-->
+    <img src="../../assets/img/Avanteminilogo.png" style="width: 40px;height:40px;" />
+  </a>
+  <!-- Divider -->
+  <hr class="sidebar-divider my-0">
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item active">
+    <a class="nav-link" href="index.html">
+      <i class="fas fa-fw fa-tachometer-alt"> </i>
+      <span>Home</span>
+    </a>
+  </li>
+  <!-- Divider -->
+  <hr class="sidebar-divider">
+  <!-- Heading -->
+  <!--<div class="sidebar-heading">
+    Master
+  </div>-->
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCommon"
+       aria-expanded="true" aria-controls="collapseCommon">
+      <i class="fab fa-creative-commons-sa"></i>
+      <span>Common</span>
+    </a>
+    <div id="collapseCommon" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Components:</h6>
+        <a class="collapse-item" routerLink="/currencylist" *ngIf="hasCurrency" routerLinkActive="active">Currency</a>
+        <a class="collapse-item" routerLink="/countrylist" *ngIf="hasCountry" routerLinkActive="active">Country</a>
+        <a class="collapse-item" routerLink="/masterlist" *ngIf="hasMaster" routerLinkActive="active">Master List</a>
+        <a class="collapse-item" routerLink="/profilelist" *ngIf="hasProfile" routerLinkActive="active">Profile</a>
+        <a class="collapse-item" routerLink="/userprofilelist" *ngIf="hasUserProfile" routerLinkActive="active">User Profile</a>
+      </div>
+    </div>
+  </li>
+
+
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+       aria-expanded="true" aria-controls="collapseTwo">
+      <i class="fas fa-fw fa-cog"> </i>
+      <span>Masters</span>
+    </a>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Components:</h6>
+        <a class="collapse-item" routerLink="/distributorlist" *ngIf="hasDistributor" routerLinkActive="active">Distributor</a>
+        <!--<a class="collapse-item" routerLink="/distregionlist" routerLinkActive="active">Distributor Region</a>-->
+        <a class="collapse-item" routerLink="/customerlist" *ngIf="hasCustomer" routerLinkActive="active">Customer</a>
+        <!--<a class="collapse-item" routerLink="/customersite" routerLinkActive="active">Customer Site</a>-->
+        <a class="collapse-item" routerLink="/instrumentlist" *ngIf="hasInstrument" routerLinkActive="active">Instrument</a>
+        <a class="collapse-item" routerLink="/sparepartlist" *ngIf="hasSparePart" routerLinkActive="active">Spare Part</a>
+        <a class="collapse-item" routerLink="/servicerequestlist" *ngIf="hasSparePart" routerLinkActive="active">Service Request</a>
+        <a class="collapse-item" routerLink="/servicereportlist" *ngIf="hasSparePart" routerLinkActive="active">Service Report</a>
+        <a class="collapse-item" routerLink="/report" routerLinkActive="active">Report</a>
+      </div>
+    </div>
+  </li>
+
+
+
+  <!-- Nav Item - Utilities Collapse Menu -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+       aria-expanded="true" aria-controls="collapseUtilities">
+      <i class="fas fa-fw fa-wrench"> </i>
+      <span> Utilities</span>
+    </a>
+    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+         data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Utilities:</h6>
+        <a class="collapse-item" routerLink="/search" *ngIf="hasSearch" routerLinkActive="active">Search</a>
+        <a class="collapse-item" routerLink="/exportsparepart" *ngIf="hasexport" routerLinkActive="active">Export template</a>
+      </div>
+    </div>
+  </li>
+  <!-- Nav Item - Utilities Collapse Menu -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
+       aria-expanded="true" aria-controls="collapseReport">
+      <i class="fas fa-fw fa fa-book"> </i>
+      <span>Reports</span>
+    </a>
+    <div id="collapseReport" class="collapse" aria-labelledby="headingUtilities"
+         data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Reports:</h6>
+        <a class="collapse-item" routerLink="/custpayrpt" *ngIf="hasSearch" routerLinkActive="active">Customer Payment</a>
+        <a class="collapse-item" routerLink="/srcontrev" *ngIf="hasSearch" routerLinkActive="active">ServiceContract Revenue</a>
+        <a class="collapse-item" routerLink="/sppartrev" *ngIf="hasSearch" routerLinkActive="active">SparePart Revenue</a>
+        <a class="collapse-item" routerLink="/qtsent" *ngIf="hasSearch" routerLinkActive="active">Quotation Sent</a>
+        <a class="collapse-item" routerLink="/sostatus" *ngIf="hasSearch" routerLinkActive="active">SupplierOrder Status</a>
+        <a class="collapse-item" routerLink="/srrpt" *ngIf="hasSearch" routerLinkActive="active">Service Report</a>
+      </div>
+    </div>
+  </li>
+
+
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePhase2" aria-expanded="true"
+       aria-controls="collapseUtilities">
+      <i class="fas fa-fw fa-wrench"> </i>
+      <span> Travel</span>
+    </a>
+
+    <div id="collapsePhase2" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Travel:</h6>
+        <a class="collapse-item" routerLink="/traveldetailslist" *ngIf="hasTravelDetails"
+           routerLinkActive="active">Travel Details</a>
+        <a class="collapse-item" routerLink="/staydetailslist" *ngIf="hasStayDetails" routerLinkActive="active">
+          Stay
+          Details
+        </a>
+        <a class="collapse-item" routerLink="/visadetailslist" *ngIf="hasVisaDetails" routerLinkActive="active">
+          Visa
+          Details
+        </a>
+        <a class="collapse-item" routerLink="/localexpenseslist" *ngIf="hasLocalExpenses"
+           routerLinkActive="active">Local Expenses</a>
+
+        <a class="collapse-item" routerLink="/customersatisfactionsurveylist" *ngIf="hascustomersatisfactionsurveylist"
+           routerLinkActive="active">Customer Satisfaction <br> Survey</a>
+
+      </div>
+
+    </div>
+
+  </li>
+
+
+
+  <!-- Divider -->
+  <!--<hr class="sidebar-divider">-->
+  <!-- Heading -->
+  <!--<div class="sidebar-heading">
+    Addons
+  </div>-->
+  <!-- Nav Item - Pages Collapse Menu -->
+  <!--<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+       aria-expanded="true" aria-controls="collapsePages">
+      <i class="fas fa-fw fa-folder"> </i>
+      <span> Pages</span>
+    </a>
+    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header"> Login Screens:</h6>
+        <a class="collapse-item" href="login.html"> Login</a>
+        <a class="collapse-item" href="register.html"> Register</a>
+        <a class="collapse-item" href="forgot-password.html"> Forgot Password</a>
+        <div class="collapse-divider"> </div>
+        <h6 class="collapse-header"> Other Pages:</h6>
+        <a class="collapse-item" href="404.html"> 404 Page</a>
+        <a class="collapse-item" href="blank.html"> Blank Page</a>
+      </div>
+    </div>
+  </li>-->
+  <!-- Nav Item - Charts -->
+  <!--<li class="nav-item">
+    <a class="nav-link" href="charts.html">
+      <i class="fas fa-fw fa-chart-area"> </i>
+      <span> Charts</span>
+    </a>
+  </li>-->
+  <!--<li class="nav-item">
+    <a class="nav-link" href="tables.html">
+      <i class="fas fa-fw fa-table"> </i>
+      <span> Tables</span>
+    </a>
+  </li>-->
+  <!-- Nav Item - Tables -->
+  <!-- Divider -->
+  <hr class="sidebar-divider d-none d-md-block">
+
+</ul>

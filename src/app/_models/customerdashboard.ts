@@ -1,0 +1,31 @@
+export class VW_Contacts {
+    parentid;
+    mappedfor;
+    id;
+    fname;
+    mname;
+    lname;
+    pcontactno;
+    scontactno;
+    pemail;
+    semail;
+    designationid;
+    whatsappno;
+    createdby;
+    createdon;
+    updatedby;
+    updatedon;
+    isactive;
+    addressfor;
+    street;
+    area;
+    place;
+    city;
+    countryid;
+    ActiveAddress;
+    countryname;
+    zip;
+    geolat;
+    geolong;
+    designation
+}
