@@ -1,27 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
+/* tslint:disable */
+import {Component, OnInit} from '@angular/core';
+import {IDropdownSettings} from 'ng-multiselect-dropdown';
 import {
-  User, Country, Distributor, Customer, ResultMsg, ProfileReadOnly, ServiceRequest,
-  FileShare, EngineerCommentList, tickersAssignedHistory, actionList, CustomerSite, ListTypeItem,
-  Instrument, Contact, ServiceReport, sparePartRecomanded
+  actionList,
+  Contact,
+  Country,
+  Customer,
+  CustomerSite,
+  Distributor,
+  EngineerCommentList,
+  FileShare,
+  Instrument,
+  ListTypeItem,
+  ProfileReadOnly,
+  ResultMsg,
+  ServiceReport,
+  ServiceRequest,
+  tickersAssignedHistory,
+  User
 } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi, Environment } from 'ag-grid-community';
-import { environment } from '../../environments/environment';
-import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
-import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
-import { ModelEngContentComponent } from './modelengcontent';
-import { ModelEngActionContentComponent } from './modelengactioncontent';
-import { DatePipe } from '@angular/common'
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {environment} from '../../environments/environment';
+import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
+import {ModelEngContentComponent} from './modelengcontent';
+import {ModelEngActionContentComponent} from './modelengactioncontent';
+import {DatePipe} from '@angular/common'
 
 import {
-  AccountService, AlertService, CountryService, DistributorService, CustomerService, ContactService, ListTypeService,
-  NotificationService, ProfileService, ServiceRequestService, FileshareService, UploadService, CustomerSiteService,
-  InstrumentService, EngCommentService, EngActionService, SRAssignedHistoryService, ServiceReportService
+  AccountService,
+  AlertService,
+  ContactService,
+  CountryService,
+  CustomerService,
+  CustomerSiteService,
+  DistributorService,
+  EngActionService,
+  EngCommentService,
+  FileshareService,
+  InstrumentService,
+  ListTypeService,
+  NotificationService,
+  ProfileService,
+  ServiceReportService,
+  ServiceRequestService,
+  SRAssignedHistoryService,
+  UploadService
 } from '../_services';
-import { ListItem } from 'ng-multiselect-dropdown/multiselect.model';
 
 
 @Component({
@@ -132,9 +159,8 @@ export class ServiceRequestComponent implements OnInit {
       }
     });
   }
-  
+
   ngOnInit() {
-    //debugger;
     this.user = this.accountService.userValue;
 
     this.profilePermission = this.profileService.userProfileValue;
@@ -159,13 +185,11 @@ export class ServiceRequestComponent implements OnInit {
       this.IsCustomerView = true;
       this.IsDistributorView = false;
       this.IsEngineerView = false;
-    }
-    else if (this.user.roleId == environment.distRoleId) {
+    } else if (this.user.roleId == environment.distRoleId) {
       this.IsCustomerView = false;
       this.IsDistributorView = true;
       this.IsEngineerView = false;
-    }
-    else {
+    } else {
       this.IsCustomerView = false;
       this.IsDistributorView = false;
       this.IsEngineerView = true;
@@ -188,7 +212,7 @@ export class ServiceRequestComponent implements OnInit {
       operatoremail: [''],
       machmodelname: [''],
       machinesno: ['', Validators.required],
-      machengineer:[''],
+      machengineer: [''],
       xraygenerator: [''],
       breakdowntype: ['', Validators.required],
       isrecurring: [false],
@@ -202,7 +226,7 @@ export class ServiceRequestComponent implements OnInit {
       escalation: [''],
       requesttypeid: [''],
       subrequesttypeid: [''],
-      remarks:[''],
+      remarks: [''],
       engComments: this.formBuilder.group({
         nextdate: [''],
         comments: ['']
@@ -236,7 +260,7 @@ export class ServiceRequestComponent implements OnInit {
           this.countries = data.object;
         },
         error: error => {
-        //  this.alertService.error(error);
+          //  this.alertService.error(error);
           this.notificationService.showSuccess(error, "Error");
           this.loading = false;
         }
@@ -247,7 +271,6 @@ export class ServiceRequestComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
-          //debugger;
           this.serviceTypeList = data;
         },
         error: error => {
@@ -261,9 +284,8 @@ export class ServiceRequestComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          //debugger;
           let srno = data.object;
-          this.serviceRequestform.patchValue({ "serreqno": srno });
+          this.serviceRequestform.patchValue({"serreqno": srno});
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -276,7 +298,6 @@ export class ServiceRequestComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
-          //debugger;
           this.breakdownlist = data;
         },
         error: error => {
@@ -289,7 +310,6 @@ export class ServiceRequestComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
-          //debugger;
           this.reqtypelist = data;
         },
         error: error => {
@@ -306,7 +326,6 @@ export class ServiceRequestComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
-          //debugger;
           this.subreqtypelist = data;
         },
         error: error => {
@@ -322,7 +341,7 @@ export class ServiceRequestComponent implements OnInit {
           this.defaultdistributors = data.object;
         },
         error: error => {
-         // this.alertService.error(error);
+          // this.alertService.error(error);
           this.notificationService.showSuccess(error, "Error");
           this.loading = false;
         }
@@ -338,9 +357,7 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            debugger;
             this.getAllInstrument(data.object.siteid);
-            
             var subreq = data.object.subrequesttypeid.split(',');
             let items: ListTypeItem[] = [];
             if (subreq.length > 0) {
@@ -349,45 +366,45 @@ export class ServiceRequestComponent implements OnInit {
                 t.listTypeItemId = subreq[i];
                 items.push(t);
               }
-              
-              this.serviceRequestform.patchValue({ "subrequesttypeid": items });
+
+              this.serviceRequestform.patchValue({"subrequesttypeid": items});
             }
-         //   data.object.subrequesttypeid = "";
-            this.serviceRequestform.patchValue({ "serreqno": data.object.serreqno });
-            this.serviceRequestform.patchValue({ "serreqdate": new Date(data.object.serreqdate) });
-            this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
-            this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
-            this.serviceRequestform.patchValue({ "serreqdate": new Date(data.object.serreqdate) });
-            this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
-            this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
-            this.serviceRequestform.patchValue({ "distid": data.object.distid });
-            this.serviceRequestform.patchValue({ "assignedto": data.object.assignedto });
-            this.serviceRequestform.patchValue({ "visittype": data.object.visittype });
-            this.serviceRequestform.patchValue({ "companyname": data.object.companyname });
-            this.serviceRequestform.patchValue({ "requesttime": data.object.requesttime });
-            this.serviceRequestform.patchValue({ "sitename": data.object.sitename });
-            this.serviceRequestform.patchValue({ "country": data.object.country });
-            this.serviceRequestform.patchValue({ "contactperson": data.object.contactperson });
-            this.serviceRequestform.patchValue({ "email": data.object.email });
-            this.serviceRequestform.patchValue({ "operatorname": data.object.operatorname });
-            this.serviceRequestform.patchValue({ "operatornumber": data.object.operatornumber });
-            this.serviceRequestform.patchValue({ "operatoremail": data.object.operatoremail });
-            this.serviceRequestform.patchValue({ "machinesno": data.object.machinesno });
-            this.serviceRequestform.patchValue({ "machengineer": data.object.machengineer });
-            this.serviceRequestform.patchValue({ "xraygenerator": data.object.xraygenerator });
-            this.serviceRequestform.patchValue({ "breakdowntype": data.object.breakdowntype });
-            this.serviceRequestform.patchValue({ "isrecurring": data.object.isrecurring });
-            this.serviceRequestform.patchValue({ "recurringcomments": data.object.recurringcomments });
-            this.serviceRequestform.patchValue({ "breakoccurdetailsid": data.object.breakoccurdetailsid });
-            this.serviceRequestform.patchValue({ "alarmdetails": data.object.alarmdetails });
-            this.serviceRequestform.patchValue({ "resolveaction": data.object.resolveaction });
-            this.serviceRequestform.patchValue({ "currentinstrustatus": data.object.currentinstrustatus });
-            this.serviceRequestform.patchValue({ "accepted": data.object.accepted });
-            this.serviceRequestform.patchValue({ "escalation": data.object.escalation });
-            this.serviceRequestform.patchValue({ "requesttypeid": data.object.requesttypeid });
-            this.serviceRequestform.patchValue({ "remarks": data.object.remarks });
+            //   data.object.subrequesttypeid = "";
+            this.serviceRequestform.patchValue({"serreqno": data.object.serreqno});
+            this.serviceRequestform.patchValue({"serreqdate": new Date(data.object.serreqdate)});
+            this.serviceRequestform.patchValue({"serresolutiondate": new Date(data.object.serresolutiondate)});
+            this.serviceRequestform.patchValue({"machmodelname": data.object.machmodelnametext});
+            this.serviceRequestform.patchValue({"serreqdate": new Date(data.object.serreqdate)});
+            this.serviceRequestform.patchValue({"serresolutiondate": new Date(data.object.serresolutiondate)});
+            this.serviceRequestform.patchValue({"machmodelname": data.object.machmodelnametext});
+            this.serviceRequestform.patchValue({"distid": data.object.distid});
+            this.serviceRequestform.patchValue({"assignedto": data.object.assignedto});
+            this.serviceRequestform.patchValue({"visittype": data.object.visittype});
+            this.serviceRequestform.patchValue({"companyname": data.object.companyname});
+            this.serviceRequestform.patchValue({"requesttime": data.object.requesttime});
+            this.serviceRequestform.patchValue({"sitename": data.object.sitename});
+            this.serviceRequestform.patchValue({"country": data.object.country});
+            this.serviceRequestform.patchValue({"contactperson": data.object.contactperson});
+            this.serviceRequestform.patchValue({"email": data.object.email});
+            this.serviceRequestform.patchValue({"operatorname": data.object.operatorname});
+            this.serviceRequestform.patchValue({"operatornumber": data.object.operatornumber});
+            this.serviceRequestform.patchValue({"operatoremail": data.object.operatoremail});
+            this.serviceRequestform.patchValue({"machinesno": data.object.machinesno});
+            this.serviceRequestform.patchValue({"machengineer": data.object.machengineer});
+            this.serviceRequestform.patchValue({"xraygenerator": data.object.xraygenerator});
+            this.serviceRequestform.patchValue({"breakdowntype": data.object.breakdowntype});
+            this.serviceRequestform.patchValue({"isrecurring": data.object.isrecurring});
+            this.serviceRequestform.patchValue({"recurringcomments": data.object.recurringcomments});
+            this.serviceRequestform.patchValue({"breakoccurdetailsid": data.object.breakoccurdetailsid});
+            this.serviceRequestform.patchValue({"alarmdetails": data.object.alarmdetails});
+            this.serviceRequestform.patchValue({"resolveaction": data.object.resolveaction});
+            this.serviceRequestform.patchValue({"currentinstrustatus": data.object.currentinstrustatus});
+            this.serviceRequestform.patchValue({"accepted": data.object.accepted});
+            this.serviceRequestform.patchValue({"escalation": data.object.escalation});
+            this.serviceRequestform.patchValue({"requesttypeid": data.object.requesttypeid});
+            this.serviceRequestform.patchValue({"remarks": data.object.remarks});
             //
-          //  this.serviceRequestform.patchValue({ "machmodelname": new Date(data.object.machineModelName) });
+            this.serviceRequestform.patchValue({"machmodelname": (data.object.machmodelname)});
             this.customerId = data.object.custid;
             this.siteId = data.object.siteid;
             this.getDistRegnContacts(data.object.distid);
@@ -395,7 +412,7 @@ export class ServiceRequestComponent implements OnInit {
             this.actionList = data.object.engAction;
             this.engineerid = data.object.assignedto;
             this.ticketHistoryList = data.object.assignedHistory;
-            
+
             //this.serviceRequestform.patchValue(data.object);
           },
           error: error => {
@@ -405,7 +422,6 @@ export class ServiceRequestComponent implements OnInit {
           }
         });
 
-       
 
       this.fileshareService.getById(this.serviceRequestId)
         .pipe(first())
@@ -420,13 +436,11 @@ export class ServiceRequestComponent implements OnInit {
           }
         });
 
-    }
-    else {
+    } else {
       this.contactService.getCustomerSiteByContact(this.user.contactId)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            debugger;
             this.logindata = data.object;
             //this.customerList = this.logindata.customer;
             //if (this.customerList != undefined) {
@@ -435,14 +449,14 @@ export class ServiceRequestComponent implements OnInit {
             this.siteId = this.logindata.sites[0].id;
             this.customerId = this.logindata.id;
             this.customerSitelist = this.logindata.sites;
-            this.serviceRequestform.patchValue({ "companyname": this.logindata.custname });
-            this.serviceRequestform.patchValue({ "distid": this.logindata.defdistid });
+            this.serviceRequestform.patchValue({"companyname": this.logindata.custname});
+            this.serviceRequestform.patchValue({"distid": this.logindata.defdistid});
             this.distId = this.logindata.defdistid;
-            this.serviceRequestform.patchValue({ "contactperson": this.user.username });
-            this.serviceRequestform.patchValue({ "email": this.user.email });
-            this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
+            this.serviceRequestform.patchValue({"contactperson": this.user.username});
+            this.serviceRequestform.patchValue({"email": this.user.email});
+            this.serviceRequestform.patchValue({"sitename": this.logindata.sites[0].custregname});
 
-            
+
             //var subreq = this.logindata.sites.id.join(',');
             let subreq = this.logindata.sites.map(x => x.id).join(',');
 
@@ -450,7 +464,6 @@ export class ServiceRequestComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data: any) => {
-                  debugger;
                   this.instrumentList = data.object;
                 },
                 error: error => {
@@ -461,8 +474,8 @@ export class ServiceRequestComponent implements OnInit {
               });
 
 
-            //this.getAllInstrument(this.logindata.sites[0].id);
-           // this.getDistRegnContacts(this.logindata.defdistid);
+            // this.getAllInstrument(this.logindata.sites[0].id);
+            // this.getDistRegnContacts(this.logindata.defdistid);
             //if (this.logindata.contacts.length > 0) {
             //  this.serviceRequestform.patchValue({ "operatorname": this.logindata.contacts[0].fname + '' + this.logindata.contacts[0].lname });
             //  this.serviceRequestform.patchValue({ "operatornumber": this.logindata.contacts[0].pcontactno });
@@ -481,12 +494,13 @@ export class ServiceRequestComponent implements OnInit {
           }
         });
     }
-    
+
     this.columnDefs = this.createColumnDefs();
     this.ticketcolumnDefs = this.createColumnHistoryDefs();
     this.actionDefs = this.createColumnActionDefs();
     this.pdfcolumnDefs = this.pdfcreateColumnDefs();
     this.serviceRequestform.get('distid').disable();
+
     if (this.IsEngineerView) {
       this.serviceRequestform.get('assignedto').disable();
       this.serviceRequestform.get('serreqdate').disable();
@@ -501,8 +515,7 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('resolveaction').disable();
       this.serviceRequestform.get('visittype').disable();
       this.serviceRequestform.get('currentinstrustatus').disable();
-    }
-    else if (this.IsDistributorView) {
+    } else if (this.IsDistributorView) {
       this.serviceRequestform.get('assignedto').enable();
       this.serviceRequestform.get('requesttime').disable();
       this.serviceRequestform.get('serreqdate').disable();
@@ -516,21 +529,24 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('resolveaction').disable();
       this.serviceRequestform.get('visittype').disable();
       this.serviceRequestform.get('currentinstrustatus').disable();
-    }
-    else {
+    } else {
       this.serviceRequestform.get('assignedto').disable();
       this.serviceRequestform.get('serreqdate').enable();
 
     }
-   // this.ticketcolumnDefs = this.createColumnTicketDefs();
+    // this.ticketcolumnDefs = this.createColumnTicketDefs();
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.serviceRequestform.controls; }
-  get a() { return this.serviceRequestform.controls.engineer; }
-   
+  get f() {
+    return this.serviceRequestform.controls;
+  }
+
+  get a() {
+    return this.serviceRequestform.controls.engineer;
+  }
+
   onSubmit() {
-    debugger;
     this.submitted = true;
 
     // reset alerts on submit
@@ -569,21 +585,19 @@ export class ServiceRequestComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
 
               this.router.navigate(["servicerequestlist"]);
-            }
-            else {
+            } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-           
+
           },
           error: error => {
-           // this.alertService.error(error);
+            // this.alertService.error(error);
             this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });
-    }
-    else {
+    } else {
       this.serviceRequest = this.serviceRequestform.getRawValue();
       this.serviceRequest.id = this.serviceRequestId;
       this.serviceRequest.siteid = this.siteId;
@@ -606,15 +620,14 @@ export class ServiceRequestComponent implements OnInit {
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["servicerequestlist"]);
-            }
-            else {
+            } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-            
+
           },
           error: error => {
-          //  this.alertService.error(error);
+            //  this.alertService.error(error);
             this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
@@ -627,7 +640,7 @@ export class ServiceRequestComponent implements OnInit {
     this.servicereport = new ServiceReport();
     this.servicereport.serviceRequestId = this.serviceRequestId;
     this.servicereport.customer = this.serviceRequestform.get('companyname').value;
-    this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name +'/'+ this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
+    this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
     this.servicereport.country = this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name;
     this.servicereport.problem = this.breakdownlist.filter(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)[0].itemname + " " + this.serviceRequestform.get('alarmdetails').value + ' ' + this.serviceRequestform.get('remarks').value;
     this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.listTypeItemId == environment.INS)).length > 0 ? true : false;
@@ -653,8 +666,7 @@ export class ServiceRequestComponent implements OnInit {
                   if (data.result) {
                     this.notificationService.showSuccess(data.resultMessage, "Success");
                     this.router.navigate(["servicereport", data.object.id]);
-                  }
-                  else {
+                  } else {
                     this.notificationService.showError(data.resultMessage, "Error");
                   }
                   this.loading = false;
@@ -672,8 +684,7 @@ export class ServiceRequestComponent implements OnInit {
             this.loading = false;
           }
         });
-    }
-    else {
+    } else {
       this.servicereportService.save(this.servicereport)
         .pipe(first())
         .subscribe({
@@ -682,8 +693,7 @@ export class ServiceRequestComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["servicereport", data.object.id]);
-            }
-            else {
+            } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
@@ -696,7 +706,7 @@ export class ServiceRequestComponent implements OnInit {
           }
         });
     }
-    
+
   }
 
   addAssignedHistory(sr: ServiceRequest) {
@@ -712,8 +722,7 @@ export class ServiceRequestComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["servicerequestlist"]);
-            }
-            else {
+            } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
@@ -727,6 +736,7 @@ export class ServiceRequestComponent implements OnInit {
         });
     }
   }
+
   //onassingedTo(event) {
   //  //debugger;
   //  this.engineerid = event.value;
@@ -765,8 +775,7 @@ export class ServiceRequestComponent implements OnInit {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 this.router.navigate(["servicerequestlist"]);
-              }
-              else {
+              } else {
                 this.notificationService.showError(data.resultMessage, "Error");
               }
               this.loading = false;
@@ -806,7 +815,7 @@ export class ServiceRequestComponent implements OnInit {
   download(fileData: any) {
     //debugger;
     const byteArray = new Uint8Array(atob(fileData).split('').map(char => char.charCodeAt(0)));
-    let b = new Blob([byteArray], { type: 'application/pdf' });
+    let b = new Blob([byteArray], {type: 'application/pdf'});
     const url = window.URL.createObjectURL(b);
     window.open(url);
     // i.e. display the PDF content via iframe
@@ -815,10 +824,10 @@ export class ServiceRequestComponent implements OnInit {
 
   public onRowClicked(e) {
     //debugger;
-   if (e.event.target !== undefined) {
+    if (e.event.target !== undefined) {
       let data = e.data;
-     let actionType = e.event.target.getAttribute("data-action-type");
-     //this.serviceRequestId = this.route.snapshot.paramMap.get('id');
+      let actionType = e.event.target.getAttribute("data-action-type");
+      //this.serviceRequestId = this.route.snapshot.paramMap.get('id');
       switch (actionType) {
         case "remove":
           if (confirm("Are you sure, you want to remove the engineer comment?") == true) {
@@ -829,8 +838,7 @@ export class ServiceRequestComponent implements OnInit {
                 next: (d: any) => {
                   if (d.result) {
                     this.notificationService.showSuccess(d.resultMessage, "Success");
-                  }
-                  else {
+                  } else {
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
@@ -859,7 +867,6 @@ export class ServiceRequestComponent implements OnInit {
     //}
   }
 
- 
 
   private pdfcreateColumnDefs() {
     return [
@@ -926,12 +933,12 @@ export class ServiceRequestComponent implements OnInit {
         next: (data: any) => {
           instument = data.object;
           this.siteId = data.object.custSiteId;
-          this.serviceRequestform.patchValue({ "machmodelname": instument.instype });
-          this.serviceRequestform.patchValue({ "operatorname": instument.operatorEng.fname + '' + instument.operatorEng.lname  });
-          this.serviceRequestform.patchValue({ "operatornumber": instument.operatorEng.pcontactno });
-          this.serviceRequestform.patchValue({ "operatoremail": instument.operatorEng.pemail });
-          this.serviceRequestform.patchValue({ "machengineer": instument.machineEng.fname + ' ' + instument.machineEng.lname  });
-          this.serviceRequestform.patchValue({ "xraygenerator": instument.insversion });
+          this.serviceRequestform.patchValue({"machmodelname": instument.instype});
+          this.serviceRequestform.patchValue({"operatorname": instument.operatorEng.fname + '' + instument.operatorEng.lname});
+          this.serviceRequestform.patchValue({"operatornumber": instument.operatorEng.pcontactno});
+          this.serviceRequestform.patchValue({"operatoremail": instument.operatorEng.pemail});
+          this.serviceRequestform.patchValue({"machengineer": instument.machineEng.fname + ' ' + instument.machineEng.lname});
+          this.serviceRequestform.patchValue({"xraygenerator": instument.insversion});
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -939,7 +946,7 @@ export class ServiceRequestComponent implements OnInit {
         }
       });
 
-      }    
+  }
 
   public onPdfRowClicked(e) {
     //debugger;
@@ -969,8 +976,7 @@ export class ServiceRequestComponent implements OnInit {
                           this.loading = false;
                         }
                       });
-                  }
-                  else {
+                  } else {
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
@@ -1020,7 +1026,7 @@ export class ServiceRequestComponent implements OnInit {
     ]
   }
 
-  
+
   private createColumnHistoryDefs() {
     return [
       {
@@ -1144,13 +1150,13 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
 
-  open(param: string,param1:string) {
+  open(param: string, param1: string) {
     //debugger;
     const initialState = {
       itemId: param,
       id: param1
     };
-    this.bsModalRef = this.modalService.show(ModelEngContentComponent, { initialState });
+    this.bsModalRef = this.modalService.show(ModelEngContentComponent, {initialState});
   }
 
   openaction(param: string, param1: string) {
@@ -1161,7 +1167,7 @@ export class ServiceRequestComponent implements OnInit {
       engineerid: this.engineerid,
       engineerlist: this.appendList
     };
-    this.bsActionModalRef = this.modalService.show(ModelEngActionContentComponent, { initialState });
+    this.bsActionModalRef = this.modalService.show(ModelEngActionContentComponent, {initialState});
   }
 
   public onactionRowClicked(e) {
@@ -1180,8 +1186,7 @@ export class ServiceRequestComponent implements OnInit {
                 next: (d: any) => {
                   if (d.result) {
                     this.notificationService.showSuccess(d.resultMessage, "Success");
-                  }
-                  else {
+                  } else {
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
