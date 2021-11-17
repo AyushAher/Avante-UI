@@ -147,6 +147,8 @@ export class ServiceRequestComponent implements OnInit {
         this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
           .subscribe({
             next: (data: any) => {
+              debugger
+              console.log(data)
               this.engineerCommentList = data.object.engComments;
               this.actionList = data.object.engAction;
             },
@@ -357,6 +359,7 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            console.log(data)
             this.getAllInstrument(data.object.siteid);
             var subreq = data.object.subrequesttypeid.split(',');
             let items: ListTypeItem[] = [];
@@ -408,7 +411,14 @@ export class ServiceRequestComponent implements OnInit {
             this.customerId = data.object.custid;
             this.siteId = data.object.siteid;
             this.getDistRegnContacts(data.object.distid);
-            this.engineerCommentList = data.object.engComments;
+            this.engineerCommentList = data.object.engComments
+
+            // transform next date to required format
+            let datepipe = new DatePipe("en-US");
+            this.engineerCommentList.forEach((value, index) => {
+              value.nextdate = datepipe.transform(value.nextdate,"dd/MM/YYYY")
+            })
+
             this.actionList = data.object.engAction;
             this.engineerid = data.object.assignedto;
             this.ticketHistoryList = data.object.assignedHistory;
@@ -558,23 +568,29 @@ export class ServiceRequestComponent implements OnInit {
     }
     this.isSave = true;
     this.loading = true;
+
     if (this.serviceRequestId == null) {
       this.serviceRequest = this.serviceRequestform.getRawValue();
       this.serviceRequest.engComments = [];
       this.serviceRequest.assignedHistory = [];
       this.serviceRequest.engAction = [];
+
       this.serviceRequest.siteid = this.siteId;
       this.serviceRequest.custid = this.customerId;
+
       if (this.serviceRequest.isrecurring == null) {
         this.serviceRequest.isrecurring = false;
       }
+
       if (this.serviceRequestform.get('subrequesttypeid').value.length > 0) {
         var selectarray = this.serviceRequestform.get('subrequesttypeid').value;
         this.serviceRequest.subrequesttypeid = selectarray.map(x => x.listTypeItemId).join(',');
       }
+
       if (this.IsCustomerView == true) {
         this.serviceRequest.serresolutiondate = null;
       }
+
       this.serviceRequestService.save(this.serviceRequest)
         .pipe(first())
         .subscribe({
@@ -605,10 +621,12 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequest.engComments = [];
       this.serviceRequest.assignedHistory = [];
       this.serviceRequest.engAction = [];
+
       if (this.serviceRequestform.get('subrequesttypeid').value.length > 0) {
         var selectarray = this.serviceRequestform.get('subrequesttypeid').value;
         this.serviceRequest.subrequesttypeid = selectarray.map(x => x.listTypeItemId).join(',');
       }
+
       this.serviceRequestService.update(this.serviceRequestId, this.serviceRequest)
         .pipe(first())
         .subscribe({
@@ -1007,7 +1025,7 @@ export class ServiceRequestComponent implements OnInit {
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
       },
       {
-        headerName: 'nextDate',
+        headerName: 'Next Date',
         field: 'nextdate',
         filter: false,
         enableSorting: false,
@@ -1030,7 +1048,7 @@ export class ServiceRequestComponent implements OnInit {
   private createColumnHistoryDefs() {
     return [
       {
-        headerName: 'EngineerName',
+        headerName: 'Engineer Name',
         field: 'engineername',
         filter: false,
         enableSorting: false,
@@ -1039,7 +1057,7 @@ export class ServiceRequestComponent implements OnInit {
         tooltipField: 'engineername',
       },
       {
-        headerName: 'assigneddate',
+        headerName: 'Assigned Date',
         field: 'assigneddate',
         filter: false,
         enableSorting: false,
@@ -1047,7 +1065,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'comments',
+        headerName: 'Comments',
         field: 'comments',
         filter: false,
         enableSorting: false,
@@ -1055,7 +1073,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'status',
+        headerName: 'Status',
         field: 'ticketstatus',
         filter: false,
         enableSorting: false,
@@ -1079,7 +1097,7 @@ export class ServiceRequestComponent implements OnInit {
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
       },
       {
-        headerName: 'EngineerName',
+        headerName: 'Engineer Name',
         field: 'engineername',
         filter: false,
         enableSorting: false,
@@ -1088,7 +1106,7 @@ export class ServiceRequestComponent implements OnInit {
         tooltipField: 'engineername',
       },
       {
-        headerName: 'actionTaken',
+        headerName: 'Action Taken',
         field: 'actiontaken',
         filter: false,
         enableSorting: false,
@@ -1096,7 +1114,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'comments',
+        headerName: 'Comments',
         field: 'comments',
         filter: false,
         enableSorting: false,
@@ -1104,7 +1122,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'teamViewerRecroding',
+        headerName: 'Team Viewer Recording',
         field: 'teamviewerrecroding',
         filter: false,
         enableSorting: false,
@@ -1112,7 +1130,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'date',
+        headerName: 'Date',
         field: 'actiondate',
         filter: false,
         enableSorting: false,
