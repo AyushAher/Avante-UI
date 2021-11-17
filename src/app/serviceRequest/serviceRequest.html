@@ -283,7 +283,7 @@
               <label for="accepted"></label>
               <div class="checkbox">
                 <label for="warranty">
-                  <input class="" formControlName="accepted" type="checkbox"/>
+                  <input class="" (input)="Accepted($event.target.value)" #accp formControlName="accepted" type="checkbox"/>
                   Accepted
                 </label>
               </div>
@@ -359,7 +359,7 @@
             <div *ngIf="IsEngineerView" aria-labelledby="home-tab" class="tab-pane fade show active" id="home"
                  role="tabpanel">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <button (click)="open(serviceRequestId)" class="btn btn-sm btn-success button" style="margin: 10px;"
+                <button (click)="open(serviceRequestId)" *ngIf="!accepted" class="btn btn-sm btn-success button" style="margin: 10px;"
                         type="button"><i class="fas fa-plus-circle" title="Add"></i></button>
                 <ag-grid-angular style="width: 100%; height: 250px;" (rowClicked)="onRowClicked($event)"
                                  (cellValueChanged)="onCellValueChanged($event)"

@@ -115,7 +115,7 @@ export class ServiceRequestComponent implements OnInit {
   custcityname: string;
   breakdownlist: ListTypeItem[];
   allsites: any;
-
+  accepted: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -405,6 +405,8 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({"requesttypeid": data.object.requesttypeid});
             this.serviceRequestform.patchValue({"remarks": data.object.remarks});
             //
+
+            this.Accepted(data.object.accepted)
             this.serviceRequestform.patchValue({"machmodelname": (data.object.machmodelname)});
             this.customerId = data.object.custid;
             this.siteId = data.object.siteid;
@@ -413,12 +415,15 @@ export class ServiceRequestComponent implements OnInit {
 
             // transform next date to required format
             let datepipe = new DatePipe("en-US");
+
             this.engineerCommentList.forEach((value, index) => {
               value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
             })
 
             this.actionList = data.object.engAction;
-
+            this.actionList.forEach((value, index) => {
+              value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
+            })
             this.engineerid = data.object.assignedto;
             this.ticketHistoryList = data.object.assignedHistory;
 
@@ -656,8 +661,15 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
 
+  Accepted(isAccepted?) {
+    if (isAccepted == "on") {
+      this.accepted = !this.accepted
+    } else {
+      this.accepted = isAccepted
+    }
+  }
+
   generatereport() {
-    debugger;
     this.servicereport = new ServiceReport();
     this.servicereport.serviceRequestId = this.serviceRequestId;
     this.servicereport.customer = this.serviceRequestform.get('companyname').value;
@@ -686,6 +698,29 @@ export class ServiceRequestComponent implements OnInit {
                   debugger;
                   if (data.result) {
                     this.notificationService.showSuccess(data.resultMessage, "Success");
+
+                    // Add Record with status 'completed' in ticket action
+                    this.srAssignedHistory = new tickersAssignedHistory;
+                    this.srAssignedHistory.engineerid = this.engineerid;
+                    this.srAssignedHistory.servicerequestid = this.serviceRequestId;
+                    this.srAssignedHistory.ticketstatus = "c488750a-47c4-11ec-9dbc-54bf64020316";
+                    this.srAssignedHistory.assigneddate = new Date()
+
+                    this.srAssignedHistoryService.save(this.srAssignedHistory)
+                      .pipe(first())
+                      .subscribe({
+                        next: (data: any) => {
+                          if (!data.result) {
+                            this.notificationService.showError(data.resultMessage, "Error");
+                          }
+                        },
+                        error: error => {
+                          // this.alertService.error(error);
+                          this.notificationService.showSuccess(error, "Error");
+                          this.loading = false;
+                        }
+                      });
+
                     this.router.navigate(["servicereport", data.object.id]);
                   } else {
                     this.notificationService.showError(data.resultMessage, "Error");
@@ -712,6 +747,27 @@ export class ServiceRequestComponent implements OnInit {
             debugger;
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
+              // Add Record with status 'completed' in ticket action
+              this.srAssignedHistory = new tickersAssignedHistory;
+              this.srAssignedHistory.engineerid = this.engineerid;
+              this.srAssignedHistory.servicerequestid = this.serviceRequestId;
+              this.srAssignedHistory.ticketstatus = "c488750a-47c4-11ec-9dbc-54bf64020316";
+              this.srAssignedHistory.assigneddate = new Date()
+
+              this.srAssignedHistoryService.save(this.srAssignedHistory)
+                .pipe(first())
+                .subscribe({
+                  next: (data: any) => {
+                    if (!data.result) {
+                      this.notificationService.showError(data.resultMessage, "Error");
+                    }
+                  },
+                  error: error => {
+                    // this.alertService.error(error);
+                    this.notificationService.showSuccess(error, "Error");
+                    this.loading = false;
+                  }
+                });
               this.router.navigate(["servicereport", data.object.id]);
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
@@ -731,6 +787,7 @@ export class ServiceRequestComponent implements OnInit {
 
   addAssignedHistory(sr: ServiceRequest) {
     if (this.engineerid != null && this.engineerid != sr.assignedto) {
+
       this.srAssignedHistory = new tickersAssignedHistory;
       this.srAssignedHistory.engineerid = this.engineerid;
       this.srAssignedHistory.servicerequestid = sr.id;
@@ -891,7 +948,6 @@ export class ServiceRequestComponent implements OnInit {
     //  d[0].insqty = event.newValue;
     //}
   }
-
 
   private pdfcreateColumnDefs() {
     return [
