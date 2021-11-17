@@ -38,14 +38,16 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="serreqno">SrNo</label>
-              <input type="text" readonly formControlName="serreqno" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.serreqno.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.serreqno.errors }" class="form-control" formControlName="serreqno" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.serreqno.errors" class="invalid-feedback">
                 <div *ngIf="f.serreqno.errors.required">SrNo is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="distid">Distributor</label>
-              <select formControlName="distid" class="form-control" readonly [ngClass]="{ 'is-invalid': submitted && f.distid.errors }">
+              <select [ngClass]="{ 'is-invalid': submitted && f.distid.errors }" class="form-control" formControlName="distid"
+                      readonly>
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of defaultdistributors" value={{distributor.id}}>
                   {{distributor.distname}}
@@ -57,7 +59,8 @@
             </div>
             <div class="col-md-3 col-sm-3" *ngIf="IsCustomerView==false">
               <label for="assignedTo">Assigned To</label>
-              <select formControlName="assignedto" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.assignedto.errors }">
+              <select [ngClass]="{ 'is-invalid': submitted && f.assignedto.errors }" class="form-control"
+                      formControlName="assignedto">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let c of appendList" value={{c.id}}>
                   {{c.fname}} {{c.lname}}
@@ -69,7 +72,8 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="serreqdate">Date</label>
-              <input type="text" [readonly]="IsEngineerView" formControlName="serreqdate" bsDatepicker class="form-control" [ngClass]="{ 'is-invalid': submitted && f.serreqdate.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.serreqdate.errors }" [readonly]="IsEngineerView" bsDatepicker class="form-control"
+                     formControlName="serreqdate" type="text"/>
               <div *ngIf="submitted && f.serreqdate.errors" class="invalid-feedback">
                 <div *ngIf="f.serreqdate.errors.required">Date is required</div>
               </div>
@@ -78,7 +82,8 @@
           <div class="row">
             <div class="col-md-3 col-sm-3">
               <label for="visittype">Service Type</label>
-              <select formControlName="visittype" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }">
+              <select [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }" class="form-control"
+                      formControlName="visittype">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let st of serviceTypeList" value={{st.listTypeItemId}}>
                   {{st.itemname}}
@@ -90,31 +95,35 @@
             </div>
             <div class="col-sm-3">
               <label for="companyname">Company Name</label>
-              <input type="text" readonly formControlName="companyname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.companyname.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.companyname.errors }" class="form-control" formControlName="companyname" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.companyname.errors" class="invalid-feedback">
                 <div *ngIf="f.companyname.errors.required">companyName is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="time">Time</label>
-              <input type="time" formControlName="requesttime" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.requesttime.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.requesttime.errors }" class="form-control" formControlName="requesttime"
+                     type="time"/>
               <div *ngIf="submitted && f.requesttime.errors" class="invalid-feedback">
                 <div *ngIf="f.requesttime.errors.required">time is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="sitename">Site Name</label>
-              <input type="text" readonly formControlName="sitename" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.sitename.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.sitename.errors }" class="form-control" formControlName="sitename" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.sitename.errors" class="invalid-feedback">
                 <div *ngIf="f.sitename.errors.required">siteName is required</div>
               </div>
             </div>
-            
+
           </div>
           <div class="row">
             <div class="col-md-3 col-sm-3">
               <label for="country">Country</label>
-              <select formControlName="country" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.country.errors }">
+              <select [ngClass]="{ 'is-invalid': submitted && f.country.errors }" class="form-control"
+                      formControlName="country">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let country of countries" value={{country.id}}>
                   {{country.name}}
@@ -126,14 +135,16 @@
             </div>
             <div class="col-sm-3">
               <label for="contactperson">contact Person</label>
-              <input type="text" readonly formControlName="contactperson" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactperson.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.contactperson.errors }" class="form-control" formControlName="contactperson" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.contactperson.errors" class="invalid-feedback">
                 <div *ngIf="f.contactperson.errors.required">contactperson is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="email">Email</label>
-              <input type="email" readonly formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.email.errors }" class="form-control" formControlName="email" readonly
+                     type="email"/>
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf="f.email.errors?.required">Email is required</div>
                 <div *ngIf="f.email.errors?.pattern">Please provide valid email</div>
@@ -141,7 +152,9 @@
             </div>
             <div class="col-sm-3">
               <label for="machinesNo">Machine SerialNo</label>
-              <select formControlName="machinesno" class="form-control" #ddlMachine (change)="oninstuchange(ddlMachine.value)" [ngClass]="{ 'is-invalid': submitted && f.machinesno.errors }">
+              <select #ddlMachine (change)="oninstuchange(ddlMachine.value)" [ngClass]="{ 'is-invalid': submitted && f.machinesno.errors }"
+                      class="form-control"
+                      formControlName="machinesno">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let i of instrumentList" value={{i.id}}>
                   {{i.serialnos}}
@@ -156,52 +169,59 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="operatorname">Operator Name</label>
-              <input type="text" readonly formControlName="operatorname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.operatorname.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.operatorname.errors }" class="form-control" formControlName="operatorname" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.operatorname.errors" class="invalid-feedback">
                 <div *ngIf="f.operatorname.errors.required">operatorName is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="operatornumber">Operator Number</label>
-              <input type="text" readonly formControlName="operatornumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.operatornumber.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.operatornumber.errors }" class="form-control" formControlName="operatornumber" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.operatornumber.errors" class="invalid-feedback">
                 <div *ngIf="f.operatornumber.errors.required">operatorNumber is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="operatoremail">Operator Email</label>
-              <input type="text" readonly formControlName="operatoremail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.operatoremail.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.operatoremail.errors }" class="form-control" formControlName="operatoremail" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.operatoremail.errors" class="invalid-feedback">
                 <div *ngIf="f.operatoremail.errors.required">operatoremail is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="machmodelname">Machine Model Name</label>
-              <input type="text" readonly formControlName="machmodelname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.machmodelname.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.machmodelname.errors }" class="form-control" formControlName="machmodelname" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.machmodelname.errors" class="invalid-feedback">
                 <div *ngIf="f.machmodelname.errors.required">machineModelName is required</div>
               </div>
             </div>
-           
+
           </div>
           <div class="row">
             <div class="col-md-3 col-sm-3">
               <label for="xraygenerator">xRayGenerator</label>
-              <input type="text" readonly formControlName="xraygenerator" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.xraygenerator.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.xraygenerator.errors }" class="form-control" formControlName="xraygenerator" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.xraygenerator.errors" class="invalid-feedback">
                 <div *ngIf="f.xraygenerator.errors?.required">xRayGenerator is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="machengineer">Machine Engineer</label>
-              <input type="text" readonly formControlName="machengineer" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.machengineer.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.machengineer.errors }" class="form-control" formControlName="machengineer" readonly
+                     type="text"/>
               <div *ngIf="submitted && f.machengineer.errors" class="invalid-feedback">
                 <div *ngIf="f.machengineer.errors?.required">machineengineer is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="breakdowntype">Breakdown Type</label>
-              <input type="text" formControlName="breakdowntype" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.breakdowntype.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.breakdowntype.errors }" class="form-control" formControlName="breakdowntype"
+                     type="text"/>
               <div *ngIf="submitted && f.breakdowntype.errors" class="invalid-feedback">
                 <div *ngIf="f.breakdowntype.errors.required">breakdownType is required</div>
               </div>
@@ -210,7 +230,7 @@
               <label for="isrecurring"></label>
               <div class="checkbox">
                 <label for="warranty">
-                  <input type="checkbox" formControlName="isrecurring" class="" />
+                  <input class="" formControlName="isrecurring" type="checkbox"/>
                   Is Recurring
                 </label>
               </div>
@@ -218,19 +238,21 @@
                 <div *ngIf="f.isrecurring.errors?.required">isRecurring is required</div>
               </div>
             </div>
-           
+
           </div>
           <div class="row">
             <div class="col-sm-3">
               <label for="recurringcomments">Recurring Comment</label>
-              <input type="text" formControlName="recurringcomments" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.recurringcomments.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.recurringcomments.errors }" class="form-control" formControlName="recurringcomments"
+                     type="text"/>
               <div *ngIf="submitted && f.recurringcomments.errors" class="invalid-feedback">
                 <div *ngIf="f.recurringcomments.errors.required">Recurring Comment is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="breakoccurdetailsid">Breakdown Occurance Details</label>
-              <select formControlName="breakoccurdetailsid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.breakoccurdetailsid.errors }">
+              <select [ngClass]="{ 'is-invalid': submitted && f.breakoccurdetailsid.errors }" class="form-control"
+                      formControlName="breakoccurdetailsid">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let st of breakdownlist" value={{st.listTypeItemId}}>
                   {{st.itemname}}
@@ -242,14 +264,16 @@
             </div>
             <div class="col-sm-3">
               <label for="alarmdetails">Alarm Details</label>
-              <input type="text" formControlName="alarmdetails" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.alarmdetails.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.alarmdetails.errors }" class="form-control" formControlName="alarmdetails"
+                     type="text"/>
               <div *ngIf="submitted && f.alarmdetails.errors" class="invalid-feedback">
                 <div *ngIf="f.alarmdetails.errors.required">Alarm Details is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="resolveaction">ResolveAction</label>
-              <input type="text" formControlName="resolveaction" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.resolveaction.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.resolveaction.errors }" class="form-control" formControlName="resolveaction"
+                     type="text"/>
               <div *ngIf="submitted && f.resolveaction.errors" class="invalid-feedback">
                 <div *ngIf="f.resolveaction.errors?.required">ResolveAction is required</div>
               </div>
@@ -259,7 +283,7 @@
               <label for="accepted"></label>
               <div class="checkbox">
                 <label for="warranty">
-                  <input type="checkbox" formControlName="accepted" class="" />
+                  <input class="" formControlName="accepted" type="checkbox"/>
                   Accepted
                 </label>
               </div>
@@ -269,14 +293,16 @@
             </div>
             <div class="col-md-3 col-sm-3" *ngIf="IsDistributorView">
               <label for="serresolutiondate">Resolution Date</label>
-              <input type="text" formControlName="serresolutiondate" bsDatepicker class="form-control" [ngClass]="{ 'is-invalid': submitted && f.serresolutiondate.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.serresolutiondate.errors }" bsDatepicker class="form-control" formControlName="serresolutiondate"
+                     type="text"/>
               <div *ngIf="submitted && f.serresolutiondate.errors" class="invalid-feedback">
                 <div *ngIf="f.serresolutiondate.errors.required">Resolution is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="requesttypeid">Request Type</label>
-              <select formControlName="requesttypeid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.requesttypeid.errors }">
+              <select [ngClass]="{ 'is-invalid': submitted && f.requesttypeid.errors }" class="form-control"
+                      formControlName="requesttypeid">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let req of reqtypelist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
@@ -299,60 +325,74 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="remarks">Remarks</label>
-              <input type="text" formControlName="remarks" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.remarks.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.remarks.errors }" class="form-control" formControlName="remarks"
+                     type="text"/>
               <div *ngIf="submitted && f.remarks.errors" class="invalid-feedback">
                 <div *ngIf="f.remarks.errors.required">remarks is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="currentinstrustatus">Current Instrument Status</label>
-              <input type="text" formControlName="currentinstrustatus" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" />
+              <input [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" class="form-control" formControlName="currentinstrustatus"
+                     type="text"/>
               <div *ngIf="submitted && f.currentinstrustatus.errors" class="invalid-feedback">
                 <div *ngIf="f.currentinstrustatus.errors.required">Current Instrument Status is required</div>
               </div>
             </div>
           </div>
-          <br />
+          <br/>
           <ul class="nav nav-tabs" id="myTab" role="tablist" *ngIf="IsCustomerView==false">
             <li class="nav-item" *ngIf="IsEngineerView==true">
-              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="{{IsEngineerView}}">Engineer</a>
+              <a aria-controls="home" aria-selected="{{IsEngineerView}}" class="nav-link active" data-toggle="tab" href="#home" id="home-tab"
+                 role="tab">Engineer</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="{{IsDistributorView}}">Ticket Assigned History</a>
+              <a aria-controls="profile" aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab" href="#profile" id="profile-tab"
+                 role="tab">Ticket Assigned History</a>
             </li>
             <li class="nav-item" *ngIf="IsEngineerView==true">
-              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Action</a>
+              <a aria-controls="contact" aria-selected="false" class="nav-link" data-toggle="tab" href="#contact" id="contact-tab"
+                 role="tab">Action</a>
             </li>
           </ul>
           <div class="tab-content" id="myTabContent" *ngIf="IsCustomerView==false">
-            <div class="tab-pane fade show active" *ngIf="IsEngineerView" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div *ngIf="IsEngineerView" aria-labelledby="home-tab" class="tab-pane fade show active" id="home"
+                 role="tabpanel">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;" (click)="open(serviceRequestId)"><i class="fas fa-plus-circle" title="Add"></i></button>
+                <button (click)="open(serviceRequestId)" class="btn btn-sm btn-success button" style="margin: 10px;"
+                        type="button"><i class="fas fa-plus-circle" title="Add"></i></button>
                 <ag-grid-angular style="width: 100%; height: 250px;" (rowClicked)="onRowClicked($event)"
                                  (cellValueChanged)="onCellValueChanged($event)"
                                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnDefs" [rowData]="engineerCommentList" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                                 [columnDefs]="columnDefs" [rowData]="engineerCommentList" pagination="true"
+                                 paginationPageSize=10 rowSelection="single"></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="height: 250px;" (rowClicked)="onhisRowClicked($event)"
                                  class="ag-theme-alpine" (gridReady)="historyready($event)"
-                                 [columnDefs]="ticketcolumnDefs" [rowData]="ticketHistoryList" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                                 [columnDefs]="ticketcolumnDefs" [rowData]="ticketHistoryList" pagination="true"
+                                 paginationPageSize=10 rowSelection="single"></ag-grid-angular>
               </div>
             </div>
-            <div class="tab-pane fade" id="contact" role="tabpanel" *ngIf="IsEngineerView" aria-labelledby="contact-tab">
+            <div *ngIf="IsEngineerView" aria-labelledby="contact-tab" class="tab-pane fade" id="contact"
+                 role="tabpanel">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;" (click)="openaction(serviceRequestId)"><i class="fas fa-plus-circle" title="Add"></i></button>
-                <ag-grid-angular style="width: 100%; height: 250px;" (rowClicked)="onactionRowClicked($event)" class="ag-theme-alpine" (gridReady)="onGridReady($event)" (cellValueChanged)="onCellValueChanged($event)"
-                                 [columnDefs]="actionDefs" [rowData]="actionList" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                <button (click)="openaction(serviceRequestId)" class="btn btn-sm btn-success button" style="margin: 10px;"
+                        type="button"><i class="fas fa-plus-circle" title="Add"></i></button>
+                <ag-grid-angular (cellValueChanged)="onCellValueChanged($event)" (gridReady)="onGridReady($event)"
+                                 (rowClicked)="onactionRowClicked($event)" [columnDefs]="actionDefs"
+                                 [rowData]="actionList"
+                                 class="ag-theme-alpine" pagination="true" paginationPageSize=10
+                                 rowSelection="single" style="width: 100%; height: 250px;"></ag-grid-angular>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="pdf" style="margin-right:15px;margin-top:15px;">Document</label>
-              <input type='file' id="pdfUpload" multiple accept=".pdf" #filePdfInput (change)="uploadPdfFile($event)" />
+              <input #filePdfInput (change)="uploadPdfFile($event)" accept=".pdf" id="pdfUpload" multiple type='file'/>
             </div>
             <div class="col-md-4 col-sm-4" *ngIf="PdffileData" style="margin-top:4%;">
               <label></label>
@@ -362,12 +402,14 @@
           </div>
           <div class="row" *ngIf="PdffileData">
             <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine" (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"
-                               [columnDefs]="pdfcolumnDefs" [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
+              <ag-grid-angular (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"
+                               [columnDefs]="pdfcolumnDefs" [rowData]="PdffileData"
+                               class="ag-theme-alpine" pagination="true" paginationPageSize=5
+                               rowSelection="single" style="width: 100%; height: 250px;"></ag-grid-angular>
             </div>
           </div>
           <hr>
-          <div class="row" *ngIf="IsCustomerView"  style="display:none">
+          <div *ngIf="IsCustomerView" class="row" style="display:none">
             <div class="col-sm-3">
               <label for="">Escalation</label>
               <select formControlName="escalation" class="form-control">
@@ -381,17 +423,19 @@
               </div>-->
             </div>
           </div>
-            <hr />
-            <div class="row">
-              <div class="col-md-6 col-sm-6" style="padding:10px">
-                <button [disabled]="loading" class="btn btn-primary" *ngIf="hasAddAccess==true || hasUpdateAccess==true">
-                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                  Submit
-                </button>
-                <a routerLink="/servicerequestlist" class="btn btn-secondary" style="margin-left:10px;">Back</a>
-               <button type="button" class="btn btn-secondary" *ngIf="IsEngineerView==true" style="margin-left:10px;" (click)="generatereport()">Generate report</button>
-              </div>
+          <hr/>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px">
+              <button *ngIf="hasAddAccess==true || hasUpdateAccess==true" [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a class="btn btn-secondary" routerLink="/servicerequestlist" style="margin-left:10px;">Back</a>
+              <button (click)="generatereport()" *ngIf="IsEngineerView==true" class="btn btn-secondary" style="margin-left:10px;"
+                      type="button">Generate report
+              </button>
             </div>
+          </div>
         </form>
       </div>
     </div>

@@ -48,13 +48,14 @@ export class EngineerCommentList {
   nextdate: string;
   comments: string;
   servicerequestid: string;
+  engineerid: string;
 }
 
 export class tickersAssignedHistory {
   id: string;
   engineerid: string;
   engineername: string;
-  assigneddate: string;
+  assigneddate: any;
   ticketstatus: string;
   servicerequestid: string;
   comments: string;

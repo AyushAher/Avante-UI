@@ -1,17 +1,19 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
-import { ListTypeItem, ResultMsg, ProfileReadOnly, User, ConfigTypeValue, EngineerCommentList } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import {EngineerCommentList, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
 import {
-  AccountService, AlertService, ListTypeService, NotificationService, ProfileService, ConfigTypeValueService, EngCommentService
+  AccountService,
+  ConfigTypeValueService,
+  EngCommentService,
+  ListTypeService,
+  NotificationService
 } from '../_services';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { NgbDate, NgbDatepicker, NgbDateStruct, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ViewChild } from '@angular/core';
+import {BsModalService} from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -33,7 +35,8 @@ export class ModelEngContentComponent implements OnInit {
   closeResult: string;
   @Input() public itemId;
   @Input() public id;
- 
+  @Input() public engineerid;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -45,9 +48,10 @@ export class ModelEngContentComponent implements OnInit {
     private notificationService: NotificationService,
     private engcommentService: EngCommentService,
     public activeModal: BsModalService
-  ) { }
- 
-  
+  ) {
+  }
+
+
   ngOnInit() {
     console.log(this.itemId);
     this.user = this.accountService.userValue;
@@ -62,7 +66,7 @@ export class ModelEngContentComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.engineerCommentForm.patchValue(data.object);
-            this.engineerCommentForm.patchValue({ "nextdate": new Date(data.object.nextdate) });
+            this.engineerCommentForm.patchValue({"nextdate": new Date(data.object.nextdate)});
           },
           error: error => {
             // this.alertService.error(error);
@@ -81,7 +85,7 @@ export class ModelEngContentComponent implements OnInit {
 
   onValueSubmit() {
     //debugger;
-    
+
     this.submitted = true;
 
     this.isSave = true;
@@ -92,6 +96,7 @@ export class ModelEngContentComponent implements OnInit {
     }
     this.engcomment = this.engineerCommentForm.value;
     this.engcomment.servicerequestid = this.itemId;
+    this.engcomment.engineerid = this.engineerid;
 
     if (this.id == null) {
       this.engcommentService.save(this.engcomment)
@@ -99,12 +104,12 @@ export class ModelEngContentComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (data.result) {
+              console.log(this.engcomment);
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
               //this.configList = data.object;
-             // this.listvalue.get("configValue").setValue("");
-            }
-            else {
+              // this.listvalue.get("configValue").setValue("");
+            } else {
               this.notificationService.showError(data.resultMessage, "Error");
               this.close();
             }
@@ -115,21 +120,20 @@ export class ModelEngContentComponent implements OnInit {
             this.loading = false;
           }
         });
-    }
-    else {
+    } else {
       this.engcomment.id = this.id;
       this.engcommentService.update(this.id, this.engcomment)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             if (data.result) {
+              console.log(this.engcomment);
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
               //this.configList = data.object;
               //this.listvalue.get("configValue").setValue("");
               //this.id = null;
-            }
-            else {
+            } else {
               this.notificationService.showError(data.resultMessage, "Error");
               this.close();
             }

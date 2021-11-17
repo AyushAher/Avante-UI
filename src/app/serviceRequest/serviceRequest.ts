@@ -147,8 +147,6 @@ export class ServiceRequestComponent implements OnInit {
         this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
           .subscribe({
             next: (data: any) => {
-              debugger
-              console.log(data)
               this.engineerCommentList = data.object.engComments;
               this.actionList = data.object.engAction;
             },
@@ -416,12 +414,17 @@ export class ServiceRequestComponent implements OnInit {
             // transform next date to required format
             let datepipe = new DatePipe("en-US");
             this.engineerCommentList.forEach((value, index) => {
-              value.nextdate = datepipe.transform(value.nextdate,"dd/MM/YYYY")
+              value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
             })
 
             this.actionList = data.object.engAction;
+
             this.engineerid = data.object.assignedto;
             this.ticketHistoryList = data.object.assignedHistory;
+
+            this.ticketHistoryList.forEach((value, index) => {
+              value.assigneddate = datepipe.transform(value.assigneddate, "dd/MM/YYYY")
+            })
 
             //this.serviceRequestform.patchValue(data.object);
           },
@@ -675,7 +678,7 @@ export class ServiceRequestComponent implements OnInit {
             this.custcityname = data.object.city;
             this.servicereport.town = this.custcityname;
             //this.getPdffile(data.object.filePath);
-
+            this.servicereport
             this.servicereportService.save(this.servicereport)
               .pipe(first())
               .subscribe({
@@ -688,7 +691,6 @@ export class ServiceRequestComponent implements OnInit {
                     this.notificationService.showError(data.resultMessage, "Error");
                   }
                   this.loading = false;
-
                 },
                 error: error => {
                   // this.alertService.error(error);
@@ -732,6 +734,12 @@ export class ServiceRequestComponent implements OnInit {
       this.srAssignedHistory = new tickersAssignedHistory;
       this.srAssignedHistory.engineerid = this.engineerid;
       this.srAssignedHistory.servicerequestid = sr.id;
+      this.srAssignedHistory.ticketstatus = "c488750a-47c4-11ec-9dbc-54bf64020316";
+
+      let datepipe = new DatePipe("en-US");
+      this.srAssignedHistory.assigneddate = new Date()
+      console.log(this.srAssignedHistory.assigneddate)
+
       this.srAssignedHistoryService.save(this.srAssignedHistory)
         .pipe(first())
         .subscribe({
@@ -807,7 +815,6 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
 
-
   getPdffile(filePath: string) {
     //debugger;
     if (filePath != null && filePath != "") {
@@ -867,7 +874,7 @@ export class ServiceRequestComponent implements OnInit {
               });
           }
         case "edit":
-          this.open(this.serviceRequestId, data.id);
+          this.open(this.serviceRequestId, data.id, this.engineerid);
       }
     }
   }
@@ -920,10 +927,8 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   historyready(params): void {
-    //debugger;
     this.historyapi = params.api;
     this.historycolumnApi = params.columnApi;
-    this.historyapi.sizeColumnsToFit();
   }
 
   public getAllInstrument(siteid: string) {
@@ -1123,7 +1128,7 @@ export class ServiceRequestComponent implements OnInit {
       },
       {
         headerName: 'Team Viewer Recording',
-        field: 'teamviewerrecroding',
+        field: 'teamviewrecording',
         filter: false,
         enableSorting: false,
         editable: false,
@@ -1168,12 +1173,14 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
 
-  open(param: string, param1: string) {
+  open(param: string, param1: string, param2: string) {
     //debugger;
     const initialState = {
       itemId: param,
-      id: param1
+      id: param1,
+      engineerid: this.engineerid
     };
+    console.log(initialState);
     this.bsModalRef = this.modalService.show(ModelEngContentComponent, {initialState});
   }
 
@@ -1204,6 +1211,8 @@ export class ServiceRequestComponent implements OnInit {
                 next: (d: any) => {
                   if (d.result) {
                     this.notificationService.showSuccess(d.resultMessage, "Success");
+                    const selectedData = this.api.getSelectedRows();
+                    this.api.applyTransaction({remove: selectedData});
                   } else {
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
