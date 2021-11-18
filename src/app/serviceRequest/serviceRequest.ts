@@ -791,11 +791,8 @@ export class ServiceRequestComponent implements OnInit {
       this.srAssignedHistory = new tickersAssignedHistory;
       this.srAssignedHistory.engineerid = this.engineerid;
       this.srAssignedHistory.servicerequestid = sr.id;
-      this.srAssignedHistory.ticketstatus = "c488750a-47c4-11ec-9dbc-54bf64020316";
-
-      let datepipe = new DatePipe("en-US");
+      this.srAssignedHistory.ticketstatus = "728d83a4-716a-48d7-8080-e5948afb4525";
       this.srAssignedHistory.assigneddate = new Date()
-      console.log(this.srAssignedHistory.assigneddate)
 
       this.srAssignedHistoryService.save(this.srAssignedHistory)
         .pipe(first())
