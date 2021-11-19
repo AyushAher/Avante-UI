@@ -17,41 +17,43 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form [formGroup]="engineerCommentForm" (ngSubmit)="onValueSubmit()">
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-sm-6 form-group">
-                <label for="nextdate">Next Date</label>
-                <input bsDatepicker formControlName="nextdate" class="form-control" />
-                <!--<input ngbDatepicker #d="ngbDatepicker" formControlName="nextdate" class="form-control" />
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
-  </div>-->
+        <div class="py-3 px-3-pb-3">
+          <form [formGroup]="engineerCommentForm" (ngSubmit)="onValueSubmit()">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-sm-6 form-group">
+                  <label for="nextdate">Next Date</label>
+                  <input bsDatepicker formControlName="nextdate" class="form-control"/>
+                  <!--<input ngbDatepicker #d="ngbDatepicker" formControlName="nextdate" class="form-control" />
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+    </div>-->
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-6">
-                <label for="comments">Comments</label>
-                <input type="text" formControlName="comments" class="form-control" />
+              <div class="row">
+                <div class="col-sm-6">
+                  <label for="comments">Comments</label>
+                  <input type="text" formControlName="comments" class="form-control" />
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-6">
+              <div class="row">
+                <div class="col-md-6 col-sm-6">
 
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+                <button [disabled]="loading" class="btn btn-primary">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                  Submit
+                </button>
+                <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
               </div>
             </div>
-
-          </div>
-          <div class="row">
-            <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
-              <button [disabled]="loading" class="btn btn-primary">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
-              </button>
-              <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>

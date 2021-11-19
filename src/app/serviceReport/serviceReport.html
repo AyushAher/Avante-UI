@@ -128,10 +128,11 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-3">
+          <div class="row mb-4">
+            <div class="col-sm-12">
               <label for="problem">Problem</label>
-              <input type="text" formControlName="problem" readonly class="form-control" [ngClass]="{ 'is-invalid': submitted && f.problem.errors }" />
+              <textarea formControlName="problem" readonly class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.problem.errors }"></textarea>
             </div>
           </div>
           <div class="row">
@@ -184,18 +185,19 @@
           <br />
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="workdone-tab" data-toggle="tab" href="#workdone" role="tab" aria-controls="workdone" aria-selected="true">WorkDone</a>
+              <a class="nav-link active" id="workdone-tab" data-toggle="tab" href="#workdone" role="tab" aria-controls="workdone" aria-selected="true">Work Done</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">workTime</a>
+              <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Work Time</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">sparepart Consumed</a>
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Spare Part Consumed</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Sparepart Recommanded</a>
+              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Spare Part Recommanded</a>
             </li>
           </ul>
+
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
               <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;" (click)="open(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
@@ -228,7 +230,7 @@
               </div>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClickedCon($event)"
-                                 (cellValueChanged)="onRowClickedPre($event)"
+                                 (cellValueChanged)="onRowClickedCon($event)"
                                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
                                  [columnDefs]="spcolumnDefs" [rowData]="spconsumedlist" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
@@ -357,17 +359,23 @@
               <img [src]="engsign" [alt]="engsign" style="width: 100%;height: 100px; padding:10px;">
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="pdf" style="margin-right:15px;margin-top:15px;">Document</label>
-              <input type='file' id="pdfUpload" multiple accept=".pdf" #filePdfInput (change)="uploadPdfFile($event)" />
+
+          <div class="row" style="margin:15px;">
+            <div class="col-md-3">
+              <input type="file" id="myFile" #file placeholder="Choose file"
+                     (change)="getfil(file.files); listfile(file.files) ;" accept=".pdf" id="pdfUpload" multiple
+                     type='file'/>
             </div>
-            <div class="col-md-4 col-sm-4" *ngIf="PdffileData" style="margin-top:4%;">
-              <label></label>
-              <button type="button" class="btn btn-link" (click)="download()">{{ PdffileData.fileName }}</button>
-              <!--<a href="pdfBase64" download="PdffileData.fileName">{{ PdffileData.fileName }}</a>-->
+            <div id="selectedfiles" class="hidden col-md-4"
+                 style="max-height:200px; overflow-y:auto;display: none;">
+              <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                <h5>Selected Files:</h5>
+                <hr/>
+              </section>
             </div>
+
           </div>
+
           <div class="row" *ngIf="PdffileData">
             <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
               <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine" (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"

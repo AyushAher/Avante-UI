@@ -1,31 +1,65 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 
 import {
-  User, Country, Distributor, Customer, ResultMsg, ProfileReadOnly, ServiceReport,
-  FileShare, workTime, sparePartRecomanded, actionList, sparePartsConsume, ListTypeItem,
-  ConfigTypeValue, SparePart, workDone, ServiceRequest, Contact, Instrument, custSPInventory
+  ConfigTypeValue,
+  Contact,
+  Country,
+  custSPInventory,
+  Distributor,
+  FileShare,
+  Instrument,
+  ListTypeItem,
+  ProfileReadOnly,
+  ResultMsg,
+  ServiceReport,
+  ServiceRequest,
+  SparePart,
+  sparePartRecomanded,
+  sparePartsConsume,
+  User,
+  workDone,
+  workTime
 } from '../_models';
-import { SignaturePad } from 'angular2-signaturepad';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first, startWith } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
-import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
-import { WorkdoneContentComponent } from './workdonecontent';
-import { WorkTimeContentComponent } from './workTime';
+import {SignaturePad} from 'angular2-signaturepad';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {debounceTime, distinctUntilChanged, first, map} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
+import {WorkdoneContentComponent} from './workdonecontent';
+import {WorkTimeContentComponent} from './workTime';
 import {
-  AccountService, AlertService, CountryService, DistributorService, CustomerService,
-  NotificationService, ProfileService, ServiceReportService, FileshareService, UploadService, ListTypeService,
-  ConfigTypeValueService, SparePartService, workdoneService, worktimeService, ServiceRequestService,
-  InstrumentService, SrRecomandService, SrConsumedService, InventoryService
+  AccountService,
+  AlertService,
+  ConfigTypeValueService,
+  CountryService,
+  CustomerService,
+  DistributorService,
+  FileshareService,
+  InstrumentService,
+  InventoryService,
+  ListTypeService,
+  NotificationService,
+  ProfileService,
+  ServiceReportService,
+  ServiceRequestService,
+  SparePartService,
+  SrConsumedService,
+  SrRecomandService,
+  UploadService,
+  workdoneService,
+  worktimeService
 } from '../_services';
-import { Observable, OperatorFunction } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import {Observable, OperatorFunction} from 'rxjs';
+import {DatePipe} from "@angular/common";
+import {HttpEventType} from "@angular/common/http";
+import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.component";
 
 @Component({
   selector: 'app-customer',
   templateUrl: './serviceReport.html',
 })
+
 export class ServiceReportComponent implements OnInit {
   user: User;
   filteredOptions: Observable<string[]>;
@@ -86,8 +120,13 @@ export class ServiceReportComponent implements OnInit {
   };
   custsign: any;
   engsign: any;
+  private transaction: number;
+  private file: any;
+  private hastransaction: boolean;
+  @Output() public onUploadFinished = new EventEmitter();
+  private fileUploadProgress: number;
 
-  
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -115,7 +154,6 @@ export class ServiceReportComponent implements OnInit {
     private srInventoryservice: InventoryService
   ) {
     this.notificationService.listen().subscribe((m: any) => {
-      console.log(m);
       if (this.ServiceReportId != null) {
         this.ServiceReportService.getById(this.ServiceReportId).pipe(first())
           .subscribe({
@@ -131,13 +169,10 @@ export class ServiceReportComponent implements OnInit {
               this.loading = false;
             }
           });
-
-         
-
       }
     });
-
   }
+
 
   ngAfterViewInit() {
     // this.signaturePad is now available
@@ -174,6 +209,7 @@ export class ServiceReportComponent implements OnInit {
       map(term => term === '' ? []
         : this.sparepartlist.filter(v => v.partNo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     )
+
   formatterpart = (x: SparePart) => x.partNo;
 
   searchpartcon: OperatorFunction<string, readonly SparePart[]> = (text$: Observable<string>) =>
@@ -186,7 +222,8 @@ export class ServiceReportComponent implements OnInit {
   formatterpartcon = (x: SparePart) => x.partNo;
 
   ngOnInit() {
-    
+
+    this.transaction = 0;
     this.user = this.accountService.userValue;
 
     this.profilePermission = this.profileService.userProfileValue;
@@ -275,11 +312,11 @@ export class ServiceReportComponent implements OnInit {
           this.loading = false;
         }
       });
+
     this.srInventoryservice.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          debugger;
           this.sparepartinvontorylist = data.object;
         },
         error: error => {
@@ -289,13 +326,12 @@ export class ServiceReportComponent implements OnInit {
         }
       });
 
-    
+
 
     this.sparePartService.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          debugger;
           this.sparepartlist = data.object;
         },
         error: error => {
@@ -305,7 +341,6 @@ export class ServiceReportComponent implements OnInit {
         }
       });
 
-     
 
     this.distributorService.getAll()
       .pipe(first())
@@ -324,7 +359,6 @@ export class ServiceReportComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
-          //debugger;
           this.departmentList = data;
         },
         error: error => {
@@ -337,7 +371,6 @@ export class ServiceReportComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
-          //debugger;
           this.brandlist = data;
         },
         error: error => {
@@ -358,7 +391,6 @@ export class ServiceReportComponent implements OnInit {
         }
       });
 
-   
 
     this.ServiceReportId = this.route.snapshot.paramMap.get('id');
     if (this.ServiceReportId != null) {
@@ -370,15 +402,20 @@ export class ServiceReportComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            debugger;
+            console.log(data);
             this.ServiceReportform.patchValue(data.object);
-            this.ServiceReportform.patchValue({ "workCompletedstr": data.object.workCompleted == true ? "0" : "1" });
-            this.ServiceReportform.patchValue({ "workfinishedstr": data.object.workfinished == true ? "0" : "1" });
-            this.ServiceReportform.patchValue({ "interruptedstr": data.object.interrupted == true ? "0" : "1" });
-            this.ServiceReportform.controls['instrument'].setValue({ serialnos: data.object.instrument });
-
+            this.ServiceReportform.patchValue({"workCompletedstr": data.object.workCompleted == true ? "0" : "1"});
+            this.ServiceReportform.patchValue({"workfinishedstr": data.object.workfinished == true ? "0" : "1"});
+            this.ServiceReportform.patchValue({"interruptedstr": data.object.interrupted == true ? "0" : "1"});
+            this.ServiceReportform.controls['instrument'].setValue({serialnos: data.object.instrument});
             this.workdonelist = data.object.lstWorkdone;
             this.workTime = data.object.lstWorktime;
+
+            let datepipe = new DatePipe("en-US");
+            this.workTime.filter((value, index) => {
+              value.worktimedate = datepipe.transform(value.worktimedate, "dd/MM/YYYY")
+            })
+
             this.spconsumedlist = data.object.lstSPConsumed;
             this.sparePartRecomanded = data.object.lstSPRecommend;
             this.custsign = data.object.custsignature;
@@ -387,9 +424,7 @@ export class ServiceReportComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data: any) => {
-                  //debugger;
                   this.servicerequest = data.object;
-                  //getallcontact
                   this.customerService.getallcontact(data.object.custid)
                     .pipe(first())
                     .subscribe({
@@ -401,7 +436,6 @@ export class ServiceReportComponent implements OnInit {
                         this.loading = false;
                       }
                     });
-                 // this.ServiceReportform.patchValue({ "interruptedstr": data.object.interrupted == true ? "0" : "1" });
                 },
                 error: error => {
                   this.notificationService.showError(error, "Error");
@@ -410,24 +444,36 @@ export class ServiceReportComponent implements OnInit {
               });
           },
           error: error => {
-           // this.alertService.error(error);
+            // this.alertService.error(error);
             this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });
 
+      //
+      // this.fileshareService.getById(this.ServiceReportId)
+      //   .pipe(first())
+      //   .subscribe({
+      //     next: (data: any) => {
+      // this.PdffileData = data.object;
+      // this.getPdffile(data.object.filePath);
+      //     },
+      //     error: error => {
+      //       this.notificationService.showError(error, "Error");
+      //       this.loading = false;
+      //     }
+      //   });
 
-      this.fileshareService.getById(this.ServiceReportId)
+
+      this.fileshareService.list(this.ServiceReportId)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.PdffileData = data.object;
-            //this.getPdffile(data.object.filePath);
           },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
-          }
+          error: (err: any) => {
+            this.notificationService.showError(err, "Error");
+          },
         });
 
     }
@@ -442,9 +488,8 @@ export class ServiceReportComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.ServiceReportform.controls; }
   get a() { return this.ServiceReportform.controls.engineer; }
-   
+
   onSubmit() {
-  debugger;
     this.submitted = true;
 
     // reset alerts on submit
@@ -480,14 +525,16 @@ export class ServiceReportComponent implements OnInit {
 
     this.ServiceReport.instrument = this.ServiceReportform.get('instrument').value.serialnos;
     if (this.ServiceReportId == null) {
-      
+
       this.ServiceReportService.save(this.ServiceReport)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
             if (data.result) {
               this.saveFileShare(data.object.id);
+              if (this.file != null) {
+                this.uploadPdfFile(this.file)
+              }
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["ServiceReportlist"]);
             }
@@ -495,7 +542,7 @@ export class ServiceReportComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-           
+
           },
           error: error => {
             // this.alertService.error(error);
@@ -513,6 +560,11 @@ export class ServiceReportComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
               this.saveFileShare(this.ServiceReportId);
+
+              if (this.file != null) {
+                this.uploadPdfFile(this.file)
+              }
+
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["servicereportlist"]);
             }
@@ -520,7 +572,7 @@ export class ServiceReportComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-            
+
           },
           error: error => {
           //  this.alertService.error(error);
@@ -532,16 +584,12 @@ export class ServiceReportComponent implements OnInit {
   }
 
   drawComplete() {
-    console.log(this.signaturePad.toDataURL());
   }
 
   drawComplete2() {
-    console.log(this.signaturePadcust
-      .toDataURL());
   }
 
   drawStart() {
-    console.log('begin drawing');
   }
 
   clearSignature() {
@@ -553,8 +601,39 @@ export class ServiceReportComponent implements OnInit {
     this.signatureImg = base64Data;
   }
 
+  getfil(x) {
+    this.file = x;
+  }
+
+  listfile = (x) => {
+    document.getElementById("selectedfiles").style.display = "block";
+
+    var selectedfiles = document.getElementById("selectedfiles");
+    var ulist = document.createElement("ul");
+    ulist.id = "demo";
+    selectedfiles.appendChild(ulist);
+
+    if (this.transaction != 0) {
+      document.getElementById("demo").remove();
+    }
+
+    this.transaction++;
+    this.hastransaction = true;
+
+    for (let i = 0; i <= x.length; i++) {
+      var name = x[i].name;
+      var ul = document.getElementById("demo");
+      var node = document.createElement("li");
+      var textnode = document.createTextNode(name)
+      node.appendChild(textnode);
+
+      console.log(node, document.getElementById("demo"))
+      ul.appendChild(node);
+
+    }
+  };
+
   public onRowClicked(e) {
-  //  //debugger;
     if (e.event.target !== undefined) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
@@ -587,7 +666,6 @@ export class ServiceReportComponent implements OnInit {
   }
 
   public onRowClickedPre(e) {
-    //  //debugger;
     if (e.event.target !== undefined) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
@@ -615,7 +693,6 @@ export class ServiceReportComponent implements OnInit {
               });
           }
         case "edit":
-          debugger;
           let sprec: sparePartRecomanded;
           sprec = data;
           this.srrecomndservice.update(sprec.id,sprec)
@@ -643,9 +720,7 @@ export class ServiceReportComponent implements OnInit {
     }
   }
 
-
   public onRowClickedCon(e) {
-    //  //debugger;
     if (e.event.target !== undefined) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
@@ -673,7 +748,6 @@ export class ServiceReportComponent implements OnInit {
               });
           }
         case "edit":
-          debugger;
           let sprec: sparePartsConsume;
           sprec = data;
           this.srConsumedservice.update(sprec.id, sprec)
@@ -701,9 +775,7 @@ export class ServiceReportComponent implements OnInit {
     }
   }
 
-
   public onworktimeRowClicked(e) {
-    //  //debugger;
     if (e.event.target !== undefined) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
@@ -737,8 +809,6 @@ export class ServiceReportComponent implements OnInit {
   }
 
   onCellValueChanged(event) {
-    //debugger;
-    //console.log(event) to test it
     var data = event.data;
     event.data.modified = true;
     //if (this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
@@ -748,11 +818,8 @@ export class ServiceReportComponent implements OnInit {
     //  d[0].insqty = event.newValue;
     //}
   }
-
 
   onCellValueChangedPre(event) {
-    //debugger;
-    //console.log(event) to test it
     var data = event.data;
     event.data.modified = true;
     //if (this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
@@ -763,79 +830,35 @@ export class ServiceReportComponent implements OnInit {
     //}
   }
 
-  private createworkdoneColumnDefs() {
-    return [
-      {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-      },
-      {
-        headerName: 'Workdone',
-        field: 'workdone',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        tooltipField: 'workdone',
-      }
-    ]
+  //}
+  updateSpareParts(params) {
   }
 
-
-  private createColumnDefs() {
-    return [
-      {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-      },
-      {
-        headerName: 'worktimedate',
-        field: 'worktimedate',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        tooltipField: 'worktimedate',
-      },
-      {
-        headerName: 'startTime',
-        field: 'starttime',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false
-      },
-      {
-        headerName: 'endTime',
-        field: 'endtime',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false
-      },
-      {
-        headerName: 'perdayhrs',
-        field: 'perdayhrs',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false
-      }
-    ]
+  addPartrecmm() {
+    let v = this.ServiceReportform.get('recondad').value;
+    this.srRecomndModel = new sparePartRecomanded();
+    this.srRecomndModel.partno = v.partNo;
+    this.srRecomndModel.hsccode = v.hsCode;
+    this.srRecomndModel.servicereportid = this.ServiceReportId;
+    this.srrecomndservice.save(this.srRecomndModel)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.notificationService.filter("itemadded");
+            //this.configList = data.object;
+            // this.listvalue.get("configValue").setValue("");
+          } else {
+            this.notificationService.showError(data.resultMessage, "Error");
+          }
+          this.loading = false;
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
   }
 
   //private createColumnspDefs() {
@@ -858,7 +881,180 @@ export class ServiceReportComponent implements OnInit {
   //      sortable: false
   //    }
   //  ]
-  //}
+
+  uploadPdfFile(files) {
+    // let file = event.target.files;
+    // if (event.target.files && event.target.files[0]) {
+    //   //  this.uploadService.upload(file).subscribe(event => {  });;
+    //   this.uploadService.uploadPdf(file)
+    //     .pipe(first())
+    //     .subscribe({
+    //       next: (data: any) => {
+    //         this.notificationService.showSuccess("File Upload Successfully", "Success");
+    //         this.pdfPath = data.path;
+    //         //this.pdfFileName = file.name;
+    //       },
+    //       error: error => {
+    //         this.notificationService.showError(error, "Error");
+    //       }
+    //     });
+    // }
+    if (files.length === 0) {
+      return;
+    }
+    let filesToUpload: File[] = files;
+    const formData = new FormData();
+
+    Array.from(filesToUpload).map((file, index) => {
+      return formData.append("file" + index, file, file.name);
+    });
+    this.fileshareService.upload(formData, this.ServiceReportId).subscribe((event) => {
+      if (event.type === HttpEventType.UploadProgress)
+        this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
+      else if (event.type === HttpEventType.Response) {
+        this.onUploadFinished.emit(event.body);
+      }
+    });
+  }
+
+  private createworkdoneColumnDefs() {
+    return [
+      {
+        headerName: 'Action',
+        field: 'id',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        template:
+          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+      },
+      {
+        headerName: 'Work Done',
+        field: 'workdone',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        tooltipField: 'Work Done',
+      }
+    ]
+  }
+
+  private createColumnDefs() {
+    return [
+      {
+        headerName: 'Action',
+        field: 'id',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        template:
+          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+      },
+      {
+        headerName: 'Work Time Date',
+        field: 'worktimedate',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        tooltipField: 'Work Time Date',
+      },
+      {
+        headerName: 'Start Time',
+        field: 'starttime',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'End Time',
+        field: 'endtime',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Per Day Hrs',
+        field: 'perdayhrs',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      }
+    ]
+  }
+
+  onGridReady(params): void {
+    this.api = params.api;
+    this.columnApi = params.columnApi;
+    this.api.sizeColumnsToFit();
+  }
+
+  onConfigChange(param: string) {
+    this.configService.getById(param)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.configValueList = data.object;
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
+  }
+
+  open(param: string, param1: string) {
+    const initialState = {
+      itemId: param,
+      id: param1
+    };
+    this.bsModalRef = this.modalService.show(WorkdoneContentComponent, {initialState});
+  }
+
+  //opentime
+  opentime(param: string, param1: string) {
+    const initialState = {
+      itemId: param,
+      id: param1
+    };
+    this.bsModalRef = this.modalService.show(WorkTimeContentComponent, {initialState});
+  }
+
+  //addPartcons
+  addPartcons() {
+    let v = this.ServiceReportform.get('consumed').value;
+    this.srConsumedModel = new sparePartsConsume();
+    this.srConsumedModel.partno = v.partNo;
+    this.srConsumedModel.hsccode = v.hsCode;
+    this.srConsumedModel.servicereportid = this.ServiceReportId;
+    this.srConsumedservice.save(this.srConsumedModel)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.notificationService.filter("itemadded");
+            //this.configList = data.object;
+            // this.listvalue.get("configValue").setValue("");
+          } else {
+            this.notificationService.showError(data.resultMessage, "Error");
+          }
+          this.loading = false;
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
+  }
 
   private createColumnspDefs() {
     return [
@@ -870,10 +1066,11 @@ export class ServiceReportComponent implements OnInit {
         editable: false,
         sortable: false,
         template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="far fa-save" title="Save Qty" data-action-type="edit"></i></button>`
       },
       {
-        headerName: 'PartNo',
+        headerName: 'Part No',
         field: 'partno',
         filter: false,
         enableSorting: false,
@@ -883,14 +1080,14 @@ export class ServiceReportComponent implements OnInit {
       },
       {
         headerName: 'Qty',
-        field: 'qtyrecommended',
+        field: 'qtyconsumed',
         filter: false,
         enableSorting: false,
-        editable: false,
+        editable: true,
         sortable: false
       },
       {
-        headerName: 'hsccode',
+        headerName: 'HS Code',
         field: 'hsccode',
         filter: false,
         enableSorting: false,
@@ -899,7 +1096,6 @@ export class ServiceReportComponent implements OnInit {
       }
     ]
   }
-
 
   private createColumnspreDefs() {
     return [
@@ -932,7 +1128,7 @@ export class ServiceReportComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'hsccode',
+        headerName: 'HS Code',
         field: 'hsccode',
         filter: false,
         enableSorting: false,
@@ -942,127 +1138,7 @@ export class ServiceReportComponent implements OnInit {
     ]
   }
 
-  onGridReady(params): void {
-    this.api = params.api;
-    this.columnApi = params.columnApi;
-    this.api.sizeColumnsToFit();
-  }
-
-  onConfigChange(param: string) {
-    this.configService.getById(param)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.configValueList = data.object;
-        },
-        error: error => {
-          this.notificationService.showError(error, "Error");
-          this.loading = false;
-        }
-      });
-  }
-
-
-
-  open(param: string, param1: string) {
-    //debugger;
-    const initialState = {
-      itemId: param,
-      id: param1
-    };
-    this.bsModalRef = this.modalService.show(WorkdoneContentComponent, { initialState });
-  }
-  //opentime
-  opentime(param: string, param1: string) {
-    //debugger;
-    const initialState = {
-      itemId: param,
-      id: param1
-    };
-    this.bsModalRef = this.modalService.show(WorkTimeContentComponent, { initialState });
-  }
-  //addPartcons
-  addPartcons() {
-    debugger;
-    let v = this.ServiceReportform.get('consumed').value;
-    this.srConsumedModel = new sparePartsConsume();
-    this.srConsumedModel.partno = v.partNo;
-    this.srConsumedModel.hsccode = v.hsCode;
-    this.srConsumedModel.servicereportid = this.ServiceReportId;
-    this.srConsumedservice.save(this.srConsumedModel)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.notificationService.filter("itemadded");
-            //this.configList = data.object;
-            // this.listvalue.get("configValue").setValue("");
-          }
-          else {
-            this.notificationService.showError(data.resultMessage, "Error");
-          }
-          this.loading = false;
-        },
-        error: error => {
-          this.notificationService.showError(error, "Error");
-          this.loading = false;
-        }
-      });
-  }
-
-  addPartrecmm() {
-    debugger;
-    let v = this.ServiceReportform.get('recondad').value;
-    this.srRecomndModel = new sparePartRecomanded();
-    this.srRecomndModel.partno = v.partNo;
-    this.srRecomndModel.hsccode = v.hsCode;
-    this.srRecomndModel.servicereportid = this.ServiceReportId;
-    this.srrecomndservice.save(this.srRecomndModel)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.notificationService.filter("itemadded");
-            //this.configList = data.object;
-            // this.listvalue.get("configValue").setValue("");
-          }
-          else {
-            this.notificationService.showError(data.resultMessage, "Error");  
-          }
-          this.loading = false;
-        },
-        error: error => {
-          this.notificationService.showError(error, "Error");
-          this.loading = false;
-        }
-      });
-  }
-
-  uploadPdfFile(event) {
-    //debugger;
-    let file = event.target.files;
-    if (event.target.files && event.target.files[0]) {
-      //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
-      this.uploadService.uploadPdf(file)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            //debugger;
-            this.notificationService.showSuccess("File Upload Successfully", "Success");
-            this.pdfPath = data.path;
-            //this.pdfFileName = file.name;
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-          }
-        });
-    }
-  }
-
   public onPdfRowClicked(e) {
-    //debugger;
     if (e.event.target !== undefined) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
@@ -1106,18 +1182,16 @@ export class ServiceReportComponent implements OnInit {
       }
     }
   }
+
   getPdffile(filePath: string) {
-    //debugger;
     if (filePath != null && filePath != "") {
       this.uploadService.getFile(filePath)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
             this.download(data.data);
             // this.alertService.success('File Upload Successfully.');
             // this.imagePath = data.path;
-            // console.log(data);
 
           },
           error: error => {
@@ -1129,7 +1203,6 @@ export class ServiceReportComponent implements OnInit {
   }
 
   download(fileData: any) {
-    //debugger;
     const byteArray = new Uint8Array(atob(fileData).split('').map(char => char.charCodeAt(0)));
     let b = new Blob([byteArray], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(b);
@@ -1143,29 +1216,30 @@ export class ServiceReportComponent implements OnInit {
     this.pdfcolumnApi = params.columnApi;
     this.pdfapi.sizeColumnsToFit();
   }
+
   private pdfcreateColumnDefs() {
     return [
       {
-        headerName: 'Action',
-        field: 'id',
+        headerName: "Action",
+        field: "id",
         filter: false,
-        enableSorting: false,
         editable: false,
         width: 100,
         sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-          <button class="btn btn-link" type="button"><i class="fas fa-download" data-action-type="download" title="Download"></i></button>`
+        cellRendererFramework: FilerendercomponentComponent,
+        cellRendererParams: {
+          deleteaccess: this.hasDeleteAccess,
+          id: this.ServiceReportId
+        },
       },
       {
-        headerName: 'FileName',
-        field: 'fileName',
-        filter: false,
-        enableSorting: false,
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
         editable: false,
-        sortable: false,
-        width: 100,
-        tooltipField: 'fileName',
+        sortable: true,
       },
     ]
   }
@@ -1200,8 +1274,4 @@ export class ServiceReportComponent implements OnInit {
     }
   }
 
-
-
 }
-
-

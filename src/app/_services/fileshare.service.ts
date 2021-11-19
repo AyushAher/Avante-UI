@@ -1,37 +1,33 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, first } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {map} from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
-import { FileShare } from '../_models';
+import {environment} from '../../environments/environment';
+import {FileShare} from '../_models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class FileshareService {
-  
 
-    constructor(
-        private router: Router,
-        private http: HttpClient
-    ) {
-    }
 
- 
+  constructor(
+    private router: Router,
+    private http: HttpClient
+  ) {
+  }
+
 
   save(fileshare: FileShare) {
     return this.http.post(`${environment.apiUrl}/FileShares`, fileshare);
-    }
+  }
 
-    getAll() {
-      return this.http.get<FileShare[]>(`${environment.apiUrl}/FileShares`);
-    }
+  getAll() {
+    return this.http.get<FileShare[]>(`${environment.apiUrl}/FileShares`);
+  }
 
-    getById(id: string) {
-      return this.http.get<FileShare>(`${environment.apiUrl}/FileShares/${id}`);
-    }
-
-
+  getById(id: string) {
+    return this.http.get<FileShare>(`${environment.apiUrl}/FileShares/${id}`);
+  }
 
   upload(fileshare: FormData, id: string) {
     debugger;
@@ -59,28 +55,27 @@ export class FileshareService {
   }
 
 
+  update(id, params) {
+    return this.http.put(`${environment.apiUrl}/FileShares`, params)
+      .pipe(map(x => {
+        // update stored user if the logged in user updated their own record
+        //if (id == this.distributor.id) {
+        //      // update local storage
+        //      const user = { ...this.userValue, ...params };
+        //      localStorage.setItem('user', JSON.stringify(user));
 
-    update(id, params) {
-      return this.http.put(`${environment.apiUrl}/FileShares`, params)
-            .pipe(map(x => {
-              // update stored user if the logged in user updated their own record
-              //if (id == this.distributor.id) {
-              //      // update local storage
-              //      const user = { ...this.userValue, ...params };
-              //      localStorage.setItem('user', JSON.stringify(user));
-
-              //      // publish updated user to subscribers
-              //      this.userSubject.next(user);
+        //      // publish updated user to subscribers
+        //      this.userSubject.next(user);
               //  }
                 return x;
             }));
-    }
+  }
 
-    delete(id: string) {
-      return this.http.delete(`${environment.apiUrl}/FileShares/${id}`)
-            .pipe(map(x => {
-               
-                return x;
-            }));
-    }
+  delete(id: string) {
+    return this.http.delete(`${environment.apiUrl}/FileShares/${id}`)
+      .pipe(map(x => {
+
+        return x;
+      }));
+  }
 }

@@ -51,6 +51,7 @@ export class OfferrequestComponent implements OnInit {
   hastransaction: boolean;
   public progress: number;
   public message: string;
+
   @Output() public onUploadFinished = new EventEmitter();
 
   constructor(
@@ -120,7 +121,6 @@ export class OfferrequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            console.log(data.object);
             this.sparePartsList = data.object;
             this.api.setRowData(this.sparePartsList)
           },
@@ -166,94 +166,6 @@ export class OfferrequestComponent implements OnInit {
 
     this.GetFileList(this.id);
   }
-  getfil(x) {
-    this.file = x;
-  }
-  createColumnDefsAttachments() {
-    return [
-      {
-        headerName: "Action",
-        field: "id",
-        filter: false,
-        editable: false,
-        width: 100,
-        sortable: false,
-        cellRendererFramework: FilerendercomponentComponent,
-        cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess,
-          id: this.id
-        },
-      },
-      {
-        headerName: "File Name",
-        field: "displayName",
-        filter: true,
-        tooltipField: "File Name",
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-      },
-    ]
-  }
-
-  listfile = (x) => {
-    document.getElementById("selectedfiles").style.display = "block";
-
-    var selectedfiles = document.getElementById("selectedfiles");
-    var ulist = document.createElement("ul");
-    ulist.id = "demo";
-    selectedfiles.appendChild(ulist);
-
-    if (this.transaction != 0) {
-      document.getElementById("demo").remove();
-    }
-
-    this.transaction++;
-    this.hastransaction = true;
-
-    for (let i = 0; i <= x.length; i++) {
-      var name = x[i].name;
-      var ul = document.getElementById("demo");
-      var node = document.createElement("li");
-      node.appendChild(document.createTextNode(name));
-      ul.appendChild(node);
-    }
-  };
-
-  public uploadFile = (files) => {
-    debugger;
-    if (files.length === 0) {
-      return;
-    }
-    let filesToUpload: File[] = files;
-    const formData = new FormData();
-
-    Array.from(filesToUpload).map((file, index) => {
-      return formData.append("file" + index, file, file.name);
-    });
-    this.FileShareService.upload(formData, this.id).subscribe((event) => {
-      if (event.type === HttpEventType.UploadProgress)
-        this.progress = Math.round((100 * event.loaded) / event.total);
-      else if (event.type === HttpEventType.Response) {
-        this.message = "Upload success.";
-        this.onUploadFinished.emit(event.body);
-      }
-    });
-  };
-
-  GetFileList(id: string) {
-    this.FileShareService.list(id)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.attachments = data.object;
-        },
-        error: (err: any) => {
-          this.notificationService.showError(err, "Error");
-        },
-      });
-  }
-
 
   RemoveSpareParts(event) {
     var cellValue = event.value;
@@ -291,7 +203,6 @@ export class OfferrequestComponent implements OnInit {
     }
 
   }
-
   SparePartsSearch = (searchtext) => {
     this.sparePartPartNo = searchtext;
 
@@ -308,8 +219,6 @@ export class OfferrequestComponent implements OnInit {
         },
       });
   }
-
-
   AddSpareParts(instrument: any) {
     this.Service
       .searchByKeyword(instrument)
@@ -338,7 +247,6 @@ export class OfferrequestComponent implements OnInit {
       });
 
   }
-
   private createColumnDefs() {
     return [{
       headerName: 'Action',
@@ -384,7 +292,6 @@ export class OfferrequestComponent implements OnInit {
     }
     ]
   }
-
   onCellValueChanged(event) {
     var data = event.data;
     event.data.modified = true;
@@ -398,21 +305,106 @@ export class OfferrequestComponent implements OnInit {
       this.api.setRowData(this.sparePartsList)
     }
   }
-
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
   }
-
   onGridReadyAttachments(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
     this.api.sizeColumnsToFit();
   }
 
+
   get f() {
     return this.form.controls
   }
+
+
+  getfil(x) {
+    this.file = x;
+  }
+  createColumnDefsAttachments() {
+    return [
+      {
+        headerName: "Action",
+        field: "id",
+        filter: false,
+        editable: false,
+        width: 100,
+        sortable: false,
+        cellRendererFramework: FilerendercomponentComponent,
+        cellRendererParams: {
+          deleteaccess: this.hasDeleteAccess,
+          id: this.id
+        },
+      },
+      {
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ]
+  }
+  listfile = (x) => {
+    document.getElementById("selectedfiles").style.display = "block";
+
+    var selectedfiles = document.getElementById("selectedfiles");
+    var ulist = document.createElement("ul");
+    ulist.id = "demo";
+    selectedfiles.appendChild(ulist);
+
+    if (this.transaction != 0) {
+      document.getElementById("demo").remove();
+    }
+
+    this.transaction++;
+    this.hastransaction = true;
+
+    for (let i = 0; i <= x.length; i++) {
+      var name = x[i].name;
+      var ul = document.getElementById("demo");
+      var node = document.createElement("li");
+      node.appendChild(document.createTextNode(name));
+      ul.appendChild(node);
+    }
+  };
+  public uploadFile = (files) => {
+    if (files.length === 0) {
+      return;
+    }
+    let filesToUpload: File[] = files;
+    const formData = new FormData();
+
+    Array.from(filesToUpload).map((file, index) => {
+      return formData.append("file" + index, file, file.name);
+    });
+    this.FileShareService.upload(formData, this.id).subscribe((event) => {
+      if (event.type === HttpEventType.UploadProgress)
+        this.progress = Math.round((100 * event.loaded) / event.total);
+      else if (event.type === HttpEventType.Response) {
+        this.message = "Upload success.";
+        this.onUploadFinished.emit(event.body);
+      }
+    });
+  };
+  GetFileList(id: string) {
+    this.FileShareService.list(id)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.attachments = data.object;
+        },
+        error: (err: any) => {
+          this.notificationService.showError(err, "Error");
+        },
+      });
+  }
+
 
   onSubmit() {
     this.submitted = true;
@@ -490,7 +482,7 @@ export class OfferrequestComponent implements OnInit {
             this.loading = false;
           },
         });
-        
+
       if (!(this.sparePartsList == null)) {
         this.SparePartsService.SaveSpareParts(this.sparePartsList)
           .pipe(first())

@@ -1,5 +1,5 @@
 /* tslint:disable */
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {IDropdownSettings} from 'ng-multiselect-dropdown';
 import {
   actionList,
@@ -49,6 +49,8 @@ import {
   SRAssignedHistoryService,
   UploadService
 } from '../_services';
+import {HttpEventType} from "@angular/common/http";
+import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.component";
 
 
 @Component({
@@ -116,6 +118,15 @@ export class ServiceRequestComponent implements OnInit {
   breakdownlist: ListTypeItem[];
   allsites: any;
   accepted: boolean;
+
+
+  @Output() public onUploadFinished = new EventEmitter();
+
+  private fileUploadProgress: number;
+  private transaction: number;
+  private hastransaction: boolean;
+  private file: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -161,6 +172,8 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.transaction = 0;
     this.user = this.accountService.userValue;
 
     this.profilePermission = this.profileService.userProfileValue;
@@ -306,6 +319,7 @@ export class ServiceRequestComponent implements OnInit {
         }
       });
 
+
     this.listTypeService.getById("TRRQT")
       .pipe(first())
       .subscribe({
@@ -369,6 +383,19 @@ export class ServiceRequestComponent implements OnInit {
               }
 
               this.serviceRequestform.patchValue({"subrequesttypeid": items});
+              this.fileshareService.list(this.serviceRequestId)
+                .pipe(first())
+                .subscribe({
+                  next: (data: any) => {
+                    this.PdffileData = data.object;
+                    //this.getPdffile(data.object.filePath);
+                  },
+                  error: error => {
+                    this.notificationService.showError(error, "Error");
+                    this.loading = false;
+                  }
+                });
+
             }
             //   data.object.subrequesttypeid = "";
             this.serviceRequestform.patchValue({"serreqno": data.object.serreqno});
@@ -436,20 +463,6 @@ export class ServiceRequestComponent implements OnInit {
           error: error => {
             // this.alertService.error(error);
             this.notificationService.showSuccess(error, "Error");
-            this.loading = false;
-          }
-        });
-
-
-      this.fileshareService.getById(this.serviceRequestId)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.PdffileData = data.object;
-            //this.getPdffile(data.object.filePath);
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
@@ -578,6 +591,7 @@ export class ServiceRequestComponent implements OnInit {
     this.loading = true;
 
     if (this.serviceRequestId == null) {
+
       this.serviceRequest = this.serviceRequestform.getRawValue();
       this.serviceRequest.engComments = [];
       this.serviceRequest.assignedHistory = [];
@@ -606,6 +620,9 @@ export class ServiceRequestComponent implements OnInit {
             //debugger;
             if (data.result) {
               this.saveFileShare(data.object.id);
+              if (this.file != null) {
+                this.uploadPdfFile(this.file)
+              }
               this.notificationService.showSuccess(data.resultMessage, "Success");
 
               this.router.navigate(["servicerequestlist"]);
@@ -641,6 +658,9 @@ export class ServiceRequestComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
               this.saveFileShare(this.serviceRequestId);
+              if (this.file != null) {
+                this.uploadPdfFile(this.file)
+              }
               if (this.IsDistributorView) {
                 this.addAssignedHistory(this.serviceRequest);
               }
@@ -675,7 +695,7 @@ export class ServiceRequestComponent implements OnInit {
     this.servicereport.customer = this.serviceRequestform.get('companyname').value;
     this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
     this.servicereport.country = this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name;
-    this.servicereport.problem = this.breakdownlist.filter(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)[0].itemname + " " + this.serviceRequestform.get('alarmdetails').value + ' ' + this.serviceRequestform.get('remarks').value;
+    this.servicereport.problem = this.breakdownlist.filter(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)[0].itemname + "||" + this.serviceRequestform.get('alarmdetails').value + '||' + this.serviceRequestform.get('remarks').value;
     this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.listTypeItemId == environment.INS)).length > 0 ? true : false;
     this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.listTypeItemId == environment.ANAS)).length > 0 ? true : false;
     this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.listTypeItemId == environment.PRMN1)).length > 0 ? true : false;
@@ -687,8 +707,9 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.custcityname = data.object.city;
+            this.custcityname = data.object.address.city;
             this.servicereport.town = this.custcityname;
+            console.log(data)
             //this.getPdffile(data.object.filePath);
             this.servicereport
             this.servicereportService.save(this.servicereport)
@@ -901,6 +922,38 @@ export class ServiceRequestComponent implements OnInit {
     // document.querySelector("iframe").src = url;
   }
 
+  getfil(x) {
+    this.file = x;
+  }
+
+  listfile = (x) => {
+    document.getElementById("selectedfiles").style.display = "block";
+
+    var selectedfiles = document.getElementById("selectedfiles");
+    var ulist = document.createElement("ul");
+    ulist.id = "demo";
+    selectedfiles.appendChild(ulist);
+
+    if (this.transaction != 0) {
+      document.getElementById("demo").remove();
+    }
+
+    this.transaction++;
+    this.hastransaction = true;
+
+    for (let i = 0; i <= x.length; i++) {
+      var name = x[i].name;
+      var ul = document.getElementById("demo");
+      var node = document.createElement("li");
+      var textnode = document.createTextNode(name)
+      node.appendChild(textnode);
+
+      console.log(node, document.getElementById("demo"))
+      ul.appendChild(node);
+
+    }
+  };
+
   public onRowClicked(e) {
     //debugger;
     if (e.event.target !== undefined) {
@@ -949,26 +1002,26 @@ export class ServiceRequestComponent implements OnInit {
   private pdfcreateColumnDefs() {
     return [
       {
-        headerName: 'Action',
-        field: 'id',
+        headerName: "Action",
+        field: "id",
         filter: false,
-        enableSorting: false,
         editable: false,
         width: 100,
         sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-          <button class="btn btn-link" type="button"><i class="fas fa-download" data-action-type="download" title="Download"></i></button>`
+        cellRendererFramework: FilerendercomponentComponent,
+        cellRendererParams: {
+          deleteaccess: this.hasDeleteAccess,
+          id: this.serviceRequestId
+        },
       },
       {
-        headerName: 'FileName',
-        field: 'fileName',
-        filter: false,
-        enableSorting: false,
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
         editable: false,
-        sortable: false,
-        width: 100,
-        tooltipField: 'fileName',
+        sortable: true,
       },
     ]
   }
@@ -1024,50 +1077,50 @@ export class ServiceRequestComponent implements OnInit {
 
   }
 
-  public onPdfRowClicked(e) {
-    //debugger;
-    if (e.event.target !== undefined) {
-      let data = e.data;
-      let actionType = e.event.target.getAttribute("data-action-type");
-      this.serviceRequestId = this.route.snapshot.paramMap.get('id');
-      switch (actionType) {
-        case "remove":
-          if (confirm("Are you sure, you want to remove the config type?") == true) {
-            //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
-            this.fileshareService.delete(data.id)
-              .pipe(first())
-              .subscribe({
-                next: (d: any) => {
-                  if (d.result) {
-                    this.notificationService.showSuccess(d.resultMessage, "Success");
-                    this.fileshareService.getById(this.serviceRequestId)
-                      .pipe(first())
-                      .subscribe({
-                        next: (data: any) => {
-                          this.PdffileData = data.object;
-                          //this.getPdffile(data.object.filePath);
-                        },
-                        error: error => {
-                          this.notificationService.showError(error, "Error");
-                          this.loading = false;
-                        }
-                      });
-                  } else {
-                    this.notificationService.showError(d.resultMessage, "Error");
-                  }
-                },
-                error: error => {
-                  this.notificationService.showError(error, "Error");
-                  this.loading = false;
-                }
-              });
-          }
-          break;
-        case "download":
-          this.getPdffile(data.filePath);
-      }
-    }
-  }
+  // public onPdfRowClicked(e) {
+  //   //debugger;
+  //   if (e.event.target !== undefined) {
+  //     let data = e.data;
+  //     let actionType = e.event.target.getAttribute("data-action-type");
+  //     this.serviceRequestId = this.route.snapshot.paramMap.get('id');
+  //     switch (actionType) {
+  //       case "remove":
+  //         if (confirm("Are you sure, you want to remove the config type?") == true) {
+  //           //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
+  //           this.fileshareService.delete(data.id)
+  //             .pipe(first())
+  //             .subscribe({
+  //               next: (d: any) => {
+  //                 if (d.result) {
+  //                   this.notificationService.showSuccess(d.resultMessage, "Success");
+  //                   this.fileshareService.getById(this.serviceRequestId)
+  //                     .pipe(first())
+  //                     .subscribe({
+  //                       next: (data: any) => {
+  //                         this.PdffileData = data.object;
+  //                         //this.getPdffile(data.object.filePath);
+  //                       },
+  //                       error: error => {
+  //                         this.notificationService.showError(error, "Error");
+  //                         this.loading = false;
+  //                       }
+  //                     });
+  //                 } else {
+  //                   this.notificationService.showError(d.resultMessage, "Error");
+  //                 }
+  //               },
+  //               error: error => {
+  //                 this.notificationService.showError(error, "Error");
+  //                 this.loading = false;
+  //               }
+  //             });
+  //         }
+  //         break;
+  //       case "download":
+  //         this.getPdffile(data.filePath);
+  //     }
+  //   }
+  // }
 
   private createColumnDefs() {
     return [
@@ -1205,26 +1258,45 @@ export class ServiceRequestComponent implements OnInit {
     this.api.sizeColumnsToFit();
   }
 
-  uploadPdfFile(event) {
-    //debugger;
-    let file = event.target.files;
-    if (event.target.files && event.target.files[0]) {
-      //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
-      this.uploadService.uploadPdf(file)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            //debugger;
-            this.notificationService.showSuccess("File Upload Successfully", "Success");
-            this.pdfPath = data.path;
-            //this.pdfFileName = file.name;
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-          }
-        });
+  uploadPdfFile(files) {
+    //
+    // let file = event.target.files;
+    // if (event.target.files && event.target.files[0]) {
+    //   //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
+    //   this.uploadService.uploadPdf(file)
+    //     .pipe(first())
+    //     .subscribe({
+    //       next: (data: any) => {
+    //         //debugger;
+    //         this.notificationService.showSuccess("File Upload Successfully", "Success");
+    //         this.pdfPath = data.path;
+    //         //this.pdfFileName = file.name;
+    //       },
+    //       error: error => {
+    //         this.notificationService.showError(error, "Error");
+    //       }
+    //     });
+    // }
+
+    console.log("file upload init")
+    if (files.length === 0) {
+      return;
     }
+    let filesToUpload: File[] = files;
+    const formData = new FormData();
+
+    Array.from(filesToUpload).map((file, index) => {
+      return formData.append("file" + index, file, file.name);
+    });
+    this.fileshareService.upload(formData, this.serviceRequestId).subscribe((event) => {
+      if (event.type === HttpEventType.UploadProgress)
+        this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
+      else if (event.type === HttpEventType.Response) {
+        this.onUploadFinished.emit(event.body);
+      }
+    });
   }
+
 
   open(param: string, param1: string, param2: string) {
     //debugger;
