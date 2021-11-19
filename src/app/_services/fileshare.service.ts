@@ -72,7 +72,7 @@ export class FileshareService {
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/FileShares/${id}`)
+    return this.http.delete(`${environment.apiUrl}/FileShares/file/${id}`)
       .pipe(map(x => {
 
         return x;
