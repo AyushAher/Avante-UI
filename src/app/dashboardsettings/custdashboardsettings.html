@@ -1,0 +1,52 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="page-title">
+        <div class="title_left">
+          <h3 style="padding:15px 0 5px 0">Dashboard Settings</h3>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <hr/>
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <label for="rowdatalist1">Dashboard Row 1</label>
+              <ng-multiselect-dropdown id="rowdatalist1" [settings]="rowdatalist1"
+                                       [data]="rowdata1" formControlName="row1">
+              </ng-multiselect-dropdown>
+            </div>
+
+            <div class="col-md-12 col-sm-12">
+              <label for="rowdatalist2">Dashboard Row 2</label>
+              <ng-multiselect-dropdown id="rowdatalist2" [settings]="rowdatalist2"
+                                       [data]="rowdata2" formControlName="row2">
+              </ng-multiselect-dropdown>
+            </div>
+
+            <div class="col-md-12 col-sm-12">
+              <label for="rowdatalist3">Dashboard Row 3</label>
+              <ng-multiselect-dropdown id="rowdatalist3" [settings]="rowdatalist3"
+                                       [data]="rowdata3" formControlName="row3">
+              </ng-multiselect-dropdown>
+            </div>
+          </div>
+
+          <br><br><br>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px;">
+              <button *ngIf="hasAddAccess || hasUpdateAccess" class="btn btn-primary" type="submit">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="" class="btn btn-secondary" style="margin: 0 10px;">Back</a>
+              <br><br>
+              <button type="button" (click)="resetOptions()" class="btn btn-danger">Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

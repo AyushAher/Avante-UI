@@ -36,3 +36,4 @@ export * from './srrecommand.service';
 export * from './srconsumed.service';
 export * from './inventory.service';
 export * from './zohoapi.service';
+export * from './custdashboardsettings';

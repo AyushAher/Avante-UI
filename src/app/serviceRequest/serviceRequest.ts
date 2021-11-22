@@ -127,30 +127,30 @@ export class ServiceRequestComponent implements OnInit {
   private hastransaction: boolean;
   private file: any;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private accountService: AccountService,
-    private alertService: AlertService,
-    private distributorService: DistributorService,
-    private countryService: CountryService,
-    private customerService: CustomerService,
-    private customerSiteService: CustomerSiteService,
-    private notificationService: NotificationService,
-    private profileService: ProfileService,
-    private serviceRequestService: ServiceRequestService,
-    private fileshareService: FileshareService,
-    private uploadService: UploadService,
-    private contactService: ContactService,
-    private listTypeService: ListTypeService,
-    private instrumentService: InstrumentService,
-    private modalService: BsModalService,
-    private engcomservice: EngCommentService,
-    private actionservice: EngActionService,
-    private srAssignedHistoryService: SRAssignedHistoryService,
-    private servicereportService: ServiceReportService,
-    public datepipe: DatePipe
+    constructor(
+      private formBuilder: FormBuilder,
+      private route: ActivatedRoute,
+      private router: Router,
+      private accountService: AccountService,
+      private alertService: AlertService,
+      private distributorService: DistributorService,
+      private countryService: CountryService,
+      private customerService: CustomerService,
+      private customerSiteService: CustomerSiteService,
+      private notificationService: NotificationService,
+      private profileService: ProfileService,
+      private serviceRequestService: ServiceRequestService,
+      private fileshareService: FileshareService,
+      private uploadService: UploadService,
+      private contactService: ContactService,
+      private listTypeService: ListTypeService,
+      private instrumentService: InstrumentService,
+      private modalService: BsModalService,
+      private engcomservice: EngCommentService,
+      private actionservice: EngActionService,
+      private srAssignedHistoryService: SRAssignedHistoryService,
+      private servicereportService: ServiceReportService,
+      public datepipe: DatePipe
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       console.log(m);
@@ -371,7 +371,7 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            console.log(data)
+
             this.getAllInstrument(data.object.siteid);
             var subreq = data.object.subrequesttypeid.split(',');
             let items: ListTypeItem[] = [];
@@ -381,8 +381,8 @@ export class ServiceRequestComponent implements OnInit {
                 t.listTypeItemId = subreq[i];
                 items.push(t);
               }
-
               this.serviceRequestform.patchValue({"subrequesttypeid": items});
+
               this.fileshareService.list(this.serviceRequestId)
                 .pipe(first())
                 .subscribe({

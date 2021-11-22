@@ -1,73 +1,73 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
-import { DistributorComponent } from './distributor/distributor';
-import { DistributorListComponent } from './distributor/distributorlist';
-import { DistributorRegionComponent } from './distributorRegion/distributor-region';
-import { ContactComponent } from './contact/contact';
-import { AuthGuard } from './_helpers';
-import { CustomerComponent } from './customer/customer';
-import { CustomerSiteComponent } from './customersite/customersite';
-import { SparePartComponent } from './spareparts/sparepart';
-import { InstrumentComponent } from './instrument/instrument';
-import { DistributorRegionListComponent } from './distributorRegion/distregionlist';
-import { CustomerListComponent } from './customer/customerlist';
-import { InstrumentListComponent } from './instrument/instrumentlist';
-import { SparePartListComponent } from './spareparts/sparepartlist';
-import { ContactListComponent } from './contact/contactlist';
-import { CustomerSiteListComponent } from './customersite/customersitelist';
-import { SearchComponent } from './search/search';
-import { InstrumentRonlyComponent } from './instrumentReadonly/instrument';
-import { ProfileListComponent } from './profile/profilelist';
-import { ProfileComponent } from './profile/profile';
-import { UserProfileListComponent } from './userprofile/userprofilelist';
-import { UserProfileComponent } from './userprofile/userprofile';
-import { CurrencyListComponent } from './currency/currencylist';
-import { CurrencyComponent } from './currency/currency';
-import { CountryListComponent } from './country/countrylist';
-import { CountryComponent } from './country/country';
-import { MasterListComponent } from './masterlist/masterlist';
-import { MasterListItemComponent } from './masterlist/masterlistitem';
-import { ExportSparePartComponent } from './spareparts/export';
-import { ServiceRequestComponent } from './serviceRequest/serviceRequest';
-import { ServiceRequestListComponent } from './serviceRequest/serviceRequestlist';
-import { ServiceReportComponent } from './serviceReport/serviceReport';
-import { ServiceReportListComponent } from './serviceReport/serviceReportlist';
-import { ServiceReport } from './_models';
-import { StaydetailsComponent } from "./Staydetails/staydetails/staydetails.component";
-import { StaydetailsListComponent } from "./Staydetails/staydetailslist/staydetailslist.component";
-import { VisadetailsListComponent } from "./Visadetails/visadetailslist/visadetailslist.component";
-import { VisadetailsComponent } from "./Visadetails/visadetails/visadetails.component";
-import { LocalexpensesComponent } from "./LocalExpenses/localexpenses/localexpenses.component";
-import { LocalexpenseslistComponent } from "./LocalExpenses/localexpenseslist/localexpenseslist.component";
-import { CustomersatisfactionsurveyComponent } from "./customersatisfactionsurvey/customersatisfactionsurvey/customersatisfactionsurvey.component";
-import { CustomersatisfactionsurveylistComponent } from "./customersatisfactionsurvey/customersatisfactionsurveylist/customersatisfactionsurveylist.component";
-import { TraveldetailslistComponent } from "./traveldetails/traveldetailslist/traveldetailslist.component";
-import { TraveldetailsComponent } from "./traveldetails/traveldetails/traveldetails.component";
-import { ReportListComponent } from './report/reportlist';
-import { CustPayComponent } from './report/custpay';
-import { srcontrevComponent } from './report/srcontrev';
-import { sppartrevComponent } from './report/sppartrev';
-import { qtsentComponent } from './report/qtsent';
-import { sostatusComponent } from './report/sostatus';
-import { srrptComponent } from './report/srrpt';
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { AmcComponent } from "./amc/amc";
-import { AmcListComponent } from "./amc/amclist";
-import { OfferrequestComponent } from "./Offerrequest/Offerrequest.component";
-import { OfferrequestlistComponent } from "./Offerrequest/Offerrequestlist.component";
-import { DistributordashboardComponent } from "./distributordashboard/distributordashboard.component";
+import {HomeComponent} from './home/home.component';
+import {DistributorComponent} from './distributor/distributor';
+import {DistributorListComponent} from './distributor/distributorlist';
+import {DistributorRegionComponent} from './distributorRegion/distributor-region';
+import {ContactComponent} from './contact/contact';
+import {AuthGuard} from './_helpers';
+import {CustomerComponent} from './customer/customer';
+import {CustomerSiteComponent} from './customersite/customersite';
+import {SparePartComponent} from './spareparts/sparepart';
+import {InstrumentComponent} from './instrument/instrument';
+import {DistributorRegionListComponent} from './distributorRegion/distregionlist';
+import {CustomerListComponent} from './customer/customerlist';
+import {InstrumentListComponent} from './instrument/instrumentlist';
+import {SparePartListComponent} from './spareparts/sparepartlist';
+import {ContactListComponent} from './contact/contactlist';
+import {CustomerSiteListComponent} from './customersite/customersitelist';
+import {SearchComponent} from './search/search';
+import {InstrumentRonlyComponent} from './instrumentReadonly/instrument';
+import {ProfileListComponent} from './profile/profilelist';
+import {ProfileComponent} from './profile/profile';
+import {UserProfileListComponent} from './userprofile/userprofilelist';
+import {UserProfileComponent} from './userprofile/userprofile';
+import {CurrencyListComponent} from './currency/currencylist';
+import {CurrencyComponent} from './currency/currency';
+import {CountryListComponent} from './country/countrylist';
+import {CountryComponent} from './country/country';
+import {MasterListComponent} from './masterlist/masterlist';
+import {MasterListItemComponent} from './masterlist/masterlistitem';
+import {ExportSparePartComponent} from './spareparts/export';
+import {ServiceRequestComponent} from './serviceRequest/serviceRequest';
+import {ServiceRequestListComponent} from './serviceRequest/serviceRequestlist';
+import {ServiceReportComponent} from './serviceReport/serviceReport';
+import {ServiceReportListComponent} from './serviceReport/serviceReportlist';
+import {StaydetailsComponent} from "./Staydetails/staydetails/staydetails.component";
+import {StaydetailsListComponent} from "./Staydetails/staydetailslist/staydetailslist.component";
+import {VisadetailsListComponent} from "./Visadetails/visadetailslist/visadetailslist.component";
+import {VisadetailsComponent} from "./Visadetails/visadetails/visadetails.component";
+import {LocalexpensesComponent} from "./LocalExpenses/localexpenses/localexpenses.component";
+import {LocalexpenseslistComponent} from "./LocalExpenses/localexpenseslist/localexpenseslist.component";
+import {CustomersatisfactionsurveyComponent} from "./customersatisfactionsurvey/customersatisfactionsurvey/customersatisfactionsurvey.component";
+import {CustomersatisfactionsurveylistComponent} from "./customersatisfactionsurvey/customersatisfactionsurveylist/customersatisfactionsurveylist.component";
+import {TraveldetailslistComponent} from "./traveldetails/traveldetailslist/traveldetailslist.component";
+import {TraveldetailsComponent} from "./traveldetails/traveldetails/traveldetails.component";
+import {ReportListComponent} from './report/reportlist';
+import {CustPayComponent} from './report/custpay';
+import {srcontrevComponent} from './report/srcontrev';
+import {sppartrevComponent} from './report/sppartrev';
+import {qtsentComponent} from './report/qtsent';
+import {sostatusComponent} from './report/sostatus';
+import {srrptComponent} from './report/srrpt';
+import {DashboardComponent} from "./dashboard/dashboard.component";
+import {AmcComponent} from "./amc/amc";
+import {AmcListComponent} from "./amc/amclist";
+import {OfferrequestComponent} from "./Offerrequest/Offerrequest.component";
+import {OfferrequestlistComponent} from "./Offerrequest/Offerrequestlist.component";
+import {DistributordashboardComponent} from "./distributordashboard/distributordashboard.component";
+import {Custdashboardsettings} from "./dashboardsettings/custdashboardsettings";
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 
 //const usersModule = () => import('./users/users.module').then(x => x.UsersModule);
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'distributorlist', component: DistributorListComponent, canActivate: [AuthGuard] },
-  { path: 'distributor', component: DistributorComponent, canActivate: [AuthGuard] },
-  { path: 'distributor/:id', component: DistributorComponent, canActivate: [AuthGuard] },
+  {path: '', component: HomeComponent, canActivate: [AuthGuard]},
+  {path: 'distributorlist', component: DistributorListComponent, canActivate: [AuthGuard]},
+  {path: 'distributor', component: DistributorComponent, canActivate: [AuthGuard]},
+  {path: 'distributor/:id', component: DistributorComponent, canActivate: [AuthGuard]},
   { path: 'contact/:type/:id', component: ContactComponent, canActivate: [AuthGuard] },
   { path: 'contact/:type/:id/:cid', component: ContactComponent, canActivate: [AuthGuard] },
   { path: 'contact/:type/:id/:cid/:did', component: ContactComponent, canActivate: [AuthGuard] },
@@ -98,7 +98,7 @@ const routes: Routes = [
   { path: 'userprofile/:id', component: UserProfileComponent, canActivate: [AuthGuard] },
   { path: 'currencylist', component: CurrencyListComponent, canActivate: [AuthGuard] },
   { path: 'currency', component: CurrencyComponent, canActivate: [AuthGuard] },
-  { path: 'currency/:id', component: CurrencyComponent, canActivate: [AuthGuard] },  
+  { path: 'currency/:id', component: CurrencyComponent, canActivate: [AuthGuard] },
   { path: 'instrumentRonly/:id', component: InstrumentRonlyComponent, canActivate: [AuthGuard] },
   { path: 'countrylist', component: CountryListComponent, canActivate: [AuthGuard] },
   { path: 'country', component: CountryComponent, canActivate: [AuthGuard] },
@@ -263,6 +263,10 @@ const routes: Routes = [
   {
     path: "distdashboard",
     component: DistributordashboardComponent,
+    canActivate: [AuthGuard],
+  },{
+    path: "custdashboardsettings",
+    component: Custdashboardsettings,
     canActivate: [AuthGuard],
   },
   { path: 'account', loadChildren: accountModule },

@@ -78,7 +78,7 @@ export class InstrumentComponent implements OnInit {
     private distributorService: DistributorService,
     private fileshareService: FileshareService,
   ) { }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -147,7 +147,7 @@ export class InstrumentComponent implements OnInit {
           this.instrumentform.get('engname').updateValueAndValidity();
           this.instrumentform.get('engcontact').clearValidators();
           this.instrumentform.get('engcontact').updateValueAndValidity();
-        }        
+        }
       }
       );
 
@@ -222,7 +222,7 @@ export class InstrumentComponent implements OnInit {
               this.imageUrl = this.noimageData;
             }
             this.instrumentform.patchValue(data.object);
-            
+
             this.sparePartDetails = data.object.spartParts;
             this.recomandFilter(this.sparePartDetails);
             for (let i = 0; i < data.object.spartParts.length; i++) {
@@ -264,7 +264,7 @@ export class InstrumentComponent implements OnInit {
     }
     this.pdfcolumnDefs = this.pdfcreateColumnDefs();
     this.columnDefs = this.createColumnDefs();
-    
+
   }
 
   @ViewChild('fileInput') el: ElementRef;
@@ -352,7 +352,7 @@ export class InstrumentComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           //debugger;
-         
+
           this.instrumentform.patchValue(data.object[0]);
           this.sparePartDetails = data.object[0].spartParts;
           this.recomandFilter(this.sparePartDetails);
@@ -460,10 +460,10 @@ export class InstrumentComponent implements OnInit {
             this.alertService.success('File Upload Successfully.');
             this.imagePath = data.path;
             // console.log(data);
-            
+
           },
           error: error => {
-             this.notificationService.showError(error, "Error"); 
+             this.notificationService.showError(error, "Error");
           }
         });
       //// When file uploads set it to file formcontrol
@@ -559,10 +559,10 @@ export class InstrumentComponent implements OnInit {
       else {
         this.config.insqty = 0;
       }
-      
+
       this.instrument.configuration.push(this.config);
     }
-    
+
     if (this.id == null) {
       this.instrumentService.save(this.instrument)
         .pipe(first())
@@ -570,7 +570,7 @@ export class InstrumentComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.saveFileShare(data.object.id)
+              // this.saveFileShare(data.object.id)
             }
             else {
               this.notificationService.showError(data.resultMessage, "Error");
@@ -590,7 +590,7 @@ export class InstrumentComponent implements OnInit {
         .subscribe({
           next: (data: ResultMsg) => {
             if (data.result) {
-              this.saveFileShare(this.id);
+              // this.saveFileShare(this.id);
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["instrumentlist"]);
             }
@@ -598,7 +598,7 @@ export class InstrumentComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-            
+
           },
           error: error => {
              this.notificationService.showError(error, "Error");
