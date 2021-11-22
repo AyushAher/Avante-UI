@@ -1,18 +1,40 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 
 import {
-  User, Instrument, CustomerSite, ListTypeItem, instrumentConfig, SparePart,
-  ResultMsg, ProfileReadOnly, ConfigTypeValue, Distributor, FileShare, Contact
+  ConfigTypeValue,
+  Contact,
+  CustomerSite,
+  Distributor,
+  FileShare,
+  Instrument,
+  instrumentConfig,
+  ListTypeItem,
+  ProfileReadOnly,
+  ResultMsg,
+  SparePart,
+  User
 } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
 import {
-  AccountService, AlertService, CustomerSiteService, InstrumentService, ListTypeService, SparePartService
-  , UploadService, NotificationService, ProfileService, ConfigTypeValueService, DistributorService, FileshareService
+  AccountService,
+  AlertService,
+  ConfigTypeValueService,
+  CustomerSiteService,
+  DistributorService,
+  FileshareService,
+  InstrumentService,
+  ListTypeService,
+  NotificationService,
+  ProfileService,
+  SparePartService,
+  UploadService
 } from '../_services';
+import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.component";
+import {HttpEventType} from "@angular/common/http";
 
 
 @Component({
@@ -59,7 +81,13 @@ export class InstrumentComponent implements OnInit {
   public pdfcolumnDefs: ColDef[];
   private pdfcolumnApi: ColumnApi;
   private pdfapi: GridApi;
+  private file: any;
+  private transaction: number;
+  private hastransaction: boolean;
+  private fileUploadProgress: number;
 
+
+  @Output() public onUploadFinished = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -78,9 +106,10 @@ export class InstrumentComponent implements OnInit {
     private distributorService: DistributorService,
     private fileshareService: FileshareService,
   ) { }
-  
+
   ngOnInit() {
 
+    this.transaction = 0;
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -147,7 +176,7 @@ export class InstrumentComponent implements OnInit {
           this.instrumentform.get('engname').updateValueAndValidity();
           this.instrumentform.get('engcontact').clearValidators();
           this.instrumentform.get('engcontact').updateValueAndValidity();
-        }        
+        }
       }
       );
 
@@ -222,7 +251,7 @@ export class InstrumentComponent implements OnInit {
               this.imageUrl = this.noimageData;
             }
             this.instrumentform.patchValue(data.object);
-            
+
             this.sparePartDetails = data.object.spartParts;
             this.recomandFilter(this.sparePartDetails);
             for (let i = 0; i < data.object.spartParts.length; i++) {
@@ -241,15 +270,14 @@ export class InstrumentComponent implements OnInit {
               shipdt: new Date(data.object.shipdt)
             });
 
+
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
-
-
-      this.fileshareService.getById(this.id)
+      this.fileshareService.list(this.id)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
@@ -261,10 +289,11 @@ export class InstrumentComponent implements OnInit {
             this.loading = false;
           }
         });
+
     }
     this.pdfcolumnDefs = this.pdfcreateColumnDefs();
     this.columnDefs = this.createColumnDefs();
-    
+
   }
 
   @ViewChild('fileInput') el: ElementRef;
@@ -352,7 +381,7 @@ export class InstrumentComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           //debugger;
-         
+
           this.instrumentform.patchValue(data.object[0]);
           this.sparePartDetails = data.object[0].spartParts;
           this.recomandFilter(this.sparePartDetails);
@@ -460,10 +489,10 @@ export class InstrumentComponent implements OnInit {
             this.alertService.success('File Upload Successfully.');
             this.imagePath = data.path;
             // console.log(data);
-            
+
           },
           error: error => {
-             this.notificationService.showError(error, "Error"); 
+            this.notificationService.showError(error, "Error");
           }
         });
       //// When file uploads set it to file formcontrol
@@ -480,25 +509,43 @@ export class InstrumentComponent implements OnInit {
     }
   }
 
-  uploadPdfFile(event) {
+  uploadPdfFile(files) {
     //debugger;
-    let file = event.target.files;
-    if (event.target.files && event.target.files[0]) {
-      //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
-      this.uploadService.uploadPdf(file)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            //debugger;
-            this.notificationService.showSuccess("File Upload Successfully", "Success");
-            this.pdfPath = data.path;
-            //this.pdfFileName = file.name;
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-          }
-        });
+    // let file = event.target.files;
+    // if (event.target.files && event.target.files[0]) {
+    //   //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
+    //   this.uploadService.uploadPdf(file)
+    //     .pipe(first())
+    //     .subscribe({
+    //       next: (data: any) => {
+    //         //debugger;
+    //         this.notificationService.showSuccess("File Upload Successfully", "Success");
+    //         this.pdfPath = data.path;
+    //         //this.pdfFileName = file.name;
+    //       },
+    //       error: error => {
+    //         this.notificationService.showError(error, "Error");
+    //       }
+    //     });
+    // }
+
+    if (files.length === 0) {
+      return;
     }
+    let filesToUpload: File[] = files;
+    const formData = new FormData();
+
+    Array.from(filesToUpload).map((file, index) => {
+      return formData.append("file" + index, file, file.name);
+    });
+    console.log(this.id)
+    this.fileshareService.upload(formData, this.id).subscribe((event) => {
+      if (event.type === HttpEventType.UploadProgress)
+        this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
+      else if (event.type === HttpEventType.Response) {
+        this.onUploadFinished.emit(event.body);
+      }
+    });
   }
 
   saveFileShare(id: string) {
@@ -559,10 +606,10 @@ export class InstrumentComponent implements OnInit {
       else {
         this.config.insqty = 0;
       }
-      
+
       this.instrument.configuration.push(this.config);
     }
-    
+
     if (this.id == null) {
       this.instrumentService.save(this.instrument)
         .pipe(first())
@@ -570,7 +617,11 @@ export class InstrumentComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.saveFileShare(data.object.id)
+              // this.saveFileShare(data.object.id)
+              if (this.file != null) {
+
+                this.uploadPdfFile(this.file)
+              }
             }
             else {
               this.notificationService.showError(data.resultMessage, "Error");
@@ -590,7 +641,10 @@ export class InstrumentComponent implements OnInit {
         .subscribe({
           next: (data: ResultMsg) => {
             if (data.result) {
-              this.saveFileShare(this.id);
+              // this.saveFileShare(this.id);
+              if (this.file != null) {
+                this.uploadPdfFile(this.file)
+              }
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["instrumentlist"]);
             }
@@ -598,15 +652,47 @@ export class InstrumentComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-            
+
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
     }
   }
+
+  getfil(x) {
+    this.file = x;
+  }
+
+  listfile = (x) => {
+    document.getElementById("selectedfiles").style.display = "block";
+
+    var selectedfiles = document.getElementById("selectedfiles");
+    var ulist = document.createElement("ul");
+    ulist.id = "demo";
+    selectedfiles.appendChild(ulist);
+
+    if (this.transaction != 0) {
+      document.getElementById("demo").remove();
+    }
+
+    this.transaction++;
+    this.hastransaction = true;
+
+    for (let i = 0; i <= x.length; i++) {
+      var name = x[i].name;
+      var ul = document.getElementById("demo");
+      var node = document.createElement("li");
+      var textnode = document.createTextNode(name)
+      node.appendChild(textnode);
+
+      console.log(node, document.getElementById("demo"))
+      ul.appendChild(node);
+
+    }
+  };
 
 
   private createColumnDefs() {
@@ -769,7 +855,6 @@ export class InstrumentComponent implements OnInit {
     }
   }
 
-
   recomandFilter(data: any) {
     this.recomandedFilter = this.sparePartDetails.filter(x => x.partTypeName == "Recommended");
     this.consumfilter = this.sparePartDetails.filter(x => x.partTypeName == "Consumables");
@@ -777,30 +862,29 @@ export class InstrumentComponent implements OnInit {
     this.othersparefilter = this.sparePartDetails.filter(x => x.partTypeName == "Other Spare");
   }
 
-
   private pdfcreateColumnDefs() {
     return [
       {
-        headerName: 'Action',
-        field: 'id',
+        headerName: "Action",
+        field: "id",
         filter: false,
-        enableSorting: false,
         editable: false,
         width: 100,
         sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-          <button class="btn btn-link" type="button"><i class="fas fa-download" data-action-type="download" title="Download"></i></button>`
+        cellRendererFramework: FilerendercomponentComponent,
+        cellRendererParams: {
+          deleteaccess: this.hasDeleteAccess,
+          id: this.id
+        },
       },
       {
-        headerName: 'FileName',
-        field: 'fileName',
-        filter: false,
-        enableSorting: false,
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
         editable: false,
-        sortable: false,
-        width: 100,
-        tooltipField: 'fileName',
+        sortable: true,
       },
     ]
   }
@@ -810,8 +894,6 @@ export class InstrumentComponent implements OnInit {
     this.pdfcolumnApi = params.columnApi;
     this.pdfapi.sizeColumnsToFit();
   }
-
-
 
   public onPdfRowClicked(e) {
     //debugger;
