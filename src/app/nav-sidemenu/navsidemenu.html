@@ -149,10 +149,14 @@
          data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Settings</h6>
-        <a class="collapse-item" routerLink="/custdashboardsettings" *ngIf="hasSearch" routerLinkActive="active">Settings</a>
+
+        <a class="collapse-item" routerLink="/custdashboardsettings" *ngIf="hasSearch" routerLinkActive="active">Customer
+          Settings</a>
+        <a class="collapse-item" routerLink="/distdashboardsettings" *ngIf="hasSearch" routerLinkActive="active">Distributor
+          Settings</a>
+
       </div>
     </div>
-
   </li>
 
   <!-- Divider -->

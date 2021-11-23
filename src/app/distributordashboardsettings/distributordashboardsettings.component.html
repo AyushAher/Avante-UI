@@ -1,0 +1,81 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="page-title">
+        <div class="title_left">
+          <h3 style="padding:15px 0 5px 0">Customer Dashboard Settings</h3>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <hr/>
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+          <div class="row">
+            <div class="accordion" id="accordionExample">
+
+              <div class="card" style="width: 100vw;">
+
+                <div class="card-header" id="headingOne" style="height: 50px">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Dashboard Row 1
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                     data-parent="#accordionExample">
+                  <div class="card-body row">
+                    <div class="input py-2 col-md-4" *ngFor="let i of rowdata1">
+                      <input type="checkbox" id="{{i.listTypeItemId}}" (change)="toggle($event.target.value,'row1')"
+                             value="{{i.listTypeItemId}}" style="margin-right: 5px">
+
+                      <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" style="width: 100vw;">
+
+                <div class="card-header" id="headingTwo" style="height: 50px">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseTwo2" aria-expanded="true" aria-controls="collapseTwo">
+                      Dashboard Row 2
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapseTwo2" class="collapse show" aria-labelledby="headingTwo"
+                     data-parent="#accordionExample">
+                  <div class="card-body row">
+                    <div class="input py-2 col-md-4" *ngFor="let i of rowdata2">
+                      <input type="checkbox" id="{{i.listTypeItemId}}" (change)="toggle($event.target.value, 'row2')"
+                             value="{{i.listTypeItemId}}" style="margin-right: 5px">
+
+                      <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br><br><br>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px;">
+              <button *ngIf="hasAddAccess || hasUpdateAccess" class="btn btn-primary" type="submit">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="" class="btn btn-secondary" style="margin: 0 10px;">Back</a>
+
+              <button type="button" (click)="resetOptions()" style="margin: 0 10px;" class="btn btn-danger">Reset
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

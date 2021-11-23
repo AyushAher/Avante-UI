@@ -94,6 +94,7 @@ import { AmcInstrumentRendererComponent } from './amc/amc-instrument-renderer.co
 import { FilerendercomponentComponent } from './Offerrequest/filerendercomponent.component';
 import { DistributordashboardComponent } from './distributordashboard/distributordashboard.component';
 import { CustdashboardsettingsComponent} from "./dashboardsettings/custdashboardsettings";
+import { DistributordashboardsettingsComponent } from './distributordashboardsettings/distributordashboardsettings.component';
 
 
 @NgModule({
@@ -172,6 +173,7 @@ import { CustdashboardsettingsComponent} from "./dashboardsettings/custdashboard
     FilerendercomponentComponent,
     DistributordashboardComponent,
     CustdashboardsettingsComponent,
+    DistributordashboardsettingsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

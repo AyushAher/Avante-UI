@@ -58,6 +58,7 @@ import {OfferrequestComponent} from "./Offerrequest/Offerrequest.component";
 import {OfferrequestlistComponent} from "./Offerrequest/Offerrequestlist.component";
 import {DistributordashboardComponent} from "./distributordashboard/distributordashboard.component";
 import {CustdashboardsettingsComponent} from "./dashboardsettings/custdashboardsettings";
+import {DistributordashboardsettingsComponent} from "./distributordashboardsettings/distributordashboardsettings.component";
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 
@@ -267,6 +268,10 @@ const routes: Routes = [
   },{
     path: "custdashboardsettings",
     component: CustdashboardsettingsComponent,
+    canActivate: [AuthGuard],
+  },{
+    path: "distdashboardsettings",
+    component: DistributordashboardsettingsComponent,
     canActivate: [AuthGuard],
   },
   { path: 'account', loadChildren: accountModule },
