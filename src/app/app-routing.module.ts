@@ -57,7 +57,7 @@ import {AmcListComponent} from "./amc/amclist";
 import {OfferrequestComponent} from "./Offerrequest/Offerrequest.component";
 import {OfferrequestlistComponent} from "./Offerrequest/Offerrequestlist.component";
 import {DistributordashboardComponent} from "./distributordashboard/distributordashboard.component";
-import {Custdashboardsettings} from "./dashboardsettings/custdashboardsettings";
+import {CustdashboardsettingsComponent} from "./dashboardsettings/custdashboardsettings";
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 
@@ -266,7 +266,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },{
     path: "custdashboardsettings",
-    component: Custdashboardsettings,
+    component: CustdashboardsettingsComponent,
     canActivate: [AuthGuard],
   },
   { path: 'account', loadChildren: accountModule },

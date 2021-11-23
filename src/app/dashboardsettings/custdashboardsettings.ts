@@ -4,21 +4,15 @@ import {Component, OnInit} from "@angular/core";
 import {ListTypeItem, ProfileReadOnly, ResultMsg, User} from "../_models";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {
-  AccountService,
-  AlertService,
-  custdashboardsettingsService,
-  ListTypeService,
-  NotificationService,
-  ProfileService
-} from "../_services";
+import {AccountService, AlertService, ListTypeService, NotificationService, ProfileService} from "../_services";
 import {first} from "rxjs/operators";
+import {CustdashboardsettingsService} from "../_services/custdashboardsettings.service";
 
 @Component({
   selector: 'app-customer',
   templateUrl: './custdashboardsettings.html',
 })
-export class Custdashboardsettings implements OnInit {
+export class CustdashboardsettingsComponent implements OnInit {
   form: FormGroup;
   model: any
   loading = false;
@@ -45,7 +39,7 @@ export class Custdashboardsettings implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private Service: custdashboardsettingsService,
+    private Service: CustdashboardsettingsService,
     private alertService: AlertService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
@@ -141,23 +135,26 @@ export class Custdashboardsettings implements OnInit {
           var Object = data.object
 
 
-          var row1 = Object.row1.split(",")
-          row1.forEach(value => {
-            document.getElementById(value).checked = true
+          this.row1Data = Object.row1.split(",")
+          this.row1Data.forEach(value => {
+            console.log(value)
+            let r1 = document.getElementById(value) as HTMLInputElement
+            r1.checked = true
           })
-          this.row1Data = row1
 
-          var row2 = Object.row2.split(",")
-          row2.forEach(value => {
-            document.getElementById(value).checked = true
+          this.row2Data = Object.row2.split(",")
+          this.row2Data.forEach(value => {
+            console.log(value)
+            let r2 = document.getElementById(value) as HTMLInputElement
+            r2.checked = true
           })
-          this.row2Data = row2
-          var row3 = Object.row3.split(",")
-          row3.forEach(value => {
-            document.getElementById(value).checked = true
-          })
-          this.row3Data = row3
 
+          this.row3Data = Object.row3.split(",")
+          this.row3Data.forEach(value => {
+            console.log(value)
+            let r3 = document.getElementById(value) as HTMLInputElement
+            r3.checked = true
+          })
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -251,7 +248,6 @@ export class Custdashboardsettings implements OnInit {
     }
     // this.isSave = true;
     this.loading = true;
-    var form = this.form
 
     this.model = this.form.value;
     this.model.userId = this.user.userId
