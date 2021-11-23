@@ -171,7 +171,7 @@ import {Custdashboardsettings} from "./dashboardsettings/custdashboardsettings";
     AmcInstrumentRendererComponent,
     FilerendercomponentComponent,
     DistributordashboardComponent,
-    Custdashboardsettings
+    Custdashboardsettings,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -2,7 +2,7 @@
 
 import {Component, OnInit} from "@angular/core";
 import {ListTypeItem, ProfileReadOnly, ResultMsg, User} from "../_models";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {
   AccountService,
@@ -13,7 +13,6 @@ import {
   ProfileService
 } from "../_services";
 import {first} from "rxjs/operators";
-import {IDropdownSettings} from "ng-multiselect-dropdown";
 
 @Component({
   selector: 'app-customer',
@@ -32,14 +31,14 @@ export class Custdashboardsettings implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
-  user: User;
+  user: User
+  row1Data = []
+  row2Data = []
+  row3Data = []
+
   rowdata1: ListTypeItem[];
   rowdata2: ListTypeItem[];
   rowdata3: ListTypeItem[];
-
-  rowdatalist1: IDropdownSettings = {};
-  rowdatalist2: IDropdownSettings = {};
-  rowdatalist3: IDropdownSettings = {};
 
   constructor(
     private formBuilder: FormBuilder,
@@ -75,9 +74,9 @@ export class Custdashboardsettings implements OnInit {
 
 
     this.form = this.formBuilder.group({
-      row1: ['', Validators.required],
-      row2: ['', Validators.required],
-      row3: ['', Validators.required],
+      row1: [''],
+      row2: [''],
+      row3: [''],
     });
 
     this.listTypeService
@@ -119,82 +118,100 @@ export class Custdashboardsettings implements OnInit {
         },
       });
 
+    //{
+    //     "id": "80351f8e-e7dc-4507-8880-af7e2071c2f6",
+    //     "createdby": null,
+    //     "createdon": "0001-01-01T00:00:00",
+    //     "updatedby": null,
+    //     "updatedon": null,
+    //     "userId": "9107ebca-ab23-43dd-8081-b79a91ed3522",
+    //     "row1": "cc0d4cc1-4bc3-11ec-9dbc-54bf64020316,cc0ff452-4bc3-11ec-9dbc-54bf64020316,cc0ba5a9-4bc3-11ec-9dbc-54bf64020316,cc0ecdbb-4bc3-11ec-9dbc-54bf64020316",
+    //     "row2": "cc152dcd-4bc3-11ec-9dbc-54bf64020316,cc125e01-4bc3-11ec-9dbc-54bf64020316,cc13e0f4-4bc3-11ec-9dbc-54bf64020316",
+    //     "row3": "cc1af8e8-4bc3-11ec-9dbc-54bf64020316,cc1c8605-4bc3-11ec-9dbc-54bf64020316,cc17d3ae-4bc3-11ec-9dbc-54bf64020316"
+    // }
+
     this.id = this.user.userId;
-    if (this.id != null) {
-      this.hasAddAccess = this.user.username == "admin";
-      this.Service.getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
 
-            var subreq1 = data.object.row1.split(',');
-            var subreq2 = data.object.row2.split(',');
-            var subreq3 = data.object.row3.split(',');
+    this.hasAddAccess = this.user.username == "admin";
+    this.Service.getById(this.id)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          console.log(data.object)
+          var Object = data.object
 
 
-            let items1: ListTypeItem[] = [];
-            if (subreq1.length > 0) {
-              for (var i = 0; i < subreq1.length; i++) {
-                let t = new ListTypeItem();
-                t.listTypeItemId = subreq1[i];
-                items1.push(t);
-              }
-            }
-            let items2: ListTypeItem[] = [];
-            if (subreq2.length > 0) {
-              for (var i = 0; i < subreq2.length; i++) {
-                let t = new ListTypeItem();
-                t.listTypeItemId = subreq2[i];
-                items2.push(t);
-              }
-            }
-            let items3: ListTypeItem[] = [];
-            if (subreq3.length > 0) {
-              for (var i = 0; i < subreq3.length; i++) {
-                let t = new ListTypeItem();
-                t.listTypeItemId = subreq3[i];
-                items3.push(t);
-              }
-            }
+          var row1 = Object.row1.split(",")
+          row1.forEach(value => {
+            document.getElementById(value).checked = true
+          })
+          this.row1Data = row1
 
-            this.form.patchValue({"row1": items1});
-            this.form.patchValue({"row2": items2});
-            this.form.patchValue({"row3": items3});
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
-          }
-        });
+          var row2 = Object.row2.split(",")
+          row2.forEach(value => {
+            document.getElementById(value).checked = true
+          })
+          this.row2Data = row2
+          var row3 = Object.row3.split(",")
+          row3.forEach(value => {
+            document.getElementById(value).checked = true
+          })
+          this.row3Data = row3
+
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
+  }
+
+  toggle(e, formcontroller) {
+    let indexOfChecked
+    switch (formcontroller) {
+      case "row1":
+        indexOfChecked = this.row1Data.indexOf(e)
+        // if item is in the list
+        if (indexOfChecked >= 0) {
+          this.row1Data.splice(indexOfChecked, 1)
+        } else {
+          this.row1Data.push(e)
+        }
+        break
+      case 'row2':
+        indexOfChecked = this.row2Data.indexOf(e)
+        // if item is in the list
+        if (indexOfChecked >= 0) {
+          this.row2Data.splice(indexOfChecked, 1)
+        } else {
+          this.row2Data.push(e)
+        }
+        break
+      case 'row3':
+        indexOfChecked = this.row3Data.indexOf(e)
+        // if item is in the list
+        if (indexOfChecked >= 0) {
+          this.row3Data.splice(indexOfChecked, 1)
+        } else {
+          this.row3Data.push(e)
+        }
+        break
     }
-    this.rowdatalist1 = {
-      idField: 'listTypeItemId',
-      textField: 'itemname',
-      limitSelection: 4
-    };
-    this.rowdatalist2 = {
-      idField: 'listTypeItemId',
-      textField: 'itemname',
-      limitSelection: 3
-    };
-    this.rowdatalist3 = {
-      idField: 'listTypeItemId',
-      textField: 'itemname',
-      limitSelection: 3
-    };
   }
 
   resetOptions() {
-
     if (confirm("Reset all options to default settings?")) {
 
-
-      this.form.value.row1 = "cc0d4cc1-4bc3-11ec-9dbc-54bf64020316,cc0ff452-4bc3-11ec-9dbc-54bf64020316,cc0ba5a9-4bc3-11ec-9dbc-54bf64020316,cc0ecdbb-4bc3-11ec-9dbc-54bf64020316"
-      this.form.value.row2 = "cc152dcd-4bc3-11ec-9dbc-54bf64020316,cc125e01-4bc3-11ec-9dbc-54bf64020316,cc13e0f4-4bc3-11ec-9dbc-54bf64020316"
-      this.form.value.row3 = "cc1af8e8-4bc3-11ec-9dbc-54bf64020316,cc1c8605-4bc3-11ec-9dbc-54bf64020316,cc17d3ae-4bc3-11ec-9dbc-54bf64020316"
+      this.row1Data = ["cc0d4cc1-4bc3-11ec-9dbc-54bf64020316", "cc0ff452-4bc3-11ec-9dbc-54bf64020316", "cc0ba5a9-4bc3-11ec-9dbc-54bf64020316", "cc0ecdbb-4bc3-11ec-9dbc-54bf64020316"]
+      this.row2Data = ["cc152dcd-4bc3-11ec-9dbc-54bf64020316", "cc125e01-4bc3-11ec-9dbc-54bf64020316", "cc13e0f4-4bc3-11ec-9dbc-54bf64020316"]
+      this.row3Data = ["cc1af8e8-4bc3-11ec-9dbc-54bf64020316", "cc1c8605-4bc3-11ec-9dbc-54bf64020316", "cc17d3ae-4bc3-11ec-9dbc-54bf64020316"]
 
       this.model = this.form.value;
       this.model.userId = this.user.userId
+
+      this.model.row1 = this.row1Data.toString()
+      this.model.row2 = this.row2Data.toString()
+      this.model.row3 = this.row3Data.toString()
 
       this.Service.update(this.id, this.model)
         .pipe(first())
@@ -208,7 +225,6 @@ export class Custdashboardsettings implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-
           },
           error: error => {
             this.notificationService.showError(error, "Error");
@@ -236,18 +252,15 @@ export class Custdashboardsettings implements OnInit {
     // this.isSave = true;
     this.loading = true;
     var form = this.form
-    var selectarray1 = form.get('row1').value;
-    form.value.row1 = selectarray1.map(x => x.listTypeItemId).join(',');
-
-    var selectarray2 = form.get('row2').value;
-    form.value.row2 = selectarray2.map(x => x.listTypeItemId).join(',');
-
-    var selectarray3 = form.get('row3').value;
-    form.value.row3 = selectarray3.map(x => x.listTypeItemId).join(',');
 
     this.model = this.form.value;
     this.model.userId = this.user.userId
 
+    this.model.row1 = this.row1Data.toString()
+    this.model.row2 = this.row2Data.toString()
+    this.model.row3 = this.row3Data.toString()
+
+    console.log(this.model)
     this.Service.update(this.id, this.model)
       .pipe(first())
       .subscribe({
@@ -268,4 +281,5 @@ export class Custdashboardsettings implements OnInit {
         }
       });
   }
+
 }
