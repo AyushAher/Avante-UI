@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
-import { User, Profile, ListTypeItem } from '../_models';
-import { AccountService, ProfileService, NotificationService, ListTypeService } from '../_services';
-import { first } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import {ListTypeItem, Profile, User} from '../_models';
+import {AccountService, ListTypeService, NotificationService, ProfileService} from '../_services';
+import {first} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -20,11 +20,8 @@ export class HomeComponent {
     private notificationService: NotificationService,
     private listTypeService: ListTypeService,
   ) {
-
-
     //this.profile = this.profileServicce.userProfileValue;
     this.user = this.accountService.userValue;
-    console.log(this.user)
 
     if (this.user.userProfileId != null) {
 
@@ -34,10 +31,6 @@ export class HomeComponent {
         this.profileServicce.getUserProfile(this.user.userProfileId);
         await delay(1000);
 
-        // Do something after
-        // console.log('after delay')
-      })();
-    }
     this.listTypeService
       .getById("ROLES")
       .pipe(first())
@@ -52,8 +45,8 @@ export class HomeComponent {
               break;
 
             case "Customer":
-              this.router.navigate(["custdashboard"]);  
-            break;
+              this.router.navigate(["custdashboard"]);
+              break;
           }
         },
         error: (error) => {
@@ -61,6 +54,10 @@ export class HomeComponent {
         },
       });
 
+        // Do something after
+        // console.log('after delay')
+      })();
+    }
   }
 
 }

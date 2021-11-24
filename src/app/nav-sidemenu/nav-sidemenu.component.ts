@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
-import { User, ProfileReadOnly } from '../_models';
-import { AccountService, ProfileService } from '../_services';
+import {Component} from '@angular/core';
+import {ListTypeItem, ProfileReadOnly, User} from '../_models';
+import {AccountService, ListTypeService, NotificationService, ProfileService} from '../_services';
+import {first} from "rxjs/operators";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-nav-sidemenu',
   templateUrl: './navsidemenu.html',
-   
+
 })
 export class NavSideMenuComponent {
   user: User;
@@ -27,11 +29,25 @@ export class NavSideMenuComponent {
   hasLocalExpenses: boolean = false;
   hascustomersatisfactionsurveylist: boolean = false
 
-  constructor(private accountService: AccountService,
-    private profileService: ProfileService) {
+
+  roles: ListTypeItem[];
+  userrole: ListTypeItem[];
+  settings: string
+  hasDistributorSettings: boolean = false;
+  hasCustomerSettings: boolean = false
+
+  constructor(
+    private accountService: AccountService,
+    private profileService: ProfileService,
+    private profileServicce: ProfileService,
+    private router: Router,
+    private notificationService: NotificationService,
+    private listTypeService: ListTypeService,
+  ) {
     debugger;
     this.user = this.accountService.userValue;
     this.profile = this.profileService.userProfileValue;
+
     if (this.profile != null) {
       if (this.profile.permissions.filter(x => x.screenCode == 'SDIST').length > 0) {
         this.hasDistributor = this.profile.permissions.filter(x => x.screenCode == 'SDIST')[0].create == true
@@ -103,15 +119,15 @@ export class NavSideMenuComponent {
       //this.hasDistributor = this.profile.Permissions
     }
     if (this.user.username == "admin") {
-      this.hasDistributor= true;
-      this.hasCustomer= true;
-      this.hasInstrument=true;
-      this.hasSparePart=true;
-      this.hasUserProfile=true;
-      this.hasProfile=true;
-      this.hasCurrency=true;
-      this.hasCountry=true;
-      this.hasSearch=true;
+      this.hasDistributor = true;
+      this.hasCustomer = true;
+      this.hasInstrument = true;
+      this.hasSparePart = true;
+      this.hasUserProfile = true;
+      this.hasProfile = true;
+      this.hasCurrency = true;
+      this.hasCountry = true;
+      this.hasSearch = true;
       this.hasMaster = true;
       this.hasexport = true;
       this.hasTravelDetails = true;
@@ -120,5 +136,30 @@ export class NavSideMenuComponent {
       this.hasLocalExpenses = true;
       this.hascustomersatisfactionsurveylist = true;
     }
+
+    this.listTypeService
+      .getById("ROLES")
+      .pipe(first())
+      .subscribe({
+        next: (data: ListTypeItem[]) => {
+          this.roles = data;
+          this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
+          switch (this.userrole[0].itemname) {
+            case "Distributor Support":
+              this.hasDistributorSettings = true
+              // this.router.navigate(["distdashboard"]);
+              break;
+
+            case "Customer":
+              this.hasCustomerSettings = true
+              // this.router.navigate(["custdashboard"]);
+              break;
+          }
+        },
+        error: (error) => {
+          this.notificationService.showError(error, "Error");
+        },
+      });
+
   }
 }

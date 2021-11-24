@@ -150,9 +150,11 @@
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Settings</h6>
 
-        <a class="collapse-item" routerLink="/custdashboardsettings" *ngIf="hasSearch" routerLinkActive="active">Customer
+        <a class="collapse-item" routerLink="/custdashboardsettings" *ngIf="hasCustomerSettings"
+           routerLinkActive="active">Dashboard
           Settings</a>
-        <a class="collapse-item" routerLink="/distdashboardsettings" *ngIf="hasSearch" routerLinkActive="active">Distributor
+        <a class="collapse-item" routerLink="/distdashboardsettings" *ngIf="hasDistributorSettings"
+           routerLinkActive="active">Dashboard
           Settings</a>
 
       </div>
