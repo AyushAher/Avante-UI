@@ -358,10 +358,7 @@ export class AmcComponent implements OnInit {
     this.model = this.form.value;
 
     const datepipie = new DatePipe("en-US");
-    this.model.sqdate = datepipie.transform(
-      this.model.sqdate,
-      "MM/dd/yyyy"
-    );
+    this.model.sqdate = datepipie.transform(this.model.sqdate,"MM/dd/yyyy");
 
     if (!this.hasId && this.hasAddAccess) {
       this.model = this.form.value;

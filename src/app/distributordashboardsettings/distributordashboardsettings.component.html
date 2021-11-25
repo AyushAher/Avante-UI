@@ -14,7 +14,7 @@
           <div class="row">
             <div class="accordion" id="accordionExample">
 
-              <div class="card" style="width: 100vw;">
+              <div class="card" style="width: 80vw;">
 
                 <div class="card-header" id="headingOne" style="height: 50px">
                   <h2 class="mb-0">
@@ -24,20 +24,22 @@
                     </button>
                   </h2>
                 </div>
+
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                      data-parent="#accordionExample">
                   <div class="card-body row">
-                    <div class="input py-2 col-md-4" *ngFor="let i of rowdata1">
+                    <div class="input py-2 col-md-6" style="font-size:14px" *ngFor="let i of rowdata1">
                       <input class="single-checkbox-Dist-1" type="checkbox" id="{{i.listTypeItemId}}"
                              (change)="toggle($event.target.value,'row1')"
                              value="{{i.listTypeItemId}}" style="margin-right: 5px">
-
                       <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
+
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="card" style="width: 100vw;">
+
+              <div class="card" style="width: 80vw;">
 
                 <div class="card-header" id="headingTwo" style="height: 50px">
                   <h2 class="mb-0">
@@ -50,7 +52,7 @@
                 <div id="collapseTwo2" class="collapse show" aria-labelledby="headingTwo"
                      data-parent="#accordionExample">
                   <div class="card-body row">
-                    <div class="input py-2 col-md-4" *ngFor="let i of rowdata2">
+                    <div class="input py-2 col-md-4" style="font-size:14px" *ngFor="let i of rowdata2">
                       <input type="checkbox" id="{{i.listTypeItemId}}" (change)="toggle($event.target.value, 'row2')"
                              value="{{i.listTypeItemId}}" style="margin-right: 5px">
 
