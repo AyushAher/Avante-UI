@@ -570,7 +570,7 @@ export class InstrumentComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              // this.saveFileShare(data.object.id)
+              this.saveFileShare(data.object.id)
             }
             else {
               this.notificationService.showError(data.resultMessage, "Error");
@@ -590,7 +590,7 @@ export class InstrumentComponent implements OnInit {
         .subscribe({
           next: (data: ResultMsg) => {
             if (data.result) {
-              // this.saveFileShare(this.id);
+              this.saveFileShare(this.id);
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["instrumentlist"]);
             }

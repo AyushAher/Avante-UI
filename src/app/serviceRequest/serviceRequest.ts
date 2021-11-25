@@ -1278,7 +1278,6 @@ export class ServiceRequestComponent implements OnInit {
     //     });
     // }
 
-    console.log("file upload init")
     if (files.length === 0) {
       return;
     }
