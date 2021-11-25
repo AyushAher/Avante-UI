@@ -621,7 +621,8 @@ export class ServiceRequestComponent implements OnInit {
             if (data.result) {
               this.saveFileShare(data.object.id);
               if (this.file != null) {
-                this.uploadPdfFile(this.file)
+
+                this.uploadPdfFile(this.file, data.object.id)
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
 
@@ -659,7 +660,7 @@ export class ServiceRequestComponent implements OnInit {
             if (data.result) {
               this.saveFileShare(this.serviceRequestId);
               if (this.file != null) {
-                this.uploadPdfFile(this.file)
+                this.uploadPdfFile(this.file, this.serviceRequestId)
               }
               if (this.IsDistributorView) {
                 this.addAssignedHistory(this.serviceRequest);
@@ -1258,7 +1259,7 @@ export class ServiceRequestComponent implements OnInit {
     this.api.sizeColumnsToFit();
   }
 
-  uploadPdfFile(files) {
+  uploadPdfFile(files, serviceRequestId) {
     //
     // let file = event.target.files;
     // if (event.target.files && event.target.files[0]) {
@@ -1287,7 +1288,7 @@ export class ServiceRequestComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
-    this.fileshareService.upload(formData, this.serviceRequestId).subscribe((event) => {
+    this.fileshareService.upload(formData, serviceRequestId).subscribe((event) => {
       if (event.type === HttpEventType.UploadProgress)
         this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
       else if (event.type === HttpEventType.Response) {
