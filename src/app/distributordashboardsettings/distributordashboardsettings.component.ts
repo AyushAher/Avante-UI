@@ -31,6 +31,7 @@ export class DistributordashboardsettingsComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   user: User
+
   row1Data = []
   row2Data = []
 
@@ -110,18 +111,27 @@ export class DistributordashboardsettingsComponent implements OnInit {
         next: (data: any) => {
 
           var Object = data.object
+
           this.row1Data = Object.row1.split(",")
           this.row1Data.forEach(value => {
-            console.log(value)
             let r1 = document.getElementById(value) as HTMLInputElement
-            r1.checked = true
+            if (r1 != null) {
+              console.log("not null r1")
+              r1.checked = true
+            } else {
+              console.log(" null r1")
+            }
           })
 
           this.row2Data = Object.row2.split(",")
           this.row2Data.forEach(value => {
-            console.log(value)
             let r2 = document.getElementById(value) as HTMLInputElement
-            r2.checked = true
+            if (r2 != null) {
+              console.log("not null r2")
+              r2.checked = true
+            } else {
+              console.log(" null r2")
+            }
           })
         },
         error: error => {
@@ -133,25 +143,32 @@ export class DistributordashboardsettingsComponent implements OnInit {
 
   toggle(e, formcontroller) {
     let indexOfChecked
+    let limit
     switch (formcontroller) {
       case "row1":
         indexOfChecked = this.row1Data.indexOf(e)
+        limit = 4
         // if item is in the list
+
         if (indexOfChecked >= 0) {
           this.row1Data.splice(indexOfChecked, 1)
         } else {
-          this.row1Data.push(e)
+          if (this.row1Data.length != limit) {
+            this.row1Data.push(e)
+          }
         }
         break
       case 'row2':
+        limit = 2
         indexOfChecked = this.row2Data.indexOf(e)
-        // if item is in the list
         if (indexOfChecked >= 0) {
           this.row2Data.splice(indexOfChecked, 1)
         } else {
-          this.row2Data.push(e)
+          if (this.row2Data.length != limit) {
+            this.row2Data.push(e)
+          }
         }
-        break
+        break;
     }
   }
 
@@ -211,14 +228,17 @@ export class DistributordashboardsettingsComponent implements OnInit {
 
     this.model.row1 = this.row1Data.toString()
     this.model.row2 = this.row2Data.toString()
+    console.log(this.model.row1)
+    console.log(this.model.row2)
 
     this.Service.update(this.id, this.model)
       .pipe(first())
       .subscribe({
         next: (data: ResultMsg) => {
           if (data.result) {
+            console.log(this.model)
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(['']);
+            // this.router.navigate(['']);
 
           } else {
             this.notificationService.showError(data.resultMessage, "Error");

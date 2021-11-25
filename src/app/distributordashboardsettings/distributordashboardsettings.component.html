@@ -28,7 +28,8 @@
                      data-parent="#accordionExample">
                   <div class="card-body row">
                     <div class="input py-2 col-md-4" *ngFor="let i of rowdata1">
-                      <input type="checkbox" id="{{i.listTypeItemId}}" (change)="toggle($event.target.value,'row1')"
+                      <input class="single-checkbox-Dist-1" type="checkbox" id="{{i.listTypeItemId}}"
+                             (change)="toggle($event.target.value,'row1')"
                              value="{{i.listTypeItemId}}" style="margin-right: 5px">
 
                       <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
