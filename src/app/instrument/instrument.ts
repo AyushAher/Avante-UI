@@ -35,6 +35,7 @@ import {
 } from '../_services';
 import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.component";
 import {HttpEventType} from "@angular/common/http";
+import {DatePipe} from "@angular/common";
 
 
 @Component({
@@ -269,8 +270,6 @@ export class InstrumentComponent implements OnInit {
             this.instrumentform.setValue({
               shipdt: new Date(data.object.shipdt)
             });
-
-
           },
           error: error => {
             this.notificationService.showError(error, "Error");
@@ -591,10 +590,13 @@ export class InstrumentComponent implements OnInit {
     }
     this.isSave = true;
     this.loading = true;
+
     this.instrument = this.instrumentform.value;
+
     this.instrument.image = this.imagePath;
     this.instrument.engcontact = String(this.instrument.engcontact);
     this.instrument.configuration = [];
+
     for (let i = 0; i < this.selectedConfigType.length; i++) {
       this.config = new instrumentConfig();
       this.config.configtypeid = this.selectedConfigType[i].listTypeItemId;
@@ -602,13 +604,20 @@ export class InstrumentComponent implements OnInit {
       this.config.sparepartid = this.selectedConfigType[i].sparePartId;
       if (this.selectedConfigType[i].insqty != null) {
         this.config.insqty = parseInt(this.selectedConfigType[i].insqty);
-      }
-      else {
+      } else {
         this.config.insqty = 0;
       }
 
       this.instrument.configuration.push(this.config);
     }
+
+    const datepipie = new DatePipe("en-US");
+    this.instrument.installdt = datepipie.transform(this.instrument.installdt, "MM/dd/yyyy");
+    this.instrument.insmfgdt = datepipie.transform(this.instrument.insmfgdt, "MM/dd/yyyy");
+    this.instrument.shipdt = datepipie.transform(this.instrument.shipdt, "MM/dd/yyyy");
+    this.instrument.wrntystdt = datepipie.transform(this.instrument.wrntystdt, "MM/dd/yyyy");
+    this.instrument.wrntyendt = datepipie.transform(this.instrument.wrntyendt, "MM/dd/yyyy");
+
 
     if (this.id == null) {
       this.instrumentService.save(this.instrument)
@@ -650,6 +659,7 @@ export class InstrumentComponent implements OnInit {
             }
             else {
               this.notificationService.showError(data.resultMessage, "Error");
+
             }
             this.loading = false;
 
