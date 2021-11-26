@@ -83,25 +83,6 @@
     </div>
   </li>
   <!-- Nav Item - Utilities Collapse Menu -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
-       aria-expanded="true" aria-controls="collapseReport">
-      <i class="fas fa-fw fa fa-book"> </i>
-      <span>Reports</span>
-    </a>
-    <div id="collapseReport" class="collapse" aria-labelledby="headingUtilities"
-         data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">Reports:</h6>
-        <a class="collapse-item" routerLink="/custpayrpt" *ngIf="hasSearch" routerLinkActive="active">Customer Payment</a>
-        <a class="collapse-item" routerLink="/srcontrev" *ngIf="hasSearch" routerLinkActive="active">ServiceContract Revenue</a>
-        <a class="collapse-item" routerLink="/sppartrev" *ngIf="hasSearch" routerLinkActive="active">SparePart Revenue</a>
-        <a class="collapse-item" routerLink="/qtsent" *ngIf="hasSearch" routerLinkActive="active">Quotation Sent</a>
-        <a class="collapse-item" routerLink="/sostatus" *ngIf="hasSearch" routerLinkActive="active">SupplierOrder Status</a>
-        <a class="collapse-item" routerLink="/srrpt" *ngIf="hasSearch" routerLinkActive="active">Service Report</a>
-      </div>
-    </div>
-  </li>
 
 
   <li class="nav-item">
@@ -136,6 +117,29 @@
 
   </li>
 
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
+       aria-expanded="true" aria-controls="collapseReport">
+      <i class="fas fa-fw fa fa-book"> </i>
+      <span>Reports</span>
+    </a>
+    <div id="collapseReport" class="collapse" aria-labelledby="headingUtilities"
+         data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Reports:</h6>
+        <a class="collapse-item" routerLink="/custpayrpt" *ngIf="hasSearch" routerLinkActive="active">Customer
+          Payment</a>
+        <a class="collapse-item" routerLink="/srcontrev" *ngIf="hasSearch" routerLinkActive="active">ServiceContract
+          Revenue</a>
+        <a class="collapse-item" routerLink="/sppartrev" *ngIf="hasSearch" routerLinkActive="active">SparePart
+          Revenue</a>
+        <a class="collapse-item" routerLink="/qtsent" *ngIf="hasSearch" routerLinkActive="active">Quotation Sent</a>
+        <a class="collapse-item" routerLink="/sostatus" *ngIf="hasSearch" routerLinkActive="active">SupplierOrder
+          Status</a>
+        <a class="collapse-item" routerLink="/srrpt" *ngIf="hasSearch" routerLinkActive="active">Service Report</a>
+      </div>
+    </div>
+  </li>
 
   <li class="nav-item">
 
