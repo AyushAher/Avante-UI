@@ -1,15 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
-import { ListTypeItem, ResultMsg, ProfileReadOnly, User, ConfigTypeValue, EngineerCommentList, actionList } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import {actionList, ListTypeItem, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
-import {
-  AccountService, ListTypeService, NotificationService, EngActionService
-} from '../_services';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import {AccountService, EngActionService, FileshareService, ListTypeService, NotificationService} from '../_services';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {HttpEventType} from "@angular/common/http";
 
 @Component({
   selector: 'app-modelcomponent',
@@ -33,20 +32,29 @@ export class ModelEngActionContentComponent implements OnInit {
   @Input() public id;
   @Input() public engineerlist;
   @Input() public engineerid;
- 
+
+
+  file: any;
+  fileList: [] = [];
+  public progress: number;
+  public message: string;
+
+  @Output() public onUploadFinished = new EventEmitter();
+
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private FileShareService: FileshareService,
     private accountService: AccountService,
     private listTypeService: ListTypeService,
     private notificationService: NotificationService,
     private actionService: EngActionService,
     public activeModal: BsModalService
   ) { }
- 
-  
+
+
   ngOnInit() {
     console.log(this.itemId);
     this.user = this.accountService.userValue;
@@ -96,9 +104,33 @@ export class ModelEngActionContentComponent implements OnInit {
     this.notificationService.filter("itemadded");
   }
 
+  getfil(x) {
+    this.file = x;
+  }
+
+  public uploadFile = (files, id) => {
+    if (files.length === 0) {
+      return;
+    }
+    let filesToUpload: File[] = files;
+    const formData = new FormData();
+
+    Array.from(filesToUpload).map((file, index) => {
+      return formData.append("file" + index, file, file.name);
+    });
+    this.FileShareService.upload(formData, id, "SRREQ-TV", "VIDEO").subscribe((event) => {
+      if (event.type === HttpEventType.UploadProgress)
+        this.progress = Math.round((100 * event.loaded) / event.total);
+      else if (event.type === HttpEventType.Response) {
+        this.message = "Upload success.";
+        this.onUploadFinished.emit(event.body);
+      }
+    });
+  };
+
   onValueSubmit() {
     //debugger;
-    
+
     this.submitted = true;
 
     this.isSave = true;
@@ -110,16 +142,22 @@ export class ModelEngActionContentComponent implements OnInit {
     this.action = this.actionForm.value;
     this.action.servicerequestid = this.itemId;
     this.action.engineerid = this.engineerid;
+    this.action.teamviewrecording = null
     if (this.id == null) {
       this.actionService.save(this.action)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             if (data.result) {
+
+              if (this.file != null) {
+                this.uploadFile(this.file, data.object.id);
+              }
+
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
               //this.configList = data.object;
-             // this.listvalue.get("configValue").setValue("");
+              // this.listvalue.get("configValue").setValue("");
             }
             else {
               this.notificationService.showError(data.resultMessage, "Error");
@@ -134,6 +172,10 @@ export class ModelEngActionContentComponent implements OnInit {
         });
     }
     else {
+
+      if (this.file != null) {
+        this.uploadFile(this.file, this.id);
+      }
       this.action.id = this.id;
       this.actionService.update(this.id, this.action)
         .pipe(first())
@@ -145,8 +187,7 @@ export class ModelEngActionContentComponent implements OnInit {
               //this.configList = data.object;
               //this.listvalue.get("configValue").setValue("");
               //this.id = null;
-            }
-            else {
+            } else {
               this.notificationService.showError(data.resultMessage, "Error");
               this.close();
             }

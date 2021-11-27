@@ -49,7 +49,7 @@ import {
   SRAssignedHistoryService,
   UploadService
 } from '../_services';
-import {HttpEventType} from "@angular/common/http";
+import {HttpEventType, HttpResponse} from "@angular/common/http";
 import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.component";
 
 
@@ -160,6 +160,25 @@ export class ServiceRequestComponent implements OnInit {
             next: (data: any) => {
               this.engineerCommentList = data.object.engComments;
               this.actionList = data.object.engAction;
+              this.actionList.forEach((value, index) => {
+                value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
+              })
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showSuccess(error, "Error");
+              this.loading = false;
+            }
+          });
+
+        this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              this.engineerCommentList = data.object.engComments;
+              this.actionList = data.object.engAction;
+              this.actionList.forEach((value, index) => {
+                value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
+              })
             },
             error: error => {
               // this.alertService.error(error);
@@ -1239,7 +1258,8 @@ export class ServiceRequestComponent implements OnInit {
         filter: false,
         enableSorting: false,
         editable: false,
-        sortable: false
+        sortable: false,
+        template: `<button type="button" class="btn btn-link" data-action-type="download" ><i class="fas fas fa-download" title="Edit Value" data-action-type="download"></i></button>`
       },
       {
         headerName: 'Date',
@@ -1350,8 +1370,38 @@ export class ServiceRequestComponent implements OnInit {
           }
         case "edit":
           this.openaction(this.serviceRequestId, data.id);
+        case "download":
+          console.log(e.data.id)
+          let params:any = {}
+          params.id = e.data.id;
+          params.fileUrl = e.data.teamviewerrecroding
+          this.downloadTeamViewerRecording(params)
+          break
       }
     }
+  }
+
+
+  downloadTeamViewerRecording(params: any) {
+    this.fileshareService.download(params.id,"/SRATN").subscribe((event) => {
+      if (event.type === HttpEventType.Response) {
+        this.downloadFile(params,event);
+      }
+    });
+  }
+
+  private downloadFile(params,data: HttpResponse<Blob>) {
+    debugger;
+    const downloadedFile = new Blob([data.body], {type: data.body.type});
+    const a = document.createElement("a");
+    a.setAttribute("style", "display:block;");
+    document.body.appendChild(a);
+    a.download = params.id;
+    a.href = URL.createObjectURL(downloadedFile);
+    a.innerHTML = params.fileUrl;
+    a.target = "_blank";
+    a.click();
+    document.body.removeChild(a);
   }
 
   public onhisRowClicked(e) {

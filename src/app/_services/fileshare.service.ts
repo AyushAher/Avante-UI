@@ -47,9 +47,9 @@ export class FileshareService {
     );
   }
 
-  public download(fileUrl: string) {
+  public download(fileUrl: string,code:string="") {
     return this.http.get(
-      `${environment.apiUrl}/FileShares/download?fileUrl=${fileUrl}`,
+      `${environment.apiUrl}/FileShares/download${code}?fileUrl=${fileUrl}`,
       {
         reportProgress: true,
         observe: "events",

@@ -53,8 +53,10 @@
             <div class="row">
               <div class="col-sm-6">
                 <label for="teamviewrecording">TeamViewer</label>
-                <input type="text" formControlName="teamviewrecording" class="form-control" />
+                <input type="file" id="myFile" #file  accept=".zip,.rar,.7zip" placeholder="Choose file"
+                       (change)="getfil(file.files);" multiple>
               </div>
+                <label style="color: red">Files Should be Compressed to a .zip or .rar format</label>
             </div>
           </div>
           <div class="row">
