@@ -7,10 +7,27 @@ import { first } from 'rxjs/operators';
 import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 import { AgRendererComponent } from 'ag-grid-angular';
 import {
-  AccountService, AlertService, DistributorService, CountryService, DistributorRegionService, CurrencyService,
-  ContactService, CustomerSiteService, InstrumentService, SparePartService, CustomerService, NotificationService,
-  ProfileService, UserProfileService, ListTypeService, ServiceRequestService, ServiceReportService
+  AccountService,
+  AlertService,
+  DistributorService,
+  CountryService,
+  DistributorRegionService,
+  CurrencyService,
+  ContactService,
+  CustomerSiteService,
+  InstrumentService,
+  SparePartService,
+  CustomerService,
+  NotificationService,
+  ProfileService,
+  UserProfileService,
+  ListTypeService,
+  ServiceRequestService,
+  ServiceReportService,
+  TravelDetailService,
+  VisadetailsService, StaydetailsService, LocalExpensesService, CustomersatisfactionsurveyService
 } from '../_services';
+
 
 @Component({
   template: `<a [routerLink]="[params.inRouterLink,params.value]"  style="margin-right: 10px;"><i class="fas fa-pen" title="Edit"></i></a>
@@ -33,20 +50,26 @@ export class RenderComponent implements AgRendererComponent  {
     private countryService: CountryService,
     private listTypeService: ListTypeService,
     private servicerequestService: ServiceRequestService,
-    private servicereportservice: ServiceReportService
+    private servicereportservice: ServiceReportService,
+    private TravelDetailService:TravelDetailService,
+    private VisaDetailsService:VisadetailsService,
+    private StayDetailsService:StaydetailsService,
+    private LocalExpensesService:LocalExpensesService,
+    private CustomerSatisfactionSurveyService:CustomersatisfactionsurveyService,
+
   ) {
 
   }
   agInit(params: any): void {
    // //debugger;
     this.params = params;
-    
+
   }
 
   refresh(params: any): boolean {
     return false;
   }
- 
+
   delete(params: any) {
     // //debugger;
     if (confirm("Are you sure, you want to delete the record?") == true) {
@@ -315,8 +338,108 @@ export class RenderComponent implements AgRendererComponent  {
             }
           });
       }
+      else if (params.deleteLink == "TRDET") {
+        this.TravelDetailService.delete(params.value)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                const selectedData = params.api.getSelectedRows();
+                params.api.applyTransaction({ remove: selectedData });
+              }
+              else {
+                this.notificationService.showError(data.resultMessage, "Error");
+              }
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showError(error, "Error");
+            }
+          });
+      }
+      else if (params.deleteLink == "VSDET") {
+        this.VisaDetailsService.delete(params.value)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                const selectedData = params.api.getSelectedRows();
+                params.api.applyTransaction({ remove: selectedData });
+              }
+              else {
+                this.notificationService.showError(data.resultMessage, "Error");
+              }
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showError(error, "Error");
+            }
+          });
+      }
       else if (params.deleteLink == "LITYIT") {
         this.listTypeService.delete(params.value)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                const selectedData = params.api.getSelectedRows();
+                params.api.applyTransaction({ remove: selectedData });
+              }
+              else {
+                this.notificationService.showError(data.resultMessage, "Error");
+              }
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showError(error, "Error");
+            }
+          });
+      }
+      else if (params.deleteLink == "STDET") {
+        this.StayDetailsService.delete(params.value)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                const selectedData = params.api.getSelectedRows();
+                params.api.applyTransaction({ remove: selectedData });
+              }
+              else {
+                this.notificationService.showError(data.resultMessage, "Error");
+              }
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showError(error, "Error");
+            }
+          });
+      }
+      else if (params.deleteLink == "LCEXP") {
+        this.LocalExpensesService.delete(params.value)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                const selectedData = params.api.getSelectedRows();
+                params.api.applyTransaction({ remove: selectedData });
+              }
+              else {
+                this.notificationService.showError(data.resultMessage, "Error");
+              }
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showError(error, "Error");
+            }
+          });
+      }
+      else if (params.deleteLink == "CSS") {
+        this.CustomerSatisfactionSurveyService.delete(params.value)
           .pipe(first())
           .subscribe({
             next: (data: any) => {
