@@ -36,6 +36,9 @@
 
                     </div>
                   </div>
+                  <div *ngIf="row1Error" class="danger px-4"><p style="color:red">You can choose only 2 options</p>
+                  </div>
+
                 </div>
               </div>
 
@@ -59,6 +62,9 @@
                       <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
                     </div>
                   </div>
+                  <div *ngIf="row2Error" class="danger px-4"><p style="color:red">You can choose only 2 options</p>
+                  </div>
+
                 </div>
               </div>
             </div>

@@ -37,6 +37,8 @@ export class DistributordashboardsettingsComponent implements OnInit {
 
   rowdata1: ListTypeItem[];
   rowdata2: ListTypeItem[];
+  row2Error: boolean = false;
+  row1Error: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -147,26 +149,20 @@ export class DistributordashboardsettingsComponent implements OnInit {
     switch (formcontroller) {
       case "row1":
         indexOfChecked = this.row1Data.indexOf(e)
-        limit = 4
         // if item is in the list
 
         if (indexOfChecked >= 0) {
           this.row1Data.splice(indexOfChecked, 1)
         } else {
-          if (this.row1Data.length != limit) {
             this.row1Data.push(e)
-          }
         }
         break
       case 'row2':
-        limit = 2
         indexOfChecked = this.row2Data.indexOf(e)
         if (indexOfChecked >= 0) {
           this.row2Data.splice(indexOfChecked, 1)
         } else {
-          if (this.row2Data.length != limit) {
             this.row2Data.push(e)
-          }
         }
         break;
     }
@@ -228,29 +224,35 @@ export class DistributordashboardsettingsComponent implements OnInit {
 
     this.model.row1 = this.row1Data.toString()
     this.model.row2 = this.row2Data.toString()
-    console.log(this.model.row1)
-    console.log(this.model.row2)
 
-    this.Service.update(this.id, this.model)
-      .pipe(first())
-      .subscribe({
-        next: (data: ResultMsg) => {
-          if (data.result) {
-            console.log(this.model)
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            // this.router.navigate(['']);
+    if (this.row1Data.length == 2 && this.row2Data.length == 2) {
 
-          } else {
-            this.notificationService.showError(data.resultMessage, "Error");
+      this.Service.update(this.id, this.model)
+        .pipe(first())
+        .subscribe({
+          next: (data: ResultMsg) => {
+            if (data.result) {
+              console.log(this.model)
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.router.navigate(['']);
+
+            } else {
+              this.notificationService.showError(data.resultMessage, "Error");
+            }
+            this.loading = false;
+
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
           }
-          this.loading = false;
+        });
+    } else {
+      this.loading = false;
+      this.row1Error = this.row1Data.length != 4;
+      this.row2Error = this.row2Data.length != 3;
+    }
 
-        },
-        error: error => {
-          this.notificationService.showError(error, "Error");
-          this.loading = false;
-        }
-      });
   }
 
 }
