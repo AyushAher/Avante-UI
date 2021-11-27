@@ -87,7 +87,6 @@ export class VisadetailsListComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        width: 100,
         cellRendererFramework: RenderComponent,
         cellRendererParams: {
           inRouterLink: "/visadetails",
@@ -146,6 +145,6 @@ export class VisadetailsListComponent implements OnInit {
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
-    this.api.sizeColumnsToFit();
+    // this.api.sizeColumnsToFit();
   }
 }

@@ -64,7 +64,7 @@
 
                         </div>
 
-              
+
                         <div class="col-md-4 col-sm-4">
                             <label for="minor_Unit">Start Date</label>
                             <input bsDatepicker formControlName="startdate" class="form-control"
@@ -130,29 +130,59 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="col-md-4 col-sm-4">
                             <label for=""></label>
-                            <div class="checkbox">
-                                <label for="isactive" style="font-size:15px; display: none;">
-                                    <input type="checkbox" formControlName="isactive" class="" />
-                                    Active
-                                </label>
-                            </div>
+                          <div class="checkbox">
+                            <label for="isactive" style="font-size:15px; display: none;">
+                              <input type="checkbox" formControlName="isactive" class=""/>
+                              Active
+                            </label>
+                          </div>
                         </div>
                     </div>
-                    <br />
+                  <br/>
 
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6" style="padding:10px;">
-                            <button class="btn btn-primary">
-                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                Submit
-                            </button>
-                            <a routerLink="/visadetailslist" class="btn btn-secondary"
-                                style="margin-left: 10px;">Back</a>
-                        </div>
+                  <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
+                    <div class="col-md-3">
+                      <input type="file" id="myFile" #file placeholder="Choose file"
+                             (change)="getfil(file.files); listfile(file.files) ;" multiple
+                             accept="text/plain, application/pdf, image/*">
                     </div>
+                    <div id="selectedfiles" class="hidden col-md-4"
+                         style="max-height:200px; overflow-y:auto;display: none;">
+                      <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                        <h5>Selected Files:</h5>
+                        <hr/>
+                      </section>
+
+                    </div>
+                  </div>
+
+                  <div class="attachment my-4" *ngIf="id!=null">
+                    <div class="page-title">
+                      <div class="title_left">
+                        <h3>Attachment List</h3>
+                        <hr>
+                      </div>
+                    </div>
+                    <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
+                                     (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments"
+                                     [rowData]="attachments" rowSelection="single" pagination="true"
+                                     paginationPageSize=10>
+                    </ag-grid-angular>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6" style="padding:10px;">
+                      <button class="btn btn-primary">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Submit
+                      </button>
+                      <a routerLink="/visadetailslist" class="btn btn-secondary"
+                         style="margin-left: 10px;">Back</a>
+                    </div>
+                  </div>
 
                 </form>
             </div>

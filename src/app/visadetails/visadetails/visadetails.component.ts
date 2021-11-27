@@ -1,5 +1,5 @@
 import {DatePipe} from "@angular/common";
-import {Component, OnInit} from "@angular/core";
+import {Component, EventEmitter, OnInit, Output} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs/operators";
@@ -19,12 +19,16 @@ import {
   AlertService,
   CountryService,
   DistributorService,
+  FileshareService,
   ListTypeService,
   NotificationService,
   ProfileService,
   ServiceRequestService,
   VisadetailsService
 } from '../../_services';
+import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
+import {FilerendercomponentComponent} from "../../Offerrequest/filerendercomponent.component";
+import {HttpEventType} from "@angular/common/http";
 
 
 @Component({
@@ -55,7 +59,25 @@ export class VisadetailsComponent implements OnInit {
   dateValid: boolean = false;
   DistributorList: any;
 
+
+  public columnDefs: ColDef[];
+  public columnDefsAttachments: ColDef[];
+  private columnApi: ColumnApi;
+  private api: GridApi;
+
+  file: any;
+  attachments: any;
+  fileList: [] = [];
+  transaction: number;
+  hastransaction: boolean;
+  public progress: number;
+  public message: string;
+
+  @Output() public onUploadFinished = new EventEmitter();
+
+
   constructor(
+    private FileShareService: FileshareService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -72,6 +94,8 @@ export class VisadetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.transaction = 0;
+
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -121,6 +145,7 @@ export class VisadetailsComponent implements OnInit {
             this.getengineers(data.object.distId)
             this.getservicerequest(data.object.distId)
             this.travelDetailform.patchValue(data.object);
+            this.GetFileList(data.object.id)
           },
           error: (error) => {
             console.log(error);
@@ -129,7 +154,7 @@ export class VisadetailsComponent implements OnInit {
           },
         });
     }
-    
+
     this.distributorservice.getAll()
       .pipe(first())
       .subscribe({
@@ -143,7 +168,7 @@ export class VisadetailsComponent implements OnInit {
         },
       })
 
-      
+
     this.countryservice
       .getAll()
       .pipe(first())
@@ -182,11 +207,109 @@ export class VisadetailsComponent implements OnInit {
           this.loading = false;
         },
       });
+    this.columnDefsAttachments = this.createColumnDefsAttachments();
+
   }
 
   get f() {
     return this.travelDetailform.controls;
   }
+
+
+  getfil(x) {
+    this.file = x;
+  }
+
+  listfile = (x) => {
+    document.getElementById("selectedfiles").style.display = "block";
+
+    var selectedfiles = document.getElementById("selectedfiles");
+    var ulist = document.createElement("ul");
+    ulist.id = "demo";
+    selectedfiles.appendChild(ulist);
+
+    if (this.transaction != 0) {
+      document.getElementById("demo").remove();
+    }
+
+    this.transaction++;
+    this.hastransaction = true;
+
+    for (let i = 0; i <= x.length; i++) {
+      var name = x[i].name;
+      var ul = document.getElementById("demo");
+      var node = document.createElement("li");
+      node.appendChild(document.createTextNode(name));
+      ul.appendChild(node);
+    }
+  };
+
+  createColumnDefsAttachments() {
+    return [
+      {
+        headerName: "Action",
+        field: "id",
+        filter: false,
+        editable: false,
+        width: 100,
+        sortable: false,
+        cellRendererFramework: FilerendercomponentComponent,
+        cellRendererParams: {
+          deleteaccess: this.hasDeleteAccess,
+          id: this.id
+        },
+      },
+      {
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ]
+  }
+
+  public uploadFile = (files, id) => {
+    if (files.length === 0) {
+      return;
+    }
+    let filesToUpload: File[] = files;
+    const formData = new FormData();
+
+    Array.from(filesToUpload).map((file, index) => {
+      return formData.append("file" + index, file, file.name);
+    });
+    this.FileShareService.upload(formData, id, "VISADET", null).subscribe((event) => {
+      if (event.type === HttpEventType.UploadProgress)
+        this.progress = Math.round((100 * event.loaded) / event.total);
+      else if (event.type === HttpEventType.Response) {
+        this.message = "Upload success.";
+        this.onUploadFinished.emit(event.body);
+      }
+    });
+  };
+
+  GetFileList(id: string) {
+    this.FileShareService.list(id)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.attachments = data.object;
+        },
+        error: (err: any) => {
+          this.notificationService.showError(err, "Error");
+        },
+      });
+  }
+
+  onGridReadyAttachments(params): void {
+    this.api = params.api;
+    this.columnApi = params.columnApi;
+    this.api.sizeColumnsToFit();
+  }
+
 
   getservicerequest(id: string) {
     this.servicerequestservice
@@ -210,7 +333,7 @@ export class VisadetailsComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.engineer = data.object.contacts;
+          this.engineer = data.object;
         },
 
         error: (error) => {
@@ -222,6 +345,7 @@ export class VisadetailsComponent implements OnInit {
   }
 
   onSubmit() {
+
     debugger;
     this.submitted = true;
     // reset alerts on submit
@@ -279,9 +403,13 @@ export class VisadetailsComponent implements OnInit {
           .save(this.travelDetail)
           .pipe(first())
           .subscribe({
-            next: (data: ResultMsg) => {
+            next: (data: any) => {
               debugger;
               if (data.result) {
+
+                if (this.file != null) {
+                  this.uploadFile(this.file, data.object.id);
+                }
                 this.notificationService.showSuccess(
                   data.resultMessage,
                   "Success"
@@ -309,6 +437,10 @@ export class VisadetailsComponent implements OnInit {
           .subscribe({
             next: (data: ResultMsg) => {
               if (data.result) {
+
+              if (this.file != null) {
+                this.uploadFile(this.file, this.id);
+              }
                 this.notificationService.showSuccess(
                   data.resultMessage,
                   "Success"
