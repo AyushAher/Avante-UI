@@ -33,6 +33,9 @@ export class CustdashboardsettingsComponent implements OnInit {
   rowdata1: ListTypeItem[];
   rowdata2: ListTypeItem[];
   rowdata3: ListTypeItem[];
+  row1Error: boolean = false;
+  row2Error: boolean = false;
+  row3Error: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -111,18 +114,6 @@ export class CustdashboardsettingsComponent implements OnInit {
           this.loading = false;
         },
       });
-
-    //{
-    //     "id": "80351f8e-e7dc-4507-8880-af7e2071c2f6",
-    //     "createdby": null,
-    //     "createdon": "0001-01-01T00:00:00",
-    //     "updatedby": null,
-    //     "updatedon": null,
-    //     "userId": "9107ebca-ab23-43dd-8081-b79a91ed3522",
-    //     "row1": "cc0d4cc1-4bc3-11ec-9dbc-54bf64020316,cc0ff452-4bc3-11ec-9dbc-54bf64020316,cc0ba5a9-4bc3-11ec-9dbc-54bf64020316,cc0ecdbb-4bc3-11ec-9dbc-54bf64020316",
-    //     "row2": "cc152dcd-4bc3-11ec-9dbc-54bf64020316,cc125e01-4bc3-11ec-9dbc-54bf64020316,cc13e0f4-4bc3-11ec-9dbc-54bf64020316",
-    //     "row3": "cc1af8e8-4bc3-11ec-9dbc-54bf64020316,cc1c8605-4bc3-11ec-9dbc-54bf64020316,cc17d3ae-4bc3-11ec-9dbc-54bf64020316"
-    // }
 
     this.id = this.user.userId;
 
@@ -251,31 +242,37 @@ export class CustdashboardsettingsComponent implements OnInit {
 
     this.model = this.form.value;
     this.model.userId = this.user.userId
+    if (this.row1Data.length == 4 && this.row2Data.length == 3 && this.row3Data.length == 3) {
+      this.model.row1 = this.row1Data.toString()
+      this.model.row2 = this.row2Data.toString()
+      this.model.row3 = this.row3Data.toString()
 
-    this.model.row1 = this.row1Data.toString()
-    this.model.row2 = this.row2Data.toString()
-    this.model.row3 = this.row3Data.toString()
+      console.log(this.model)
+      this.Service.update(this.id, this.model)
+        .pipe(first())
+        .subscribe({
+          next: (data: ResultMsg) => {
+            if (data.result) {
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.router.navigate(['']);
 
-    console.log(this.model)
-    this.Service.update(this.id, this.model)
-      .pipe(first())
-      .subscribe({
-        next: (data: ResultMsg) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(['']);
+            } else {
+              this.notificationService.showError(data.resultMessage, "Error");
+            }
+            this.loading = false;
 
-          } else {
-            this.notificationService.showError(data.resultMessage, "Error");
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
           }
-          this.loading = false;
-
-        },
-        error: error => {
-          this.notificationService.showError(error, "Error");
-          this.loading = false;
-        }
-      });
+        });
+    } else {
+      this.loading = false;
+      this.row1Error = this.row1Data.length != 4;
+      this.row2Error = this.row2Data.length != 3;
+      this.row3Error = this.row3Data.length != 3;
+    }
   }
 
 }
