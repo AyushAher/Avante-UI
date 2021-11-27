@@ -90,7 +90,6 @@ random="hello"
         enableSorting: false,
         editable: false,
         sortable: false,
-        width: 100,
         cellRendererFramework: RenderComponent,
         cellRendererParams: {
           inRouterLink: "/staydetails",
@@ -145,6 +144,6 @@ random="hello"
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
-    this.api.sizeColumnsToFit();
+    // this.api.sizeColumnsToFit();
   }
 }
