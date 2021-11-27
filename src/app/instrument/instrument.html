@@ -184,7 +184,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="image" style="margin-right:15px;margin-top:15px;">image</label>
-              <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile($event)" />
+              <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile(fileInput.files,id)" />
               <!--<label for="imageUpload" *ngIf="editFile" [ngClass]="['custom-label', 'upload-image']"></label>-->
               <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']" (click)="removeUploadedFile()"></label>
             </div>
@@ -304,11 +304,11 @@
           <!--            </div>-->
           <!--          </div>-->
 
-          <div class="row" style="margin:15px;">
+          <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
             <div class="col-md-3">
               <input type="file" id="myFile" #file placeholder="Choose file"
-                     (change)="getfil(file.files); listfile(file.files) ;" accept=".pdf" id="pdfUpload" multiple
-                     type='file'/>
+                     (change)="getfil(file.files); listfile(file.files) ;" multiple
+                     accept="text/plain, application/pdf, image/*">
             </div>
             <div id="selectedfiles" class="hidden col-md-4"
                  style="max-height:200px; overflow-y:auto;display: none;">
@@ -316,16 +316,19 @@
                 <h5>Selected Files:</h5>
                 <hr/>
               </section>
+
             </div>
           </div>
 
           <div class="row" *ngIf="PdffileData">
             <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine" (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"
-                               [columnDefs]="pdfcolumnDefs" [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
+              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
+                               (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"
+                               [columnDefs]="pdfcolumnDefs" [rowData]="PdffileData" rowSelection="single"
+                               pagination="true" paginationPageSize=5></ag-grid-angular>
             </div>
           </div>
-          <hr />
+          <hr/>
           <div class="row">
             <div class="col-md-6 col-sm-6">
               <button [disabled]="loading" *ngIf="hasAddAccess==true || hasUpdateAccess==true" class="btn btn-primary">

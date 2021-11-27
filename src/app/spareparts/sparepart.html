@@ -169,7 +169,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
-              <input type='file' formControlName="image" id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile($event)" />
+              <input type='file' formControlName="image" id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile(fileInput.files,id)" />
               <div *ngIf="submitted && f.image.errors" class="invalid-feedback">
                 <div *ngIf="f.image.errors.required">Image is required</div>
               </div>

@@ -29,9 +29,13 @@ export class FileshareService {
     return this.http.get<FileShare>(`${environment.apiUrl}/FileShares/${id}`);
   }
 
-  upload(fileshare: FormData, id: string) {
+  getImg(id: string, code: string) {
+    return this.http.get<FileShare>(`${environment.apiUrl}/FileShares/getImg/${code}/${id}`);
+  }
+
+  upload(fileshare: FormData, id: string, code: string, IMG?) {
     debugger;
-    return this.http.post(`${environment.apiUrl}/FileShares/upload/${id}`, fileshare, {
+    return this.http.post(`${environment.apiUrl}/FileShares/upload/${code}/${id}/${IMG}`, fileshare, {
       reportProgress: true,
       observe: "events",
     });
