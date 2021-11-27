@@ -55,6 +55,11 @@ import {DatePipe} from "@angular/common";
 import {HttpEventType} from "@angular/common/http";
 import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.component";
 
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 @Component({
   selector: 'app-customer',
   templateUrl: './serviceReport.html',
@@ -523,7 +528,7 @@ export class ServiceReportComponent implements OnInit {
       this.ServiceReport.engsignature = this.signaturePadcust.toDataURL();
     }
 
-    this.ServiceReport.instrument = this.ServiceReportform.get('instrument').value.serialnos;
+    this.ServiceReport.instrument = this.ServiceReportform.get('instrument').value;
     if (this.ServiceReportId == null) {
 
       this.ServiceReportService.save(this.ServiceReport)
@@ -533,7 +538,7 @@ export class ServiceReportComponent implements OnInit {
             if (data.result) {
               this.saveFileShare(data.object.id);
               if (this.file != null) {
-                this.uploadPdfFile(this.file)
+                this.uploadPdfFile(this.file, data.object.id);
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["ServiceReportlist"]);
@@ -552,7 +557,7 @@ export class ServiceReportComponent implements OnInit {
         });
     }
     else {
-      //this.ServiceReport = this.ServiceReportform.value;
+      this.ServiceReport = this.ServiceReportform.value;
       this.ServiceReport.id = this.ServiceReportId;
       this.ServiceReportService.update(this.ServiceReportId, this.ServiceReport)
         .pipe(first())
@@ -562,7 +567,7 @@ export class ServiceReportComponent implements OnInit {
               this.saveFileShare(this.ServiceReportId);
 
               if (this.file != null) {
-                this.uploadPdfFile(this.file)
+                this.uploadPdfFile(this.file, this.ServiceReportId)
               }
 
               this.notificationService.showSuccess(data.resultMessage, "Success");
@@ -882,7 +887,7 @@ export class ServiceReportComponent implements OnInit {
   //    }
   //  ]
 
-  uploadPdfFile(files) {
+  uploadPdfFile(files, id) {
     // let file = event.target.files;
     // if (event.target.files && event.target.files[0]) {
     //   //  this.uploadService.upload(file).subscribe(event => {  });;
@@ -908,7 +913,7 @@ export class ServiceReportComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
-    this.fileshareService.upload(formData, this.ServiceReportId).subscribe((event) => {
+    this.fileshareService.upload(formData, id, "SRREP").subscribe((event) => {
       if (event.type === HttpEventType.UploadProgress)
         this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
       else if (event.type === HttpEventType.Response) {
@@ -1272,6 +1277,74 @@ export class ServiceReportComponent implements OnInit {
           });
       }
     }
+  }
+
+  GeneratePDF() {
+    let docDefinition = {
+      content: [
+        {
+          text: 'Service Report',
+          fontSize: 16,
+          alignment: 'center',
+          color: '#047886'
+        }, {
+          columns: [
+            [
+              {text: "Customer Name", bold: true},
+              {text: "Report Of", bold: true},
+              {text: "Department", bold: true},
+              {text: "Country", bold: true},
+              {text: " "},
+              {text: "Town", bold: true},
+              {text: "Resp. for Instrument", bold: true},
+              {text: "Lab Chief", bold: true},
+              {text: "Computer ARL S/N", bold: true},
+              {text: " "},
+              {text: "Instrument", bold: true},
+              {text: "Software", bold: true},
+              {text: "Brand Name", bold: true},
+              {text: "Firmware", bold: true},
+              {text: " "},
+            ], [
+              {text: "Ayush Aher"},
+              {text: "Engineer/Djibouti/2021-11-03"},
+              {text: "E&L"},
+              {text: "Ayush Aher"},
+              {text: " "},
+
+              {text: "Engineer/Djibouti/2021-11-03"},
+              {text: "E&L"},
+              {text: "Ayush Aher"},
+              {text: "Engineer/Djibouti/2021-11-03"},
+              {text: " "},
+
+              {text: "E&L"},
+              {text: "Ayush Aher"},
+              {text: "Engineer/Djibouti/2021-11-03"},
+              {text: "E&L"},
+              {text: " "},
+            ]
+          ]
+        }, {
+          text: "Problem"
+        }, {
+          text: "Problem",
+        },
+        {text: " "},
+        {
+          columns: [
+            [
+              {text: "Installation", bold: true},
+              {text: "Corr. Maintenance", bold: true}
+            ],
+            [{text: "Analytical Assistance", bold: true}],
+            [{text: "Prev. Maintenance", bold: true}],
+            [{text: "Rework", bold: true}],
+          ],
+        }
+      ]
+    }
+    pdfMake.createPdf(docDefinition).open()
   }
 
 }
