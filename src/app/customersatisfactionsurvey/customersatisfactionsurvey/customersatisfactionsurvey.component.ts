@@ -192,7 +192,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.engineer = data.object.contacts;
+          this.engineer = data.object;
         },
 
         error: (error) => {
