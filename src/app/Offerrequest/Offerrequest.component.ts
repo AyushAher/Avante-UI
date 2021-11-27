@@ -1,18 +1,27 @@
-import { DatePipe } from "@angular/common";
-import { HttpEventType } from "@angular/common/http";
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
-import { Guid } from "guid-typescript";
-import { first } from "rxjs/operators";
-import { AmcInstrumentRendererComponent } from "../amc/amc-instrument-renderer.component";
-import { Currency, Distributor, ResultMsg, User } from "../_models";
-import { Offerrequest } from "../_models/Offerrequest.model";
-import { AccountService, AlertService, NotificationService, ListTypeService, ProfileService, DistributorService, CurrencyService, FileshareService } from "../_services";
-import { OfferrequestService } from "../_services/Offerrequest.service";
-import { SparePartsOfferRequestService } from "../_services/sparepartsofferrequest.service";
-import { FilerendercomponentComponent } from "./filerendercomponent.component";
+import {DatePipe} from "@angular/common";
+import {HttpEventType} from "@angular/common/http";
+import {Component, EventEmitter, OnInit, Output} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
+import {Guid} from "guid-typescript";
+import {first} from "rxjs/operators";
+import {AmcInstrumentRendererComponent} from "../amc/amc-instrument-renderer.component";
+import {Currency, Distributor, ResultMsg, User} from "../_models";
+import {Offerrequest} from "../_models/Offerrequest.model";
+import {
+  AccountService,
+  AlertService,
+  CurrencyService,
+  DistributorService,
+  FileshareService,
+  NotificationService,
+  ProfileService
+} from "../_services";
+import {OfferrequestService} from "../_services/Offerrequest.service";
+import {SparePartsOfferRequestService} from "../_services/sparepartsofferrequest.service";
+import {FilerendercomponentComponent} from "./filerendercomponent.component";
+
 @Component({
   selector: "app-Offerrequest",
   templateUrl: "./Offerrequest.component.html",
@@ -324,6 +333,30 @@ export class OfferrequestComponent implements OnInit {
   getfil(x) {
     this.file = x;
   }
+  listfile = (x) => {
+    document.getElementById("selectedfiles").style.display = "block";
+
+    var selectedfiles = document.getElementById("selectedfiles");
+    var ulist = document.createElement("ul");
+    ulist.id = "demo";
+    selectedfiles.appendChild(ulist);
+
+    if (this.transaction != 0) {
+      document.getElementById("demo").remove();
+    }
+
+    this.transaction++;
+    this.hastransaction = true;
+
+    for (let i = 0; i <= x.length; i++) {
+      var name = x[i].name;
+      var ul = document.getElementById("demo");
+      var node = document.createElement("li");
+      node.appendChild(document.createTextNode(name));
+      ul.appendChild(node);
+    }
+  };
+
   createColumnDefsAttachments() {
     return [
       {
@@ -350,30 +383,8 @@ export class OfferrequestComponent implements OnInit {
       },
     ]
   }
-  listfile = (x) => {
-    document.getElementById("selectedfiles").style.display = "block";
 
-    var selectedfiles = document.getElementById("selectedfiles");
-    var ulist = document.createElement("ul");
-    ulist.id = "demo";
-    selectedfiles.appendChild(ulist);
-
-    if (this.transaction != 0) {
-      document.getElementById("demo").remove();
-    }
-
-    this.transaction++;
-    this.hastransaction = true;
-
-    for (let i = 0; i <= x.length; i++) {
-      var name = x[i].name;
-      var ul = document.getElementById("demo");
-      var node = document.createElement("li");
-      node.appendChild(document.createTextNode(name));
-      ul.appendChild(node);
-    }
-  };
-  public uploadFile = (files) => {
+  public uploadFile = (files, id) => {
     if (files.length === 0) {
       return;
     }
@@ -383,7 +394,7 @@ export class OfferrequestComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
-    this.FileShareService.upload(formData, this.id).subscribe((event) => {
+    this.FileShareService.upload(formData, id, "OFREQ").subscribe((event) => {
       if (event.type === HttpEventType.UploadProgress)
         this.progress = Math.round((100 * event.loaded) / event.total);
       else if (event.type === HttpEventType.Response) {
@@ -421,11 +432,6 @@ export class OfferrequestComponent implements OnInit {
       })
     }
 
-    if (this.file != null) {
-      this.uploadFile(this.file);
-    }
-
-
     this.model = this.form.value;
     const datepipie = new DatePipe("en-US");
     this.model.podate = datepipie.transform(
@@ -440,7 +446,10 @@ export class OfferrequestComponent implements OnInit {
       this.Service.save(this.model)
         .pipe(first())
         .subscribe({
-          next: (data: ResultMsg) => {
+          next: (data: any) => {
+            if (this.file != null) {
+              this.uploadFile(this.file,data.object.id);
+       ``     }
             this.notificationService.showSuccess(
               data.resultMessage,
               "Success"
@@ -472,6 +481,10 @@ export class OfferrequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
+
+            if (this.file != null) {
+              this.uploadFile(this.file,this.id);
+            }
             this.notificationService.showSuccess(
               data.resultMessage,
               "Success"
