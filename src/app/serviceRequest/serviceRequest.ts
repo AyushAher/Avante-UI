@@ -1288,7 +1288,7 @@ export class ServiceRequestComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
-    this.fileshareService.upload(formData, serviceRequestId).subscribe((event) => {
+    this.fileshareService.upload(formData, serviceRequestId,"SRREQ").subscribe((event) => {
       if (event.type === HttpEventType.UploadProgress)
         this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
       else if (event.type === HttpEventType.Response) {
