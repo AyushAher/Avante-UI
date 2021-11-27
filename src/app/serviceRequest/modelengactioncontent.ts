@@ -32,6 +32,7 @@ export class ModelEngActionContentComponent implements OnInit {
   @Input() public id;
   @Input() public engineerlist;
   @Input() public engineerid;
+  hasRemote: boolean = false;
 
 
   file: any;
@@ -104,10 +105,13 @@ export class ModelEngActionContentComponent implements OnInit {
     this.notificationService.filter("itemadded");
   }
 
+  getActiontaken(e) {
+    this.hasRemote = e.value == "a2e5b403-fd00-11eb-ae84-fc45964f576b";
+  }
+
   getfil(x) {
     this.file = x;
   }
-
   public uploadFile = (files, id) => {
     if (files.length === 0) {
       return;

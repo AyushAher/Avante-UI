@@ -42,7 +42,7 @@
               </div>
               <div class="col-sm-6">
                 <label for="actiontaken">Action taken</label>
-                <select formControlName="actiontaken" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }">
+                <select formControlName="actiontaken" class="form-control" (change)="getActiontaken($event.target)" [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }">
                   <!--<option value="0">--All--</option>-->
                   <option *ngFor="let st of actiontakenlist" value={{st.listTypeItemId}}>
                     {{st.itemname}}
@@ -50,7 +50,7 @@
                 </select>
               </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="hasRemote">
               <div class="col-sm-6">
                 <label for="teamviewrecording">TeamViewer</label>
                 <input type="file" id="myFile" #file  accept=".zip,.rar,.7zip" placeholder="Choose file"
