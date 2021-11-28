@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-4">
-                            <label for="totalamount">Totalamount</label>
+                            <label for="totalamount">Total Amount</label>
                             <br>
                             <select id="currency" style="display:inline-block; width:100px;"
                                 formControlName="currencyId" class="form-control"
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-4">
-                            <label for="podate">Podate</label>
+                            <label for="podate">PO Date</label>
                             <input id="podate" type="text" bsDatepicker formControlName="podate" class="form-control"
                                 [ngClass]="{ ' is -invalid': submitted && f.podate.errors}" />
                             <div Style="display: block" *ngIf="submitted && f.podate.errors" class="invalid-feedback">
