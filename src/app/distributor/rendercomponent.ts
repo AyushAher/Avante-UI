@@ -27,6 +27,7 @@ import {
   TravelDetailService,
   VisadetailsService, StaydetailsService, LocalExpensesService, CustomersatisfactionsurveyService
 } from '../_services';
+import {CustspinventoryService} from "../_services/custspinventory.service";
 
 
 @Component({
@@ -56,6 +57,7 @@ export class RenderComponent implements AgRendererComponent  {
     private StayDetailsService:StaydetailsService,
     private LocalExpensesService:LocalExpensesService,
     private CustomerSatisfactionSurveyService:CustomersatisfactionsurveyService,
+    private CustomerSPInventoory:CustspinventoryService,
 
   ) {
 
@@ -440,6 +442,26 @@ export class RenderComponent implements AgRendererComponent  {
       }
       else if (params.deleteLink == "CSS") {
         this.CustomerSatisfactionSurveyService.delete(params.value)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                const selectedData = params.api.getSelectedRows();
+                params.api.applyTransaction({ remove: selectedData });
+              }
+              else {
+                this.notificationService.showError(data.resultMessage, "Error");
+              }
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showError(error, "Error");
+            }
+          });
+      }
+      else if (params.deleteLink == "CUSTS") {
+        this.CustomerSPInventoory.delete(params.value)
           .pipe(first())
           .subscribe({
             next: (data: any) => {

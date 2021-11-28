@@ -60,6 +60,8 @@ import {DistributordashboardComponent} from "./distributordashboard/distributord
 import {CustdashboardsettingsComponent} from "./dashboardsettings/custdashboardsettings";
 import {DistributordashboardsettingsComponent} from "./distributordashboardsettings/distributordashboardsettings.component";
 import {SparepartsrecommendedComponent} from "./sparepartsrecommended/sparepartsrecommended.component";
+import {CustspinventorylistComponent} from "./custspinventory/Custspinventorylist.component";
+import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 
@@ -270,17 +272,29 @@ const routes: Routes = [
     path: "custdashboardsettings",
     component: CustdashboardsettingsComponent,
     canActivate: [AuthGuard],
-  },{
+  }, {
     path: "distdashboardsettings",
     component: DistributordashboardsettingsComponent,
     canActivate: [AuthGuard],
-  },{
+  }, {
     path: "sparepartsrecommended",
     component: SparepartsrecommendedComponent,
     canActivate: [AuthGuard],
+  }, {
+    path: "customerspinventorylist",
+    component: CustspinventorylistComponent,
+    canActivate: [AuthGuard],
+  },{
+    path: "customerspinventory",
+    component: CustSPInventoryComponent,
+    canActivate: [AuthGuard],
+  },{
+    path: "customerspinventory/:id",
+    component: CustSPInventoryComponent,
+    canActivate: [AuthGuard],
   },
-  { path: 'account', loadChildren: accountModule },
-  { path: '**', redirectTo: '' }
+  {path: 'account', loadChildren: accountModule},
+  {path: '**', redirectTo: ''}
 ];
 
 @NgModule({

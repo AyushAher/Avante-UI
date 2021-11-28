@@ -1,0 +1,89 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="page-title">
+        <div class="title_left"><h3>Customer Spare Part Inventory</h3></div>
+      </div>
+      <hr/>
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row">
+
+            <div class="col-sm-4">
+              <label for="configTypeid">Config Type</label>
+
+              <select id="configTypeid" formControlName="configType" #configType class="form-control"
+                      (change)="onConfigChange(configType.value)"
+                      [ngClass]="{ 'is-invalid': submitted && f.configType.errors }">
+                <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
+                  {{congfig.itemname}}
+                </option>
+              </select>
+
+              <div *ngIf="submitted && f.configType.errors" class="invalid-feedback">
+                <div *ngIf="f.configType.errors.required">Config Type is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="configValueid">Config Value</label>
+              <select id="configValueid" formControlName="configValue" class="form-control" #configvalue
+                      (change)="onConfigVChange(configType.value,configvalue.value)">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let c of configValueList" value={{c.id}}>
+                  {{c.configValue}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.configValue.errors" class="invalid-feedback">
+                <div *ngIf="f.configValue.errors.required">Config Value is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="partno">Partno</label>
+              <input id="partno" type="text" formControlName="partNo"
+                     class="form-control" [ngClass]="{ ' is -invalid': submitted && f.partNo.errors}"/>
+              <div *ngIf="submitted && f.partNo.errors" class="invalid-feedback">
+                <div *ngIf="f.partNo.errors.required">
+                  partno is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="hsccode">Hsc Code</label>
+              <input id="hsccode" type="text" formControlName="hscCode"
+                     class="form-control" [ngClass]="{ ' is -invalid': submitted && f.hscCode.errors}"/>
+              <div *ngIf="submitted && f.hscCode.errors" class="invalid-feedback">
+                <div *ngIf="f.hscCode.errors.required">
+                  hsccode is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="qtyAvailable">Qtyavailable</label>
+              <input id="qtyAvailable" type="text" formControlName="qtyAvailable"
+                     class="form-control" [ngClass]="{ ' is -invalid': submitted && f.qtyAvailable.errors}"/>
+              <div *ngIf="submitted && f.qtyAvailable.errors" class="invalid-feedback">
+                <div *ngIf="f.qtyAvailable.errors.required">
+                  qtyAvailable is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px;">
+              <button class="btn btn-primary" type="submit" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/customerspinventorylist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</layout>
