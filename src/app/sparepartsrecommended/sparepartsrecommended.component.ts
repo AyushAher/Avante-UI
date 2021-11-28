@@ -153,8 +153,28 @@ export class SparepartsrecommendedComponent implements OnInit {
         sortable: true,
         tooltipField: "code",
       },
+      {
+        headerName: "Action",
+        field: "value",
+        filter: true,
+        editable: false,
+        sortable: true,
+        tooltipField: "code",
+        template: `<button routerLink="/offerrequest" data-action-type="offerrequest" class="btn btn-primary" style="margin-left: 10px;">Offer Request </button>`
+      },
 
     ];
+  }
+
+  onRowClicked(e) {
+    if (e.event.target !== undefined) {
+      let actionType = e.event.target.getAttribute("data-action-type")
+      switch (actionType) {
+        case "offerrequest":
+          this.router.navigate(["/offerrequest"])
+          break
+      }
+    }
   }
 
   onGridReady(params): void {
