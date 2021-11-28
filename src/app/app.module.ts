@@ -95,6 +95,7 @@ import { FilerendercomponentComponent } from './Offerrequest/filerendercomponent
 import { DistributordashboardComponent } from './distributordashboard/distributordashboard.component';
 import { CustdashboardsettingsComponent} from "./dashboardsettings/custdashboardsettings";
 import { DistributordashboardsettingsComponent } from './distributordashboardsettings/distributordashboardsettings.component';
+import { SparepartsrecommendedComponent } from './sparepartsrecommended/sparepartsrecommended.component';
 
 
 @NgModule({
@@ -174,6 +175,7 @@ import { DistributordashboardsettingsComponent } from './distributordashboardset
     DistributordashboardComponent,
     CustdashboardsettingsComponent,
     DistributordashboardsettingsComponent,
+    SparepartsrecommendedComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
