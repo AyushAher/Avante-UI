@@ -19,8 +19,8 @@ export class CustspinventoryService {
     return this.http.post(`${environment.apiUrl}/CustSPInventory`, action);
   }
 
-  getAll() {
-    return this.http.get<Custspinventory[]>(`${environment.apiUrl}/CustSPInventory`);
+  getAll(contactId) {
+    return this.http.get<Custspinventory[]>(`${environment.apiUrl}/CustSPInventory/all/${contactId}`);
   }
 
   getById(id: string) {

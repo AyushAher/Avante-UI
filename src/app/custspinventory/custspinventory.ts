@@ -144,6 +144,8 @@ export class CustSPInventoryComponent implements OnInit {
     // stop here if form is invalid
     if (this.form.invalid) return
     this.model = this.form.value
+    this.model.customerId = this.user.contactId;
+
     if (this.id == null) {
       this.Service.save(this.model)
         .pipe(first())
@@ -155,7 +157,7 @@ export class CustSPInventoryComponent implements OnInit {
                 data.resultMessage,
                 "Success"
               );
-              this.router.navigate(["Custspinventorylist"]);
+              this.router.navigate(["customerspinventorylist"]);
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
@@ -178,7 +180,7 @@ export class CustSPInventoryComponent implements OnInit {
                 data.resultMessage,
                 "Success"
               );
-              this.router.navigate(["Custspinventorylist"]);
+              this.router.navigate(["customerspinventorylist"]);
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }

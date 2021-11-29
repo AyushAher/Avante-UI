@@ -44,7 +44,7 @@ export class CustspinventorylistComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.columnDefs = this.createColumnDefs();
 
-    this.Service.getAll()
+    this.Service.getAll(this.user.contactId)
       .pipe(first())
       .subscribe({
         next: (data: any) => {

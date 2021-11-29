@@ -54,7 +54,7 @@ export class workTime {
 }
 
 export class sparePartsConsume {
-  id:string
+  id: string
   sparepartId: string;
   servicereportid: string;
   hsccode: string;
@@ -62,6 +62,9 @@ export class sparePartsConsume {
   configvalue: string;
   configtype: string;
   qtyconsumed: string;
+  qtyAvailable: string;
+
+
 }
 
 export class sparePartRecomanded {

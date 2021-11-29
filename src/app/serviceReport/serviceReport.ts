@@ -57,6 +57,7 @@ import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import {CustspinventoryService} from "../_services/custspinventory.service";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -156,7 +157,8 @@ export class ServiceReportComponent implements OnInit {
     private serviceRequestService: ServiceRequestService,
     private srrecomndservice: SrRecomandService,
     private srConsumedservice: SrConsumedService,
-    private srInventoryservice: InventoryService
+    private srInventoryservice: InventoryService,
+    private CustSPInventoryService: CustspinventoryService
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       if (this.ServiceReportId != null) {
@@ -230,7 +232,6 @@ export class ServiceReportComponent implements OnInit {
 
     this.transaction = 0;
     this.user = this.accountService.userValue;
-
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SCUST");
@@ -332,8 +333,7 @@ export class ServiceReportComponent implements OnInit {
       });
 
 
-
-    this.sparePartService.getAll()
+    this.CustSPInventoryService.getAll(this.user.contactId)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
@@ -746,35 +746,41 @@ export class ServiceReportComponent implements OnInit {
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
-                error: error => {
-                  this.notificationService.showError(error, "Error");
-                  this.loading = false;
-                }
+                // error: error => {
+                //   this.notificationService.showError(error, "Error");
+                //   this.loading = false;
+                // }
               });
           }
         case "edit":
           let sprec: sparePartsConsume;
           sprec = data;
-          this.srConsumedservice.update(sprec.id, sprec)
-            .pipe(first())
-            .subscribe({
-              next: (data: any) => {
-                if (data.result) {
-                  this.notificationService.showSuccess(data.resultMessage, "Success");
-                  this.notificationService.filter("itemadded");
-                  //this.configList = data.object;
-                  // this.listvalue.get("configValue").setValue("");
+          console.log(sprec);
+          if (sprec.qtyconsumed <= sprec.qtyAvailable) {
+            this.srConsumedservice.update(sprec.id, sprec)
+              .pipe(first())
+              .subscribe({
+                next: (data: any) => {
+                  if (data.result) {
+                    this.notificationService.showSuccess(data.resultMessage, "Success");
+                    this.notificationService.filter("itemadded");
+                    //this.configList = data.object;
+                    // this.listvalue.get("configValue").setValue("");
+                  } else {
+                    this.notificationService.showError(data.resultMessage, "Error");
+                  }
+                  this.loading = false;
+                },
+                error: error => {
+                  this.notificationService.showError(error, "Error");
+                  this.loading = false;
                 }
-                else {
-                  this.notificationService.showError(data.resultMessage, "Error");
-                }
-                this.loading = false;
-              },
-              error: error => {
-                this.notificationService.showError(error, "Error");
-                this.loading = false;
-              }
-            });
+              });
+          } else {
+            this.notificationService.showError("Don't have Spare Parts in the Inventory. Please Recommend the Spare Parts", "Error");
+            this.loading = false;
+          }
+
         //this.open(this.ServiceReportId, data.id);
       }
     }
@@ -1036,10 +1042,12 @@ export class ServiceReportComponent implements OnInit {
   //addPartcons
   addPartcons() {
     let v = this.ServiceReportform.get('consumed').value;
+    console.log(v)
     this.srConsumedModel = new sparePartsConsume();
     this.srConsumedModel.partno = v.partNo;
-    this.srConsumedModel.hsccode = v.hsCode;
+    this.srConsumedModel.hsccode = v.hscCode;
     this.srConsumedModel.servicereportid = this.ServiceReportId;
+    this.srConsumedModel.qtyAvailable = v.qtyAvailable;
     this.srConsumedservice.save(this.srConsumedModel)
       .pipe(first())
       .subscribe({
@@ -1084,21 +1092,29 @@ export class ServiceReportComponent implements OnInit {
         tooltipField: 'partno',
       },
       {
-        headerName: 'Qty',
+        headerName: 'HSC Code',
+        field: 'hsccode',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Qty Available',
+        field: 'qtyAvailable',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Qty Required',
         field: 'qtyconsumed',
         filter: false,
         enableSorting: false,
         editable: true,
         sortable: false
       },
-      {
-        headerName: 'HS Code',
-        field: 'hsccode',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false
-      }
     ]
   }
 
