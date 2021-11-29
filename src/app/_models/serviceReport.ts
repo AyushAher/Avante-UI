@@ -63,8 +63,7 @@ export class sparePartsConsume {
   configtype: string;
   qtyconsumed: string;
   qtyAvailable: string;
-
-
+  customerSPInventoryId : string;
 }
 
 export class sparePartRecomanded {

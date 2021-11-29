@@ -131,6 +131,7 @@ export class ServiceReportComponent implements OnInit {
   private hastransaction: boolean;
   @Output() public onUploadFinished = new EventEmitter();
   private fileUploadProgress: number;
+  sparepartrecmmlist: any;
 
 
   constructor(
@@ -214,7 +215,7 @@ export class ServiceReportComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term === '' ? []
-        : this.sparepartlist.filter(v => v.partNo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+        : this.sparepartrecmmlist.filter(v => v.partNo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     )
 
   formatterpart = (x: SparePart) => x.partNo;
@@ -332,12 +333,11 @@ export class ServiceReportComponent implements OnInit {
         }
       });
 
-
-    this.CustSPInventoryService.getAll(this.user.contactId)
+    this.sparePartService.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.sparepartlist = data.object;
+          this.sparepartrecmmlist = data.object;
         },
         error: error => {
           //  this.alertService.error(error);
@@ -429,6 +429,20 @@ export class ServiceReportComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data: any) => {
+                  this.CustSPInventoryService.getAll(this.user.contactId, data.object.custid)
+                    .pipe(first())
+                    .subscribe({
+                      next: (data: any) => {
+                        console.log(data)
+                        this.sparepartlist = data.object;
+                      },
+                      error: error => {
+                        //  this.alertService.error(error);
+                        this.notificationService.showSuccess(error, "Error");
+                        this.loading = false;
+                      }
+                    });
+
                   this.servicerequest = data.object;
                   this.customerService.getallcontact(data.object.custid)
                     .pipe(first())
@@ -762,7 +776,8 @@ export class ServiceReportComponent implements OnInit {
               .subscribe({
                 next: (data: any) => {
                   if (data.result) {
-                    this.notificationService.showSuccess(data.resultMessage, "Success");
+                    let newQtyAvailable: number = Number(sprec.qtyAvailable) - Number(sprec.qtyconsumed);
+                    this.CustSPInventoryService.updateqty(sprec.customerSPInventoryId, newQtyAvailable.toString()).pipe(first()).subscribe()
                     this.notificationService.filter("itemadded");
                     //this.configList = data.object;
                     // this.listvalue.get("configValue").setValue("");
@@ -777,8 +792,8 @@ export class ServiceReportComponent implements OnInit {
                 }
               });
           } else {
-            this.notificationService.showError("Don't have Spare Parts in the Inventory. Please Recommend the Spare Parts", "Error");
-            this.loading = false;
+            this.notificationService.showError("The Required Qty. is not Available. Please Recommend the Spare"+
+              " Parts", "Error");
           }
 
         //this.open(this.ServiceReportId, data.id);
@@ -1048,12 +1063,12 @@ export class ServiceReportComponent implements OnInit {
     this.srConsumedModel.hsccode = v.hscCode;
     this.srConsumedModel.servicereportid = this.ServiceReportId;
     this.srConsumedModel.qtyAvailable = v.qtyAvailable;
+    this.srConsumedModel.customerSPInventoryId = v.id;
     this.srConsumedservice.save(this.srConsumedModel)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
             this.notificationService.filter("itemadded");
             //this.configList = data.object;
             // this.listvalue.get("configValue").setValue("");
