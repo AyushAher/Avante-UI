@@ -19,8 +19,12 @@ export class CustspinventoryService {
     return this.http.post(`${environment.apiUrl}/CustSPInventory`, action);
   }
 
-  getAll(contactId) {
-    return this.http.get<Custspinventory[]>(`${environment.apiUrl}/CustSPInventory/all/${contactId}`);
+  getAll(contactId, custid = null) {
+    return this.http.get<Custspinventory[]>(`${environment.apiUrl}/CustSPInventory/all/${contactId}/${custid}`);
+  }
+
+  getHistory(contactId, custSPInventoryId) {
+    return this.http.get<Custspinventory[]>(`${environment.apiUrl}/CustSPInventory/history/${contactId}/${custSPInventoryId}`);
   }
 
   getById(id: string) {
@@ -32,6 +36,10 @@ export class CustspinventoryService {
       .pipe(map(x => {
         return x;
       }));
+  }
+
+  updateqty(id, params) {
+    return this.http.put(`${environment.apiUrl}/CustSPInventory/qty/${id}/${params}`, params)
   }
 
   delete(id: string) {

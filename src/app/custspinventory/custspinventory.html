@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="partno">Partno</label>
+              <label for="partno">Part No.</label>
               <input id="partno" type="text" formControlName="partNo"
                      class="form-control" [ngClass]="{ ' is -invalid': submitted && f.partNo.errors}"/>
               <div *ngIf="submitted && f.partNo.errors" class="invalid-feedback">
@@ -51,7 +51,7 @@
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="hsccode">Hsc Code</label>
+              <label for="hsccode">HSC Code</label>
               <input id="hsccode" type="text" formControlName="hscCode"
                      class="form-control" [ngClass]="{ ' is -invalid': submitted && f.hscCode.errors}"/>
               <div *ngIf="submitted && f.hscCode.errors" class="invalid-feedback">
@@ -61,7 +61,7 @@
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="qtyAvailable">Qtyavailable</label>
+              <label for="qtyAvailable">Qty. Available</label>
               <input id="qtyAvailable" type="text" formControlName="qtyAvailable"
                      class="form-control" [ngClass]="{ ' is -invalid': submitted && f.qtyAvailable.errors}"/>
               <div *ngIf="submitted && f.qtyAvailable.errors" class="invalid-feedback">
@@ -72,6 +72,18 @@
             </div>
           </div>
           <br/>
+          <div class="row" *ngIf="id!=null">
+            <h3>Consumed History</h3>
+            <hr/>
+                  <div class="clearfix"></div>
+
+            <ag-grid-angular style="width: 50%; height: 400px; margin-right:50%;margin-top:5px;" id="history" class="ag-theme-alpine"
+                             (gridReady)="onGridReady($event)"
+                             [columnDefs]="columnDefs" [rowData]="historyModel" rowSelection="single" pagination="true"
+                             paginationPageSize=8>
+            </ag-grid-angular>
+          </div>
+          <br>
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px;">
               <button class="btn btn-primary" type="submit" class="btn btn-primary">

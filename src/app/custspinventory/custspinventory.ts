@@ -13,6 +13,8 @@ import {CustspinventoryService} from "../_services/custspinventory.service";
 import {Custspinventory} from "../_models/custspinventory";
 import {first} from "rxjs/operators";
 import {ConfigTypeValue, ListTypeItem, ResultMsg, SparePart, User} from "../_models";
+import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: "app-Custspinventory",
@@ -38,7 +40,11 @@ export class CustSPInventoryComponent implements OnInit {
   replacementParts: SparePart[];
   configValueList: ConfigTypeValue[];
   listTypeItems: ListTypeItem[];
-  code: string = "CONTY";
+
+  public columnDefs: ColDef[];
+  private columnApi: ColumnApi;
+  private api: GridApi;
+  historyModel
 
   constructor(
     private formBuilder: FormBuilder,
@@ -65,17 +71,7 @@ export class CustSPInventoryComponent implements OnInit {
       qtyAvailable: ["", Validators.required],
     })
     this.id = this.route.snapshot.paramMap.get("id");
-    this.listTypeService.getById(this.code)
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.listTypeItems = data;
-        },
-        error: error => {
-          this.notificationService.showError(error, "Error");
-          this.loading = false;
-        }
-      });
+
     if (this.id != null) {
       this.Service.getById(this.id)
         .pipe(first())
@@ -93,15 +89,42 @@ export class CustSPInventoryComponent implements OnInit {
                   this.loading = false;
                 }
               });
+            console.log(data.object);
             this.form.patchValue(data.object);
+            this.Service.getHistory(this.user.contactId, this.id).pipe(first()).subscribe({
+              next: (data: any) => {
 
+                const datepipie = new DatePipe("en-US");
+                // data.object;
+                data.object.forEach(value => {
+                  value.serviceReportDate = datepipie.transform(value.serviceReportDate, "MM/dd/yyyy")
+                })
+                this.historyModel = data.object;
+              },
+              error: (error) => {
+                this.notificationService.showError(error, "Error");
+                this.loading = false;
+              }
+            })
           },
           error: (error) => {
-            this.notificationService.showError("Error", "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           },
         });
     }
+    this.listTypeService.getById("CONTY")
+      .pipe(first())
+      .subscribe({
+        next: (data: ListTypeItem[]) => {
+          this.listTypeItems = data;
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
+    this.columnDefs = this.createColumnDefs();
   }
 
   onConfigChange(param: string) {
@@ -135,6 +158,46 @@ export class CustSPInventoryComponent implements OnInit {
 
   get f() {
     return this.form.controls;
+  }
+
+  private createColumnDefs() {
+    return [
+
+      {
+        headerName: "Service Request No.",
+        field: "serReqNo",
+        filter: true,
+        tooltipField: "hsccode",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "Service Report Date",
+        field: "serviceReportDate",
+        filter: true,
+        tooltipField: "qtyavailable",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "Qty Consumed",
+        field: "qtyConsumed",
+        filter: true,
+        tooltipField: "partno",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ]
+  }
+
+  onGridReady(params: any): void {
+    this.api = params.api;
+    this.columnApi = params.columnApi;
+    this.api.sizeColumnsToFit();
+
   }
 
   onSubmit() {

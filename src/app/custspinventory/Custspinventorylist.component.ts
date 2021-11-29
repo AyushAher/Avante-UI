@@ -79,7 +79,7 @@ export class CustspinventorylistComponent implements OnInit {
       },
       {
         headerName: "Configtype",
-        field: "configType",
+        field: "configTypeId",
         filter: true,
         tooltipField: "configtype",
         enableSorting: true,
@@ -88,7 +88,7 @@ export class CustspinventorylistComponent implements OnInit {
       },
       {
         headerName: "ConfigValue",
-        field: "configValue",
+        field: "configValueId",
         filter: true,
         tooltipField: "configvalue",
         enableSorting: true,
