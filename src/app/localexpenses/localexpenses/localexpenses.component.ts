@@ -3,15 +3,7 @@ import {Component, EventEmitter, OnInit, Output} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs/operators";
-import {
-  DistributorRegionContacts,
-  ListTypeItem,
-  LocalExpenses,
-  ProfileReadOnly,
-  ResultMsg,
-  ServiceRequest,
-  User,
-} from "../../_models";
+import {DistributorRegionContacts, ListTypeItem, LocalExpenses, ResultMsg, ServiceRequest, User,} from "../../_models";
 import {
   AccountService,
   AlertService,
@@ -40,7 +32,7 @@ export class LocalexpensesComponent implements OnInit {
   type: string;
   id: string;
   travelDetailmodel: LocalExpenses;
-  profilePermission: ProfileReadOnly;
+  profilePermission: any;
   hasReadAccess: boolean = false;
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
@@ -95,7 +87,7 @@ export class LocalexpensesComponent implements OnInit {
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
-        (x) => x.screenCode == "SCURR"
+        (x) => x.screenCode == "LCEXP"
       );
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
@@ -264,7 +256,6 @@ export class LocalexpensesComponent implements OnInit {
         field: "id",
         filter: false,
         editable: false,
-        width: 100,
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
