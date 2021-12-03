@@ -175,7 +175,7 @@
                   </div>
                   <div class="row">
                     <div class="col-md-6 col-sm-6" style="padding:10px;">
-                      <button class="btn btn-primary">
+                      <button class="btn btn-primary" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
                         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                         Submit
                       </button>
