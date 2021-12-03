@@ -36,6 +36,7 @@ import {
 import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.component";
 import {HttpEventType} from "@angular/common/http";
 import {DomSanitizer} from "@angular/platform-browser";
+import {DatePipe} from "@angular/common";
 
 
 @Component({
@@ -94,7 +95,7 @@ export class InstrumentComponent implements OnInit {
   public message: string;
 
   @Output() public onUploadFinished = new EventEmitter();
-
+  datepipie = new DatePipe("en-US");
 
   constructor(
     private formBuilder: FormBuilder,
@@ -670,6 +671,11 @@ export class InstrumentComponent implements OnInit {
 
       this.instrument.configuration.push(this.config);
     }
+    this.instrument.insmfgdt = this.datepipie.transform(this.instrument.insmfgdt, "MM/dd/yyyy")
+    this.instrument.shipdt = this.datepipie.transform(this.instrument.shipdt, "MM/dd/yyyy")
+    this.instrument.wrntyendt = this.datepipie.transform(this.instrument.wrntyendt, "MM/dd/yyyy")
+    this.instrument.wrntystdt = this.datepipie.transform(this.instrument.wrntystdt, "MM/dd/yyyy")
+    this.instrument.installdt = this.datepipie.transform(this.instrument.installdt, "MM/dd/yyyy")
 
     if (this.id == null) {
       this.instrumentService.save(this.instrument)
