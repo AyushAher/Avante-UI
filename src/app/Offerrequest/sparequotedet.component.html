@@ -46,9 +46,9 @@
 
               <div class="col-md-12 col-sm-12">
                 <label for="status">Comments</label>
-                <input id="comments" type="text" [ngClass]="{ 'is-invalid': submitted && f.comments.errors }"
-                       formControlName="comments" class="form-control"/>
-
+                <textarea id="comments" type="text" [ngClass]="{ 'is-invalid': submitted && f.comments.errors }"
+                          formControlName="comments" class="form-control">
+                </textarea>
                 <div *ngIf="f.comments.errors" class="invalid-feedback">
                   <div *ngIf="f.comments.errors.required">Comments is required</div>
                 </div>
