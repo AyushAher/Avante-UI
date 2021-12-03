@@ -4,7 +4,7 @@ import { User, Distributor, Country, ProfileReadOnly } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import { ColDef,GridApi,ColumnApi} from 'ag-grid-community';
 
 import { AccountService, AlertService, DistributorService, CountryService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from './rendercomponent';
@@ -29,7 +29,7 @@ export class DistributorListComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
-  private api: GridApi;  
+  private api: GridApi;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,9 +42,9 @@ export class DistributorListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
-    
+
   }
-  
+
   ngOnInit() {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
@@ -80,7 +80,7 @@ export class DistributorListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['distributor']);  
+    this.router.navigate(['distributor']);
   }
 
   delete(value: any) {
@@ -108,7 +108,6 @@ export class DistributorListComponent implements OnInit {
         filter: false,
         enableSorting: false,
         editable: false,
-        width: 100,
         sortable: false,
         cellRendererFramework: RenderComponent,
         cellRendererParams: {
@@ -145,12 +144,12 @@ export class DistributorListComponent implements OnInit {
         tooltipField: 'payterms',
       }
     ]
-  }  
+  }
 
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
-    
+
     this.api.sizeColumnsToFit();
   }
 
