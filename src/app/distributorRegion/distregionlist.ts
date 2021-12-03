@@ -4,7 +4,7 @@ import { User, Distributor, Country, DistributorRegion, ProfileReadOnly } from '
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import { ColDef,GridApi,ColumnApi} from 'ag-grid-community';
 
 import { AccountService, AlertService, DistributorRegionService, CountryService, DistributorService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
@@ -30,7 +30,7 @@ export class DistributorRegionListComponent implements OnInit {
 
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
-  private api: GridApi;  
+  private api: GridApi;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -45,7 +45,7 @@ export class DistributorRegionListComponent implements OnInit {
     private profileService: ProfileService,
   ) {
   }
-  
+
   ngOnInit() {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
@@ -75,13 +75,13 @@ export class DistributorRegionListComponent implements OnInit {
           this.loading = false;
         }
       });
-    this.columnDefs = this.createColumnDefs(); 
+    this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
-    this.router.navigate(['distributorregion', this.distributorId]);  
+    this.router.navigate(['distributorregion', this.distributorId]);
   }
- 
+
 
   private createColumnDefs() {
     return [
@@ -89,7 +89,6 @@ export class DistributorRegionListComponent implements OnInit {
         headerName: 'Action',
         field: 'id',
         filter: false,
-        width: 100,
         enableSorting: false,
         editable: false,
         sortable: false,
@@ -123,9 +122,9 @@ export class DistributorRegionListComponent implements OnInit {
         sortable: true,
         tooltipField: 'distregname',
       }
-      
+
     ]
-  }  
+  }
 
   onGridReady(params): void {
     this.api = params.api;

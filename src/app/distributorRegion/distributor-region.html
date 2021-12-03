@@ -77,7 +77,7 @@
                 <div *ngIf="f.payterms.errors.required">Payment Term is required</div>
               </div>
             </div>
-            
+
               <div class="col-md-4 col-sm-4" *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true">
                 <label for=""></label>
                 <div class="checkbox">
@@ -189,7 +189,7 @@
           <hr />
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding: 10px;">
-              <button [disabled]="loading" *ngIf="hasAddAccess==true || hasUpdateAccess==true" class="btn btn-primary">
+              <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && distributorId==null)" class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
