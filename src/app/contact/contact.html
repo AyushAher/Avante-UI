@@ -4,7 +4,7 @@
       <div class="row" style="float:right" *ngIf="id!=null">
         <button type="button" *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true" class="btn btn-primary" (click)="addUser()">Create User</button>
       </div>
-      
+
       <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
         <li class="nav-item" role="presentation">
           <a class="nav-link active"
@@ -120,7 +120,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="scontactno">Secondory Contact No</label><br />
-              <input type="tel" ng2TelInput formControlName="scontactno" 
+              <input type="tel" ng2TelInput formControlName="scontactno"
                      (ng2TelOutput)="getNumber($event)"
                      (intlTelInputObject)="telInputObjectCo($event)"
                      (countryChange)="countryChange2($event)"
@@ -268,7 +268,7 @@
           <hr />
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px;">
-              <button [disabled]="loading" *ngIf="hasAddAccess==true || hasUpdateAccess==true"  class="btn btn-primary">
+              <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)"  class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>

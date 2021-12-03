@@ -4,7 +4,7 @@ import { User, Contact, Country, DistributorRegion, Customer, ProfileReadOnly } 
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import { ColDef,GridApi,ColumnApi} from 'ag-grid-community';
 
 import {
   AccountService, AlertService, ContactService, CountryService, DistributorService, CustomerService,
@@ -53,9 +53,9 @@ export class ContactListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService
   ) {
-    
+
   }
-  
+
   ngOnInit() {
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     this.masterId = this.route.snapshot.paramMap.get('id');
@@ -165,7 +165,7 @@ export class ContactListComponent implements OnInit {
       this.router.navigate(['contact', this.type, this.masterId]);
     }
   }
- 
+
 
   private createColumnDefs() {
     return [{
@@ -179,10 +179,11 @@ export class ContactListComponent implements OnInit {
       cellRendererFramework: RenderComponent,
       cellRendererParams: {
         inRouterLink: '/contact/' + this.type + '/' + this.masterId + '/',
-        deleteLink: 'C'
+        deleteLink: 'C',
+        deleteaccess : this.hasDeleteAccess
       },
     },{
-      headerName: 'first Name',
+      headerName: 'First Name',
       field: 'fname',
       filter: true,
       enableSorting: true,
@@ -190,14 +191,14 @@ export class ContactListComponent implements OnInit {
         sortable: true,
         tooltipField: 'fname',
     }, {
-      headerName: 'email',
+      headerName: 'Email',
         field: 'pemail',
       filter: true,
         editable: false,
         sortable: true,
         tooltipField: 'pemail',
       },
-      
+
     ]
   }
 
@@ -229,7 +230,7 @@ export class ContactListComponent implements OnInit {
         sortable: true,
         tooltipField: 'pemail',
     },
-    
+
     ]
   }
 
