@@ -67,7 +67,7 @@
                             </div>
 
                         </div>
-                  
+
                         <div class="col-md-4 col-sm-4">
                             <label for="minor_Unit">Hotel Name</label>
                             <input type="text" formControlName="hotelname" class="form-control"
@@ -159,7 +159,7 @@
                             </div>
 
                         </div>
-          
+
                         <div class="col-md-4 col-sm-4">
                             <label for=""></label>
                             <div class="checkbox">
@@ -176,9 +176,10 @@
 
                     <div class="row">
                         <div class="col-md-6 col-sm-6" style="padding:10px;">
-                            <button type="submit" class="btn btn-primary">
-                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                Submit
+                            <button type="submit" class="btn btn-primary"
+                                    *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
+                              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                              Submit
                             </button>
                             <a routerLink="/staydetailslist" class="btn btn-secondary"
                                 style="margin-left: 10px;">Back</a>

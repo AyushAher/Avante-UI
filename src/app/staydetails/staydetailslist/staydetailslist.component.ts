@@ -46,7 +46,7 @@ random="hello"
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
-        (x) => x.screenCode == "SCURR"
+        (x) => x.screenCode == "STDET"
       );
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
