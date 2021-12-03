@@ -13,74 +13,79 @@
                 <form [formGroup]="form" (ngSubmit)="onSubmit()">
                     <div class="row">
 
-                        <div class="col-md-4 col-sm-4">
-                            <label for="distributor">Distributor</label>
-                            <select id="distributor" type="text" formControlName="distributorid" class="form-control"
+                      <div class="col-md-4 col-sm-4" [style.display]="(hasId)?'block':'none'">
+                        <label for="offReqNo">Offer Request No.</label>
+                        <input id="offReqNo" readonly type="text" formControlName="offReqNo" class="form-control">
+                      </div>
+
+                      <div class="col-md-4 col-sm-4">
+                        <label for="distributor">Distributor</label>
+                        <select id="distributor" type="text" formControlName="distributorid" class="form-control"
                                 [ngClass]="{ ' is -invalid': submitted && f.distributorid.errors}">
-                                <option *ngFor="let i of distributorList" value="{{i.id}}">{{i.distname}}
-                                </option>
-                            </select>
-                            <div Style="display: block" *ngIf="submitted && f.distributorid.errors"
-                                class="invalid-feedback">
-                                <div *ngIf="f.distributorid.errors.required">
-                                    distributor is required
-                                </div>
-                            </div>
+                          <option *ngFor="let i of distributorList" value="{{i.id}}">{{i.distname}}
+                          </option>
+                        </select>
+                        <div Style="display: block" *ngIf="submitted && f.distributorid.errors"
+                             class="invalid-feedback">
+                          <div *ngIf="f.distributorid.errors.required">
+                            distributor is required
+                          </div>
                         </div>
-                        <div class="col-md-4 col-sm-4">
-                            <label for="totalamount">Total Amount</label>
-                            <br>
-                            <select id="currency" style="display:inline-block; width:100px;"
+                      </div>
+                      <div class="col-md-4 col-sm-4" hidden>
+                        <label for="totalamount">Total Amount</label>
+                        <br>
+                        <select id="currency" style="display:inline-block; width:100px;"
                                 formControlName="currencyId" class="form-control"
                                 [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
-                                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
-                                </option>
-                            </select>
+                          <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                          </option>
+                        </select>
 
-                            <input id="totalamount" type="number" formControlName="totalamount" class="form-control"
-                                style="display:inline-block; width:270px; margin-left: 5px;"
-                                [ngClass]="{ ' is -invalid': submitted && f.totalamount.errors}" />
-                            <div Style="display: block" *ngIf="submitted && f.totalamount.errors"
-                                class="invalid-feedback">
-                                <div *ngIf="f.totalamount.errors.required">
-                                    totalamount is required
-                                </div>
-                            </div>
+                        <input id="totalamount" type="number" formControlName="totalamount" class="form-control"
+                               style="display:inline-block; width:270px; margin-left: 5px;"
+                               [ngClass]="{ ' is -invalid': submitted && f.totalamount.errors}"/>
+                        <div Style="display: block" *ngIf="submitted && f.totalamount.errors"
+                             class="invalid-feedback">
+                          <div *ngIf="f.totalamount.errors.required">
+                            totalamount is required
+                          </div>
                         </div>
+                      </div>
 
-                        <div class="col-md-4 col-sm-4">
-                            <label for="status">Status</label>
-                            <input id="status" type="text" formControlName="status" class="form-control"
-                                [ngClass]="{ ' is -invalid': submitted && f.status.errors}" />
-                            <div Style="display: block" *ngIf="submitted && f.status.errors" class="invalid-feedback">
-                                <div *ngIf="f.status.errors.required">
-                                    status is required
-                                </div>
-                            </div>
+                      <div class="col-md-4 col-sm-4" hidden>
+                        <label for="status">Status</label>
+                        <input id="status" type="text" formControlName="status" class="form-control"
+                               [ngClass]="{ ' is -invalid': submitted && f.status.errors}"/>
+                        <div Style="display: block" *ngIf="submitted && f.status.errors" class="invalid-feedback">
+                          <div *ngIf="f.status.errors.required">
+                            status is required
+                          </div>
                         </div>
-                        <div class="col-md-4 col-sm-4">
-                            <label for="podate">PO Date</label>
-                            <input id="podate" type="text" bsDatepicker formControlName="podate" class="form-control"
-                                [ngClass]="{ ' is -invalid': submitted && f.podate.errors}" />
-                            <div Style="display: block" *ngIf="submitted && f.podate.errors" class="invalid-feedback">
-                                <div *ngIf="f.podate.errors.required">
-                                    podate is required
-                                </div>
-                            </div>
+                      </div>
+                      <div class="col-md-4 col-sm-4">
+                        <label for="podate">PO Date</label>
+                        <input id="podate" type="text" bsDatepicker formControlName="podate" class="form-control"
+                               [ngClass]="{ ' is -invalid': submitted && f.podate.errors}"/>
+                        <div Style="display: block" *ngIf="submitted && f.podate.errors" class="invalid-feedback">
+                          <div *ngIf="f.podate.errors.required">
+                            podate is required
+                          </div>
                         </div>
+                      </div>
 
-                        <div class="col-md-4 col-sm-4" style="display: none;">
-                            <br />
-                            <label for="isactive">
-                                <input id="isactive" type="checkbox" formControlName="isactive">
-                                Isactive
-                            </label>
-                        </div>
+                      <div class="col-md-4 col-sm-4" style="display: none;">
+                        <br/>
+                        <label for="isactive">
+                          <input id="isactive" type="checkbox" formControlName="isactive">
+                          Isactive
+                        </label>
+                      </div>
                     </div>
 
                     <div class="row" style="margin-top:50px">
                       <div class="col-md-9">
-                        <label for="search">Search SpareParts By Part No. </label>
+                        <label for="browser">Search SpareParts By Part No. </label>
                         <input (input)="SparePartsSearch($event.target.value)" #sparePartsSearch list="browsers"
                                name="browser" id="browser" class="form-control">
                         <datalist id="browsers">
@@ -139,17 +144,39 @@
 
                   </div>
 
-                  <div class="row">
-                    <h3>Spare Quote Details</h3>
+                  <div class="row my-4" *ngIf="hasId">
+
+                    <div class="page-title">
+                      <div class="title_left">
+                        <h3 style="padding:15px 0 5px 0">Spare Quotation Details</h3>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr/>
+                    <br>
+
+                    <div class="col-md-12" *ngIf="(!prevNotCompleted)">
+                      <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;"
+                              (click)="open(id)"><i class="fas fa-plus-circle" title="Add"></i></button>
+                    </div>
+
+
+                    <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
+                                     (gridReady)="onGridReadySPDet($event)" [columnDefs]="ColumnDefsSPDet"
+                                     (rowClicked)="onRowClicked($event)"
+                                     [rowData]="SpareQuotationDetailsList" pagination="true" paginationPageSize=10>
+                    </ag-grid-angular>
+
                   </div>
+
 
                   <div class="row">
                     <div class="col-md-6 col-sm-6" style="padding:10px;">
                       <button
                         *ngIf="hasAddAccess || hasUpdateAccess" class="btn btn-primary" type="submit"
-                        class="btn btn-primary"><span *ngIf="loading"
-                                                      class="spinner-border spinner-border-sm mr-1">
-                                </span> Submit
+                        class="btn btn-primary">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Submit
                       </button>
                       <a routerLink="/offerrequestlist" class="btn btn-secondary"
                          style="margin-left: 10px;">Back</a></div>

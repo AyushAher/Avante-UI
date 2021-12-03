@@ -1,33 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-
-import { User, Distributor, Country } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
-import { AgRendererComponent } from 'ag-grid-angular';
+import {Component} from '@angular/core';
+import {first} from 'rxjs/operators';
+import {AgRendererComponent} from 'ag-grid-angular';
 import {
-  AccountService,
   AlertService,
-  DistributorService,
-  CountryService,
-  DistributorRegionService,
-  CurrencyService,
   ContactService,
-  CustomerSiteService,
-  InstrumentService,
-  SparePartService,
+  CountryService,
+  CurrencyService,
+  CustomersatisfactionsurveyService,
   CustomerService,
+  CustomerSiteService,
+  DistributorRegionService,
+  DistributorService,
+  InstrumentService,
+  ListTypeService,
+  LocalExpensesService,
   NotificationService,
   ProfileService,
-  UserProfileService,
-  ListTypeService,
-  ServiceRequestService,
   ServiceReportService,
+  ServiceRequestService,
+  SparePartService,
+  StaydetailsService,
   TravelDetailService,
-  VisadetailsService, StaydetailsService, LocalExpensesService, CustomersatisfactionsurveyService
+  UserProfileService,
+  VisadetailsService
 } from '../_services';
 import {CustspinventoryService} from "../_services/custspinventory.service";
+import {OfferrequestService} from "../_services/Offerrequest.service";
 
 
 @Component({
@@ -58,6 +56,7 @@ export class RenderComponent implements AgRendererComponent  {
     private LocalExpensesService:LocalExpensesService,
     private CustomerSatisfactionSurveyService:CustomersatisfactionsurveyService,
     private CustomerSPInventoory:CustspinventoryService,
+    private OfferrequestService:OfferrequestService,
 
   ) {
 
@@ -471,6 +470,24 @@ export class RenderComponent implements AgRendererComponent  {
                 params.api.applyTransaction({ remove: selectedData });
               }
               else {
+                this.notificationService.showError(data.resultMessage, "Error");
+              }
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showError(error, "Error");
+            }
+          });
+      } else if (params.deleteLink == "OFFER") {
+        this.OfferrequestService.delete(params.value)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                const selectedData = params.api.getSelectedRows();
+                params.api.applyTransaction({remove: selectedData});
+              } else {
                 this.notificationService.showError(data.resultMessage, "Error");
               }
             },

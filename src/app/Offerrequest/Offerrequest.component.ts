@@ -21,6 +21,9 @@ import {
 import {OfferrequestService} from "../_services/Offerrequest.service";
 import {SparePartsOfferRequestService} from "../_services/sparepartsofferrequest.service";
 import {FilerendercomponentComponent} from "./filerendercomponent.component";
+import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
+import {SparequotedetComponent} from "./sparequotedet.component";
+import {SparequotedetService} from "../_services/sparequotedet.service";
 
 @Component({
   selector: "app-Offerrequest",
@@ -62,6 +65,13 @@ export class OfferrequestComponent implements OnInit {
   public message: string;
 
   @Output() public onUploadFinished = new EventEmitter();
+  bsModalRef: BsModalRef;
+  SpareQuotationDetailsList = []
+  datepipie = new DatePipe("en-US");
+  ColumnDefsSPDet: ColDef[]
+  prevNotCompleted: boolean = false;
+
+  CompletedId = "706a8df4-5202-11ec-abe2-54bf64020316"
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,7 +86,51 @@ export class OfferrequestComponent implements OnInit {
     private profileService: ProfileService,
     private FileShareService: FileshareService,
     private SparePartsService: SparePartsOfferRequestService,
-  ) { }
+    private modalService: BsModalService,
+    private SpareQuoteDetService: SparequotedetService,
+  ) {
+    this.notificationService.listen().subscribe((m: any) => {
+      if (this.id != null) {
+        this.SpareQuoteDetService.getAll(this.id).pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              console.log(data)
+              this.SpareQuotationDetailsList = data.object;
+              this.SpareQuotationDetailsList.forEach(value => {
+                value.zohoPORaisedDate = this.datepipie.transform(value.zohoPORaisedDate, "MM/dd/yyyy");
+                value.deliveredOn = this.datepipie.transform(value.deliveredOn, "MM/dd/yyyy");
+                value.custResponseDate = this.datepipie.transform(value.custResponseDate, "MM/dd/yyyy");
+                value.raisedDate = this.datepipie.transform(value.raisedDate, "MM/dd/yyyy");
+              })
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showSuccess(error, "Error");
+              this.loading = false;
+            }
+          });
+        this.SpareQuoteDetService.getPrev(this.id)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              debugger
+              if (data.object != null) {
+                if (data.object.status != this.CompletedId && data.object.status != null) {
+                  this.prevNotCompleted = true
+                } else {
+                  this.prevNotCompleted = false
+                }
+              } else {
+                this.prevNotCompleted = false
+              }
+              console.log(this.prevNotCompleted, data)
+            }
+          })
+      }
+    });
+
+  }
+
   ngOnInit() {
 
     this.transaction = 0;
@@ -103,16 +157,19 @@ export class OfferrequestComponent implements OnInit {
 
     this.form = this.formBuilder.group({
       isactive: [true],
+      offReqNo: [""],
       distributorid: ["", Validators.required],
-      totalamount: [0, Validators.required],
-      currencyId: ["", Validators.required],
-      status: ["", Validators.required],
+      totalamount: [0],
+      currencyId: [""],
+      status: [""],
       podate: ["", Validators.required],
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
     this.columnDefs = this.createColumnDefs();
     this.columnDefsAttachments = this.createColumnDefsAttachments();
+    this.ColumnDefsSPDet = this.createColumnDefsSPDet()
+
     if (this.id != null) {
       this.Service.getById(this.id)
         .pipe(first())
@@ -125,6 +182,7 @@ export class OfferrequestComponent implements OnInit {
             this.loading = false;
           },
         });
+
 
       this.SparePartsService.getSparePartsByOfferRequestId(this.id)
         .pipe(first())
@@ -172,8 +230,44 @@ export class OfferrequestComponent implements OnInit {
           this.loading = false;
         }
       })
+    this.SpareQuoteDetService.getAll(this.id)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          console.log(data)
+          this.SpareQuotationDetailsList = data.object;
+          this.SpareQuotationDetailsList.forEach(value => {
+            value.zohoPORaisedDate = this.datepipie.transform(value.zohoPORaisedDate, "MM/dd/yyyy");
+            value.deliveredOn = this.datepipie.transform(value.deliveredOn, "MM/dd/yyyy");
+            value.custResponseDate = this.datepipie.transform(value.custResponseDate, "MM/dd/yyyy");
+            value.raisedDate = this.datepipie.transform(value.raisedDate, "MM/dd/yyyy");
+          })
+          console.log(this.SpareQuotationDetailsList)
 
+        }
+      })
+
+    if (this.hasId) {
+      this.SpareQuoteDetService.getPrev(this.id)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            debugger
+            if (data.object != null) {
+              if (data.object.status != this.CompletedId && data.object.status != null) {
+                this.prevNotCompleted = true
+              } else {
+                this.prevNotCompleted = false
+              }
+            } else {
+              this.prevNotCompleted = false
+            }
+            console.log(this.prevNotCompleted, data)
+          }
+        })
+    }
     this.GetFileList(this.id);
+
   }
 
   RemoveSpareParts(event) {
@@ -277,28 +371,34 @@ export class OfferrequestComponent implements OnInit {
       field: 'hscode',
       filter: true,
     },
-    {
-      headerName: 'Qty',
-      field: 'qty',
-      filter: true,
-      editable: true,
-      sortable: true,
-      defaultValue: 0
-    },
-    {
-      headerName: 'Price',
-      field: 'price',
-      filter: true,
-      editable: true,
-      sortable: true,
-      default: 0
-    },
-    {
-      headerName: 'Amount',
-      field: 'amount',
-      filter: true,
-      sortable: true
-    }
+      {
+        headerName: 'Qty',
+        field: 'qty',
+        filter: true,
+        editable: true,
+        sortable: true,
+        defaultValue: 0
+      },
+      {
+        headerName: 'Price',
+        field: 'price',
+        filter: true,
+        editable: true,
+        sortable: true,
+        default: 0
+      },
+      {
+        headerName: 'Amount',
+        field: 'amount',
+        filter: true,
+        sortable: true
+      },
+      {
+        headerName: 'Currency',
+        field: 'currency',
+        filter: true,
+        sortable: true
+      }
     ]
   }
   onCellValueChanged(event) {
@@ -314,16 +414,18 @@ export class OfferrequestComponent implements OnInit {
       this.api.setRowData(this.sparePartsList)
     }
   }
+
   onGridReady(params): void {
-    this.api = params.api;
-    this.columnApi = params.columnApi;
-  }
-  onGridReadyAttachments(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
     this.api.sizeColumnsToFit();
   }
 
+  onGridReadyAttachments(params): void {
+    this.api = params.api;
+    this.columnApi = params.columnApi;
+    this.api.sizeColumnsToFit();
+  }
 
   get f() {
     return this.form.controls
@@ -356,7 +458,6 @@ export class OfferrequestComponent implements OnInit {
       ul.appendChild(node);
     }
   };
-
   createColumnDefsAttachments() {
     return [
       {
@@ -384,7 +485,7 @@ export class OfferrequestComponent implements OnInit {
     ]
   }
 
-  public uploadFile = (files, id) => {
+  uploadFile = (files, id) => {
     if (files.length === 0) {
       return;
     }
@@ -417,6 +518,132 @@ export class OfferrequestComponent implements OnInit {
   }
 
 
+  open(parentId: string, id: string = null) {
+    const initialState = {
+      parentId: parentId,
+      id: id
+    };
+    this.bsModalRef = this.modalService.show(SparequotedetComponent, {initialState});
+  }
+
+  onGridReadySPDet(params): void {
+    this.api = params.api;
+    this.columnApi = params.columnApi;
+    // this.api.sizeColumnsToFit();
+  }
+
+  public onRowClicked(e) {
+    if (e.event.target !== undefined) {
+      let data = e.data;
+      let actionType = e.event.target.getAttribute("data-action-type");
+      //this.serviceRequestId = this.route.snapshot.paramMap.get('id');
+      switch (actionType) {
+        case "remove":
+          if (confirm("Are you sure, you want to remove the Spare Quotation Details?") == true) {
+            //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
+            this.SpareQuoteDetService.delete(data.id)
+              .pipe(first())
+              .subscribe({
+                next: (d: any) => {
+                  if (d.result) {
+                    this.notificationService.filter("itemadded");
+                  } else {
+                    this.notificationService.showError(d.resultMessage, "Error");
+                  }
+                },
+                error: error => {
+                  this.notificationService.showError(error, "Error");
+                  this.loading = false;
+                }
+              });
+          }
+          break
+        case "edit":
+          this.open(this.id, data.id);
+          break
+      }
+    }
+  }
+
+  createColumnDefsSPDet() {
+    return [
+      {
+        headerName: "Action",
+        field: "id",
+        filter: false,
+        editable: false,
+        sortable: false,
+        template:
+          `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>
+<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+      },
+
+      {
+        headerName: "Raised Date",
+        field: "raisedDate",
+        filter: true,
+        tooltipField: "Status",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "Status",
+        field: "statusId",
+        filter: true,
+        tooltipField: "Status",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "Comments",
+        field: "comments",
+        filter: true,
+        tooltipField: "Comments",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "Customer Response Date",
+        field: "custResponseDate",
+        filter: true,
+        tooltipField: "Comments",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "PO Raised Date",
+        field: "zohoPORaisedDate",
+        filter: true,
+        tooltipField: "Comments",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "Shipped Date",
+        field: "shippedDate",
+        filter: true,
+        tooltipField: "Comments",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "Delivered On",
+        field: "deliveredOn",
+        filter: true,
+        tooltipField: "Comments",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ]
+  }
+
   onSubmit() {
     this.submitted = true;
 
@@ -448,12 +675,16 @@ export class OfferrequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (this.file != null) {
-              this.uploadFile(this.file,data.object.id);
-       ``     }
+              this.uploadFile(this.file, data.object.id);
+              ``
+            }
             this.notificationService.showSuccess(
               data.resultMessage,
               "Success"
             );
+
+            this.router.navigate(["offerrequestlist"]);
+
           },
           error: (error) => {
             this.notificationService.showError(error, "Error");
@@ -472,8 +703,6 @@ export class OfferrequestComponent implements OnInit {
           });
 
       }
-      this.router.navigate(["offerrequestlist"]);
-
     } else if (this.hasUpdateAccess) {
       this.model = this.form.value;
       this.model.id = this.id;
@@ -483,12 +712,14 @@ export class OfferrequestComponent implements OnInit {
           next: (data: ResultMsg) => {
 
             if (this.file != null) {
-              this.uploadFile(this.file,this.id);
+              this.uploadFile(this.file, this.id);
             }
             this.notificationService.showSuccess(
               data.resultMessage,
               "Success"
             );
+            this.router.navigate(["offerrequestlist"]);
+
           },
           error: (error) => {
             this.notificationService.showError(error, "Error");
@@ -506,9 +737,6 @@ export class OfferrequestComponent implements OnInit {
             },
           });
       }
-
-      this.router.navigate(["offerrequestlist"]);
-
     }
   }
 }

@@ -98,6 +98,7 @@ import { DistributordashboardsettingsComponent } from './distributordashboardset
 import { SparepartsrecommendedComponent } from './sparepartsrecommended/sparepartsrecommended.component';
 import {CustspinventorylistComponent} from "./custspinventory/Custspinventorylist.component";
 import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
+import { SparequotedetComponent } from './Offerrequest/sparequotedet.component';
 
 
 @NgModule({
@@ -180,6 +181,7 @@ import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
     SparepartsrecommendedComponent,
     CustSPInventoryComponent,
     CustspinventorylistComponent,
+    SparequotedetComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
