@@ -9,7 +9,7 @@
       <div class="clearfix"></div>
       <hr />
       <div class="col-md-12 col-sm-12 ">
-        <form [formGroup]="countryform" (ngSubmit)="onSubmit()">      
+        <form [formGroup]="countryform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-4">
               <label for="name">Country Name</label>
@@ -78,12 +78,12 @@
               <div *ngIf="submitted && f.currencyid.errors" class="invalid-feedback">
                 <div *ngIf="f.currencyid.errors.required">Currency is required</div>
               </div>
-            </div>           
+            </div>
           </div>
           <br />
           <div class="row">
             <div class="col-md-6 col-sm-6">
-              <button [disabled]="loading" *ngIf="hasAddAccess==true || hasUpdateAccess==true" class="btn btn-primary">
+              <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)" class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
