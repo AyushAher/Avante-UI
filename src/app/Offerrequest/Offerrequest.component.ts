@@ -588,6 +588,15 @@ export class OfferrequestComponent implements OnInit {
         sortable: true,
       },
       {
+        headerName: "Raised By",
+        field: "raisedById",
+        filter: true,
+        tooltipField: "raisedbyId",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
         headerName: "Status",
         field: "statusId",
         filter: true,
