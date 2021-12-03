@@ -1,16 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { User, Contact, Country, DistributorRegion, Customer, ProfileReadOnly } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community';
+import {Contact, Country, ProfileReadOnly, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
 import {
-  AccountService, AlertService, ContactService, CountryService, DistributorService, CustomerService,
-  DistributorRegionService, CustomerSiteService, NotificationService, ProfileService
+  AccountService,
+  AlertService,
+  ContactService,
+  CountryService,
+  CustomerService,
+  CustomerSiteService,
+  DistributorRegionService,
+  DistributorService,
+  NotificationService,
+  ProfileService
 } from '../_services';
-import { RenderComponent } from '../distributor/rendercomponent';
+import {RenderComponent} from '../distributor/rendercomponent';
 
 
 @Component({
@@ -212,7 +220,8 @@ export class ContactListComponent implements OnInit {
       sortable: true,
       cellRendererFramework: RenderComponent,
       cellRendererParams: {
-        inRouterLink: '/contact/' + this.type + '/' + this.masterId + '/' + this.detailId + '/'
+        inRouterLink: '/contact/' + this.type + '/' + this.masterId + '/' + this.detailId + '/',
+        deleteaccess: this.hasDeleteAccess
       },
     },{
       headerName: 'first Name',
