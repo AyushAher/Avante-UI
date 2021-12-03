@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
 import {FormGroup} from "@angular/forms";
 import {Router} from "@angular/router";
-import {AccountService, NotificationService} from "../_services";
+import {AccountService, NotificationService, ProfileService} from "../_services";
 import {CustspinventoryService} from "../_services/custspinventory.service";
 import {RenderComponent} from "../distributor/rendercomponent";
 import {Custspinventory} from "../_models/custspinventory";
@@ -31,24 +31,37 @@ export class CustspinventorylistComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
+  profilePermission: any;
 
   constructor(
     private router: Router,
     private accountService: AccountService,
     private notificationService: NotificationService,
-    private Service: CustspinventoryService
+    private Service: CustspinventoryService,
+    private profileService: ProfileService,
   ) {
   }
 
   ngOnInit() {
     this.user = this.accountService.userValue;
     this.columnDefs = this.createColumnDefs();
+    this.profilePermission = this.profileService.userProfileValue;
+    if (this.profilePermission != null) {
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "CTSPI");
+      if (profilePermission.length > 0) {
+        this.hasAddAccess = profilePermission[0].create;
+        this.hasDeleteAccess = profilePermission[0].delete;
+      }
+    }
+    if (this.user.username == "admin") {
+      this.hasAddAccess = true;
+      this.hasDeleteAccess = true;
+    }
 
     this.Service.getAll(this.user.contactId)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data)
           this.model = data.object;
         },
         error: (error) => {
@@ -74,7 +87,7 @@ export class CustspinventorylistComponent implements OnInit {
         cellRendererParams: {
           inRouterLink: "/customerspinventory",
           deleteLink: "CUSTS",
-          deleteaccess: true,
+          deleteaccess: this.hasDeleteAccess,
         },
       },
       {

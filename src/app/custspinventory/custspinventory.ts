@@ -6,7 +6,7 @@ import {
   AlertService,
   ConfigTypeValueService,
   ListTypeService,
-  NotificationService,
+  NotificationService, ProfileService,
   SparePartService
 } from "../_services";
 import {CustspinventoryService} from "../_services/custspinventory.service";
@@ -30,6 +30,7 @@ export class CustSPInventoryComponent implements OnInit {
   type: string;
   id: string;
   user: User;
+  profilePermission: any;
   hasReadAccess: boolean = false;
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
@@ -57,11 +58,30 @@ export class CustSPInventoryComponent implements OnInit {
     private Service: CustspinventoryService,
     private sparePartService: SparePartService,
     private configService: ConfigTypeValueService,
+    private profileService: ProfileService,
   ) {
   }
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+    this.profilePermission = this.profileService.userProfileValue;
+    if (this.profilePermission != null) {
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "CTSPI");
+      if (profilePermission.length > 0) {
+        this.hasReadAccess = profilePermission[0].read;
+        this.hasAddAccess = profilePermission[0].create;
+        this.hasDeleteAccess = profilePermission[0].delete;
+        this.hasUpdateAccess = profilePermission[0].update;
+      }
+    }
+
+    if (this.user.username == "admin") {
+      this.hasAddAccess = true;
+      this.hasDeleteAccess = true;
+      this.hasUpdateAccess = true;
+      this.hasReadAccess = true;
+    }
+
     this.form = this.formBuilder.group({
       isactive: [true],
       configType: ["", Validators.required],
@@ -77,7 +97,6 @@ export class CustSPInventoryComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-
             this.configService.getById(data.object.configType)
               .pipe(first())
               .subscribe({
@@ -89,7 +108,6 @@ export class CustSPInventoryComponent implements OnInit {
                   this.loading = false;
                 }
               });
-            console.log(data.object);
             this.form.patchValue(data.object);
             this.Service.getHistory(this.user.contactId, this.id).pipe(first()).subscribe({
               next: (data: any) => {
