@@ -4,7 +4,13 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
 import {Sparequotedet} from "../_models/sparequotedet";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService, ConfigTypeValueService, ListTypeService, NotificationService} from "../_services";
+import {
+  AccountService,
+  ConfigTypeValueService,
+  ListTypeService,
+  NotificationService,
+  ProfileService
+} from "../_services";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {first} from "rxjs/operators";
 import {SparequotedetService} from "../_services/sparequotedet.service";
@@ -45,6 +51,12 @@ export class SparequotedetComponent implements OnInit {
   ShowCustResponseDate: boolean;
   isRaisedBy: boolean;
 
+  profilePermission: any;
+  hasReadAccess: boolean = false;
+  hasUpdateAccess: boolean = false;
+  hasDeleteAccess: boolean = false;
+  hasAddAccess: boolean = false;
+
   hasId: boolean = false;
 
   constructor(
@@ -56,6 +68,7 @@ export class SparequotedetComponent implements OnInit {
     private listTypeService: ListTypeService,
     private notificationService: NotificationService,
     private Service: SparequotedetService,
+    private profileService: ProfileService,
     public activeModal: BsModalService
   ) {
   }
@@ -63,6 +76,24 @@ export class SparequotedetComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+    this.profilePermission = this.profileService.userProfileValue;
+    if (this.profilePermission != null) {
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "OFREQ");
+      if (profilePermission.length > 0) {
+        this.hasReadAccess = profilePermission[0].read;
+        this.hasAddAccess = profilePermission[0].create;
+        this.hasDeleteAccess = profilePermission[0].delete;
+        this.hasUpdateAccess = profilePermission[0].update;
+      }
+    }
+
+    if (this.user.username == "admin") {
+      this.hasAddAccess = true;
+      this.hasDeleteAccess = true;
+      this.hasUpdateAccess = true;
+      this.hasReadAccess = true;
+    }
+
     this.Form = this.formBuilder.group({
       raisedBy: ['', Validators.required],
       raisedDate: ["", Validators.required],

@@ -138,7 +138,7 @@ export class OfferrequestComponent implements OnInit {
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SSPAR");
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "OFREQ");
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
         this.hasAddAccess = profilePermission[0].create;
@@ -465,7 +465,6 @@ export class OfferrequestComponent implements OnInit {
         field: "id",
         filter: false,
         editable: false,
-        width: 100,
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
@@ -539,27 +538,31 @@ export class OfferrequestComponent implements OnInit {
       //this.serviceRequestId = this.route.snapshot.paramMap.get('id');
       switch (actionType) {
         case "remove":
-          if (confirm("Are you sure, you want to remove the Spare Quotation Details?") == true) {
-            //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
-            this.SpareQuoteDetService.delete(data.id)
-              .pipe(first())
-              .subscribe({
-                next: (d: any) => {
-                  if (d.result) {
-                    this.notificationService.filter("itemadded");
-                  } else {
-                    this.notificationService.showError(d.resultMessage, "Error");
+          if (this.hasDeleteAccess) {
+            if (confirm("Are you sure, you want to remove the Spare Quotation Details?") == true) {
+              //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
+              this.SpareQuoteDetService.delete(data.id)
+                .pipe(first())
+                .subscribe({
+                  next: (d: any) => {
+                    if (d.result) {
+                      this.notificationService.filter("itemadded");
+                    } else {
+                      this.notificationService.showError(d.resultMessage, "Error");
+                    }
+                  },
+                  error: error => {
+                    this.notificationService.showError(error, "Error");
+                    this.loading = false;
                   }
-                },
-                error: error => {
-                  this.notificationService.showError(error, "Error");
-                  this.loading = false;
-                }
-              });
+                });
+            }
           }
           break
         case "edit":
-          this.open(this.id, data.id);
+          if (this.hasUpdateAccess) {
+            this.open(this.id, data.id);
+          }
           break
       }
     }

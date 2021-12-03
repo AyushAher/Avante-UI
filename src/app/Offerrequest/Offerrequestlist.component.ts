@@ -8,10 +8,12 @@ import { User } from "../_models";
 import { Offerrequest } from "../_models/Offerrequest.model";
 import { AccountService, NotificationService, ProfileService } from "../_services";
 import { OfferrequestService } from "../_services/Offerrequest.service";
+
 @Component({
   selector: "app-Offerrequestlist",
   templateUrl: "./Offerrequestlist.component.html",
 })
+
 export class OfferrequestlistComponent implements OnInit {
   form: FormGroup;
   model: Offerrequest;
@@ -30,6 +32,7 @@ export class OfferrequestlistComponent implements OnInit {
   private columnApi: ColumnApi;
   private api: GridApi;
   profilePermission: any;
+
   constructor(
     private router: Router,
     private accountService: AccountService,
@@ -37,11 +40,12 @@ export class OfferrequestlistComponent implements OnInit {
     private Service: OfferrequestService,
     private profileService: ProfileService,
   ) { }
+
   ngOnInit() {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SSPAR");
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "OFREQ");
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
         this.hasAddAccess = profilePermission[0].create;

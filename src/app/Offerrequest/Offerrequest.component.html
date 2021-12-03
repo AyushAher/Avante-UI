@@ -172,9 +172,8 @@
 
                   <div class="row">
                     <div class="col-md-6 col-sm-6" style="padding:10px;">
-                      <button
-                        *ngIf="hasAddAccess || hasUpdateAccess" class="btn btn-primary" type="submit"
-                        class="btn btn-primary">
+                      <button *ngIf="(hasUpdateAccess) || (hasAddAccess && !hasId)" class="btn btn-primary"
+                              type="submit" class="btn btn-primary">
                         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                         Submit
                       </button>
