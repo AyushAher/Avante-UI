@@ -1,15 +1,25 @@
-import { DatePipe } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
-import { Guid } from "guid-typescript";
-import { first } from "rxjs/operators";
-import { Amc, Currency, Customer, ListTypeItem, ResultMsg, User } from "../_models";
-import { AmcInstrument } from "../_models/Amcinstrument";
-import { AccountService, AlertService, NotificationService, ListTypeService, AmcService, ProfileService, CustomerService, CurrencyService } from "../_services";
-import { AmcinstrumentService } from "../_services/amcinstrument.service";
-import { AmcInstrumentRendererComponent } from "./amc-instrument-renderer.component";
+import {DatePipe} from "@angular/common";
+import {Component, OnInit} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
+import {Guid} from "guid-typescript";
+import {first} from "rxjs/operators";
+import {Amc, Currency, Customer, ListTypeItem, ResultMsg, User} from "../_models";
+import {AmcInstrument} from "../_models/Amcinstrument";
+import {
+  AccountService,
+  AlertService,
+  AmcService,
+  CurrencyService,
+  CustomerService,
+  ListTypeService,
+  NotificationService,
+  ProfileService
+} from "../_services";
+import {AmcinstrumentService} from "../_services/amcinstrument.service";
+import {AmcInstrumentRendererComponent} from "./amc-instrument-renderer.component";
+
 @Component({
   selector: "app-Amc",
   templateUrl: "./Amc.html",
@@ -62,7 +72,7 @@ export class AmcComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SSPAR");
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "AMC");
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
         this.hasAddAccess = profilePermission[0].create;

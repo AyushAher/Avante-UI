@@ -157,7 +157,7 @@
 
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px;">
-              <button *ngIf="hasAddAccess || hasUpdateAccess" class="btn btn-primary" type="submit"
+              <button *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)" class="btn btn-primary" type="submit"
                 class="btn btn-primary"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit </button>
               <a routerLink="/amclist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
