@@ -59,10 +59,10 @@
               <label for=""></label>
               <div class="checkbox">
                 <label for="active">
-                  <input type="checkbox" formControlName="isactive" class="" />
+                  <input type="checkbox" formControlName="isactive" class=""/>
                   Active
                 </label>
-              </div>            
+              </div>
             </div>
 
           </div>
@@ -155,7 +155,8 @@
           <hr />
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px">
-              <button [disabled]="loading" class="btn btn-primary" *ngIf="hasAddAccess==true || hasUpdateAccess==true">
+              <button [disabled]="loading" class="btn btn-primary"
+                      *ngIf="(hasUpdateAccess) || (hasAddAccess && customerId==null)">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
