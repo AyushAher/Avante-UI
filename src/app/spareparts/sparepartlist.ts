@@ -4,7 +4,7 @@ import { User, Country, SparePart, ProfileReadOnly } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import { ColDef,GridApi,ColumnApi} from 'ag-grid-community';
 
 import { AccountService, AlertService, CountryService, SparePartService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
@@ -26,7 +26,7 @@ export class SparePartListComponent implements OnInit {
   countries: Country[];
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
-  private api: GridApi;  
+  private api: GridApi;
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
@@ -42,9 +42,9 @@ export class SparePartListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
-    
+
   }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -74,23 +74,22 @@ export class SparePartListComponent implements OnInit {
           this.loading = false;
         }
       });
-    this.columnDefs = this.createColumnDefs(); 
+    this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
-    this.router.navigate(['sparepart']);  
+    this.router.navigate(['sparepart']);
   }
   export() {
     this.router.navigate(['exportsparepart']);
   }
- 
+
   private createColumnDefs() {
     return [
       {
         headerName: 'Action',
         field: 'id',
         filter: false,
-        width: 150,
         enableSorting: false,
         editable: false,
         sortable: false,
@@ -153,7 +152,7 @@ export class SparePartListComponent implements OnInit {
         sortable: true,
         tooltipField: 'itemDesc',
     },
-    
+
     ]
   }
 
