@@ -94,7 +94,6 @@ export class InstrumentListComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        width: 100,
         cellRendererFramework: RenderComponent,
         cellRendererParams: {
           inRouterLink: '/instrument',
