@@ -75,7 +75,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
-        (x) => x.screenCode == "SCURR"
+        (x) => x.screenCode == "CTSS"
       );
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
@@ -105,7 +105,6 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get("id");
 
     if (this.id != null) {
-      this.hasAddAccess = false;
       if (this.user.username == "admin") {
         this.hasAddAccess = true;
       }

@@ -26,7 +26,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   user: User;
-  
+
 
   constructor(
     private router: Router,
@@ -41,7 +41,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
-        (x) => x.screenCode == "SCURR"
+        (x) => x.screenCode == "CTSS"
       );
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
@@ -56,7 +56,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     }
-    
+
     this.CustomersatisfactionsurveyService.getAll()
       .pipe(first())
       .subscribe({
@@ -85,7 +85,6 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        width: 100,
         cellRendererFramework: RenderComponent,
         cellRendererParams: {
           inRouterLink: "/customersatisfactionsurvey",
@@ -110,7 +109,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
         sortable: true,
         tooltipField: "code",
       },
-   
+
 
     ];
   }
