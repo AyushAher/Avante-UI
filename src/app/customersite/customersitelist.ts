@@ -1,13 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { User, Customer, CustomerSite, ProfileReadOnly } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import {CustomerSite, ProfileReadOnly, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
-import { AccountService, AlertService, CustomerService, CustomerSiteService, CountryService, NotificationService, ProfileService } from '../_services';
-import { RenderComponent } from '../distributor/rendercomponent';
+import {
+  AccountService,
+  AlertService,
+  CountryService,
+  CustomerService,
+  NotificationService,
+  ProfileService
+} from '../_services';
+import {RenderComponent} from '../distributor/rendercomponent';
 
 
 @Component({
@@ -27,10 +34,10 @@ export class CustomerSiteListComponent implements OnInit {
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
-  
+
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
-  private api: GridApi;  
+  private api: GridApi;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,9 +50,9 @@ export class CustomerSiteListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
-    
+
   }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -78,13 +85,13 @@ export class CustomerSiteListComponent implements OnInit {
           this.loading = false;
         }
       });
-    this.columnDefs = this.createColumnDefs(); 
+    this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
-    this.router.navigate(['customersite', this.customerId]);  
+    this.router.navigate(['customersite', this.customerId]);
   }
- 
+
 
   private createColumnDefs() {
     return [
@@ -92,7 +99,6 @@ export class CustomerSiteListComponent implements OnInit {
         headerName: 'Action',
         field: 'id',
         filter: false,
-        width: 100,
         enableSorting: false,
         editable: false,
         sortable: false,
@@ -118,9 +124,9 @@ export class CustomerSiteListComponent implements OnInit {
         sortable: true,
         tooltipField: 'regname',
       },
-      
+
     ]
-  }  
+  }
 
   onGridReady(params): void {
     this.api = params.api;
