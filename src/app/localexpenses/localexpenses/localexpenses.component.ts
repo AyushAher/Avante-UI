@@ -3,10 +3,19 @@ import {Component, EventEmitter, OnInit, Output} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs/operators";
-import {DistributorRegionContacts, ListTypeItem, LocalExpenses, ResultMsg, ServiceRequest, User,} from "../../_models";
+import {
+  Currency,
+  DistributorRegionContacts,
+  ListTypeItem,
+  LocalExpenses,
+  ResultMsg,
+  ServiceRequest,
+  User,
+} from "../../_models";
 import {
   AccountService,
   AlertService,
+  CurrencyService,
   DistributorService,
   FileshareService,
   ListTypeService,
@@ -48,6 +57,7 @@ export class LocalexpensesComponent implements OnInit {
 
   valid: boolean;
   DistributorList: any;
+  currencyList: Currency[];
 
 
   public columnDefs: ColDef[];
@@ -77,6 +87,7 @@ export class LocalexpensesComponent implements OnInit {
     private profileService: ProfileService,
     private distributorservice: DistributorService,
     private servicerequestservice: ServiceRequestService,
+    private currencyService: CurrencyService,
     private listTypeService: ListTypeService
   ) { }
 
@@ -113,9 +124,22 @@ export class LocalexpensesComponent implements OnInit {
       isactive: [true],
       remarks: ["", [Validators.required]],
       requesttype: ["", [Validators.required]],
+      currencyId: ["", [Validators.required]],
     });
 
     this.id = this.route.snapshot.paramMap.get("id");
+
+    this.currencyService.getAll()
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.currencyList = data.object
+        },
+        error: (error) => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      })
 
     if (this.id != null) {
       this.hasAddAccess = false;

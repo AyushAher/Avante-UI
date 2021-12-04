@@ -66,38 +66,46 @@
 
 
                         <div class="col-md-4 col-sm-4">
-                            <label for="departuredate">City</label>
-                            <input type="text" formControlName="city" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.city.errors }" />
+                          <label for="departuredate">City</label>
+                          <input type="text" formControlName="city" class="form-control"
+                                 [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
 
-                            <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
-                                <div *ngIf="f.city.errors.required">City is required</div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                            <label for="returndate">Total Amount</label>
-                            <input type="number" formControlName="totalamount" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.totalamount.errors }" />
-
-                            <div *ngIf="submitted && f.totalamount.errors" class="invalid-feedback">
-                                <div *ngIf="f.totalamount.errors.required">Amount is required</div>
-                            </div>
+                          <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                            <div *ngIf="f.city.errors.required">City is required</div>
+                          </div>
 
                         </div>
 
 
-                        <div class="col-md-4 col-sm-4">
-                            <label for="returndate">Remarks</label>
-                            <input type="text" formControlName="remarks" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.remarks.errors }" />
+                      <div class="col-md-4 col-sm-4">
+                        <label for="totalamount">Total Amount</label>
+                        <br>
+                        <select id="currency" style="display:inline-block; width:100px;"
+                                formControlName="currencyId" class="form-control"
+                                [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
+                          <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                          </option>
+                        </select>
+                        <input id="totalamount" type="number" formControlName="totalamount" class="form-control"
+                               style="display:inline-block; width:270px; margin-left: 5px;"
+                               [ngClass]="{ ' is -invalid': submitted && f.totalamount.errors}"/>
 
-                            <div *ngIf="submitted && f.remarks.errors" class="invalid-feedback">
-                                <div *ngIf="f.remarks.errors.required">Remarks is required</div>
-                            </div>
-
+                        <div *ngIf="submitted && f.totalamount.errors" class="invalid-feedback">
+                          <div *ngIf="f.totalamount.errors.required">Amount is required</div>
                         </div>
+
+                      </div>
+
+                      <div class="col-md-4 col-sm-4">
+                        <label for="returndate">Remarks</label>
+                        <input type="text" formControlName="remarks" class="form-control"
+                               [ngClass]="{ 'is-invalid': submitted && f.remarks.errors }"/>
+
+                        <div *ngIf="submitted && f.remarks.errors" class="invalid-feedback">
+                          <div *ngIf="f.remarks.errors.required">Remarks is required</div>
+                        </div>
+
+                      </div>
 
 
                         <div class="col-md-4 col-sm-4">
