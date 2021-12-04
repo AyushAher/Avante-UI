@@ -687,6 +687,8 @@ export class InstrumentComponent implements OnInit {
               if (this.file != null) {
                 this.saveFileShare(this.file, data.object.id)
               }
+
+              this.router.navigate(["instrumentlist"]);
             }
             else {
               this.notificationService.showError(data.resultMessage, "Error");
