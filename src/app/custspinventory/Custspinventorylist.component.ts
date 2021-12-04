@@ -44,7 +44,6 @@ export class CustspinventorylistComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.accountService.userValue;
-    this.columnDefs = this.createColumnDefs();
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "CTSPI");
@@ -69,6 +68,7 @@ export class CustspinventorylistComponent implements OnInit {
           this.loading = false;
         },
       });
+    this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
