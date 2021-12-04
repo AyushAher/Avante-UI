@@ -181,28 +181,33 @@
 
                             <div class="col-md-6 col-sm-6">
 
-                                <label for="airline">Flight Date</label>
-                                <input bsDatepicker formControlName="flightdate" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.get('flightdate').errors }" />
+                              <label for="airline">Flight Date</label>
+                              <input bsDatepicker formControlName="flightdate" class="form-control"
+                                     [ngClass]="{ 'is-invalid': submitted && f.get('flightdate').errors }"/>
 
-                                <div *ngIf="submitted &&  f.get('flightdate').errors" class="invalid-feedback">
-                                    <div *ngIf=" f.get('flightdate').errors.required">Flight Date is required</div>
-                                </div>
+                              <div *ngIf="submitted &&  f.get('flightdate').errors" class="invalid-feedback">
+                                <div *ngIf=" f.get('flightdate').errors.required">Flight Date is required</div>
+                              </div>
 
                             </div>
 
-                          <div class="col-md-6 col-sm-6">
-
-                            <label for="airline">Flight Cost</label>
-                            <input type="number" formControlName="flightcost" class="form-control"
-                                   [ngClass]="{ 'is-invalid': submitted &&  f.get('flightcost').errors }"/>
-
-
+                          <div class="col-md-4 col-sm-4">
+                            <label for="totalamount">Total Amount</label>
+                            <br>
+                            <select id="currency" style="display:inline-block; width:100px;"
+                                    formControlName="currencyId" class="form-control"
+                                    [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
+                              <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                              </option>
+                            </select>
+                            <input id="totalamount" type="number" formControlName="flightcost" class="form-control"
+                                   style="display:inline-block; width:270px; margin-left: 5px;"
+                                   [ngClass]="{ ' is -invalid': submitted && f.flightcost.errors}"/>
                             <div *ngIf="submitted && f.get('flightcost').errors" class="invalid-feedback">
                               <div *ngIf="f.get('flightcost').errors.required">Flight Cost is required</div>
                             </div>
-
                           </div>
+
                         </div>
                     </div>
 

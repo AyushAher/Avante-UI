@@ -24,5 +24,6 @@ export class FlightDetails {
   flightno:string;
   flightcost:string;
   flightdate:string;
+  currencyId:string;
 
 }

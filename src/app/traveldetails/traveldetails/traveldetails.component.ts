@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs/operators";
 
 import {
+  Currency,
   DistributorRegionContacts,
   ListTypeItem,
   ProfileReadOnly,
@@ -15,7 +16,7 @@ import {
 } from "../../_models";
 import {
   AccountService,
-  AlertService,
+  AlertService, CurrencyService,
   DistributorService,
   FileshareService,
   ListTypeService,
@@ -74,6 +75,7 @@ export class TraveldetailsComponent implements OnInit {
   hastransaction: boolean;
   public progress: number;
   public message: string;
+  currencyList: Currency[];
 
   @Output() public onUploadFinished = new EventEmitter();
 
@@ -90,7 +92,9 @@ export class TraveldetailsComponent implements OnInit {
     private profileService: ProfileService,
     private distributorservice: DistributorService,
     private listTypeService: ListTypeService,
-    private servicerequestservice: ServiceRequestService
+    private servicerequestservice: ServiceRequestService,
+    private currencyService: CurrencyService,
+
   ) { }
 
   ngOnInit() {
@@ -132,6 +136,7 @@ export class TraveldetailsComponent implements OnInit {
         airline: ["", [Validators.required]],
         flightno: ["", [Validators.required]],
         flightdate: ["", [Validators.required]],
+        currencyId: ["", [Validators.required]],
         flightcost: ["", [Validators.required]],
       }),
     });
@@ -163,6 +168,17 @@ export class TraveldetailsComponent implements OnInit {
         });
     }
 
+    this.currencyService.getAll()
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.currencyList = data.object
+        },
+        error: (error) => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      })
     this.distributorservice.getAll()
       .pipe(first())
       .subscribe({
