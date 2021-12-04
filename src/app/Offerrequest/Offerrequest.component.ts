@@ -356,7 +356,7 @@ export class OfferrequestComponent implements OnInit {
       field: 'id',
       cellRendererFramework: AmcInstrumentRendererComponent,
       cellRendererParams: {
-        deleteaccess: this.hasDeleteAccess,
+        deleteaccess: this.hasAddAccess || this.hasUpdateAccess,
       },
 
     }, {
