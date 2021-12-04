@@ -157,7 +157,6 @@ export class TraveldetailsComponent implements OnInit {
             this.GetFileList(data.object.id)
           },
           error: (error) => {
-            console.log(error);
             this.notificationService.showError("Error", "Error");
             this.loading = false;
           },
@@ -169,7 +168,6 @@ export class TraveldetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.DistributorList = data.object;
-          console.log(data);
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
@@ -233,7 +231,6 @@ export class TraveldetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.servicerequest = (data.object);
-          console.log(this.servicerequest)
         },
 
         error: (error) => {
@@ -244,17 +241,14 @@ export class TraveldetailsComponent implements OnInit {
   }
 
   getengineers(id: string) {
-    console.log(id)
     this.distributorservice.getDistributorRegionContacts(id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.engineer = data.object;
-          console.log(this.engineer)
         },
 
         error: (error) => {
-          console.log(error);
           this.notificationService.showError("Error", error);
           this.loading = false;
         },
@@ -450,7 +444,6 @@ export class TraveldetailsComponent implements OnInit {
                 this.router.navigate(["traveldetailslist"]);
               } else {
                 this.notificationService.showError(data.resultMessage, "Error");
-                console.log(data.resultMessage);
               }
               this.loading = false;
             },
@@ -481,13 +474,11 @@ export class TraveldetailsComponent implements OnInit {
                 this.router.navigate(["traveldetailslist"]);
               } else {
                 this.notificationService.showError(data.resultMessage, "Error");
-                console.log(data.resultMessage);
               }
               this.loading = false;
             },
             error: (error) => {
               this.notificationService.showError(error, "Error");
-              console.log(error);
 
               this.loading = false;
             },
