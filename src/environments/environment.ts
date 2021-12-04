@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   apiUrl: 'https://localhost:44317/api',
   uiUrl: 'https://localhost:44378/',
-  configTypeId: "4c155b3e-7526-11eb-97d1-1c39472d435b",// "f0bf6d8d-739a-11eb-adfc-0a91af0598e6" //"4c155b3e-7526-11eb-97d1-1c39472d435b"
+  configTypeId: "f0bf6d8d-739a-11eb-adfc-0a91af0598e6",// "f0bf6d8d-739a-11eb-adfc-0a91af0598e6" //"4c155b3e-7526-11eb-97d1-1c39472d435b"
   custRoleId: "36eb70f8-0247-11ec-8e31-fc45964f576b",
   distRoleId: "36fafd78-0247-11ec-8e31-fc45964f576b",
   engRoleId: "374154ac-0247-11ec-8e31-fc45964f576b",
