@@ -66,7 +66,24 @@ export class AmcComponent implements OnInit {
     private customerService: CustomerService,
     private currencyService: CurrencyService,
     private AmcInstrumentService: AmcinstrumentService,
-  ) { }
+  ) {
+
+    this.notificationService.listen().subscribe((m: any) => {
+      if (this.id != null) {
+        this.AmcInstrumentService.getAmcInstrumentsByAmcId(this.id)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              this.instrumentList = data.object;
+            },
+            error: (error) => {
+              this.notificationService.showError("Error", "Error");
+              this.loading = false;
+            },
+          });
+      }
+    });
+  }
 
   ngOnInit() {
     this.user = this.accountService.userValue;
@@ -282,7 +299,7 @@ export class AmcComponent implements OnInit {
       sortable: false,
       cellRendererFramework: AmcInstrumentRendererComponent,
       cellRendererParams: {
-        deleteaccess: this.hasDeleteAccess,
+        deleteaccess: this.hasAddAccess,
         list: this.instrumentList
       },
 

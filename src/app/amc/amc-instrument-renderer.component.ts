@@ -1,22 +1,39 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { AgRendererComponent } from 'ag-grid-angular';
-import { first } from 'rxjs/operators';
-import { DistributorService, NotificationService } from '../_services';
-import { AmcComponent } from './amc';
+import {Component} from '@angular/core';
+import {AgRendererComponent} from 'ag-grid-angular';
+import {first} from 'rxjs/operators';
+import {ResultMsg} from "../_models";
+import {AmcinstrumentService} from "../_services/amcinstrument.service";
+import {NotificationService} from "../_services";
 
 @Component({
   template: `
-  <button class="btn btn-link" *ngIf="params.deleteaccess" type="button">
-    <i class="fas fa-trash-alt" title="Delete"></i>
-  </button>
-  
-  `})
+    <button class="btn btn-link" (click)="delete(params.value)" *ngIf="params.deleteaccess" type="button">
+      <i class="fas fa-trash-alt" title="Delete"></i>
+    </button>
+
+  `
+})
 export class AmcInstrumentRendererComponent implements AgRendererComponent {
   params: any;
-  constructor() { }
+
+  constructor(
+    private AmcInstrumentService: AmcinstrumentService,
+    private notificationService: NotificationService,
+  ) {
+  }
 
   agInit(params: any): void {
     this.params = params;
+  }
+
+  delete(id) {
+    this.AmcInstrumentService.delete(id)
+      .pipe(first())
+      .subscribe({
+        next: (data: ResultMsg) => {
+          this.notificationService.filter("itemadded");
+        }
+      });
   }
 
   refresh(): boolean {
