@@ -111,23 +111,16 @@ export class StaydetailsComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get("id");
 
     if (this.id != null) {
-      this.hasAddAccess = false;
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
-
       this.travelDetailService
         .getById(this.id)
         .pipe(first())
         .subscribe({
-          next: (data: any) => {
-            console.log(data);
+          next: (data: any) =>{
             this.getengineers(data.object.distId)
             this.getservicerequest(data.object.distId)
             this.travelDetailform.patchValue(data.object);
           },
           error: (error) => {
-            console.log(error);
             this.notificationService.showError("Error", "Error");
             this.loading = false;
           },
@@ -139,7 +132,6 @@ export class StaydetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.DistributorList = data.object;
-          console.log(data);
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
@@ -175,7 +167,6 @@ export class StaydetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
           this.notificationService.showError("Error", error);
           this.loading = false;
         },
@@ -183,7 +174,6 @@ export class StaydetailsComponent implements OnInit {
   }
 
   getengineers(id: string) {
-    console.log(id);
     this.distributorservice.getDistributorRegionContacts(id)
       .pipe(first())
       .subscribe({
@@ -192,7 +182,6 @@ export class StaydetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
           this.notificationService.showError("Error", error);
           this.loading = false;
         },
@@ -252,9 +241,6 @@ export class StaydetailsComponent implements OnInit {
       return;
     }
 
-    this.travelDetailform.value.totalcost =
-      Number(this.travelDetailform.value.pricepernight) * calc;
-
     if (!this.travelDetailform.value.isactive) {
       this.travelDetailform.value.isactive = false;
     }
@@ -274,7 +260,6 @@ export class StaydetailsComponent implements OnInit {
                 this.router.navigate(["/staydetailslist"]);
               } else {
                 this.notificationService.showError(data.resultMessage, "Error");
-                console.log(data.resultMessage);
               }
               this.loading = false;
             },
@@ -300,13 +285,11 @@ export class StaydetailsComponent implements OnInit {
                 this.router.navigate(["/staydetailslist"]);
               } else {
                 this.notificationService.showError(data.resultMessage, "Error");
-                console.log(data.resultMessage);
               }
               this.loading = false;
             },
             error: (error) => {
               this.notificationService.showError(error, "Error");
-              console.log(error);
               this.loading = false;
             },
           });
