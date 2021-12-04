@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs/operators";
 
 import {
-  Country,
+  Country, Currency,
   DistributorRegionContacts,
   ListTypeItem,
   ProfileReadOnly,
@@ -17,7 +17,7 @@ import {
 import {
   AccountService,
   AlertService,
-  CountryService,
+  CountryService, CurrencyService,
   DistributorService,
   FileshareService,
   ListTypeService,
@@ -74,6 +74,7 @@ export class VisadetailsComponent implements OnInit {
   public message: string;
 
   @Output() public onUploadFinished = new EventEmitter();
+  currencyList: Currency[];
 
 
   constructor(
@@ -89,7 +90,8 @@ export class VisadetailsComponent implements OnInit {
     private distributorservice: DistributorService,
     private servicerequestservice: ServiceRequestService,
     private listTypeService: ListTypeService,
-    private countryservice: CountryService
+    private countryservice: CountryService,
+    private currencyService: CurrencyService,
   ) {
   }
 
@@ -127,7 +129,20 @@ export class VisadetailsComponent implements OnInit {
       visacost: ["", [Validators.required]],
       requesttype: ["", [Validators.required]],
       isactive: [true],
+      currencyId: ["",Validators.required],
     });
+
+    this.currencyService.getAll()
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.currencyList = data.object
+        },
+        error: (error) => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      })
 
     this.id = this.route.snapshot.paramMap.get("id");
 

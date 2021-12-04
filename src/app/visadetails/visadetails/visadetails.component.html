@@ -88,44 +88,53 @@
 
 
                         <div class="col-md-4 col-sm-4">
-                            <label for="travelclass">Visa Type</label>
+                          <label for="travelclass">Visa Type</label>
 
-                            <select placeholder="Travel Class" formControlName="visatypeid" class="form-control"
-                                [ngClass]="{'is-invalid':submitted && f.visatypeid.errors }">
+                          <select placeholder="Travel Class" formControlName="visatypeid" class="form-control"
+                                  [ngClass]="{'is-invalid':submitted && f.visatypeid.errors }">
 
-                                <option *ngFor="let i of visatype" value="{{i.listTypeItemId}}">{{i.itemname}}
-                                </option>
+                            <option *ngFor="let i of visatype" value="{{i.listTypeItemId}}">{{i.itemname}}
+                            </option>
 
-                            </select>
+                          </select>
 
-                            <div *ngIf="submitted && f.visatypeid.errors" class="invalid-feedback">
-                                <div *ngIf="f.visatypeid.errors.required">Visa Type is required</div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                            <label for="departuredate">Visa Cost</label>
-                            <input type="number" formControlName="visacost" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.visacost.errors }" />
-
-                            <div *ngIf="submitted && f.visacost.errors" class="invalid-feedback">
-                                <div *ngIf="f.visacost.errors.required">Visa Cost is required</div>
-                            </div>
+                          <div *ngIf="submitted && f.visatypeid.errors" class="invalid-feedback">
+                            <div *ngIf="f.visatypeid.errors.required">Visa Type is required</div>
+                          </div>
 
                         </div>
 
-                        <div class="col-md-4 col-sm-4">
 
-                            <label for="airline">Request Type</label>
+                      <div class="col-md-4 col-sm-4">
+                        <label for="totalamount">Visa Cost</label>
+                        <br>
+                        <select id="currency" style="display:inline-block; width:100px;"
+                                formControlName="currencyId" class="form-control"
+                                [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
+                          <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                          </option>
+                        </select>
 
-                            <select name="" placeholder="Request Type" formControlName="requesttype" id=""
+                        <input id="totalamount" type="number" formControlName="visacost" class="form-control"
+                               style="display:inline-block; width:270px; margin-left: 5px;"
+                               [ngClass]="{ ' is -invalid': submitted && f.visacost.errors}"/>
+                        <div *ngIf="submitted && f.get('visacost').errors" class="invalid-feedback">
+                          <div *ngIf="f.get('visacost').errors.required">Visa Cost is required</div>
+
+                        </div>
+                      </div>
+
+                      <div class="col-md-4 col-sm-4">
+
+                        <label for="airline">Request Type</label>
+
+                        <select name="" placeholder="Request Type" formControlName="requesttype" id=""
                                 class="form-control" [ngClass]="{'is-invalid':submitted && f.requesttype.errors }">
-                                <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
-                                </option>
-                            </select>
+                          <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
+                          </option>
+                        </select>
 
-                            <div *ngIf="submitted && f.requesttype.errors" class="invalid-feedback">
+                        <div *ngIf="submitted && f.requesttype.errors" class="invalid-feedback">
                                 <div *ngIf="f.requesttype.errors.required">Request Type is required</div>
                             </div>
 
