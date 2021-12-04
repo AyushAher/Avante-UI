@@ -1238,7 +1238,7 @@ export class ServiceRequestComponent implements OnInit {
       },
       {
         headerName: 'Action Taken',
-        field: 'actiontaken',
+        field: 'actiontakenId',
         filter: false,
         enableSorting: false,
         editable: false,
