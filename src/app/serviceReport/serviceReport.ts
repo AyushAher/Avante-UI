@@ -769,8 +769,7 @@ export class ServiceReportComponent implements OnInit {
         case "edit":
           let sprec: sparePartsConsume;
           sprec = data;
-          console.log(sprec);
-          if (sprec.qtyconsumed <= sprec.qtyAvailable) {
+          if (Number(sprec.qtyconsumed) <= Number(sprec.qtyAvailable)) {
             this.srConsumedservice.update(sprec.id, sprec)
               .pipe(first())
               .subscribe({
