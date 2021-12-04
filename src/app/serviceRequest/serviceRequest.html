@@ -380,10 +380,9 @@
             <div *ngIf="IsEngineerView" aria-labelledby="contact-tab" class="tab-pane fade" id="contact"
                  role="tabpanel">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <div class="" style="display: flex; justify-content:space-between">
-                  <button (click)="openaction(serviceRequestId)" *ngIf="accepted" class="btn btn-sm btn-success button"
-                          style="margin: 10px;"
-                          type="button"><i class="fas fa-plus-circle" title="Add"></i>
+                <div class="" style="display: flex; justify-content:space-between" *ngIf="accepted">
+                  <button (click)="openaction(serviceRequestId)" class="btn btn-sm btn-success button"
+                          style="margin: 10px;" type="button"><i class="fas fa-plus-circle" title="Add"></i>
                   </button>
                   <a href="teamviewer8://" class="link-primary mt-3">Open TeamViewer</a>
                 </div>
