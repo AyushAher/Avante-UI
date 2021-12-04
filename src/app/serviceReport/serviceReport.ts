@@ -133,6 +133,7 @@ export class ServiceReportComponent implements OnInit {
   private fileUploadProgress: number;
   sparepartrecmmlist: any;
 
+ datepipe = new DatePipe("en-US");
 
   constructor(
     private formBuilder: FormBuilder,
@@ -168,6 +169,11 @@ export class ServiceReportComponent implements OnInit {
             next: (data: any) => {
               this.workdonelist = data.object.lstWorkdone;
               this.workTime = data.object.lstWorktime;
+
+              this.workTime.forEach((value, index) => {
+                value.worktimedate = this.datepipe.transform(value.worktimedate, "dd/MM/YYYY")
+              })
+
               this.sparePartRecomanded = data.object.lstSPRecommend;
               this.spconsumedlist = data.object.lstSPConsumed;
             },
@@ -417,7 +423,7 @@ export class ServiceReportComponent implements OnInit {
             this.workTime = data.object.lstWorktime;
 
             let datepipe = new DatePipe("en-US");
-            this.workTime.filter((value, index) => {
+            this.workTime.forEach((value, index) => {
               value.worktimedate = datepipe.transform(value.worktimedate, "dd/MM/YYYY")
             })
 
