@@ -24,7 +24,7 @@ export class ServiceRequestService {
     //    return this.userSubject.value;
     //}
 
-  
+
 
   save(serviceRequest: ServiceRequest) {
     return this.http.post(`${environment.apiUrl}/serviceRequest`, serviceRequest);
@@ -53,6 +53,21 @@ export class ServiceRequestService {
 
     update(id, params) {
       return this.http.put(`${environment.apiUrl}/serviceRequest`, params)
+            .pipe(map(x => {
+              // update stored user if the logged in user updated their own record
+              //if (id == this.distributor.id) {
+              //      // update local storage
+              //      const user = { ...this.userValue, ...params };
+              //      localStorage.setItem('user', JSON.stringify(user));
+
+              //      // publish updated user to subscribers
+              //      this.userSubject.next(user);
+              //  }
+                return x;
+            }));
+    }
+    updateIsAccepted(id, params) {
+      return this.http.put(`${environment.apiUrl}/serviceRequest/accepted`, params)
             .pipe(map(x => {
               // update stored user if the logged in user updated their own record
               //if (id == this.distributor.id) {

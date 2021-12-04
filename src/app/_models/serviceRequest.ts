@@ -28,7 +28,7 @@ export class ServiceRequest {
   currentinstrustatus: string;
   compliantregisName: string;
   registrarphone: string;
-  accepted: string;
+  accepted: boolean;
   engComments: EngineerCommentList[];
   assignedHistory : tickersAssignedHistory[];
   customerName: string;

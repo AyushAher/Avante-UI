@@ -117,7 +117,7 @@ export class ServiceRequestComponent implements OnInit {
   custcityname: string;
   breakdownlist: ListTypeItem[];
   allsites: any;
-  accepted: boolean;
+  accepted: boolean = false;
 
 
   @Output() public onUploadFinished = new EventEmitter();
@@ -150,7 +150,7 @@ export class ServiceRequestComponent implements OnInit {
       private actionservice: EngActionService,
       private srAssignedHistoryService: SRAssignedHistoryService,
       private servicereportService: ServiceReportService,
-      public datepipe: DatePipe
+      public datepipe: DatePipe,
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       console.log(m);
@@ -159,6 +159,11 @@ export class ServiceRequestComponent implements OnInit {
           .subscribe({
             next: (data: any) => {
               this.engineerCommentList = data.object.engComments;
+
+              this.engineerCommentList.forEach((value, index) => {
+                value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
+              })
+
               this.actionList = data.object.engAction;
               this.actionList.forEach((value, index) => {
                 value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
@@ -390,7 +395,8 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-
+            this.accepted = data.object.accepted;
+            console.log(this.accepted)
             this.getAllInstrument(data.object.siteid);
             var subreq = data.object.subrequesttypeid.split(',');
             let items: ListTypeItem[] = [];
@@ -451,8 +457,6 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({"requesttypeid": data.object.requesttypeid});
             this.serviceRequestform.patchValue({"remarks": data.object.remarks});
             //
-
-            this.Accepted(data.object.accepted)
             this.serviceRequestform.patchValue({"machmodelname": (data.object.machmodelname)});
             this.customerId = data.object.custid;
             this.siteId = data.object.siteid;
@@ -702,11 +706,24 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   Accepted(isAccepted?) {
-    if (isAccepted == "on") {
-      this.accepted = !this.accepted
-    } else {
-      this.accepted = isAccepted
-    }
+    this.accepted = true
+    console.log(this.serviceRequestId)
+    let serviceRequest = new ServiceRequest();
+    serviceRequest.id = this.serviceRequestId;
+    serviceRequest.accepted = true
+
+    this.serviceRequestService.updateIsAccepted(this.serviceRequestId, serviceRequest)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+                this.serviceRequestform.get('accepted').disable();
+          this.notificationService.showSuccess(data.resultMessage, "Success");
+        }, error: (error) => {
+
+          console.log(serviceRequest)
+          this.notificationService.showError(error, "Error");
+        }
+      })
   }
 
   generatereport() {

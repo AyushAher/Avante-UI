@@ -283,7 +283,8 @@
               <label for="accepted"></label>
               <div class="checkbox">
                 <label for="warranty">
-                  <input class="" (input)="Accepted($event.target.value)" #accp formControlName="accepted" type="checkbox"/>
+                  <input class="" [readonly]="accepted" (input)="Accepted($event.target.value)" #accp
+                         formControlName="accepted" type="checkbox"/>
                   Accepted
                 </label>
               </div>
