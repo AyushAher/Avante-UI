@@ -71,6 +71,7 @@ export class SparePartComponent implements OnInit {
   public message: string;
 
   @Output() public onUploadFinished = new EventEmitter();
+  img: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -279,8 +280,17 @@ export class SparePartComponent implements OnInit {
     //debugger;
     let reader = new FileReader(); // HTML5 FileReader API
     let file = files[0];
+    this.img = files;
     // if (event.target.files && event.target.files[0]) {
-      reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      this.imageUrl = reader.result as string;
+      this.sparepartform.patchValue({
+        imageUrl: reader.result as string
+      });
+    }
+
     //   this.uploadService.upload(file)
     //     .pipe(first())
     //     .subscribe({
@@ -297,19 +307,13 @@ export class SparePartComponent implements OnInit {
     //       }
     //     });
 
-      //// When file uploads set it to file formcontrol
-      reader.onload = () => {
-        this.imageUrl = reader.result as string;
-        this.sparepartform.patchValue({
-         imageUrl: reader.result as string
-        });
-        //  this.editFile = false;
-        //  this.removeUpload = true;
-      }
-      // ChangeDetectorRef since file is loading outside the zone
-      //this.cd.markForCheck();
+    //// When file uploads set it to file formcontrol
+    //  this.editFile = false;
+    //  this.removeUpload = true;
+    // ChangeDetectorRef since file is loading outside the zone
+    //this.cd.markForCheck();
 
-    if (files.length === 0) {
+    if (files.length === 0 && id == null) {
       return;
     }
     let filesToUpload: File[] = files;
@@ -349,9 +353,10 @@ export class SparePartComponent implements OnInit {
       this.sparePartService.save(this.sparePart)
         .pipe(first())
         .subscribe({
-          next: (data: ResultMsg) => {
+          next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.uploadFile(this.img, data.object.id)
               this.router.navigate(["sparepartlist"]);
             }
             else {

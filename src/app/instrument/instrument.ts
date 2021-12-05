@@ -86,7 +86,7 @@ export class InstrumentComponent implements OnInit {
 
 
   file: any;
-
+  img: any
   attachments: any;
   fileList: [] = [];
   transaction: number;
@@ -516,10 +516,17 @@ export class InstrumentComponent implements OnInit {
 
   uploadFile(files, id) {
     //debugger;
+    this.img = files;
     let reader = new FileReader(); // HTML5 FileReader API
     let file = files[0];
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.imageUrl = reader.result as string;
+      this.instrumentform.patchValue({
+        imageUrl: reader.result as string
+      });
+    }
     // if (event.target.files && event.target.files[0]) {
-      reader.readAsDataURL(file);
     // //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
     //   this.fileshareService.upload(file,id,"INSTIMG","INST")
     //     .pipe(first())
@@ -536,21 +543,16 @@ export class InstrumentComponent implements OnInit {
     //       }
     // });
     // When file uploads set it to file formcontrol
-    reader.onload = () => {
-    this.imageUrl = reader.result as string;
-    this.instrumentform.patchValue({
-     imageUrl: reader.result as string
-    });
-    }
     //  this.removeUpload = true;
     //  this.editFile = false;
     // ChangeDetectorRef since file is loading outside the zone
     // this.cd.markForCheck();
     // }
 
-    if (files.length === 0) {
+    if (files.length === 0 || id == null) {
       return;
     }
+    console.log("img")
     let filesToUpload: File[] = files;
     const formData = new FormData();
     Array.from(filesToUpload).map((file, index) => {
@@ -686,6 +688,7 @@ export class InstrumentComponent implements OnInit {
               if (this.file != null) {
                 this.saveFileShare(this.file, data.object.id)
               }
+                this.uploadFile(this.img, data.object.id)
 
               this.router.navigate(["instrumentlist"]);
             }
@@ -736,8 +739,12 @@ export class InstrumentComponent implements OnInit {
         editable: false,
         width: 100,
         sortable: false,
-        template:
-            `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+
+        cellRenderer: (params) => {
+          if (this.hasDeleteAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          }
+        }
       },
       {
         headerName: 'Type',
