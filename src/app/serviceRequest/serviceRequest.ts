@@ -258,7 +258,7 @@ export class ServiceRequestComponent implements OnInit {
       alarmdetails: [''],
       resolveaction: [''],
       currentinstrustatus: ['', Validators.required],
-      accepted: [false],
+      accepted: [{value: false, disabled: this.accepted}],
       serresolutiondate: [''],
       escalation: [''],
       requesttypeid: [''],
@@ -453,6 +453,13 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({"resolveaction": data.object.resolveaction});
             this.serviceRequestform.patchValue({"currentinstrustatus": data.object.currentinstrustatus});
             this.serviceRequestform.patchValue({"accepted": data.object.accepted});
+
+            if (data.object.accepted) {
+              this.serviceRequestform.get('accepted').disable();
+            } else {
+              this.serviceRequestform.get('accepted').enable();
+            }
+
             this.serviceRequestform.patchValue({"escalation": data.object.escalation});
             this.serviceRequestform.patchValue({"requesttypeid": data.object.requesttypeid});
             this.serviceRequestform.patchValue({"remarks": data.object.remarks});
