@@ -516,10 +516,10 @@ export class InstrumentComponent implements OnInit {
 
   uploadFile(files, id) {
     //debugger;
-    // let reader = new FileReader(); // HTML5 FileReader API
-    // let file = event.target.files[0];
+    let reader = new FileReader(); // HTML5 FileReader API
+    let file = files[0];
     // if (event.target.files && event.target.files[0]) {
-    //   reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
     // //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
     //   this.fileshareService.upload(file,id,"INSTIMG","INST")
     //     .pipe(first())
@@ -536,16 +536,16 @@ export class InstrumentComponent implements OnInit {
     //       }
     // });
     // When file uploads set it to file formcontrol
-    // reader.onload = () => {
-    // this.imageUrl = reader.result as string;
-    //this.instrumentform.patchValue({
-    //  imageUrl: reader.result as string
-    //});
-    //  this.editFile = false;
+    reader.onload = () => {
+    this.imageUrl = reader.result as string;
+    this.instrumentform.patchValue({
+     imageUrl: reader.result as string
+    });
+    }
     //  this.removeUpload = true;
-    // }
+    //  this.editFile = false;
     // ChangeDetectorRef since file is loading outside the zone
-    //this.cd.markForCheck();
+    // this.cd.markForCheck();
     // }
 
     if (files.length === 0) {
@@ -553,7 +553,6 @@ export class InstrumentComponent implements OnInit {
     }
     let filesToUpload: File[] = files;
     const formData = new FormData();
-
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
