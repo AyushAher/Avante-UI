@@ -1395,23 +1395,36 @@ export class ServiceRequestComponent implements OnInit {
         case "edit":
           this.openaction(this.serviceRequestId, data.id);
         case "download":
-          console.log(e.data.id)
-          let params:any = {}
+          debugger
+          let params: any = {}
           params.id = e.data.id;
           params.fileUrl = e.data.teamviewerrecroding
-          this.downloadTeamViewerRecording(params)
-          break
+
+          if (e.data.teamviewerrecroding != null || params.teamviewerrecroding == null) {
+            this.downloadTeamViewerRecording(params)
+            console.log(params.fileUrl)
+            break
+          } else {
+            this.notificationService.showError("No Recording ", "Error")
+            console.log(params.fileUrl, e)
+
+            break;
+          }
+
       }
     }
   }
 
 
   downloadTeamViewerRecording(params: any) {
-    this.fileshareService.download(params.id,"/SRATN").subscribe((event) => {
-      if (event.type === HttpEventType.Response) {
-        this.downloadFile(params,event);
+    this.fileshareService.download(params.id, "/SRATN").subscribe((event) => {
+        if (event.type === HttpEventType.Response) {
+          this.downloadFile(params, event);
+        }
+      }, error => {
+            this.notificationService.showError("No Recording ", "Error")
       }
-    });
+    );
   }
 
   private downloadFile(params,data: HttpResponse<Blob>) {
