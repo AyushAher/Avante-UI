@@ -183,7 +183,7 @@
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="image" style="margin-right:15px;margin-top:15px;">image</label>
+              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
               <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile(fileInput.files,id)" />
               <!--<label for="imageUpload" *ngIf="editFile" [ngClass]="['custom-label', 'upload-image']"></label>-->
               <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']" (click)="removeUploadedFile()"></label>

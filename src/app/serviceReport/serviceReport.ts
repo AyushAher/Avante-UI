@@ -957,9 +957,17 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+
+        cellRenderer: (params) => {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          }
+        }
       },
       {
         headerName: 'Work Done',
@@ -982,9 +990,17 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+
+        cellRenderer: (params) => {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          }
+        }
       },
       {
         headerName: 'Work Time Date',
@@ -1098,9 +1114,17 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="far fa-save" title="Save Qty" data-action-type="edit"></i></button>`
+
+        cellRenderer: (params) => {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          }
+        }
       },
       {
         headerName: 'Part No',
@@ -1147,9 +1171,16 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-            <button type="button" class="btn btn-link" data-action-type="edit" ><i class="far fa-save" title="Save Qty" data-action-type="edit"></i></button>`
+        cellRenderer: (params) => {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          }
+        }
       },
       {
         headerName: 'PartNo',

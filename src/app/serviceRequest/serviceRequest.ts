@@ -477,6 +477,7 @@ export class ServiceRequestComponent implements OnInit {
               value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
             })
 
+
             this.actionList = data.object.engAction;
             this.actionList.forEach((value, index) => {
               value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
@@ -1175,9 +1176,16 @@ export class ServiceRequestComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+        cellRenderer: (params) => {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          }
+        }
       },
       {
         headerName: 'Next Date',
@@ -1247,9 +1255,16 @@ export class ServiceRequestComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        template:
-          `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+        cellRenderer: (params) => {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          }
+        }
       },
       {
         headerName: 'Engineer Name',

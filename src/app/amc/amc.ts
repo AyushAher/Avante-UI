@@ -299,7 +299,7 @@ export class AmcComponent implements OnInit {
       sortable: false,
       cellRendererFramework: AmcInstrumentRendererComponent,
       cellRendererParams: {
-        deleteaccess: this.hasAddAccess,
+        deleteaccess: this.hasDeleteAccess,
         list: this.instrumentList
       },
 

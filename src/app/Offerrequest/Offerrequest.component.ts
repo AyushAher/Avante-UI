@@ -356,7 +356,7 @@ export class OfferrequestComponent implements OnInit {
       field: 'id',
       cellRendererFramework: AmcInstrumentRendererComponent,
       cellRendererParams: {
-        deleteaccess: this.hasAddAccess || this.hasUpdateAccess,
+        deleteaccess: this.hasDeleteAccess,
       },
 
     }, {
@@ -576,9 +576,17 @@ export class OfferrequestComponent implements OnInit {
         filter: false,
         editable: false,
         sortable: false,
-        template:
-          `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>
-<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+
+        cellRenderer: (params) => {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          }
+        }
       },
 
       {

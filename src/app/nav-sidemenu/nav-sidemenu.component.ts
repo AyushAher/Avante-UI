@@ -54,7 +54,7 @@ export class NavSideMenuComponent {
     debugger;
     this.user = this.accountService.userValue;
     this.profile = this.profileService.userProfileValue;
-    console.log(this.profile.permissions.filter(x => x.screenCode == 'SDIST')[0])
+
     if (this.profile != null) {
       if (this.profile.permissions.filter(x => x.screenCode == 'SDIST').length > 0) {
         this.hasDistributor = this.profile.permissions.filter(x => x.screenCode == 'SDIST')[0].create == true
