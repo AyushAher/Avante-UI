@@ -201,12 +201,9 @@ export class SparePartComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            if (data.object.image != null) {
+
               this.getfileImage(data.object.id);
-            }
-            else {
-              this.imageUrl = this.noimageData;
-            }
+
             this.onConfigChange(data.object.configTypeid);
             this.onConfigVChange(data.object.configTypeid, data.object.configValueid);
 
@@ -281,9 +278,9 @@ export class SparePartComponent implements OnInit {
   uploadFile(files,id) {
     //debugger;
     let reader = new FileReader(); // HTML5 FileReader API
-    // let file = event.target.files[0];
+    let file = files[0];
     // if (event.target.files && event.target.files[0]) {
-    //   reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
     //   this.uploadService.upload(file)
     //     .pipe(first())
     //     .subscribe({
@@ -301,14 +298,14 @@ export class SparePartComponent implements OnInit {
     //     });
 
       //// When file uploads set it to file formcontrol
-      // reader.onload = () => {
-        // this.imageUrl = reader.result as string;
-        // this.instrumentform.patchValue({
-        //  imageUrl: reader.result as string
-        // });
+      reader.onload = () => {
+        this.imageUrl = reader.result as string;
+        this.sparepartform.patchValue({
+         imageUrl: reader.result as string
+        });
         //  this.editFile = false;
         //  this.removeUpload = true;
-      // }
+      }
       // ChangeDetectorRef since file is loading outside the zone
       //this.cd.markForCheck();
 
