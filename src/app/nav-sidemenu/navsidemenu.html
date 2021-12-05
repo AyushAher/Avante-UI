@@ -65,21 +65,21 @@
         <a class="collapse-item" routerLink="/sparepartlist" *ngIf="hasSparePart" routerLinkActive="active">Spare
           Part</a>
 
-        <a class="collapse-item" routerLink="/servicerequestlist" *ngIf="hasSparePart" routerLinkActive="active">Service
+        <a class="collapse-item" routerLink="/servicerequestlist" *ngIf="hasServiceRequest" routerLinkActive="active">Service
           Request</a>
 
-        <a class="collapse-item" routerLink="/servicereportlist" *ngIf="hasSparePart" routerLinkActive="active">Service
+        <a class="collapse-item" routerLink="/servicereportlist" *ngIf="hasServiceReport" routerLinkActive="active">Service
           Report</a>
 
-        <a class="collapse-item" routerLink="/offerrequestlist" routerLinkActive="active">Offer Request</a>
+        <a class="collapse-item" routerLink="/offerrequestlist" *ngIf="hasOfferRequest" routerLinkActive="active">Offer Request</a>
 
-        <a class="collapse-item" routerLink="/sparepartsrecommended" routerLinkActive="active">Spare Parts <br>
+        <a class="collapse-item" routerLink="/sparepartsrecommended" *ngIf="hasSparePartRecommended" routerLinkActive="active">Spare Parts <br>
           Recommended</a>
 
-        <a class="collapse-item" routerLink="/customerspinventorylist" routerLinkActive="active">Customer Spare <br>
+        <a class="collapse-item" routerLink="/customerspinventorylist" *ngIf="hasCustomerSparePartsInventory" routerLinkActive="active">Customer Spare <br>
           Parts Inventory</a>
 
-        <a class="collapse-item" routerLink="/amclist" routerLinkActive="active">AMC</a>
+        <a class="collapse-item" routerLink="/amclist" *ngIf="hasAmc" routerLinkActive="active">AMC</a>
 
         <a class="collapse-item" routerLink="/report" routerLinkActive="active">Report</a>
 
@@ -118,11 +118,11 @@
     <div id="collapsePhase2" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Travel:</h6>
-        <a class="collapse-item" routerLink="/traveldetailslist" routerLinkActive="active">Travel Details</a>
-        <a class="collapse-item" routerLink="/staydetailslist" routerLinkActive="active"> Stay Details </a>
-        <a class="collapse-item" routerLink="/visadetailslist" routerLinkActive="active">Visa Details </a>
-        <a class="collapse-item" routerLink="/localexpenseslist" routerLinkActive="active">Local Expenses</a>
-        <a class="collapse-item" routerLink="/customersatisfactionsurveylist" routerLinkActive="active">Customer
+        <a class="collapse-item" routerLink="/traveldetailslist" *ngIf="hasTravelDetails" routerLinkActive="active">Travel Details</a>
+        <a class="collapse-item" routerLink="/staydetailslist" *ngIf="hasStayDetails" routerLinkActive="active"> Stay Details </a>
+        <a class="collapse-item" routerLink="/visadetailslist" *ngIf="hasVisaDetails" routerLinkActive="active">Visa Details </a>
+        <a class="collapse-item" routerLink="/localexpenseslist" *ngIf="hasLocalExpenses" routerLinkActive="active">Local Expenses</a>
+        <a class="collapse-item" routerLink="/customersatisfactionsurveylist" *ngIf="hascustomersatisfactionsurveylist" routerLinkActive="active">Customer
           Satisfaction <br> Survey</a>
       </div>
     </div>

@@ -30,6 +30,13 @@ export class NavSideMenuComponent {
   hascustomersatisfactionsurveylist: boolean = false
 
 
+  hasAmc: boolean = false;
+  hasOfferRequest: boolean = false;
+  hasServiceRequest: boolean = false;
+  hasServiceReport: boolean = false;
+  hasSparePartRecommended: boolean = false;
+  hasCustomerSparePartsInventory: boolean = false;
+
   roles: ListTypeItem[];
   userrole: ListTypeItem[];
   settings: string
@@ -47,7 +54,7 @@ export class NavSideMenuComponent {
     debugger;
     this.user = this.accountService.userValue;
     this.profile = this.profileService.userProfileValue;
-
+    console.log(this.profile.permissions.filter(x => x.screenCode == 'SDIST')[0])
     if (this.profile != null) {
       if (this.profile.permissions.filter(x => x.screenCode == 'SDIST').length > 0) {
         this.hasDistributor = this.profile.permissions.filter(x => x.screenCode == 'SDIST')[0].create == true
@@ -116,25 +123,112 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'MAST')[0].read == true
           || this.profile.permissions.filter(x => x.screenCode == 'MAST')[0].delete == true
       }
+
+      if (this.profile.permissions.filter(x => x.screenCode == 'AMC').length > 0) {
+        this.hasAmc = this.profile.permissions.filter(x => x.screenCode == 'AMC')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'AMC')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'AMC')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'AMC')[0].delete == true
+      }
+      if (this.profile.permissions.filter(x => x.screenCode == 'OFREQ').length > 0) {
+        this.hasOfferRequest = this.profile.permissions.filter(x => x.screenCode == 'OFREQ')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'OFREQ')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'OFREQ')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'OFREQ')[0].delete == true
+      }
+      if (this.profile.permissions.filter(x => x.screenCode == 'SRREQ').length > 0) {
+        this.hasServiceRequest = this.profile.permissions.filter(x => x.screenCode == 'SRREQ')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRREQ')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRREQ')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRREQ')[0].delete == true
+      }
+      if (this.profile.permissions.filter(x => x.screenCode == 'SRREP').length > 0) {
+        this.hasServiceReport = this.profile.permissions.filter(x => x.screenCode == 'SRREP')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRREP')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRREP')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRREP')[0].delete == true
+      }
+      if (this.profile.permissions.filter(x => x.screenCode == 'CTSPI').length > 0) {
+        this.hasCustomerSparePartsInventory = this.profile.permissions.filter(x => x.screenCode == 'CTSPI')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'CTSPI')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'CTSPI')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'CTSPI')[0].delete == true
+      }
+      if (this.profile.permissions.filter(x => x.screenCode == 'SPRCM').length > 0) {
+        this.hasSparePartRecommended = this.profile.permissions.filter(x => x.screenCode == 'SPRCM')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SPRCM')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SPRCM')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SPRCM')[0].delete == true
+      }
+
+      if (this.profile.permissions.filter(x => x.screenCode == 'TRDET').length > 0) {
+        this.hasTravelDetails = this.profile.permissions.filter(x => x.screenCode == 'TRDET')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'TRDET')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'TRDET')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'TRDET')[0].delete == true
+      }
+
+      if (this.profile.permissions.filter(x => x.screenCode == 'STDET').length > 0) {
+        this.hasStayDetails = this.profile.permissions.filter(x => x.screenCode == 'STDET')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'STDET')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'STDET')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'STDET')[0].delete == true
+      }
+
+      if (this.profile.permissions.filter(x => x.screenCode == 'VADET').length > 0) {
+        this.hasVisaDetails = this.profile.permissions.filter(x => x.screenCode == 'VADET')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'VADET')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'VADET')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'VADET')[0].delete == true
+      }
+
+      if (this.profile.permissions.filter(x => x.screenCode == 'LCEXP').length > 0) {
+        this.hasLocalExpenses = this.profile.permissions.filter(x => x.screenCode == 'LCEXP')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'LCEXP')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'LCEXP')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'LCEXP')[0].delete == true
+      }
+
+      if (this.profile.permissions.filter(x => x.screenCode == 'CTSS').length > 0) {
+        this.hascustomersatisfactionsurveylist = this.profile.permissions.filter(x => x.screenCode == 'CTSS')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'CTSS')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'CTSS')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'CTSS')[0].delete == true
+      }
+
+
+      //
+      // hasTravelDetails: boolean = false;
+      // hasStayDetails: boolean = false;
+      // hasVisaDetails: boolean = false;
+      // hasLocalExpenses: boolean = false;
+      // hascustomersatisfactionsurveylist: boolean = false
       //this.hasDistributor = this.profile.Permissions
     }
     if (this.user.username == "admin") {
       this.hasDistributor = true;
       this.hasCustomer = true;
-      this.hasInstrument = true;
-      this.hasSparePart = true;
-      this.hasUserProfile = true;
-      this.hasProfile = true;
-      this.hasCurrency = true;
       this.hasCountry = true;
+      this.hasCurrency = true;
+      this.hasSparePart = true;
+      this.hasInstrument = true;
       this.hasSearch = true;
-      this.hasMaster = true;
+      this.hasUserProfile = true;
       this.hasexport = true;
+      this.hasProfile = true;
       this.hasTravelDetails = true;
-      this.hasStayDetails = true;
+      this.hasAmc = true;
       this.hasVisaDetails = true;
+      this.hasOfferRequest = true;
       this.hasLocalExpenses = true;
+      this.hasServiceRequest = true;
+      this.hasStayDetails = true;
+      this.hasServiceReport = true;
       this.hascustomersatisfactionsurveylist = true;
+      this.hasSparePartRecommended = true;
+      this.hasMaster = true;
+      this.hasCustomerSparePartsInventory = true;
+
     }
 
     this.listTypeService
