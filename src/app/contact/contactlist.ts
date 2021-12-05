@@ -188,24 +188,32 @@ export class ContactListComponent implements OnInit {
       cellRendererParams: {
         inRouterLink: '/contact/' + this.type + '/' + this.masterId + '/',
         deleteLink: 'C',
-        deleteaccess : this.hasDeleteAccess
+        deleteaccess: this.hasDeleteAccess
       },
-    },{
+    }, {
       headerName: 'First Name',
       field: 'fname',
       filter: true,
       enableSorting: true,
       editable: false,
-        sortable: true,
-        tooltipField: 'fname',
+      sortable: true,
+      tooltipField: 'fname',
+    }, {
+      headerName: 'Last Name',
+      field: 'lname',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'lname',
     }, {
       headerName: 'Email',
-        field: 'pemail',
+      field: 'pemail',
       filter: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'pemail',
-      },
+      editable: false,
+      sortable: true,
+      tooltipField: 'pemail',
+    },
 
     ]
   }
@@ -223,21 +231,29 @@ export class ContactListComponent implements OnInit {
         inRouterLink: '/contact/' + this.type + '/' + this.masterId + '/' + this.detailId + '/',
         deleteaccess: this.hasDeleteAccess
       },
-    },{
+    }, {
       headerName: 'first Name',
       field: 'fname',
       filter: true,
       enableSorting: true,
       editable: false,
-        sortable: true,
-        tooltipField: 'fname',
+      sortable: true,
+      tooltipField: 'fname',
+    }, {
+      headerName: 'Last Name',
+      field: 'lname',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'lname',
     }, {
       headerName: 'email',
       field: 'pemail',
       filter: true,
       editable: false,
-        sortable: true,
-        tooltipField: 'pemail',
+      sortable: true,
+      tooltipField: 'pemail',
     },
 
     ]
