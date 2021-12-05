@@ -418,7 +418,7 @@ export class ServiceReportComponent implements OnInit {
             this.ServiceReportform.patchValue({"workCompletedstr": data.object.workCompleted == true ? "0" : "1"});
             this.ServiceReportform.patchValue({"workfinishedstr": data.object.workfinished == true ? "0" : "1"});
             this.ServiceReportform.patchValue({"interruptedstr": data.object.interrupted == true ? "0" : "1"});
-            this.ServiceReportform.controls['instrument'].setValue(data.object.instrument);
+            this.ServiceReportform.controls['instrument'].setValue({serialnos: data.object.instrument});
             this.workdonelist = data.object.lstWorkdone;
             this.workTime = data.object.lstWorktime;
 
@@ -548,7 +548,7 @@ export class ServiceReportComponent implements OnInit {
       this.ServiceReport.engsignature = this.signaturePadcust.toDataURL();
     }
 
-    this.ServiceReport.instrument = this.ServiceReportform.get('instrument').value;
+    this.ServiceReport.instrument = this.ServiceReport.instrument.serialnos
     if (this.ServiceReportId == null) {
 
       this.ServiceReportService.save(this.ServiceReport)

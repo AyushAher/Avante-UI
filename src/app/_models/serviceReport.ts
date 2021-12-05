@@ -5,7 +5,7 @@ export class ServiceReport {
   department: string;
   country: string;
   town: string;
-  instrument: string;
+  instrument: any;
   respInstrument: string;
   labChief: string;
   computerarlsn: string;
