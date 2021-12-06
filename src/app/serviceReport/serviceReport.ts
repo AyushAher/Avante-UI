@@ -241,7 +241,7 @@ export class ServiceReportComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SCUST");
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SRREP");
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
         this.hasAddAccess = profilePermission[0].create;

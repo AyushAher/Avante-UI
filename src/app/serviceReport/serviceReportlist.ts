@@ -1,13 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { User, Customer, Country, DistributorRegion, ProfileReadOnly, ServiceReport } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import {Country, ProfileReadOnly, ServiceReport, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
-import { AccountService, AlertService, CustomerService, CountryService, NotificationService, ProfileService, ServiceReportService } from '../_services';
-import { RenderComponent } from '../distributor/rendercomponent';
+import {
+  AccountService,
+  AlertService,
+  CountryService,
+  CustomerService,
+  NotificationService,
+  ProfileService,
+  ServiceReportService
+} from '../_services';
+import {RenderComponent} from '../distributor/rendercomponent';
 
 
 @Component({
@@ -29,7 +37,7 @@ export class ServiceReportListComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
-  private api: GridApi;  
+  private api: GridApi;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,15 +51,15 @@ export class ServiceReportListComponent implements OnInit {
     private profileService: ProfileService,
     private ServiceReportService: ServiceReportService
   ) {
-    
+
   }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SCUST");
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SRREP");
       if (profilePermission.length > 0) {
         this.hasAddAccess = profilePermission[0].create;
         this.hasDeleteAccess = profilePermission[0].delete;
@@ -75,13 +83,13 @@ export class ServiceReportListComponent implements OnInit {
           this.loading = false;
         }
       });
-    this.columnDefs = this.createColumnDefs(); 
+    this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
-    this.router.navigate(['servicereport']);  
+    this.router.navigate(['servicereport']);
   }
- 
+
 
   private createColumnDefs() {
     return [{
@@ -135,7 +143,7 @@ export class ServiceReportListComponent implements OnInit {
         sortable: true
       }
     ]
-  }  
+  }
 
   onGridReady(params): void {
     this.api = params.api;
