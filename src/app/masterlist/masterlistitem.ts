@@ -99,7 +99,7 @@ export class MasterListItemComponent implements OnInit {
       });
     var list2 = JSON.parse(localStorage.getItem(this.listid))
     if (list2 != null) {
-      if (list2[0].listCode == environment.configTypeId) {
+      if (list2[0].listCode == environment.configTypeCode) {
         this.addAccess = true;
       }
     }
