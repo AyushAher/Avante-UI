@@ -184,6 +184,7 @@ export class ServiceRequestComponent implements OnInit {
               this.actionList.forEach((value, index) => {
                 value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
               })
+              this.api.refreshCells()
             },
             error: error => {
               // this.alertService.error(error);
@@ -202,7 +203,7 @@ export class ServiceRequestComponent implements OnInit {
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SCUST");
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SRREQ");
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
         this.hasAddAccess = profilePermission[0].create;
@@ -355,15 +356,16 @@ export class ServiceRequestComponent implements OnInit {
           this.loading = false;
         }
       });
+
     this.dropdownSettings = {
-      idField: 'listTypeItemId',
+      idField: 'itemCode',
       textField: 'itemname',
     };
 
     this.listTypeService.getById("SRT")
       .pipe(first())
       .subscribe({
-        next: (data: ListTypeItem[]) => {
+        next: (data: any) => {
           this.subreqtypelist = data;
         },
         error: error => {
@@ -387,25 +389,25 @@ export class ServiceRequestComponent implements OnInit {
 
     this.serviceRequestId = this.route.snapshot.paramMap.get('id');
     if (this.serviceRequestId != null) {
-      this.hasAddAccess = false;
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
+
+      this.hasAddAccess = this.user.username == "admin";
+
       this.serviceRequestService.getById(this.serviceRequestId)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.accepted = data.object.accepted;
-            console.log(this.accepted)
             this.getAllInstrument(data.object.siteid);
             var subreq = data.object.subrequesttypeid.split(',');
             let items: ListTypeItem[] = [];
+
             if (subreq.length > 0) {
               for (var i = 0; i < subreq.length; i++) {
                 let t = new ListTypeItem();
-                t.listTypeItemId = subreq[i];
+                t.itemCode = subreq[i];
                 items.push(t);
               }
+
               this.serviceRequestform.patchValue({"subrequesttypeid": items});
 
               this.fileshareService.list(this.serviceRequestId)
@@ -637,7 +639,7 @@ export class ServiceRequestComponent implements OnInit {
 
       if (this.serviceRequestform.get('subrequesttypeid').value.length > 0) {
         var selectarray = this.serviceRequestform.get('subrequesttypeid').value;
-        this.serviceRequest.subrequesttypeid = selectarray.map(x => x.listTypeItemId).join(',');
+        this.serviceRequest.subrequesttypeid = selectarray.map(x => x.itemCode).join(',');
       }
 
       if (this.IsCustomerView == true) {
@@ -681,7 +683,7 @@ export class ServiceRequestComponent implements OnInit {
 
       if (this.serviceRequestform.get('subrequesttypeid').value.length > 0) {
         var selectarray = this.serviceRequestform.get('subrequesttypeid').value;
-        this.serviceRequest.subrequesttypeid = selectarray.map(x => x.listTypeItemId).join(',');
+        this.serviceRequest.subrequesttypeid = selectarray.map(x => x.itemCode).join(',');
       }
 
       this.serviceRequestService.update(this.serviceRequestId, this.serviceRequest)
@@ -715,7 +717,6 @@ export class ServiceRequestComponent implements OnInit {
 
   Accepted(isAccepted?) {
     this.accepted = true
-    console.log(this.serviceRequestId)
     let serviceRequest = new ServiceRequest();
     serviceRequest.id = this.serviceRequestId;
     serviceRequest.accepted = true
@@ -728,7 +729,6 @@ export class ServiceRequestComponent implements OnInit {
           this.notificationService.showSuccess(data.resultMessage, "Success");
         }, error: (error) => {
 
-          console.log(serviceRequest)
           this.notificationService.showError(error, "Error");
         }
       })
@@ -741,12 +741,13 @@ export class ServiceRequestComponent implements OnInit {
     this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
     this.servicereport.country = this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name;
     this.servicereport.problem = this.breakdownlist.filter(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)[0].itemname + "||" + this.serviceRequestform.get('alarmdetails').value + '||' + this.serviceRequestform.get('remarks').value;
-    this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.listTypeItemId == environment.INS)).length > 0 ? true : false;
-    this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.listTypeItemId == environment.ANAS)).length > 0 ? true : false;
-    this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.listTypeItemId == environment.PRMN1)).length > 0 ? true : false;
-    this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.listTypeItemId == environment.REWK)).length > 0 ? true : false;
-    this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.listTypeItemId == environment.CRMA)).length > 0 ? true : false;
 
+    this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.INS)).length > 0;
+    this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.ANAS)).length > 0;
+    this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.PRMN1)).length > 0;
+    this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.REWK)).length > 0;
+    this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.CRMA)).length > 0;
+    console.log(this.servicereport)
     if (this.customerId != null) {
       this.customerService.getById(this.customerId)
         .pipe(first())
@@ -754,7 +755,6 @@ export class ServiceRequestComponent implements OnInit {
           next: (data: any) => {
             this.custcityname = data.object.address.city;
             this.servicereport.town = this.custcityname;
-            console.log(data)
             //this.getPdffile(data.object.filePath);
             this.servicereport
             this.servicereportService.save(this.servicereport)
@@ -1298,7 +1298,13 @@ export class ServiceRequestComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        template: `<button type="button" class="btn btn-link" data-action-type="download" ><i class="fas fas fa-download" title="Edit Value" data-action-type="download"></i></button>`
+        cellRenderer: (params) => {
+          if (params.value != null) {
+            return `<button type="button" class="btn btn-link" data-action-type="download" ><i class="fas fas fa-download" title="Edit Value" data-action-type="download"></i></button>`
+          } else {
+            return ``
+          }
+        }
       },
       {
         headerName: 'Date',
