@@ -51,7 +51,6 @@ export class NavSideMenuComponent {
     private notificationService: NotificationService,
     private listTypeService: ListTypeService,
   ) {
-    debugger;
     this.user = this.accountService.userValue;
     this.profile = this.profileService.userProfileValue;
 

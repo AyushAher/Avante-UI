@@ -1,13 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { ListType, ProfileReadOnly, User } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import {ListType, ProfileReadOnly, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
-import { AccountService, AlertService, MasterListService, NotificationService, ProfileService } from '../_services';
-import { RenderComponent } from '../distributor/rendercomponent';
+import {
+  AccountService,
+  AlertService,
+  ListTypeService,
+  MasterListService,
+  NotificationService,
+  ProfileService
+} from '../_services';
+import {RenderComponent} from '../distributor/rendercomponent';
 
 
 @Component({
@@ -39,6 +46,7 @@ export class MasterListComponent implements OnInit {
     private masterlistService: MasterListService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
+    private listTypeService: ListTypeService,
   ) {
 
   }
@@ -66,8 +74,22 @@ export class MasterListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          //debugger;
+          // debugger;
           this.masterList = data.object;
+          data.object.forEach((value1) => {
+
+            this.listTypeService.getByListId(value1.id)
+              .pipe(first())
+              .subscribe({
+                next: (data1: any) => {
+
+                  data1.object.forEach((value) => {
+                    localStorage.setItem(value.listTypeId, JSON.stringify(data1.object));
+                  })
+
+                }
+              })
+          })
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -90,7 +112,7 @@ export class MasterListComponent implements OnInit {
         width: 100,
         cellRendererFramework: RenderComponent,
         cellRendererParams: {
-          inRouterLink: '/masterlistitem'          
+          inRouterLink: '/masterlistitem'
         },
       },
       {

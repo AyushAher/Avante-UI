@@ -1,18 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { ListTypeItem, ResultMsg, ProfileReadOnly, User } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
-
-import { environment } from '../../environments/environment';
-import {
-  AccountService, AlertService, ListTypeService, NotificationService, ProfileService
-} from '../_services';
-import { MRenderComponent } from './rendercomponent';
-import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
-import { ModelContentComponent } from './modelcontent';
+import {ListTypeItem, ProfileReadOnly, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {AccountService, AlertService, ListTypeService, NotificationService, ProfileService} from '../_services';
+import {MRenderComponent} from './rendercomponent';
+import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
+import {ModelContentComponent} from './modelcontent';
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-masterlistitem',
@@ -71,7 +68,7 @@ export class MasterListItemComponent implements OnInit {
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     }
-    
+
     this.masterlistitemform = this.formBuilder.group({
       itemname: ['', Validators.required],
       code: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(5)])],
@@ -82,31 +79,32 @@ export class MasterListItemComponent implements OnInit {
 
     this.listid = this.route.snapshot.paramMap.get('id');
     if (this.listid != null) {
-      this.hasAddAccess = false;
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
+
+      this.hasAddAccess = this.user.username == "admin";
     }
     this.listTypeService.getByListId(this.listid)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.itemList = data.object;
+          this.itemList = data.object
           this.masterlistitemform.get("listName").setValue(this.itemList[0].listName);
           this.masterlistitemform.get("listTypeId").setValue(this.itemList[0].listTypeId);
-          
-        //  this.masterlistitemform.patchValue(this.itemList[0]);
+
+          //  this.masterlistitemform.patchValue(this.itemList[0]);
         },
         error: error => {
           this.notificationService.showError(error, "Error");
           this.loading = false;
         }
       });
-    if (this.listid == environment.configTypeId) {
-      this.addAccess = true;
+    var list2 = JSON.parse(localStorage.getItem(this.listid))
+    if (list2 != null) {
+      if (list2[0].listCode == environment.configTypeId) {
+        this.addAccess = true;
+      }
     }
-      this.columnDefs = this.createColumnDefs();
-    
+    this.columnDefs = this.createColumnDefs();
+
     //if (this.id != null) {
     //  this.listTypeService.getById(this.id)
     //    .pipe(first())
@@ -127,7 +125,7 @@ export class MasterListItemComponent implements OnInit {
     const initialState  = {
       itemId: param
     };
-    this.bsModalRef = this.modalService.show(ModelContentComponent, { initialState });
+    this.bsModalRef = this.modalService.show(ModelContentComponent, {initialState});
   }
 
   close() {
