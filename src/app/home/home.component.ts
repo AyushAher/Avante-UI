@@ -24,35 +24,37 @@ export class HomeComponent {
     this.user = this.accountService.userValue;
 
     if (this.user.userProfileId != null) {
-
       (async () => {
         // Do something before delay
         // console.log('before delay')
-        this.profileServicce.getUserProfile(this.user.userProfileId);
-        await delay(1000);
+        if (this.user.username != "admin") {
+          this.profileServicce.getUserProfile(this.user.userProfileId);
+          await delay(1000);
+          this.listTypeService
+            .getById("ROLES")
+            .pipe(first())
+            .subscribe({
+              next: (data: ListTypeItem[]) => {
+                this.roles = data;
+                this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
+                console.log(this.userrole)
+                if (this.userrole != [] && this.userrole != null) {
+                  switch (this.userrole[0].itemname) {
+                    case "Distributor Support":
+                      this.router.navigate(["distdashboard"]);
+                      break;
 
-    this.listTypeService
-      .getById("ROLES")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.roles = data;
-          this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
-          console.log(this.userrole)
-          switch (this.userrole[0].itemname) {
-            case "Distributor Support":
-              this.router.navigate(["distdashboard"]);
-              break;
-
-            case "Customer":
-              this.router.navigate(["custdashboard"]);
-              break;
-          }
-        },
-        error: (error) => {
-          this.notificationService.showError(error, "Error");
-        },
-      });
+                    case "Customer":
+                      this.router.navigate(["custdashboard"]);
+                      break;
+                  }
+                }
+              },
+              error: (error) => {
+                this.notificationService.showError(error, "Error");
+              },
+            });
+        }
 
         // Do something after
         // console.log('after delay')
