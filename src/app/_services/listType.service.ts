@@ -1,30 +1,24 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
-import { ListTypeItem } from '../_models';
+import {environment} from '../../environments/environment';
+import {ListTypeItem} from '../_models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class ListTypeService {
-  private CurrencySubject: BehaviorSubject<ListTypeItem>;
-  public currency: Observable<ListTypeItem>;
+  private roleSubject: BehaviorSubject<ListTypeItem>;
+  public role: Observable<ListTypeItem>;
 
   constructor(
     private router: Router,
     private http: HttpClient
   ) {
-    //this.distrubutorSubject = new BehaviorSubject<Distributor>();
-    //this.user = this.distrubutorSubject.asObservable();
+    this.roleSubject = new BehaviorSubject<ListTypeItem>(JSON.parse(localStorage.getItem('roles')));
+    this.role = this.roleSubject.asObservable();
   }
-
-  //public get userValue(): User {
-  //    return this.userSubject.value;
-  //}
-
-
 
   save(listType: ListTypeItem) {
     return this.http.post(`${environment.apiUrl}/ListItems`, listType);
@@ -36,6 +30,21 @@ export class ListTypeService {
 
   getById(code: string) {
     return this.http.get<ListTypeItem[]>(`${environment.apiUrl}/ListItems/${code}`);
+  }
+
+  public get roleValue(): ListTypeItem {
+    return this.roleSubject.value;
+  }
+
+  getItemById(id: string) {
+    return this.http.get<ListTypeItem[]>(`${environment.apiUrl}/ListItems/itemid/${id}`)
+      .pipe(map(x => {
+        localStorage.setItem('roles', JSON.stringify(x))
+        if (x != null) {
+          this.roleSubject.next(x[0]);
+        }
+        return x;
+      }));
   }
 
   getByListId(listid: string) {

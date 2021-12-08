@@ -168,6 +168,8 @@ export class ServiceRequestComponent implements OnInit {
               this.actionList.forEach((value, index) => {
                 value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
               })
+              this.api.refreshCells()
+
             },
             error: error => {
               // this.alertService.error(error);
@@ -175,16 +177,20 @@ export class ServiceRequestComponent implements OnInit {
               this.loading = false;
             }
           });
-
         this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
           .subscribe({
             next: (data: any) => {
               this.engineerCommentList = data.object.engComments;
+
+              this.engineerCommentList.forEach((value, index) => {
+                value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
+              })
               this.actionList = data.object.engAction;
               this.actionList.forEach((value, index) => {
                 value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
               })
               this.api.refreshCells()
+
             },
             error: error => {
               // this.alertService.error(error);
@@ -193,8 +199,8 @@ export class ServiceRequestComponent implements OnInit {
             }
           });
       }
-    });
-  }
+    })
+    }
 
   ngOnInit() {
 
@@ -219,11 +225,17 @@ export class ServiceRequestComponent implements OnInit {
       this.hasReadAccess = true;
     }
 
-    if (this.user.roleId == environment.custRoleId) {
+
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
+
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
+
+    if (role == environment.custRoleCode) {
       this.IsCustomerView = true;
       this.IsDistributorView = false;
       this.IsEngineerView = false;
-    } else if (this.user.roleId == environment.distRoleId) {
+    } else if (role == environment.distRoleCode) {
       this.IsCustomerView = false;
       this.IsDistributorView = true;
       this.IsEngineerView = false;
@@ -747,7 +759,7 @@ export class ServiceRequestComponent implements OnInit {
     this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.PRMN1)).length > 0;
     this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.REWK)).length > 0;
     this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.CRMA)).length > 0;
-    console.log(this.servicereport)
+
     if (this.customerId != null) {
       this.customerService.getById(this.customerId)
         .pipe(first())
@@ -769,7 +781,7 @@ export class ServiceRequestComponent implements OnInit {
                     this.srAssignedHistory = new tickersAssignedHistory;
                     this.srAssignedHistory.engineerid = this.engineerid;
                     this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-                    this.srAssignedHistory.ticketstatus = "c488750a-47c4-11ec-9dbc-54bf64020316";
+                    this.srAssignedHistory.ticketstatus = "26fbd954-50dc-11ec-8b07-1c39472d435b";
                     this.srAssignedHistory.assigneddate = new Date()
 
                     this.srAssignedHistoryService.save(this.srAssignedHistory)
@@ -817,7 +829,7 @@ export class ServiceRequestComponent implements OnInit {
               this.srAssignedHistory = new tickersAssignedHistory;
               this.srAssignedHistory.engineerid = this.engineerid;
               this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-              this.srAssignedHistory.ticketstatus = "c488750a-47c4-11ec-9dbc-54bf64020316";
+              this.srAssignedHistory.ticketstatus = "26fbd954-50dc-11ec-8b07-1c39472d435b";
               this.srAssignedHistory.assigneddate = new Date()
 
               this.srAssignedHistoryService.save(this.srAssignedHistory)
@@ -857,7 +869,7 @@ export class ServiceRequestComponent implements OnInit {
       this.srAssignedHistory = new tickersAssignedHistory;
       this.srAssignedHistory.engineerid = this.engineerid;
       this.srAssignedHistory.servicerequestid = sr.id;
-      this.srAssignedHistory.ticketstatus = "728d83a4-716a-48d7-8080-e5948afb4525";
+      this.srAssignedHistory.ticketstatus = "26f4afde-50dc-11ec-8b07-1c39472d435b";
       this.srAssignedHistory.assigneddate = new Date()
 
       this.srAssignedHistoryService.save(this.srAssignedHistory)

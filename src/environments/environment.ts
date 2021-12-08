@@ -12,9 +12,9 @@ export const environment = {
   uiUrl: 'https://localhost:44378/',
   configTypeCode: "CONTY",// "f0bf6d8d-739a-11eb-adfc-0a91af0598e6" //"4c155b3e-7526-11eb-97d1-1c39472d435b"
 
-  custRoleId: "36eb70f8-0247-11ec-8e31-fc45964f576b",
-  distRoleId: "36fafd78-0247-11ec-8e31-fc45964f576b",
-  engRoleId: "374154ac-0247-11ec-8e31-fc45964f576b",
+  custRoleCode: "RCUST",
+  distRoleCode: "RDTSP",
+  engRoleCode: "RENG",
 
   INS: "INS",
   ANAS: "ANAS",

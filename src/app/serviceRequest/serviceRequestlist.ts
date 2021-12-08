@@ -12,6 +12,7 @@ import {
   ContactService,
   CountryService,
   CustomerService,
+  ListTypeService,
   NotificationService,
   ProfileService,
   ServiceRequestService
@@ -57,7 +58,8 @@ export class ServiceRequestListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private serviceRequestService: ServiceRequestService,
-    private contcactservice: ContactService
+    private contcactservice: ContactService,
+    private listTypeService: ListTypeService
   ) {
 
   }
@@ -66,7 +68,7 @@ export class ServiceRequestListComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SCUST");
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SRREQ");
       if (profilePermission.length > 0) {
         this.hasAddAccess = profilePermission[0].create;
         this.hasDeleteAccess = profilePermission[0].delete;
@@ -77,11 +79,16 @@ export class ServiceRequestListComponent implements OnInit {
       this.hasDeleteAccess = true;
     }
 
-    if (this.user.roleId == environment.custRoleId) {
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
+
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
+
+    if (role == environment.custRoleCode) {
       this.IsCustomerView = true;
       this.IsDistributorView = false;
       this.IsEngineerView = false;
-    } else if (this.user.roleId == environment.distRoleId) {
+    } else if (role == environment.distRoleCode) {
       this.IsCustomerView = false;
       this.IsDistributorView = true;
       this.IsEngineerView = false;
@@ -94,7 +101,6 @@ export class ServiceRequestListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data)
           this.distId = data.object.defdistid;
           this.getallrecored();
         },
@@ -276,7 +282,7 @@ export class ServiceRequestListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data)
+
           this.srCustList = data.object.filter(x => x.createdby == this.user.userId);
           this.srDistList = data.object.filter(x => x.distid == this.distId);
           this.srEngList = data.object.filter(x => x.assignedto == this.user.contactId);
