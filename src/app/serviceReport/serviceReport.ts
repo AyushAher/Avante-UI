@@ -334,7 +334,7 @@ export class ServiceReportComponent implements OnInit {
         },
         error: error => {
           //  this.alertService.error(error);
-                              console.log(error);
+
 
           this.notificationService.showError(error, "Error");
           this.loading = false;
@@ -350,7 +350,7 @@ export class ServiceReportComponent implements OnInit {
         },
         error: error => {
           // this.alertService.error(error);
-          console.log(error)
+
 
           this.notificationService.showError(error, "Error");
           this.loading = false;
@@ -364,7 +364,7 @@ export class ServiceReportComponent implements OnInit {
           this.departmentList = data;
         },
         error: error => {
-          console.log(error)
+
           this.notificationService.showError(error, "Error");
           this.loading = false;
         }
@@ -377,7 +377,7 @@ export class ServiceReportComponent implements OnInit {
           this.brandlist = data;
         },
         error: error => {
-          console.log(error)
+
           this.notificationService.showError(error, "Error");
           this.loading = false;
         }
@@ -390,7 +390,7 @@ export class ServiceReportComponent implements OnInit {
           this.listTypeItems = data;
         },
         error: error => {
-          console.log(error)
+
           this.notificationService.showError(error, "Error");
           this.loading = false;
         }
@@ -438,7 +438,7 @@ export class ServiceReportComponent implements OnInit {
                       },
                       error: error => {
                         //  this.alertService.error(error);
-                        console.log(error);
+
                         this.notificationService.showError(error, "Error");
                         this.loading = false;
                       }
@@ -453,14 +453,14 @@ export class ServiceReportComponent implements OnInit {
                         this.allcontactlist = data.object;
                       },
                       error: error => {
-                        console.log(error)
+
                         this.notificationService.showError(error, "Error");
                         this.loading = false;
                       }
                     });
                 },
                 error: error => {
-                  console.log(error)
+
                   this.notificationService.showError(error, "Error");
                   this.loading = false;
                 }
@@ -496,7 +496,7 @@ export class ServiceReportComponent implements OnInit {
             this.PdffileData = data.object;
           },
           error: (err: any) => {
-            console.log(err)
+
             this.notificationService.showError(err, "Error");
           },
         });
@@ -564,7 +564,7 @@ export class ServiceReportComponent implements OnInit {
               this.router.navigate(["ServiceReportlist"]);
             }
             else {
-              console.log(data.resultMessage)
+
 
               this.notificationService.showError(data.resultMessage, "Error");
             }
@@ -573,7 +573,7 @@ export class ServiceReportComponent implements OnInit {
           },
           error: error => {
             // this.alertService.error(error);
-            console.log(error)
+
             this.notificationService.showError(error, "Error");
             this.loading = false;
           }
@@ -597,7 +597,7 @@ export class ServiceReportComponent implements OnInit {
               this.router.navigate(["servicereportlist"]);
             }
             else {
-              console.log(data.resultMessage)
+
 
               this.notificationService.showError(data.resultMessage, "Error");
             }
@@ -679,13 +679,13 @@ export class ServiceReportComponent implements OnInit {
                     this.notificationService.showSuccess(d.resultMessage, "Success");
                   }
                   else {
-                    console.log(d.resultMessage)
+
 
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
                 error: error => {
-                  console.log(error)
+
                   this.notificationService.showError(error, "Error");
                   this.loading = false;
                 }
@@ -715,13 +715,13 @@ export class ServiceReportComponent implements OnInit {
                     this.notificationService.filter("itemadded");
                   }
                   else {
-                    console.log(d.resultMessage)
+
 
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
                 error: error => {
-                  console.log(error)
+
                   this.notificationService.showError(error, "Error");
                   this.loading = false;
                 }
@@ -741,14 +741,14 @@ export class ServiceReportComponent implements OnInit {
                   // this.listvalue.get("configValue").setValue("");
                 }
                 else {
-                  console.log(data.resultMessage)
+
 
                   this.notificationService.showError(data.resultMessage, "Error");
                 }
                 this.loading = false;
               },
               error: error => {
-                console.log(error)
+
                 this.notificationService.showError(error, "Error");
                 this.loading = false;
               }
@@ -776,13 +776,13 @@ export class ServiceReportComponent implements OnInit {
                     this.notificationService.filter("itemadded");
                   }
                   else {
-                    console.log(d.resultMessage)
+
 
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
                 // error: error => {
-                // console.log(error)
+
                 //   this.notificationService.showError(error, "Error");
                 //   this.loading = false;
                 // }
@@ -803,13 +803,13 @@ export class ServiceReportComponent implements OnInit {
                     //this.configList = data.object;
                     // this.listvalue.get("configValue").setValue("");
                   } else {
-                    console.log(data.resultMessage)
+
                     this.notificationService.showError(data.resultMessage, "Error");
                   }
                   this.loading = false;
                 },
                 error: error => {
-                  console.log(error)
+
                   this.notificationService.showError(error, "Error");
                   this.loading = false;
                 }
@@ -842,13 +842,13 @@ export class ServiceReportComponent implements OnInit {
                     this.notificationService.filter("itemadded");
                   }
                   else {
-                    console.log(d.resultMessage)
+
 
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
                 error: error => {
-                  console.log(error)
+
                   this.notificationService.showError(error, "Error");
                   this.loading = false;
                 }
@@ -902,14 +902,14 @@ export class ServiceReportComponent implements OnInit {
             //this.configList = data.object;
             // this.listvalue.get("configValue").setValue("");
           } else {
-            console.log(data.resultMessage)
+
 
             this.notificationService.showError(data.resultMessage, "Error");
           }
           this.loading = false;
         },
         error: error => {
-          console.log(error)
+
           this.notificationService.showError(error, "Error");
           this.loading = false;
         }
@@ -950,7 +950,7 @@ export class ServiceReportComponent implements OnInit {
     //         //this.pdfFileName = file.name;
     //       },
     //       error: error => {
-    // console.log(error)
+
     //         this.notificationService.showError(error, "Error");
     //       }
     //     });
@@ -1077,7 +1077,7 @@ export class ServiceReportComponent implements OnInit {
           this.configValueList = data.object;
         },
         error: error => {
-          console.log(error)
+
           this.notificationService.showError(error, "Error");
           this.loading = false;
         }
@@ -1119,14 +1119,14 @@ export class ServiceReportComponent implements OnInit {
             //this.configList = data.object;
             // this.listvalue.get("configValue").setValue("");
           } else {
-            console.log(data.resultMessage)
+
 
             this.notificationService.showError(data.resultMessage, "Error");
           }
           this.loading = false;
         },
         error: error => {
-          console.log(error)
+
           this.notificationService.showError(error, "Error");
           this.loading = false;
         }
@@ -1261,19 +1261,19 @@ export class ServiceReportComponent implements OnInit {
                           //this.getPdffile(data.object.filePath);
                         },
                         error: error => {
-                          console.log(error)
+
                           this.notificationService.showError(error, "Error");
                           this.loading = false;
                         }
                       });
                   }
                   else {
-                    console.log(d.resultMessage)
+
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
                 error: error => {
-                  console.log(error)
+
                   this.notificationService.showError(error, "Error");
                   this.loading = false;
                 }
@@ -1298,7 +1298,7 @@ export class ServiceReportComponent implements OnInit {
 
           },
           error: error => {
-            console.log(error)
+
             this.notificationService.showError(error, "Error");
             // this.imageUrl = this.noimageData;
           }
@@ -1365,13 +1365,13 @@ export class ServiceReportComponent implements OnInit {
                 //this.router.navigate(["ServiceReportlist"]);
               }
               else {
-                console.log(data.resultMessage)
+
                 this.notificationService.showError(data.resultMessage, "Error");
               }
               this.loading = false;
             },
             error: error => {
-              console.log(error)
+
               this.notificationService.showError(error, "Error");
               this.loading = false;
             }
