@@ -527,6 +527,8 @@ export class ServiceReportComponent implements OnInit {
     this.isSave = true;
     this.loading = true;
     this.ServiceReport = this.ServiceReportform.value;
+    let nextvisitscheduled = new Date(this.ServiceReport.nextvisitscheduled);
+    this.ServiceReport.nextvisitscheduled = this.datepipe.transform(nextvisitscheduled, "MM/dd/yyyy")
     this.ServiceReport.workCompleted = this.ServiceReport.workCompletedstr == "0" ? true : false;
     this.ServiceReport.workfinished = this.ServiceReport.workfinishedstr == "0" ? true : false;
     this.ServiceReport.interrupted = this.ServiceReport.interruptedstr == "0" ? true : false;
@@ -534,8 +536,7 @@ export class ServiceReportComponent implements OnInit {
       if (this.custsign != null) {
         this.ServiceReport.custsignature = this.custsign;
       }
-    }
-    else {
+    } else {
       this.ServiceReport.custsignature = this.signaturePad.toDataURL();
     }
 
@@ -1148,9 +1149,9 @@ export class ServiceReportComponent implements OnInit {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
           } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`
           } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
-            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`
           }
         }
       },
