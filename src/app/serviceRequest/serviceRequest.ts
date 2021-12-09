@@ -781,7 +781,7 @@ export class ServiceRequestComponent implements OnInit {
                     this.srAssignedHistory = new tickersAssignedHistory;
                     this.srAssignedHistory.engineerid = this.engineerid;
                     this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-                    this.srAssignedHistory.ticketstatus = "26fbd954-50dc-11ec-8b07-1c39472d435b";
+                    this.srAssignedHistory.ticketstatus = "INPRG" ;
                     this.srAssignedHistory.assigneddate = new Date()
 
                     this.srAssignedHistoryService.save(this.srAssignedHistory)
@@ -829,7 +829,7 @@ export class ServiceRequestComponent implements OnInit {
               this.srAssignedHistory = new tickersAssignedHistory;
               this.srAssignedHistory.engineerid = this.engineerid;
               this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-              this.srAssignedHistory.ticketstatus = "26fbd954-50dc-11ec-8b07-1c39472d435b";
+              this.srAssignedHistory.ticketstatus = "INPRG";
               this.srAssignedHistory.assigneddate = new Date()
 
               this.srAssignedHistoryService.save(this.srAssignedHistory)
@@ -869,7 +869,7 @@ export class ServiceRequestComponent implements OnInit {
       this.srAssignedHistory = new tickersAssignedHistory;
       this.srAssignedHistory.engineerid = this.engineerid;
       this.srAssignedHistory.servicerequestid = sr.id;
-      this.srAssignedHistory.ticketstatus = "26f4afde-50dc-11ec-8b07-1c39472d435b";
+      this.srAssignedHistory.ticketstatus = "INPRG";
       this.srAssignedHistory.assigneddate = new Date()
 
       this.srAssignedHistoryService.save(this.srAssignedHistory)
