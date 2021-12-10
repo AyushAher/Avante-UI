@@ -99,6 +99,8 @@ import { SparepartsrecommendedComponent } from './sparepartsrecommended/sparepar
 import {CustspinventorylistComponent} from "./custspinventory/Custspinventorylist.component";
 import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
 import { SparequotedetComponent } from './Offerrequest/sparequotedet.component';
+import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
+import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
 
 @NgModule({
@@ -182,6 +184,8 @@ import { SparequotedetComponent } from './Offerrequest/sparequotedet.component';
     CustSPInventoryComponent,
     CustspinventorylistComponent,
     SparequotedetComponent,
+    PreventivemaintenancetablelistComponent,
+    PreventivemaintenancetableComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

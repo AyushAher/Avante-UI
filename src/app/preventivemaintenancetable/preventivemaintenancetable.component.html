@@ -1,0 +1,94 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="page-title my-4">
+        <div class="title_left">
+          <h3>Preventive Maintenance Table</h3>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+
+          <div class="row">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+
+                <tr>
+                  <th>Location</th>
+                  <th>Element</th>
+                  <th>Weekkly</th>
+                  <th>Monthly</th>
+                  <th>Yearly</th>
+                  <th>Every 2 Year</th>
+                  <th>Every 3 Year</th>
+                  <th>Every 5 Year</th>
+                </tr>
+
+                </thead>
+
+                <tbody>
+                <tr formArrayName="maintenance"
+                    *ngFor="let item of Form.get('maintenance')['controls']let i=index">
+
+                  <td [formGroupName]="i">
+                    <!--                    <input type="hidden" formControlName="screenId"/>-->
+                    <!--<input type="text" formControlName="screenName" readonly />-->
+                    <label>{{ getName(i).location }}</label>
+                  </td>
+
+                  <td [formGroupName]="i">{{ getName(i).element }}</td>
+
+                  <td [formGroupName]="i">
+                    <input type="checkbox" formControlName="weekly"/>
+                    <label *ngIf="getName(i).weekly==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                  </td>
+
+                  <td [formGroupName]="i">
+                    <input type="checkbox" formControlName="monthly"/>
+                    <label *ngIf="getName(i).monthly==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                  </td>
+
+                  <td [formGroupName]="i">
+                    <input type="checkbox" formControlName="yearly"/>
+                    <label *ngIf="getName(i).yearly==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                  </td>
+
+                  <td [formGroupName]="i">
+                    <input type="checkbox" formControlName="every2year"/>
+                    <label *ngIf="getName(i).every2year==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                  </td>
+
+                  <td [formGroupName]="i">
+                    <input type="checkbox" formControlName="every3year"/>
+                    <label *ngIf="getName(i).every3year==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                  </td>
+
+                  <td [formGroupName]="i">
+                    <input type="checkbox" formControlName="every5year"/>
+                    <label *ngIf="getName(i).every5year==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                  </td>
+
+                </tr>
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+          <hr/>
+          <div class="row">
+            <div class="col-md-6 col-sm-6">
+              <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/profilelist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

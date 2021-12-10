@@ -62,6 +62,8 @@ import {DistributordashboardsettingsComponent} from "./distributordashboardsetti
 import {SparepartsrecommendedComponent} from "./sparepartsrecommended/sparepartsrecommended.component";
 import {CustspinventorylistComponent} from "./custspinventory/Custspinventorylist.component";
 import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
+import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
+import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 
@@ -291,6 +293,18 @@ const routes: Routes = [
   },{
     path: "customerspinventory/:id",
     component: CustSPInventoryComponent,
+    canActivate: [AuthGuard],
+  }, {
+    path: "preventivemaintenancetablelist",
+    component: PreventivemaintenancetablelistComponent,
+    canActivate: [AuthGuard],
+  },{
+    path: "preventivemaintenancetable",
+    component: PreventivemaintenancetableComponent,
+    canActivate: [AuthGuard],
+  },{
+    path: "preventivemaintenancetable/:id",
+    component: PreventivemaintenancetableComponent,
     canActivate: [AuthGuard],
   },
   {path: 'account', loadChildren: accountModule},

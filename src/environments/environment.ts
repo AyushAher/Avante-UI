@@ -6,8 +6,8 @@ export const environment = {
   //for dev:
 
   // production: false,
-  // apiUrl: 'https://localhost:44317/api',
-  // uiUrl: 'https://localhost:44378/',
+  apiUrl: 'https://localhost:44317/api',
+  uiUrl: 'https://localhost:44378/',
   // configTypeCode: "CONTY",// "f0bf6d8d-739a-11eb-adfc-0a91af0598e6" //"4c155b3e-7526-11eb-97d1-1c39472d435b"
   //
   // custRoleCode: "RCUST",
@@ -36,8 +36,8 @@ export const environment = {
   // for prod
 
   production: true,
-  apiUrl: 'https://service.avantgardeinc.com/api/api',
-  uiUrl: 'https://service.avantgardeinc.com/',
+  // apiUrl: 'https://service.avantgardeinc.com/api/api',
+  // uiUrl: 'https://service.avantgardeinc.com/',
 
   custRoleCode: "RCUST",
   distRoleCode: "RDTSP",
