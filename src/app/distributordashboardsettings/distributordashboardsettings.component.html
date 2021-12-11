@@ -29,10 +29,10 @@
                      data-parent="#accordionExample">
                   <div class="card-body row">
                     <div class="input py-2 col-md-6" style="font-size:14px" *ngFor="let i of rowdata1">
-                      <input class="single-checkbox-Dist-1" type="checkbox" id="{{i.listTypeItemId}}"
+                      <input class="single-checkbox-Dist-1" type="checkbox" id="chk_{{i.listTypeItemId}}"
                              (change)="toggle($event.target.value,'row1')"
                              value="{{i.listTypeItemId}}" style="margin-right: 5px">
-                      <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
+                      <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
 
                     </div>
                   </div>
@@ -56,10 +56,11 @@
                      data-parent="#accordionExample">
                   <div class="card-body row">
                     <div class="input py-2 col-md-4" style="font-size:14px" *ngFor="let i of rowdata2">
-                      <input type="checkbox" id="{{i.listTypeItemId}}" (change)="toggle($event.target.value, 'row2')"
+                      <input type="checkbox" id="chk_{{i.listTypeItemId}}"
+                             (change)="toggle($event.target.value, 'row2')"
                              value="{{i.listTypeItemId}}" style="margin-right: 5px">
 
-                      <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
+                      <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
                     </div>
                   </div>
                   <div *ngIf="row2Error" class="danger px-4"><p style="color:red">You can choose only 2 options</p>
@@ -73,7 +74,7 @@
           <br><br><br>
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px;">
-              <button *ngIf="hasAddAccess || hasUpdateAccess" class="btn btn-primary" type="submit">
+              <button class="btn btn-primary" type="submit">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>

@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {ListTypeItem, ProfileReadOnly, ResultMsg, User} from "../_models";
+import {ListTypeItem, ProfileReadOnly, User} from "../_models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {
   AccountService,
   AlertService,
-  DistributordashboardsettingsService,
+  CustdashboardsettingsService,
   ListTypeService,
   NotificationService,
   ProfileService
@@ -31,21 +31,20 @@ export class DistributordashboardsettingsComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   user: User
-
-  row1Data = []
-  row2Data = []
-
   rowdata1: ListTypeItem[];
   rowdata2: ListTypeItem[];
   row2Error: boolean = false;
   row1Error: boolean = false;
+
+  Data = []
+  localData: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private Service: DistributordashboardsettingsService,
+    private Service: CustdashboardsettingsService,
     private alertService: AlertService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
@@ -74,8 +73,11 @@ export class DistributordashboardsettingsComponent implements OnInit {
 
 
     this.form = this.formBuilder.group({
-      row1: [''],
-      row2: [''],
+      displayIn: "",
+      position: 0,
+      isDefault: false,
+      dashboardFor: "DHCT",
+      graphName: ""
     });
 
     this.listTypeService
@@ -107,34 +109,18 @@ export class DistributordashboardsettingsComponent implements OnInit {
     this.id = this.user.userId;
 
     this.hasAddAccess = this.user.username == "admin";
+
     this.Service.getById(this.id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-
-          var Object = data.object
-
-          this.row1Data = Object.row1.split(",")
-          this.row1Data.forEach(value => {
-            let r1 = document.getElementById(value) as HTMLInputElement
-            if (r1 != null) {
-              console.log("not null r1")
-              r1.checked = true
-            } else {
-              console.log(" null r1")
-            }
-          })
-
-          this.row2Data = Object.row2.split(",")
-          this.row2Data.forEach(value => {
-            let r2 = document.getElementById(value) as HTMLInputElement
-            if (r2 != null) {
-              console.log("not null r2")
-              r2.checked = true
-            } else {
-              console.log(" null r2")
-            }
-          })
+          this.Data = data.object;
+          this.Data.forEach(value => {
+            this.localData.push(value);
+            let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement;
+            valu.checked = true;
+          }
+          )
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -144,62 +130,59 @@ export class DistributordashboardsettingsComponent implements OnInit {
   }
 
   toggle(e, formcontroller) {
-    let indexOfChecked
-    let limit
-    switch (formcontroller) {
-      case "row1":
-        indexOfChecked = this.row1Data.indexOf(e)
-        // if item is in the list
+    let prev = this.localData.filter(row => row.graphName == e && row.displayIn == formcontroller)
+    if (prev.length == 0 || prev == null) {
+      this.model = this.form.value
+      this.model.displayIn = formcontroller
+      this.model.position = 0
+      this.model.graphName = e
+      this.model.dashboardFor = "DHDT"
+      this.model.isDefault = false
+      this.localData.push(this.model)
+      this.model = null
+      this.form.reset()
+    } else {
+      let indexOfElement = this.localData.findIndex((x) => x.graphName == e && x.displayIn == formcontroller)
+      if (indexOfElement >= 0) {
+        this.localData.splice(indexOfElement, 1);
+      }
 
-        if (indexOfChecked >= 0) {
-          this.row1Data.splice(indexOfChecked, 1)
-        } else {
-            this.row1Data.push(e)
-        }
-        break
-      case 'row2':
-        indexOfChecked = this.row2Data.indexOf(e)
-        if (indexOfChecked >= 0) {
-          this.row2Data.splice(indexOfChecked, 1)
-        } else {
-            this.row2Data.push(e)
-        }
-        break;
     }
+    console.log(this.localData)
   }
 
-  resetOptions() {
-    if (confirm("Reset all options to default settings?")) {
-
-      this.row1Data = ['62df0bd7-4c98-11ec-9dbc-54bf64020316', '62e0af36-4c98-11ec-9dbc-54bf64020316', '62e2b128-4c98-11ec-9dbc-54bf64020316', '62e476d4-4c98-11ec-9dbc-54bf64020316']
-      this.row2Data =['62e8e7d1-4c98-11ec-9dbc-54bf64020316','62e7616e-4c98-11ec-9dbc-54bf64020316']
-
-      this.model = this.form.value;
-      this.model.userId = this.user.userId
-
-      this.model.row1 = this.row1Data.toString()
-      this.model.row2 = this.row2Data.toString()
-
-      this.Service.update(this.id, this.model)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess("Settings Restored to default", "Success");
-              this.router.navigate(['']);
-
-            } else {
-              this.notificationService.showError(data.resultMessage, "Error");
-            }
-            this.loading = false;
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
-          }
-        });
-    }
-  }
+  // resetOptions() {
+  //   if (confirm("Reset all options to default settings?")) {
+  //
+  //     this.row1Data = ['62df0bd7-4c98-11ec-9dbc-54bf64020316', '62e0af36-4c98-11ec-9dbc-54bf64020316', '62e2b128-4c98-11ec-9dbc-54bf64020316', '62e476d4-4c98-11ec-9dbc-54bf64020316']
+  //     this.row2Data =['62e8e7d1-4c98-11ec-9dbc-54bf64020316','62e7616e-4c98-11ec-9dbc-54bf64020316']
+  //
+  //     this.model = this.form.value;
+  //     this.model.userId = this.user.userId
+  //
+  //     this.model.row1 = this.row1Data.toString()
+  //     this.model.row2 = this.row2Data.toString()
+  //
+  //     this.Service.update(this.id, this.model)
+  //       .pipe(first())
+  //       .subscribe({
+  //         next: (data: ResultMsg) => {
+  //           if (data.result) {
+  //             this.notificationService.showSuccess("Settings Restored to default", "Success");
+  //             this.router.navigate(['']);
+  //
+  //           } else {
+  //             this.notificationService.showError(data.resultMessage, "Error");
+  //           }
+  //           this.loading = false;
+  //         },
+  //         error: error => {
+  //           this.notificationService.showError(error, "Error");
+  //           this.loading = false;
+  //         }
+  //       });
+  //   }
+  // }
 
   // convenience getter for easy access to form fields
   get f() {
@@ -219,20 +202,25 @@ export class DistributordashboardsettingsComponent implements OnInit {
     // this.isSave = true;
     this.loading = true;
 
-    this.model = this.form.value;
-    this.model.userId = this.user.userId
 
-    this.model.row1 = this.row1Data.toString()
-    this.model.row2 = this.row2Data.toString()
-
-    if (this.row1Data.length == 2 && this.row2Data.length == 2) {
-
-      this.Service.update(this.id, this.model)
+    let row1 = 0
+    let row2 = 0
+    this.localData.forEach(value => {
+      switch (value.displayIn) {
+        case "row1":
+          row1 = row1 + 1
+          break;
+        case "row2":
+          row2 = row2 + 1
+          break;
+      }
+    })
+    if (row1 === 2 && row2 === 2) {
+      this.Service.update(this.id, this.localData)
         .pipe(first())
         .subscribe({
-          next: (data: ResultMsg) => {
+          next: (data: any) => {
             if (data.result) {
-              console.log(this.model)
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(['']);
 
@@ -249,10 +237,8 @@ export class DistributordashboardsettingsComponent implements OnInit {
         });
     } else {
       this.loading = false;
-      this.row1Error = this.row1Data.length != 4;
-      this.row2Error = this.row2Data.length != 3;
+      this.row1Error = row1 != 2
+      this.row2Error = row2 != 2
     }
-
   }
-
 }
