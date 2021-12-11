@@ -162,40 +162,28 @@ export class CustdashboardsettingsComponent implements OnInit {
     console.log(this.localData)
   }
 
-  // resetOptions() {
-  //   if (confirm("Reset all options to default settings?")) {
-  //
-  //     this.row1Data = ["3111664b-50dc-11ec-8b07-1c39472d435b", "3112bc8d-50dc-11ec-8b07-1c39472d435b", "31146d57-50dc-11ec-8b07-1c39472d435b", "31161195-50dc-11ec-8b07-1c39472d435b"]
-  //     this.Data = ["311a14f0-50dc-11ec-8b07-1c39472d435b", "311b60af-50dc-11ec-8b07-1c39472d435b", "311cb2f0-50dc-11ec-8b07-1c39472d435b"]
-  //     this.row3Data = ["3122bea2-50dc-11ec-8b07-1c39472d435b", "312604bc-50dc-11ec-8b07-1c39472d435b", "3127b51b-50dc-11ec-8b07-1c39472d435b"]
-  //
-  //     this.model = this.form.value;
-  //     this.model.userId = this.user.userId
-  //
-  //     this.model.row1 = this.row1Data.toString()
-  //     this.model.row2 = this.Data.toString()
-  //     this.model.row3 = this.row3Data.toString()
-  //
-  //     this.Service.update(this.id, this.model)
-  //       .pipe(first())
-  //       .subscribe({
-  //         next: (data: ResultMsg) => {
-  //           if (data.result) {
-  //             this.notificationService.showSuccess("Settings Restored to default", "Success");
-  //             this.router.navigate(['']);
-  //
-  //           } else {
-  //             this.notificationService.showError(data.resultMessage, "Error");
-  //           }
-  //           this.loading = false;
-  //         },
-  //         error: error => {
-  //           this.notificationService.showError(error, "Error");
-  //           this.loading = false;
-  //         }
-  //       });
-  //   }
-  // }
+  resetOptions() {
+    if (confirm("Reset all options to default settings?")) {
+      this.Service.reset(this.id,"DHCT")
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            if (data.result) {
+              this.notificationService.showSuccess("Settings Restored to default", "Success");
+              this.router.navigate(['']);
+
+            } else {
+              this.notificationService.showError(data.resultMessage, "Error");
+            }
+            this.loading = false;
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
+          }
+        });
+    }
+  }
 
   // convenience getter for easy access to form fields
   get f() {

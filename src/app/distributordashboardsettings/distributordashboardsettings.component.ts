@@ -151,38 +151,29 @@ export class DistributordashboardsettingsComponent implements OnInit {
     console.log(this.localData)
   }
 
-  // resetOptions() {
-  //   if (confirm("Reset all options to default settings?")) {
-  //
-  //     this.row1Data = ['62df0bd7-4c98-11ec-9dbc-54bf64020316', '62e0af36-4c98-11ec-9dbc-54bf64020316', '62e2b128-4c98-11ec-9dbc-54bf64020316', '62e476d4-4c98-11ec-9dbc-54bf64020316']
-  //     this.row2Data =['62e8e7d1-4c98-11ec-9dbc-54bf64020316','62e7616e-4c98-11ec-9dbc-54bf64020316']
-  //
-  //     this.model = this.form.value;
-  //     this.model.userId = this.user.userId
-  //
-  //     this.model.row1 = this.row1Data.toString()
-  //     this.model.row2 = this.row2Data.toString()
-  //
-  //     this.Service.update(this.id, this.model)
-  //       .pipe(first())
-  //       .subscribe({
-  //         next: (data: ResultMsg) => {
-  //           if (data.result) {
-  //             this.notificationService.showSuccess("Settings Restored to default", "Success");
-  //             this.router.navigate(['']);
-  //
-  //           } else {
-  //             this.notificationService.showError(data.resultMessage, "Error");
-  //           }
-  //           this.loading = false;
-  //         },
-  //         error: error => {
-  //           this.notificationService.showError(error, "Error");
-  //           this.loading = false;
-  //         }
-  //       });
-  //   }
-  // }
+  resetOptions() {
+    if (confirm("Reset all options to default settings?")) {
+
+      this.Service.reset(this.id,"DHDT")
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            if (data.result) {
+              this.notificationService.showSuccess("Settings Restored to default", "Success");
+              this.router.navigate(['']);
+
+            } else {
+              this.notificationService.showError(data.resultMessage, "Error");
+            }
+            this.loading = false;
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
+          }
+        });
+    }
+  }
 
   // convenience getter for easy access to form fields
   get f() {

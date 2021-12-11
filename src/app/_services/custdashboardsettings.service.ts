@@ -21,8 +21,8 @@ export class CustdashboardsettingsService {
     return this.http.post(`${environment.apiUrl}/CustDashboardSettings`, settings);
   }
 
-  reset(id) {
-    return this.http.get(`${environment.apiUrl}/CustDashboardSettings/reset/${id}`);
+  reset(id, code) {
+    return this.http.get(`${environment.apiUrl}/CustDashboardSettings/reset/${code}/${id}`);
   }
 
   getAll() {
