@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import {Component, OnInit} from "@angular/core";
-import {ListTypeItem, ProfileReadOnly, ResultMsg, User} from "../_models";
+import {ListTypeItem, ProfileReadOnly, User} from "../_models";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AccountService, AlertService, ListTypeService, NotificationService, ProfileService} from "../_services";
@@ -26,9 +26,7 @@ export class CustdashboardsettingsComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   user: User
-  row1Data = []
-  row2Data = []
-  row3Data = []
+  Data = []
 
   rowdata1: ListTypeItem[];
   rowdata2: ListTypeItem[];
@@ -71,9 +69,11 @@ export class CustdashboardsettingsComponent implements OnInit {
 
 
     this.form = this.formBuilder.group({
-      row1: [''],
-      row2: [''],
-      row3: [''],
+      displayin: "",
+      position: 0,
+      isdefault: false,
+      dashboardfor: "DHCT",
+      graphname: ""
     });
 
     this.listTypeService
@@ -118,33 +118,15 @@ export class CustdashboardsettingsComponent implements OnInit {
     this.id = this.user.userId;
 
     this.hasAddAccess = this.user.username == "admin";
+
     this.Service.getById(this.id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data.object)
-          var Object = data.object
-
-
-          this.row1Data = Object.row1.split(",")
-          this.row1Data.forEach(value => {
-            console.log(value)
-            let r1 = document.getElementById(value) as HTMLInputElement
-            r1.checked = true
-          })
-
-          this.row2Data = Object.row2.split(",")
-          this.row2Data.forEach(value => {
-            console.log(value)
-            let r2 = document.getElementById(value) as HTMLInputElement
-            r2.checked = true
-          })
-
-          this.row3Data = Object.row3.split(",")
-          this.row3Data.forEach(value => {
-            console.log(value)
-            let r3 = document.getElementById(value) as HTMLInputElement
-            r3.checked = true
+          this.Data = data.object;
+          this.Data.forEach(value => {
+            let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement
+            valu.checked = true
           })
         },
         error: error => {
@@ -155,72 +137,60 @@ export class CustdashboardsettingsComponent implements OnInit {
   }
 
   toggle(e, formcontroller) {
-    let indexOfChecked
-    switch (formcontroller) {
-      case "row1":
-        indexOfChecked = this.row1Data.indexOf(e)
-        // if item is in the list
-        if (indexOfChecked >= 0) {
-          this.row1Data.splice(indexOfChecked, 1)
-        } else {
-          this.row1Data.push(e)
-        }
-        break
-      case 'row2':
-        indexOfChecked = this.row2Data.indexOf(e)
-        // if item is in the list
-        if (indexOfChecked >= 0) {
-          this.row2Data.splice(indexOfChecked, 1)
-        } else {
-          this.row2Data.push(e)
-        }
-        break
-      case 'row3':
-        indexOfChecked = this.row3Data.indexOf(e)
-        // if item is in the list
-        if (indexOfChecked >= 0) {
-          this.row3Data.splice(indexOfChecked, 1)
-        } else {
-          this.row3Data.push(e)
-        }
-        break
+    let prev = this.Data.filter(row => row.graphname == e)
+    this.model = this.form.value
+    this.model.displayin = formcontroller
+    this.model.position = 0
+    this.model.graphname = e
+    this.model.dashboardfor = "DHCT"
+    this.model.isdefault = false
+    debugger;
+    if (prev.length == 0 || prev == null) {
+      this.Data.push(this.model)
+    } else {
+      let indexOfElement = this.Data.indexOf(this.model)
+      this.Data.splice(indexOfElement, 1)
+
     }
+    this.model = null
+    this.form.reset()
+
   }
 
-  resetOptions() {
-    if (confirm("Reset all options to default settings?")) {
-
-      this.row1Data = ["cc0d4cc1-4bc3-11ec-9dbc-54bf64020316", "cc0ff452-4bc3-11ec-9dbc-54bf64020316", "cc0ba5a9-4bc3-11ec-9dbc-54bf64020316", "cc0ecdbb-4bc3-11ec-9dbc-54bf64020316"]
-      this.row2Data = ["cc152dcd-4bc3-11ec-9dbc-54bf64020316", "cc125e01-4bc3-11ec-9dbc-54bf64020316", "cc13e0f4-4bc3-11ec-9dbc-54bf64020316"]
-      this.row3Data = ["cc1af8e8-4bc3-11ec-9dbc-54bf64020316", "cc1c8605-4bc3-11ec-9dbc-54bf64020316", "cc17d3ae-4bc3-11ec-9dbc-54bf64020316"]
-
-      this.model = this.form.value;
-      this.model.userId = this.user.userId
-
-      this.model.row1 = this.row1Data.toString()
-      this.model.row2 = this.row2Data.toString()
-      this.model.row3 = this.row3Data.toString()
-
-      this.Service.update(this.id, this.model)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess("Settings Restored to default", "Success");
-              this.router.navigate(['']);
-
-            } else {
-              this.notificationService.showError(data.resultMessage, "Error");
-            }
-            this.loading = false;
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
-          }
-        });
-    }
-  }
+  // resetOptions() {
+  //   if (confirm("Reset all options to default settings?")) {
+  //
+  //     this.row1Data = ["3111664b-50dc-11ec-8b07-1c39472d435b", "3112bc8d-50dc-11ec-8b07-1c39472d435b", "31146d57-50dc-11ec-8b07-1c39472d435b", "31161195-50dc-11ec-8b07-1c39472d435b"]
+  //     this.Data = ["311a14f0-50dc-11ec-8b07-1c39472d435b", "311b60af-50dc-11ec-8b07-1c39472d435b", "311cb2f0-50dc-11ec-8b07-1c39472d435b"]
+  //     this.row3Data = ["3122bea2-50dc-11ec-8b07-1c39472d435b", "312604bc-50dc-11ec-8b07-1c39472d435b", "3127b51b-50dc-11ec-8b07-1c39472d435b"]
+  //
+  //     this.model = this.form.value;
+  //     this.model.userId = this.user.userId
+  //
+  //     this.model.row1 = this.row1Data.toString()
+  //     this.model.row2 = this.Data.toString()
+  //     this.model.row3 = this.row3Data.toString()
+  //
+  //     this.Service.update(this.id, this.model)
+  //       .pipe(first())
+  //       .subscribe({
+  //         next: (data: ResultMsg) => {
+  //           if (data.result) {
+  //             this.notificationService.showSuccess("Settings Restored to default", "Success");
+  //             this.router.navigate(['']);
+  //
+  //           } else {
+  //             this.notificationService.showError(data.resultMessage, "Error");
+  //           }
+  //           this.loading = false;
+  //         },
+  //         error: error => {
+  //           this.notificationService.showError(error, "Error");
+  //           this.loading = false;
+  //         }
+  //       });
+  //   }
+  // }
 
   // convenience getter for easy access to form fields
   get f() {
@@ -242,37 +212,26 @@ export class CustdashboardsettingsComponent implements OnInit {
 
     this.model = this.form.value;
     this.model.userId = this.user.userId
-    if (this.row1Data.length == 4 && this.row2Data.length == 3 && this.row3Data.length == 3) {
-      this.model.row1 = this.row1Data.toString()
-      this.model.row2 = this.row2Data.toString()
-      this.model.row3 = this.row3Data.toString()
 
-      console.log(this.model)
-      this.Service.update(this.id, this.model)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(['']);
 
-            } else {
-              this.notificationService.showError(data.resultMessage, "Error");
-            }
-            this.loading = false;
+    this.Service.update(this.id, this.Data)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(['']);
 
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
+          } else {
+            this.notificationService.showError(data.resultMessage, "Error");
           }
-        });
-    } else {
-      this.loading = false;
-      this.row1Error = this.row1Data.length != 4;
-      this.row2Error = this.row2Data.length != 3;
-      this.row3Error = this.row3Data.length != 3;
-    }
-  }
+          this.loading = false;
 
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
+  }
 }

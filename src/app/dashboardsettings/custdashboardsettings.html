@@ -28,10 +28,10 @@
                      data-parent="#accordionExample">
                   <div class="card-body row">
                     <div class="input py-2 col-md-2" *ngFor="let i of rowdata1">
-                      <input type="checkbox" id="{{i.listTypeItemId}}" (change)="toggle($event.target.value,'row1')"
+                      <input type="checkbox" id="chk_{{i.listTypeItemId}}"  (change)="toggle($event.target.value,'row1')"
                              value="{{i.listTypeItemId}}" style="margin-right: 5px">
 
-                      <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
+                      <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
                     </div>
                   </div>
                 <div *ngIf="row1Error" class="danger px-4"><p style="color:red">You can choose only 4 options</p></div>
@@ -51,10 +51,10 @@
                      data-parent="#accordionExample">
                   <div class="card-body row">
                     <div class="input py-2 col-md-2" *ngFor="let i of rowdata2">
-                      <input type="checkbox" id="{{i.listTypeItemId}}" (change)="toggle($event.target.value, 'row2')"
+                      <input type="checkbox" id="chk_{{i.listTypeItemId}}" (change)="toggle($event.target.value, 'row2')"
                              value="{{i.listTypeItemId}}" style="margin-right: 5px">
 
-                      <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
+                      <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
                     </div>
                   </div>
                   <div *ngIf="row2Error" class="danger px-4"><p style="color:red">You can choose only 3 options</p></div>
@@ -76,10 +76,10 @@
                      data-parent="#accordionExample">
                   <div class="card-body row">
                     <div class="input py-2 col-md-2" *ngFor="let i of rowdata3">
-                      <input type="checkbox" id="{{i.listTypeItemId}}" (change)="toggle($event.target.value,'row3')"
+                      <input type="checkbox" id="chk_{{i.listTypeItemId}}" (change)="toggle($event.target.value,'row3')"
                              value="{{i.listTypeItemId}}" style="margin-right: 5px ">
 
-                      <label for="{{i.listTypeItemId}}">{{i.itemname}}</label>
+                      <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
                     </div>
                   </div>
                   <div *ngIf="row3Error" class="danger px-4"><p style="color:red">You can choose only 3 options</p></div>
@@ -92,13 +92,14 @@
           <br><br><br>
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px;">
-              <button *ngIf="hasAddAccess || hasUpdateAccess" class="btn btn-primary" type="submit">
+              <button class="btn btn-primary" type="submit">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
               <a routerLink="" class="btn btn-secondary" style="margin: 0 10px;">Back</a>
 
               <button type="button" (click)="resetOptions()" style="margin: 0 10px;" class="btn btn-danger">Reset</button>
+
             </div>
           </div>
         </form>
