@@ -27,6 +27,7 @@ export class CustdashboardsettingsComponent implements OnInit {
   hasAddAccess: boolean = false;
   user: User
   Data = []
+  localData: any[] = [];
 
   rowdata1: ListTypeItem[];
   rowdata2: ListTypeItem[];
@@ -69,11 +70,11 @@ export class CustdashboardsettingsComponent implements OnInit {
 
 
     this.form = this.formBuilder.group({
-      displayin: "",
+      displayIn: "",
       position: 0,
-      isdefault: false,
-      dashboardfor: "DHCT",
-      graphname: ""
+      isDefault: false,
+      dashboardFor: "DHCT",
+      graphName: ""
     });
 
     this.listTypeService
@@ -127,7 +128,9 @@ export class CustdashboardsettingsComponent implements OnInit {
           this.Data.forEach(value => {
             let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement
             valu.checked = true
+            this.localData.push(value)
           })
+          console.log(this.localData)
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -137,24 +140,26 @@ export class CustdashboardsettingsComponent implements OnInit {
   }
 
   toggle(e, formcontroller) {
-    let prev = this.Data.filter(row => row.graphname == e)
-    this.model = this.form.value
-    this.model.displayin = formcontroller
-    this.model.position = 0
-    this.model.graphname = e
-    this.model.dashboardfor = "DHCT"
-    this.model.isdefault = false
+    let prev = this.localData.filter(row => row.graphName == e && row.displayIn == formcontroller)
     debugger;
     if (prev.length == 0 || prev == null) {
-      this.Data.push(this.model)
+      this.model = this.form.value
+      this.model.displayIn = formcontroller
+      this.model.position = 0
+      this.model.graphName = e
+      this.model.dashboardFor = "DHCT"
+      this.model.isDefault = false
+      this.localData.push(this.model)
+      this.model = null
+      this.form.reset()
     } else {
-      let indexOfElement = this.Data.indexOf(this.model)
-      this.Data.splice(indexOfElement, 1)
+      let indexOfElement = this.localData.findIndex((x) => x.graphName == e && x.displayIn == formcontroller)
+      if (indexOfElement >= 0) {
+        this.localData.splice(indexOfElement, 1);
+      }
 
     }
-    this.model = null
-    this.form.reset()
-
+    console.log(this.localData)
   }
 
   // resetOptions() {
@@ -198,7 +203,7 @@ export class CustdashboardsettingsComponent implements OnInit {
   }
 
   onSubmit() {
-    //debugger;
+    debugger;
     this.submitted = true;
     // reset alerts on submit
     this.alertService.clear();
@@ -210,28 +215,50 @@ export class CustdashboardsettingsComponent implements OnInit {
     // this.isSave = true;
     this.loading = true;
 
-    this.model = this.form.value;
-    this.model.userId = this.user.userId
 
+    let row1 = 0
+    let row2 = 0
+    let row3 = 0
 
-    this.Service.update(this.id, this.Data)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(['']);
+    this.localData.forEach(value => {
+      switch (value.displayIn) {
+        case "row1":
+          row1 = row1 + 1
+          break;
+        case "row2":
+          row2 = row2 + 1
+          break;
+        case "row3":
+          row3 = row3 + 1
+          break;
+      }
+    })
 
-          } else {
-            this.notificationService.showError(data.resultMessage, "Error");
+    if (row1 === 4 && row2 === 3 && row3 === 3) {
+      this.Service.update(this.id, this.localData)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            if (data.result) {
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.router.navigate(['']);
+
+            } else {
+              this.notificationService.showError(data.resultMessage, "Error");
+            }
+            this.loading = false;
+
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
           }
-          this.loading = false;
-
-        },
-        error: error => {
-          this.notificationService.showError(error, "Error");
-          this.loading = false;
-        }
-      });
+        });
+    } else {
+      this.loading = false;
+      this.row1Error = row1 != 4
+      this.row2Error = row2 != 3
+      this.row3Error = row3 != 3
+    }
   }
 }
