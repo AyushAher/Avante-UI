@@ -30,9 +30,10 @@
                 </thead>
 
                 <tbody>
-                <tr formArrayName="maintenance" style="height:81.5px" *ngFor="let item of Form.get('maintenance')['controls']let i=index">
+                <tr formArrayName="maintenance" style="height:81.5px"
+                    *ngFor="let item of Form.get('maintenance')['controls'];let i=index">
 
-                  <td [formGroupName]="i" style="width:192.5px" >
+                  <td [formGroupName]="i" style="width:192.5px">
                     <!--                    <input type="hidden" formControlName="screenId"/>-->
                     <!--<input type="text" formControlName="screenName" readonly />-->
                     <label>{{ getName(i).location }}</label>
@@ -40,7 +41,7 @@
 
                   <td [formGroupName]="i" style="width:428.5px">{{ getName(i).element }}</td>
 
-                  <td [formGroupName]="i" style="width:113.5px" >
+                  <td [formGroupName]="i" style="width:113.5px">
                     <input type="checkbox" formControlName="weekly"/>
                     <label *ngIf="getName(i).weekly==true"> {{ getName(i).weeklyDate}}</label>
                   </td>
@@ -83,7 +84,7 @@
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
-              <a routerLink="/profilelist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+              <a routerLink="/servicereport/{{this.id}}" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
             </div>
           </div>
         </form>

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CustomerSite, instrumentConfig, ListTypeItem, ProfileReadOnly, SparePart, User} from "../_models";
-import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {
   AccountService,
@@ -90,16 +90,14 @@ export class PreventivemaintenancetableComponent implements OnInit {
 
 
     this.Form = this.formBuilder.group({
-      serviceReportId: '9e38ddc3-a0d1-4fa4-a406-7aba59ebe532',
+      serviceReportId: ['', Validators.required],
       maintenance: this.formBuilder.array([]),
     });
 
     this.id = this.route.snapshot.paramMap.get('id');
-    // this.id = "";
+    this.Form.get('serviceReportId').setValue(this.id);
     if (this.id != null) {
-
       this.hasAddAccess = this.user.username == "admin";
-
       this.preventivemaintenancesService.getById(this.id)
         .pipe(first())
         .subscribe({
@@ -120,13 +118,11 @@ export class PreventivemaintenancetableComponent implements OnInit {
       .pipe(first())
       .subscribe({
           next: (data: any) => {
-            //
             this.listTypeItems = data.object;
             let data2 = []
             this.listTypeItems.forEach(value => {
               let data1 = this.savedData.find(x => x.elementId == value.id)
-              console.log(data1)
-                            if (data1 != undefined) {
+              if (data1 != undefined) {
 
                 if (data1.monthlyDate == null) {
                   data1.monthlyDate = this.dateObj;
@@ -146,7 +142,6 @@ export class PreventivemaintenancetableComponent implements OnInit {
                 if (data1.every5YearDate == null) {
                   data1.every5YearDate = this.dateObj;
                 }
-                console.log(data1)
                 let obj = {
                   elementId: data1.elementId,
                   element: data1.element,
@@ -285,7 +280,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
             //
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              // this.router.navigate(["profilelist"]);
+              this.router.navigate([`/servicereport`]);
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
@@ -297,14 +292,13 @@ export class PreventivemaintenancetableComponent implements OnInit {
           }
         });
     } else {
-      this.profile.prevchklocpartelementid = this.id;
       this.preventivemaintenancesService.update(this.id, this.profile)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              // this.router.navigate(["profilelist"]);
+              this.router.navigate([`/servicereport/${this.id}`]);
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
