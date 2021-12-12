@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CustomerSite, instrumentConfig, ListTypeItem, ProfileReadOnly, SparePart, User} from "../_models";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {
   AccountService,
@@ -15,6 +15,7 @@ import {
 import {first} from "rxjs/operators";
 import {PrevchklocpartelementService} from "../_services/prevchklocpartelement.service";
 import {PreventivemaintenancesService} from "../_services/preventivemaintenances.service";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-preventivemaintenancetable',
@@ -31,7 +32,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
   isSave = false;
   id: string;
   code: string = "CONTY";
-  listTypeItems: ListTypeItem[];
+  listTypeItems;
   config: instrumentConfig;
   sparePartDetails: SparePart[];
   selectedConfigType: string[] = [];
@@ -45,6 +46,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
   hasAddAccess: boolean = false;
   dateObj
   list
+  savedData = []
 
   constructor(
     private formBuilder: FormBuilder,
@@ -60,12 +62,13 @@ export class PreventivemaintenancetableComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private preventivemaintenancesService: PreventivemaintenancesService,
+    public datepipe: DatePipe,
   ) {
   }
 
   ngOnInit() {
-    //debugger;
-    this.dateObj = Date.now();
+    //
+    this.dateObj = this.datepipe.transform(Date.now(),"MM/dd/yyyy");
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -87,17 +90,116 @@ export class PreventivemaintenancetableComponent implements OnInit {
 
 
     this.Form = this.formBuilder.group({
-      serviceReportId: ['a6fb836e-78dc-4826-b7b0-54b87d9bd916', Validators.required],
+      serviceReportId: '9e38ddc3-a0d1-4fa4-a406-7aba59ebe532',
       maintenance: this.formBuilder.array([]),
     });
+
+    this.id = this.route.snapshot.paramMap.get('id');
+    // this.id = "";
+    if (this.id != null) {
+
+      this.hasAddAccess = this.user.username == "admin";
+
+      this.preventivemaintenancesService.getById(this.id)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            //
+            data.object.maintenance.forEach(value => {
+              this.savedData.push(value);
+            })
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
+          }
+        });
+    }
 
     this.prevchklocpartelementService.getAll()
       .pipe(first())
       .subscribe({
           next: (data: any) => {
-            //debugger;
+            //
             this.listTypeItems = data.object;
-            this.addItem(this.listTypeItems);
+            let data2 = []
+            this.listTypeItems.forEach(value => {
+              let data1 = this.savedData.find(x => x.elementId == value.id)
+              console.log(data1)
+                            if (data1 != undefined) {
+
+                if (data1.monthlyDate == null) {
+                  data1.monthlyDate = this.dateObj;
+                }
+                if (data1.weeklyDate == null) {
+                  data1.weeklyDate = this.dateObj;
+                }
+                if (data1.yearlyDate == null) {
+                  data1.yearlyDate = this.dateObj;
+                }
+                if (data1.every2YearDate == null) {
+                  data1.every2YearDate = this.dateObj;
+                }
+                if (data1.every3YearDate == null) {
+                  data1.every3YearDate = this.dateObj;
+                }
+                if (data1.every5YearDate == null) {
+                  data1.every5YearDate = this.dateObj;
+                }
+                console.log(data1)
+                let obj = {
+                  elementId: data1.elementId,
+                  element: data1.element,
+
+                  location: data1.location,
+                  locationId: data1.locationId,
+
+                  weekly: data1.weekly,
+                  monthly: data1.monthly,
+                  yearly: data1.yearly,
+
+                  every2year: data1.every2Year,
+                  every3year: data1.every3Year,
+                  every5year: data1.every5Year,
+
+                  weeklyDate: data1.weeklyDate,
+                  monthlyDate: data1.monthlyDate,
+                  yearlyDate: data1.yearlyDate,
+
+                  every2yearDate: data1.every2YearDate,
+                  every3yearDate: data1.every3YearDate,
+                  every5yearDate: data1.every5YearDate,
+                };
+
+                data2.push(obj);
+              } else {
+                let obj = {
+                  elementId: value.id,
+                  element: value.element,
+
+                  location: value.location,
+                  locationId: value.locationId,
+
+                  weekly: false,
+                  monthly: false,
+                  yearly: false,
+
+                  every2year: false,
+                  every3year: false,
+                  every5year: false,
+
+                  weeklyDate: this.dateObj,
+                  monthlyDate: this.dateObj,
+                  yearlyDate: this.dateObj,
+
+                  every2yearDate: this.dateObj,
+                  every3yearDate: this.dateObj,
+                  every5yearDate: this.dateObj,
+                };
+                data2.push(obj);
+              }
+            })
+            this.addItem(data2);
             this.list = this.listTypeItems;
           },
           error: error => {
@@ -107,47 +209,38 @@ export class PreventivemaintenancetableComponent implements OnInit {
         }
       );
 
-    this.id = this.route.snapshot.paramMap.get('id');
-    if (this.id != null) {
-
-      this.hasAddAccess = this.user.username == "admin";
-
-      this.preventivemaintenancesService.getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            //debugger;
-            this.Form.patchValue(data.object);
-            console.log(data.object)
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
-          }
-        });
-    }
   }
 
-  addItem(item: any): void {
+  addItem(item: any) {
     item.forEach((value) => {
         this.maintenance = this.Form.get('maintenance') as FormArray;
         this.maintenance.push(this.formBuilder.group({
-          prevchklocpartelementid: 'a6fb836e-78dc-4826-b7b0-54b87d9bd916',
+          elementId: value.elementId,
           location: value.location,
           element: value.element,
-          listTypeItemId: value.listTypeItemId,
+          locationId: value.locationId,
 
-          weekly: false,
-          monthly: false,
-          yearly: false,
+          weekly: value.weekly,
+          monthly: value.monthly,
+          yearly: value.yearly,
           isactive: true,
-          every2year: false,
-          every3year: false,
-          every5year: false,
+          every2year: value.every2year,
+          every3year: value.every3year,
+          every5year: value.every5year,
+
+          weeklyDate: value.weeklyDate,
+          monthlyDate: value.monthlyDate,
+          yearlyDate: value.yearlyDate,
+
+          every2yearDate: value.every2yearDate,
+          every3yearDate: value.every3yearDate,
+          every5yearDate: value.every5yearDate,
         }))
       }
     )
+    console.log(this.maintenance)
   }
+
 
   // convenience getter for easy access to form fields
   get f() {
@@ -168,7 +261,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
   }
 
   onSubmit() {
-    debugger;
+
     this.submitted = true;
 
     // reset alerts on submit
@@ -189,7 +282,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
+            //
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               // this.router.navigate(["profilelist"]);

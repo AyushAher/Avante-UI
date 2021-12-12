@@ -19,57 +19,56 @@
                 <tr>
                   <th>Location</th>
                   <th>Element</th>
-                  <th>Weekkly</th>
+                  <th>Weekly</th>
                   <th>Monthly</th>
                   <th>Yearly</th>
                   <th>Every 2 Year</th>
                   <th>Every 3 Year</th>
-                  <th>Every 5 Year</th>
+                  <!--                  <th>Every 5 Year</th>-->
                 </tr>
 
                 </thead>
 
                 <tbody>
-                <tr formArrayName="maintenance"
-                    *ngFor="let item of Form.get('maintenance')['controls']let i=index">
+                <tr formArrayName="maintenance" style="height:81.5px" *ngFor="let item of Form.get('maintenance')['controls']let i=index">
 
-                  <td [formGroupName]="i">
+                  <td [formGroupName]="i" style="width:192.5px" >
                     <!--                    <input type="hidden" formControlName="screenId"/>-->
                     <!--<input type="text" formControlName="screenName" readonly />-->
                     <label>{{ getName(i).location }}</label>
                   </td>
 
-                  <td [formGroupName]="i">{{ getName(i).element }}</td>
+                  <td [formGroupName]="i" style="width:428.5px">{{ getName(i).element }}</td>
 
-                  <td [formGroupName]="i">
+                  <td [formGroupName]="i" style="width:113.5px" >
                     <input type="checkbox" formControlName="weekly"/>
-                    <label *ngIf="getName(i).weekly==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                    <label *ngIf="getName(i).weekly==true"> {{ getName(i).weeklyDate}}</label>
                   </td>
 
-                  <td [formGroupName]="i">
+                  <td [formGroupName]="i" style="width:116.5px">
                     <input type="checkbox" formControlName="monthly"/>
-                    <label *ngIf="getName(i).monthly==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                    <label *ngIf="getName(i).monthly==true"> {{ getName(i).monthlyDate}}</label>
                   </td>
 
-                  <td [formGroupName]="i">
+                  <td [formGroupName]="i" style="width:116.5px">
                     <input type="checkbox" formControlName="yearly"/>
-                    <label *ngIf="getName(i).yearly==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                    <label *ngIf="getName(i).yearly==true"> {{ getName(i).yearlyDate}}</label>
                   </td>
 
-                  <td [formGroupName]="i">
+                  <td [formGroupName]="i" style="width:116.5px">
                     <input type="checkbox" formControlName="every2year"/>
-                    <label *ngIf="getName(i).every2year==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                    <label *ngIf="getName(i).every2year==true"> {{ getName(i).every2yearDate}}</label>
                   </td>
 
-                  <td [formGroupName]="i">
+                  <td [formGroupName]="i" style="width:116.5px">
                     <input type="checkbox" formControlName="every3year"/>
-                    <label *ngIf="getName(i).every3year==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
+                    <label *ngIf="getName(i).every3year==true"> {{ getName(i).every3yearDate}}</label>
                   </td>
 
-                  <td [formGroupName]="i">
-                    <input type="checkbox" formControlName="every5year"/>
-                    <label *ngIf="getName(i).every5year==true"> {{ dateObj | date:'MM/dd/yyyy'}}</label>
-                  </td>
+                  <!--                  <td [formGroupName]="i">-->
+                  <!--                    <input type="checkbox" formControlName="every5year"/>-->
+                  <!--                    <label *ngIf="getName(i).every5year==true"> {{ getName(i).every5yearDate | date:'MM/dd/yyyy'}}</label>-->
+                  <!--                  </td>-->
 
                 </tr>
                 </tbody>

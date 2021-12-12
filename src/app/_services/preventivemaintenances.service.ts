@@ -24,7 +24,7 @@ export class PreventivemaintenancesService {
   }
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/PreventiveMaintenances`, params)
+    return this.http.put(`${environment.apiUrl}/PreventiveMaintenances/${id}`, params)
       .pipe(map(x => {
         return x;
       }));
