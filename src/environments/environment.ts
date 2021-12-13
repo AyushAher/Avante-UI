@@ -43,6 +43,7 @@ export const environment = {
   distRoleCode: "RDTSP",
   engRoleCode: "RENG",
   configTypeCode: "CONTY",// "f0bf6d8d-739a-11eb-adfc-0a91af0598e6" //"4c155b3e-7526-11eb-97d1-1c39472d435b"
+  location: "PMCL",
 
 
   INS: "INS",

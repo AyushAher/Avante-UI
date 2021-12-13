@@ -10,6 +10,7 @@ import {MRenderComponent} from './rendercomponent';
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {ModelContentComponent} from './modelcontent';
 import {environment} from "../../environments/environment";
+import {PrevchklocpartelementvalueComponent} from "./prevchklocpartelementvalue.component";
 
 @Component({
   selector: 'app-masterlistitem',
@@ -36,6 +37,7 @@ export class MasterListItemComponent implements OnInit {
   private api: GridApi;
   bsModalRef: BsModalRef;
   addAccess: boolean = false;
+  list2
 
   constructor(
     private formBuilder: FormBuilder,
@@ -97,9 +99,9 @@ export class MasterListItemComponent implements OnInit {
           this.loading = false;
         }
       });
-    var list2 = JSON.parse(localStorage.getItem(this.listid))
-    if (list2 != null) {
-      if (list2[0].listCode == environment.configTypeCode) {
+    this.list2 = JSON.parse(localStorage.getItem(this.listid))
+    if (this.list2 != null) {
+      if (this.list2[0].listCode == environment.configTypeCode || this.list2[0].listCode == environment.location) {
         this.addAccess = true;
       }
     }
@@ -121,11 +123,18 @@ export class MasterListItemComponent implements OnInit {
 
   }
 
-  open(param:string) {
-    const initialState  = {
+  open(param: string, code: string) {
+    const initialState = {
       itemId: param
     };
-    this.bsModalRef = this.modalService.show(ModelContentComponent, {initialState});
+    switch (code) {
+      case "CONTY":
+        this.bsModalRef = this.modalService.show(ModelContentComponent, {initialState});
+        break;
+      case "PMCL":
+        this.bsModalRef = this.modalService.show(PrevchklocpartelementvalueComponent, {initialState});
+        break;
+    }
   }
 
   close() {
@@ -142,7 +151,6 @@ export class MasterListItemComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        width: 100,
         cellRendererFramework: MRenderComponent,
         cellRendererParams: {
           deleteLink: 'LITYIT',
@@ -177,7 +185,7 @@ export class MasterListItemComponent implements OnInit {
 
       switch (actionType) {
         case "add":
-          this.open(data.listTypeItemId);
+          this.open(data.listTypeItemId, this.list2[0].listCode);
 
         case "edit":
           this.masterlistitemform.get("id").setValue(data.listTypeItemId);

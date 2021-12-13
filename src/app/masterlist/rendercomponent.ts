@@ -1,16 +1,24 @@
-import { Component, OnInit,EventEmitter,Output } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
-import { User, Distributor, Country } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
-import { AgRendererComponent } from 'ag-grid-angular';
+import {Component} from '@angular/core';
+import {first} from 'rxjs/operators';
+import {AgRendererComponent} from 'ag-grid-angular';
 import {
-  AccountService, AlertService, DistributorService, CountryService, DistributorRegionService, CurrencyService,
-  ContactService, CustomerSiteService, InstrumentService, SparePartService, CustomerService, NotificationService,
-  ProfileService, UserProfileService, ListTypeService, ConfigTypeValueService
+  AlertService,
+  ConfigTypeValueService,
+  ContactService,
+  CountryService,
+  CurrencyService,
+  CustomerService,
+  CustomerSiteService,
+  DistributorRegionService,
+  DistributorService,
+  InstrumentService,
+  ListTypeService,
+  NotificationService,
+  ProfileService,
+  SparePartService,
+  UserProfileService
 } from '../_services';
+import {PrevchklocpartelementService} from "../_services/prevchklocpartelement.service";
 
 @Component({
   template: `
@@ -21,22 +29,23 @@ import {
 })
 export class MRenderComponent implements AgRendererComponent  {
   params: any;
-  
+
   constructor(private distributorService: DistributorService,
-    private distributorRegionService: DistributorRegionService,
-    private alertService: AlertService,
-    private contactService: ContactService,
-    private custsiteService: CustomerSiteService,
-    private sparepartService: SparePartService,
-    private instrumnetservice: InstrumentService,
-    private customerservice: CustomerService,
-    private notificationService: NotificationService,
-    private profileService: ProfileService,
-    private userprofileService: UserProfileService,
-    private currencyService: CurrencyService,
-    private countryService: CountryService,
-    private listTypeService: ListTypeService,
-    private configService: ConfigTypeValueService,
+              private distributorRegionService: DistributorRegionService,
+              private alertService: AlertService,
+              private contactService: ContactService,
+              private custsiteService: CustomerSiteService,
+              private sparepartService: SparePartService,
+              private instrumnetservice: InstrumentService,
+              private customerservice: CustomerService,
+              private notificationService: NotificationService,
+              private profileService: ProfileService,
+              private userprofileService: UserProfileService,
+              private currencyService: CurrencyService,
+              private countryService: CountryService,
+              private listTypeService: ListTypeService,
+              private configService: ConfigTypeValueService,
+              private prevchklocpartelementService: PrevchklocpartelementService,
   ) {
 
   }
@@ -49,9 +58,7 @@ export class MRenderComponent implements AgRendererComponent  {
     return false;
   }
 
-  
 
- 
   delete(params: any) {
     //debugger;
     if (confirm("Are you sure, you want to delete the record?") == true) {
@@ -70,8 +77,6 @@ export class MRenderComponent implements AgRendererComponent  {
               else {
                 this.notificationService.showError(data.resultMessage, "Error");
               }
-
-
             },
             error: error => {
               // this.alertService.error(error);
@@ -89,8 +94,7 @@ export class MRenderComponent implements AgRendererComponent  {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
                 params.api.applyTransaction({ remove: selectedData });
-              }
-              else {
+              } else {
                 this.notificationService.showError(data.resultMessage, "Error");
               }
             },
@@ -100,7 +104,26 @@ export class MRenderComponent implements AgRendererComponent  {
             }
           });
       }
-      else if (params.deleteLink == "CNG") {
+      else if (params.deleteLink == "ELEMENT") {
+        //debugger;
+        this.prevchklocpartelementService.delete(params.value)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                const selectedData = params.api.getSelectedRows();
+                params.api.applyTransaction({remove: selectedData});
+              } else {
+                this.notificationService.showError(data.resultMessage, "Error");
+              }
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showError(error, "Error");
+            }
+          });
+      } else if (params.deleteLink == "CNG") {
         //debugger;
         this.configService.delete(params.value)
           .pipe(first())
@@ -109,9 +132,8 @@ export class MRenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({ remove: selectedData });
-              }
-              else {
+                params.api.applyTransaction({remove: selectedData});
+              } else {
                 this.notificationService.showError(data.resultMessage, "Error");
               }
             },

@@ -25,8 +25,12 @@ export class PrevchklocpartelementService {
     return this.http.get<ConfigTypeValue[]>(`${environment.apiUrl}/PrevChkLocPartElements`);
   }
 
+  getListById(id: string) {
+    return this.http.get<ConfigTypeValue>(`${environment.apiUrl}/PrevChkLocPartElements/PrevChkLocPartElementByLTItemId/${id}`);
+  }
+
   getById(id: string) {
-    return this.http.get<ConfigTypeValue>(`${environment.apiUrl}/PrevChkLocPartElements/GetConfigValuesByLTItemId/${id}`);
+    return this.http.get<ConfigTypeValue>(`${environment.apiUrl}/PrevChkLocPartElements/${id}`);
   }
 
   update(id, params) {
