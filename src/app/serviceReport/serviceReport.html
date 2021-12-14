@@ -172,7 +172,8 @@
             </div>
             <div class="col-sm-3">
               <label for="corrmaintenance">
-                <input type="checkbox" readonly disabled formControlName="corrmaintenance" [ngClass]="{ 'is-invalid': submitted && f.corrmaintenance.errors }" />
+                <input type="checkbox" readonly disabled formControlName="corrmaintenance"
+                       [ngClass]="{ 'is-invalid': submitted && f.corrmaintenance.errors }"/>
                 Corr. Maintenance
               </label>
               <div *ngIf="submitted && f.corrmaintenance.errors" class="invalid-feedback">
@@ -182,30 +183,44 @@
 
           </div>
 
-          <br />
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" id="workdone-tab" data-toggle="tab" href="#workdone" role="tab" aria-controls="workdone" aria-selected="true">Work Done</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Work Time</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Spare Part Consumed</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Spare Part Recommanded</a>
-            </li>
-          </ul>
+          <br/>
+          <div class="" style="display: flex;justify-content: space-between">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="workdone-tab" data-toggle="tab" href="#workdone" role="tab"
+                   aria-controls="workdone" aria-selected="true">Work Done</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                   aria-selected="false">Work Time</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                   aria-controls="profile"
+                   aria-selected="false">Spare Part Consumed</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                   aria-controls="contact"
+                   aria-selected="false">Spare Part Recommanded</a>
+              </li>
+            </ul>
+
+            <a class="nav-link" *ngIf="ServiceReportform.get('prevmaintenance').value == true" style="text-decoration: underline"
+               (click)="openPrev(ServiceReportId)">Preventive Maintenance Checklist</a>
+
+          </div>
 
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
-              <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;" (click)="open(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
+              <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;"
+                      (click)="open(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
                                  (cellValueChanged)="onCellValueChanged($event)"
                                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnworkdefs" [rowData]="workdonelist" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                                 [columnDefs]="columnworkdefs" [rowData]="workdonelist" rowSelection="single"
+                                 pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -394,8 +409,7 @@
               </button>
               <a routerLink="/servicereportlist" class="btn btn-secondary" style="margin-left:10px;">Back</a>
               <button type="button" class="btn btn-secondary" style="margin-left:15px;" (click)="GeneratePDF()">Generate PDF</button>
-              <a routerLink="/preventivemaintenancetable/{{ServiceReportId}}" class="btn btn-info"
-                 style="margin-left:15px;">Preventive Maintenance Table</a>
+
             </div>
           </div>
         </form>

@@ -58,6 +58,7 @@ import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import {CustspinventoryService} from "../_services/custspinventory.service";
+import {PreventivemaintenancetableComponent} from "../preventivemaintenancetable/preventivemaintenancetable.component";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -1094,6 +1095,15 @@ export class ServiceReportComponent implements OnInit {
       id: param1
     };
     this.bsModalRef = this.modalService.show(WorkdoneContentComponent, {initialState});
+  }
+
+  openPrev(param: string) {
+
+    const initialState = {
+      id: param
+    };
+
+    this.bsModalRef = this.modalService.show(PreventivemaintenancetableComponent, {initialState});
   }
 
   //opentime

@@ -1,67 +1,70 @@
-<layout>
-  <div class="right_col" role="main">
-    <div class="container">
-      <div class="page-title my-4">
-        <div class="title_left">
-          <h3>Preventive Maintenance Table</h3>
-        </div>
+<div class="modal" style="display: block" id="modal" role="dialog">
+  <div class="modal-dialog modal-xl" style="width: 95vw">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add Enginneer Comment</h4>
+        <button type="button"
+                class="close"
+                aria-label="Close"
+                data-dismiss="modal" (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="clearfix"></div>
+      <div class="py-3 px-3-pb-3">
+        <div class="container">
+          <form [formGroup]="Form" (ngSubmit)="onSubmit()">
 
-      <div class="col-md-12 col-sm-12 ">
-        <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
 
-          <div class="row">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Element</th>
+                    <th>Weekly</th>
+                    <th>Monthly</th>
+                    <th>Yearly</th>
+                    <th>Every 2 Year</th>
+                    <th>Every 3 Year</th>
+                    <!--                  <th>Every 5 Year</th>-->
+                  </tr>
 
-                <tr>
-                  <th>Location</th>
-                  <th>Element</th>
-                  <th>Weekly</th>
-                  <th>Monthly</th>
-                  <th>Yearly</th>
-                  <th>Every 2 Year</th>
-                  <th>Every 3 Year</th>
-                  <!--                  <th>Every 5 Year</th>-->
-                </tr>
-
-                </thead>
+                  </thead>
 
                 <tbody>
                 <tr formArrayName="maintenance" style="height:81.5px"
                     *ngFor="let item of Form.get('maintenance')['controls'];let i=index">
 
-                  <td [formGroupName]="i" style="width:192.5px">
+                  <td [formGroupName]="i">
                     <!--                    <input type="hidden" formControlName="screenId"/>-->
                     <!--<input type="text" formControlName="screenName" readonly />-->
                     <label>{{ getName(i).location }}</label>
                   </td>
 
-                  <td [formGroupName]="i" style="width:428.5px">{{ getName(i).element }}</td>
+                  <td [formGroupName]="i">{{ getName(i).element }}</td>
 
-                  <td [formGroupName]="i" style="width:113.5px">
+                  <td [formGroupName]="i" style="width:150px">
                     <input type="checkbox" formControlName="weekly"/>
                     <label *ngIf="getName(i).weekly==true"> {{ getName(i).weeklyDate}}</label>
                   </td>
 
-                  <td [formGroupName]="i" style="width:116.5px">
+                  <td [formGroupName]="i" style="width:150px">
                     <input type="checkbox" formControlName="monthly"/>
                     <label *ngIf="getName(i).monthly==true"> {{ getName(i).monthlyDate}}</label>
                   </td>
 
-                  <td [formGroupName]="i" style="width:116.5px">
+                  <td [formGroupName]="i" style="width:150px">
                     <input type="checkbox" formControlName="yearly"/>
                     <label *ngIf="getName(i).yearly==true"> {{ getName(i).yearlyDate}}</label>
                   </td>
 
-                  <td [formGroupName]="i" style="width:116.5px">
+                  <td [formGroupName]="i" style="width:150px">
                     <input type="checkbox" formControlName="every2year"/>
                     <label *ngIf="getName(i).every2year==true"> {{ getName(i).every2yearDate}}</label>
                   </td>
 
-                  <td [formGroupName]="i" style="width:116.5px">
+                  <td [formGroupName]="i" style="width:150px">
                     <input type="checkbox" formControlName="every3year"/>
                     <label *ngIf="getName(i).every3year==true"> {{ getName(i).every3yearDate}}</label>
                   </td>
@@ -74,21 +77,22 @@
                 </tr>
                 </tbody>
 
-              </table>
+                </table>
+              </div>
             </div>
-          </div>
-          <hr/>
-          <div class="row">
-            <div class="col-md-6 col-sm-6">
-              <button [disabled]="loading" class="btn btn-primary">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
-              </button>
-              <a routerLink="/servicereport/{{this.id}}" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+            <hr/>
+            <div class="row">
+              <div class="col-md-6 col-sm-6">
+                <button [disabled]="loading" class="btn btn-primary">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                  Submit
+                </button>
+                <a routerLink="/servicereport/{{this.id}}" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</layout>
+</div>

@@ -1,21 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CustomerSite, instrumentConfig, ListTypeItem, ProfileReadOnly, SparePart, User} from "../_models";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {
-  AccountService,
-  AlertService,
-  CustomerSiteService,
-  InstrumentService,
-  NotificationService,
-  ProfileService,
-  SparePartService,
-  UploadService
-} from "../_services";
+import {AccountService, NotificationService, ProfileService} from "../_services";
 import {first} from "rxjs/operators";
 import {PrevchklocpartelementService} from "../_services/prevchklocpartelement.service";
 import {PreventivemaintenancesService} from "../_services/preventivemaintenances.service";
 import {DatePipe} from "@angular/common";
+import {BsModalService} from "ngx-bootstrap/modal";
 
 @Component({
   selector: 'app-preventivemaintenancetable',
@@ -30,7 +21,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
   loading = false;
   submitted = false;
   isSave = false;
-  id: string;
+  @Input() public id;
   code: string = "CONTY";
   listTypeItems;
   config: instrumentConfig;
@@ -40,64 +31,32 @@ export class PreventivemaintenancetableComponent implements OnInit {
   instuType: ListTypeItem[];
   maintenance: FormArray;
   profilePermission: ProfileReadOnly;
-  hasReadAccess: boolean = false;
-  hasUpdateAccess: boolean = false;
-  hasDeleteAccess: boolean = false;
-  hasAddAccess: boolean = false;
   dateObj
   list
   savedData = []
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private customerSiteService: CustomerSiteService,
-    private instrumentService: InstrumentService,
     private prevchklocpartelementService: PrevchklocpartelementService,
-    private sparePartService: SparePartService,
-    private uploadService: UploadService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private preventivemaintenancesService: PreventivemaintenancesService,
     public datepipe: DatePipe,
+    public activeModal: BsModalService
   ) {
   }
 
   ngOnInit() {
     //
     this.dateObj = this.datepipe.transform(Date.now(),"MM/dd/yyyy");
-    this.user = this.accountService.userValue;
-    this.profilePermission = this.profileService.userProfileValue;
-    if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "PROF");
-      if (profilePermission.length > 0) {
-        this.hasReadAccess = profilePermission[0].read;
-        this.hasAddAccess = profilePermission[0].create;
-        this.hasDeleteAccess = profilePermission[0].delete;
-        this.hasUpdateAccess = profilePermission[0].update;
-      }
-    }
-
-    if (this.user.username == "admin") {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
-    }
-
-
     this.Form = this.formBuilder.group({
       serviceReportId: ['', Validators.required],
       maintenance: this.formBuilder.array([]),
     });
 
-    this.id = this.route.snapshot.paramMap.get('id');
     this.Form.get('serviceReportId').setValue(this.id);
-    if (this.id != null) {
-      this.hasAddAccess = this.user.username == "admin";
+    if (this.id != undefined) {
       this.preventivemaintenancesService.getById(this.id)
         .pipe(first())
         .subscribe({
@@ -206,31 +165,36 @@ export class PreventivemaintenancetableComponent implements OnInit {
 
   }
 
+  close() {
+    this.activeModal.hide();
+    this.notificationService.filter("itemadded");
+  }
+
   addItem(item: any) {
     item.forEach((value) => {
-        this.maintenance = this.Form.get('maintenance') as FormArray;
-        this.maintenance.push(this.formBuilder.group({
-          elementId: value.elementId,
-          location: value.location,
-          element: value.element,
-          locationId: value.locationId,
+      this.maintenance = this.Form.get('maintenance') as FormArray;
+      this.maintenance.push(this.formBuilder.group({
+        elementId: value.elementId,
+        location: value.location,
+        element: value.element,
+        locationId: value.locationId,
 
-          weekly: value.weekly,
-          monthly: value.monthly,
-          yearly: value.yearly,
-          isactive: true,
-          every2year: value.every2year,
-          every3year: value.every3year,
-          every5year: value.every5year,
+        weekly: value.weekly,
+        monthly: value.monthly,
+        yearly: value.yearly,
+        isactive: true,
+        every2year: value.every2year,
+        every3year: value.every3year,
+        every5year: value.every5year,
 
-          weeklyDate: value.weeklyDate,
-          monthlyDate: value.monthlyDate,
-          yearlyDate: value.yearlyDate,
+        weeklyDate: value.weeklyDate,
+        monthlyDate: value.monthlyDate,
+        yearlyDate: value.yearlyDate,
 
-          every2yearDate: value.every2yearDate,
-          every3yearDate: value.every3yearDate,
-          every5yearDate: value.every5yearDate,
-        }))
+        every2yearDate: value.every2yearDate,
+        every3yearDate: value.every3yearDate,
+        every5yearDate: value.every5yearDate,
+      }))
       }
     )
     console.log(this.maintenance)
@@ -258,14 +222,8 @@ export class PreventivemaintenancetableComponent implements OnInit {
   onSubmit() {
 
     this.submitted = true;
-
-    // reset alerts on submit
-    this.alertService.clear();
-
-    // stop here if form is invalid
-
     if (this.Form.invalid) {
-      return console.log(this.Form);
+      return;
     }
 
     this.isSave = true;
@@ -280,10 +238,10 @@ export class PreventivemaintenancetableComponent implements OnInit {
             //
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate([`/servicereport`]);
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
+            this.close();
             this.loading = false;
           },
           error: error => {
@@ -292,16 +250,17 @@ export class PreventivemaintenancetableComponent implements OnInit {
           }
         });
     } else {
+      this.profile.serviceReportId = this.id;
       this.preventivemaintenancesService.update(this.id, this.profile)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate([`/servicereport/${this.id}`]);
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
+            this.close();
             this.loading = false;
           },
           error: error => {
