@@ -1,21 +1,21 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
-import { ServiceReport } from '../_models';
+import {environment} from '../../environments/environment';
+import {ServiceReport} from '../_models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class ServiceReportService {
   private ServiceReportSubject: BehaviorSubject<ServiceReport>;
   public ServiceReport: Observable<ServiceReport>;
 
-    constructor(
-        private router: Router,
-        private http: HttpClient
-    ) {
+  constructor(
+    private router: Router,
+    private http: HttpClient
+  ) {
       //this.distrubutorSubject = new BehaviorSubject<Distributor>();
       //this.user = this.distrubutorSubject.asObservable();
     }
@@ -24,7 +24,7 @@ export class ServiceReportService {
     //    return this.userSubject.value;
     //}
 
-  
+
 
   save(ServiceReport: ServiceReport) {
     return this.http.post(`${environment.apiUrl}/ServiceReports`, ServiceReport);
@@ -38,9 +38,13 @@ export class ServiceReportService {
     return this.http.get<ServiceReport[]>(`${environment.apiUrl}/ServiceReports/GetServiceReportByCustomer/${cust}`);
   }
 
-    getById(id: string) {
-      return this.http.get<ServiceReport>(`${environment.apiUrl}/ServiceReports/${id}`);
-    }
+  getById(id: string) {
+    return this.http.get<ServiceReport>(`${environment.apiUrl}/ServiceReports/${id}`);
+  }
+
+  getView(id: string) {
+    return this.http.get<ServiceReport>(`${environment.apiUrl}/VW_ServiceReport/${id}`);
+  }
 
   searchByKeyword(param: string, custSiteId: string) {
     param = param == "" ? "undefined" : param;

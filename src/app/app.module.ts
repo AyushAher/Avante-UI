@@ -100,6 +100,7 @@ import {CustspinventorylistComponent} from "./custspinventory/Custspinventorylis
 import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
 import { SparequotedetComponent } from './Offerrequest/sparequotedet.component';
 import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
+import {PrevchklocpartelementvalueComponent} from "./masterlist/prevchklocpartelementvalue.component";
 
 
 @NgModule({
@@ -184,6 +185,7 @@ import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/
     CustspinventorylistComponent,
     SparequotedetComponent,
     PreventivemaintenancetableComponent,
+    PrevchklocpartelementvalueComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
