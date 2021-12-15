@@ -75,51 +75,58 @@ export class ServiceRequestListComponent implements OnInit {
       }
     }
     if (this.user.username == "admin") {
-      this.hasAddAccess = true;
+      this.hasAddAccess = false;
       this.hasDeleteAccess = true;
-    }
-
-    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
-
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0].itemCode;
-
-    if (role == environment.custRoleCode) {
-      this.IsCustomerView = true;
-      this.IsDistributorView = false;
-      this.IsEngineerView = false;
-    } else if (role == environment.distRoleCode) {
-      this.IsCustomerView = false;
-      this.IsDistributorView = true;
-      this.IsEngineerView = false;
+       this.columnDefs = this.createCustColumnDefs();
+       this.srCustList =[]
+       this.srEngList =[]
+       this.srDistList =[]
     } else {
-      this.IsCustomerView = false;
-      this.IsDistributorView = false;
-      this.IsEngineerView = true;
-    }
-    this.contcactservice.getDistByContact(this.user.contactId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.distId = data.object.defdistid;
-          this.getallrecored();
-        },
-        error: error => {
-          //  this.alertService.error(error);
-          this.notificationService.showSuccess(error, "Error");
-          this.loading = false;
-        }
-      });
+      this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
 
-    // this.distributorId = this.route.snapshot.paramMap.get('id');
+      let role = JSON.parse(localStorage.getItem('roles'));
+      role = role[0].itemCode;
 
-    if (this.IsDistributorView) {
-      this.columnDefs = this.createDisColumnDefs();
-    } else if (this.IsEngineerView) {
-      this.columnDefs = this.createDisColumnDefs();
-    } else {
-      this.columnDefs = this.createCustColumnDefs();
+      if (role == environment.custRoleCode) {
+        this.IsCustomerView = true;
+        this.IsDistributorView = false;
+        this.IsEngineerView = false;
+      } else if (role == environment.distRoleCode) {
+        this.IsCustomerView = false;
+        this.IsDistributorView = true;
+        this.IsEngineerView = false;
+      } else {
+        this.IsCustomerView = false;
+        this.IsDistributorView = false;
+        this.IsEngineerView = true;
+      }
+
+      this.contcactservice.getDistByContact(this.user.contactId)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            this.distId = data.object.defdistid;
+            this.getallrecored();
+          },
+          error: error => {
+            //  this.alertService.error(error);
+            this.notificationService.showSuccess(error, "Error");
+            this.loading = false;
+          }
+        });
+
+      // this.distributorId = this.route.snapshot.paramMap.get('id');
+
+      if (this.IsDistributorView) {
+        this.columnDefs = this.createDisColumnDefs();
+      } else if (this.IsEngineerView) {
+        this.columnDefs = this.createDisColumnDefs();
+      } else {
+        this.columnDefs = this.createCustColumnDefs();
+      }
+
     }
+
   }
 
   Add() {

@@ -86,7 +86,7 @@
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     Submit
                   </button>
-                  <a routerLink="/servicereport/{{this.id}}" class="btn btn-secondary"
+                  <a (click)="close()" class="btn btn-secondary"
                      style="margin-left: 10px;">Back</a>
                 </div>
               </div>
