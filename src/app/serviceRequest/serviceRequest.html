@@ -72,7 +72,7 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="serreqdate">Date</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.serreqdate.errors }" [readonly]="IsEngineerView" bsDatepicker class="form-control"
+              <input [ngClass]="{ 'is-invalid': submitted && f.serreqdate.errors }" readonly class="form-control"
                      formControlName="serreqdate" type="text"/>
               <div *ngIf="submitted && f.serreqdate.errors" class="invalid-feedback">
                 <div *ngIf="f.serreqdate.errors.required">Date is required</div>
@@ -103,8 +103,8 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="time">Time</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.requesttime.errors }" class="form-control" formControlName="requesttime"
-                     type="time"/>
+              <input [ngClass]="{ 'is-invalid': submitted && f.requesttime.errors }" readonly class="form-control" formControlName="requesttime"
+                     type="text"/>
               <div *ngIf="submitted && f.requesttime.errors" class="invalid-feedback">
                 <div *ngIf="f.requesttime.errors.required">time is required</div>
               </div>

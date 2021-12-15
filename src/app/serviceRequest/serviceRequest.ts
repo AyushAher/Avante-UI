@@ -438,10 +438,10 @@ export class ServiceRequestComponent implements OnInit {
             }
             //   data.object.subrequesttypeid = "";
             this.serviceRequestform.patchValue({"serreqno": data.object.serreqno});
-            this.serviceRequestform.patchValue({"serreqdate": new Date(data.object.serreqdate)});
+            this.serviceRequestform.patchValue({"serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy")});
             this.serviceRequestform.patchValue({"serresolutiondate": new Date(data.object.serresolutiondate)});
             this.serviceRequestform.patchValue({"machmodelname": data.object.machmodelnametext});
-            this.serviceRequestform.patchValue({"serreqdate": new Date(data.object.serreqdate)});
+            this.serviceRequestform.patchValue({"serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy")});
             this.serviceRequestform.patchValue({"serresolutiondate": new Date(data.object.serresolutiondate)});
             this.serviceRequestform.patchValue({"machmodelname": data.object.machmodelnametext});
             this.serviceRequestform.patchValue({"distid": data.object.distid});
@@ -513,6 +513,9 @@ export class ServiceRequestComponent implements OnInit {
         });
 
     } else {
+
+      this.serviceRequestform.get('requesttime').setValue(this.datepipe.transform(Date.now(), "H:mm"))
+      this.serviceRequestform.get('serreqdate').setValue(this.datepipe.transform(Date.now(), "MM/dd/yyyy"))
       this.contactService.getCustomerSiteByContact(this.user.contactId)
         .pipe(first())
         .subscribe({
@@ -579,8 +582,6 @@ export class ServiceRequestComponent implements OnInit {
 
     if (this.IsEngineerView) {
       this.serviceRequestform.get('assignedto').disable();
-      this.serviceRequestform.get('serreqdate').disable();
-      this.serviceRequestform.get('requesttime').disable();
       this.serviceRequestform.get('country').disable();
       this.serviceRequestform.get('machinesno').disable();
       this.serviceRequestform.get('breakdowntype').disable();
@@ -593,8 +594,6 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('currentinstrustatus').disable();
     } else if (this.IsDistributorView) {
       this.serviceRequestform.get('assignedto').enable();
-      this.serviceRequestform.get('requesttime').disable();
-      this.serviceRequestform.get('serreqdate').disable();
       this.serviceRequestform.get('country').disable();
       this.serviceRequestform.get('machinesno').disable();
       this.serviceRequestform.get('breakdowntype').disable();
