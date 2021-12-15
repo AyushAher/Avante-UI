@@ -1413,7 +1413,16 @@ export class ServiceReportComponent implements OnInit {
               data.attachment == true ? data.attachment = this.checkedImg : data.attachment = this.unCheckedImg;
               data.interrupted == true ? data.interrupted = this.checkedImg : data.interrupted = this.unCheckedImg;
               data.isworkdone == true ? data.isworkdone = this.checkedImg : data.isworkdone = this.unCheckedImg;
-              data.workTime.forEach(x => {
+
+              (data.workTime==[] || data.workTime == null)?data.workTime = [
+                {
+                  worktimedate:'No Data Avaliable',
+                  starttime:'No Data Avaliable',
+                  endtime:'No Data Avaliable',
+                  perdayhrs:'No Data Avaliable'
+                }
+
+              ] :data.workTime.forEach(x => {
                 x.worktimedate = this.datepipe.transform(x.worktimedate, "dd-MM-yy");
                 totalHrs = totalHrs + Number(x.perdayhrs)
               })
