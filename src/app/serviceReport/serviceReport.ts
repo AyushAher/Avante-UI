@@ -1779,7 +1779,7 @@ export class ServiceReportComponent implements OnInit {
                             )),
                             [
                               {text: "Total Days", fontSize: 10},
-                              {text: ""},
+                              {text: data.totalDays},
                               {text: "Total Hours", fontSize: 10},
                               {text: totalHrs},
                             ]
@@ -1866,6 +1866,7 @@ export class ServiceReportComponent implements OnInit {
 
             }
             pdfMake.createPdf(docDefinition).open()
+            // pdfMake.createPdf(docDefinition).download();
           }
         }
       )
