@@ -15,27 +15,29 @@
           <form [formGroup]="workTimeForm" (ngSubmit)="onValueSubmit()">
             <div class="modal-body">
               <div class="row">
-                <div class="col-sm-6 form-group">
+                <div class="col-sm-12 form-group">
                   <label for="worktimedate">Date</label>
                   <input bsDatepicker formControlName="worktimedate" class="form-control"/>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-12 col-sm-12">
                   <label for="starttime">start time</label>
-                  <input type="time" formControlName="starttime" class="form-control" />
+                  <input type="time" formControlName="starttime" (input)="PerDayHrs()"
+                         class="form-control"/>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-12 col-sm-12">
                   <label for="endtime">End time</label>
-                  <input type="time" formControlName="endtime" class="form-control" />
+                  <input type="time" formControlName="endtime" (input)="PerDayHrs()"
+                         class="form-control"/>
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                   <label for="perdayhrs">per day hrs</label>
-                  <input type="text" formControlName="perdayhrs" class="form-control" />
+                  <input type="text" formControlName="perdayhrs" readonly class="form-control"/>
                 </div>
               </div>
             </div>

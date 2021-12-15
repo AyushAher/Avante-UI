@@ -1,20 +1,19 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+
+import {User, workTime} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
 import {
-  ListTypeItem, ResultMsg, ProfileReadOnly, User, ConfigTypeValue,
-  EngineerCommentList, workTime
-} from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
-
-import {
-  AccountService, AlertService, ListTypeService, NotificationService, ProfileService, ConfigTypeValueService, worktimeService, workdoneService
+  AccountService,
+  ConfigTypeValueService,
+  ListTypeService,
+  NotificationService,
+  worktimeService
 } from '../_services';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { NgbDate, NgbDatepicker, NgbDateStruct, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ViewChild } from '@angular/core';
+import {BsModalService} from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -37,7 +36,7 @@ export class WorkTimeContentComponent implements OnInit {
   closeResult: string;
   @Input() public itemId;
   @Input() public id;
- 
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,10 +49,9 @@ export class WorkTimeContentComponent implements OnInit {
     private worktimeservice: worktimeService,
     public activeModal: BsModalService
   ) { }
- 
-  
+
+
   ngOnInit() {
-    console.log(this.itemId);
     this.user = this.accountService.userValue;
 
     this.workTimeForm = this.formBuilder.group({
@@ -68,7 +66,8 @@ export class WorkTimeContentComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.workTimeForm.patchValue(data.object);
-            this.workTimeForm.patchValue({ "worktimedate": new Date(data.object.worktimedate) });
+            this.workTimeForm.patchValue({"worktimedate": new Date(data.object.worktimedate)});
+            this.PerDayHrs()
           },
           error: error => {
             // this.alertService.error(error);
@@ -85,9 +84,34 @@ export class WorkTimeContentComponent implements OnInit {
     this.notificationService.filter("itemadded");
   }
 
+  PerDayHrs() {
+    let startTime: Date;
+    let endTime: Date;
+
+    startTime = new Date(new Date(this.workTimeForm.get('worktimedate').value).toDateString() + " " + this.workTimeForm.get('endtime').value);
+    endTime = new Date(new Date(this.workTimeForm.get('worktimedate').value).toDateString() + " " + this.workTimeForm.get('starttime').value);
+
+    let diff = (startTime.getTime() - endTime.getTime()) / (1000 * 60 * 60);
+    if (
+      this.workTimeForm.get('worktimedate').value != "" &&
+      this.workTimeForm.get('endtime').value != "" &&
+      this.workTimeForm.get('starttime').value != ""
+    ) {
+
+      if (diff > 0) {
+        this.workTimeForm.get('perdayhrs').setValue(diff.toString());
+      } else {
+        diff = 0;
+        this.workTimeForm.get('perdayhrs').setValue(diff.toString());
+        this.notificationService.showError("End Time cannot be more than start time", "Error")
+      }
+
+    }
+  }
+
   onValueSubmit() {
     //debugger;
-    
+
     this.submitted = true;
 
     this.isSave = true;
