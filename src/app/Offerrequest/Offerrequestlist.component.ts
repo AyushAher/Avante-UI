@@ -114,7 +114,7 @@ export class OfferrequestlistComponent implements OnInit {
         sortable: true,
       },
       {
-        headerName: "Podate",
+        headerName: "RFQ Date",
         field: "podate",
         filter: true,
         tooltipField: "PODate",
