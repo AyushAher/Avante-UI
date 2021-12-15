@@ -21,7 +21,7 @@
           <form [formGroup]="engineerCommentForm" (ngSubmit)="onValueSubmit()">
             <div class="modal-body">
               <div class="row">
-                <div class="col-sm-6 form-group">
+                <div class="col-sm-12 form-group">
                   <label for="nextdate">Next Date</label>
                   <input bsDatepicker formControlName="nextdate" class="form-control"/>
                   <!--<input ngbDatepicker #d="ngbDatepicker" formControlName="nextdate" class="form-control" />
@@ -31,20 +31,20 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                   <label for="comments">Comments</label>
-                  <input type="text" formControlName="comments" class="form-control" />
+                  <textarea type="text" formControlName="comments" class="form-control" > </textarea>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-12 col-sm-12">
 
                 </div>
               </div>
 
             </div>
             <div class="row">
-              <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+              <div class="col-md-12 col-sm-12" style="margin-left: 16px;">
                 <button [disabled]="loading" class="btn btn-primary">
                   <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                   Submit
