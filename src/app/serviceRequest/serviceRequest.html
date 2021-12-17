@@ -334,7 +334,8 @@
             </div>
             <div class="col-sm-3">
               <label for="currentinstrustatus">Current Instrument Status</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" class="form-control" formControlName="currentinstrustatus"
+              <input [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" class="form-control"
+                     formControlName="currentinstrustatus"
                      type="text"/>
               <div *ngIf="submitted && f.currentinstrustatus.errors" class="invalid-feedback">
                 <div *ngIf="f.currentinstrustatus.errors.required">Current Instrument Status is required</div>
@@ -342,20 +343,28 @@
             </div>
           </div>
           <br/>
-          <ul class="nav nav-tabs" id="myTab" role="tablist" *ngIf="IsCustomerView==false">
-            <li class="nav-item" *ngIf="IsEngineerView==true">
-              <a aria-controls="home" aria-selected="{{IsEngineerView}}" class="nav-link active" data-toggle="tab" href="#home" id="home-tab"
-                 role="tab">Engineer</a>
-            </li>
-            <li class="nav-item">
-              <a aria-controls="profile" aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab" href="#profile" id="profile-tab"
-                 role="tab">Ticket Assigned History</a>
-            </li>
-            <li class="nav-item" *ngIf="IsEngineerView==true">
-              <a aria-controls="contact" aria-selected="false" class="nav-link" data-toggle="tab" href="#contact" id="contact-tab"
-                 role="tab">Action</a>
-            </li>
-          </ul>
+
+          <div class="" style="display: flex;justify-content: space-between">
+            <ul class="nav nav-tabs" id="myTab" role="tablist" *ngIf="IsCustomerView==false">
+              <li class="nav-item" *ngIf="IsEngineerView==true">
+                <a aria-controls="home" aria-selected="{{IsEngineerView}}" class="nav-link active" data-toggle="tab"
+                   href="#home" id="home-tab"
+                   role="tab">Engineer</a>
+              </li>
+              <li class="nav-item">
+                <a aria-controls="profile" aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab"
+                   href="#profile" id="profile-tab"
+                   role="tab">Ticket Assigned History</a>
+              </li>
+              <li class="nav-item" *ngIf="IsEngineerView==true">
+                <a aria-controls="contact" aria-selected="false" class="nav-link" data-toggle="tab" href="#contact"
+                   id="contact-tab"
+                   role="tab">Action</a>
+              </li>
+            </ul>
+            <a class="link" *ngIf="IsEngineerView==true && accepted" routerLink="/schedule">Schedule Call</a>
+          </div>
+
           <div class="tab-content" id="myTabContent" *ngIf="IsCustomerView==false">
             <div *ngIf="IsEngineerView" aria-labelledby="home-tab" class="tab-pane fade show active" id="home"
                  role="tabpanel">
