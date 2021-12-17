@@ -28,6 +28,7 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {ModelEngContentComponent} from './modelengcontent';
 import {ModelEngActionContentComponent} from './modelengactioncontent';
 import {DatePipe} from '@angular/common'
+import {EngschedulerService} from "../_services/engscheduler.service";
 
 import {
   AccountService,
@@ -151,53 +152,54 @@ export class ServiceRequestComponent implements OnInit {
       private srAssignedHistoryService: SRAssignedHistoryService,
       private servicereportService: ServiceReportService,
       public datepipe: DatePipe,
-  ) {
-    this.notificationService.listen().subscribe((m: any) => {
-      console.log(m);
-      if (this.serviceRequestId != null) {
-        this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
-          .subscribe({
-            next: (data: any) => {
-              this.engineerCommentList = data.object.engComments;
+      private EngschedulerService: EngschedulerService,
+    ) {
+      this.notificationService.listen().subscribe((m: any) => {
+        console.log(m);
+        if (this.serviceRequestId != null) {
+          this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
+            .subscribe({
+              next: (data: any) => {
+                this.engineerCommentList = data.object.engComments;
 
-              this.engineerCommentList.forEach((value, index) => {
-                value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
-              })
+                this.engineerCommentList.forEach((value, index) => {
+                  value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
+                })
 
-              this.actionList = data.object.engAction;
-              this.actionList.forEach((value, index) => {
-                value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
-              })
-              this.api.refreshCells()
+                this.actionList = data.object.engAction;
+                this.actionList.forEach((value, index) => {
+                  value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
+                })
+                this.api.refreshCells()
 
-            },
-            error: error => {
-              // this.alertService.error(error);
-              this.notificationService.showSuccess(error, "Error");
-              this.loading = false;
-            }
-          });
-        this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
-          .subscribe({
-            next: (data: any) => {
-              this.engineerCommentList = data.object.engComments;
+              },
+              error: error => {
+                // this.alertService.error(error);
+                this.notificationService.showSuccess(error, "Error");
+                this.loading = false;
+              }
+            });
+          this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
+            .subscribe({
+              next: (data: any) => {
+                this.engineerCommentList = data.object.engComments;
 
-              this.engineerCommentList.forEach((value, index) => {
-                value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
-              })
-              this.actionList = data.object.engAction;
-              this.actionList.forEach((value, index) => {
-                value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
-              })
-              this.api.refreshCells()
+                this.engineerCommentList.forEach((value, index) => {
+                  value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
+                })
+                this.actionList = data.object.engAction;
+                this.actionList.forEach((value, index) => {
+                  value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
+                })
+                this.api.refreshCells()
 
-            },
-            error: error => {
-              // this.alertService.error(error);
-              this.notificationService.showSuccess(error, "Error");
-              this.loading = false;
-            }
-          });
+              },
+              error: error => {
+                // this.alertService.error(error);
+                this.notificationService.showSuccess(error, "Error");
+                this.loading = false;
+              }
+            });
       }
     })
     }
@@ -746,50 +748,69 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   generatereport() {
-    this.servicereport = new ServiceReport();
-    this.servicereport.serviceRequestId = this.serviceRequestId;
-    this.servicereport.customer = this.serviceRequestform.get('companyname').value;
-    this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
-    this.servicereport.country = this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name;
-    this.servicereport.problem = this.breakdownlist.filter(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)[0].itemname + "||" + this.serviceRequestform.get('alarmdetails').value + '||' + this.serviceRequestform.get('remarks').value;
+    this.EngschedulerService.getAll().pipe(first()).subscribe({
+      next: (data: any) => {
 
-    this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.INS)).length > 0;
-    this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.ANAS)).length > 0;
-    this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.PRMN1)).length > 0;
-    this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.REWK)).length > 0;
-    this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.CRMA)).length > 0;
+        if (data.result) {
+          let scheduleCalls = data.object.filter(x => x.serReqId == this.serviceRequestId)
+          if (scheduleCalls != null && scheduleCalls.length > 0) {
+            this.servicereport = new ServiceReport();
+            this.servicereport.serviceRequestId = this.serviceRequestId;
+            this.servicereport.customer = this.serviceRequestform.get('companyname').value;
+            this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
+            this.servicereport.country = this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name;
+            this.servicereport.problem = this.breakdownlist.filter(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)[0].itemname + "||" + this.serviceRequestform.get('alarmdetails').value + '||' + this.serviceRequestform.get('remarks').value;
 
-    if (this.customerId != null) {
-      this.customerService.getById(this.customerId)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.custcityname = data.object.address.city;
-            this.servicereport.town = this.custcityname;
-            //this.getPdffile(data.object.filePath);
-            this.servicereport
-            this.servicereportService.save(this.servicereport)
-              .pipe(first())
-              .subscribe({
-                next: (data: any) => {
-                  debugger;
-                  if (data.result) {
-                    this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.INS)).length > 0;
+            this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.ANAS)).length > 0;
+            this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.PRMN1)).length > 0;
+            this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.REWK)).length > 0;
+            this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.CRMA)).length > 0;
 
-                    // Add Record with status 'completed' in ticket action
-                    this.srAssignedHistory = new tickersAssignedHistory;
-                    this.srAssignedHistory.engineerid = this.engineerid;
-                    this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-                    this.srAssignedHistory.ticketstatus = "INPRG" ;
-                    this.srAssignedHistory.assigneddate = new Date()
-
-                    this.srAssignedHistoryService.save(this.srAssignedHistory)
+            if (this.customerId != null) {
+              this.customerService.getById(this.customerId)
+                .pipe(first())
+                .subscribe({
+                  next: (data: any) => {
+                    this.custcityname = data.object.address.city;
+                    this.servicereport.town = this.custcityname;
+                    //this.getPdffile(data.object.filePath);
+                    this.servicereport
+                    this.servicereportService.save(this.servicereport)
                       .pipe(first())
                       .subscribe({
                         next: (data: any) => {
-                          if (!data.result) {
+                          debugger;
+                          if (data.result) {
+                            this.notificationService.showSuccess(data.resultMessage, "Success");
+
+                            // Add Record with status 'completed' in ticket action
+                            this.srAssignedHistory = new tickersAssignedHistory;
+                            this.srAssignedHistory.engineerid = this.engineerid;
+                            this.srAssignedHistory.servicerequestid = this.serviceRequestId;
+                            this.srAssignedHistory.ticketstatus = "INPRG";
+                            this.srAssignedHistory.assigneddate = new Date()
+
+                            this.srAssignedHistoryService.save(this.srAssignedHistory)
+                              .pipe(first())
+                              .subscribe({
+                                next: (data: any) => {
+                                  if (!data.result) {
+                                    this.notificationService.showError(data.resultMessage, "Error");
+                                  }
+                                },
+                                error: error => {
+                                  // this.alertService.error(error);
+                                  this.notificationService.showSuccess(error, "Error");
+                                  this.loading = false;
+                                }
+                              });
+
+                            this.router.navigate(["servicereport", data.object.id]);
+                          } else {
                             this.notificationService.showError(data.resultMessage, "Error");
                           }
+                          this.loading = false;
                         },
                         error: error => {
                           // this.alertService.error(error);
@@ -797,47 +818,47 @@ export class ServiceRequestComponent implements OnInit {
                           this.loading = false;
                         }
                       });
-
-                    this.router.navigate(["servicereport", data.object.id]);
-                  } else {
-                    this.notificationService.showError(data.resultMessage, "Error");
+                  },
+                  error: error => {
+                    this.notificationService.showError(error, "Error");
+                    this.loading = false;
                   }
-                  this.loading = false;
-                },
-                error: error => {
-                  // this.alertService.error(error);
-                  this.notificationService.showSuccess(error, "Error");
-                  this.loading = false;
-                }
-              });
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
-          }
-        });
-    } else {
-      this.servicereportService.save(this.servicereport)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            debugger;
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              // Add Record with status 'completed' in ticket action
-              this.srAssignedHistory = new tickersAssignedHistory;
-              this.srAssignedHistory.engineerid = this.engineerid;
-              this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-              this.srAssignedHistory.ticketstatus = "INPRG";
-              this.srAssignedHistory.assigneddate = new Date()
-
-              this.srAssignedHistoryService.save(this.srAssignedHistory)
+                });
+            } else {
+              this.servicereportService.save(this.servicereport)
                 .pipe(first())
                 .subscribe({
                   next: (data: any) => {
-                    if (!data.result) {
+                    debugger;
+                    if (data.result) {
+                      this.notificationService.showSuccess(data.resultMessage, "Success");
+                      // Add Record with status 'completed' in ticket action
+                      this.srAssignedHistory = new tickersAssignedHistory;
+                      this.srAssignedHistory.engineerid = this.engineerid;
+                      this.srAssignedHistory.servicerequestid = this.serviceRequestId;
+                      this.srAssignedHistory.ticketstatus = "INPRG";
+                      this.srAssignedHistory.assigneddate = new Date()
+
+                      this.srAssignedHistoryService.save(this.srAssignedHistory)
+                        .pipe(first())
+                        .subscribe({
+                          next: (data: any) => {
+                            if (!data.result) {
+                              this.notificationService.showError(data.resultMessage, "Error");
+                            }
+                          },
+                          error: error => {
+                            // this.alertService.error(error);
+                            this.notificationService.showSuccess(error, "Error");
+                            this.loading = false;
+                          }
+                        });
+                      this.router.navigate(["servicereport", data.object.id]);
+                    } else {
                       this.notificationService.showError(data.resultMessage, "Error");
                     }
+                    this.loading = false;
+
                   },
                   error: error => {
                     // this.alertService.error(error);
@@ -845,20 +866,20 @@ export class ServiceRequestComponent implements OnInit {
                     this.loading = false;
                   }
                 });
-              this.router.navigate(["servicereport", data.object.id]);
-            } else {
-              this.notificationService.showError(data.resultMessage, "Error");
             }
-            this.loading = false;
 
-          },
-          error: error => {
-            // this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
-            this.loading = false;
+          } else {
+            this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
           }
-        });
-    }
+        } else {
+          this.notificationService.showError(data.resultMessage, "Error")
+        }
+
+      },
+      error: (error) => {
+        this.notificationService.showError(error, "Error")
+      }
+    })
 
   }
 
