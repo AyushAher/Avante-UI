@@ -26,6 +26,7 @@
     "@ng-bootstrap/ng-bootstrap": "^9.0.2",
     "@ng-select/ng-select": "^5.1.0",
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
+    "@syncfusion/ej2-angular-schedule": "^19.3.55",
     "ag-grid-angular": "^25.0.1",
     "ag-grid-community": "^25.0.1",
     "angular2-signaturepad": "^3.0.4",
@@ -45,7 +46,8 @@
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "xlsx": "^0.16.9",
-    "zone.js": "0.9.1"
+    "zone.js": "0.9.1",
+    "@syncfusion/ej2-material-theme": "~19.3.53"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.6",

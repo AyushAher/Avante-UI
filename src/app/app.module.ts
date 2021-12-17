@@ -101,6 +101,14 @@ import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
 import { SparequotedetComponent } from './Offerrequest/sparequotedet.component';
 import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 import {PrevchklocpartelementvalueComponent} from "./masterlist/prevchklocpartelementvalue.component";
+import {
+  ScheduleModule,
+  RecurrenceEditorModule,
+  DayService,
+  WeekService,
+  MonthService, WorkWeekService, MonthAgendaService, TimelineMonth, TimelineMonthService
+} from '@syncfusion/ej2-angular-schedule';
+import { EngineerschedulerComponent } from './engineerscheduler/engineerscheduler.component';
 
 
 @NgModule({
@@ -186,6 +194,7 @@ import {PrevchklocpartelementvalueComponent} from "./masterlist/prevchklocpartel
     SparequotedetComponent,
     PreventivemaintenancetableComponent,
     PrevchklocpartelementvalueComponent,
+    EngineerschedulerComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -203,11 +212,12 @@ import {PrevchklocpartelementvalueComponent} from "./masterlist/prevchklocpartel
     ToastrModule.forRoot(),
     BsDatepickerModule.forRoot(),
     NgMultiSelectDropDownModule.forRoot(),
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([]),
+    ScheduleModule, RecurrenceEditorModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    fakeBackendProvider, DatePipe
+    fakeBackendProvider, DatePipe,DayService,WeekService,MonthService,WorkWeekService,MonthAgendaService,TimelineMonthService
   ],
   bootstrap: [AppComponent]
 })

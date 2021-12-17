@@ -63,6 +63,7 @@ import {SparepartsrecommendedComponent} from "./sparepartsrecommended/spareparts
 import {CustspinventorylistComponent} from "./custspinventory/Custspinventorylist.component";
 import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
 import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
+import {EngineerschedulerComponent} from "./engineerscheduler/engineerscheduler.component";
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
@@ -310,6 +311,11 @@ const routes: Routes = [
   {
     path: "preventivemaintenancetable/:id",
     component: PreventivemaintenancetableComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "schedule",
+    component: EngineerschedulerComponent,
     canActivate: [AuthGuard],
   },
   {path: 'account', loadChildren: accountModule},

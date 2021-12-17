@@ -32,14 +32,14 @@
               "node_modules/ag-grid-community/dist/styles/ag-grid.css",
               "node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css",
               "node_modules/ngx-toastr/toastr.css",
-              "node_modules/intl-tel-input/build/css/intlTelInput.css"
+              "node_modules/intl-tel-input/build/css/intlTelInput.css",
+              "./node_modules/@syncfusion/ej2-material-theme/styles/material.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "src/assets/js/sb-admin-2.js",
               "node_modules/intl-tel-input/build/js/intlTelInput.min.js",
-
               "src/index.js",
               "src/assets/DistJs/azia.js",
               "src/assets/DistJs/chart.flot.sampledata.js",
@@ -51,7 +51,6 @@
               "src/assets/lib/peity/jquery.peity.min.js",
               "src/assets/lib/jquery.flot/jquery.flot.resize.js",
               "src/assets/lib/chart.js/Chart.bundle.min.js",
-
               "src/assets/custdashboardassets/js/material-dashboard.min.js",
               "src/assets/custdashboardassets/js/plugins/chartjs.min.js",
               "src/assets/custdashboardassets/js/plugins/smooth-scrollbar.min.js",
@@ -105,7 +104,8 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "./node_modules/@syncfusion/ej2-material-theme/styles/material.css"
             ],
             "scripts": [],
             "assets": [
