@@ -115,8 +115,8 @@ export class srcontrevComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.AmcList = data.salesorders.filter(x => x.cf_service_type != "Service Spares Sales");
-          this.pageData = data.page_context;
+          this.AmcList = data.object.filter(x => x.cf_service_type != "Service Spares Sales");
+          this.pageData = data.extraObject;
           this.currentpage = this.pageData.page;
           this.has_more_data = this.pageData.has_more_page;
 

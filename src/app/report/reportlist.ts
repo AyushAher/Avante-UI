@@ -103,7 +103,7 @@ export class ReportListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.AmcList = data.invoices;
+          this.AmcList = data.object;
         },
         error: error => {
           this.notificationService.showError(error, "Error");

@@ -9,15 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.zohoapiService = void 0;
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var http_1 = require("@angular/common/http");
 var operators_1 = require("rxjs/operators");
 var environment_1 = require("../../environments/environment");
+var _services_1 = require("../_services");
 var zohoapiService = /** @class */ (function () {
-    function zohoapiService(router, http) {
+    function zohoapiService(router, http, accountService) {
         this.router = router;
         this.http = http;
+        this.accountService = accountService;
         //this.distrubutorSubject = new BehaviorSubject<Distributor>();
         //this.user = this.distrubutorSubject.asObservable();
     }
@@ -34,35 +37,35 @@ var zohoapiService = /** @class */ (function () {
         //formData.append('client_secret', environment.secret);
         //formData.append('redirect_uri', environment.redirecturl);
         //formData.append('grant_type', "authorization_code");
-        var url = environment_1.environment.zohoaccessapi.replace("{0}", code);
-        return this.http.post(url, "");
+        // let url = "${ environment.apiUrl }/Amc/${id}"
+        return this.http.get(environment_1.environment.apiUrl + "/Zoho/" + code);
     };
     zohoapiService.prototype.getAllinvoice = function () {
-        return this.http.get(environment_1.environment.bookapi + "/invoices");
+        return this.http.get(environment_1.environment.apiUrl + "/zoho/invoices/1");
     };
     zohoapiService.prototype.getAllCustomerPayments = function (custname, page) {
         if (page == 0 || page == undefined) {
             page = 1;
         }
-        return this.http.get(environment_1.environment.bookapi + "/customerpayments?page=" + page + "&customer_name_contains=" + custname);
+        return this.http.get(environment_1.environment.apiUrl + "/zoho/customerpament/" + this.accountService.zohoauthValue + "/" + page + "?customer_name_contains=" + custname);
     };
     zohoapiService.prototype.getSrConrtactRevenue = function (custname, page) {
         if (page == 0 || page == undefined) {
             page = 1;
         }
-        return this.http.get(environment_1.environment.bookapi + "/salesorders?page=" + page + "&customer_name_contains=" + custname);
+        return this.http.get(environment_1.environment.apiUrl + "/zoho/salesorders/" + this.accountService.zohoauthValue + "/" + page + "?customer_name_contains=" + custname);
     };
     zohoapiService.prototype.getquotation = function (custname, page) {
         if (page == 0 || page == undefined) {
             page = 1;
         }
-        return this.http.get(environment_1.environment.bookapi + "/salesorders?page=" + page + "&salesorder_number_startswith=SQT&customer_name_contains=" + custname);
+        return this.http.get(environment_1.environment.apiUrl + "/zoho/salesorders/" + this.accountService.zohoauthValue + "/" + page + "?salesorder_number_startswith=SQT&customer_name_contains=" + custname);
     };
     zohoapiService.prototype.getsostatus = function (custname, page) {
         if (page == 0 || page == undefined) {
             page = 1;
         }
-        return this.http.get(environment_1.environment.bookapi + "/purchaseorders?page=" + page + "&cf_intended_customer=" + custname);
+        return this.http.get(environment_1.environment.apiUrl + "/zoho/purchaseorders/" + this.accountService.zohoauthValue + "/" + page + "?cf_intended_customer=" + custname);
     };
     zohoapiService.prototype.getAll = function () {
         return this.http.get(environment_1.environment.apiUrl + "/Amc");
@@ -111,7 +114,8 @@ var zohoapiService = /** @class */ (function () {
     zohoapiService = __decorate([
         core_1.Injectable({ providedIn: 'root' }),
         __metadata("design:paramtypes", [router_1.Router,
-            http_1.HttpClient])
+            http_1.HttpClient,
+            _services_1.AccountService])
     ], zohoapiService);
     return zohoapiService;
 }());

@@ -82,15 +82,16 @@ export class CustPayComponent implements OnInit {
     //this.accountService.clear();
     if (this.accountService.zohoauthValue == null) {
       if (this.zohocode == null) {
-        this.zohoservice.authservice();
+        this.zohoservice.authservice();  
       }
       else {
         this.zohoservice.authwithcode(this.zohocode).subscribe({
           next: (data: any) => {
             debugger;
             //alert(data.access_token);
-            localStorage.setItem('zohotoken', JSON.stringify(data.access_token));
-            this.accountService.zohoauthSet(data.access_token);
+            localStorage.setItem('zohotoken', JSON.stringify(data.object));
+            debugger;
+            this.accountService.zohoauthSet(data.object);
             this.getinvoice("",1);
           },
           error: error => {
@@ -115,8 +116,9 @@ export class CustPayComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.AmcList = data.customerpayments;
-          this.pageData = data.page_context;
+          debugger;
+          this.AmcList = data.object;
+          this.pageData = data.extraObject;
           this.currentpage = this.pageData.page;
           this.has_more_data = this.pageData.has_more_page;
         },

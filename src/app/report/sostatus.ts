@@ -114,8 +114,8 @@ export class sostatusComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.AmcList = data.purchaseorders;
-          this.pageData = data.page_context;
+          this.AmcList = data.object;
+          this.pageData = data.extraObject;
           this.currentpage = this.pageData.page;
           this.has_more_data = this.pageData.has_more_page;
         },
@@ -151,11 +151,11 @@ export class sostatusComponent implements OnInit {
   private createColumnDefs() {
     return [{
       headerName: 'Customer Name',
-      field: 'cf_end_customer',
+      field: 'cf_intended_customer',
       filter: true,
         editable: false,
       sortable: true,
-      tooltipField: 'cf_end_customer'
+      tooltipField: 'cf_intended_customer'
       },
       {
         headerName: 'Payment',

@@ -115,8 +115,8 @@ export class qtsentComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.AmcList = data.salesorders;
-          this.pageData = data.page_context;
+          this.AmcList = data.object;
+          this.pageData = data.extraObject;
           this.currentpage = this.pageData.page;
           this.has_more_data = this.pageData.has_more_page;
         },

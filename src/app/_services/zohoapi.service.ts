@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { Amc } from '../_models';
+import { AccountService } from '../_services';
 
 
 @Injectable({ providedIn: 'root' })
@@ -15,7 +16,8 @@ export class zohoapiService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+      private http: HttpClient,
+      private accountService: AccountService
     ) {
       //this.distrubutorSubject = new BehaviorSubject<Distributor>();
       //this.user = this.distrubutorSubject.asObservable();
@@ -36,39 +38,39 @@ export class zohoapiService {
     //formData.append('client_secret', environment.secret);
     //formData.append('redirect_uri', environment.redirecturl);
     //formData.append('grant_type', "authorization_code");
-    let url = environment.zohoaccessapi.replace("{0}", code);
-    return this.http.post(url,"");
+   // let url = "${ environment.apiUrl }/Amc/${id}"
+    return this.http.get(`${environment.apiUrl}/Zoho/${code}`);
   }
 
     getAllinvoice() {
-    return this.http.get(`${environment.bookapi}/invoices`);
+      return this.http.get(`${environment.apiUrl}/zoho/invoices/1`);
   }
 
   getAllCustomerPayments(custname: string, page: number) {
     if (page == 0 || page == undefined) {
       page = 1;
     }
-    return this.http.get(`${environment.bookapi}/customerpayments?page=`+ page +`&customer_name_contains=` + custname);
+    return this.http.get(`${environment.apiUrl}/zoho/customerpament/` + this.accountService.zohoauthValue + `/` + page + "?customer_name_contains=" + custname);
   }
 
   getSrConrtactRevenue(custname: string, page: number) {
     if (page == 0 || page == undefined) {
       page = 1;
     }
-    return this.http.get(`${environment.bookapi}/salesorders?page=` + page + `&customer_name_contains=` + custname);
+    return this.http.get(`${environment.apiUrl}/zoho/salesorders/` + this.accountService.zohoauthValue + `/` + page + `?customer_name_contains=` + custname);
   }
 
   getquotation(custname: string, page: number) {
     if (page == 0 || page == undefined) {
       page = 1;
     }
-    return this.http.get(`${environment.bookapi}/salesorders?page=` + page + `&salesorder_number_startswith=SQT&customer_name_contains=` + custname);
+    return this.http.get(`${environment.apiUrl}/zoho/salesorders/` + this.accountService.zohoauthValue + `/` + page + `?salesorder_number_startswith=SQT&customer_name_contains=` + custname);
   }
   getsostatus(custname: string, page: number) {
     if (page == 0 || page == undefined) {
       page = 1;
     }
-    return this.http.get(`${environment.bookapi}/purchaseorders?page=` + page + `&cf_intended_customer=` + custname);
+    return this.http.get(`${environment.apiUrl}/zoho/purchaseorders/` + this.accountService.zohoauthValue + `/` + page + `?cf_intended_customer=` + custname);
   }
 
     getAll() {
