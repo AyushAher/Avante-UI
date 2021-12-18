@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
-import { first } from 'rxjs/operators';
-import { RenderComponent } from '../../distributor/rendercomponent';
-import { ProfileReadOnly, User, Visadetails } from '../../_models';
-import { AccountService, NotificationService, ProfileService, VisadetailsService } from '../../_services';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {first} from 'rxjs/operators';
+import {RenderComponent} from '../../distributor/rendercomponent';
+import {ProfileReadOnly, User, Visadetails} from '../../_models';
+import {AccountService, NotificationService, ProfileService, VisadetailsService} from '../../_services';
 
 @Component({
   selector: 'app-visadetailslist',
@@ -13,7 +13,7 @@ import { AccountService, NotificationService, ProfileService, VisadetailsService
 })
 export class VisadetailsListComponent implements OnInit {
   form: FormGroup;
-  traveldetailsList: Visadetails[];
+  List: Visadetails[];
   loading = false;
   submitted = false;
   isSave = false;
@@ -31,7 +31,7 @@ export class VisadetailsListComponent implements OnInit {
   constructor(
     private router: Router,
     private accountService: AccountService,
-    private travelDetailsService: VisadetailsService,
+    private Service: VisadetailsService,
     private notificationService: NotificationService,
     private profileService: ProfileService
   ) {}
@@ -39,10 +39,12 @@ export class VisadetailsListComponent implements OnInit {
   ngOnInit() {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
+
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
         (x) => x.screenCode == "VADET"
       );
+
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
         this.hasAddAccess = profilePermission[0].create;
@@ -50,21 +52,21 @@ export class VisadetailsListComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
+
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     }
-    // console.log(this.user.id);
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
-    this.travelDetailsService.getAll()
+    this.Service.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.traveldetailsList = data.object;
-          console.log(this.traveldetailsList)
+          data.object = data.object.filter(x => x.createdby == this.user.userId)
+          this.List = data.object;
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");

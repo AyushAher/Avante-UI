@@ -1,24 +1,22 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
-import { first } from "rxjs/operators";
-import { RenderComponent } from "../../distributor/rendercomponent";
-import { ProfileReadOnly, User, Staydetails } from "../../_models";
-import {  AccountService, AlertService, NotificationService, ProfileService, StaydetailsService } from "../../_services";
+import {Component, OnInit} from "@angular/core";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
+import {first} from "rxjs/operators";
+import {RenderComponent} from "../../distributor/rendercomponent";
+import {ProfileReadOnly, Staydetails, User} from "../../_models";
+import {AccountService, AlertService, NotificationService, ProfileService, StaydetailsService} from "../../_services";
 
 @Component({
   selector: "app-staydetailslist",
   templateUrl: "./staydetailslist.component.html",
-  // styleUrls: ['./staydetails-list.component.css']
 })
 export class StaydetailsListComponent implements OnInit {
   form: FormGroup;
-  traveldetailsList: Staydetails[];
+  List: Staydetails[];
   loading = false;
   submitted = false;
   isSave = false;
-random="hello"
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
@@ -67,7 +65,8 @@ random="hello"
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.traveldetailsList = data.object;
+          data.object = data.object.filter(x => x.createdby == this.user.userId)
+          this.List = data.object;
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
-import { first } from 'rxjs/operators';
-import { RenderComponent } from '../../distributor/rendercomponent';
-import { ProfileReadOnly, User, LocalExpenses } from '../../_models';
-import { AccountService, AlertService, NotificationService, ProfileService, LocalExpensesService } from '../../_services';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {first} from 'rxjs/operators';
+import {RenderComponent} from '../../distributor/rendercomponent';
+import {LocalExpenses, ProfileReadOnly, User} from '../../_models';
+import {AccountService, AlertService, LocalExpensesService, NotificationService, ProfileService} from '../../_services';
 
 @Component({
   selector: 'app-localexpenseslist',
@@ -13,7 +13,7 @@ import { AccountService, AlertService, NotificationService, ProfileService, Loca
 })
 export class LocalexpenseslistComponent implements OnInit {
   form: FormGroup;
-  LocalexpensesList: LocalExpenses[];
+  List: LocalExpenses[];
   loading = false;
   submitted = false;
   isSave = false;
@@ -34,7 +34,7 @@ export class LocalexpenseslistComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private alertService: AlertService,
-    private localExpensesService: LocalExpensesService,
+    private Service: LocalExpensesService,
     private notificationService: NotificationService,
     private profileService: ProfileService
   ) {}
@@ -60,12 +60,12 @@ export class LocalexpenseslistComponent implements OnInit {
       this.hasReadAccess = true;
     }
 
-    this.localExpensesService.getAll()
+    this.Service.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.LocalexpensesList = data.object;
-          console.log(this.LocalexpensesList)
+          data.object = data.object.filter(x => x.createdby == this.user.userId)
+          this.List = data.object;
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");

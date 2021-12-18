@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
-import { first } from "rxjs/operators";
-import { RenderComponent } from "../../distributor/rendercomponent";
-import { ProfileReadOnly, User, travelDetails } from "../../_models";
-import {   AccountService,   NotificationService,  ProfileService, TravelDetailService} from "../../_services";
+import {Component, OnInit} from "@angular/core";
+import {FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
+import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
+import {first} from "rxjs/operators";
+import {RenderComponent} from "../../distributor/rendercomponent";
+import {ProfileReadOnly, travelDetails, User} from "../../_models";
+import {AccountService, NotificationService, ProfileService, TravelDetailService} from "../../_services";
 
 @Component({
   selector: "app-traveldetailslist",
@@ -13,7 +13,7 @@ import {   AccountService,   NotificationService,  ProfileService, TravelDetailS
 })
 export class TraveldetailslistComponent implements OnInit {
   form: FormGroup;
-  traveldetailsList: travelDetails[];
+  List: travelDetails[];
   loading = false;
   submitted = false;
   isSave = false;
@@ -32,7 +32,7 @@ export class TraveldetailslistComponent implements OnInit {
   constructor(
     private router: Router,
     private accountService: AccountService,
-    private travelDetailsService: TravelDetailService,
+    private Service: TravelDetailService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {}
@@ -60,12 +60,13 @@ export class TraveldetailslistComponent implements OnInit {
     // console.log(this.user.id);
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
-    this.travelDetailsService
+    this.Service
       .getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.traveldetailsList = data.object;
+          data.object = data.object.filter(x => x.createdby == this.user.userId)
+          this.List = data.object;
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
