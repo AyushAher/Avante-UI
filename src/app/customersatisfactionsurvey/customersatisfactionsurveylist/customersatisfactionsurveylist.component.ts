@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
-import { first } from 'rxjs/operators';
-import { RenderComponent } from '../../distributor/rendercomponent';
-import { ProfileReadOnly, User, Customersatisfactionsurvey, LocalExpenses } from '../../_models';
-import { AccountService, AlertService, NotificationService, ProfileService, CustomersatisfactionsurveyService, LocalExpensesService} from '../../_services';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {first} from 'rxjs/operators';
+import {RenderComponent} from '../../distributor/rendercomponent';
+import {Customersatisfactionsurvey, ProfileReadOnly, User} from '../../_models';
+import {AccountService, CustomersatisfactionsurveyService, NotificationService, ProfileService} from '../../_services';
 
 @Component({
   selector: 'app-customersatisfactionsurveylist',
@@ -13,7 +13,7 @@ import { AccountService, AlertService, NotificationService, ProfileService, Cust
 })
 export class CustomersatisfactionsurveylistComponent implements OnInit {
   form: FormGroup;
-  CustomersatisfactionsurveyList: Customersatisfactionsurvey[];
+  List: Customersatisfactionsurvey[];
   loading = false;
   submitted = false;
   isSave = false;
@@ -31,7 +31,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
   constructor(
     private router: Router,
     private accountService: AccountService,
-    private CustomersatisfactionsurveyService: CustomersatisfactionsurveyService,
+    private Service: CustomersatisfactionsurveyService,
     private notificationService: NotificationService,
     private profileService: ProfileService
   ) {}
@@ -57,12 +57,12 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
       this.hasReadAccess = true;
     }
 
-    this.CustomersatisfactionsurveyService.getAll()
+    this.Service.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.CustomersatisfactionsurveyList = data.object;
-          console.log(this.CustomersatisfactionsurveyList)
+          data.object = data.object.filter(x => x.createdby == this.user.userId)
+          this.List = data.object;
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
