@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AccountService, DistributordashboardsettingsService, ListTypeService} from "../_services";
+import {AccountService, CustdashboardsettingsService, ListTypeService} from "../_services";
 import {ListTypeItem, User} from "../_models";
 import {first} from "rxjs/operators";
 
@@ -19,7 +19,7 @@ export class DistributordashboardComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private listTypeService: ListTypeService,
-    private SettingsService: DistributordashboardsettingsService,
+    private SettingsService: CustdashboardsettingsService,
   ) {
   }
 
@@ -31,48 +31,14 @@ export class DistributordashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data0: any) => {
-
-          this.row1 = data0.object.row1.split(",")
-
-          if (this.row1 != []) {
-            this.row1.forEach((value, index) => {
-              document.getElementById(value).style.visibility = 'visible'
+          let data = data0.object
+          console.log(data)
+          if (data != null && data.length > 0 && data0.result) {
+            data.forEach(x => {
+              document.getElementById(x.graphNameCode).style.visibility = "visible";
             })
+
           }
-
-          if (this.row2 != []) {
-            this.row2 = data0.object.row2.split(",")
-            this.row2.forEach((value, index) => {
-              document.getElementById(value).style.visibility = 'visible'
-            })
-          }
-
-          this.listTypeService
-            .getById("DDRW1")
-            .pipe(first())
-            .subscribe({
-              next: (data1: any) => {
-                for (var i in data1) {
-                  if (!this.row1.includes(data1[i].listTypeItemId)) {
-                    document.getElementById((data1[i].listTypeItemId)).style.display = 'none';
-                  }
-                }
-              }
-            });
-
-          this.listTypeService
-            .getById("DDRW2")
-            .pipe(first())
-            .subscribe({
-              next: (data2: any) => {
-                for (var i in data2) {
-                  console.log(data2[i].listTypeItemId)
-                  if (!this.row2.includes(data2[i].listTypeItemId)) {
-                    document.getElementById((data2[i].listTypeItemId)).style.display = 'none';
-                  }
-                }
-              }
-            });
         }
       })
   }
