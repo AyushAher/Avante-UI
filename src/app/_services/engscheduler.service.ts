@@ -26,6 +26,12 @@ export class EngschedulerService {
     );
   }
 
+  getByEngId(id: string) {
+    return this.http.get(
+      `${environment.apiUrl}/EngSchedulers/engid/${id}`
+    );
+  }
+
   update(id, params) {
     return this.http
       .put(`${environment.apiUrl}/EngSchedulers/${id}`, params)

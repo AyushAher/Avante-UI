@@ -1,46 +1,51 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
-import { ServiceRequest } from '../_models';
+import {environment} from '../../environments/environment';
+import {ServiceRequest} from '../_models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class ServiceRequestService {
   private serviceRequestSubject: BehaviorSubject<ServiceRequest>;
   public serviceRequest: Observable<ServiceRequest>;
 
-    constructor(
-        private router: Router,
-        private http: HttpClient
-    ) {
-      //this.distrubutorSubject = new BehaviorSubject<Distributor>();
-      //this.user = this.distrubutorSubject.asObservable();
-    }
+  constructor(
+    private router: Router,
+    private http: HttpClient
+  ) {
+    //this.distrubutorSubject = new BehaviorSubject<Distributor>();
+    //this.user = this.distrubutorSubject.asObservable();
+  }
 
-    //public get userValue(): User {
-    //    return this.userSubject.value;
-    //}
-
+  //public get userValue(): User {
+  //    return this.userSubject.value;
+  //}
 
 
   save(serviceRequest: ServiceRequest) {
     return this.http.post(`${environment.apiUrl}/serviceRequest`, serviceRequest);
-    }
+  }
 
-    getAll() {
-      return this.http.get<ServiceRequest[]>(`${environment.apiUrl}/serviceRequest`);
-    }
+  getAll() {
+    return this.http.get<ServiceRequest[]>(`${environment.apiUrl}/serviceRequest`);
+  }
 
-    getById(id: string) {
-      return this.http.get<ServiceRequest>(`${environment.apiUrl}/serviceRequest/${id}`);
-    }
+  getById(id: string) {
+    return this.http.get<ServiceRequest>(`${environment.apiUrl}/serviceRequest/${id}`);
+  }
+
   //GetSerReqNo
   getSerReqNo() {
     return this.http.get<ServiceRequest>(`${environment.apiUrl}/serviceRequest/GetSerReqNo`);
   }
+
+  GetServiceRequestByConId(id: string) {
+    return this.http.get<ServiceRequest>(`${environment.apiUrl}/serviceRequest/GetServiceRequestByConId/${id}`);
+  }
+
   GetServiceRequestByDist(id: string) {
     return this.http.get<ServiceRequest>(`${environment.apiUrl}/ServiceRequest/GetServiceRequestByDist/${id}`);
   }
