@@ -1,17 +1,19 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
-import { ListTypeItem, ResultMsg, ProfileReadOnly, User, ConfigTypeValue, EngineerCommentList, workDone } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import {User, workDone} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
 import {
-  AccountService, AlertService, ListTypeService, NotificationService, ProfileService, ConfigTypeValueService, workdoneService
+  AccountService,
+  ConfigTypeValueService,
+  ListTypeService,
+  NotificationService,
+  workdoneService
 } from '../_services';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { NgbDate, NgbDatepicker, NgbDateStruct, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ViewChild } from '@angular/core';
+import {BsModalService} from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -34,7 +36,7 @@ export class WorkdoneContentComponent implements OnInit {
   closeResult: string;
   @Input() public itemId;
   @Input() public id;
- 
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,14 +49,16 @@ export class WorkdoneContentComponent implements OnInit {
     private workdoneservice: workdoneService,
     public activeModal: BsModalService
   ) { }
- 
-  
+
+
   ngOnInit() {
     console.log(this.itemId);
     this.user = this.accountService.userValue;
 
     this.workdoneForm = this.formBuilder.group({
-      workdone: ['', Validators.required]
+      workdone: ['', Validators.required],
+      isactive: [true],
+
     });
     if (this.id != undefined) {
       this.workdoneservice.getById(this.id)
@@ -81,7 +85,7 @@ export class WorkdoneContentComponent implements OnInit {
 
   onValueSubmit() {
     //debugger;
-    
+
     this.submitted = true;
 
     this.isSave = true;

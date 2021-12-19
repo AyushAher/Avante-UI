@@ -42,7 +42,7 @@ export class CustomerComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) { }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -77,7 +77,7 @@ export class CustomerComponent implements OnInit {
         zip: ['', Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(10)])],
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
-        isActive: false,
+        isActive: true,
       }),
     });
 
@@ -132,7 +132,7 @@ export class CustomerComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.customerform.controls; }
   get a() { return this.customerform.controls.address; }
-   
+
   onSubmit() {
    // //debugger;
     this.submitted = true;
@@ -160,7 +160,7 @@ export class CustomerComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-           
+
           },
           error: error => {
            // this.alertService.error(error);
@@ -184,7 +184,7 @@ export class CustomerComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-            
+
           },
           error: error => {
           //  this.alertService.error(error);

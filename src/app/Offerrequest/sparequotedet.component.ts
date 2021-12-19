@@ -103,6 +103,7 @@ export class SparequotedetComponent implements OnInit {
       zohoPORaisedDate: [""],
       deliveredOn: [""],
       shippedDate: [""],
+      isactive: [true],
     });
 
     this.listTypeService.getById("SQDTS")

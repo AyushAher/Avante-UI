@@ -76,6 +76,7 @@ export class DistributordashboardsettingsComponent implements OnInit {
       displayIn: "",
       position: 0,
       isDefault: false,
+      isactive: true,
       dashboardFor: "DHCT",
       graphName: ""
     });

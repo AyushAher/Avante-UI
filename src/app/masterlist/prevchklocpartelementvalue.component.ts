@@ -47,7 +47,9 @@ export class PrevchklocpartelementvalueComponent implements OnInit {
 
     this.listvalue = this.formBuilder.group({
       element: ['', Validators.required],
-      id: ''
+      id: '',
+      isactive: [true],
+
     });
 
     //debugger;

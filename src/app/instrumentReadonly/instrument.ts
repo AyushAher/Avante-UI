@@ -1,17 +1,34 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 import {
-  User, Instrument, CustomerSite, ListTypeItem, instrumentConfig, Distributor, SparePart,
-  ResultMsg, ProfileReadOnly, FileShare
+  CustomerSite,
+  Distributor,
+  FileShare,
+  Instrument,
+  instrumentConfig,
+  ListTypeItem,
+  ProfileReadOnly,
+  ResultMsg,
+  SparePart,
+  User
 } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
 import {
-  AccountService, AlertService, CustomerSiteService, InstrumentService, ListTypeService, SparePartService
-  , UploadService, NotificationService, ProfileService, DistributorService, FileshareService
+  AccountService,
+  AlertService,
+  CustomerSiteService,
+  DistributorService,
+  FileshareService,
+  InstrumentService,
+  ListTypeService,
+  NotificationService,
+  ProfileService,
+  SparePartService,
+  UploadService
 } from '../_services';
 
 
@@ -111,7 +128,9 @@ export class InstrumentRonlyComponent implements OnInit {
       wrntystdt: [''],
       wrntyendt: [''],
       configtypeid: [''],
-      installbyOther: ['']
+      installbyOther: [''],
+      isactive: [true],
+
     });
     this.imageUrl = this.noimageData;
     this.instrumentform.get('warranty').valueChanges
@@ -366,7 +385,7 @@ export class InstrumentRonlyComponent implements OnInit {
     }
   }
 
- 
+
 
   onSubmit() {
     //debugger;
@@ -455,7 +474,7 @@ export class InstrumentRonlyComponent implements OnInit {
         editable: false,
         sortable: false,
         width: 0,
-        hide: true, 
+        hide: true,
       },
       {
         headerName: 'Value',

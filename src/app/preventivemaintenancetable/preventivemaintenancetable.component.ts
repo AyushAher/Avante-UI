@@ -53,6 +53,8 @@ export class PreventivemaintenancetableComponent implements OnInit {
     this.Form = this.formBuilder.group({
       serviceReportId: ['', Validators.required],
       maintenance: this.formBuilder.array([]),
+      isactive: [true],
+
     });
 
     this.Form.get('serviceReportId').setValue(this.id);

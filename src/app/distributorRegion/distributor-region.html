@@ -87,18 +87,6 @@
                   </label>
                 </div>
               </div>
-              <div class="col-md-4 col-sm-4" *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true">
-                <label for=""></label>
-                <div class="checkbox">
-                  <label for="active">
-                    <input type="checkbox" formControlName="isActive" class="" />
-                    Active
-                  </label>
-                </div>
-                <!--<div *ngIf="submitted && f.active.errors" class="invalid-feedback">
-      <div *ngIf="f.active.errors.required">Active is required</div>
-    </div>-->
-            </div>
           </div>
           <br />
           <p><b>Address</b></p>
@@ -171,18 +159,6 @@
                 <div *ngIf="submitted && a.get('geolong').errors" class="invalid-feedback">
                   <div *ngIf="a.get('geolong').errors.required">Longitude is required</div>
                 </div>
-              </div>
-              <div class="col-sm-4">
-                <label for=""></label>
-                <div class="checkbox">
-                  <label for="isActive">
-                    <input type="checkbox" formControlName="isActive" class="" />
-                    Active
-                  </label>
-                </div>
-                <!--<div *ngIf="submitted && f.addressActive.errors" class="invalid-feedback">
-          <div *ngIf="f.addressActive.errors.required">Active is required</div>
-        </div>-->
               </div>
             </div>
           </div>

@@ -59,6 +59,8 @@ export class WorkTimeContentComponent implements OnInit {
       starttime: ['', Validators.required],
       endtime: ['', Validators.required],
       perdayhrs: ['', Validators.required],
+      isactive: [true],
+
     });
     if (this.id != undefined) {
       this.worktimeservice.getById(this.id)

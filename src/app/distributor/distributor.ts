@@ -6,8 +6,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService, DistributorService, CountryService, NotificationService, ProfileService } from '../_services';
- 
- 
+
+
 @Component({
   selector: 'app-distributor',
   templateUrl: './distributor.html',
@@ -40,7 +40,7 @@ export class DistributorComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService
   ) { }
-  
+
   ngOnInit() {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
@@ -65,7 +65,7 @@ export class DistributorComponent implements OnInit {
       distname: ['', Validators.required],
       payterms: ['', Validators.required],
       isblocked: false,
-      isactive: false,
+      isactive: true,
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: ['', Validators.required],
@@ -76,7 +76,7 @@ export class DistributorComponent implements OnInit {
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
         isActive: false,
-      }), 
+      }),
     });
     this.countryService.getAll()
       .pipe(first())
@@ -117,14 +117,14 @@ export class DistributorComponent implements OnInit {
   get f() {
     return this.form.controls;
   }
-  
+
   get a() {
     ////debugger;
     return this.form.controls.address;
   }
 
   onSubmit() {
-    
+
     //debugger;
     this.submitted = true;
 
@@ -151,9 +151,9 @@ export class DistributorComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
              //console.log(data);
-            
+
             this.loading = false;
-            
+
           },
           error: error => {
             //this.alertService.error(error);
@@ -178,9 +178,9 @@ export class DistributorComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
              //console.log(data);
-            
+
             this.loading = false;
-           
+
           },
           error: error => {
             this.notificationService.showError("Error", "Error");

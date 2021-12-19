@@ -65,6 +65,7 @@ export class ModelEngActionContentComponent implements OnInit {
       comments: ['', Validators.required],
       actiondate: ['', Validators.required],
       actiontaken: [''],
+      isactive: [true],
       teamviewrecording:['']
     });
 

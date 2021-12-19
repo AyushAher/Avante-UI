@@ -58,7 +58,9 @@ export class ModelEngContentComponent implements OnInit {
 
     this.engineerCommentForm = this.formBuilder.group({
       comments: ['', Validators.required],
-      nextdate: ['', Validators.required]
+      nextdate: ['', Validators.required],
+      isactive: [true],
+
     });
     if (this.id != undefined) {
       this.engcommentService.getById(this.id)

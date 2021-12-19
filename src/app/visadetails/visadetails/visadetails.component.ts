@@ -5,7 +5,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs/operators";
 
 import {
-  Country, Currency,
+  Country,
+  Currency,
   DistributorRegionContacts,
   ListTypeItem,
   ProfileReadOnly,
@@ -17,7 +18,8 @@ import {
 import {
   AccountService,
   AlertService,
-  CountryService, CurrencyService,
+  CountryService,
+  CurrencyService,
   DistributorService,
   FileshareService,
   ListTypeService,
@@ -150,6 +152,7 @@ export class VisadetailsComponent implements OnInit {
       this.hasAddAccess = false;
       if (this.user.username == "admin") {
         this.hasAddAccess = true;
+        this.hasUpdateAccess = true;
       }
 
       this.travelDetailService
@@ -163,7 +166,6 @@ export class VisadetailsComponent implements OnInit {
             this.GetFileList(data.object.id)
           },
           error: (error) => {
-            console.log(error);
             this.notificationService.showError("Error", "Error");
             this.loading = false;
           },
@@ -175,7 +177,6 @@ export class VisadetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.DistributorList = data.object;
-          console.log(data);
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
@@ -336,7 +337,6 @@ export class VisadetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
           this.notificationService.showError("Error", error);
           this.loading = false;
         },
@@ -352,7 +352,6 @@ export class VisadetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
           this.notificationService.showError("Error", error);
           this.loading = false;
         },
@@ -433,7 +432,6 @@ export class VisadetailsComponent implements OnInit {
                 this.router.navigate(["visadetailslist"]);
               } else {
                 this.notificationService.showError(data.resultMessage, "Error");
-                console.log(data.resultMessage);
               }
               this.loading = false;
             },
@@ -463,13 +461,11 @@ export class VisadetailsComponent implements OnInit {
                 this.router.navigate(["visadetailslist"]);
               } else {
                 this.notificationService.showError(data.resultMessage, "Error");
-                console.log(data.resultMessage);
               }
               this.loading = false;
             },
             error: (error) => {
               this.notificationService.showError(error, "Error");
-              console.log(error);
 
               this.loading = false;
             },

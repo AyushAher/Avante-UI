@@ -279,6 +279,7 @@ export class ServiceRequestComponent implements OnInit {
       requesttypeid: [''],
       subrequesttypeid: [''],
       remarks: [''],
+      isactive: [true],
       engComments: this.formBuilder.group({
         nextdate: [''],
         comments: ['']

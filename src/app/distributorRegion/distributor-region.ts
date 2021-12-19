@@ -42,7 +42,7 @@ export class DistributorRegionComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService
   ) { }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -69,7 +69,7 @@ export class DistributorRegionComponent implements OnInit {
       distregname: ['', Validators.required],
       payterms: ['', Validators.required],
       isblocked: false,
-      isActive: false,
+      isActive: true,
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: ['', Validators.required],
@@ -161,7 +161,7 @@ export class DistributorRegionComponent implements OnInit {
             }
             //this.alertService.success('Data save successfull');
             this.loading = false;
-            
+
           },
           error: error => {
              this.notificationService.showError(error, "Error");
@@ -184,7 +184,7 @@ export class DistributorRegionComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-           
+
           },
           error: error => {
              this.notificationService.showError(error, "Error");

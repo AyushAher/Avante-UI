@@ -126,7 +126,7 @@ export class SparePartComponent implements OnInit {
       image: [''],
       isObselete: false,
       replacepPartNoId: [''],
-      isActive: [''],
+      isActive: [true],
     });
 
     this.countryService.getAll()

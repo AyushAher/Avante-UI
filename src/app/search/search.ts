@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 
-import { User, Customer, CustomerSite, Instrument } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import {CustomerSite, Instrument, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
-import { AccountService, AlertService, CustomerSiteService, CustomerService, InstrumentService, CountryService, NotificationService } from '../_services';
-import { lnkRenderComponent } from './lnkrendercomponent';
+import {AccountService, AlertService, CustomerSiteService, InstrumentService, NotificationService} from '../_services';
+import {lnkRenderComponent} from './lnkrendercomponent';
 
 
 @Component({
@@ -27,10 +27,10 @@ export class SearchComponent implements OnInit {
   type: string = "D";
   searchKeyword: search;
   visible: boolean = false;
-  
+
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
-  private api: GridApi;  
+  private api: GridApi;
 
   @ViewChild('sform') testFormElement;
   constructor(
@@ -43,9 +43,9 @@ export class SearchComponent implements OnInit {
     private customerSiteService: CustomerSiteService,
     private notificationService: NotificationService,
   ) {
-    
+
   }
-  
+
   ngOnInit() {
 
     this.customerSiteService.getAllCustomerSites()
@@ -64,7 +64,9 @@ export class SearchComponent implements OnInit {
     //debugger;
     this.form = this.fb.group({
       search: [''],
-      custSiteId: ['']
+      custSiteId: [''],
+      isactive: [true],
+
     });
     this.columnDefs = this.createColumnDefs();
     if (JSON.parse(localStorage.getItem('search')) != null) {
@@ -74,14 +76,14 @@ export class SearchComponent implements OnInit {
       this.searchKeyword.search = JSON.parse(localStorage.getItem('search')).search;
       this.searchKeyword.custSiteId = JSON.parse(localStorage.getItem('search')).custSiteId;
       //localStorage.removeItem('search');
-     
+
     //  this.testFormElement.ngSubmit.emit();
     }
   }
 
   ngAfterViewInit() {
     if (this.searchKeyword.search != null || this.searchKeyword.custSiteId != null) {
-      this.instrumentService.searchByKeyword(this.searchKeyword.search, this.searchKeyword.custSiteId)      
+      this.instrumentService.searchByKeyword(this.searchKeyword.search, this.searchKeyword.custSiteId)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
@@ -105,9 +107,9 @@ export class SearchComponent implements OnInit {
   get f() { return this.form.controls; }
 
   Add() {
-    this.router.navigate(['customersite', this.customerId]);  
+    this.router.navigate(['customersite', this.customerId]);
   }
- 
+
 
   private createColumnDefs() {
     return [
@@ -142,7 +144,7 @@ export class SearchComponent implements OnInit {
         tooltipField: 'custSiteName',
       }
     ]
-  }  
+  }
 
   onGridReady(params): void {
     this.api = params.api;
@@ -156,7 +158,7 @@ export class SearchComponent implements OnInit {
       return;
     }
     this.searchKeyword = this.form.value
-    
+
     //this.customerId = this.route.snapshot.paramMap.get('id');
     this.instrumentService.searchByKeyword(this.searchKeyword.search, this.searchKeyword.custSiteId)
       .pipe(first())

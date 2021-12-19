@@ -74,7 +74,9 @@ export class CustdashboardsettingsComponent implements OnInit {
       position: 0,
       isDefault: false,
       dashboardFor: "DHCT",
-      graphName: ""
+      graphName: "",
+      isactive : true,
+
     });
 
     this.listTypeService

@@ -77,7 +77,7 @@ export class ContactComponent implements OnInit {
       scontactno: [''],
       semail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
       designationid: ['', [Validators.required, Validators.maxLength(512)]],
-      isActive: [''],
+      isActive: [true],
       whatsappNo:[''],
 
       address: this.formBuilder.group({
@@ -89,7 +89,7 @@ export class ContactComponent implements OnInit {
         zip: ['', Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(10)])],
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
-        isActive: [''],
+        isActive: [true],
       }),
       contactMapping: this.formBuilder.group({
         mappedFor: null,
@@ -289,10 +289,10 @@ export class ContactComponent implements OnInit {
   }
 
   getNumber(e: any) {
-    //debugger;  
+    //debugger;
   }
 
-  
+
 
   onSubmit() {
     //debugger;

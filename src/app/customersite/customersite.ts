@@ -44,7 +44,7 @@ export class CustomerSiteComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) { }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -77,7 +77,7 @@ export class CustomerSiteComponent implements OnInit {
       distid: ['', Validators.required],
       payterms: ['', Validators.required],
       isblocked: false,
-      isactive: false,
+      isactive: true,
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: ['', Validators.required],
@@ -209,9 +209,9 @@ export class CustomerSiteComponent implements OnInit {
             }
             else {
               this.notificationService.showError(data.resultMessage, "Error");
-            } 
+            }
             this.loading = false;
-            
+
           },
           error: error => {
            // this.alertService.error(error);
@@ -236,7 +236,7 @@ export class CustomerSiteComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-            
+
           },
           error: error => {
           //  this.alertService.error(error);

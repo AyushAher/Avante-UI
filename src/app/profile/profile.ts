@@ -1,13 +1,29 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-
-import { User, Instrument, CustomerSite, ListTypeItem, instrumentConfig, SparePart, Profile, ResultMsg, ProfileReadOnly } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
 
 import {
-  AccountService, AlertService, CustomerSiteService, InstrumentService, ListTypeService, SparePartService
-  , UploadService, NotificationService, ProfileService
+  CustomerSite,
+  instrumentConfig,
+  ListTypeItem,
+  Profile,
+  ProfileReadOnly,
+  ResultMsg,
+  SparePart,
+  User
+} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+
+import {
+  AccountService,
+  AlertService,
+  CustomerSiteService,
+  InstrumentService,
+  ListTypeService,
+  NotificationService,
+  ProfileService,
+  SparePartService,
+  UploadService
 } from '../_services';
 
 
@@ -53,7 +69,7 @@ export class ProfileComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) { }
-  
+
   ngOnInit() {
     //debugger;
     this.user = this.accountService.userValue;
@@ -67,7 +83,7 @@ export class ProfileComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
-    
+
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
@@ -79,6 +95,7 @@ export class ProfileComponent implements OnInit {
     this.profileform = this.formBuilder.group({
       profilename: ['', Validators.required],
       permissions: this.formBuilder.array([]),
+      isactive: [true],
     });
 
     this.listTypeService.getById("SCRNS")
@@ -107,7 +124,7 @@ export class ProfileComponent implements OnInit {
           next: (data: any) => {
             //debugger;
             this.profileform.patchValue(data.object);
-            
+
           },
           error: error => {
              this.notificationService.showError(error, "Error");
@@ -150,17 +167,17 @@ export class ProfileComponent implements OnInit {
   get f() { return this.profileform.controls; }
   get c() { return this.profileform.controls.Permissions; }
 
-  
+
   getName(i) {
-    
+
     return this.getControls()[i].value;
   }
 
   getControls() {
     return (<FormArray>this.profileform.get('permissions')).controls;
   }
-  
-  
+
+
   onSubmit() {
     //debugger;
     this.submitted = true;
@@ -175,8 +192,8 @@ export class ProfileComponent implements OnInit {
     this.isSave = true;
     this.loading = true;
     this.profile = this.profileform.value;
-    
-    
+
+
     if (this.id == null) {
       this.profileService.save(this.profile)
         .pipe(first())
@@ -192,7 +209,7 @@ export class ProfileComponent implements OnInit {
             }
 
             this.loading = false;
-            
+
           },
           error: error => {
              this.notificationService.showError(error, "Error");
@@ -214,7 +231,7 @@ export class ProfileComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-            
+
           },
           error: error => {
              this.notificationService.showError(error, "Error");

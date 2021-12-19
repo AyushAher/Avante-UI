@@ -79,6 +79,7 @@ export class EngineerschedulerComponent implements OnInit {
                   x.EndTime = x.EndTime.toString();
                   x.EngId = this.user.contactId;
                   x.RoomId = this.user.contactId;
+                  x.isactive = true;
 
                   this.EngschedulerService.save(x).pipe(first()).subscribe({
                     next: (data: any) => {
@@ -222,10 +223,12 @@ export class EngineerschedulerComponent implements OnInit {
                 let serReqDate = new Date(data.serreqdate)
                 let SDate: Date = x.StartTime;
                 let diff = SDate.valueOf() - serReqDate.valueOf()
+
                 if (diff >= 0) {
                   x.StartTime = x.StartTime.toString();
                   x.EndTime = x.EndTime.toString();
                   x.EngId = x.RoomId;
+                  x.isactive = true;
 
                   this.EngschedulerService.save(x).pipe(first()).subscribe({
                     next: (data: any) => {
