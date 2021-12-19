@@ -31,6 +31,7 @@ export class NavSideMenuComponent {
 
 
   hasAmc: boolean = false;
+  hasschedule: boolean = false;
   hasOfferRequest: boolean = false;
   hasServiceRequest: boolean = false;
   hasServiceReport: boolean = false;
@@ -72,6 +73,12 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'SINST')[0].update == true
           || this.profile.permissions.filter(x => x.screenCode == 'SINST')[0].read == true
           || this.profile.permissions.filter(x => x.screenCode == 'SINST')[0].delete == true
+      }
+      if (this.profile.permissions.filter(x => x.screenCode == 'SCDLE').length > 0) {
+        this.hasInstrument = this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].delete == true
       }
 
       if (this.profile.permissions.filter(x => x.screenCode == 'SSPAR').length > 0) {
@@ -226,8 +233,8 @@ export class NavSideMenuComponent {
       this.hascustomersatisfactionsurveylist = true;
       this.hasSparePartRecommended = true;
       this.hasMaster = true;
+      this.hasschedule = true;
       this.hasCustomerSparePartsInventory = true;
-
     }
 
     this.listTypeService
