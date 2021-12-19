@@ -1,13 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { User, Customer, Country, DistributorRegion, ProfileReadOnly } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import {Country, Customer, ProfileReadOnly, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
-import { AccountService, AlertService, CustomerService, CountryService, NotificationService, ProfileService } from '../_services';
-import { RenderComponent } from '../distributor/rendercomponent';
+import {
+  AccountService,
+  AlertService,
+  CountryService,
+  CustomerService,
+  NotificationService,
+  ProfileService
+} from '../_services';
+import {RenderComponent} from '../distributor/rendercomponent';
 
 
 @Component({
@@ -29,7 +36,7 @@ export class CustomerListComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
-  private api: GridApi;  
+  private api: GridApi;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,9 +49,9 @@ export class CustomerListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
-    
+
   }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -67,6 +74,7 @@ export class CustomerListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          console.log(data);
           this.customerList = data.object;
         },
         error: error => {
@@ -74,13 +82,13 @@ export class CustomerListComponent implements OnInit {
           this.loading = false;
         }
       });
-    this.columnDefs = this.createColumnDefs(); 
+    this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
-    this.router.navigate(['customer']);  
+    this.router.navigate(['customer']);
   }
- 
+
 
   private createColumnDefs() {
     return [{
@@ -97,24 +105,34 @@ export class CustomerListComponent implements OnInit {
         deleteLink: 'CU',
         deleteaccess: this.hasDeleteAccess
       },
-    },{
-      headerName: 'Customer Name',
-      field: 'custname',
-      filter: true,
-      enableSorting: true,
-      editable: false,
+    },
+      {
+        headerName: 'Customer Name',
+        field: 'custname',
+        filter: true,
+        enableSorting: true,
+        editable: false,
         sortable: true,
         tooltipField: 'custname',
-    }, {
-      headerName: 'Is Active',
-        field: 'isactive',
-      filter: true,
-        editable: false,
-      sortable: true
       },
-      
+      {
+        headerName: 'Default Distributor',
+        field: 'defdist',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: 'Is Active',
+        field: 'isactive',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+
     ]
-  }  
+  }
 
   onGridReady(params): void {
     this.api = params.api;
