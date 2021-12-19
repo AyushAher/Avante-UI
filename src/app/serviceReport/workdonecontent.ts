@@ -58,6 +58,7 @@ export class WorkdoneContentComponent implements OnInit {
     this.workdoneForm = this.formBuilder.group({
       workdone: ['', Validators.required],
       isactive: [true],
+      isdeleted: [false],
 
     });
     if (this.id != undefined) {

@@ -131,6 +131,7 @@ export class VisadetailsComponent implements OnInit {
       visacost: ["", [Validators.required]],
       requesttype: ["", [Validators.required]],
       isactive: [true],
+      isdeleted: [false],
       currencyId: ["",Validators.required],
     });
 

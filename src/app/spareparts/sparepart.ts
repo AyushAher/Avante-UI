@@ -127,6 +127,7 @@ export class SparePartComponent implements OnInit {
       isObselete: false,
       replacepPartNoId: [''],
       isActive: [true],
+      isdeleted: [false],
     });
 
     this.countryService.getAll()

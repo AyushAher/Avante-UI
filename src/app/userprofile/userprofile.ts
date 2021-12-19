@@ -61,7 +61,7 @@ export class UserProfileComponent implements OnInit {
     private profileService: ProfileService,
     private userprofileService: UserProfileService,
   ) { }
-  
+
   ngOnInit() {
     //debugger;
     this.user = this.accountService.userValue;
@@ -90,6 +90,7 @@ export class UserProfileComponent implements OnInit {
       profileForId: [''],
       distributorName: [''],
       roleId: ['', Validators.required],
+      isdeleted: [false],
       profileRegions: this.formBuilder.array([]),
     });
 
@@ -212,7 +213,7 @@ export class UserProfileComponent implements OnInit {
 
   }
 
-   
+
   // convenience getter for easy access to form fields
   get f() { return this.userprofileform.controls; }
   get c() { return this.userprofileform.controls.profileRegions; }
@@ -267,7 +268,7 @@ export class UserProfileComponent implements OnInit {
         }
       });
   }
-  
+
   onSubmit() {
     //debugger;
     this.submitted = true;
@@ -282,8 +283,8 @@ export class UserProfileComponent implements OnInit {
     this.isSave = true;
     this.loading = true;
     this.userprofile = this.userprofileform.value;
-    
-    
+
+
     if (this.id == null) {
       this.userprofileService.save(this.userprofile)
         .pipe(first())
@@ -297,7 +298,7 @@ export class UserProfileComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-            
+
           },
           error: error => {
              this.notificationService.showError(error, "Error");
@@ -319,7 +320,7 @@ export class UserProfileComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-            
+
           },
           error: error => {
              this.notificationService.showError(error, "Error");

@@ -74,9 +74,10 @@ export class CountryComponent implements OnInit {
       sub_Region: [''],
       capital: [''],
       continentid: ['', Validators.required],
-      currencyid: ['', Validators.required]
+      currencyid: ['', Validators.required],
+      isdeleted: [false],
     });
-    
+
     this.currencyService.getAll()
       .pipe(first())
       .subscribe({
@@ -137,7 +138,7 @@ export class CountryComponent implements OnInit {
       return;
     }
     this.isSave = true;
-    this.loading = true;   
+    this.loading = true;
     if (this.id == null) {
 
       this.countryService.save(this.countryform.value)
@@ -152,7 +153,7 @@ export class CountryComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-           
+
           },
           error: error => {
             this.notificationService.showError(error, "Error");
@@ -175,14 +176,14 @@ export class CountryComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-           
+
           },
           error: error => {
             this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
-     
+
     }
   }
 

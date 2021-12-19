@@ -106,6 +106,7 @@ export class StaydetailsComponent implements OnInit {
       pricepernight: ["", [Validators.required]],
       totalcost: ["", [Validators.required]],
       isactive: [true],
+      isdeleted: [false],
     });
 
     this.id = this.route.snapshot.paramMap.get("id");

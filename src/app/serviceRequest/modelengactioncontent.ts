@@ -66,6 +66,7 @@ export class ModelEngActionContentComponent implements OnInit {
       actiondate: ['', Validators.required],
       actiontaken: [''],
       isactive: [true],
+      isdeleted: [false],
       teamviewrecording:['']
     });
 

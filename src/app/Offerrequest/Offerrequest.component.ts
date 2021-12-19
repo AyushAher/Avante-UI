@@ -163,6 +163,7 @@ export class OfferrequestComponent implements OnInit {
       currencyId: [""],
       status: [""],
       podate: ["", Validators.required],
+      isdeleted: [false],
     })
 
     this.id = this.route.snapshot.paramMap.get("id");

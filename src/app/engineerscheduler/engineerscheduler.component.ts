@@ -80,6 +80,7 @@ export class EngineerschedulerComponent implements OnInit {
                   x.EngId = this.user.contactId;
                   x.RoomId = this.user.contactId;
                   x.isactive = true;
+                  x.isdeleted = true;
 
                   this.EngschedulerService.save(x).pipe(first()).subscribe({
                     next: (data: any) => {
@@ -229,6 +230,7 @@ export class EngineerschedulerComponent implements OnInit {
                   x.EndTime = x.EndTime.toString();
                   x.EngId = x.RoomId;
                   x.isactive = true;
+                  x.isdeleted= false;
 
                   this.EngschedulerService.save(x).pipe(first()).subscribe({
                     next: (data: any) => {

@@ -60,6 +60,7 @@ export class ModelEngContentComponent implements OnInit {
       comments: ['', Validators.required],
       nextdate: ['', Validators.required],
       isactive: [true],
+      isdeleted: [false],
 
     });
     if (this.id != undefined) {

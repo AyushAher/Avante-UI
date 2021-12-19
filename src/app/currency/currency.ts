@@ -14,7 +14,7 @@ import {
   selector: 'app-currency',
   templateUrl: './currency.html',
 })
-export class CurrencyComponent implements OnInit { 
+export class CurrencyComponent implements OnInit {
   currencyform: FormGroup;
   currency: Currency
   loading = false;
@@ -66,11 +66,12 @@ export class CurrencyComponent implements OnInit {
       minor_Unit: ['', [Validators.required, Validators.maxLength(5)]]   ,
       n_Code: [''],
       symbol: [''],
+      isdeleted: [false],
     });
 
-    this.id = this.route.snapshot.paramMap.get('id');   
+    this.id = this.route.snapshot.paramMap.get('id');
     console.log(this.id);
-   
+
     if (this.id != null) {
       this.hasAddAccess = false;
       if (this.user.username == "admin") {
@@ -92,7 +93,7 @@ export class CurrencyComponent implements OnInit {
 
   // convenience getter for easy access to form fields
   get f() { return this.currencyform.controls; }
-   
+
   onSubmit() {
     //debugger;
     this.submitted = true;
@@ -115,7 +116,7 @@ export class CurrencyComponent implements OnInit {
             //debugger;
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              
+
               this.router.navigate(['currencylist']);
             }
             else {
@@ -146,7 +147,7 @@ export class CurrencyComponent implements OnInit {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
-          
+
           },
           error: error => {
             this.notificationService.showError(error, "Error");

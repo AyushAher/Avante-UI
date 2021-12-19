@@ -279,6 +279,7 @@ export class ServiceReportComponent implements OnInit {
       corrmaintenance: [false],
       rework: [false],
       isactive: [true],
+      isdeleted: [false],
       problem: ['', Validators.required],
       workCompletedstr: ['', Validators.required],
       workfinishedstr: ['', Validators.required],

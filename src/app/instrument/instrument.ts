@@ -152,6 +152,7 @@ export class InstrumentComponent implements OnInit {
       engemail: ['', [Validators.required, Validators.email]],
       warranty: false,
       isactive: true,
+      isdeleted: [false],
       wrntystdt: [''],
       wrntyendt: [''],
       configtypeid: [''],

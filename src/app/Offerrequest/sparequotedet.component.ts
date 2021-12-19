@@ -104,6 +104,7 @@ export class SparequotedetComponent implements OnInit {
       deliveredOn: [""],
       shippedDate: [""],
       isactive: [true],
+      isdeleted: [false],
     });
 
     this.listTypeService.getById("SQDTS")

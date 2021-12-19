@@ -100,6 +100,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       knowledgewithproduct: [""],
       problemsolveskill: [""],
       satisfactionlevel: [""],
+      isdeleted: [false],
     });
 
     this.id = this.route.snapshot.paramMap.get("id");

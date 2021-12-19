@@ -78,6 +78,7 @@ export class CustomerSiteComponent implements OnInit {
       payterms: ['', Validators.required],
       isblocked: false,
       isactive: true,
+      isdeleted: [false],
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: ['', Validators.required],

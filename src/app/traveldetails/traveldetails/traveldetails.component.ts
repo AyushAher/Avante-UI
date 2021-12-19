@@ -131,6 +131,7 @@ export class TraveldetailsComponent implements OnInit {
       departuredate: ["", [Validators.required]],
       returndate: ["", [Validators.required]],
       isactive: [true],
+      isdeleted: [false],
       requesttype: ["", [Validators.required]],
       flightdetails: this.formBuilder.group({
         airline: ["", [Validators.required]],

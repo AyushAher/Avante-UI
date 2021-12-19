@@ -78,6 +78,7 @@ export class CustomerComponent implements OnInit {
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
         isActive: true,
+        isdeleted: [false],
       }),
     });
 

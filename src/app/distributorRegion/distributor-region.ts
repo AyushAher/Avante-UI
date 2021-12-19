@@ -70,6 +70,7 @@ export class DistributorRegionComponent implements OnInit {
       payterms: ['', Validators.required],
       isblocked: false,
       isActive: true,
+      isdeleted: [false],
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: ['', Validators.required],

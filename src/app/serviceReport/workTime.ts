@@ -60,6 +60,7 @@ export class WorkTimeContentComponent implements OnInit {
       endtime: ['', Validators.required],
       perdayhrs: ['', Validators.required],
       isactive: [true],
+      isdeleted: [false],
 
     });
     if (this.id != undefined) {

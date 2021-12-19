@@ -96,6 +96,7 @@ export class ProfileComponent implements OnInit {
       profilename: ['', Validators.required],
       permissions: this.formBuilder.array([]),
       isactive: [true],
+      isdeleted: [false],
     });
 
     this.listTypeService.getById("SCRNS")

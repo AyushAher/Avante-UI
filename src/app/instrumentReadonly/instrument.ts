@@ -130,7 +130,7 @@ export class InstrumentRonlyComponent implements OnInit {
       configtypeid: [''],
       installbyOther: [''],
       isactive: [true],
-
+      isdeleted: [false],
     });
     this.imageUrl = this.noimageData;
     this.instrumentform.get('warranty').valueChanges

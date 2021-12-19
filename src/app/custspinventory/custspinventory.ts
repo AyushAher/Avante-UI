@@ -89,6 +89,7 @@ export class CustSPInventoryComponent implements OnInit {
       partNo: ["", Validators.required],
       hscCode: ["", Validators.required],
       qtyAvailable: ["", Validators.required],
+      isdeleted: [false],
     })
     this.id = this.route.snapshot.paramMap.get("id");
 

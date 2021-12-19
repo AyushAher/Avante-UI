@@ -78,6 +78,7 @@ export class ContactComponent implements OnInit {
       semail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
       designationid: ['', [Validators.required, Validators.maxLength(512)]],
       isActive: [true],
+      isdeleted: [false],
       whatsappNo:[''],
 
       address: this.formBuilder.group({
