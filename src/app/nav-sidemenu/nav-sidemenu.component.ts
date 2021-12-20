@@ -75,7 +75,7 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'SINST')[0].delete == true
       }
       if (this.profile.permissions.filter(x => x.screenCode == 'SCDLE').length > 0) {
-        this.hasInstrument = this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].create == true
+        this.hasschedule = this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].create == true
           || this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].update == true
           || this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].read == true
           || this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].delete == true

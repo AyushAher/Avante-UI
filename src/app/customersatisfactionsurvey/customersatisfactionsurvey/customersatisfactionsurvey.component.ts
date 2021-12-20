@@ -108,7 +108,7 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.id = this.route.snapshot.paramMap.get("id");
 
       let role = JSON.parse(localStorage.getItem('roles'));
-      role = role[0].itemCode;
+      role = role[0]?.itemCode;
 
     if (this.id != null) {
       if (this.user.username == "admin") {

@@ -20,21 +20,24 @@ export class ServiceReportService {
       //this.user = this.distrubutorSubject.asObservable();
     }
 
-    //public get userValue(): User {
-    //    return this.userSubject.value;
-    //}
-
+  //public get userValue(): User {
+  //    return this.userSubject.value;
+  //}
 
 
   save(ServiceReport: ServiceReport) {
     return this.http.post(`${environment.apiUrl}/ServiceReports`, ServiceReport);
-    }
-
-    getAll() {
-      return this.http.get<ServiceReport[]>(`${environment.apiUrl}/ServiceReports`);
   }
 
-  getbycust(cust:string) {
+  getAll() {
+    return this.http.get<ServiceReport[]>(`${environment.apiUrl}/ServiceReports`);
+  }
+
+  GetServiceReportByContId(id: string) {
+    return this.http.get(`${environment.apiUrl}/ServiceReports/GetServiceReportByContId/${id}`);
+  }
+
+  getbycust(cust: string) {
     return this.http.get<ServiceReport[]>(`${environment.apiUrl}/ServiceReports/GetServiceReportByCustomer/${cust}`);
   }
 

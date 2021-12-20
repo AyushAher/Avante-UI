@@ -107,7 +107,7 @@ export class TraveldetailsComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0].itemCode;
+    role = role[0]?.itemCode;
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {

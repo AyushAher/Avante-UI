@@ -188,7 +188,7 @@ export class VisadetailsComponent implements OnInit {
 
 this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0].itemCode;
+    role = role[0]?.itemCode;
 
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({

@@ -8,7 +8,8 @@ import {LocalExpenses, ProfileReadOnly, User} from '../../_models';
 import {
   AccountService,
   AlertService,
-  DistributorService, ListTypeService,
+  DistributorService,
+  ListTypeService,
   LocalExpensesService,
   NotificationService,
   ProfileService
@@ -53,7 +54,7 @@ export class LocalexpenseslistComponent implements OnInit {
     this.user = this.accountService.userValue;
 this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0].itemCode;
+    role = role[0]?.itemCode;
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -78,20 +79,25 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.distributorService.getByConId(this.user.contactId)
-            .pipe(first())
-            .subscribe({
-              next: (data1: any) => {
-                if (role == environment.distRoleCode) {
-                  this.List = data.object.filter(x => x.distId == data1.object[0].id)
-                } else if (role == environment.engRoleCode) {
-                  data.object = data.object.filter(x => x.createdby == this.user.userId)
-                  this.List = data.object;
-                } else {
-                  this.List = data.object
+          if (this.user.username != "admin") {
+
+            this.distributorService.getByConId(this.user.contactId)
+              .pipe(first())
+              .subscribe({
+                next: (data1: any) => {
+                  if (role == environment.distRoleCode) {
+                    this.List = data.object.filter(x => x.distId == data1.object[0].id)
+                  } else if (role == environment.engRoleCode) {
+                    data.object = data.object.filter(x => x.createdby == this.user.userId)
+                    this.List = data.object;
+                  } else {
+                    this.List = data.object
+                  }
                 }
-              }
-            })
+              })
+          } else {
+            this.List = data.object
+          }
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");

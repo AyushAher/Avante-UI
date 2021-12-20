@@ -8,7 +8,8 @@ import {Customersatisfactionsurvey, ProfileReadOnly, User} from '../../_models';
 import {
   AccountService,
   CustomersatisfactionsurveyService,
-  DistributorService, ListTypeService,
+  DistributorService,
+  ListTypeService,
   NotificationService,
   ProfileService
 } from '../../_services';
@@ -49,7 +50,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0].itemCode;
+    role = role[0]?.itemCode;
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -74,27 +75,32 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.distributorService.getByConId(this.user.contactId)
-            .pipe(first())
-            .subscribe({
-              next: (data1: any) => {
-                if (role == environment.distRoleCode) {
-                  this.List = data.object.filter(x => x.distId == data1.object[0].id)
-                } else if (role == environment.engRoleCode) {
-                  data.object = data.object.filter(x => x.createdby == this.user.userId)
-                  this.List = data.object;
-                } else {
-                  this.List = data.object
+          if (this.user.username != "admin") {
+            this.distributorService.getByConId(this.user.contactId)
+              .pipe(first())
+              .subscribe({
+                next: (data1: any) => {
+                  if (role == environment.distRoleCode) {
+                    this.List = data.object.filter(x => x.distId == data1.object[0].id)
+                  } else if (role == environment.engRoleCode) {
+                    data.object = data.object.filter(x => x.createdby == this.user.userId)
+                    this.List = data.object;
+                  } else {
+                    this.List = data.object
+                  }
                 }
-              }
 
-            })
+              })
+          } else {
+            this.List = data.object
+          }
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
           this.loading = false;
         },
       });
+
     this.columnDefs = this.createColumnDefs();
   }
 
