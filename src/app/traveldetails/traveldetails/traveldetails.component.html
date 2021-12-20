@@ -15,7 +15,7 @@
 
                         <div class="col-sm-4">
                           <label>Distributor</label>
-                          <select formControlName="distId" class="form-control" #distributorid
+                          <select formControlName="distId" disabled class="form-control" #distributorid
                                   (input)="getservicerequest($event.target.value);getengineers($event.target.value)"
                                   [ngClass]="{'is-invalid':submitted && t.distId.errors }">
                             <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
@@ -30,7 +30,7 @@
                         <div class="col-sm-4">
                           <label>Engineer Name</label>
 
-                            <select name="" placeholder="Engineer Name" formControlName="engineerid" id=""
+                            <select name="" placeholder="Engineer Name" disabled formControlName="engineerid" id=""
                                     class="form-control" [ngClass]="{'is-invalid':submitted && t.engineerid.errors }">
                               <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
                             </select>

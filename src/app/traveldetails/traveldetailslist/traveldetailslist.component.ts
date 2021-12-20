@@ -5,7 +5,14 @@ import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
 import {first} from "rxjs/operators";
 import {RenderComponent} from "../../distributor/rendercomponent";
 import {ProfileReadOnly, travelDetails, User} from "../../_models";
-import {AccountService, NotificationService, ProfileService, TravelDetailService} from "../../_services";
+import {
+  AccountService,
+  DistributorService,
+  NotificationService,
+  ProfileService,
+  TravelDetailService
+} from "../../_services";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: "app-traveldetailslist",
@@ -35,10 +42,15 @@ export class TraveldetailslistComponent implements OnInit {
     private Service: TravelDetailService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
+    private distributorService: DistributorService,
   ) {}
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
+
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
@@ -65,12 +77,20 @@ export class TraveldetailslistComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          if (this.user.username != 'admin') {
-            data.object = data.object.filter(x => x.createdby == this.user.userId)
-            this.List = data.object;
-          } else {
-            this.List = data.object
-          }
+          this.distributorService.getByConId(this.user.contactId)
+            .pipe(first())
+            .subscribe({
+              next: (data1: any) => {
+                if (role == environment.distRoleCode) {
+                  this.List = data.object.filter(x => x.distId == data1.object[0].id)
+                } else if (role == environment.engRoleCode) {
+                  data.object = data.object.filter(x => x.createdby == this.user.userId)
+                  this.List = data.object;
+                } else {
+                  this.List = data.object
+                }
+              }
+            })
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");

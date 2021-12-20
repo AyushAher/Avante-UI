@@ -31,6 +31,7 @@ import {
 import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
 import {FilerendercomponentComponent} from "../../Offerrequest/filerendercomponent.component";
 import {HttpEventType} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
 
 
 @Component({
@@ -185,6 +186,20 @@ export class VisadetailsComponent implements OnInit {
         },
       })
 
+
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
+
+    this.distributorservice.getByConId(this.user.contactId).pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.travelDetailform.get('distId').setValue(data.object[0].id)
+          this.getengineers(data.object[0].id)
+        }
+      })
+    if (role == environment.engRoleCode) {
+      this.travelDetailform.get('engineerid').setValue(this.user.contactId)
+    }
 
     this.countryservice
       .getAll()

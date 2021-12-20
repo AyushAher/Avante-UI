@@ -107,8 +107,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
     this.id = this.route.snapshot.paramMap.get("id");
 
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0].itemCode;
+      let role = JSON.parse(localStorage.getItem('roles'));
+      role = role[0].itemCode;
 
     if (this.id != null) {
       if (this.user.username == "admin") {

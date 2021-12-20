@@ -5,7 +5,14 @@ import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 import {first} from 'rxjs/operators';
 import {RenderComponent} from '../../distributor/rendercomponent';
 import {ProfileReadOnly, User, Visadetails} from '../../_models';
-import {AccountService, NotificationService, ProfileService, VisadetailsService} from '../../_services';
+import {
+  AccountService,
+  DistributorService,
+  NotificationService,
+  ProfileService,
+  VisadetailsService
+} from '../../_services';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-visadetailslist',
@@ -33,7 +40,8 @@ export class VisadetailsListComponent implements OnInit {
     private accountService: AccountService,
     private Service: VisadetailsService,
     private notificationService: NotificationService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private  distributorService: DistributorService
   ) {}
 
   ngOnInit() {
@@ -60,17 +68,28 @@ export class VisadetailsListComponent implements OnInit {
       this.hasReadAccess = true;
     }
 
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     this.Service.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          if (this.user.username != 'admin') {
-            data.object = data.object.filter(x => x.createdby == this.user.userId)
-            this.List = data.object;
-          } else {
-            this.List = data.object
-          }
+          this.distributorService.getByConId(this.user.contactId)
+            .pipe(first())
+            .subscribe({
+              next: (data1: any) => {
+                if (role == environment.distRoleCode) {
+                  this.List = data.object.filter(x => x.distId == data1.object[0].id)
+                } else if (role == environment.engRoleCode) {
+                  data.object = data.object.filter(x => x.createdby == this.user.userId)
+                  this.List = data.object;
+                } else {
+                  this.List = data.object
+                }
+              }
+
+            })
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");

@@ -26,6 +26,7 @@ import {
   ServiceRequestService,
   StaydetailsService
 } from "../../_services";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: "app-staydetails",
@@ -143,6 +144,19 @@ export class StaydetailsComponent implements OnInit {
         });
     }
 
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
+
+    this.distributorservice.getByConId(this.user.contactId).pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.travelDetailform.get('distId').setValue(data.object[0].id)
+          this.getengineers(data.object[0].id)
+        }
+      })
+    if (role == environment.engRoleCode) {
+      this.travelDetailform.get('engineerid').setValue(this.user.contactId)
+    }
     this.distributorservice.getAll()
       .pipe(first())
       .subscribe({

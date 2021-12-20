@@ -16,7 +16,8 @@ import {
 } from "../../_models";
 import {
   AccountService,
-  AlertService, CurrencyService,
+  AlertService,
+  CurrencyService,
   DistributorService,
   FileshareService,
   ListTypeService,
@@ -28,6 +29,7 @@ import {
 import {FilerendercomponentComponent} from "../../Offerrequest/filerendercomponent.component";
 import {HttpEventType} from "@angular/common/http";
 import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: "app-traveldetails",
@@ -192,6 +194,19 @@ export class TraveldetailsComponent implements OnInit {
         },
       })
 
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
+
+    this.distributorservice.getByConId(this.user.contactId).pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.travelDetailform.get('distId').setValue(data.object[0].id)
+          this.getengineers(data.object[0].id)
+        }
+      })
+    if (role == environment.engRoleCode) {
+      this.travelDetailform.get('engineerid').setValue(this.user.contactId)
+    }
     this.listTypeService
       .getById(this.code[0])
       .pipe(first())

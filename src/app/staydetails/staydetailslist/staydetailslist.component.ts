@@ -5,7 +5,15 @@ import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
 import {first} from "rxjs/operators";
 import {RenderComponent} from "../../distributor/rendercomponent";
 import {ProfileReadOnly, Staydetails, User} from "../../_models";
-import {AccountService, AlertService, NotificationService, ProfileService, StaydetailsService} from "../../_services";
+import {
+  AccountService,
+  AlertService,
+  DistributorService,
+  NotificationService,
+  ProfileService,
+  StaydetailsService
+} from "../../_services";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: "app-staydetailslist",
@@ -36,6 +44,7 @@ export class StaydetailsListComponent implements OnInit {
     private alertService: AlertService,
     private StayDetailsService: StaydetailsService,
     private notificationService: NotificationService,
+    private distributorService: DistributorService,
     private profileService: ProfileService
   ) {}
 
@@ -60,17 +69,28 @@ export class StaydetailsListComponent implements OnInit {
       this.hasReadAccess = true;
     }
 
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
+
     this.StayDetailsService
       .getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          if (this.user.username != 'admin') {
-            data.object = data.object.filter(x => x.createdby == this.user.userId)
-            this.List = data.object;
-          } else {
-            this.List = data.object
-          }
+          this.distributorService.getByConId(this.user.contactId)
+            .pipe(first())
+            .subscribe({
+              next: (data1: any) => {
+                if (role == environment.distRoleCode) {
+                  this.List = data.object.filter(x => x.distId == data1.object[0].id)
+                } else if (role == environment.engRoleCode) {
+                  data.object = data.object.filter(x => x.createdby == this.user.userId)
+                  this.List = data.object;
+                } else {
+                  this.List = data.object
+                }
+              }
+            })
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");

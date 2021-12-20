@@ -76,7 +76,6 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
             .pipe(first())
             .subscribe({
               next: (data1: any) => {
-                console.log(data1)
                 if (role == environment.distRoleCode) {
                   this.List = data.object.filter(x => x.distId == data1.object[0].id)
                 } else if (role == environment.engRoleCode) {
