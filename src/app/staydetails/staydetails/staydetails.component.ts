@@ -143,7 +143,7 @@ export class StaydetailsComponent implements OnInit {
           },
         });
     }
-
+this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
     role = role[0].itemCode;
 
@@ -193,7 +193,7 @@ export class StaydetailsComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = (data.object);
+          this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
         },
 
         error: (error) => {
@@ -209,6 +209,7 @@ export class StaydetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.engineer = data.object
+          this.getservicerequest(id)
         },
 
         error: (error) => {

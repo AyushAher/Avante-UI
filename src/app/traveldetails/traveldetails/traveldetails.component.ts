@@ -69,7 +69,9 @@ export class TraveldetailsComponent implements OnInit {
   public columnDefsAttachments: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
-
+  isEng = false
+  isDist = false
+  flightdetails = false
   file: any;
   attachments: any;
   fileList: [] = [];
@@ -103,6 +105,10 @@ export class TraveldetailsComponent implements OnInit {
     this.transaction = 0;
 
     this.user = this.accountService.userValue;
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
+
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
@@ -115,13 +121,6 @@ export class TraveldetailsComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
-    if (this.user.username == "admin") {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
-    }
-
     this.travelDetailform = this.formBuilder.group({
       engineerid: ["", [Validators.required]],
       servicerequestid: ["", [Validators.required]],
@@ -136,13 +135,41 @@ export class TraveldetailsComponent implements OnInit {
       isdeleted: [false],
       requesttype: ["", [Validators.required]],
       flightdetails: this.formBuilder.group({
-        airline: ["", [Validators.required]],
-        flightno: ["", [Validators.required]],
-        flightdate: ["", [Validators.required]],
-        currencyId: ["", [Validators.required]],
-        flightcost: ["", [Validators.required]],
+        airline: ["",],
+        flightno: ["",],
+        flightdate: ["",],
+        currencyId: ["",],
+        flightcost: [0],
       }),
     });
+
+    if (this.user.username == "admin") {
+      this.hasAddAccess = true;
+      this.hasDeleteAccess = true;
+      this.hasUpdateAccess = true;
+      this.hasReadAccess = true;
+    } else if (role == environment.engRoleCode) {
+      this.isEng = true;
+      this.travelDetailform.get('flightdetails').get('currencyId').disable();
+    } else if (role == environment.distRoleCode) {
+      this.isDist = true;
+
+      this.travelDetailform.get('flightdetails').get('airline').setValidators([Validators.required])
+      this.travelDetailform.get('flightdetails').get('airline').updateValueAndValidity()
+
+      this.travelDetailform.get('flightdetails').get('flightdate').setValidators([Validators.required])
+      this.travelDetailform.get('flightdetails').get('flightdate').updateValueAndValidity()
+
+      this.travelDetailform.get('flightdetails').get('flightno').setValidators([Validators.required])
+      this.travelDetailform.get('flightdetails').get('flightno').updateValueAndValidity()
+
+      this.travelDetailform.get('flightdetails').get('currencyId').setValidators([Validators.required])
+      this.travelDetailform.get('flightdetails').get('currencyId').updateValueAndValidity()
+
+      this.travelDetailform.get('flightdetails').get('flightcost').setValidators([Validators.required])
+      this.travelDetailform.get('flightdetails').get('flightcost').updateValueAndValidity()
+    }
+
 
     this.id = this.route.snapshot.paramMap.get("id");
 
@@ -158,7 +185,7 @@ export class TraveldetailsComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-
+            this.flightdetails = true;
             this.getengineers(data.object.distId)
             this.getservicerequest(data.object.distId)
             this.travelDetailform.patchValue(data.object);
@@ -194,8 +221,6 @@ export class TraveldetailsComponent implements OnInit {
         },
       })
 
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0].itemCode;
 
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
@@ -262,7 +287,7 @@ export class TraveldetailsComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = (data.object);
+          this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
         },
 
         error: (error) => {
@@ -278,6 +303,7 @@ export class TraveldetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.engineer = data.object;
+          this.getservicerequest(id)
         },
 
         error: (error) => {
@@ -427,11 +453,12 @@ export class TraveldetailsComponent implements OnInit {
       dateSent,
       "MM/dd/yyyy"
     );
-
-    this.travelDetailform.value.flightdetails.flightdate = datepipie.transform(
-      flightdate,
-      "MM/dd/yyyy"
-    );
+    if (this.isDist) {
+      this.travelDetailform.value.flightdetails.flightdate = datepipie.transform(
+        flightdate,
+        "MM/dd/yyyy"
+      );
+    }
 
     let fcity = this.travelDetailform.value.fromcity.toLowerCase();
     let city = this.travelDetailform.value.tocity;

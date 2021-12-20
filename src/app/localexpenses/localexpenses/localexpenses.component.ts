@@ -96,6 +96,7 @@ export class LocalexpensesComponent implements OnInit {
     this.transaction = 0;
 
     this.user = this.accountService.userValue;
+this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
@@ -233,7 +234,7 @@ export class LocalexpensesComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = (data.object);
+          this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
         },
 
         error: (error) => {
@@ -250,6 +251,7 @@ export class LocalexpensesComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.engineer = data.object;
+          this.getservicerequest(id)
         },
 
         error: (error) => {

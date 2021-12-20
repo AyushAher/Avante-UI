@@ -8,7 +8,7 @@ import {Customersatisfactionsurvey, ProfileReadOnly, User} from '../../_models';
 import {
   AccountService,
   CustomersatisfactionsurveyService,
-  DistributorService,
+  DistributorService, ListTypeService,
   NotificationService,
   ProfileService
 } from '../../_services';
@@ -42,10 +42,12 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private distributorService: DistributorService,
+    private listTypeService: ListTypeService,
   ) {}
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
     role = role[0].itemCode;
 

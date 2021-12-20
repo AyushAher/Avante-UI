@@ -7,7 +7,7 @@ import {RenderComponent} from "../../distributor/rendercomponent";
 import {ProfileReadOnly, travelDetails, User} from "../../_models";
 import {
   AccountService,
-  DistributorService,
+  DistributorService, ListTypeService,
   NotificationService,
   ProfileService,
   TravelDetailService
@@ -43,11 +43,12 @@ export class TraveldetailslistComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private distributorService: DistributorService,
+    private listTypeService: ListTypeService,
   ) {}
 
   ngOnInit() {
     this.user = this.accountService.userValue;
-
+this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
     role = role[0].itemCode;
 
@@ -81,13 +82,18 @@ export class TraveldetailslistComponent implements OnInit {
             .pipe(first())
             .subscribe({
               next: (data1: any) => {
+
                 if (role == environment.distRoleCode) {
                   this.List = data.object.filter(x => x.distId == data1.object[0].id)
+                  console.log(this.List)
                 } else if (role == environment.engRoleCode) {
                   data.object = data.object.filter(x => x.createdby == this.user.userId)
                   this.List = data.object;
+                  console.log(this.List,role)
                 } else {
                   this.List = data.object
+                  console.log(this.List)
+
                 }
               }
             })
@@ -133,14 +139,6 @@ export class TraveldetailslistComponent implements OnInit {
       {
         headerName: "Service Request No",
         field: "servicerequestno",
-        filter: true,
-        editable: false,
-        sortable: true,
-        tooltipField: "code",
-      },
-      {
-        headerName: "Flight Date",
-        field: "flightdetails.flightdate",
         filter: true,
         editable: false,
         sortable: true,

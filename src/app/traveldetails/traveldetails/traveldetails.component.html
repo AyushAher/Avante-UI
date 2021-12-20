@@ -144,25 +144,25 @@
 
                     </div>
 
-                    <div formGroupName="flightdetails" class="hide mt-4">
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6">
+                    <div formGroupName="flightdetails" *ngIf="flightdetails" class="hide mt-4">
+                      <div class="row">
+                        <div class="col-md-6 col-sm-6">
 
-                                <label for="airline">Airline</label>
-                                <input type="text" formControlName="airline" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.get('airline').errors }" />
+                          <label for="airline">Airline</label>
+                          <input type="text" formControlName="airline" [readonly]="isEng" class="form-control"
+                                 [ngClass]="{ 'is-invalid': submitted && f.get('airline').errors }"/>
 
-                                <div *ngIf="submitted && f.get('airline').errors" class="invalid-feedback">
-                                    <div *ngIf="f.get('airline').errors.required">Airline is required</div>
-                                </div>
+                          <div *ngIf="submitted && f.get('airline').errors" class="invalid-feedback">
+                            <div *ngIf="f.get('airline').errors.required">Airline is required</div>
+                          </div>
 
                             </div>
 
                             <div class="col-md-6 col-sm-6">
 
                                 <label for="airline">Flight No</label>
-                                <input type="text" formControlName="flightno" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.get('flightno').errors }" />
+                              <input type="text" formControlName="flightno" [readonly]="isEng" class="form-control"
+                                     [ngClass]="{ 'is-invalid': submitted && f.get('flightno').errors }"/>
 
                                 <div *ngIf="submitted && f.get('flightno').errors" class="invalid-feedback">
                                     <div *ngIf="f.get('flightno').errors.required">Flight No is required</div>
@@ -173,7 +173,7 @@
                             <div class="col-md-6 col-sm-6">
 
                               <label for="airline">Flight Date</label>
-                              <input bsDatepicker formControlName="flightdate" class="form-control"
+                              <input bsDatepicker formControlName="flightdate" [readonly]="isEng" class="form-control"
                                      [ngClass]="{ 'is-invalid': submitted && f.get('flightdate').errors }"/>
 
                               <div *ngIf="submitted &&  f.get('flightdate').errors" class="invalid-feedback">
@@ -191,7 +191,8 @@
                               <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                               </option>
                             </select>
-                            <input id="totalamount" type="number" formControlName="flightcost" class="form-control"
+                            <input id="totalamount" [readonly]="isEng" type="number" formControlName="flightcost"
+                                   class="form-control"
                                    style="display:inline-block; width:270px; margin-left: 5px;"
                                    [ngClass]="{ ' is -invalid': submitted && f.flightcost.errors}"/>
                             <div *ngIf="submitted && f.get('flightcost').errors" class="invalid-feedback">

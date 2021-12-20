@@ -7,7 +7,7 @@ import {RenderComponent} from '../../distributor/rendercomponent';
 import {ProfileReadOnly, User, Visadetails} from '../../_models';
 import {
   AccountService,
-  DistributorService,
+  DistributorService, ListTypeService,
   NotificationService,
   ProfileService,
   VisadetailsService
@@ -41,7 +41,9 @@ export class VisadetailsListComponent implements OnInit {
     private Service: VisadetailsService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
-    private  distributorService: DistributorService
+    private  distributorService: DistributorService,
+    private  listTypeService: ListTypeService,
+
   ) {}
 
   ngOnInit() {
@@ -67,7 +69,7 @@ export class VisadetailsListComponent implements OnInit {
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     }
-
+this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
     role = role[0].itemCode;
     // this.distributorId = this.route.snapshot.paramMap.get('id');

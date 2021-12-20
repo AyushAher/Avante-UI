@@ -8,7 +8,7 @@ import {ProfileReadOnly, Staydetails, User} from "../../_models";
 import {
   AccountService,
   AlertService,
-  DistributorService,
+  DistributorService, ListTypeService,
   NotificationService,
   ProfileService,
   StaydetailsService
@@ -45,11 +45,14 @@ export class StaydetailsListComponent implements OnInit {
     private StayDetailsService: StaydetailsService,
     private notificationService: NotificationService,
     private distributorService: DistributorService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private listTypeService: ListTypeService,
+
   ) {}
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(

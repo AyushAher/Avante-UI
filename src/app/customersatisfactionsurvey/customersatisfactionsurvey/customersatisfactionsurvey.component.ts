@@ -72,7 +72,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.accountService.userValue;
-
+this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.profilePermission = this.profileService.userProfileValue;
 
     if (this.profilePermission != null) {
@@ -192,7 +192,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = (data.object);
+          this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
         },
 
         error: (error) => {
@@ -209,6 +209,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.engineer = data.object;
+          this.getservicerequest(id)
         },
 
         error: (error) => {
