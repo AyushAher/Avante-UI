@@ -65,8 +65,12 @@ export class TraveldetailslistComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          data.object = data.object.filter(x => x.createdby == this.user.userId)
-          this.List = data.object;
+          if (this.user.username != 'admin') {
+            data.object = data.object.filter(x => x.createdby == this.user.userId)
+            this.List = data.object;
+          } else {
+            this.List = data.object
+          }
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
