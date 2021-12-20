@@ -21,6 +21,7 @@ import {
   ProfileService,
   ServiceRequestService,
 } from "../../_services";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: "app-customersatisfactionsurvey",
@@ -52,6 +53,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
   valid: boolean;
   DistributorList: any;
+  eng: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -93,8 +95,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
     this.form = this.formBuilder.group({
       isactive: [true],
-      engineerid: ["", [Validators.required]],
-      distId: ["", [Validators.required]],
+      engineerid: [""],
+      distId: [""],
       servicerequestid: ["", [Validators.required]],
       ontime: [""],
       knowledgewithproduct: [""],
@@ -104,6 +106,9 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     });
 
     this.id = this.route.snapshot.paramMap.get("id");
+
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
 
     if (this.id != null) {
       if (this.user.username == "admin") {
@@ -152,6 +157,17 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
         },
       });
 
+    this.distributorservice.getByConId(this.user.contactId).pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.form.get('distId').setValue(data.object[0].id)
+          this.getengineers(data.object[0].id)
+        }
+      })
+    if (role == environment.engRoleCode) {
+      this.eng = true
+      this.form.get('engineerid').setValue(this.user.contactId)
+    }
     this.listTypeService
       .getById(this.code)
       .pipe(first())

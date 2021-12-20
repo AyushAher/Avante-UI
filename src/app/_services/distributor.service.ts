@@ -45,6 +45,10 @@ export class DistributorService {
     return this.http.get<Distributor>(`${environment.apiUrl}/Distributors/${id}`);
   }
 
+  getByConId(id: string) {
+    return this.http.get<Distributor>(`${environment.apiUrl}/Distributors/getbyconid/${id}`);
+  }
+
   //GetDistributorRegionContacts
   getDistributorRegionContacts(id: string) {
     return this.http.get<Distributor>(`${environment.apiUrl}/Distributors/GetDistributorRegionContacts/${id}`);

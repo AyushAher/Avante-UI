@@ -5,7 +5,14 @@ import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 import {first} from 'rxjs/operators';
 import {RenderComponent} from '../../distributor/rendercomponent';
 import {Customersatisfactionsurvey, ProfileReadOnly, User} from '../../_models';
-import {AccountService, CustomersatisfactionsurveyService, NotificationService, ProfileService} from '../../_services';
+import {
+  AccountService,
+  CustomersatisfactionsurveyService,
+  DistributorService,
+  NotificationService,
+  ProfileService
+} from '../../_services';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-customersatisfactionsurveylist',
@@ -33,11 +40,15 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
     private accountService: AccountService,
     private Service: CustomersatisfactionsurveyService,
     private notificationService: NotificationService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private distributorService: DistributorService,
   ) {}
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0].itemCode;
+
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
@@ -61,12 +72,22 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          if (this.user.username != 'admin') {
-            data.object = data.object.filter(x => x.createdby == this.user.userId)
-            this.List = data.object;
-          } else {
-            this.List = data.object
-          }
+          this.distributorService.getByConId(this.user.contactId)
+            .pipe(first())
+            .subscribe({
+              next: (data1: any) => {
+                console.log(data1)
+                if (role == environment.distRoleCode) {
+                  this.List = data.object.filter(x => x.distId == data1.object[0].id)
+                } else if (role == environment.engRoleCode) {
+                  data.object = data.object.filter(x => x.createdby == this.user.userId)
+                  this.List = data.object;
+                } else {
+                  this.List = data.object
+                }
+              }
+
+            })
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
