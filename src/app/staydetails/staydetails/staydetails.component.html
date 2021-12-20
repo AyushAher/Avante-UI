@@ -139,34 +139,47 @@
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label for="returndate">Price Per Night</label>
-                            <input type="number" formControlName="pricepernight" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.pricepernight.errors }" />
+                          <label for="returndate">Price Per Night</label>
+                          <br>
+                          <select [ngClass]="{ ' is -invalid': submitted && f.perNightCurrencyId.errors}"
+                                  class="form-control"
+                                  formControlName="perNightCurrencyId" id="currency"
+                                  style="display:inline-block; width:100px;">
+                            <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                            </option>
+                          </select>
+                          <input [ngClass]="{ 'is-invalid': submitted && f.pricepernight.errors }" class="form-control"
+                                 formControlName="pricepernight"
+                                 style="display:inline-block; width:270px; margin-left: 5px;"
+                                 type="number"/>
 
-                            <div *ngIf="submitted && f.pricepernight.errors" class="invalid-feedback">
-                                <div *ngIf="f.pricepernight.errors.required">Price per night is required</div>
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-md-4 col-sm-4">
-                            <label>Total Cost</label>
-                            <br>
-                            <select id="currency" style="display:inline-block; width:100px;"
-                                    formControlName="currencyId" class="form-control"
-                                    [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
-                              <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
-                              </option>
-                            </select>
-                            <input type="number" formControlName="totalcost" class="form-control" style="display:inline-block; width:270px; margin-left: 5px;"
-                                [ngClass]="{ 'is-invalid': submitted && f.totalcost.errors }" />
-
-                            <div *ngIf="submitted && f.totalcost.errors" class="invalid-feedback">
-                                <div *ngIf="f.totalcost.errors.required">Total cost is required</div>
-                            </div>
+                          <div *ngIf="submitted && f.pricepernight.errors" class="invalid-feedback">
+                            <div *ngIf="f.pricepernight.errors.required">Price per night is required</div>
+                          </div>
 
                         </div>
+
+
+                      <div class="col-md-4 col-sm-4">
+                        <label>Total Cost</label>
+                        <br>
+                        <select [ngClass]="{ ' is -invalid': submitted && f.totalCurrencyId.errors}"
+                                class="form-control"
+                                formControlName="totalCurrencyId" id="currency"
+                                style="display:inline-block; width:100px;">
+                          <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                          </option>
+                        </select>
+                        <input [ngClass]="{ 'is-invalid': submitted && f.totalcost.errors }" class="form-control"
+                               formControlName="totalcost"
+                               style="display:inline-block; width:270px; margin-left: 5px;"
+                               type="number"/>
+
+                        <div *ngIf="submitted && f.totalcost.errors" class="invalid-feedback">
+                          <div *ngIf="f.totalcost.errors.required">Total cost is required</div>
+                        </div>
+
+                      </div>
 
                     </div>
                     <br />

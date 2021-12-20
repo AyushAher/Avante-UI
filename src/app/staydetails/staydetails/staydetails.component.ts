@@ -110,7 +110,8 @@ export class StaydetailsComponent implements OnInit {
       totalcost: ["", [Validators.required]],
       isactive: [true],
       isdeleted: [false],
-      currencyId: ["", Validators.required],
+      totalCurrencyId: ["", Validators.required],
+      perNightCurrencyId: ["", Validators.required],
     });
     this.currencyService.getAll()
       .pipe(first())
