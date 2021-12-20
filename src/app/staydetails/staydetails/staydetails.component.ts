@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs/operators";
 import {
   Country,
+  Currency,
   DistributorRegionContacts,
   ListTypeItem,
   ProfileReadOnly,
@@ -17,6 +18,7 @@ import {
   AccountService,
   AlertService,
   CountryService,
+  CurrencyService,
   DistributorService,
   ListTypeService,
   NotificationService,
@@ -51,7 +53,7 @@ export class StaydetailsComponent implements OnInit {
   accomodationtype: ListTypeItem[];
   engineer: DistributorRegionContacts[] = [];
   servicerequest: ServiceRequest[] = [];
-
+  currencyList: Currency[];
   valid: boolean;
   DistributorList: any;
 
@@ -67,7 +69,8 @@ export class StaydetailsComponent implements OnInit {
     private distributorservice: DistributorService,
     private servicerequestservice: ServiceRequestService,
     private listTypeService: ListTypeService,
-    private countryservice: CountryService
+    private countryservice: CountryService,
+    private currencyService: CurrencyService,
   ) {
   }
 
@@ -107,8 +110,19 @@ export class StaydetailsComponent implements OnInit {
       totalcost: ["", [Validators.required]],
       isactive: [true],
       isdeleted: [false],
+      currencyId: ["", Validators.required],
     });
-
+    this.currencyService.getAll()
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.currencyList = data.object
+        },
+        error: (error) => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      })
     this.id = this.route.snapshot.paramMap.get("id");
 
     if (this.id != null) {
@@ -116,7 +130,7 @@ export class StaydetailsComponent implements OnInit {
         .getById(this.id)
         .pipe(first())
         .subscribe({
-          next: (data: any) =>{
+          next: (data: any) => {
             this.getengineers(data.object.distId)
             this.getservicerequest(data.object.distId)
             this.travelDetailform.patchValue(data.object);

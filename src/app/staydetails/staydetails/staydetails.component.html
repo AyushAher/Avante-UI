@@ -149,9 +149,17 @@
 
                         </div>
 
+
                         <div class="col-md-4 col-sm-4">
-                            <label for="returndate">Total Cost</label>
-                            <input type="number" formControlName="totalcost" class="form-control"
+                            <label>Total Cost</label>
+                            <br>
+                            <select id="currency" style="display:inline-block; width:100px;"
+                                    formControlName="currencyId" class="form-control"
+                                    [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
+                              <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                              </option>
+                            </select>
+                            <input type="number" formControlName="totalcost" class="form-control" style="display:inline-block; width:270px; margin-left: 5px;"
                                 [ngClass]="{ 'is-invalid': submitted && f.totalcost.errors }" />
 
                             <div *ngIf="submitted && f.totalcost.errors" class="invalid-feedback">
