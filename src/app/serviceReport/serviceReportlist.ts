@@ -118,8 +118,14 @@ export class ServiceReportListComponent implements OnInit {
             this.loading = false;
           }
         });
-      this.columnDefs = this.createColumnDefs();
+    } else {
+      this.ServiceReportService.getAll().pipe(first()).subscribe({
+        next: (data: any) => {
+          this.ServiceReportList = data.object;
+        }
+      })
     }
+      this.columnDefs = this.createColumnDefs();
   }
 
   Add() {

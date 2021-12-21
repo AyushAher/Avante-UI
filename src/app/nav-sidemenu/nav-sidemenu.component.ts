@@ -278,7 +278,7 @@ export class NavSideMenuComponent {
         next: (data: ListTypeItem[]) => {
           this.roles = data;
           this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
-          switch (this.userrole[0].itemname) {
+          switch (this.userrole[0]?.itemname) {
             case "Distributor Support":
               this.hasDistributorSettings = true
               // this.router.navigate(["distdashboard"]);
