@@ -92,8 +92,8 @@
           <br><br><br>
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px;">
-              <button class="btn btn-primary" type="submit">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+              <button *ngIf="hasAddAccess || hasUpdateAccess" class="btn btn-primary" type="submit">
+                <span *ngIf="loading"  class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
               <a routerLink="" class="btn btn-secondary" style="margin: 0 10px;">Back</a>

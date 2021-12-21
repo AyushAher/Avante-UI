@@ -43,6 +43,10 @@ export class NavSideMenuComponent {
   settings: string
   hasDistributorSettings: boolean = false;
   hasCustomerSettings: boolean = false
+  hascustomerdashboard: boolean = false;
+  hasdistributordashboard: boolean = false;
+  haspreventivemaintenance: boolean = false;
+  hasdashboardsettings: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -202,6 +206,32 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'CTSS')[0].delete == true
       }
 
+      if (this.profile.permissions.filter(x => x.screenCode == 'CUSDH').length > 0) {
+        this.hascustomerdashboard = this.profile.permissions.filter(x => x.screenCode == 'CUSDH')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'CUSDH')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'CUSDH')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'CUSDH')[0].delete == true
+      }
+      if (this.profile.permissions.filter(x => x.screenCode == 'DISDH').length > 0) {
+        this.hasdistributordashboard = this.profile.permissions.filter(x => x.screenCode == 'DISDH')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'DISDH')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'DISDH')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'DISDH')[0].delete == true
+      }
+      if (this.profile.permissions.filter(x => x.screenCode == 'PRVMN').length > 0) {
+        this.haspreventivemaintenance = this.profile.permissions.filter(x => x.screenCode == 'PRVMN')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'PRVMN')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'PRVMN')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'PRVMN')[0].delete == true
+      }
+
+      if (this.profile.permissions.filter(x => x.screenCode == 'DHSET').length > 0) {
+        this.hasdashboardsettings = this.profile.permissions.filter(x => x.screenCode == 'DHSET')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'DHSET')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'DHSET')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'DHSET')[0].delete == true
+      }
+
 
       //
       // hasTravelDetails: boolean = false;
@@ -235,6 +265,10 @@ export class NavSideMenuComponent {
       this.hasMaster = true;
       this.hasschedule = true;
       this.hasCustomerSparePartsInventory = true;
+      this.hascustomerdashboard = true;
+      this.hasdistributordashboard = true;
+      this.haspreventivemaintenance = true;
+      this.hasdashboardsettings = true;
     }
 
     this.listTypeService

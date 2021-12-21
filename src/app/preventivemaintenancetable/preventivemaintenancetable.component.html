@@ -82,7 +82,7 @@
               <div class="row">
                 <div class="fixed-bottom "
                      style="margin: 0 0 50px 200px; background-color: #fff; width: 73%;padding-left: 20px;padding-top:20px">
-                  <button [disabled]="loading" class="btn btn-primary">
+                  <button [disabled]="loading" *ngIf="hasAddAccess||hasUpdateAccess" class="btn btn-primary">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     Submit
                   </button>

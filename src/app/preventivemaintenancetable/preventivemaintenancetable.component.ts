@@ -34,6 +34,10 @@ export class PreventivemaintenancetableComponent implements OnInit {
   dateObj
   list
   savedData = []
+  hasDeleteAccess = false
+  hasAddAccess = false
+  hasUpdateAccess = false
+  hasReadAccess = false
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,14 +53,23 @@ export class PreventivemaintenancetableComponent implements OnInit {
 
   ngOnInit() {
     //
-    this.dateObj = this.datepipe.transform(Date.now(),"MM/dd/yyyy");
+    this.dateObj = this.datepipe.transform(Date.now(), "MM/dd/yyyy");
     this.Form = this.formBuilder.group({
       serviceReportId: ['', Validators.required],
       maintenance: this.formBuilder.array([]),
       isactive: [true],
       isdeleted: [false],
     });
-
+    this.profilePermission = this.profileService.userProfileValue;
+    if (this.profilePermission != null) {
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "PRVMN");
+      if (profilePermission.length > 0) {
+        this.hasReadAccess = profilePermission[0].read;
+        this.hasAddAccess = profilePermission[0].create;
+        this.hasDeleteAccess = profilePermission[0].delete;
+        this.hasUpdateAccess = profilePermission[0].update;
+      }
+    }
     this.Form.get('serviceReportId').setValue(this.id);
     if (this.id != undefined) {
       this.preventivemaintenancesService.getById(this.id)
