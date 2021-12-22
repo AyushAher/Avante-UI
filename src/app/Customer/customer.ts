@@ -67,7 +67,8 @@ export class CustomerComponent implements OnInit {
     this.customerform = this.formBuilder.group({
       custname: ['', Validators.required],
       defdistid: ['', Validators.required],
-      isactive: ['', Validators.required],
+      isactive: [true],
+      isdeleted: [true],
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: ['', Validators.required],
@@ -143,7 +144,7 @@ export class CustomerComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.customerform.invalid) {
-      return;
+      return console.log(this.customerform);
     }
     this.isSave = true;
     this.loading = true;
