@@ -88,7 +88,7 @@ export class CustomerSiteComponent implements OnInit {
         zip: ['', Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(10)])],
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
-        isActive: [''],
+        isActive: true,
       }),
     });
     this.countryService.getAll()
