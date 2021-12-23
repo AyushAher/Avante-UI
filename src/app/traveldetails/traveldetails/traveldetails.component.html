@@ -194,7 +194,7 @@
                             <input id="totalamount" [readonly]="isEng" type="number" formControlName="flightcost"
                                    class="form-control"
                                    style="display:inline-block; width:270px; margin-left: 5px;"
-                                   [ngClass]="{ ' is -invalid': submitted && f.flightcost.errors}"/>
+                                   [ngClass]="{ ' is -invalid': submitted && f.get('flightcost').errors}"/>
                             <div *ngIf="submitted && f.get('flightcost').errors" class="invalid-feedback">
                               <div *ngIf="f.get('flightcost').errors.required">Flight Cost is required</div>
                             </div>

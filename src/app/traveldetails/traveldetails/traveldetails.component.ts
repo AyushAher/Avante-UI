@@ -135,11 +135,11 @@ export class TraveldetailsComponent implements OnInit {
       isdeleted: [false],
       requesttype: ["", [Validators.required]],
       flightdetails: this.formBuilder.group({
-        airline: ["",],
-        flightno: ["",],
-        flightdate: ["",],
-        currencyId: ["",],
-        flightcost: [0],
+        airline: [""],
+        flightno: [""],
+        flightdate: [""],
+        currencyId: [""],
+        flightcost: 0,
       }),
     });
 
@@ -287,7 +287,12 @@ export class TraveldetailsComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
+          console.log(data)
+          if (this.isEng) {
+            this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
+          } else if (this.isDist) {
+            this.servicerequest = (data.object.filter(x => x.distid == id));
+          }
         },
 
         error: (error) => {
