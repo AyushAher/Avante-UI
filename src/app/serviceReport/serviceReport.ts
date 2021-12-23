@@ -1397,16 +1397,17 @@ export class ServiceReportComponent implements OnInit {
   }
 
   GeneratePDF() {
+    this.onSubmit();
     this.ServiceReportService.getView(this.ServiceReportId)
       .pipe(first())
       .subscribe({
-          next: (data: any) => {
-            console.log(data)
-            data = data.object
-            let totalHrs = 0;
+        next: (data: any) => {
+          console.log(data)
+          data = data.object
+          let totalHrs = 0;
 
-            {
-              data.analyticalassit == true ? data.analyticalassit = this.checkedImg : data.analyticalassit = this.unCheckedImg;
+          {
+            data.analyticalassit == true ? data.analyticalassit = this.checkedImg : data.analyticalassit = this.unCheckedImg;
               data.installation == true ? data.installation = this.checkedImg : data.installation = this.unCheckedImg;
               data.rework == true ? data.rework = this.checkedImg : data.rework = this.unCheckedImg;
               data.prevmaintenance == true ? data.prevmaintenance = this.checkedImg : data.prevmaintenance = this.unCheckedImg;
