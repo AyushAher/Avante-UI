@@ -1397,7 +1397,7 @@ export class ServiceReportComponent implements OnInit {
   }
 
   GeneratePDF() {
-    this.onSubmit();
+    // this.onSubmit();
     this.ServiceReportService.getView(this.ServiceReportId)
       .pipe(first())
       .subscribe({
@@ -1407,25 +1407,33 @@ export class ServiceReportComponent implements OnInit {
           let totalHrs = 0;
 
           {
+            if (data.custsignature == null) {
+
+              data.custsignature = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAI8AAABSCAYAAABtw4diAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAADiSURBVHhe7dIxAcAgEMDAp/49A0MNkPluiYGsfQ0E3194Zh4y85CZh8w8ZOYhMw+ZecjMQ2YeMvOQmYfMPGTmITMPmXnIzENmHjLzkJmHzDxk5iEzD5l5yMxDZh4y85CZh8w8ZOYhMw+ZecjMQ2YeMvOQmYfMPGTmITMPmXnIzENmHjLzkJmHzDxk5iEzD5l5yMxDZh4y85CZh8w8ZOYhMw+ZecjMQ2YeMvOQmYfMPGTmITMPmXnIzENmHjLzkJmHzDxk5iEzD5l5yMxDZh4y85CZh8w8ZOYhMw+ZecjMQzRzAO/qBKDxFE3sAAAAAElFTkSuQmCC";
+            }
+            if (data.engsignature == null) {
+
+              data.engsignature = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAI8AAABSCAYAAABtw4diAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAADiSURBVHhe7dIxAcAgEMDAp/49A0MNkPluiYGsfQ0E3194Zh4y85CZh8w8ZOYhMw+ZecjMQ2YeMvOQmYfMPGTmITMPmXnIzENmHjLzkJmHzDxk5iEzD5l5yMxDZh4y85CZh8w8ZOYhMw+ZecjMQ2YeMvOQmYfMPGTmITMPmXnIzENmHjLzkJmHzDxk5iEzD5l5yMxDZh4y85CZh8w8ZOYhMw+ZecjMQ2YeMvOQmYfMPGTmITMPmXnIzENmHjLzkJmHzDxk5iEzD5l5yMxDZh4y85CZh8w8ZOYhMw+ZecjMQzRzAO/qBKDxFE3sAAAAAElFTkSuQmCC";
+            }
             data.analyticalassit == true ? data.analyticalassit = this.checkedImg : data.analyticalassit = this.unCheckedImg;
-              data.installation == true ? data.installation = this.checkedImg : data.installation = this.unCheckedImg;
-              data.rework == true ? data.rework = this.checkedImg : data.rework = this.unCheckedImg;
-              data.prevmaintenance == true ? data.prevmaintenance = this.checkedImg : data.prevmaintenance = this.unCheckedImg;
-              data.corrmaintenance == true ? data.corrmaintenance = this.checkedImg : data.corrmaintenance = this.unCheckedImg;
-              data.workfinished == true ? data.workfinished = this.checkedImg : data.workfinished = this.unCheckedImg;
-              data.attachment == true ? data.attachment = this.checkedImg : data.attachment = this.unCheckedImg;
-              data.interrupted == true ? data.interrupted = this.checkedImg : data.interrupted = this.unCheckedImg;
-              data.isworkdone == true ? data.isworkdone = this.checkedImg : data.isworkdone = this.unCheckedImg;
+            data.installation == true ? data.installation = this.checkedImg : data.installation = this.unCheckedImg;
+            data.rework == true ? data.rework = this.checkedImg : data.rework = this.unCheckedImg;
+            data.prevmaintenance == true ? data.prevmaintenance = this.checkedImg : data.prevmaintenance = this.unCheckedImg;
+            data.corrmaintenance == true ? data.corrmaintenance = this.checkedImg : data.corrmaintenance = this.unCheckedImg;
+            data.workfinished == true ? data.workfinished = this.checkedImg : data.workfinished = this.unCheckedImg;
+            data.attachment == true ? data.attachment = this.checkedImg : data.attachment = this.unCheckedImg;
+            data.interrupted == true ? data.interrupted = this.checkedImg : data.interrupted = this.unCheckedImg;
+            data.isworkdone == true ? data.isworkdone = this.checkedImg : data.isworkdone = this.unCheckedImg;
 
-              (data.workTime==[] || data.workTime == null)?data.workTime = [
-                {
-                  worktimedate:'No Data Avaliable',
-                  starttime:'No Data Avaliable',
-                  endtime:'No Data Avaliable',
-                  perdayhrs:'No Data Avaliable'
-                }
+            (data.workTime == [] || data.workTime == null) ? data.workTime = [
+              {
+                worktimedate: 'No Data Avaliable',
+                starttime: 'No Data Avaliable',
+                endtime: 'No Data Avaliable',
+                perdayhrs: 'No Data Avaliable'
+              }
 
-              ] :data.workTime.forEach(x => {
+            ] : data.workTime.forEach(x => {
                 x.worktimedate = this.datepipe.transform(x.worktimedate, "dd-MM-yy");
                 totalHrs = totalHrs + Number(x.perdayhrs)
               })
