@@ -1397,7 +1397,7 @@ export class ServiceReportComponent implements OnInit {
   }
 
   GeneratePDF() {
-    // this.onSubmit();
+    this.onSubmit();
     this.ServiceReportService.getView(this.ServiceReportId)
       .pipe(first())
       .subscribe({
