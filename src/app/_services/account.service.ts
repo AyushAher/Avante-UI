@@ -35,7 +35,7 @@ export class AccountService {
     this.zohoSubject.next(v);
   }
 
-  
+
   clear() {
     localStorage.removeItem('zohotoken');
     this.zohoSubject.next(null);
@@ -43,7 +43,7 @@ export class AccountService {
 
 
   login(username, password) {
-   
+
     password = window.btoa(password);
     return this.http.post<User>(`${environment.apiUrl}/user/authenticate`, { username, password})
       .pipe(map(user => {
@@ -59,8 +59,7 @@ export class AccountService {
 
   logout() {
     // remove user from local storage and set current user to null
-    localStorage.removeItem('user');
-    localStorage.removeItem('userprofile');
+    localStorage.clear();
     this.clear();
     this.userSubject.next(null);
     this.router.navigate(['/account/login']);
