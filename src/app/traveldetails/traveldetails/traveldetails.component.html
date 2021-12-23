@@ -187,7 +187,7 @@
                             <br>
                             <select id="currency" style="display:inline-block; width:100px;"
                                     formControlName="currencyId" class="form-control"
-                                    [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
+                                    [ngClass]="{ ' is -invalid': submitted && f.get('currencyId').errors}">
                               <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                               </option>
                             </select>

@@ -52,7 +52,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
   }
 
   ngOnInit() {
-    //
+    debugger;
     this.dateObj = this.datepipe.transform(Date.now(), "MM/dd/yyyy");
     this.Form = this.formBuilder.group({
       serviceReportId: ['', Validators.required],
@@ -76,23 +76,24 @@ export class PreventivemaintenancetableComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //
-            data.object.maintenance.forEach(value => {
-              this.savedData.push(value);
-            })
+            if (data.result && data.object != null && data.object.length > 0) {
+              data.object.maintenance.forEach(value => {
+                this.savedData.push(value);
+              })
+            }
           },
           error: error => {
             this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
-    }
 
     this.prevchklocpartelementService.getAll()
       .pipe(first())
       .subscribe({
           next: (data: any) => {
             this.listTypeItems = data.object;
+            console.log(data)
             let data2 = []
             this.listTypeItems.forEach(value => {
               let data1 = this.savedData.find(x => x.elementId == value.id)
@@ -177,7 +178,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
           }
         }
       );
-
+    }
   }
 
   close() {

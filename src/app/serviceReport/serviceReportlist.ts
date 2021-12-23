@@ -157,7 +157,7 @@ export class ServiceReportListComponent implements OnInit {
       tooltipField: 'customer',
     }, {
       headerName: 'Department',
-      field: 'departmentName',
+      field: 'department',
       filter: true,
         editable: false,
       sortable: true

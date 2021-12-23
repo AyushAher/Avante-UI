@@ -29,6 +29,7 @@ export class ServiceRequestListComponent implements OnInit {
   form: FormGroup;
   srCustList: ServiceRequest[];
   srDistList: ServiceRequest[];
+  srAdminList: ServiceRequest[];
   srEngList: ServiceRequest[];
   loading = false;
   submitted = false;
@@ -45,6 +46,7 @@ export class ServiceRequestListComponent implements OnInit {
   IsCustomerView: boolean = true;
   IsDistributorView: boolean = false;
   IsEngineerView: boolean = false;
+  IsAdminView: boolean = false;
   distId: any;
 
   constructor(
@@ -77,10 +79,9 @@ export class ServiceRequestListComponent implements OnInit {
     if (this.user.username == "admin") {
       this.hasAddAccess = false;
       this.hasDeleteAccess = true;
-       this.columnDefs = this.createCustColumnDefs();
-       this.srCustList =[]
-       this.srEngList =[]
-       this.srDistList =[]
+      this.IsAdminView = true;
+      this.getallrecored();
+      this.columnDefs = this.createCustColumnDefs();
     } else {
       this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
 
@@ -121,8 +122,10 @@ export class ServiceRequestListComponent implements OnInit {
         this.columnDefs = this.createDisColumnDefs();
       } else if (this.IsEngineerView) {
         this.columnDefs = this.createDisColumnDefs();
-      } else {
+      } else if(this.IsCustomerView){
         this.columnDefs = this.createCustColumnDefs();
+      }else if(this.IsAdminView){
+        this.columnDefs = this.createDisColumnDefs()
       }
 
     }
@@ -289,10 +292,13 @@ export class ServiceRequestListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-
-          this.srCustList = data.object.filter(x => x.createdby == this.user.userId);
-          this.srDistList = data.object.filter(x => x.distid == this.distId);
-          this.srEngList = data.object.filter(x => x.assignedto == this.user.contactId);
+          if (this.user.username != 'admin') {
+            this.srCustList = data.object.filter(x => x.createdby == this.user.userId);
+            this.srDistList = data.object.filter(x => x.distid == this.distId);
+            this.srEngList = data.object.filter(x => x.assignedto == this.user.contactId);
+          } else {
+            this.srAdminList = data.object;
+          }
         },
         error: error => {
           this.notificationService.showError(error, "Error");
