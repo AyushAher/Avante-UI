@@ -76,7 +76,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            if (data.result && data.object != null && data.object.length > 0) {
+            if (data.result && data.object != null) {
               data.object.maintenance.forEach(value => {
                 this.savedData.push(value);
               })
