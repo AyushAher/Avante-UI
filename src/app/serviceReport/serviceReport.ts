@@ -1637,18 +1637,18 @@ export class ServiceReportComponent implements OnInit {
                     [
                       {
                         columns: [
-                          {text: 'Work Finished', width: 65},
                           {
                             image: data.workfinished,
                             height: 10,
                             width: 10
                           },
-                          {text: 'Interrupted', width: 55},
+                          {text: 'Work Finished', width: 65},
                           {
                             image: data.interrupted,
                             height: 10,
                             width: 10
                           },
+                          {text: 'Interrupted', width: 55},
                         ]
                       },
                       {
