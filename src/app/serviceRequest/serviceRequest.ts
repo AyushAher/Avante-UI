@@ -750,6 +750,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   generatereport() {
+      this.onSubmit();
     this.EngschedulerService.getAll().pipe(first()).subscribe({
       next: (data: any) => {
 
