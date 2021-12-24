@@ -53,87 +53,86 @@
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label for="n_Code">Accomodation Type</label>
+                          <label for="n_Code">Accomodation Type</label>
 
-                            <select name="" placeholder="Accomodation Class" formControlName="accomodationtype" id=""
-                                class="form-control" [ngClass]="{'is-invalid':submitted && f.accomodationtype.errors }">
-                                <option *ngFor="let i of accomodationtype" value="{{i.listTypeItemId}}">{{i.itemname}}
-                                </option>
-                            </select>
+                          <select name="" placeholder="Accomodation Class" formControlName="accomodationtype" id=""
+                                  class="form-control"
+                                  [ngClass]="{'is-invalid':submitted && f.accomodationtype.errors }">
+                            <option *ngFor="let i of accomodationtype" value="{{i.listTypeItemId}}">{{i.itemname}}
+                            </option>
+                          </select>
 
 
-                            <div *ngIf="submitted && f.accomodationtype.errors" class="invalid-feedback">
-                                <div *ngIf="f.accomodationtype.errors.required">Accomodation Type is required</div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                            <label for="minor_Unit">Hotel Name</label>
-                            <input type="text" formControlName="hotelname" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.hotelname.errors}" />
-
-                            <div *ngIf="submitted && f.hotelname.errors" class="invalid-feedback">
-                                <div *ngIf="f.hotelname.errors.required">Hotel Name is required</div>
-                            </div>
+                          <div *ngIf="submitted && f.accomodationtype.errors" class="invalid-feedback">
+                            <div *ngIf="f.accomodationtype.errors.required">Accomodation Type is required</div>
+                          </div>
 
                         </div>
 
-                        <div class="col-md-4 col-sm-4">
-                            <label for="minor_Unit">Stay Address</label>
-                            <input type="text" formControlName="stayaddress" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.stayaddress.errors}" />
+                      <div class="col-md-4 col-sm-4">
+                        <label for="departuredate">City</label>
+                        <input type="text" formControlName="city" class="form-control"
+                               [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
 
-                            <div *ngIf="submitted && f.stayaddress.errors" class="invalid-feedback">
-                                <div *ngIf="f.stayaddress.errors.required">Stay Address is required</div>
-                            </div>
-
+                        <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                          <div *ngIf="f.city.errors.required">City is required</div>
                         </div>
 
+                      </div>
 
+                      <div class="col-md-4 col-sm-4">
+                        <label for="returndate">Checkin Date</label>
+                        <input bsDatepicker formControlName="checkindate" class="form-control"
+                               [ngClass]="{ 'is-invalid': submitted && f.checkindate.errors }"/>
 
+                        <div *ngIf="submitted && f.checkindate.errors" class="invalid-feedback">
+                          <div *ngIf="f.checkindate.errors.required">Checkin Date is required</div>
+                        </div>
 
+                      </div>
 
-                        <div class="col-md-4 col-sm-4">
-                            <label for="travelclass">Room Details</label>
+                      <div class="col-md-4 col-sm-4">
+                        <label for="returndate">Checkout Date</label>
+                        <input bsDatepicker formControlName="checkoutdate" class="form-control"
+                               [ngClass]="{ 'is-invalid': submitted && f.checkoutdate.errors }"/>
+
+                        <div *ngIf="submitted && f.checkoutdate.errors" class="invalid-feedback">
+                          <div *ngIf="f.checkoutdate.errors.required">Checkout date is required</div>
+                        </div>
+
+                      </div>
+                    </div>
+                  <div class="row" *ngIf="id!=null">
+                    <br><br>
+                    <div class="col-md-4 col-sm-4">
+                      <label for="minor_Unit">Hotel Name</label>
+                      <input type="text" formControlName="hotelname" class="form-control"
+                             [ngClass]="{ 'is-invalid': submitted && f.hotelname.errors}"/>
+
+                      <div *ngIf="submitted && f.hotelname.errors" class="invalid-feedback">
+                        <div *ngIf="f.hotelname.errors.required">Hotel Name is required</div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                      <label for="minor_Unit">Stay Address</label>
+                      <input type="text" formControlName="stayaddress" class="form-control"
+                             [ngClass]="{ 'is-invalid': submitted && f.stayaddress.errors}"/>
+
+                      <div *ngIf="submitted && f.stayaddress.errors" class="invalid-feedback">
+                        <div *ngIf="f.stayaddress.errors.required">Stay Address is required</div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                      <label for="travelclass">Room Details</label>
                             <input type="text" formControlName="roomdetails" class="form-control"
                                 [ngClass]="{ 'is-invalid': submitted && f.roomdetails.errors }" />
 
                             <div *ngIf="submitted && f.roomdetails.errors" class="invalid-feedback">
                                 <div *ngIf="f.roomdetails.errors.required">Room Details is required</div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                            <label for="departuredate">City</label>
-                            <input type="text" formControlName="city" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.city.errors }" />
-
-                            <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
-                                <div *ngIf="f.city.errors.required">City is required</div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                            <label for="returndate">Checkin Date</label>
-                            <input bsDatepicker formControlName="checkindate" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.checkindate.errors }" />
-
-                            <div *ngIf="submitted && f.checkindate.errors" class="invalid-feedback">
-                                <div *ngIf="f.checkindate.errors.required">Checkin Date is required</div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                            <label for="returndate">Checkout Date</label>
-                            <input bsDatepicker formControlName="checkoutdate" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.checkoutdate.errors }" />
-
-                            <div *ngIf="submitted && f.checkoutdate.errors" class="invalid-feedback">
-                                <div *ngIf="f.checkoutdate.errors.required">Checkout date is required</div>
                             </div>
 
                         </div>

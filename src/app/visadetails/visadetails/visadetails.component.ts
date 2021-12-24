@@ -79,6 +79,8 @@ export class VisadetailsComponent implements OnInit {
   @Output() public onUploadFinished = new EventEmitter();
   currencyList: Currency[];
 
+  isEng: boolean = false
+  isDist: boolean = false
 
   constructor(
     private FileShareService: FileshareService,
@@ -99,8 +101,11 @@ export class VisadetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.transaction = 0;
 
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0]?.itemCode;
+
+    this.transaction = 0;
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -119,6 +124,10 @@ export class VisadetailsComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else if (role == environment.engRoleCode) {
+      this.isEng = true;
+    } else if (role == environment.distRoleCode) {
+      this.isDist = true;
     }
 
     this.travelDetailform = this.formBuilder.group({
@@ -187,9 +196,6 @@ export class VisadetailsComponent implements OnInit {
       })
 
 this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
-
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
         next: (data: any) => {
@@ -349,8 +355,10 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-  this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
+          this.isEng ? this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId)
+            : this.isDist ? this.servicerequest = data.object.filter(x => x.distid == id) : this.servicerequest = [];
         },
+
 
         error: (error) => {
           this.notificationService.showError("Error", error);

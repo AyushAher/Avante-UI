@@ -54,6 +54,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   valid: boolean;
   DistributorList: any;
   eng: boolean = false;
+  isEng: boolean = false;
+  isDist: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -72,7 +74,10 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.accountService.userValue;
-this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
+
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0]?.itemCode;
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.profilePermission = this.profileService.userProfileValue;
 
     if (this.profilePermission != null) {
@@ -91,6 +96,10 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else if (role == environment.engRoleCode) {
+      this.isEng = true;
+    } else if (role == environment.distRoleCode) {
+      this.isDist = true;
     }
 
     this.form = this.formBuilder.group({
@@ -106,10 +115,6 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     });
 
     this.id = this.route.snapshot.paramMap.get("id");
-
-      let role = JSON.parse(localStorage.getItem('roles'));
-      role = role[0]?.itemCode;
-
     if (this.id != null) {
       if (this.user.username == "admin") {
         this.hasAddAccess = true;
@@ -192,7 +197,8 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
+          this.isEng ? this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId)
+            : this.isDist ? this.servicerequest = data.object.filter(x => x.distid == id) : this.servicerequest = [];
         },
 
         error: (error) => {

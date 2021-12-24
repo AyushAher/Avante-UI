@@ -41,7 +41,6 @@ export class StaydetailsComponent implements OnInit {
   isSave = false;
   type: string;
   id: string;
-  travelDetailmodel: Staydetails;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
   hasUpdateAccess: boolean = false;
@@ -57,6 +56,9 @@ export class StaydetailsComponent implements OnInit {
   currencyList: Currency[];
   valid: boolean;
   DistributorList: any;
+
+  isDist: boolean = false;
+  isEng: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -77,6 +79,8 @@ export class StaydetailsComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0]?.itemCode;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
@@ -94,26 +98,35 @@ export class StaydetailsComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+      this.isEng = true;
+      this.isDist = true;
+    } else if (role == environment.engRoleCode) {
+      this.isEng = true;
+    } else if (role == environment.distRoleCode) {
+      this.isDist = true;
     }
+
 
     this.travelDetailform = this.formBuilder.group({
       engineerid: ["", [Validators.required]],
       distId: ["", [Validators.required]],
       servicerequestid: ["", [Validators.required]],
       accomodationtype: ["", [Validators.required]],
-      hotelname: ["", [Validators.required]],
-      stayaddress: ["", [Validators.required]],
-      roomdetails: ["", [Validators.required]],
       city: ["", [Validators.required]],
       checkindate: ["", [Validators.required]],
       checkoutdate: ["", [Validators.required]],
-      pricepernight: ["", [Validators.required]],
-      totalcost: ["", [Validators.required]],
-      isactive: [true],
-      isdeleted: [false],
-      totalCurrencyId: ["", Validators.required],
-      perNightCurrencyId: ["", Validators.required],
+
+      hotelname: "",
+      stayaddress: "",
+      roomdetails: "",
+      pricepernight: "",
+      totalcost: "",
+      isactive: true,
+      isdeleted: false,
+      totalCurrencyId: "",
+      perNightCurrencyId: "",
     });
+
     this.currencyService.getAll()
       .pipe(first())
       .subscribe({
@@ -125,6 +138,7 @@ export class StaydetailsComponent implements OnInit {
           this.loading = false;
         }
       })
+
     this.id = this.route.snapshot.paramMap.get("id");
 
     if (this.id != null) {
@@ -143,10 +157,39 @@ export class StaydetailsComponent implements OnInit {
           },
         });
     }
-this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
 
+    if (this.isEng) {
+      this.travelDetailform.get('hotelname').disable()
+      this.travelDetailform.get('stayaddress').disable()
+      this.travelDetailform.get('roomdetails').disable()
+      this.travelDetailform.get('pricepernight').disable()
+      this.travelDetailform.get('totalcost').disable()
+      this.travelDetailform.get('totalCurrencyId').disable()
+      this.travelDetailform.get('perNightCurrencyId').disable()
+    } else if (this.isDist) {
+      this.travelDetailform.get('hotelname').setValidators([Validators.required]);
+      this.travelDetailform.get('hotelname').updateValueAndValidity();
+
+      this.travelDetailform.get('stayaddress').setValidators([Validators.required]);
+      this.travelDetailform.get('stayaddress').updateValueAndValidity();
+
+      this.travelDetailform.get('roomdetails').setValidators([Validators.required]);
+      this.travelDetailform.get('roomdetails').updateValueAndValidity();
+
+      this.travelDetailform.get('pricepernight').setValidators([Validators.required]);
+      this.travelDetailform.get('pricepernight').updateValueAndValidity();
+
+      this.travelDetailform.get('totalcost').setValidators([Validators.required]);
+      this.travelDetailform.get('totalcost').updateValueAndValidity();
+
+      this.travelDetailform.get('totalCurrencyId').setValidators([Validators.required]);
+      this.travelDetailform.get('totalCurrencyId').updateValueAndValidity();
+
+      this.travelDetailform.get('perNightCurrencyId').setValidators([Validators.required]);
+      this.travelDetailform.get('perNightCurrencyId').updateValueAndValidity();
+    }
+
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
         next: (data: any) => {
@@ -193,7 +236,8 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
+          this.isEng ? this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId)
+            : this.isDist ? this.servicerequest = data.object.filter(x => x.distid == id) : this.servicerequest = [];
         },
 
         error: (error) => {

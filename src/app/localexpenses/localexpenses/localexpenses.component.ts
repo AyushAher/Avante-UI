@@ -73,6 +73,8 @@ export class LocalexpensesComponent implements OnInit {
   hastransaction: boolean;
   public progress: number;
   public message: string;
+  isEng: boolean = false;
+  isDist: boolean = false;
 
   @Output() public onUploadFinished = new EventEmitter();
 
@@ -96,8 +98,13 @@ export class LocalexpensesComponent implements OnInit {
     this.transaction = 0;
 
     this.user = this.accountService.userValue;
-this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
+
+    let role = JSON.parse(localStorage.getItem('roles'));
+    role = role[0]?.itemCode;
+
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.profilePermission = this.profileService.userProfileValue;
+
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
         (x) => x.screenCode == "LCEXP"
@@ -114,6 +121,10 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else if (role == environment.engRoleCode) {
+      this.isEng = true;
+    } else if (role == environment.distRoleCode) {
+      this.isDist = true;
     }
 
     this.travelDetailform = this.formBuilder.group({
@@ -168,9 +179,6 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
           },
         });
     }
-
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
 
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
@@ -234,7 +242,8 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
+          this.isEng ? this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId)
+            : this.isDist ? this.servicerequest = data.object.filter(x => x.distid == id) : this.servicerequest = [];
         },
 
         error: (error) => {
