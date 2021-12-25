@@ -39,7 +39,7 @@ export class zohoapiService {
     //formData.append('redirect_uri', environment.redirecturl);
     //formData.append('grant_type', "authorization_code");
    // let url = "${ environment.apiUrl }/Amc/${id}"
-    return this.http.get(`${environment.apiUrl}/Zoho/${code}`);
+    return this.http.get(`${environment.apiUrl}/Zoho/GetZToken/${code}`);
   }
 
     getAllinvoice() {
