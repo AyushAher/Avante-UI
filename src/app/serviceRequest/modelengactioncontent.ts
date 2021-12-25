@@ -108,7 +108,15 @@ export class ModelEngActionContentComponent implements OnInit {
   }
 
   getActiontaken(e) {
-    this.hasRemote = e.value == "a2e5b403-fd00-11eb-ae84-fc45964f576b";
+    this.listTypeService.getById('ACTKN')
+      .pipe(first())
+      .subscribe({
+        next: (data: ListTypeItem[]) => {
+          console.log(data)
+          data = data.filter(x => x.itemCode == "RMD")
+          e.value == data[0].listTypeItemId ? this.hasRemote = true : this.hasRemote = false;
+        }
+      })
   }
 
   getfil(x) {
@@ -148,7 +156,8 @@ export class ModelEngActionContentComponent implements OnInit {
     this.action = this.actionForm.value;
     this.action.servicerequestid = this.itemId;
     this.action.engineerid = this.engineerid;
-    this.action.teamviewrecording = null
+    this.action.teamviewrecording = null;
+
     if (this.id == null) {
       this.actionService.save(this.action)
         .pipe(first())
