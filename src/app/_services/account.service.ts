@@ -73,8 +73,8 @@ export class AccountService {
     return this.http.post(`${environment.apiUrl}/user/changepassword`, changePassword);
   }
 
-  ForgotPassword(userId: string, user: User) {
-    return this.http.post(`${environment.apiUrl}/user/forgotpassword/${userId}`, user);
+  ForgotPassword( email: string) {
+    return this.http.post(`${environment.apiUrl}/user/forgotpassword/` + email,null);
   }
 
   getAll() {
