@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
-import { User, Profile } from '../_models';
+import {environment} from '../../environments/environment';
+import {ChangePasswordModel, User} from '../_models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class AccountService {
   private userSubject: BehaviorSubject<User>;
   private zohoSubject: BehaviorSubject<string>;
@@ -67,6 +67,14 @@ export class AccountService {
 
   register(user: User) {
     return this.http.post(`${environment.apiUrl}/user`, user);
+  }
+
+  ChangePassword(changePassword: ChangePasswordModel) {
+    return this.http.post(`${environment.apiUrl}/user/changepassword`, changePassword);
+  }
+
+  ForgotPassword(userId: string, user: User) {
+    return this.http.post(`${environment.apiUrl}/user/forgotpassword/${userId}`, user);
   }
 
   getAll() {

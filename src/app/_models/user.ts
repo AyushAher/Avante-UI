@@ -18,3 +18,9 @@ export class AuthenticateModel {
   username: string;
   password: string;
 }
+
+export class ChangePasswordModel {
+  userId: string;
+  nPass: string;
+  oPass: string;
+}

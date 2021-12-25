@@ -1,0 +1,67 @@
+<div class="modal" style="display: block" id="modal" role="dialog">
+  <div class="modal-dialog" style="width: 95vw">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #589b44; color: #fff">
+        <h4 class="modal-title" id="modal-basic-title">Change Account Password</h4>
+        <button type="button" class="close" aria-label="Close" data-dismiss="modal" (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="py-3 px-3-pb-3">
+          <div class="container">
+            <form [formGroup]="Form" (ngSubmit)="onValueSubmit()">
+              <div class="modal-body">
+                <div class="row">
+
+                  <div class="col-sm-12">
+                    <label for="oldpass">Old Password</label>
+                    <input type="password" id="oldpass" formControlName="oPass" class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.oPass.errors }"/>
+
+                    <div *ngIf="submitted && f.oPass.errors" class="invalid-feedback">
+                      <div *ngIf="f.oPass.errors.required">Old Password is required</div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label for="newpass">New Password</label>
+                    <input type="password" id="newpass" formControlName="nPass" class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.nPass.errors }"/>
+
+                    <div *ngIf="submitted && f.nPass.errors" class="invalid-feedback">
+                      <div *ngIf="f.nPass.errors.required">New Password is required</div>
+                      <div *ngIf="f.nPass.errors.minlength">Length of Password Should be minimum 8 characters</div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label for="confpass">Confirm New Password</label>
+                    <input type="password" id="confpass" formControlName="cPass" class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.cPass.errors }"/>
+
+                    <div *ngIf="submitted && f.cPass.errors" class="invalid-feedback">
+                      <div *ngIf="f.cPass.errors.required">Confirm Password is required</div>
+                      <div *ngIf="f.cPass.errors.minlength">Length of Password Should be minimum 8 characters</div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+                  <button [disabled]="loading" class="btn btn-primary">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Submit
+                  </button>
+                  <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

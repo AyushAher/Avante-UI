@@ -109,6 +109,8 @@ import {
   MonthService, WorkWeekService, MonthAgendaService, TimelineMonth, TimelineMonthService
 } from '@syncfusion/ej2-angular-schedule';
 import { EngineerschedulerComponent } from './engineerscheduler/engineerscheduler.component';
+import {ChangepasswoardComponent} from "./account/changepasswoard.component";
+import {ForgotpasswoardComponent} from "./account/forgotpasswoard.component";
 
 
 @NgModule({
@@ -195,6 +197,8 @@ import { EngineerschedulerComponent } from './engineerscheduler/engineerschedule
     PreventivemaintenancetableComponent,
     PrevchklocpartelementvalueComponent,
     EngineerschedulerComponent,
+    ChangepasswoardComponent,
+    ForgotpasswoardComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
