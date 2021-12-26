@@ -120,6 +120,10 @@ export class EngineerschedulerComponent implements OnInit {
                         ResourceId: x.resourceId,
                         Description: x.description,
                         SerReqId: x.serReqId,
+                        RecurrenceRule: x.recurrenceRule,
+                        RecurrenceException: x.RecurrenceException,
+                        StartTimezone: x.StartTimezone,
+                        EndTimezone: x.EndTimezone,
                       };
                       this.dataSrc.push(obj);
                     })
@@ -168,6 +172,10 @@ export class EngineerschedulerComponent implements OnInit {
                                   ResourceId: y.roomId,
                                   Description: y.description,
                                   SerReqId: y.serReqId,
+                                  RecurrenceRule: y.recurrenceRule,
+                                  RecurrenceException: y.RecurrenceException,
+                                  StartTimezone: y.StartTimezone,
+                                  EndTimezone: y.EndTimezone,
                                 };
                                 DistData.push(obj);
                               })
