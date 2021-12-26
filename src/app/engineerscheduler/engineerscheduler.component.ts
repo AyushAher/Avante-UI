@@ -51,6 +51,7 @@ export class EngineerschedulerComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(
     private serviceRequestService: ServiceRequestService,
@@ -85,6 +86,7 @@ export class EngineerschedulerComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasReadAccess = true;
       this.hasUpdateAccess = true;
+      this.isAdmin = true;
     }
 
 

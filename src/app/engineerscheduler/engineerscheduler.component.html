@@ -14,13 +14,14 @@
                       (actionBegin)="onActionBegin($event)" (popupOpen)='onPopupOpen($event)'
                       [eventSettings]="eventSettings">
         </ejs-schedule>
+        <ejs-schedule *ngIf="isAdmin==true" width='100%' height='100%'></ejs-schedule>
         <ejs-schedule *ngIf="isDistSupp==true" width='100%' height='100%' #scheduleObj [currentView]="setView"
                       (actionBegin)="onActionBeginDist($event)" (popupOpen)='onPopupOpenDist($event)'
                       [eventSettings]="eventSettings" [group]='group'>
           <e-resources>
             <e-resource field="RoomId" title="Engineer Name" name="Engineers"
                         [dataSource]="roomDataSource" [allowMultiple]='allowMultipleRoom'
-                        textField='text' idField='id'startHourField='startHour'>
+                        textField='text' idField='id' startHourField='startHour'>
             </e-resource>
           </e-resources>
           <ng-template #resourceHeaderTemplate let-data>
