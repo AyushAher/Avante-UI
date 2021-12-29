@@ -15,7 +15,8 @@
             <div class="col-md-4 col-sm-4">
               <label for="billto">Bill To</label>
               <select id="billto" formControlName="billtoid" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.billtoid.errors}">
+                      (change)="GetSites($event.target.value)"
+                      [ngClass]="{ ' is -invalid': submitted && f.billtoid.errors}">
                 <option *ngFor="let i of customersList" value="{{i.id}}">{{i.custname}}
                 </option>
               </select>
@@ -28,9 +29,24 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
+              <label for="CustSite">Customer Site</label>
+              <select id="CustSite" formControlName="custSite" class="form-control"
+                      [ngClass]="{ ' is -invalid': submitted && f.custsite.errors}">
+                <option *ngFor="let i of custSiteList" value="{{i.id}}">{{i.custregname}}
+                </option>
+              </select>
+
+              <div Style="display: block" *ngIf="submitted && f.custSite.errors" class="invalid-feedback">
+                <div *ngIf="f.custSite.errors.required">
+                  Customer Site is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
               <label for="servicequote">Service Quote</label>
               <input id="servicequote" type="text" formControlName="servicequote" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.servicequote.errors}" />
+                     [ngClass]="{ ' is -invalid': submitted && f.servicequote.errors}"/>
               <div Style="display: block" *ngIf="submitted && f.servicequote.errors" class="invalid-feedback">
                 <div *ngIf="f.servicequote.errors.required">
                   Service Quote is required

@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { User, Customer, Country, DistributorRegion, ProfileReadOnly, Amc } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import {Amc, Country, ProfileReadOnly, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
 import {
-  AccountService, AlertService, CustomerService, CountryService,
-  NotificationService, ProfileService, ServiceReportService, AmcService
+  AccountService,
+  AlertService,
+  AmcService,
+  CountryService,
+  CustomerService,
+  NotificationService,
+  ProfileService
 } from '../_services';
-import { RenderComponent } from '../distributor/rendercomponent';
+import {RenderComponent} from '../distributor/rendercomponent';
 
 
 @Component({
@@ -100,17 +105,27 @@ export class AmcListComponent implements OnInit {
         deleteLink: 'a',
         deleteaccess: this.hasDeleteAccess
       },
-    }, {
-      headerName: 'Bill To',
-      field: 'billto',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'Bill To',
     },
-    {
-      headerName: 'Service Quote',
+      {
+        headerName: 'Bill To',
+        field: 'billto',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'Bill To',
+      },
+      {
+        headerName: 'Customer Site',
+        field: 'custSiteName',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'Bill To',
+      },
+      {
+        headerName: 'Service Quote',
       field: 'servicequote',
       filter: true,
       editable: false,

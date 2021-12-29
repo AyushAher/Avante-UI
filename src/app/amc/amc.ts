@@ -48,11 +48,13 @@ export class AmcComponent implements OnInit {
   instrumentAutoComplete: any[];
   instrumentList: AmcInstrument[] = []
   supplierList: ListTypeItem[];
+  custSiteList: any;
 
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
   hasId: boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -117,6 +119,7 @@ export class AmcComponent implements OnInit {
       currency: ["", Validators.required],
       zerorate: [0, Validators.required],
       tnc: ["", Validators.required],
+      custSite: ["", Validators.required],
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
@@ -127,6 +130,7 @@ export class AmcComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            this.GetSites(data.object.billtoid);
             this.form.patchValue(data.object);
           },
           error: (error) => {
@@ -209,6 +213,24 @@ export class AmcComponent implements OnInit {
 
   get f() {
     return this.form.controls;
+  }
+
+  GetSites(customerId) {
+    console.log(customerId)
+    this.customerService.getById(customerId)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          //debugger;
+          this.custSiteList = data.object.sites;
+        },
+        error: error => {
+          // this.alertService.error(error);
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
+
   }
 
   RemoveInnstrument(event) {
