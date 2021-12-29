@@ -102,7 +102,7 @@ export class AmcListComponent implements OnInit {
       cellRendererFramework: RenderComponent,
       cellRendererParams: {
         inRouterLink: '/amc',
-        deleteLink: 'a',
+        deleteLink: 'AMC',
         deleteaccess: this.hasDeleteAccess
       },
     },
