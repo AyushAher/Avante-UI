@@ -229,7 +229,9 @@ export class ContactListComponent implements OnInit {
       cellRendererFramework: RenderComponent,
       cellRendererParams: {
         inRouterLink: '/contact/' + this.type + '/' + this.masterId + '/' + this.detailId + '/',
-        deleteaccess: this.hasDeleteAccess
+        deleteaccess: this.hasDeleteAccess,
+        deleteLink: 'C',
+
       },
     }, {
       headerName: 'first Name',
