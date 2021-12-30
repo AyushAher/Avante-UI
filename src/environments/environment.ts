@@ -53,9 +53,9 @@ export const environment = {
   REWK: "REWK",
   CRMA: "CRMA",
 
-  zohocodeapi: "https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.fullaccess.all&client_id=1000.0JAHNX3N4V33CK2BTWDZV374B0NMKY&response_type=code&redirect_uri=https://service.avantgardeinc.com/custpayrpt&access_type=offline",
+  // zohocodeapi: "https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.fullaccess.all&client_id=1000.0JAHNX3N4V33CK2BTWDZV374B0NMKY&response_type=code&redirect_uri=https://service.avantgardeinc.com/custpayrpt&access_type=offline",
   // zohoaccessapi: "https://accounts.zoho.com/oauth/v2/token?code={0}&client_id=1000.B3E6SJ92Q73ECGWMH78XIANG9CA2XB&client_secret=fe6678494763975fc429bccfc9361a3d8ca53407ef&redirect_uri=https://service.avantgardeinc.com/custpayrpt&grant_type=authorization_code",
-
+  zohocodeapi: "https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.fullaccess.all&client_id=1000.0JAHNX3N4V33CK2BTWDZV374B0NMKY&response_type=code&redirect_uri=https://service.avantgardeinc.com/custpayrpt&access_type=offline&prompt=consent",
   // client: "1000.B3E6SJ92Q73ECGWMH78XIANG9CA2XB",
   // secret: "fe6678494763975fc429bccfc9361a3d8ca53407ef",
   // redirecturl: "https://service.avantgardeinc.com/custpayrpt",
