@@ -77,7 +77,7 @@ export class DistributorRegionComponent implements OnInit {
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
-        zip: ['', Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(10)])],
+        zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
         isActive: false,
