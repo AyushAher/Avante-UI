@@ -411,6 +411,24 @@ export class AmcComponent implements OnInit {
     this.model = this.form.value;
 
     const datepipie = new DatePipe("en-US");
+    let dateSent = new Date(this.model.sdate);
+    let currentDate = new Date(this.model.edate);
+    let calc = Math.floor(
+      (Date.UTC(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate()
+      ) - Date.UTC(
+        dateSent.getFullYear(),
+        dateSent.getMonth(),
+        dateSent.getDate()
+      )) /
+      (1000 * 60 * 60 * 24)
+    );
+    if (calc <= 0) {
+      this.notificationService.showError("End Date should not be greater than Start Date", "Error");
+      return;
+    }
     this.model.sqdate = datepipie.transform(this.model.sqdate, "MM/dd/yyyy");
     this.model.sdate = datepipie.transform(this.model.sdate, "MM/dd/yyyy");
     this.model.edate = datepipie.transform(this.model.edate, "MM/dd/yyyy");
