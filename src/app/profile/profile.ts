@@ -178,6 +178,14 @@ export class ProfileComponent implements OnInit {
     return (<FormArray>this.profileform.get('permissions')).controls;
   }
 
+  SelectAll(property: string) {
+    let permission = this.profileform.get('permissions') as FormArray;
+    let inp = document.getElementById('selectall' + property) as HTMLInputElement;
+
+    for (var i of permission.controls) {
+      inp.checked ? i.get(property).setValue(true) : i.get(property).setValue(false);
+    }
+  }
 
   onSubmit() {
     //debugger;

@@ -28,10 +28,10 @@
                 <thead>
                   <tr>
                     <th>Screen Name</th>
-                    <th>Create</th>
-                    <th>Read</th>
-                    <th>Update</th>
-                    <th>Delete</th>
+                    <th>Create <br> <input type="checkbox" id="selectallcreate" (change)="SelectAll('create')"></th>
+                    <th>Read<br> <input type="checkbox" id="selectallread" (change)="SelectAll('read')"></th>
+                    <th>Update<br> <input type="checkbox" id="selectallupdate" (change)="SelectAll('update')"></th>
+                    <th>Delete<br> <input type="checkbox" id="selectalldelete" (change)="SelectAll('delete')"></th>
                   </tr>
                 </thead>
                 <tbody>
