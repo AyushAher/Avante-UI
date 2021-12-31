@@ -464,7 +464,7 @@ export class AmcComponent implements OnInit {
               data.resultMessage,
               "Success"
             );
-            if (this.instrumentList != null && this.instrumentList.length > 0) {
+            if (this.instrumentList == null && this.instrumentList.length <= 0) {
               this.router.navigate(["amclist"]);
             }
           },
