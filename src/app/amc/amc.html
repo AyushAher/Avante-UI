@@ -31,7 +31,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="CustSite">Customer Site</label>
               <select id="CustSite" formControlName="custSite" class="form-control"
-                      [ngClass]="{ ' is -invalid': submitted && f.custsite.errors}">
+                      [ngClass]="{ ' is -invalid': submitted && f.custSite.errors}">
                 <option *ngFor="let i of custSiteList" value="{{i.id}}">{{i.custregname}}
                 </option>
               </select>
@@ -53,20 +53,44 @@
                 </div>
               </div>
             </div>
+
             <div class="col-md-4 col-sm-4">
               <label for="sqdate">SQ Date</label>
               <input id="sqdate" bsDatepicker type="text" formControlName="sqdate" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.sqdate.errors}" />
+                     [ngClass]="{ ' is -invalid': submitted && f.sqdate.errors}"/>
               <div Style="display: block" *ngIf="submitted && f.sqdate.errors" class="invalid-feedback">
                 <div *ngIf="f.sqdate.errors.required">
                   SQ Date is required
                 </div>
               </div>
             </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="sdate">Start Date</label>
+              <input id="sdate" bsDatepicker type="text" formControlName="sdate" class="form-control"
+                     [ngClass]="{ ' is -invalid': submitted && f.sdate.errors}"/>
+              <div Style="display: block" *ngIf="submitted && f.sdate.errors" class="invalid-feedback">
+                <div *ngIf="f.sdate.errors.required">
+                  Start Date is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="edate">End Date</label>
+              <input id="edate" bsDatepicker type="text" formControlName="edate" class="form-control"
+                     [ngClass]="{ ' is -invalid': submitted && f.edate.errors}"/>
+              <div Style="display: block" *ngIf="submitted && f.edate.errors" class="invalid-feedback">
+                <div *ngIf="f.edate.errors.required">
+                  End Date is required
+                </div>
+              </div>
+            </div>
+
             <div class="col-md-4 col-sm-4">
               <label for="project">Project</label>
               <input id="project" type="text" formControlName="project" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.project.errors}" />
+                     [ngClass]="{ ' is -invalid': submitted && f.project.errors}"/>
               <div Style="display: block" *ngIf="submitted && f.project.errors" class="invalid-feedback">
                 <div *ngIf="f.project.errors.required">
                   Project is required
@@ -135,6 +159,7 @@
                 </div>
               </div>
             </div>
+
           </div> <br />
 
           <div class="row">

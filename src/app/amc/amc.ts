@@ -113,6 +113,8 @@ export class AmcComponent implements OnInit {
       billtoid: ["", Validators.required],
       servicequote: ["", Validators.required],
       sqdate: ["", Validators.required],
+      sdate: ["", Validators.required],
+      edate: ["", Validators.required],
       project: ["", Validators.required],
       servicetype: ["", Validators.required],
       brand: ["", Validators.required],
@@ -216,7 +218,6 @@ export class AmcComponent implements OnInit {
   }
 
   GetSites(customerId) {
-    console.log(customerId)
     this.customerService.getById(customerId)
       .pipe(first())
       .subscribe({
@@ -373,13 +374,13 @@ export class AmcComponent implements OnInit {
     }
     ]
   }
+
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
   }
+
   onCellValueChanged(event) {
-    //debugger;
-    //console.log(event) to test it
     var data = event.data;
     event.data.modified = true;
 
@@ -399,16 +400,20 @@ export class AmcComponent implements OnInit {
 
     this.alertService.clear();
 
-    this.instrumentList.forEach(instrument => {
-      instrument.amcId = this.id;
-    })
+    if (this.instrumentList != null && this.instrumentList.length > 0) {
+      this.instrumentList.forEach(instrument => {
+        instrument.amcId = this.id;
+      })
+    }
 
-    if (this.form.invalid) return
+    if (this.form.invalid) return;
 
     this.model = this.form.value;
 
     const datepipie = new DatePipe("en-US");
-    this.model.sqdate = datepipie.transform(this.model.sqdate,"MM/dd/yyyy");
+    this.model.sqdate = datepipie.transform(this.model.sqdate, "MM/dd/yyyy");
+    this.model.sdate = datepipie.transform(this.model.sdate, "MM/dd/yyyy");
+    this.model.edate = datepipie.transform(this.model.edate, "MM/dd/yyyy");
 
     if (!this.hasId && this.hasAddAccess) {
       this.model = this.form.value;
@@ -429,18 +434,20 @@ export class AmcComponent implements OnInit {
             this.loading = false;
           },
         });
-      this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            this.router.navigate(["amclist"]);
-          },
-          error: (error) => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
-          },
-        });
 
+      if (this.instrumentList != null && this.instrumentList.length > 0) {
+        this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
+          .pipe(first())
+          .subscribe({
+            next: (data: ResultMsg) => {
+              this.router.navigate(["amclist"]);
+            },
+            error: (error) => {
+              this.notificationService.showError(error, "Error");
+              this.loading = false;
+            },
+          });
+      }
     }
     else if (this.hasUpdateAccess) {
       this.model = this.form.value;
@@ -460,17 +467,19 @@ export class AmcComponent implements OnInit {
             this.loading = false;
           },
         });
-      this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            this.router.navigate(["amclist"]);
-          },
-          error: (error) => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
-          },
-        });
+      if (this.instrumentList != null && this.instrumentList.length > 0) {
+        this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
+          .pipe(first())
+          .subscribe({
+            next: (data: ResultMsg) => {
+              this.router.navigate(["amclist"]);
+            },
+            error: (error) => {
+              this.notificationService.showError(error, "Error");
+              this.loading = false;
+            },
+          });
+      }
     }
   }
 }

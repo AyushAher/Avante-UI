@@ -4,6 +4,8 @@ export class Amc {
   billtoid : string;
   servicequote: string;
   sqdate: string;
+  sdate: string;
+  edate: string;
   project: string;
   servicetype: string;
   brand: string;
