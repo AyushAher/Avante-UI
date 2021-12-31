@@ -427,9 +427,12 @@ export class AmcComponent implements OnInit {
               data.resultMessage,
               "Success"
             );
+
+            if (this.instrumentList != null && this.instrumentList.length > 0) {
+              this.router.navigate(["amclist"]);
+            }
           },
           error: (error) => {
-            console.log(error)
             this.notificationService.showError(error, "Error");
             this.loading = false;
           },
@@ -461,6 +464,9 @@ export class AmcComponent implements OnInit {
               data.resultMessage,
               "Success"
             );
+            if (this.instrumentList != null && this.instrumentList.length > 0) {
+              this.router.navigate(["amclist"]);
+            }
           },
           error: (error) => {
             this.notificationService.showError(error, "Error");
