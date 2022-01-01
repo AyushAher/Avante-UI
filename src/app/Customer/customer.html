@@ -43,9 +43,10 @@
                 <div *ngIf="f.custname.errors.required">Name is required</div>
               </div>
             </div>
+
             <div class="col-sm-4">
               <label for="defdistid">Default Distributor</label>
-              <select formControlName="defdistid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.defdistid.errors }">
+              <select formControlName="defdistid" class="form-control" (change)="onDefDistchanged($event.target.value)" [ngClass]="{ 'is-invalid': submitted && f.defdistid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of defaultdistributors" value={{distributor.id}}>
                   {{distributor.distname}}
@@ -53,6 +54,18 @@
               </select>
               <div *ngIf="submitted && f.defdistid.errors" class="invalid-feedback">
                 <div *ngIf="f.defdistid.errors.required">Default Distributor is required</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="defdistid">Distributor Regions</label>
+              <select formControlName="defdistregionid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.defdistregionid.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let distributor of distRegionsList" value="{{distributor.id}}">
+                  {{distributor.region}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.defdistregionid.errors" class="invalid-feedback">
+                <div *ngIf="f.defdistregionid.errors.required">Distributor Region is required</div>
               </div>
             </div>
 

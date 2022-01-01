@@ -1,11 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { User, Country, Distributor, Customer, ResultMsg, ProfileReadOnly } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import {Country, Customer, ProfileReadOnly, ResultMsg, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
 
-import { AccountService, AlertService, CountryService, DistributorService, CustomerService, NotificationService, ProfileService } from '../_services';
+import {
+  AccountService,
+  AlertService,
+  CountryService,
+  CustomerService,
+  DistributorService,
+  NotificationService,
+  ProfileService
+} from '../_services';
 
 
 @Component({
@@ -21,13 +29,14 @@ export class CustomerComponent implements OnInit {
   type: string = "C";
   customerId: string;
   countries: Country[];
-  defaultdistributors: Distributor[];
+  defaultdistributors: any[];
   customer: Customer;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
+  distRegionsList: any;
   //public defaultdistributors: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
 
   constructor(
@@ -67,6 +76,7 @@ export class CustomerComponent implements OnInit {
     this.customerform = this.formBuilder.group({
       custname: ['', Validators.required],
       defdistid: ['', Validators.required],
+      defdistregionid: ['', Validators.required],
       isactive: [true],
       isdeleted: [true],
       address: this.formBuilder.group({
@@ -119,10 +129,11 @@ export class CustomerComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            this.onDefDistchanged(data.object.defdistid);
             this.customerform.patchValue(data.object);
           },
           error: error => {
-           // this.alertService.error(error);
+            // this.alertService.error(error);
             this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
@@ -132,11 +143,21 @@ export class CustomerComponent implements OnInit {
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.customerform.controls; }
-  get a() { return this.customerform.controls.address; }
+  get f() {
+    return this.customerform.controls;
+  }
+
+  get a() {
+    return this.customerform.controls.address;
+  }
+
+  onDefDistchanged(distId) {
+    this.distRegionsList = this.defaultdistributors.filter(x => x.id === distId)[0].regions;
+    console.log(this.distRegionsList)
+  }
 
   onSubmit() {
-   // //debugger;
+    // //debugger;
     this.submitted = true;
 
     // reset alerts on submit
