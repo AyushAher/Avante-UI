@@ -28,7 +28,7 @@
               <label for="designation">User Designation</label>
               <input type="text" formControlName="designation" class="form-control" readonly />
             </div>
-           
+
           </div>
           <div class="row">
             <div class="col-md-6 col-sm-6">
@@ -63,7 +63,8 @@
           <div class="row">
             <div class="col-md-6 col-sm-6">
               <label for="roleId">Role</label>
-              <select formControlName="roleId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.roleId.errors }">
+              <select formControlName="roleId" class="form-control" (change)="onRoleChange($event.target.value)"
+                      [ngClass]="{ 'is-invalid': submitted && f.roleId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let r of roleList" value={{r.listTypeItemId}}>
                   {{r.itemname}}
@@ -73,6 +74,17 @@
                 <div *ngIf="f.roleId.errors.required">Role is required</div>
               </div>
             </div>
+            <div class="col-md-6 col-sm-6" *ngIf="isEng || isDist">
+              <label for="regions">Distributor Regions</label>
+              <ng-multiselect-dropdown [settings]="dropdownSettings"
+                                       [data]="regionList" id="regions" formControlName="distRegions">
+              </ng-multiselect-dropdown>
+              <div *ngIf="submitted && f.distRegions.errors" class="invalid-feedback">
+                <div *ngIf="f.distRegions.errors.required">Distributor Region is required</div>
+              </div>
+            </div>
+
+
           </div>
           <div class="row" *ngIf="hidetable==true">
             <div class="table-responsive">

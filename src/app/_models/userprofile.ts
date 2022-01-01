@@ -16,6 +16,7 @@ export class UserProfile {
   distributorName: string;
   roleId: string;
   profileRegions: ProfileRegions
+  distRegions: any;
 }
 
 export class ProfileRegions {

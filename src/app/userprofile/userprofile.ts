@@ -1,14 +1,35 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-
-import { User, Instrument, CustomerSite, ListTypeItem, instrumentConfig, SparePart, Profile, UserProfile, ProfileRegions, ProfileReadOnly } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
 
 import {
-  AccountService, AlertService, CustomerSiteService, InstrumentService, ListTypeService, SparePartService
-  , UploadService, NotificationService, ProfileService, UserProfileService
+  CustomerSite,
+  instrumentConfig,
+  ListTypeItem,
+  Profile,
+  ProfileReadOnly,
+  ProfileRegions,
+  SparePart,
+  User,
+  UserProfile
+} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+
+import {
+  AccountService,
+  AlertService,
+  CustomerSiteService,
+  DistributorService,
+  InstrumentService,
+  ListTypeService,
+  NotificationService,
+  ProfileService,
+  SparePartService,
+  UploadService,
+  UserProfileService
 } from '../_services';
+import {environment} from "../../environments/environment";
+import {IDropdownSettings} from "ng-multiselect-dropdown";
 
 
 @Component({
@@ -46,6 +67,11 @@ export class UserProfileComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
 
+  isEng: boolean = false;
+  isDist: boolean = false;
+  regionList: any;
+  dropdownSettings: IDropdownSettings = {};
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -60,9 +86,14 @@ export class UserProfileComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private userprofileService: UserProfileService,
+    private DistributorService: DistributorService,
   ) { }
 
   ngOnInit() {
+    this.dropdownSettings = {
+      idField: 'id',
+      textField: 'region',
+    };
     //debugger;
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
@@ -90,6 +121,7 @@ export class UserProfileComponent implements OnInit {
       profileForId: [''],
       distributorName: [''],
       roleId: ['', Validators.required],
+      distRegions: ['', Validators.required],
       isdeleted: [false],
       profileRegions: this.formBuilder.array([]),
     });
@@ -162,17 +194,71 @@ export class UserProfileComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             //debugger;
-            this.userprofileform.patchValue(data.object);
+
             this.contactId = data.object.contactid;
+            this.onRoleChange(data.object.roleId);
+
+            var subreq = data.object.distRegions.split(',');
+            let items: any = [];
+            if (subreq.length > 0) {
+              for (var i = 0; i < subreq.length; i++) {
+                let t = {id: subreq[i]}
+                items.push(t);
+              }
+              this.userprofileform.patchValue({"distRegions": items});
+            }
+
+            this.userprofileform.patchValue({"userId": data.object.userId});
+            this.userprofileform.patchValue({"designation": data.object.designation});
+            this.userprofileform.patchValue({"profileId": data.object.profileId});
+            this.userprofileform.patchValue({"profileForId": data.object.profileForId});
+            this.userprofileform.patchValue({"distributorName": data.object.distributorName});
+            this.userprofileform.patchValue({"roleId": data.object.roleId});
+            this.userprofileform.patchValue({"isdeleted": data.object.isdeleted});
+            this.userprofileform.patchValue({"profileRegions": data.object.profileRegions});
+
             this.profilewithregdata = data.object.profileRegions;
+            // this.userprofileform.patchValue(data.object);
             this.onprofileClick(data.object.profileForId);
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
     }
+  }
+
+  onRoleChange(role: string) {
+    switch (this.roleList.filter(x => x.listTypeItemId == role)[0].itemCode) {
+
+      case environment.engRoleCode:
+        this.isEng = true;
+        this.GetDistributorByContactId();
+        break;
+
+      case environment.distRoleCode:
+        this.isDist = true;
+        this.GetDistributorByContactId();
+        break;
+
+      case environment.custRoleCode:
+        break;
+    }
+  }
+
+  GetDistributorByContactId() {
+    this.DistributorService.getByConId(this.contactId)
+      .pipe(first())
+      .subscribe({
+          next: (data: any) => {
+            if (data.result) {
+              this.regionList = data.object[0].regions;
+              console.log(this.regionList);
+            }
+          }
+        }
+      )
   }
 
   CreateItem(): FormGroup {
@@ -249,6 +335,7 @@ export class UserProfileComponent implements OnInit {
   onUserChange(value: any) {
     //debugger;
     this.contactId = this.userlist.filter(x => x.userid === value)[0].contactid;
+    this.GetDistributorByContactId();
     this.userprofileService.getByUserId(this.contactId)
       .pipe(first())
       .subscribe({
@@ -284,7 +371,11 @@ export class UserProfileComponent implements OnInit {
     this.loading = true;
     this.userprofile = this.userprofileform.value;
 
-
+    if (this.userprofileform.get('distRegions').value.length > 0) {
+      var selectarray = this.userprofileform.get('distRegions').value;
+      this.userprofile.distRegions = selectarray.map(x => x.id).join(',');
+    }
+    console.log(this.userprofileform.get('distRegions').value);
     if (this.id == null) {
       this.userprofileService.save(this.userprofile)
         .pipe(first())
@@ -293,8 +384,7 @@ export class UserProfileComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["userprofilelist"]);
-            }
-            else {
+            } else {
               this.notificationService.showError(data.resultMessage, "Error");
             }
             this.loading = false;
