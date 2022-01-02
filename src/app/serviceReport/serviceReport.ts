@@ -318,7 +318,7 @@ export class ServiceReportComponent implements OnInit {
         }
       });
 
-    this.instrumentservice.getAll()
+    this.instrumentservice.getAll(this.user.userId)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
