@@ -198,9 +198,9 @@ export class UserProfileComponent implements OnInit {
             this.contactId = data.object.contactid;
             this.onRoleChange(data.object.roleId);
 
-            var subreq = data.object.distRegions.split(',');
+            var subreq = data.object.distRegions?.split(',');
             let items: any = [];
-            if (subreq.length > 0) {
+            if (subreq != null && subreq.length > 0) {
               for (var i = 0; i < subreq.length; i++) {
                 let t = {id: subreq[i]}
                 items.push(t);
