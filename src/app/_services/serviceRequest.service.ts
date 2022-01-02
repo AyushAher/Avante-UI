@@ -29,8 +29,8 @@ export class ServiceRequestService {
     return this.http.post(`${environment.apiUrl}/serviceRequest`, serviceRequest);
   }
 
-  getAll() {
-    return this.http.get<ServiceRequest[]>(`${environment.apiUrl}/serviceRequest`);
+  getAll(userId) {
+    return this.http.get<ServiceRequest[]>(`${environment.apiUrl}/serviceRequest/GetByAssignedRegions/${userId}`);
   }
 
   getById(id: string) {

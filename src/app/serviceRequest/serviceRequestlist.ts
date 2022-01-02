@@ -288,7 +288,7 @@ export class ServiceRequestListComponent implements OnInit {
   }
 
   getallrecored() {
-    this.serviceRequestService.getAll()
+    this.serviceRequestService.getAll(this.user.userId)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
