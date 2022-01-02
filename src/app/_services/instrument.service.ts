@@ -1,43 +1,42 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
-import { Instrument, instrumentConfig } from '../_models';
+import {environment} from '../../environments/environment';
+import {Instrument, instrumentConfig} from '../_models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class InstrumentService {
   private distrubutorSubject: BehaviorSubject<Instrument>;
   public distributor: Observable<Instrument>;
 
-    constructor(
-        private router: Router,
-        private http: HttpClient
-    ) {
+  constructor(
+    private router: Router,
+    private http: HttpClient
+  ) {
       //this.distrubutorSubject = new BehaviorSubject<Distributor>();
       //this.user = this.distrubutorSubject.asObservable();
     }
 
-    //public get userValue(): User {
-    //    return this.userSubject.value;
-    //}
+  //public get userValue(): User {
+  //    return this.userSubject.value;
+  //}
 
-  
 
   save(instrument: Instrument) {
     return this.http.post(`${environment.apiUrl}/Instrument`, instrument);
-    }
-
-    getAll() {
-      return this.http.get<Instrument[]>(`${environment.apiUrl}/Instrument`);
-    }
-
-    getById(id: string) {
-      return this.http.get<Instrument>(`${environment.apiUrl}/Instrument/${id}`);
   }
-  
+
+  getAll(userId: string) {
+    return this.http.get<Instrument[]>(`${environment.apiUrl}/Instrument/GetByAssignedRegions/${userId}`);
+  }
+
+  getById(id: string) {
+    return this.http.get<Instrument>(`${environment.apiUrl}/Instrument/${id}`);
+  }
+
   getSerReqInstrument(id: string) {
     return this.http.get<Instrument>(`${environment.apiUrl}/Instrument/GetSerReqInstrument/${id}`);
   }

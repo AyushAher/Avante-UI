@@ -66,7 +66,7 @@ export class InstrumentListComponent implements OnInit {
 
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
-    this.instrumentService.getAll()
+    this.instrumentService.getAll(this.user.userId)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
