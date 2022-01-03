@@ -70,18 +70,33 @@ export class CustomerListComponent implements OnInit {
 
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
-    this.customerService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          console.log(data);
-          this.customerList = data.object;
-        },
-        error: error => {
-          this.notificationService.showError(error, "Error");
-          this.loading = false;
-        }
-      });
+    if (this.user.username == 'admin') {
+      this.customerService.getAll()
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            console.log(data);
+            this.customerList = data.object;
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
+          }
+        });
+    } else {
+      this.customerService.getAllByConId(this.user.contactId)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            console.log(data);
+            this.customerList = data.object;
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
+          }
+        });
+    }
     this.columnDefs = this.createColumnDefs();
   }
 

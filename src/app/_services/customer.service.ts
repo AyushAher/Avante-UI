@@ -24,7 +24,7 @@ export class CustomerService {
     //    return this.userSubject.value;
     //}
 
-  
+
 
   save(customer: Customer) {
     return this.http.post(`${environment.apiUrl}/Customer`, customer);
@@ -32,6 +32,9 @@ export class CustomerService {
 
     getAll() {
       return this.http.get<Customer[]>(`${environment.apiUrl}/Customer`);
+    }
+    getAllByConId(conId) {
+      return this.http.get<Customer[]>(`${environment.apiUrl}/Customer/GetByConId/${conId}`);
     }
 
     getById(id: string) {
