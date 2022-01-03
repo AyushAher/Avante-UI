@@ -18,7 +18,7 @@ export class ServiceReportService {
   ) {
       //this.distrubutorSubject = new BehaviorSubject<Distributor>();
       //this.user = this.distrubutorSubject.asObservable();
-    }
+  }
 
   //public get userValue(): User {
   //    return this.userSubject.value;
@@ -27,6 +27,10 @@ export class ServiceReportService {
 
   save(ServiceReport: ServiceReport) {
     return this.http.post(`${environment.apiUrl}/ServiceReports`, ServiceReport);
+  }
+
+  GenerateServciesReport(ServiceReport) {
+    return this.http.post(`${environment.apiUrl}/ServiceReports/GenerateServiceReport`, ServiceReport);
   }
 
   getAll() {
