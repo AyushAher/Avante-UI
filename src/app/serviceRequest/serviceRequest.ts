@@ -532,6 +532,7 @@ export class ServiceRequestComponent implements OnInit {
             this.siteId = this.logindata.sites[0].id;
             this.customerId = this.logindata.id;
             this.customerSitelist = this.logindata.sites;
+            this.serviceRequestform.patchValue({"country": this.logindata.address.countryid});
             this.serviceRequestform.patchValue({"companyname": this.logindata.custname});
             this.serviceRequestform.patchValue({"distid": this.logindata.defdistid});
             this.distId = this.logindata.defdistid;
@@ -577,6 +578,7 @@ export class ServiceRequestComponent implements OnInit {
           }
         });
     }
+    this.serviceRequestform.get('country').disable();
 
     this.columnDefs = this.createColumnDefs();
     this.ticketcolumnDefs = this.createColumnHistoryDefs();
