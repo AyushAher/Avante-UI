@@ -16,6 +16,7 @@ import {ProfileReadOnly, ServiceRequest, User} from "../_models";
 import {EngschedulerService} from "../_services/engscheduler.service";
 import {DatePipe} from "@angular/common";
 import {environment} from "../../environments/environment";
+import {ActivatedRoute} from "@angular/router";
 
 L10n.load({
   'en-US': {
@@ -52,7 +53,8 @@ export class EngineerschedulerComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   isAdmin: boolean = false;
-
+  id: string;
+  link: string;
   constructor(
     private serviceRequestService: ServiceRequestService,
     private notificationService: NotificationService,
@@ -63,12 +65,15 @@ export class EngineerschedulerComponent implements OnInit {
     private datepipe: DatePipe,
     private listTypeService: ListTypeService,
     private profileService: ProfileService,
+    private route: ActivatedRoute,
   ) {
   }
 
   public eventSettings: EventSettingsModel;
 
   ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.link = `/servicerequest/${this.id}`
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {

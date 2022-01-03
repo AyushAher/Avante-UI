@@ -318,6 +318,11 @@ const routes: Routes = [
     component: EngineerschedulerComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: "schedule/:id",
+    component: EngineerschedulerComponent,
+    canActivate: [AuthGuard],
+  },
   {path: 'account', loadChildren: accountModule},
   {path: '**', redirectTo: ''}
 ];

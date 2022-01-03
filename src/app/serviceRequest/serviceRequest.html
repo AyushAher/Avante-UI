@@ -391,7 +391,7 @@
                    role="tab">Action</a>
               </li>
             </ul>
-            <a class="link" *ngIf="IsEngineerView==true && accepted" style="margin-right: 20px;" routerLink="/schedule">Schedule
+            <a class="link" *ngIf="IsEngineerView==true && accepted" style="margin-right: 20px;" [routerLink]="scheduleLink">Schedule
               Call</a>
           </div>
 

@@ -120,7 +120,7 @@ export class ServiceRequestComponent implements OnInit {
   allsites: any;
   accepted: boolean = false;
   isAmc: boolean = false;
-
+  scheduleLink: string
 
   @Output() public onUploadFinished = new EventEmitter();
 
@@ -407,6 +407,7 @@ export class ServiceRequestComponent implements OnInit {
       });
 
     this.serviceRequestId = this.route.snapshot.paramMap.get('id');
+    this.scheduleLink = `/schedule/${this.serviceRequestId}`;
     if (this.serviceRequestId != null) {
 
       this.hasAddAccess = this.user.username == "admin";
