@@ -119,6 +119,7 @@ export class ServiceRequestComponent implements OnInit {
   breakdownlist: ListTypeItem[];
   allsites: any;
   accepted: boolean = false;
+  isAmc: boolean = false;
 
 
   @Output() public onUploadFinished = new EventEmitter();
@@ -248,6 +249,8 @@ export class ServiceRequestComponent implements OnInit {
     }
 
     this.serviceRequestform = this.formBuilder.group({
+      sdate: [""],
+      edate: [""],
       serreqno: ['', Validators.required],
       distid: ['', Validators.required],
       assignedto: [''],
@@ -413,6 +416,7 @@ export class ServiceRequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.accepted = data.object.accepted;
+            this.onServiceTypeChange(data.object.visittype);
             this.getAllInstrument(data.object.siteid);
             var subreq = data.object.subrequesttypeid.split(',');
             let items: ListTypeItem[] = [];
@@ -441,6 +445,8 @@ export class ServiceRequestComponent implements OnInit {
 
             }
             //   data.object.subrequesttypeid = "";
+            this.serviceRequestform.patchValue({"sdate": data.object.sdate});
+            this.serviceRequestform.patchValue({"edate": data.object.edate});
             this.serviceRequestform.patchValue({"serreqno": data.object.serreqno});
             this.serviceRequestform.patchValue({"serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy")});
             this.serviceRequestform.patchValue({"serresolutiondate": new Date(data.object.serresolutiondate)});
@@ -635,11 +641,38 @@ export class ServiceRequestComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.serviceRequestform.invalid) {
+      console.log(this.serviceRequestform)
       return;
     }
     this.isSave = true;
     this.loading = true;
 
+    const datepipie = new DatePipe("en-US");
+
+    if (this.serviceRequestform.get('sdate').value != "" && this.serviceRequestform.get('edate').value != "") {
+      let dateSent = new Date(this.serviceRequestform.get('sdate').value);
+      let currentDate = new Date(this.serviceRequestform.get('edate').value);
+      let calc = Math.floor(
+        (Date.UTC(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate()
+        ) - Date.UTC(
+          dateSent.getFullYear(),
+          dateSent.getMonth(),
+          dateSent.getDate()
+        )) /
+        (1000 * 60 * 60 * 24)
+      );
+      if (calc <= 0) {
+        this.notificationService.showError("End Date should not be greater than Start Date", "Error");
+        this.loading = false;
+        return;
+      }
+      this.serviceRequestform.get('sdate').setValue(datepipie.transform(this.serviceRequestform.get('sdate').value, "MM/dd/yyyy"));
+      this.serviceRequestform.get('edate').setValue(datepipie.transform(this.serviceRequestform.get('edate').value, "MM/dd/yyyy"));
+
+    }
     if (this.serviceRequestId == null) {
 
       this.serviceRequest = this.serviceRequestform.getRawValue();
@@ -729,6 +762,32 @@ export class ServiceRequestComponent implements OnInit {
             this.loading = false;
           }
         });
+    }
+  }
+
+  onServiceTypeChange(serviceTypeId) {
+    this.isAmc = false;
+    let servicetypeCode = this.serviceTypeList.filter(x => x.listTypeItemId == serviceTypeId)[0]?.itemCode;
+    if (servicetypeCode == "AMC") {
+      this.isAmc = true;
+      this.serviceRequestform.get('sdate').setValidators(Validators.required)
+      this.serviceRequestform.get('sdate').updateValueAndValidity()
+      this.serviceRequestform.get('edate').setValidators(Validators.required)
+      this.serviceRequestform.get('edate').updateValueAndValidity()
+
+      this.serviceRequestform.get('recurringcomments').clearValidators()
+      this.serviceRequestform.get('recurringcomments').updateValueAndValidity()
+      this.serviceRequestform.get('breakoccurdetailsid').clearValidators()
+      this.serviceRequestform.get('breakoccurdetailsid').updateValueAndValidity()
+      this.serviceRequestform.get('alarmdetails').clearValidators()
+      this.serviceRequestform.get('alarmdetails').updateValueAndValidity()
+      this.serviceRequestform.get('resolveaction').clearValidators()
+      this.serviceRequestform.get('resolveaction').updateValueAndValidity()
+      this.serviceRequestform.get('breakdowntype').clearValidators()
+      this.serviceRequestform.get('breakdowntype').updateValueAndValidity()
+      this.serviceRequestform.get('isrecurring').clearValidators()
+      this.serviceRequestform.get('isrecurring').updateValueAndValidity()
+
     }
   }
 

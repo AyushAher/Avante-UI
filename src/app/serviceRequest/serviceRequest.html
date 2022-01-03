@@ -83,7 +83,7 @@
             <div class="col-md-3 col-sm-3">
               <label for="visittype">Service Type</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }" class="form-control"
-                      formControlName="visittype">
+                      formControlName="visittype" (change)="onServiceTypeChange($event.target.value)">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let st of serviceTypeList" value={{st.listTypeItemId}}>
                   {{st.itemname}}
@@ -212,21 +212,47 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="machengineer">Machine Engineer</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.machengineer.errors }" class="form-control" formControlName="machengineer" readonly
+              <input [ngClass]="{ 'is-invalid': submitted && f.machengineer.errors }" class="form-control"
+                     formControlName="machengineer" readonly
                      type="text"/>
               <div *ngIf="submitted && f.machengineer.errors" class="invalid-feedback">
                 <div *ngIf="f.machengineer.errors?.required">machineengineer is required</div>
               </div>
             </div>
-            <div class="col-sm-3">
+
+
+            <div class="col-md-3 col-sm-3" *ngIf="isAmc">
+              <label for="sdate">Start Date</label>
+              <input id="sdate" bsDatepicker type="text" formControlName="sdate" class="form-control"
+                     [ngClass]="{ ' is -invalid': submitted && f.sdate.errors}"/>
+              <div Style="display: block" *ngIf="submitted && f.sdate.errors" class="invalid-feedback">
+                <div *ngIf="f.sdate.errors.required">
+                  Start Date is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-3" *ngIf="isAmc">
+              <label for="edate">End Date</label>
+              <input id="edate" bsDatepicker type="text" formControlName="edate" class="form-control"
+                     [ngClass]="{ ' is -invalid': submitted && f.edate.errors}"/>
+              <div Style="display: block" *ngIf="submitted && f.edate.errors" class="invalid-feedback">
+                <div *ngIf="f.edate.errors.required">
+                  End Date is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-3" *ngIf="!isAmc">
               <label for="breakdowntype">Breakdown Type</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.breakdowntype.errors }" class="form-control" formControlName="breakdowntype"
+              <input [ngClass]="{ 'is-invalid': submitted && f.breakdowntype.errors }" class="form-control"
+                     formControlName="breakdowntype"
                      type="text"/>
               <div *ngIf="submitted && f.breakdowntype.errors" class="invalid-feedback">
                 <div *ngIf="f.breakdowntype.errors.required">breakdownType is required</div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-3">
+            <div class="col-md-3 col-sm-3" *ngIf="!isAmc">
               <label for="isrecurring"></label>
               <div class="checkbox">
                 <label for="warranty">
@@ -241,15 +267,16 @@
 
           </div>
           <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-3" *ngIf="!isAmc">
               <label for="recurringcomments">Recurring Comment</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.recurringcomments.errors }" class="form-control" formControlName="recurringcomments"
+              <input [ngClass]="{ 'is-invalid': submitted && f.recurringcomments.errors }" class="form-control"
+                     formControlName="recurringcomments"
                      type="text"/>
               <div *ngIf="submitted && f.recurringcomments.errors" class="invalid-feedback">
                 <div *ngIf="f.recurringcomments.errors.required">Recurring Comment is required</div>
               </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" *ngIf="!isAmc">
               <label for="breakoccurdetailsid">Breakdown Occurance Details</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.breakoccurdetailsid.errors }" class="form-control"
                       formControlName="breakoccurdetailsid">
@@ -262,17 +289,19 @@
                 <div *ngIf="f.breakoccurdetailsid.errors.required">breakdownOccuranceDetails is required</div>
               </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" *ngIf="!isAmc">
               <label for="alarmdetails">Alarm Details</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.alarmdetails.errors }" class="form-control" formControlName="alarmdetails"
+              <input [ngClass]="{ 'is-invalid': submitted && f.alarmdetails.errors }" class="form-control"
+                     formControlName="alarmdetails"
                      type="text"/>
               <div *ngIf="submitted && f.alarmdetails.errors" class="invalid-feedback">
                 <div *ngIf="f.alarmdetails.errors.required">Alarm Details is required</div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-3">
+            <div class="col-md-3 col-sm-3" *ngIf="!isAmc">
               <label for="resolveaction">ResolveAction</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.resolveaction.errors }" class="form-control" formControlName="resolveaction"
+              <input [ngClass]="{ 'is-invalid': submitted && f.resolveaction.errors }" class="form-control"
+                     formControlName="resolveaction"
                      type="text"/>
               <div *ngIf="submitted && f.resolveaction.errors" class="invalid-feedback">
                 <div *ngIf="f.resolveaction.errors?.required">ResolveAction is required</div>
