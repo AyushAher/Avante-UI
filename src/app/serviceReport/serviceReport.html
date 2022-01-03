@@ -410,9 +410,9 @@
               <a routerLink="/servicereportlist" class="btn btn-secondary" style="margin-left:10px;">Back</a>
               <button type="button" class="btn btn-secondary" style="margin-left:15px;" (click)="GeneratePDF(true)">Preview</button>
 
-              <button [disabled]="loading" class="btn btn-primary" *ngIf="hasAddAccess==true || hasUpdateAccess==true"
+              <button [disabled]="loading" class="btn btn-secondary"
+                      *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true"
                       (click)="GeneratePDF(false)">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Generate Service Report
               </button>
 
