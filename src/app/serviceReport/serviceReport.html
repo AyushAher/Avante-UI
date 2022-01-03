@@ -405,10 +405,10 @@
             <div class="col-md-6 col-sm-6" style="padding:10px">
               <button [disabled]="loading" class="btn btn-primary" *ngIf="hasAddAccess==true || hasUpdateAccess==true">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
+                Save
               </button>
               <a routerLink="/servicereportlist" class="btn btn-secondary" style="margin-left:10px;">Back</a>
-              <button type="button" class="btn btn-secondary" style="margin-left:15px;" (click)="GeneratePDF()">Generate PDF</button>
+              <button type="button" class="btn btn-secondary" style="margin-left:15px;" (click)="GeneratePDF()">Preview</button>
 
             </div>
           </div>
