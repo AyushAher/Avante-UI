@@ -75,8 +75,8 @@ export class DistributordashboardsettingsComponent implements OnInit {
     this.form = this.formBuilder.group({
       displayIn: "",
       position: 0,
-      isDefault: false,
-      isactive: true,
+      isDefault: [false],
+      isactive: [true],
       isdeleted: [false],
       dashboardFor: "DHCT",
       graphName: ""
@@ -118,10 +118,10 @@ export class DistributordashboardsettingsComponent implements OnInit {
         next: (data: any) => {
           this.Data = data.object;
           this.Data.forEach(value => {
-            this.localData.push(value);
-            let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement;
-            valu.checked = true;
-          }
+              this.localData.push(value);
+              let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement;
+              valu.checked = true;
+            }
           )
         },
         error: error => {
@@ -139,6 +139,8 @@ export class DistributordashboardsettingsComponent implements OnInit {
       this.model.position = 0
       this.model.graphName = e
       this.model.dashboardFor = "DHDT"
+      this.model.isactive = true
+      this.model.isdeleted = false
       this.model.isDefault = false
       this.localData.push(this.model)
       this.model = null
@@ -150,7 +152,6 @@ export class DistributordashboardsettingsComponent implements OnInit {
       }
 
     }
-    console.log(this.localData)
   }
 
   resetOptions() {
