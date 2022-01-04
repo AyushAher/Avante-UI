@@ -9,17 +9,13 @@ import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 import {
   AccountService,
   AlertService,
-  ContactService,
   CountryService,
   CustomerService,
-  ListTypeService,
   NotificationService,
   ProfileService,
-  ServiceReportService,
-  ServiceRequestService
+  ServiceReportService
 } from '../_services';
 import {RenderComponent} from '../distributor/rendercomponent';
-import {environment} from "../../environments/environment";
 
 
 @Component({
@@ -42,10 +38,6 @@ export class ServiceReportListComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
-  private IsEngineerView: boolean = false;
-  private IsDistributorView: boolean = false;
-  private IsCustomerView: boolean = false;
-  private distId: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -57,10 +49,7 @@ export class ServiceReportListComponent implements OnInit {
     private countryService: CountryService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
-    private listTypeService: ListTypeService,
-    private ServiceReportService: ServiceReportService,
-    private serviceRequestService: ServiceRequestService,
-    private contcactservice: ContactService,
+    private ServiceReportService: ServiceReportService
   ) {
 
   }
@@ -79,53 +68,22 @@ export class ServiceReportListComponent implements OnInit {
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
-    } else {
-      this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     }
 
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
-
-    if (role == environment.custRoleCode) {
-      this.IsCustomerView = true;
-      this.IsDistributorView = false;
-      this.IsEngineerView = false;
-    } else if (role == environment.distRoleCode) {
-      this.IsCustomerView = false;
-      this.IsDistributorView = true;
-      this.IsEngineerView = false;
-    } else if (role == environment.engRoleCode) {
-      this.IsCustomerView = false;
-      this.IsDistributorView = false;
-      this.IsEngineerView = true;
-    } else {
-      this.IsCustomerView = true;
-      this.IsDistributorView = true;
-      this.IsEngineerView = true;
-    }
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
-    if (this.user.username != 'admin') {
-      this.ServiceReportService.GetServiceReportByContId(this.user.contactId)
-        .pipe(first())
-        .subscribe({
-          next: (servicereport: any) => {
-            console.log(servicereport)
-            this.ServiceReportList = servicereport.object;
-          },
-          error: error => {
-            this.notificationService.showError(error, "Error");
-            this.loading = false;
-          }
-        });
-    } else {
-      this.ServiceReportService.getAll().pipe(first()).subscribe({
+    this.ServiceReportService.getAll()
+      .pipe(first())
+      .subscribe({
         next: (data: any) => {
           this.ServiceReportList = data.object;
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
         }
-      })
-    }
-      this.columnDefs = this.createColumnDefs();
+      });
+    this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
@@ -136,9 +94,10 @@ export class ServiceReportListComponent implements OnInit {
   private createColumnDefs() {
     return [{
       headerName: 'Action',
-      field: 'serviceReportId',
+      field: 'id',
       filter: false,
       enableSorting: false,
+      width: 150,
       editable: false,
       sortable: false,
       cellRendererFramework: RenderComponent,
