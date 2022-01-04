@@ -196,7 +196,7 @@ export class UserProfileComponent implements OnInit {
             //debugger;
 
             this.contactId = data.object.contactid;
-            this.onRoleChange(data.object.roleId);
+            this.onRoleChange(data.object?.roleId);
 
             var subreq = data.object.distRegions?.split(',');
             let items: any = [];
@@ -230,7 +230,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   onRoleChange(role: string) {
-    switch (this.roleList.filter(x => x.listTypeItemId == role)[0].itemCode) {
+    switch (this.roleList.filter(x => x.listTypeItemId == role)[0]?.itemCode) {
 
       case environment.engRoleCode:
         this.isEng = true;
@@ -241,9 +241,6 @@ export class UserProfileComponent implements OnInit {
         this.isDist = true;
         this.GetDistributorByContactId();
         break;
-
-      case environment.custRoleCode:
-        break;
     }
   }
 
@@ -253,8 +250,7 @@ export class UserProfileComponent implements OnInit {
       .subscribe({
           next: (data: any) => {
             if (data.result) {
-              this.regionList = data.object[0].regions;
-              console.log(this.regionList);
+              this.regionList = data.object[0]?.regions;
             }
           }
         }
