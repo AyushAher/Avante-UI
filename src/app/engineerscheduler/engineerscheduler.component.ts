@@ -100,9 +100,9 @@ export class EngineerschedulerComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           data = data.filter(x => x.listTypeItemId == this.user.roleId)[0]
-          if (data.itemCode == environment.engRoleCode) {
+          if (data?.itemCode == environment.engRoleCode) {
             this.isEng = true
-          } else if (data.itemCode == environment.distRoleCode) {
+          } else if (data?.itemCode == environment.distRoleCode) {
             this.isDistSupp = true
           }
           if (this.isEng) {
@@ -110,10 +110,10 @@ export class EngineerschedulerComponent implements OnInit {
             this.EngschedulerService.getByEngId(this.user.contactId)
               .pipe(first())
               .subscribe({
-                next: (data: any) => {
-                  data.object = data.object.filter(x => x.engId === this.user.contactId)
-                  if (data.result && data.object != [] && data.object != null) {
-                    data.object.forEach(x => {
+                next: (Engdata: any) => {
+                  Engdata.object = Engdata.object.filter(x => x.engId === this.user.contactId)
+                  if (Engdata.result && Engdata.object != [] && Engdata.object != null) {
+                    Engdata.object.forEach(x => {
                       let obj = {
                         Id: x.id,
                         Subject: x.subject,
@@ -156,9 +156,9 @@ export class EngineerschedulerComponent implements OnInit {
             this.distributorService.GetDistributorRegionContactsByContactId(this.user.contactId)
               .pipe(first())
               .subscribe({
-                next: (data: any) => {
-                  if (data.result && data.object != null) {
-                    data.object.forEach(x => {
+                next: (Distdata: any) => {
+                  if (Distdata.result && Distdata.object != null) {
+                    Distdata.object.forEach(x => {
                       this.EngschedulerService.getByEngId(x.id)
                         .pipe(first())
                         .subscribe({
