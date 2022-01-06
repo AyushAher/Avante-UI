@@ -232,6 +232,13 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'DHSET')[0].delete == true
       }
 
+      if (this.profile.permissions.filter(x => x.screenCode == 'AUDIT').length > 0) {
+        this.hasAuditTrail = this.profile.permissions.filter(x => x.screenCode == 'AUDIT')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'AUDIT')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'AUDIT')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'AUDIT')[0].delete == true
+      }
+
 
       //
       // hasTravelDetails: boolean = false;

@@ -5,22 +5,10 @@
 export const environment = {
   //for dev:
 
-  // production: false,
-  // apiUrl: 'https://localhost:44317/api',
-  // uiUrl: 'https://localhost:44378/',
-  // configTypeCode: "CONTY",// "f0bf6d8d-739a-11eb-adfc-0a91af0598e6" //"4c155b3e-7526-11eb-97d1-1c39472d435b"
-  //
-  // custRoleCode: "RCUST",
-  // distRoleCode: "RDTSP",
-  // engRoleCode: "RENG",
-  //
-  // INS: "INS",
-  // ANAS: "ANAS",
-  // PRMN1: "PRMN1",
-  // PRMN2: "PRMN2",
-  // REWK:"REWK",
-  // CRMA: "CRMA",
-  //
+  production: false,
+  apiUrl: 'https://localhost:44317/api',
+  uiUrl: 'https://localhost:44378/',
+
   // zohocodeapi: "https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.fullaccess.all&client_id=1000.5H07NQJOLXW69IEHWG3GICTVU8L51W&response_type=code&redirect_uri=http://localhost:4200/custpayrpt&access_type=offline",
   // zohoaccessapi:"https://accounts.zoho.com/oauth/v2/token?code={0}&client_id=1000.5H07NQJOLXW69IEHWG3GICTVU8L51W&client_secret=2f54ec5f719c6ee911a367c16211f8d3576378d013&redirect_uri=http://localhost:4200/custpayrpt&grant_type=authorization_code",
   //
@@ -35,14 +23,14 @@ export const environment = {
 
   // for prod
 
-  production: true,
-  apiUrl: 'https://service.avantgardeinc.com/api/api',
-  uiUrl: 'https://service.avantgardeinc.com/',
+  // production: true,
+  // apiUrl: 'https://service.avantgardeinc.com/api/api',
+  // uiUrl: 'https://service.avantgardeinc.com/',
 
   custRoleCode: "RCUST",
   distRoleCode: "RDTSP",
   engRoleCode: "RENG",
-  configTypeCode: "CONTY",// "f0bf6d8d-739a-11eb-adfc-0a91af0598e6" //"4c155b3e-7526-11eb-97d1-1c39472d435b"
+  configTypeCode: "CONTY",
   location: "PMCL",
 
 

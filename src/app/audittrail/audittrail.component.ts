@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from "../_models";
+import {ProfileReadOnly, User} from "../_models";
 import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService} from "../_services";
+import {AccountService, ProfileService} from "../_services";
 import {AudittrailService} from "../_services/audittrail.service";
 import {first} from "rxjs/operators";
 import {RenderComponent} from "../distributor/rendercomponent";
@@ -21,17 +21,37 @@ export class AudittrailComponent implements OnInit {
   user: User;
   datepipie = new DatePipe("en-US");
 
+  hasReadAccess: boolean = false
+  hasAddAccess: boolean = false;
+  hasUpdateAccess: boolean = false;
+  hasDeleteAccess: boolean = false;
+  profilePermission: ProfileReadOnly;
+
   constructor(
     private router: Router,
     private accountService: AccountService,
     private Service: AudittrailService,
     private route: ActivatedRoute,
+    private profileService: ProfileService,
   ) {
   }
 
   ngOnInit(): void {
     this.user = this.accountService.userValue;
-    if (this.user.username == "admin") {
+
+    this.profilePermission = this.profileService.userProfileValue;
+
+    if (this.profilePermission != null) {
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "AUDIT");
+      if (profilePermission.length > 0) {
+        this.hasAddAccess = profilePermission[0].create;
+        this.hasDeleteAccess = profilePermission[0].delete;
+        this.hasUpdateAccess = profilePermission[0].update;
+        this.hasReadAccess = profilePermission[0].read;
+      }
+    }
+
+    if (this.user.username == "admin" || this.hasReadAccess) {
       this.Service.getAll()
         .pipe(first())
         .subscribe({

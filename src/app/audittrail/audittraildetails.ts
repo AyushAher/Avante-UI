@@ -1,8 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService} from "../_services";
+import {AccountService, ProfileService} from "../_services";
 import {AudittrailService} from "../_services/audittrail.service";
-import {User} from "../_models";
+import {ProfileReadOnly, User} from "../_models";
 import {DatePipe} from "@angular/common";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {first} from "rxjs/operators";
@@ -19,17 +19,35 @@ export class AudittrailDetailsComponent implements OnInit {
   nValue
   oValue
 
+  hasReadAccess: boolean = false
+  hasAddAccess: boolean = false;
+  hasUpdateAccess: boolean = false;
+  hasDeleteAccess: boolean = false;
+  profilePermission: ProfileReadOnly;
   constructor(
     private router: Router,
     private accountService: AccountService,
     private Service: AudittrailService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private profileService: ProfileService,
   ) {
   }
 
   ngOnInit(): void {
     this.user = this.accountService.userValue;
+
+    this.profilePermission = this.profileService.userProfileValue;
+
+    if (this.profilePermission != null) {
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "AUDIT");
+      if (profilePermission.length > 0) {
+        this.hasAddAccess = profilePermission[0].create;
+        this.hasDeleteAccess = profilePermission[0].delete;
+        this.hasUpdateAccess = profilePermission[0].update;
+        this.hasReadAccess = profilePermission[0].read;
+      }
+    }
 
     this.form = this.formBuilder.group({
       action: [{value: '', disabled: true}],
@@ -38,7 +56,7 @@ export class AudittrailDetailsComponent implements OnInit {
       screen: [{value: '', disabled: true}],
     })
 
-    if (this.user.username == "admin") {
+    if (this.user.username == "admin" || this.hasReadAccess ) {
       this.id = this.route.snapshot.paramMap.get("id");
       this.Service.getById(this.id)
         .pipe(first()).subscribe({
