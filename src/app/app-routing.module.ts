@@ -64,6 +64,8 @@ import {CustspinventorylistComponent} from "./custspinventory/Custspinventorylis
 import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
 import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 import {EngineerschedulerComponent} from "./engineerscheduler/engineerscheduler.component";
+import {AudittrailComponent} from "./audittrail/audittrail.component";
+import {AudittrailDetailsComponent} from "./audittrail/audittraildetails";
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
@@ -316,6 +318,16 @@ const routes: Routes = [
   {
     path: "schedule",
     component: EngineerschedulerComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "audittrail",
+    component: AudittrailComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "audittrail/:id",
+    component: AudittrailDetailsComponent,
     canActivate: [AuthGuard],
   },
   {

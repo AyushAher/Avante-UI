@@ -687,12 +687,12 @@ export class InstrumentComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.router.navigate(["instrumentlist"]);
               if (this.file != null) {
                 this.saveFileShare(this.file, data.object.id)
               }
                 this.uploadFile(this.img, data.object.id)
 
-              this.router.navigate(["instrumentlist"]);
             }
             else {
               this.notificationService.showError(data.resultMessage, "Error");

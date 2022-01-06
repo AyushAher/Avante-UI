@@ -111,6 +111,8 @@ import {
 import { EngineerschedulerComponent } from './engineerscheduler/engineerscheduler.component';
 import {ChangepasswoardComponent} from "./account/changepasswoard.component";
 import {ForgotpasswoardComponent} from "./account/forgotpasswoard.component";
+import { AudittrailComponent } from './audittrail/audittrail.component';
+import {AudittrailDetailsComponent} from "./audittrail/audittraildetails";
 
 
 @NgModule({
@@ -198,7 +200,9 @@ import {ForgotpasswoardComponent} from "./account/forgotpasswoard.component";
     PrevchklocpartelementvalueComponent,
     EngineerschedulerComponent,
     ChangepasswoardComponent,
-    ForgotpasswoardComponent
+    ForgotpasswoardComponent,
+    AudittrailComponent,
+    AudittrailDetailsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

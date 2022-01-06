@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {ListTypeItem, ProfileReadOnly, User} from '../_models';
-import {AccountService, ListTypeService, NotificationService, ProfileService} from '../_services';
-import {first} from "rxjs/operators";
-import {Router} from "@angular/router";
+import { Component } from '@angular/core';
+import { ListTypeItem, ProfileReadOnly, User } from '../_models';
+import { AccountService, ListTypeService, NotificationService, ProfileService } from '../_services';
+import { first } from "rxjs/operators";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-nav-sidemenu',
@@ -47,7 +47,7 @@ export class NavSideMenuComponent {
   hasdistributordashboard: boolean = false;
   haspreventivemaintenance: boolean = false;
   hasdashboardsettings: boolean = false;
-
+  hasAuditTrail: boolean = false;
   constructor(
     private accountService: AccountService,
     private profileService: ProfileService,
@@ -269,6 +269,7 @@ export class NavSideMenuComponent {
       this.hasdistributordashboard = true;
       this.haspreventivemaintenance = true;
       this.hasdashboardsettings = true;
+      this.hasAuditTrail = true;
     }
 
     this.listTypeService
