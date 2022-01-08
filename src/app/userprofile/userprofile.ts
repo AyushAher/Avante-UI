@@ -231,7 +231,6 @@ export class UserProfileComponent implements OnInit {
 
   onRoleChange(role: string) {
     switch (this.roleList.filter(x => x.listTypeItemId == role)[0]?.itemCode) {
-
       case environment.engRoleCode:
         this.isEng = true;
         this.GetDistributorByContactId();
@@ -240,6 +239,13 @@ export class UserProfileComponent implements OnInit {
       case environment.distRoleCode:
         this.isDist = true;
         this.GetDistributorByContactId();
+        break;
+
+      case environment.custRoleCode:
+        this.isDist = false;
+        this.isEng = false;
+        this.userprofileform.get('distRegions').clearValidators()
+        this.userprofileform.get('distRegions').updateValueAndValidity()
         break;
     }
   }
@@ -371,7 +377,7 @@ export class UserProfileComponent implements OnInit {
       var selectarray = this.userprofileform.get('distRegions').value;
       this.userprofile.distRegions = selectarray.map(x => x.id).join(',');
     }
-    console.log(this.userprofileform.get('distRegions').value);
+
     if (this.id == null) {
       this.userprofileService.save(this.userprofile)
         .pipe(first())
