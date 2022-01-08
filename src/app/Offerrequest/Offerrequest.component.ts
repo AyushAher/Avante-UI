@@ -15,6 +15,7 @@ import {
   CurrencyService,
   DistributorService,
   FileshareService,
+  ListTypeService,
   NotificationService,
   ProfileService
 } from "../_services";
@@ -71,7 +72,8 @@ export class OfferrequestComponent implements OnInit {
   ColumnDefsSPDet: ColDef[]
   prevNotCompleted: boolean = false;
 
-  CompletedId = "706a8df4-5202-11ec-abe2-54bf64020316"
+  CompletedId = "COMP"
+  statusList: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -88,13 +90,13 @@ export class OfferrequestComponent implements OnInit {
     private SparePartsService: SparePartsOfferRequestService,
     private modalService: BsModalService,
     private SpareQuoteDetService: SparequotedetService,
+    private listTypeService: ListTypeService,
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       if (this.id != null) {
         this.SpareQuoteDetService.getAll(this.id).pipe(first())
           .subscribe({
             next: (data: any) => {
-              console.log(data)
               this.SpareQuotationDetailsList = data.object;
               this.SpareQuotationDetailsList.forEach(value => {
                 value.zohoPORaisedDate = this.datepipie.transform(value.zohoPORaisedDate, "MM/dd/yyyy");
@@ -113,17 +115,19 @@ export class OfferrequestComponent implements OnInit {
           .pipe(first())
           .subscribe({
             next: (data: any) => {
-              debugger
-              if (data.object != null) {
-                if (data.object.status != this.CompletedId && data.object.status != null) {
-                  this.prevNotCompleted = true
-                } else {
-                  this.prevNotCompleted = false
-                }
-              } else {
-                this.prevNotCompleted = false
-              }
-              console.log(this.prevNotCompleted, data)
+              this.listTypeService.getById("SQDTS")
+                .pipe(first())
+                .subscribe({
+                  next: (stat: any) => {
+                    this.statusList = stat;
+                    let compStatus = this.statusList.filter(x => x.listTypeItemId == data.object.status)[0]?.itemCode;
+                    if (compStatus != null) {
+                      this.prevNotCompleted = compStatus != this.CompletedId && compStatus != null;
+                    } else {
+                      this.prevNotCompleted = false
+                    }
+                  }
+                });
             }
           })
       }
@@ -235,7 +239,6 @@ export class OfferrequestComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data)
           this.SpareQuotationDetailsList = data.object;
           this.SpareQuotationDetailsList.forEach(value => {
             value.zohoPORaisedDate = this.datepipie.transform(value.zohoPORaisedDate, "MM/dd/yyyy");
@@ -243,7 +246,6 @@ export class OfferrequestComponent implements OnInit {
             value.custResponseDate = this.datepipie.transform(value.custResponseDate, "MM/dd/yyyy");
             value.raisedDate = this.datepipie.transform(value.raisedDate, "MM/dd/yyyy");
           })
-          console.log(this.SpareQuotationDetailsList)
 
         }
       })
@@ -253,17 +255,19 @@ export class OfferrequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            debugger
-            if (data.object != null) {
-              if (data.object.status != this.CompletedId && data.object.status != null) {
-                this.prevNotCompleted = true
-              } else {
-                this.prevNotCompleted = false
-              }
-            } else {
-              this.prevNotCompleted = false
-            }
-            console.log(this.prevNotCompleted, data)
+            this.listTypeService.getById("SQDTS")
+              .pipe(first())
+              .subscribe({
+                next: (stat: any) => {
+                  this.statusList = stat;
+                  let compStatus = this.statusList.filter(x => x.listTypeItemId == data.object.status)[0]?.itemCode;
+                  if (compStatus != null) {
+                    this.prevNotCompleted = compStatus != this.CompletedId && compStatus != null;
+                  } else {
+                    this.prevNotCompleted = false
+                  }
+                }
+              });
           }
         })
     }

@@ -42,9 +42,9 @@ export class SparequotedetComponent implements OnInit {
   @Input() public id;
 
   currentStatus: string;
-  completedId: string = "706a8df4-5202-11ec-abe2-54bf64020316";
-  PORaisedId: string = "707d7598-5202-11ec-abe2-54bf64020316";
-  shippedId: string = "70914028-5202-11ec-abe2-54bf64020316";
+  completedId: string = "COMP";
+  PORaisedId: string = "ZPORD";
+  shippedId: string = "SHPED";
 
   datepipie = new DatePipe("en-US");
   showStatus: boolean;
@@ -162,6 +162,7 @@ export class SparequotedetComponent implements OnInit {
     })
     this.Form.get('status').valueChanges.subscribe(
       value => {
+        value = this.statusList.filter(status => status.listTypeItemId == value)[0]?.itemCode;
         if (value != null) {
           switch (value) {
             case this.completedId:
@@ -232,8 +233,8 @@ export class SparequotedetComponent implements OnInit {
     this.notificationService.filter("itemadded");
   }
 
-  statusChanged(status: string) {
-    this.currentStatus = status;
+  statusChanged(sta: string) {
+    this.currentStatus = this.statusList.filter(status => status.listTypeItemId == sta)[0]?.itemCode;
   }
 
   onValueSubmit() {
@@ -242,7 +243,6 @@ export class SparequotedetComponent implements OnInit {
     this.submitted = true;
 
     if (this.Form.invalid) {
-      console.log(this.Form.controls['shippedDate'].errors)
       return
     }
 
@@ -286,9 +286,6 @@ export class SparequotedetComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
-              //this.configList = data.object;
-              //this.listvalue.get("configValue").setValue("");
-              //this.id = null;
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
               this.close();
