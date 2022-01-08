@@ -39,7 +39,6 @@ export class ListTypeService {
   getItemById(id: string) {
     return this.http.get<ListTypeItem[]>(`${environment.apiUrl}/ListItems/itemid/${id}`)
       .pipe(map(x => {
-        localStorage.setItem('roles', JSON.stringify(x))
         if (x != null) {
           this.roleSubject.next(x[0]);
         }

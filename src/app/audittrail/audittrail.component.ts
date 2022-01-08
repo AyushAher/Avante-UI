@@ -57,11 +57,6 @@ export class AudittrailComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             data.object.forEach(x => {
-
-              let stringFormat = String(x.nValue).replace('`', "")
-              stringFormat = stringFormat.replace('`', "")
-              var JSONobj = JSON.parse(String(stringFormat))
-
               x.createdon = this.datepipie.transform(x.createdon, "MM-dd-yyyy HH:mm:ss")
             })
             this.List = data.object;
