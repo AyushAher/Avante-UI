@@ -789,6 +789,26 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('isrecurring').clearValidators()
       this.serviceRequestform.get('isrecurring').updateValueAndValidity()
 
+    } else {
+      this.isAmc = false;
+      this.serviceRequestform.get('sdate').clearValidators()
+      this.serviceRequestform.get('sdate').updateValueAndValidity()
+      this.serviceRequestform.get('edate').clearValidators()
+      this.serviceRequestform.get('edate').updateValueAndValidity()
+
+      this.serviceRequestform.get('recurringcomments').setValidators(Validators.required)
+      this.serviceRequestform.get('recurringcomments').updateValueAndValidity()
+      this.serviceRequestform.get('breakoccurdetailsid').setValidators(Validators.required)
+      this.serviceRequestform.get('breakoccurdetailsid').updateValueAndValidity()
+      this.serviceRequestform.get('alarmdetails').setValidators(Validators.required)
+      this.serviceRequestform.get('alarmdetails').updateValueAndValidity()
+      this.serviceRequestform.get('resolveaction').setValidators(Validators.required)
+      this.serviceRequestform.get('resolveaction').updateValueAndValidity()
+      this.serviceRequestform.get('breakdowntype').setValidators(Validators.required)
+      this.serviceRequestform.get('breakdowntype').updateValueAndValidity()
+      this.serviceRequestform.get('isrecurring').setValidators(Validators.required)
+      this.serviceRequestform.get('isrecurring').updateValueAndValidity()
+
     }
   }
 
