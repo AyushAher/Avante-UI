@@ -357,7 +357,9 @@ export class SparePartComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.uploadFile(this.img, data.object.id)
+              if (this.img != undefined && this.img.length > 0) {
+                this.uploadFile(this.img, data.object.id)
+              }
               this.router.navigate(["sparepartlist"]);
             }
             else {
