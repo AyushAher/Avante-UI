@@ -36,22 +36,17 @@ import {environment} from "../../../environments/environment";
   templateUrl: "./traveldetails.component.html",
 })
 export class TraveldetailsComponent implements OnInit {
-  travelDetailform: FormGroup;
-  travelDetail: travelDetails;
+  Form: FormGroup;
+  Model: travelDetails;
   loading = false;
   submitted = false;
-  isSave = false;
-  type: string;
   id: string;
-  travelDetailmodel: travelDetails;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   user: User;
-
-  distid = "f785105b-cba7-4d5b-b58c-099002f3e3e0";
 
   engineer: DistributorRegionContacts[] = [];
   servicerequest: ServiceRequest[] = [];
@@ -90,7 +85,7 @@ export class TraveldetailsComponent implements OnInit {
     private router: Router,
     private FileShareService: FileshareService,
     private accountService: AccountService,
-    private travelDetailService: TravelDetailService,
+    private Service: TravelDetailService,
     private alertService: AlertService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
@@ -98,7 +93,6 @@ export class TraveldetailsComponent implements OnInit {
     private listTypeService: ListTypeService,
     private servicerequestservice: ServiceRequestService,
     private currencyService: CurrencyService,
-
   ) { }
 
   ngOnInit() {
@@ -121,7 +115,7 @@ export class TraveldetailsComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
-    this.travelDetailform = this.formBuilder.group({
+    this.Form = this.formBuilder.group({
       engineerid: ["", [Validators.required]],
       servicerequestid: ["", [Validators.required]],
       distId: ["", [Validators.required]],
@@ -150,24 +144,25 @@ export class TraveldetailsComponent implements OnInit {
       this.hasReadAccess = true;
     } else if (role == environment.engRoleCode) {
       this.isEng = true;
-      this.travelDetailform.get('flightdetails').get('currencyId').disable();
+      this.Form.get('flightdetails').get('currencyId').disable();
     } else if (role == environment.distRoleCode) {
       this.isDist = true;
+      if (this.id != null) {
+        this.Form.get('flightdetails').get('airline').setValidators([Validators.required])
+        this.Form.get('flightdetails').get('airline').updateValueAndValidity()
 
-      this.travelDetailform.get('flightdetails').get('airline').setValidators([Validators.required])
-      this.travelDetailform.get('flightdetails').get('airline').updateValueAndValidity()
+        this.Form.get('flightdetails').get('flightdate').setValidators([Validators.required])
+        this.Form.get('flightdetails').get('flightdate').updateValueAndValidity()
 
-      this.travelDetailform.get('flightdetails').get('flightdate').setValidators([Validators.required])
-      this.travelDetailform.get('flightdetails').get('flightdate').updateValueAndValidity()
+        this.Form.get('flightdetails').get('flightno').setValidators([Validators.required])
+        this.Form.get('flightdetails').get('flightno').updateValueAndValidity()
 
-      this.travelDetailform.get('flightdetails').get('flightno').setValidators([Validators.required])
-      this.travelDetailform.get('flightdetails').get('flightno').updateValueAndValidity()
+        this.Form.get('flightdetails').get('currencyId').setValidators([Validators.required])
+        this.Form.get('flightdetails').get('currencyId').updateValueAndValidity()
 
-      this.travelDetailform.get('flightdetails').get('currencyId').setValidators([Validators.required])
-      this.travelDetailform.get('flightdetails').get('currencyId').updateValueAndValidity()
-
-      this.travelDetailform.get('flightdetails').get('flightcost').setValidators([Validators.required])
-      this.travelDetailform.get('flightdetails').get('flightcost').updateValueAndValidity()
+        this.Form.get('flightdetails').get('flightcost').setValidators([Validators.required])
+        this.Form.get('flightdetails').get('flightcost').updateValueAndValidity()
+      }
     }
 
 
@@ -180,7 +175,7 @@ export class TraveldetailsComponent implements OnInit {
         this.hasAddAccess = true;
       }
 
-      this.travelDetailService
+      this.Service
         .getById(this.id)
         .pipe(first())
         .subscribe({
@@ -188,7 +183,7 @@ export class TraveldetailsComponent implements OnInit {
             this.flightdetails = true;
             this.getengineers(data.object.distId)
             this.getservicerequest(data.object.distId)
-            this.travelDetailform.patchValue(data.object);
+            this.Form.patchValue(data.object);
             this.GetFileList(data.object.id)
           },
           error: (error) => {
@@ -225,12 +220,12 @@ export class TraveldetailsComponent implements OnInit {
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.travelDetailform.get('distId').setValue(data.object[0].id)
+          this.Form.get('distId').setValue(data.object[0].id)
           this.getengineers(data.object[0].id)
         }
       })
     if (role == environment.engRoleCode) {
-      this.travelDetailform.get('engineerid').setValue(this.user.contactId)
+      this.Form.get('engineerid').setValue(this.user.contactId)
     }
     this.listTypeService
       .getById(this.code[0])
@@ -275,10 +270,10 @@ export class TraveldetailsComponent implements OnInit {
   }
 
   get t() {
-    return this.travelDetailform.controls;
+    return this.Form.controls;
   }
   get f() {
-    return this.travelDetailform.controls.flightdetails;
+    return this.Form.controls.flightdetails;
   }
 
   getservicerequest(id: string) {
@@ -287,7 +282,6 @@ export class TraveldetailsComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data)
           if (this.isEng) {
             this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
           } else if (this.isDist) {
@@ -419,19 +413,18 @@ export class TraveldetailsComponent implements OnInit {
     this.alertService.clear();
 
     // stop here if form is invalid
-    if (this.travelDetailform.invalid) {
+    if (this.Form.invalid) {
       return;
     }
-    this.isSave = true;
 
     this.loading = true;
-    this.travelDetail = this.travelDetailform.value;
+    this.Model = this.Form.value;
 
     let dateSent;
-    let currentDate = new Date(this.travelDetailform.value.departuredate);
-    dateSent = new Date(this.travelDetailform.value.returndate);
+    let currentDate = new Date(this.Form.value.departuredate);
+    dateSent = new Date(this.Form.value.returndate);
     let flightdate = new Date(
-      this.travelDetailform.value.flightdetails.flightdate
+      this.Form.value.flightdetails.flightdate
     );
 
     let calc = Math.floor(
@@ -439,7 +432,7 @@ export class TraveldetailsComponent implements OnInit {
         dateSent.getFullYear(),
         dateSent.getMonth(),
         dateSent.getDate()
-      ) -
+        ) -
         Date.UTC(
           currentDate.getFullYear(),
           currentDate.getMonth(),
@@ -449,25 +442,25 @@ export class TraveldetailsComponent implements OnInit {
     );
 
     const datepipie = new DatePipe("en-US");
-    this.travelDetailform.value.departuredate = datepipie.transform(
+    this.Form.value.departuredate = datepipie.transform(
       currentDate,
       "MM/dd/yyyy"
     );
 
-    this.travelDetailform.value.returndate = datepipie.transform(
+    this.Form.value.returndate = datepipie.transform(
       dateSent,
       "MM/dd/yyyy"
     );
-    if (this.isDist) {
-      this.travelDetailform.value.flightdetails.flightdate = datepipie.transform(
+    if (this.isDist && this.id != null) {
+      this.Form.value.flightdetails.flightdate = datepipie.transform(
         flightdate,
         "MM/dd/yyyy"
       );
     }
 
-    let fcity = this.travelDetailform.value.fromcity.toLowerCase();
-    let city = this.travelDetailform.value.tocity;
-    let tcity = this.travelDetailform.value.tocity.toLowerCase();
+    let fcity = this.Form.value.fromcity.toLowerCase();
+    let city = this.Form.value.tocity;
+    let tcity = this.Form.value.tocity.toLowerCase();
     if (fcity != tcity) {
       this.cityValid = true;
     } else {
@@ -490,8 +483,8 @@ export class TraveldetailsComponent implements OnInit {
     }
     if (this.dateValid && this.cityValid) {
       if (this.id == null) {
-        this.travelDetailService
-          .save(this.travelDetail)
+        this.Service
+          .save(this.Model)
           .pipe(first())
           .subscribe({
             next: (data: any) => {
@@ -518,10 +511,10 @@ export class TraveldetailsComponent implements OnInit {
             },
           });
       } else {
-        this.travelDetail = this.travelDetailform.value;
-        this.travelDetail.id = this.id;
-        this.travelDetailService
-          .update(this.id, this.travelDetail)
+        this.Model = this.Form.value;
+        this.Model.id = this.id;
+        this.Service
+          .update(this.id, this.Model)
           .pipe(first())
           .subscribe({
             next: (data: ResultMsg) => {
