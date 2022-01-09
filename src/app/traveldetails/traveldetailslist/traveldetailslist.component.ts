@@ -49,8 +49,7 @@ export class TraveldetailslistComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.accountService.userValue;
-    let role = JSON.parse(localStorage.getItem('roles'));
-
+    let role;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
@@ -68,8 +67,9 @@ export class TraveldetailslistComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
-    }else{
-          role = role[0].itemCode;
+    } else {
+      role = JSON.parse(localStorage.getItem('roles'));
+      role = role[0].itemCode;
     }
     // console.log(this.user.id);
 
@@ -79,7 +79,6 @@ export class TraveldetailslistComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-                  console.log(data.object)
           if (this.user.username != "admin") {
             if (role == environment.engRoleCode) {
               data.object = data.object.filter(x => x.createdby == this.user.userId || x.engineerid == this.user.contactId)
