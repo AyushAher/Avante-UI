@@ -129,8 +129,8 @@ export class CustomerComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.onDefDistchanged(data.object.defdistid);
             this.customerform.patchValue(data.object);
+            this.onDefDistchanged(data.object.defdistid);
           },
           error: error => {
             // this.alertService.error(error);
@@ -152,8 +152,17 @@ export class CustomerComponent implements OnInit {
   }
 
   onDefDistchanged(distId) {
-    this.distRegionsList = this.defaultdistributors.filter(x => x.id === distId)[0].regions;
-    console.log(this.distRegionsList)
+    this.distributorService.getAll()
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.distRegionsList = data.object.filter(x => x.id === distId)[0].regions;
+        },
+        error: error => {
+          this.notificationService.showSuccess(error, "Error");
+          this.loading = false;
+        }
+      });
   }
 
   onSubmit() {
