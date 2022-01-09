@@ -49,9 +49,7 @@ export class TraveldetailslistComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.accountService.userValue;
-this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -70,6 +68,8 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    }else{
+          role = role[0].itemCode;
     }
     // console.log(this.user.id);
 
@@ -79,19 +79,18 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+                  console.log(data.object)
           if (this.user.username != "admin") {
+            if (role == environment.engRoleCode) {
+              data.object = data.object.filter(x => x.createdby == this.user.userId || x.engineerid == this.user.contactId)
+              this.List = data.object;
+            }
             this.distributorService.getByConId(this.user.contactId)
               .pipe(first())
               .subscribe({
                 next: (data1: any) => {
-
                   if (role == environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
-                  } else if (role == environment.engRoleCode) {
-                    data.object = data.object.filter(x => x.createdby == this.user.userId)
-                    this.List = data.object;
-                  } else {
-                    this.List = data.object;
                   }
                 }
               })
