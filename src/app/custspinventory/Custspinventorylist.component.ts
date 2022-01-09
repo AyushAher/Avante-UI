@@ -57,7 +57,7 @@ export class CustspinventorylistComponent implements OnInit {
       this.hasDeleteAccess = true;
     }
 
-    this.Service.getAll(this.user.contactId)
+    this.Service.getAll(this.user.contactId,null)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
