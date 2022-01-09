@@ -10,58 +10,61 @@
             <hr />
 
             <div class="col-md-12 col-sm-12 ">
-                <form [formGroup]="Form" (ngSubmit)="onSubmit()">
-                    <div class="row">
+                <form (ngSubmit)="onSubmit()" [formGroup]="travelDetailform">
+                  <div class="row">
 
-                        <div class="col-sm-4">
-                          <label>Distributor</label>
-                          <select formControlName="distId" class="form-control" disabled #distributorid
-                                  (input)="getservicerequest($event.target.value);getengineers($event.target.value)"
-                                  [ngClass]="{'is-invalid':submitted && f.distId.errors }">
-                            <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
-                          </select>
+                    <div class="col-sm-4">
+                      <label for="engineername">Distributor</label>
+                      <select #distributorid
+                              (input)="getservicerequest($event.target.value);getengineers($event.target.value)"
+                              [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-control" disabled
+                              formControlName="distId"
+                              id="">
+                        <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
+                      </select>
 
-                          <div *ngIf="submitted && f.distId.errors" class="invalid-feedback">
-                            <div *ngIf="f.distId.errors.required">Distributor is required</div>
-                          </div>
-
-                        </div>
-
-                        <div class="col-sm-4">
-                          <label>Engineer Name</label>
-
-                          <select name="" placeholder="Engineer Name" [disabled]="isEng" formControlName="engineerid"
-                                  class="form-control" [ngClass]="{'is-invalid':submitted && f.engineerid.errors }">
-                            <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
-                          </select>
-
-                            <div *ngIf="submitted && f.engineerid.errors" class="invalid-feedback">
-                                <div *ngIf="f.engineerid.errors.required">Engineer Name is required</div>
-                            </div>
-
-                        </div>
-
-                      <div class="col-md-4 col-sm-4">
-                        <label>Service Request No</label>
-                        <select name="" placeholder="Service Request Id" formControlName="servicerequestid"
-                                class="form-control" [ngClass]="{'is-invalid':submitted && f.servicerequestid.errors }">
-                          <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
-                        </select>
-
-                        <div *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
-                          <div *ngIf="f.servicerequestid.errors.required">Service Request Id is required</div>
-                        </div>
+                      <div *ngIf="submitted && f.distId.errors" class="invalid-feedback">
+                        <div *ngIf="f.distId.errors.required">Distributor is required</div>
                       </div>
 
-                        <div class="col-md-4 col-sm-4">
-                          <label>Accomodation Type</label>
+                    </div>
 
-                          <select name="" placeholder="Accomodation Class" formControlName="accomodationtype"
-                                  class="form-control"
-                                  [ngClass]="{'is-invalid':submitted && f.accomodationtype.errors }">
-                            <option *ngFor="let i of accomodationtype" value="{{i.listTypeItemId}}">{{i.itemname}}
-                            </option>
-                          </select>
+                    <div class="col-sm-4">
+                      <label for="engineername">Engineer Name</label>
+
+                      <select [ngClass]="{'is-invalid':submitted && f.engineerid.errors }" class="form-control" disabled
+                              formControlName="engineerid" id=""
+                              name="" placeholder="Engineer Name">
+                        <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
+                      </select>
+
+                      <div *ngIf="submitted && f.engineerid.errors" class="invalid-feedback">
+                        <div *ngIf="f.engineerid.errors.required">Engineer Name is required</div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                      <label for="name">Service Request No</label>
+                      <select formControlName="servicerequestid" id="" name="" placeholder="Service Request Id"
+                              class="form-control" [ngClass]="{'is-invalid':submitted && f.servicerequestid.errors }">
+                        <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
+                      </select>
+
+                      <div *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
+                        <div *ngIf="f.servicerequestid.errors.required">Service Request Id is required</div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                      <label for="n_Code">Accomodation Type</label>
+
+                      <select formControlName="accomodationtype" id="" name="" placeholder="Accomodation Class"
+                              class="form-control"
+                              [ngClass]="{'is-invalid':submitted && f.accomodationtype.errors }">
+                        <option *ngFor="let i of accomodationtype" value="{{i.listTypeItemId}}">{{i.itemname}}
+                        </option>
+                      </select>
 
 
                           <div *ngIf="submitted && f.accomodationtype.errors" class="invalid-feedback">
@@ -71,7 +74,7 @@
                         </div>
 
                       <div class="col-md-4 col-sm-4">
-                        <label>City</label>
+                        <label for="departuredate">City</label>
                         <input type="text" formControlName="city" class="form-control"
                                [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
 
@@ -82,7 +85,7 @@
                       </div>
 
                       <div class="col-md-4 col-sm-4">
-                        <label>Checkin Date</label>
+                        <label for="returndate">Checkin Date</label>
                         <input bsDatepicker formControlName="checkindate" class="form-control"
                                [ngClass]="{ 'is-invalid': submitted && f.checkindate.errors }"/>
 
@@ -93,7 +96,7 @@
                       </div>
 
                       <div class="col-md-4 col-sm-4">
-                        <label>Checkout Date</label>
+                        <label for="returndate">Checkout Date</label>
                         <input bsDatepicker formControlName="checkoutdate" class="form-control"
                                [ngClass]="{ 'is-invalid': submitted && f.checkoutdate.errors }"/>
 
@@ -106,7 +109,7 @@
                   <div class="row" *ngIf="id!=null">
                     <br><br>
                     <div class="col-md-4 col-sm-4">
-                      <label>Hotel Name</label>
+                      <label for="minor_Unit">Hotel Name</label>
                       <input type="text" formControlName="hotelname" class="form-control"
                              [ngClass]="{ 'is-invalid': submitted && f.hotelname.errors}"/>
 
@@ -117,7 +120,7 @@
                     </div>
 
                     <div class="col-md-4 col-sm-4">
-                      <label>Stay Address</label>
+                      <label for="minor_Unit">Stay Address</label>
                       <input type="text" formControlName="stayaddress" class="form-control"
                              [ngClass]="{ 'is-invalid': submitted && f.stayaddress.errors}"/>
 
@@ -128,7 +131,7 @@
                     </div>
 
                     <div class="col-md-4 col-sm-4">
-                      <label>Room Details</label>
+                      <label for="travelclass">Room Details</label>
                             <input type="text" formControlName="roomdetails" class="form-control"
                                 [ngClass]="{ 'is-invalid': submitted && f.roomdetails.errors }" />
 
@@ -139,11 +142,11 @@
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                          <label>Price Per Night</label>
+                          <label for="returndate">Price Per Night</label>
                           <br>
                           <select [ngClass]="{ ' is -invalid': submitted && f.perNightCurrencyId.errors}"
                                   class="form-control"
-                                  formControlName="perNightCurrencyId"
+                                  formControlName="perNightCurrencyId" id="currency"
                                   style="display:inline-block; width:100px;">
                             <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                             </option>
@@ -165,7 +168,7 @@
                         <br>
                         <select [ngClass]="{ ' is -invalid': submitted && f.totalCurrencyId.errors}"
                                 class="form-control"
-                                formControlName="totalCurrencyId"
+                                formControlName="totalCurrencyId" id="currency"
                                 style="display:inline-block; width:100px;">
                           <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                           </option>
