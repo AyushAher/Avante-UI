@@ -73,8 +73,7 @@ export class StaydetailsListComponent implements OnInit {
       this.hasReadAccess = true;
     }
 
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
+    let role;
 
     this.StayDetailsService
       .getAll()
@@ -82,6 +81,8 @@ export class StaydetailsListComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           if (this.user.username != 'admin') {
+            role = JSON.parse(localStorage.getItem('roles'));
+            role = role[0]?.itemCode;
             this.distributorService.getByConId(this.user.contactId)
               .pipe(first())
               .subscribe({
