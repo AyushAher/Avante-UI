@@ -34,12 +34,10 @@ import {environment} from "../../../environments/environment";
   // styleUrls: ['./staydetails.component.css']
 })
 export class StaydetailsComponent implements OnInit {
-  travelDetailform: FormGroup;
-  travelDetail: Staydetails;
+  Form: FormGroup;
+  Model: Staydetails;
   loading = false;
   submitted = false;
-  isSave = false;
-  type: string;
   id: string;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
@@ -65,7 +63,7 @@ export class StaydetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private travelDetailService: StaydetailsService,
+    private Service: StaydetailsService,
     private alertService: AlertService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
@@ -79,8 +77,7 @@ export class StaydetailsComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.accountService.userValue;
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
+    let role;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
@@ -93,6 +90,12 @@ export class StaydetailsComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
+
+    if (this.user.username != "admin") {
+      role = JSON.parse(localStorage.getItem('roles'));
+      role = role[0]?.itemCode;
+    }
+
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
@@ -107,7 +110,7 @@ export class StaydetailsComponent implements OnInit {
     }
 
 
-    this.travelDetailform = this.formBuilder.group({
+    this.Form = this.formBuilder.group({
       engineerid: ["", [Validators.required]],
       distId: ["", [Validators.required]],
       servicerequestid: ["", [Validators.required]],
@@ -119,8 +122,8 @@ export class StaydetailsComponent implements OnInit {
       hotelname: "",
       stayaddress: "",
       roomdetails: "",
-      pricepernight: "",
-      totalcost: "",
+      pricepernight: 0,
+      totalcost: 0,
       isactive: true,
       isdeleted: false,
       totalCurrencyId: "",
@@ -142,14 +145,14 @@ export class StaydetailsComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get("id");
 
     if (this.id != null) {
-      this.travelDetailService
+      this.Service
         .getById(this.id)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.getengineers(data.object.distId)
             this.getservicerequest(data.object.distId)
-            this.travelDetailform.patchValue(data.object);
+            this.Form.patchValue(data.object);
           },
           error: (error) => {
             this.notificationService.showError("Error", "Error");
@@ -159,46 +162,46 @@ export class StaydetailsComponent implements OnInit {
     }
 
     if (this.isEng) {
-      this.travelDetailform.get('hotelname').disable()
-      this.travelDetailform.get('stayaddress').disable()
-      this.travelDetailform.get('roomdetails').disable()
-      this.travelDetailform.get('pricepernight').disable()
-      this.travelDetailform.get('totalcost').disable()
-      this.travelDetailform.get('totalCurrencyId').disable()
-      this.travelDetailform.get('perNightCurrencyId').disable()
-    } else if (this.isDist) {
-      this.travelDetailform.get('hotelname').setValidators([Validators.required]);
-      this.travelDetailform.get('hotelname').updateValueAndValidity();
+      this.Form.get('hotelname').disable()
+      this.Form.get('stayaddress').disable()
+      this.Form.get('roomdetails').disable()
+      this.Form.get('pricepernight').disable()
+      this.Form.get('totalcost').disable()
+      this.Form.get('totalCurrencyId').disable()
+      this.Form.get('perNightCurrencyId').disable()
+    } else if (this.isDist && this.id != null) {
+      this.Form.get('hotelname').setValidators([Validators.required]);
+      this.Form.get('hotelname').updateValueAndValidity();
 
-      this.travelDetailform.get('stayaddress').setValidators([Validators.required]);
-      this.travelDetailform.get('stayaddress').updateValueAndValidity();
+      this.Form.get('stayaddress').setValidators([Validators.required]);
+      this.Form.get('stayaddress').updateValueAndValidity();
 
-      this.travelDetailform.get('roomdetails').setValidators([Validators.required]);
-      this.travelDetailform.get('roomdetails').updateValueAndValidity();
+      this.Form.get('roomdetails').setValidators([Validators.required]);
+      this.Form.get('roomdetails').updateValueAndValidity();
 
-      this.travelDetailform.get('pricepernight').setValidators([Validators.required]);
-      this.travelDetailform.get('pricepernight').updateValueAndValidity();
+      this.Form.get('pricepernight').setValidators([Validators.required]);
+      this.Form.get('pricepernight').updateValueAndValidity();
 
-      this.travelDetailform.get('totalcost').setValidators([Validators.required]);
-      this.travelDetailform.get('totalcost').updateValueAndValidity();
+      this.Form.get('totalcost').setValidators([Validators.required]);
+      this.Form.get('totalcost').updateValueAndValidity();
 
-      this.travelDetailform.get('totalCurrencyId').setValidators([Validators.required]);
-      this.travelDetailform.get('totalCurrencyId').updateValueAndValidity();
+      this.Form.get('totalCurrencyId').setValidators([Validators.required]);
+      this.Form.get('totalCurrencyId').updateValueAndValidity();
 
-      this.travelDetailform.get('perNightCurrencyId').setValidators([Validators.required]);
-      this.travelDetailform.get('perNightCurrencyId').updateValueAndValidity();
+      this.Form.get('perNightCurrencyId').setValidators([Validators.required]);
+      this.Form.get('perNightCurrencyId').updateValueAndValidity();
     }
 
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.travelDetailform.get('distId').setValue(data.object[0].id)
+          this.Form.get('distId').setValue(data.object[0].id)
           this.getengineers(data.object[0].id)
         }
       })
     if (role == environment.engRoleCode) {
-      this.travelDetailform.get('engineerid').setValue(this.user.contactId)
+      this.Form.get('engineerid').setValue(this.user.contactId)
     }
     this.distributorservice.getAll()
       .pipe(first())
@@ -227,7 +230,7 @@ export class StaydetailsComponent implements OnInit {
   }
 
   get f() {
-    return this.travelDetailform.controls;
+    return this.Form.controls;
   }
 
   getservicerequest(id: string) {
@@ -269,21 +272,21 @@ export class StaydetailsComponent implements OnInit {
     this.alertService.clear();
 
     // stop here if form is invalid
-    if (this.travelDetailform.invalid) {
+    if (this.Form.invalid) {
       return;
     }
     // this.isSave = true;
     this.loading = true;
 
-    let currentDate = new Date(this.travelDetailform.value.checkindate);
-    let dateSent = new Date(this.travelDetailform.value.checkoutdate);
+    let currentDate = new Date(this.Form.value.checkindate);
+    let dateSent = new Date(this.Form.value.checkoutdate);
 
     let calc = Math.floor(
       (Date.UTC(
         dateSent.getFullYear(),
         dateSent.getMonth(),
         dateSent.getDate()
-      ) -
+        ) -
         Date.UTC(
           currentDate.getFullYear(),
           currentDate.getMonth(),
@@ -293,16 +296,16 @@ export class StaydetailsComponent implements OnInit {
     );
 
     const datepipie = new DatePipe("en-US");
-    this.travelDetailform.value.checkindate = datepipie.transform(
+    this.Form.value.checkindate = datepipie.transform(
       currentDate,
       "MM/dd/yyyy"
     );
 
-    this.travelDetailform.value.checkoutdate = datepipie.transform(
+    this.Form.value.checkoutdate = datepipie.transform(
       dateSent,
       "MM/dd/yyyy"
     );
-    this.travelDetail = this.travelDetailform.value;
+    this.Model = this.Form.value;
 
     if (calc > 1) {
       this.valid = true;
@@ -316,13 +319,13 @@ export class StaydetailsComponent implements OnInit {
       return;
     }
 
-    if (!this.travelDetailform.value.isactive) {
-      this.travelDetailform.value.isactive = false;
+    if (!this.Form.value.isactive) {
+      this.Form.value.isactive = false;
     }
     if (this.valid) {
       if (this.id == null) {
-        this.travelDetailService
-          .save(this.travelDetail)
+        this.Service
+          .save(this.Model)
           .pipe(first())
           .subscribe({
             next: (data: ResultMsg) => {
@@ -345,10 +348,10 @@ export class StaydetailsComponent implements OnInit {
             },
           });
       } else {
-        this.travelDetail = this.travelDetailform.value;
-        this.travelDetail.id = this.id;
-        this.travelDetailService
-          .update(this.id, this.travelDetail)
+        this.Model = this.Form.value;
+        this.Model.id = this.id;
+        this.Service
+          .update(this.id, this.Model)
           .pipe(first())
           .subscribe({
             next: (data: ResultMsg) => {
