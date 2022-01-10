@@ -11,10 +11,20 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
 
-            <div class="col-sm-4">
+            <div class="col-md-12" *ngIf="id==null">
+              <div class="input" style="width: 85%; display: inline-block; margin-right: 5%">
+                <label for="SearchPartNo">Search Spare Part by Part No.</label>
+                <input id="SearchPartNo" type="text" formControlName="SearchPartNo"
+                       class="form-control" [ngbTypeahead]="searchpart" [resultFormatter]="formatterpart"
+                       [inputFormatter]="formatterpart"/>
+              </div>
+              <button class="btn btn-primary" (click)="onSeearchByPartNo()" type="button">Search</button>
+            </div>
+
+            <div class="col-sm-4" hidden>
               <label for="configTypeid">Config Type</label>
 
-              <select id="configTypeid" formControlName="configType" #configType class="form-control"
+              <select id="configTypeid" #configType class="form-control"
                       (change)="onConfigChange(configType.value)"
                       [ngClass]="{ 'is-invalid': submitted && f.configType.errors }">
                 <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
@@ -26,10 +36,9 @@
                 <div *ngIf="f.configType.errors.required">Config Type is required</div>
               </div>
             </div>
-
-            <div class="col-md-4 col-sm-4">
+            <div class="col-md-4 col-sm-4" hidden>
               <label for="configValueid">Config Value</label>
-              <select id="configValueid" formControlName="configValue" class="form-control" #configvalue
+              <select id="configValueid" class="form-control" #configvalue
                       (change)="onConfigVChange(configType.value,configvalue.value)">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let c of configValueList" value={{c.id}}>
@@ -42,7 +51,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="partno">Part No.</label>
-              <input id="partno" type="text" formControlName="partNo"
+              <input id="partno" type="text" readonly formControlName="partNo"
                      class="form-control" [ngClass]="{ ' is -invalid': submitted && f.partNo.errors}"/>
               <div *ngIf="submitted && f.partNo.errors" class="invalid-feedback">
                 <div *ngIf="f.partNo.errors.required">
@@ -52,7 +61,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="hsccode">HSC Code</label>
-              <input id="hsccode" type="text" formControlName="hscCode"
+              <input id="hsccode" type="text" readonly formControlName="hscCode"
                      class="form-control" [ngClass]="{ ' is -invalid': submitted && f.hscCode.errors}"/>
               <div *ngIf="submitted && f.hscCode.errors" class="invalid-feedback">
                 <div *ngIf="f.hscCode.errors.required">
@@ -66,7 +75,7 @@
                      class="form-control" [ngClass]="{ ' is -invalid': submitted && f.qtyAvailable.errors}"/>
               <div *ngIf="submitted && f.qtyAvailable.errors" class="invalid-feedback">
                 <div *ngIf="f.qtyAvailable.errors.required">
-                  qtyAvailable is required
+                  Qty. Available is required
                 </div>
               </div>
             </div>

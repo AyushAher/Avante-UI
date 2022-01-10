@@ -6,15 +6,17 @@ import {
   AlertService,
   ConfigTypeValueService,
   ListTypeService,
-  NotificationService, ProfileService,
+  NotificationService,
+  ProfileService,
   SparePartService
 } from "../_services";
 import {CustspinventoryService} from "../_services/custspinventory.service";
 import {Custspinventory} from "../_models/custspinventory";
-import {first} from "rxjs/operators";
+import {debounceTime, distinctUntilChanged, first, map} from "rxjs/operators";
 import {ConfigTypeValue, ListTypeItem, ResultMsg, SparePart, User} from "../_models";
 import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
 import {DatePipe} from "@angular/common";
+import {Observable, OperatorFunction} from "rxjs";
 
 @Component({
   selector: "app-Custspinventory",
@@ -46,6 +48,7 @@ export class CustSPInventoryComponent implements OnInit {
   private columnApi: ColumnApi;
   private api: GridApi;
   historyModel
+  sparepartlist: any
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,6 +64,15 @@ export class CustSPInventoryComponent implements OnInit {
     private profileService: ProfileService,
   ) {
   }
+
+  searchpart: OperatorFunction<string, readonly SparePart[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term === '' ? []
+        : this.sparepartlist.filter(v => v.partNo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )
+  formatterpart = (x: SparePart) => x.partNo;
 
   ngOnInit() {
     this.user = this.accountService.userValue;
@@ -83,14 +95,22 @@ export class CustSPInventoryComponent implements OnInit {
     }
 
     this.form = this.formBuilder.group({
-      isactive: [true],
-      configType: ["", Validators.required],
-      configValue: ["", Validators.required],
       partNo: ["", Validators.required],
       hscCode: ["", Validators.required],
       qtyAvailable: ["", Validators.required],
+      SearchPartNo: [""],
+      sparePartId: [""],
+      isactive: [true],
       isdeleted: [false],
     })
+    this.sparePartService.getAll()
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          data.result ? this.sparepartlist = data.object : this.sparepartlist = [];
+        }
+      })
+
     this.id = this.route.snapshot.paramMap.get("id");
 
     if (this.id != null) {
@@ -98,6 +118,7 @@ export class CustSPInventoryComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            this.getSparePartByPartNo(data.object.sparePart.partNo)
             this.configService.getById(data.object.configType)
               .pipe(first())
               .subscribe({
@@ -109,6 +130,7 @@ export class CustSPInventoryComponent implements OnInit {
                   this.loading = false;
                 }
               });
+            // this.form.get("SearchPartNo")
             this.form.patchValue(data.object);
             this.Service.getHistory(this.user.contactId, this.id).pipe(first()).subscribe({
               next: (data: any) => {
@@ -173,6 +195,32 @@ export class CustSPInventoryComponent implements OnInit {
           this.loading = false;
         }
       });
+  }
+
+  onSeearchByPartNo() {
+    var partno = this.form.get("SearchPartNo").value
+    partno = partno.partNo;
+    this.getSparePartByPartNo(partno)
+  }
+
+  getSparePartByPartNo(partno: string) {
+    this.Service.GetSparePartByNo(partno)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          if (!data.result || data.object == null) {
+            this.notificationService.showError(data.resultMessage, "Error")
+            return;
+          }
+          console.log(data)
+          this.form.get("sparePartId").setValue(data.object.id)
+          this.form.get("partNo").setValue(data.object.partno)
+          this.form.get("hscCode").setValue(data.object.hscode)
+        },
+        error: (error: any) => {
+          this.notificationService.showError(error, "Error")
+        }
+      })
   }
 
   get f() {

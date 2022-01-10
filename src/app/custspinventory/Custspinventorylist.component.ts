@@ -91,25 +91,7 @@ export class CustspinventorylistComponent implements OnInit {
         },
       },
       {
-        headerName: "Configtype",
-        field: "configTypeId",
-        filter: true,
-        tooltipField: "configtype",
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-      },
-      {
-        headerName: "ConfigValue",
-        field: "configValueId",
-        filter: true,
-        tooltipField: "configvalue",
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-      },
-      {
-        headerName: "Partno",
+        headerName: "Part No",
         field: "partNo",
         filter: true,
         tooltipField: "partno",
@@ -118,7 +100,7 @@ export class CustspinventorylistComponent implements OnInit {
         sortable: true,
       },
       {
-        headerName: "Hsccode",
+        headerName: "HSC Code",
         field: "hscCode",
         filter: true,
         tooltipField: "hsccode",
@@ -127,7 +109,7 @@ export class CustspinventorylistComponent implements OnInit {
         sortable: true,
       },
       {
-        headerName: "Qtyavailable",
+        headerName: "Qty. Available",
         field: "qtyAvailable",
         filter: true,
         tooltipField: "qtyavailable",
@@ -141,7 +123,7 @@ export class CustspinventorylistComponent implements OnInit {
   onGridReady(params: any): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
-    // this.api.sizeColumnsToFit();
+    this.api.sizeColumnsToFit();
 
   }
 }

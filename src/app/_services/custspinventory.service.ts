@@ -31,6 +31,10 @@ export class CustspinventoryService {
     return this.http.get<Custspinventory>(`${environment.apiUrl}/CustSPInventory/${id}`);
   }
 
+  GetSparePartByNo(id: string) {
+    return this.http.get(`${environment.apiUrl}/CustSPInventory/GetSparePartByNo/${id}`);
+  }
+
   update(id, params) {
     return this.http.put(`${environment.apiUrl}/CustSPInventory/${id}`, params)
       .pipe(map(x => {
