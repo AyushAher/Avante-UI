@@ -1,31 +1,31 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
-import { Amc } from '../_models';
-import { AccountService } from '../_services';
+import {environment} from '../../environments/environment';
+import {Amc} from '../_models';
+import {AccountService} from '../_services';
 
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class zohoapiService {
   private AmcSubject: BehaviorSubject<Amc>;
   public Amc: Observable<Amc>;
 
-    constructor(
-        private router: Router,
-      private http: HttpClient,
-      private accountService: AccountService
-    ) {
-      //this.distrubutorSubject = new BehaviorSubject<Distributor>();
-      //this.user = this.distrubutorSubject.asObservable();
-    }
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private accountService: AccountService
+  ) {
+    //this.distrubutorSubject = new BehaviorSubject<Distributor>();
+    //this.user = this.distrubutorSubject.asObservable();
+  }
 
-    //public get userValue(): User {
-    //    return this.userSubject.value;
-    //}
+  //public get userValue(): User {
+  //    return this.userSubject.value;
+  //}
 
   authservice() {
     window.location.href = environment.zohocodeapi;
@@ -38,8 +38,11 @@ export class zohoapiService {
     //formData.append('client_secret', environment.secret);
     //formData.append('redirect_uri', environment.redirecturl);
     //formData.append('grant_type', "authorization_code");
-   // let url = "${ environment.apiUrl }/Amc/${id}"
-    return this.http.get(`${environment.apiUrl}/Zoho/GetZToken/${code}`);
+    // let url = "${ environment.apiUrl }/Amc/${id}"
+     return this.http.get(`${environment.apiUrl}/Zoho/GetZToken/${code}`);
+    // debugger;
+    // var Zdata = this.http.post(`https://accounts.zoho.com/oauth/v2/token?code=${code}&client_id=1000.5H07NQJOLXW69IEHWG3GICTVU8L51W&client_secret=2f54ec5f719c6ee911a367c16211f8d3576378d013&redirect_uri=http://localhost:4200/custpayrpt&grant_type=authorization_code`, null);
+    // return Zdata
   }
 
     getAllinvoice() {
