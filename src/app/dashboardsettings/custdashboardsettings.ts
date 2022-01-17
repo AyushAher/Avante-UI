@@ -162,7 +162,6 @@ export class CustdashboardsettingsComponent implements OnInit {
       }
 
     }
-    console.log(this.localData)
   }
 
   resetOptions() {
@@ -212,6 +211,8 @@ export class CustdashboardsettingsComponent implements OnInit {
     let row3 = 0
 
     this.localData.forEach(value => {
+      value.isactive = true
+      value.isdeleted = false
       switch (value.displayIn) {
         case "row1":
           row1 = row1 + 1
@@ -224,7 +225,7 @@ export class CustdashboardsettingsComponent implements OnInit {
           break;
       }
     })
-
+    console.log(this.localData)
     if (row1 === 4 && row2 === 3 && row3 === 3) {
       this.Service.update(this.id, this.localData)
         .pipe(first())

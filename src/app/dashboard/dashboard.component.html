@@ -2,7 +2,6 @@
     <main class="main-content position-relative border-radius-lg ">
         <div class="container-fluid py-4">
             <div class="row">
-
               <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4" style="display: none" id="CNAME">
                 <div class="card">
                   <div class="card-header p-3 pt-2">
@@ -12,12 +11,12 @@
                     </div>
                     <div class="text-end pt-1">
                       <p class="text-sm mb-0 text-capitalize">Client Name</p>
-                      <h4 class="mb-0">OBA Cement</h4>
+                      <h4 class="mb-0">{{customerName}}</h4>
                     </div>
                   </div>
                   <hr class="dark horizontal my-0">
                   <div class="card-footer p-3">
-                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Nigeria</span>-
+                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">{{customerCountry}}</span>-
                       Country
                     </p>
                   </div>
@@ -54,7 +53,7 @@
                     </div>
                     <div class="text-end pt-1">
                       <p class="text-sm mb-0 text-capitalize">Contacts</p>
-                      <h4 class="mb-0">169</h4>
+                      <h4 class="mb-0">{{totalCustContacts}}</h4>
                     </div>
                   </div>
                   <hr class="dark horizontal my-0">
@@ -75,12 +74,12 @@
                     </div>
                     <div class="text-end pt-1">
                       <p class="text-sm mb-0 text-capitalize">Distributor Name</p>
-                      <h4 class="mb-0">Avantgarde-Dubai</h4>
+                      <h4 class="mb-0">{{custDefDistName}}</h4>
                     </div>
                   </div>
                   <hr class="dark horizontal my-0">
                   <div class="card-footer p-3">
-                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Nigeria</span>-
+                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">{{defDistCountryName}}</span>-
                       Country
                     </p>
                   </div>
@@ -146,133 +145,26 @@
                 </div>
                 <div class="card-body px-2 pb-2">
                   <div class="table-responsive">
-                                <table class="table align-items-center mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                SR#
-                                            </th>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Instrument
-                                            </th>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Engineer
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">SR131</h6>
+                    <table class="table align-items-center mb-0">
+                      <thead>
 
-                                            </td>
-                                            <td>2500W-XY</td>
+                      <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">SR#</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Instrument</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Engineer</th>
+                      </tr>
 
-                                            <td class="align-middle">
-                                                Ayush
-                                            </td>
-                                        </tr>
+                      </thead>
+                      <tbody>
 
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">SR131</h6>
+                      <tr *ngFor="let x of srList">
+                        <td><h6 class="mb-0 text-sm">{{x.serreqno}}</h6></td>
+                        <td>{{x.machineModelName}}</td>
+                        <td class="align-middle"> {{x.assignedtoName}}</td>
+                      </tr>
 
-                                            </td>
-                                            <td>2500W-XY</td>
-
-                                            <td class="align-middle">
-                                                Ayush
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">SR131</h6>
-
-                                            </td>
-                                            <td>2500W-XY</td>
-
-                                            <td class="align-middle">
-                                                Ayush
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">SR131</h6>
-
-                                            </td>
-                                            <td>2500W-XY</td>
-
-                                            <td class="align-middle">
-                                                Ayush
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">SR131</h6>
-
-                                            </td>
-                                            <td>2500W-XY</td>
-
-                                            <td class="align-middle">
-                                                Ayush
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">SR131</h6>
-
-                                            </td>
-                                            <td>2500W-XY</td>
-
-                                            <td class="align-middle">
-                                                Ayush
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">SR131</h6>
-
-                                            </td>
-                                            <td>2500W-XY</td>
-
-                                            <td class="align-middle">
-                                                Ayush
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">SR131</h6>
-
-                                            </td>
-                                            <td>2500W-XY</td>
-
-                                            <td class="align-middle">
-                                                Ayush
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">SR131</h6>
-
-                                            </td>
-                                            <td>2500W-XY</td>
-
-                                          <td class="align-middle">
-                                            Ayush
-                                          </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -403,60 +295,20 @@
                   <h6>Spare Recommended</h6>
                 </div>
                 <div class="card-body p-3" style="height: 342.6px; overflow-y: auto;">
-
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <h5>Contactor 24VDC/32A<span>(5)</span></h5>
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                       *ngFor="let x of spRecomList">
+                    <h5>{{x.partno}}<span>({{x.qtyRecommended}})</span></h5>
                     <div class="sub-heading">
-                      <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
+                      <span class="dist">{{x.defaultDistributor}}: </span> <span
+                      class="eng">{{x.assignedTofName}}</span>
                     </div>
 
                     <button type="button" class="btn-close" data-bs-dismiss="alert"
                             aria-label="Close"></button>
                   </div>
-
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <h5>Contactor 24VDC/32A<span>(5)</span></h5>
-                    <div class="sub-heading">
-                      <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
-                    </div>
-
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                            aria-label="Close"></button>
-                  </div>
-
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <h5>Contactor 24VDC/32A<span>(5)</span></h5>
-                    <div class="sub-heading">
-                      <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
-                                </div>
-
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                <h5>Contactor 24VDC/32A<span>(5)</span></h5>
-                                <div class="sub-heading">
-                                    <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
-                                </div>
-
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                <h5>Contactor 24VDC/32A<span>(5)</span></h5>
-                                <div class="sub-heading">
-                                    <span class="dist">Avantegarde-Dubai</span> <span class="eng">karthik</span>
-                                </div>
-
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
+              </div>
+            </div>
           </div>
         </div>
     </main>

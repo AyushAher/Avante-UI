@@ -1,6 +1,7 @@
 // customer dashboard
 function CustomerDashboardCharts() {
-  console.log('Customer Dashboard Charts')
+  let spInventory = JSON.parse(localStorage.getItem('spInventoryChart'))
+  let sReqType = JSON.parse(localStorage.getItem('servicerequesttype'))
   new Chart('chart-bars', {
     type: 'bar',
     data: {
@@ -84,7 +85,7 @@ function CustomerDashboardCharts() {
   new Chart('chart-line', {
     type: 'doughnut',
     data: {
-      labels: ['Preventive', 'AMC', 'Break Down', 'On Call', 'Planned'],
+      labels: sReqType.label,
       datasets: [
         {
           label: 'Service Request Types',
@@ -93,16 +94,10 @@ function CustomerDashboardCharts() {
           pointRadius: 5,
           // pointBackgroundColor: "rgba(255, 255, 255, .8)",
           pointBorderColor: 'transparent',
-          backgroundColor: [
-            '#990099',
-            '#109618',
-            '#ff9900',
-            '#dc3912',
-            '#3366cc',
-          ],
+          backgroundColor: sReqType.bgColor,
           borderColor: 'rgba(255, 255, 255, .8)',
           fill: true,
-          data: [20, 20, 20, 20, 20],
+          data: sReqType.chartData,
           maxBarThickness: 6,
         },
       ],
@@ -125,15 +120,10 @@ function CustomerDashboardCharts() {
   new Chart('chart-line-tasks', {
     type: 'line',
     data: {
-      labels: [
-        'Contactor',
-        'Press in Terminal',
-        'Kit Filter Safety',
-        'Kit Filter Safety',
-      ],
+      labels: spInventory.label,
       datasets: [
         {
-          label: 'Spare Inventory',
+          label: 'Qty. Available',
           tension: 0,
           pointRadius: 5,
           pointBackgroundColor: 'rgba(255, 255, 255, .8)',
@@ -142,7 +132,7 @@ function CustomerDashboardCharts() {
           borderWidth: 4,
           backgroundColor: 'transparent',
           fill: true,
-          data: [150, 240, 300, 400],
+          data: spInventory.data,
           maxBarThickness: 6,
         },
       ],
