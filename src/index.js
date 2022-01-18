@@ -2,6 +2,7 @@
 function CustomerDashboardCharts() {
   let spInventory = JSON.parse(localStorage.getItem('spInventoryChart'))
   let sReqType = JSON.parse(localStorage.getItem('servicerequesttype'))
+
   new Chart('chart-bars', {
     type: 'bar',
     data: {

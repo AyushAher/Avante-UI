@@ -69,11 +69,33 @@ export class DashboardComponent implements OnInit {
             label.push(x.partNo)
             chartData.push(x.qtyAvailable)
           })
-          localStorage.setItem('spInventoryChart', JSON.stringify({label: label, data: chartData}))
+          localStorage.setItem('spInventoryChart', JSON.stringify({label: label.reverse(), data: chartData.reverse()}))
         }
       });
 
-    CustomerDashboardCharts()
+    this.serviceRequestService.getAll(this.user.userId)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+
+          let label = []
+          let chartData = []
+          let bgColor = []
+
+          data.object.forEach(x => {
+            label.push(x.visittypeName)
+            chartData.push(data.object.filter(x => x.visittype == x.visittype).length)
+            bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
+          })
+
+          let srqType = {label: label, chartData: chartData, bgColor: bgColor}
+          localStorage.setItem('servicerequesttype', JSON.stringify(srqType))
+
+          this.srList = data.object.filter(x => x.createdby == this.user.userId);
+        }
+      });
+
+    setInterval(CustomerDashboardCharts(), 1000)
 
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "CUSDH");
@@ -138,28 +160,6 @@ export class DashboardComponent implements OnInit {
               );
             })
           },
-        });
-
-      this.serviceRequestService.getAll(this.user.userId)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-
-            let label = []
-            let chartData = []
-            let bgColor = []
-
-            data.object.forEach(x => {
-              label.push(x.visittypeName)
-              chartData.push(data.object.filter(x => x.visittype == x.visittype).length)
-              bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
-            })
-
-            let srqType = {label: label, chartData: chartData, bgColor: bgColor}
-            localStorage.setItem('servicerequesttype', JSON.stringify(srqType))
-
-            this.srList = data.object.filter(x => x.createdby == this.user.userId);
-          }
         });
 
     }
