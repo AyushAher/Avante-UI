@@ -15,7 +15,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="billto">Bill To</label>
               <select id="billto" formControlName="billtoid" class="form-control"
-                      (change)="GetSites($event.target.value)"
+                      (change)="GetSites($event.target['value'])"
                       [ngClass]="{ ' is -invalid': submitted && f.billtoid.errors}">
                 <option *ngFor="let i of customersList" value="{{i.id}}">{{i.custname}}
                 </option>
@@ -152,7 +152,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="tnc">TNC</label>
               <textarea id="tnc" type="text" formControlName="tnc" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.tnc.errors}"></textarea>
+                        [ngClass]="{ ' is -invalid': submitted && f.tnc.errors}"></textarea>
               <div Style="display: block" *ngIf="submitted && f.tnc.errors" class="invalid-feedback">
                 <div *ngIf="f.tnc.errors.required">
                   TNC is required
@@ -160,14 +160,23 @@
               </div>
             </div>
 
-          </div> <br />
+          </div>
+          <br/>
 
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Add Instrument</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr/>
           <div class="row">
             <div class="col-md-9">
-              <label for="search">Search Instruments By Serial No. </label>
+              <label>Search Instruments By Serial No. </label>
 
-              <input (input)="InstrumentSearch($event.target.value)" #instrumentSearch list="browsers" name="browser"
-                id="browser" class="form-control">
+              <input (input)="InstrumentSearch($event.target['value'])" #instrumentSearch list="browsers" name="browser"
+                     id="browser" class="form-control">
               <datalist id="browsers">
                 <option *ngFor="let i of instrumentAutoComplete" value="{{i.serialnos}}">
               </datalist>

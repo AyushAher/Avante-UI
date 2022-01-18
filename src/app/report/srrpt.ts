@@ -1,17 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { User, Customer, Country, DistributorRegion, ProfileReadOnly, Amc, ServiceReport } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import {Country, ProfileReadOnly, ServiceReport, User} from '../_models';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 
 import {
-  AccountService, AlertService, CustomerService, CountryService,
-  NotificationService, ProfileService, ServiceReportService, AmcService, zohoapiService
+  AccountService,
+  AlertService,
+  AmcService,
+  CountryService,
+  CustomerService,
+  NotificationService,
+  ProfileService,
+  ServiceReportService,
+  zohoapiService
 } from '../_services';
-import { RenderComponent } from '../distributor/rendercomponent';
-
 
 
 @Component({
@@ -50,9 +55,9 @@ export class srrptComponent implements OnInit {
     private zohoservice: zohoapiService,
     private ServiceReportService: ServiceReportService
   ) {
-    
+
   }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -68,7 +73,7 @@ export class srrptComponent implements OnInit {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
     }
-    
+
 
     this.form = this.fb.group({
       search: ['']
@@ -80,7 +85,6 @@ export class srrptComponent implements OnInit {
 
 
   getrpt(custname: string) {
-    debugger;
     this.ServiceReportService.getbycust(custname)
       .pipe(first())
       .subscribe({
@@ -110,7 +114,7 @@ export class srrptComponent implements OnInit {
       field: 'id',
       filter: false,
       enableSorting: false,
-      width: 150,
+      width: 400,
       editable: false,
       sortable: false,
     }, {

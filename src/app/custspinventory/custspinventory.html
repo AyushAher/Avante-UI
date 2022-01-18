@@ -81,12 +81,18 @@
             </div>
           </div>
           <br/>
-          <div class="row" *ngIf="id!=null">
-            <h3>Consumed History</h3>
-            <hr/>
-                  <div class="clearfix"></div>
 
-            <ag-grid-angular style="width: 50%; height: 400px; margin-right:50%;margin-top:5px;" id="history" class="ag-theme-alpine"
+          <div class="page-title" *ngIf="id!=null">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Consumed History</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr/>
+
+          <div class="row" *ngIf="id!=null">
+            <ag-grid-angular style="width: 50%; height: 400px; margin-right:50%;margin-top:5px;" id="history"
+                             class="ag-theme-alpine"
                              (gridReady)="onGridReady($event)"
                              [columnDefs]="columnDefs" [rowData]="historyModel" rowSelection="single" pagination="true"
                              paginationPageSize=8>

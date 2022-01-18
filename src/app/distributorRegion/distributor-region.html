@@ -31,19 +31,21 @@
              aria-selected="false">Region Contact</a>
         </li>
       </ul>
-      <!--<div class="page-title">
-        <div class="title_left">
-          <h3>Distributor Region</h3>
-        </div>
-      </div>-->
-      <div class="clearfix"></div>
 
+      <div class="page-title">
+        <div class="title_left">
+          <h3 style="padding:15px 0 5px 0">Distributor Region</h3>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <hr/>
       <div class="col-md-12 col-sm-12 ">
         <form [formGroup]="destributorRegionform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-4">
               <label for="distid">Distributor</label>
-              <select formControlName="distid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.distid.errors }">
+              <select formControlName="distid" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.distid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of distributors" value={{distributor.id}}>
                   {{distributor.distname}}
@@ -78,24 +80,30 @@
               </div>
             </div>
 
-              <div class="col-md-4 col-sm-4" *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true">
-                <label for=""></label>
-                <div class="checkbox">
-                  <label for="isblocked">
-                    <input type="checkbox" formControlName="isblocked" class="" />
-                    Block Distributer Account
-                  </label>
-                </div>
+            <div class="col-md-4 col-sm-4"
+                 *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true">
+              <label for=""></label>
+              <div class="checkbox">
+                <label for="isblocked">
+                  <input type="checkbox" formControlName="isblocked" class=""/>
+                  Block Distributer Account
+                </label>
               </div>
+            </div>
           </div>
-          <br />
-          <p><b>Address</b></p>
-          <hr>
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Address</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr/>
           <div formGroupName="address">
             <div class="row">
               <div class="col-sm-4">
                 <label for="street">Street</label>
-                <input type="text" formControlName="street" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }" />
+                <input type="text" formControlName="street" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }"/>
                 <div *ngIf="submitted && a.get('street').errors" class="invalid-feedback">
                   <div *ngIf="a.get('street').errors.required">Street is required</div>
                 </div>

@@ -184,16 +184,27 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
-              <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile(fileInput.files,id)" />
+              <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput
+                     (change)="uploadFile(fileInput.files,id)"/>
               <!--<label for="imageUpload" *ngIf="editFile" [ngClass]="['custom-label', 'upload-image']"></label>-->
-              <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']" (click)="removeUploadedFile()"></label>
+              <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
+                     (click)="removeUploadedFile()"></label>
             </div>
           </div>
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Spare Parts List</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr/>
 
           <div class="row">
             <div class="col-sm-4">
               <label for="configtypeid">Config Type</label>
-              <select formControlName="" class="form-control" #mySelect (change)="onConfigChange(mySelect.value)" [ngClass]="{ 'is-invalid': submitted && f.configtypeid.errors }">
+              <select formControlName="" class="form-control" #mySelect (change)="onConfigChange(mySelect.value)"
+                      [ngClass]="{ 'is-invalid': submitted && f.configtypeid.errors }">
                 <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
                 </option>
@@ -303,6 +314,14 @@
           <!--              &lt;!&ndash;<a href="pdfBase64" download="PdffileData.fileName">{{ PdffileData.fileName }}</a>&ndash;&gt;-->
           <!--            </div>-->
           <!--          </div>-->
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Attachments</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr/>
 
           <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
             <div class="col-md-3">

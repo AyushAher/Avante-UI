@@ -12,12 +12,10 @@
 
                 <form [formGroup]="form" (ngSubmit)="onSubmit()">
                     <div class="row">
-
                       <div class="col-md-4 col-sm-4" [style.display]="(hasId)?'block':'none'">
                         <label for="offReqNo">Offer Request No.</label>
                         <input id="offReqNo" readonly type="text" formControlName="offReqNo" class="form-control">
                       </div>
-
                       <div class="col-md-4 col-sm-4">
                         <label for="distributor">Distributor</label>
                         <select id="distributor" type="text" formControlName="distributorid" class="form-control"
@@ -52,7 +50,6 @@
                           </div>
                         </div>
                       </div>
-
                       <div class="col-md-4 col-sm-4" hidden>
                         <label for="status">Status</label>
                         <input id="status" type="text" formControlName="status" class="form-control"
@@ -73,20 +70,27 @@
                           </div>
                         </div>
                       </div>
-
                     </div>
 
-                    <div class="row" style="margin-top:50px">
-                      <div class="col-md-9">
-                        <label for="browser">Search SpareParts By Part No. </label>
-                        <input (input)="SparePartsSearch($event.target.value)" #sparePartsSearch list="browsers"
-                               name="browser" id="browser" class="form-control">
-                        <datalist id="browsers">
-                          <option *ngFor="let i of sparePartsAutoComplete" value="{{i.partno}}">
-                        </datalist>
-                      </div>
+                  <div class="page-title">
+                    <div class="title_left">
+                      <h3 style="padding:15px 0 5px 0">Add Spare Parts</h3>
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                  <hr/>
 
-                      <div class="col-md-3" style="margin-top:30px">
+                  <div class="row" style="margin-top:50px">
+                    <div class="col-md-9">
+                      <label for="browser">Search SpareParts By Part No. </label>
+                      <input (input)="SparePartsSearch($event.target.value)" #sparePartsSearch list="browsers"
+                             name="browser" id="browser" class="form-control">
+                      <datalist id="browsers">
+                        <option *ngFor="let i of sparePartsAutoComplete" value="{{i.partno}}">
+                      </datalist>
+                    </div>
+
+                    <div class="col-md-3" style="margin-top:30px">
                         <button class="btn btn-primary" (click)="AddSpareParts(sparePartsSearch.value)"
                                 type="button" class="btn btn-primary">Add SpareParts
                         </button>
@@ -106,12 +110,14 @@
                   <br/>
 
                   <div class="attachment my-4">
-                    <div class="page-title">
-                      <div class="title_left">
-                        <h3>Attachments</h3>
-                        <hr>
-                      </div>
+
+                  <div class="page-title">
+                    <div class="title_left">
+                      <h3 style="padding:15px 0 5px 0">Attachments</h3>
                     </div>
+                  </div>
+                  <div class="clearfix"></div>
+                  <hr/>
 
                     <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
                       <div class="col-md-3">
