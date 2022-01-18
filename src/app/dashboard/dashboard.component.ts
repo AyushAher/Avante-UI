@@ -11,7 +11,6 @@ import {
   SrRecomandService
 } from "../_services";
 import {first} from "rxjs/operators";
-import {DatePipe} from "@angular/common";
 import {CustspinventoryService} from "../_services/custspinventory.service";
 
 declare function CustomerDashboardCharts(): any;
@@ -150,15 +149,7 @@ export class DashboardComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.spRecomList = data.object;
-            const datepipie = new DatePipe("en-US");
-
-            this.spRecomList.forEach((value) => {
-              value.assignedTofName = value.assignedTofName + " " + value.assignedTolName
-              value.serviceReportDate = datepipie.transform(
-                value.serviceReportDate,
-                "MM/dd/yyyy"
-              );
-            })
+            this.spRecomList.forEach((value) => value.assignedTofName = value.assignedTofName + " " + value.assignedTolName)
           },
         });
 
