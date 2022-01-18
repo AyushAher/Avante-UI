@@ -37,7 +37,13 @@ export class DashboardComponent implements OnInit {
   custDefDistId: any
   defDistCountryName: any
   spRecomList: any
-  srList: any
+  srList: any;
+
+  currentIndex = 0;
+  custSite = []
+  siteName: string = ""
+  siteRegion: string = ""
+
 
   constructor(
     private accountService: AccountService,
@@ -94,7 +100,7 @@ export class DashboardComponent implements OnInit {
         }
       });
 
-    setInterval(CustomerDashboardCharts(), 1000)
+    setTimeout(CustomerDashboardCharts(), 0)
 
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "CUSDH");
@@ -122,6 +128,11 @@ export class DashboardComponent implements OnInit {
                 .subscribe({
                   next: (data: any) => {
                     let cust = data.object[0]
+
+                    this.custSite = cust.sites;
+                    this.siteName = this.custSite[this.currentIndex].custregname;
+                    this.siteRegion = this.custSite[this.currentIndex].regname;
+
                     this.customerName = cust?.custname;
                     this.customerCountry = cust?.address.countryName
                     this.custDefDistName = cust.defdist
@@ -155,5 +166,21 @@ export class DashboardComponent implements OnInit {
 
     }
   }
+
+
+  next() {
+    let max = this.custSite.length - 1;
+    this.currentIndex != max ? this.currentIndex++ : this.currentIndex = 0;
+
+    this.siteName = this.custSite[this.currentIndex].custregname;
+    this.siteRegion = this.custSite[this.currentIndex].regname;
+  }
+
+  prev() {
+    this.currentIndex != 0 ? this.currentIndex-- : this.currentIndex++;
+    this.siteName = this.custSite[this.currentIndex].custregname;
+    this.siteRegion = this.custSite[this.currentIndex].regname;
+  }
+
 
 }

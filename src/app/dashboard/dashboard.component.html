@@ -5,9 +5,9 @@
               <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4" style="display: none" id="CNAME">
                 <div class="card">
                   <div class="card-header p-3 pt-2">
-                    <div
-                      class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
-<!--                      <i class="fas fa-fw fa-user fa-5x"></i>-->
+                    <div style="background-color:#9e9e9e;"
+                         class="icon icon-lg icon-shape shadow-primary text-center border-radius-xl mt-n4 position-absolute">
+                      <!--                      <i class="fas fa-fw fa-user fa-5x"></i>-->
                       <img src="../../assets/img/customer-removebg-preview.png" style="height:50px" alt="">
                     </div>
                     <div class="text-end pt-1">
@@ -33,22 +33,34 @@
                     </div>
                     <div class="text-end pt-1">
                       <p class="text-sm mb-0 text-capitalize">Sites</p>
-                      <h4 class="mb-0">Sokoto</h4>
+                      <h4 class="mb-0">{{siteName}}</h4>
                     </div>
                   </div>
                   <hr class="dark horizontal my-0">
                   <div class="card-footer p-3">
-                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Sokoto</span>- Site
+                    <p class="mb-0"><span
+                      class="text-success text-sm font-weight-bolder">{{siteRegion}}</span>- Site
                       Region
                     </p>
                   </div>
+                  <div class="controls">
+                    <button (click)="next()"
+                            style="position: absolute;top: 4rem;left: 15rem;width: fit-content;height: fit-content;padding:1px 4px; margin: 0;background:grey;opacity: 0.2;">
+                      >
+                    </button>
+                    <button (click)="prev()"
+                            style="position: absolute;top: 4rem;right: 15rem;width: fit-content;height: fit-content;padding:1px 4px; margin: 0;background:grey;opacity: 0.2;">
+                      <
+                    </button>
+                  </div>
+
                 </div>
               </div>
               <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4" style="display: none" id="CONTS">
                 <div class="card">
                   <div class="card-header p-3 pt-2">
                     <div
-                      class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                      class="icon icon-lg icon-shape bg-gradient-primary shadow-success text-center border-radius-xl mt-n4 position-absolute">
                       <i class="fas fa-fw fa-user fa-5x"></i>
 
                     </div>
