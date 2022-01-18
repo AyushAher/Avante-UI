@@ -385,22 +385,20 @@ function DistributorDashboardCharts() {
       },
     },
   )
-
+  let instrumentWithHighestServiceRequest = JSON.parse(localStorage.getItem('instrumentWithHighestServiceRequest'))
   var ctx5 = document.getElementById('chartBar5').getContext('2d')
   new Chart(ctx5, {
     type: 'bar',
     data: {
-      labels: [0, 1, 2, 3, 4, 5, 6, 7],
+      labels: instrumentWithHighestServiceRequest.label,
       datasets: [
         {
-          data: [2, 4, 10, 20, 45, 40, 35, 18],
+          data: instrumentWithHighestServiceRequest.data,
           backgroundColor: '#560bd0',
         },
-        {
-          data: [3, 6, 15, 35, 50, 45, 35, 25],
-          backgroundColor: '#cad0e8',
-        },
       ],
+      maxBarThickness: 2,
+
     },
     options: {
       responsive: true,
@@ -426,9 +424,8 @@ function DistributorDashboardCharts() {
           },
           ticks: {
             suggestedMin: 0,
-            suggestedMax: 500,
+            suggestedMax: 200,
             beginAtZero: true,
-            padding: 10,
             font: {
               size: 14,
               weight: 300,
@@ -440,6 +437,7 @@ function DistributorDashboardCharts() {
           },
         },
         x: {
+          barPercentage: 0.1,
           grid: {
             drawBorder: false,
             display: false,
@@ -451,7 +449,6 @@ function DistributorDashboardCharts() {
           ticks: {
             display: true,
             color: '#f8f9fa',
-            padding: 10,
             font: {
               size: 14,
               weight: 300,
