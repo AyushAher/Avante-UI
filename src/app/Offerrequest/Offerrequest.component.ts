@@ -168,6 +168,7 @@ export class OfferrequestComponent implements OnInit {
       status: [""],
       podate: ["", Validators.required],
       isdeleted: [false],
+      spareQuoteNo: [{value: "", disabled: true}]
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
