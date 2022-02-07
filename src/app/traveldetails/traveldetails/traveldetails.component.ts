@@ -1,8 +1,8 @@
-import {DatePipe} from "@angular/common";
-import {Component, EventEmitter, OnInit, Output} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {first} from "rxjs/operators";
+import { DatePipe } from "@angular/common";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { first } from "rxjs/operators";
 
 import {
   Currency,
@@ -26,10 +26,10 @@ import {
   ServiceRequestService,
   TravelDetailService
 } from "../../_services";
-import {FilerendercomponentComponent} from "../../Offerrequest/filerendercomponent.component";
-import {HttpEventType} from "@angular/common/http";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {environment} from "../../../environments/environment";
+import { FilerendercomponentComponent } from "../../Offerrequest/filerendercomponent.component";
+import { HttpEventType } from "@angular/common/http";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-traveldetails",
@@ -77,6 +77,7 @@ export class TraveldetailsComponent implements OnInit {
   currencyList: Currency[];
 
   @Output() public onUploadFinished = new EventEmitter();
+  distId: string;
 
 
   constructor(
@@ -101,7 +102,6 @@ export class TraveldetailsComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -142,11 +142,17 @@ export class TraveldetailsComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
-    } else if (role == environment.engRoleCode) {
+    } else {
+      role = role[0]?.itemCode;
+    }
+    if (role == environment.engRoleCode) {
       this.isEng = true;
       this.Form.get('flightdetails').get('currencyId').disable();
+      this.Form.get('engineerid').disable();
+      this.Form.get('distId').disable();
     } else if (role == environment.distRoleCode) {
       this.isDist = true;
+      this.Form.get('distId').disable();
       if (this.id != null) {
         this.Form.get('flightdetails').get('airline').setValidators([Validators.required])
         this.Form.get('flightdetails').get('airline').updateValueAndValidity()
@@ -182,7 +188,7 @@ export class TraveldetailsComponent implements OnInit {
           next: (data: any) => {
             this.flightdetails = true;
             this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
             this.Form.patchValue(data.object);
             this.GetFileList(data.object.id)
           },
@@ -217,11 +223,14 @@ export class TraveldetailsComponent implements OnInit {
       })
 
 
-    this.distributorservice.getByConId(this.user.contactId).pipe(first())
+    this.distributorservice.getByConId(this.user.contactId)
+      .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.Form.get('distId').setValue(data.object[0].id)
-          this.getengineers(data.object[0].id)
+          if (this.user.username != "admin") {
+            this.Form.get('distId').setValue(data.object[0].id);
+            this.getengineers(data.object[0].id)
+          }
         }
       })
     if (role == environment.engRoleCode) {
@@ -276,17 +285,13 @@ export class TraveldetailsComponent implements OnInit {
     return this.Form.controls.flightdetails;
   }
 
-  getservicerequest(id: string) {
+  getservicerequest(id: string, engId = null) {
     this.servicerequestservice
       .GetServiceRequestByDist(id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          if (this.isEng) {
-            this.servicerequest = (data.object.filter(x => x.assignedto == this.user.contactId));
-          } else if (this.isDist) {
-            this.servicerequest = (data.object.filter(x => x.distid == id));
-          }
+          this.servicerequest = data.object.filter(x => x.assignedto == engId)
         },
 
         error: (error) => {
@@ -301,8 +306,9 @@ export class TraveldetailsComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          this.distId = id
           this.engineer = data.object;
-          this.getservicerequest(id)
+          // this.getservicerequest(id)
         },
 
         error: (error) => {
@@ -311,6 +317,7 @@ export class TraveldetailsComponent implements OnInit {
         },
       });
   }
+
 
 
   getfil(x) {
@@ -378,7 +385,7 @@ export class TraveldetailsComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
-    this.FileShareService.upload(formData, id, "TRREQ",null).subscribe((event) => {
+    this.FileShareService.upload(formData, id, "TRREQ", null).subscribe((event) => {
       if (event.type === HttpEventType.UploadProgress)
         this.progress = Math.round((100 * event.loaded) / event.total);
       else if (event.type === HttpEventType.Response) {
@@ -432,7 +439,7 @@ export class TraveldetailsComponent implements OnInit {
         dateSent.getFullYear(),
         dateSent.getMonth(),
         dateSent.getDate()
-        ) -
+      ) -
         Date.UTC(
           currentDate.getFullYear(),
           currentDate.getMonth(),

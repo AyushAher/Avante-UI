@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
-import {first} from 'rxjs/operators';
-import {RenderComponent} from '../../distributor/rendercomponent';
-import {LocalExpenses, ProfileReadOnly, User} from '../../_models';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { first } from 'rxjs/operators';
+import { RenderComponent } from '../../distributor/rendercomponent';
+import { LocalExpenses, ProfileReadOnly, User } from '../../_models';
 import {
   AccountService,
   AlertService,
@@ -14,7 +14,7 @@ import {
   NotificationService,
   ProfileService
 } from '../../_services';
-import {environment} from "../../../environments/environment";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: 'app-localexpenseslist',
@@ -48,13 +48,12 @@ export class LocalexpenseslistComponent implements OnInit {
     private profileService: ProfileService,
     private distributorService: DistributorService,
     private listTypeService: ListTypeService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.user = this.accountService.userValue;
-this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -73,6 +72,8 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else {
+      role = role[0]?.itemCode;
     }
 
     this.Service.getAll()
@@ -88,7 +89,7 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
                   if (role == environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
                   } else if (role == environment.engRoleCode) {
-                    data.object = data.object.filter(x => x.createdby == this.user.userId)
+                    data.object = data.object.filter(x => x.engineerid == this.user.contactId)
                     this.List = data.object;
                   } else {
                     this.List = data.object

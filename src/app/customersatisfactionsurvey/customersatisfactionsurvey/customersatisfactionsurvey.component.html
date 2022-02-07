@@ -1,111 +1,111 @@
 <layout>
-    <div class="right_col" role="main">
-        <div class="container">
-          <div class="col-md-12 col-sm-12 ">
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="col-md-12 col-sm-12 ">
 
-            <div class="page-title">
-              <div class="title_left">
-                <h3>Customer Satisfaction Survey</h3>
-              </div>
-            </div>
-            <div class="clearfix"></div>
-            <hr/>
-
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
-              <div class="row">
-                <div class="col-sm-4">
-                  <label for="engineername">Distributor</label>
-                  <select formControlName="distId" id="" disabled class="form-control" #distributorid
-                          (input)="getservicerequest($event.target.value);getengineers($event.target.value)"
-                          [ngClass]="{'is-invalid':submitted && f.distId.errors }">
-                    <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
-                  </select>
-
-                  <div *ngIf="submitted && f.distId.errors" class="invalid-feedback">
-                    <div *ngIf="f.distId.errors.required">Distributor is required</div>
-                  </div>
-
-                </div>
-
-                <div class="col-sm-4">
-                  <label for="engineername">Engineer Name</label>
-
-                  <select name="" placeholder="Engineer Name" disabled formControlName="engineerid" id=""
-                          class="form-control" [ngClass]="{'is-invalid':submitted && f.engineerid.errors }">
-                    <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname +" "+ i.lname}}</option>
-                  </select>
-
-                  <div *ngIf="submitted && f.engineerid.errors" class="invalid-feedback">
-                    <div *ngIf="f.engineerid.errors.required">Engineer Name is required</div>
-                  </div>
-
-                </div>
-
-                <div class="col-md-4 col-sm-4">
-                  <label for="name">Service Request No</label>
-                  <select name="" placeholder="Service Request Id" formControlName="servicerequestid" id=""
-                          class="form-control" [ngClass]="{'is-invalid':submitted && f.servicerequestid.errors }">
-                    <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
-                  </select>
-
-                  <div *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
-                    <div *ngIf="f.servicerequestid.errors.required">Service Request Id is required</div>
-                  </div>
-                </div>
-
-                <div class="col-md-4 col-sm-4">
-                  <div class="checkbox">
-                    <label for="isactive" style="font-size:15px">
-                      <input type="checkbox" formControlName="ontime" class="" />
-                      On time Arrival to site
-                    </label>
-                  </div>
-                </div>
-                <div class="col-md-4 col-sm-4">
-                  <div class="checkbox">
-                    <label for="knowledgewithproduct" style="font-size:15px">
-                      <input type="checkbox" formControlName="knowledgewithproduct" class="" />
-                      Engineer Knowledge with Product
-                    </label>
-                  </div>
-                </div>
-                <div class="col-md-4 col-sm-4"></div>
-
-                <div class="col-md-4 col-sm-4">
-                  <div class="checkbox">
-                    <label for="problemsolveskill" style="font-size:15px">
-                      <input type="checkbox" formControlName="problemsolveskill" class="" />
-                      Problem or issuue resolved skill of FSE
-                    </label>
-                  </div>
-                </div>
-
-
-                <div class="col-md-4 col-sm-4">
-                  <div class="checkbox">
-                    <label for="satisfactionlevel" style="font-size:15px">
-                      <input type="checkbox" formControlName="satisfactionlevel" />
-                      Satisfaction Level
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <br />
-              <div class="row">
-                <div class="col-md-6 col-sm-6" style="padding:10px;">
-                  <button type="submit" class="btn btn-primary"
-                          *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                    Submit
-                  </button>
-                  <a routerLink="/customersatisfactionsurveylist" class="btn btn-secondary"
-                     style="margin-left: 10px;">Back</a>
-                </div>
-              </div>
-
-            </form>
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Customer Satisfaction Survey</h3>
           </div>
         </div>
+        <div class="clearfix"></div>
+        <hr />
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-4">
+              <label>Distributor</label>
+              <select #distributorid (input)="getengineers($event.target.value)"
+                [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-control" formControlName="distId">
+                <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
+              </select>
+
+              <div *ngIf="submitted && f.distId.errors" class="invalid-feedback">
+                <div *ngIf="f.distId.errors.required">Distributor is required</div>
+              </div>
+
+            </div>
+
+            <div class="col-sm-4">
+              <label>Engineer Name</label>
+
+              <select formControlName="engineerid" (change)="getservicerequest(distId,$event.target.value)"
+                placeholder="Engineer Name" class="form-control"
+                [ngClass]="{'is-invalid':submitted && f.engineerid.errors }">
+                <option *ngFor="let i of engineer" value="{{i.id}}">{{i["fname"] + " " + i["lname"]}}</option>
+              </select>
+
+              <div *ngIf="submitted && f.engineerid.errors" class="invalid-feedback">
+                <div *ngIf="f.engineerid.errors.required">Engineer Name is required</div>
+              </div>
+
+            </div>
+
+
+            <div class="col-md-4 col-sm-4">
+              <label for="name">Service Request No</label>
+              <select name="" placeholder="Service Request Id" formControlName="servicerequestid" id=""
+                class="form-control" [ngClass]="{'is-invalid':submitted && f.servicerequestid.errors }">
+                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
+              </select>
+
+              <div *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
+                <div *ngIf="f.servicerequestid.errors.required">Service Request Id is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <div class="checkbox">
+                <label for="isactive" style="font-size:15px">
+                  <input type="checkbox" formControlName="ontime" class="" />
+                  On time Arrival to site
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <div class="checkbox">
+                <label for="knowledgewithproduct" style="font-size:15px">
+                  <input type="checkbox" formControlName="knowledgewithproduct" class="" />
+                  Engineer Knowledge with Product
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4"></div>
+
+            <div class="col-md-4 col-sm-4">
+              <div class="checkbox">
+                <label for="problemsolveskill" style="font-size:15px">
+                  <input type="checkbox" formControlName="problemsolveskill" class="" />
+                  Problem or issuue resolved skill of FSE
+                </label>
+              </div>
+            </div>
+
+
+            <div class="col-md-4 col-sm-4">
+              <div class="checkbox">
+                <label for="satisfactionlevel" style="font-size:15px">
+                  <input type="checkbox" formControlName="satisfactionlevel" />
+                  Satisfaction Level
+                </label>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px;">
+              <button type="submit" class="btn btn-primary" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/customersatisfactionsurveylist" class="btn btn-secondary"
+                style="margin-left: 10px;">Back</a>
+            </div>
+          </div>
+
+        </form>
+      </div>
     </div>
+  </div>
 
 </layout>

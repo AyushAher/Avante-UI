@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
+import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { Ng2TelInputModule } from 'ng2-tel-input';
@@ -93,14 +93,14 @@ import { OfferrequestlistComponent } from './Offerrequest/Offerrequestlist.compo
 import { AmcInstrumentRendererComponent } from './amc/amc-instrument-renderer.component';
 import { FilerendercomponentComponent } from './Offerrequest/filerendercomponent.component';
 import { DistributordashboardComponent } from './distributordashboard/distributordashboard.component';
-import { CustdashboardsettingsComponent} from "./dashboardsettings/custdashboardsettings";
+import { CustdashboardsettingsComponent } from "./dashboardsettings/custdashboardsettings";
 import { DistributordashboardsettingsComponent } from './distributordashboardsettings/distributordashboardsettings.component';
 import { SparepartsrecommendedComponent } from './sparepartsrecommended/sparepartsrecommended.component';
-import {CustspinventorylistComponent} from "./custspinventory/Custspinventorylist.component";
-import {CustSPInventoryComponent} from "./custspinventory/custspinventory";
+import { CustspinventorylistComponent } from "./custspinventory/Custspinventorylist.component";
+import { CustSPInventoryComponent } from "./custspinventory/custspinventory";
 import { SparequotedetComponent } from './Offerrequest/sparequotedet.component';
-import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
-import {PrevchklocpartelementvalueComponent} from "./masterlist/prevchklocpartelementvalue.component";
+import { PreventivemaintenancetableComponent } from "./preventivemaintenancetable/preventivemaintenancetable.component";
+import { PrevchklocpartelementvalueComponent } from "./masterlist/prevchklocpartelementvalue.component";
 import {
   ScheduleModule,
   RecurrenceEditorModule,
@@ -109,10 +109,10 @@ import {
   MonthService, WorkWeekService, MonthAgendaService, TimelineMonth, TimelineMonthService
 } from '@syncfusion/ej2-angular-schedule';
 import { EngineerschedulerComponent } from './engineerscheduler/engineerscheduler.component';
-import {ChangepasswoardComponent} from "./account/changepasswoard.component";
-import {ForgotpasswoardComponent} from "./account/forgotpasswoard.component";
+import { ChangepasswoardComponent } from "./account/changepasswoard.component";
+import { ForgotpasswoardComponent } from "./account/forgotpasswoard.component";
 import { AudittrailComponent } from './audittrail/audittrail.component';
-import {AudittrailDetailsComponent} from "./audittrail/audittraildetails";
+import { AudittrailDetailsComponent } from "./audittrail/audittraildetails";
 
 
 @NgModule({
@@ -224,9 +224,9 @@ import {AudittrailDetailsComponent} from "./audittrail/audittraildetails";
     ScheduleModule, RecurrenceEditorModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    fakeBackendProvider, DatePipe,DayService,WeekService,MonthService,WorkWeekService,MonthAgendaService,TimelineMonthService
-  ],
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    fakeBackendProvider, DatePipe, DayService, WeekService, MonthService, WorkWeekService, MonthAgendaService, TimelineMonthService,
+  { provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

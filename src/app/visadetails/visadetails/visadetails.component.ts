@@ -1,8 +1,8 @@
-import {DatePipe} from "@angular/common";
-import {Component, EventEmitter, OnInit, Output} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {first} from "rxjs/operators";
+import { DatePipe } from "@angular/common";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { first } from "rxjs/operators";
 
 import {
   Country,
@@ -28,10 +28,10 @@ import {
   ServiceRequestService,
   VisadetailsService
 } from '../../_services';
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {FilerendercomponentComponent} from "../../Offerrequest/filerendercomponent.component";
-import {HttpEventType} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { FilerendercomponentComponent } from "../../Offerrequest/filerendercomponent.component";
+import { HttpEventType } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
 
 
 @Component({
@@ -81,6 +81,7 @@ export class VisadetailsComponent implements OnInit {
 
   isEng: boolean = false
   isDist: boolean = false
+  distId: string;
 
   constructor(
     private FileShareService: FileshareService,
@@ -103,7 +104,6 @@ export class VisadetailsComponent implements OnInit {
   ngOnInit() {
 
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
 
     this.transaction = 0;
     this.user = this.accountService.userValue;
@@ -124,7 +124,10 @@ export class VisadetailsComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
-    } else if (role == environment.engRoleCode) {
+    } else {
+      role = role[0]?.itemCode;
+    }
+    if (role == environment.engRoleCode) {
       this.isEng = true;
     } else if (role == environment.distRoleCode) {
       this.isDist = true;
@@ -142,7 +145,7 @@ export class VisadetailsComponent implements OnInit {
       requesttype: ["", [Validators.required]],
       isactive: [true],
       isdeleted: [false],
-      currencyId: ["",Validators.required],
+      currencyId: ["", Validators.required],
     });
 
     this.currencyService.getAll()
@@ -161,18 +164,13 @@ export class VisadetailsComponent implements OnInit {
 
     if (this.id != null) {
       this.hasAddAccess = false;
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-        this.hasUpdateAccess = true;
-      }
-
       this.travelDetailService
         .getById(this.id)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
             this.travelDetailform.patchValue(data.object);
             this.GetFileList(data.object.id)
           },
@@ -195,16 +193,22 @@ export class VisadetailsComponent implements OnInit {
         },
       })
 
-this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.travelDetailform.get('distId').setValue(data.object[0].id)
-          this.getengineers(data.object[0].id)
+          if (this.user.username != "admin") {
+            this.travelDetailform.get('distId').setValue(data.object[0].id)
+            this.getengineers(data.object[0].id)
+          }
         }
       })
     if (role == environment.engRoleCode) {
       this.travelDetailform.get('engineerid').setValue(this.user.contactId)
+      this.travelDetailform.get('engineerid').disable()
+      this.travelDetailform.get('distId').disable()
+    } else if (role == environment.distRoleCode) {
+      this.travelDetailform.get('distId').disable()
     }
 
     this.countryservice
@@ -349,16 +353,16 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
   }
 
 
-  getservicerequest(id: string) {
+
+
+  getservicerequest(id: string, engId = null) {
     this.servicerequestservice
       .GetServiceRequestByDist(id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.isEng ? this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId)
-            : this.isDist ? this.servicerequest = data.object.filter(x => x.distid == id) : this.servicerequest = [];
+          this.servicerequest = data.object.filter(x => x.assignedto == engId)
         },
-
 
         error: (error) => {
           this.notificationService.showError("Error", error);
@@ -368,12 +372,13 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
   }
 
   getengineers(id: string) {
+    this.distId = id
     this.distributorservice.getDistributorRegionContacts(id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.engineer = data.object;
-          this.getservicerequest(id)
+          // this.getservicerequest(id)
         },
 
         error: (error) => {
@@ -382,6 +387,7 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
         },
       });
   }
+
 
   onSubmit() {
 
@@ -408,7 +414,7 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
         dateSent.getFullYear(),
         dateSent.getMonth(),
         dateSent.getDate()
-        ) -
+      ) -
         Date.UTC(
           currentDate.getFullYear(),
           currentDate.getMonth(),
@@ -476,9 +482,9 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
             next: (data: ResultMsg) => {
               if (data.result) {
 
-              if (this.file != null) {
-                this.uploadFile(this.file, this.id);
-              }
+                if (this.file != null) {
+                  this.uploadFile(this.file, this.id);
+                }
                 this.notificationService.showSuccess(
                   data.resultMessage,
                   "Success"

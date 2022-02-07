@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {Router} from '@angular/router';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
-import {first} from 'rxjs/operators';
-import {RenderComponent} from '../../distributor/rendercomponent';
-import {ProfileReadOnly, User, Visadetails} from '../../_models';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { first } from 'rxjs/operators';
+import { RenderComponent } from '../../distributor/rendercomponent';
+import { ProfileReadOnly, User, Visadetails } from '../../_models';
 import {
   AccountService,
   DistributorService,
@@ -13,7 +13,7 @@ import {
   ProfileService,
   VisadetailsService
 } from '../../_services';
-import {environment} from "../../../environments/environment";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: 'app-visadetailslist',
@@ -42,12 +42,13 @@ export class VisadetailsListComponent implements OnInit {
     private Service: VisadetailsService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
-    private  distributorService: DistributorService,
-    private  listTypeService: ListTypeService,
+    private distributorService: DistributorService,
+    private listTypeService: ListTypeService,
 
-  ) {}
+  ) { }
 
   ngOnInit() {
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
 
@@ -69,10 +70,10 @@ export class VisadetailsListComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else {
+      role = role[0]?.itemCode;
+      this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     }
-this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     this.Service.getAll()
       .pipe(first())
@@ -86,7 +87,7 @@ this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
                   if (role == environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
                   } else if (role == environment.engRoleCode) {
-                    data.object = data.object.filter(x => x.createdby == this.user.userId)
+                    data.object = data.object.filter(x => x.createdby == this.user.userId || x.engineerid == this.user.contactId)
                     this.List = data.object;
                   } else if (this.user.username == 'admin') {
                     this.List = data.object
