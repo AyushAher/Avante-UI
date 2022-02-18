@@ -1,21 +1,20 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {Country, ProfileReadOnly, ServiceReport, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { Country, ProfileReadOnly, ServiceReport, User } from '../_models';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
-  AlertService,
-  CountryService,
-  CustomerService,
+  ContactService,
   NotificationService,
   ProfileService,
   ServiceReportService
 } from '../_services';
-import {RenderComponent} from '../distributor/rendercomponent';
+import { RenderComponent } from '../distributor/rendercomponent';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -28,9 +27,6 @@ export class ServiceReportListComponent implements OnInit {
   ServiceReportList: ServiceReport[];
   loading = false;
   submitted = false;
-  isSave = false;
-  customerId: string;
-  type: string = "D";
   countries: Country[];
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
@@ -38,16 +34,13 @@ export class ServiceReportListComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
+  role: any;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private customerService: CustomerService,
-    private countryService: CountryService,
     private notificationService: NotificationService,
+    private contcactservice: ContactService,
     private profileService: ProfileService,
     private ServiceReportService: ServiceReportService
   ) {
@@ -68,6 +61,10 @@ export class ServiceReportListComponent implements OnInit {
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
+    } else {
+      this.role = JSON.parse(localStorage.getItem('roles'));
+      this.role = this.role[0]?.itemCode;
+
     }
 
 
@@ -76,7 +73,24 @@ export class ServiceReportListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.ServiceReportList = data.object;
+          this.contcactservice.getDistByContact(this.user.contactId)
+            .pipe(first())
+            .subscribe((data1: any) => {
+              switch (this.role) {
+                case environment.custRoleCode:
+                  this.ServiceReportList = data.object.filter(x => x.serviceRequest.createdby == this.user.userId);
+                  break;
+                case environment.distRoleCode:
+                  this.ServiceReportList = data.object.filter(x => x.serviceRequest.distid == data1.object.defdistid);
+                  break;
+                case environment.engRoleCode:
+                  this.ServiceReportList = data.object.filter(x => x.serviceRequest.assignedto == this.user.contactId);
+                  break;
+                default:
+                  this.ServiceReportList = data.object;
+                  break
+              }
+            })
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -106,43 +120,53 @@ export class ServiceReportListComponent implements OnInit {
         deleteLink: 'SRE',
         deleteaccess: this.hasDeleteAccess
       },
-    },{
+    },
+    {
+      headerName: 'Service Req. No.',
+      field: 'serviceRequest.serreqno',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'customer',
+    },
+    {
       headerName: 'Customer Name',
       field: 'customer',
       filter: true,
       enableSorting: true,
       editable: false,
-        sortable: true,
+      sortable: true,
       tooltipField: 'customer',
-    }, {
+    },
+    {
       headerName: 'Department',
       field: 'departmentName',
       filter: true,
-        editable: false,
+      editable: false,
       sortable: true
-      },
-      {
-        headerName: 'Of',
-        field: 'srOf',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Lab Chief',
-        field: 'labChief',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Instrument',
-        field: 'instrument',
-        filter: true,
-        editable: false,
-        sortable: true
-      }
-    ]
+    },
+    {
+      headerName: 'Of',
+      field: 'srOf',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Lab Chief',
+      field: 'labChief',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Instrument',
+      field: 'instrument',
+      filter: true,
+      editable: false,
+      sortable: true
+    }]
   }
 
   onGridReady(params): void {

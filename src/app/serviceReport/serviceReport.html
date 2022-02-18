@@ -1,24 +1,24 @@
 <layout>
   <div class="right_col" role="main">
     <div class="container">
-<!--      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">-->
-<!--        <li class="nav-item" role="presentation">-->
-<!--          <a class="nav-link active"-->
-<!--             id="ex1-tab-1"-->
-<!--             data-mdb-toggle="tab"-->
-<!--             routerLink="/servicereport/{{ ServiceReportId }}" routerLinkActive="active"-->
-<!--             role="tab"-->
-<!--             aria-controls="ex1-tabs-1"-->
-<!--             aria-selected="true">ServiceReport</a>-->
-<!--        </li>-->
-<!--      </ul>-->
+      <!--      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">-->
+      <!--        <li class="nav-item" role="presentation">-->
+      <!--          <a class="nav-link active"-->
+      <!--             id="ex1-tab-1"-->
+      <!--             data-mdb-toggle="tab"-->
+      <!--             routerLink="/servicereport/{{ ServiceReportId }}" routerLinkActive="active"-->
+      <!--             role="tab"-->
+      <!--             aria-controls="ex1-tabs-1"-->
+      <!--             aria-selected="true">ServiceReport</a>-->
+      <!--        </li>-->
+      <!--      </ul>-->
 
       <div class="page-title">
         <div class="title_left">
           <h3>Service Report</h3>
         </div>
       </div>
-      <hr/>
+      <hr />
       <div class="clearfix"></div>
 
       <div class="col-md-12 col-sm-12 ">
@@ -26,18 +26,20 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="customer">Customer</label>
-              <input type="text" formControlName="customer" class="form-control" readonly/>
+              <input type="text" formControlName="customer" class="form-control" readonly />
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="srOf">OF</label>
-              <input type="text" formControlName="srOf" readonly class="form-control" [ngClass]="{ 'is-invalid': submitted && f.srOf.errors }" />
+              <input type="text" formControlName="srOf" readonly class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.srOf.errors }" />
               <div *ngIf="submitted && f.srOf.errors" class="invalid-feedback">
                 <div *ngIf="f.srOf.errors.required">of is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="department">Department</label>
-              <select formControlName="department" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.department.errors }">
+              <select formControlName="department" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.department.errors }">
                 <option value="">Select</option>
                 <option *ngFor="let d of departmentList" value={{d.listTypeItemId}}>
                   {{d.itemname}}
@@ -49,7 +51,8 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="country">Country</label>
-              <input type="text" formControlName="country" readonly class="form-control" [ngClass]="{ 'is-invalid': submitted && f.country.errors }" />
+              <input type="text" formControlName="country" readonly class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.country.errors }" />
               <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
                 <div *ngIf="f.country.errors.required">Country is required</div>
               </div>
@@ -59,14 +62,16 @@
           <div class="row">
             <div class="col-md-3 col-sm-3">
               <label for="town">Town</label>
-              <input type="text" formControlName="town" readonly class="form-control" [ngClass]="{ 'is-invalid': submitted && f.town.errors }" />
+              <input type="text" formControlName="town" readonly class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.town.errors }" />
               <div *ngIf="submitted && f.town.errors" class="invalid-feedback">
                 <div *ngIf="f.town.errors.required">town is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="respInstrument">Resp. for Instrument</label>
-              <select formControlName="respInstrument" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.respInstrument.errors }">
+              <select formControlName="respInstrument" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.respInstrument.errors }">
                 <option value="">--Select--</option>
                 <option *ngFor="let c of allcontactlist" value={{c.id}}>
                   {{c.fname}}{{c.lname}}
@@ -78,7 +83,8 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="labChief">Lab Chief</label>
-              <input type="text" formControlName="labChief" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.labChief.errors }" />
+              <input type="text" formControlName="labChief" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.labChief.errors }" />
               <div *ngIf="submitted && f.labChief.errors" class="invalid-feedback">
                 <div *ngIf="f.labChief.errors?.required">labChief is required</div>
 
@@ -86,7 +92,8 @@
             </div>
             <div class="col-sm-3">
               <label for="computerarlsn">Computer ARL S/N</label>
-              <input type="text" formControlName="computerarlsn" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.computerarlsn.errors }" />
+              <input type="text" formControlName="computerarlsn" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.computerarlsn.errors }" />
               <div *ngIf="submitted && f.computerarlsn.errors" class="invalid-feedback">
                 <div *ngIf="f.computerarlsn.errors.required">computerArl is required</div>
               </div>
@@ -95,7 +102,8 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="instrument">Instrument</label>
-              <input id="typeahead-format" type="text" formControlName="instrument" class="form-control" [ngbTypeahead]="searchinstu" [resultFormatter]="formatterinstu" [inputFormatter]="formatterinstu" />
+              <input id="typeahead-format" type="text" formControlName="instrument" class="form-control"
+                [ngbTypeahead]="searchinstu" [resultFormatter]="formatterinstu" [inputFormatter]="formatterinstu" />
               <!--<select formControlName="instrument" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.instrument.errors }">
                 <option value="">--Select--</option>
                 <option *ngFor="let c of instrumentlist" value={{c.id}}>
@@ -110,14 +118,16 @@
             </div>
             <div class="col-sm-3">
               <label for="software">software</label>
-              <input type="text" formControlName="software" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.software.errors }" />
+              <input type="text" formControlName="software" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.software.errors }" />
               <div *ngIf="submitted && f.software.errors" class="invalid-feedback">
                 <div *ngIf="f.software.errors.required">software is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="brandName">Brand Name</label>
-              <select formControlName="brandName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.brandName.errors }">
+              <select formControlName="brandName" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.brandName.errors }">
                 <option value="">Select</option>
                 <option *ngFor="let d of brandlist" value={{d.listTypeItemId}}>
                   {{d.itemname}}
@@ -129,7 +139,8 @@
             </div>
             <div class="col-sm-3">
               <label for="firmaware">Firmware</label>
-              <input type="text" formControlName="firmaware" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firmaware.errors }" />
+              <input type="text" formControlName="firmaware" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.firmaware.errors }" />
               <div *ngIf="submitted && f.firmaware.errors" class="invalid-feedback">
                 <div *ngIf="f.firmaware.errors.required">firmware</div>
               </div>
@@ -139,13 +150,14 @@
             <div class="col-sm-12">
               <label for="problem">Problem</label>
               <textarea formControlName="problem" readonly class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.problem.errors }"></textarea>
+                [ngClass]="{ 'is-invalid': submitted && f.problem.errors }"></textarea>
             </div>
           </div>
           <div class="row">
             <div class="col-md-3 col-sm-3">
               <label for="installation">
-                <input type="checkbox" readonly disabled formControlName="installation" [ngClass]="{ 'is-invalid': submitted && f.installation.errors }" />
+                <input type="checkbox" readonly disabled formControlName="installation"
+                  [ngClass]="{ 'is-invalid': submitted && f.installation.errors }" />
                 Installation
               </label>
               <div *ngIf="submitted && f.installation.errors" class="invalid-feedback">
@@ -155,7 +167,8 @@
 
             <div class="col-sm-3">
               <label for="analyticalassit">
-                <input type="checkbox" readonly disabled formControlName="analyticalassit" [ngClass]="{ 'is-invalid': submitted && f.analyticalassit.errors }" />
+                <input type="checkbox" readonly disabled formControlName="analyticalassit"
+                  [ngClass]="{ 'is-invalid': submitted && f.analyticalassit.errors }" />
                 Analytical Assistance
               </label>
               <div *ngIf="submitted && f.analyticalassit.errors" class="invalid-feedback">
@@ -164,7 +177,8 @@
             </div>
             <div class="col-sm-3">
               <label for="prevmaintenance">
-                <input type="checkbox" readonly disabled formControlName="prevmaintenance" [ngClass]="{ 'is-invalid': submitted && f.prevmaintenance.errors }" />
+                <input type="checkbox" readonly disabled formControlName="prevmaintenance"
+                  [ngClass]="{ 'is-invalid': submitted && f.prevmaintenance.errors }" />
                 Prev. Maintenance
               </label>
               <div *ngIf="submitted && f.prevmaintenance.errors" class="invalid-feedback">
@@ -173,14 +187,15 @@
             </div>
             <div class="col-sm-3">
               <label for="corrmaintenance">
-                <input type="checkbox" readonly disabled formControlName="rework" [ngClass]="{ 'is-invalid': submitted && f.corrmaintenance.errors }" />
+                <input type="checkbox" readonly disabled formControlName="rework"
+                  [ngClass]="{ 'is-invalid': submitted && f.corrmaintenance.errors }" />
                 Rework
               </label>
             </div>
             <div class="col-sm-3">
               <label for="corrmaintenance">
                 <input type="checkbox" readonly disabled formControlName="corrmaintenance"
-                       [ngClass]="{ 'is-invalid': submitted && f.corrmaintenance.errors }"/>
+                  [ngClass]="{ 'is-invalid': submitted && f.corrmaintenance.errors }" />
                 Corr. Maintenance
               </label>
               <div *ngIf="submitted && f.corrmaintenance.errors" class="invalid-feedback">
@@ -190,87 +205,94 @@
 
           </div>
 
-          <br/>
+          <br />
           <div class="" style="display: flex;justify-content: space-between">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
               <li class="nav-item">
                 <a class="nav-link active" id="workdone-tab" data-toggle="tab" href="#workdone" role="tab"
-                   aria-controls="workdone" aria-selected="true">Work Done</a>
+                  aria-controls="workdone" aria-selected="true">Work Done</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                   aria-selected="false">Work Time</a>
+                  aria-selected="false">Work Time</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                   aria-controls="profile"
-                   aria-selected="false">Spare Part Consumed</a>
+                  aria-controls="profile" aria-selected="false">Spare Part Consumed</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                   aria-controls="contact"
-                   aria-selected="false">Spare Part Recommanded</a>
+                  aria-controls="contact" aria-selected="false">Spare Part Recommanded</a>
               </li>
             </ul>
 
-            <a class="nav-link" *ngIf="ServiceReportform.get('prevmaintenance').value == true" style="text-decoration: underline;cursor: pointer;"
-               (click)="openPrev(ServiceReportId)">Preventive Maintenance Checklist</a>
+            <a class="nav-link" *ngIf="ServiceReportform.get('prevmaintenance').value == true"
+              style="text-decoration: underline;cursor: pointer;" (click)="openPrev(ServiceReportId)">Preventive
+              Maintenance Checklist</a>
 
           </div>
 
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
               <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;"
-                      (click)="open(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
+                (click)="open(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
-                                 (cellValueChanged)="onCellValueChanged($event)"
-                                 class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnworkdefs" [rowData]="workdonelist" rowSelection="single"
-                                 pagination="true" paginationPageSize=10></ag-grid-angular>
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnworkdefs" [rowData]="workdonelist"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-              <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;" (click)="opentime(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
+              <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;"
+                (click)="opentime(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onworktimeRowClicked($event)"
-                                 (cellValueChanged)="onCellValueChanged($event)"
-                                 class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnDefs" [rowData]="workTime" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="workTime" rowSelection="single"
+                  pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
               <div class="row">
                 <div class="col-sm-4">
                   <label>select sparepart</label>
-                  <input id="typeahead-format" type="text" formControlName="consumed" class="form-control" [ngbTypeahead]="searchpartcon" [resultFormatter]="formatterpartcon" [inputFormatter]="formatterpartcon" />
+                  <input id="typeahead-format" type="text" formControlName="consumed" class="form-control"
+                    [ngbTypeahead]="searchpartcon" [resultFormatter]="formatterpartcon"
+                    [inputFormatter]="formatterpartcon" />
                 </div>
                 <div class="col-sm-4">
                   <label for=""></label>
-                  <button type="button" class="btn btn-primary" style="margin-top: 31px;" (click)="addPartcons()">Add</button>
+                  <button type="button" class="btn btn-primary" style="margin-top: 31px;"
+                    (click)="addPartcons()">Add</button>
                 </div>
               </div>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClickedCon($event)"
-                                 (cellValueChanged)="onRowClickedCon($event)"
-                                 class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="spcolumnDefs" [rowData]="spconsumedlist" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                  (cellValueChanged)="onRowClickedCon($event)" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  [columnDefs]="spcolumnDefs" [rowData]="spconsumedlist" rowSelection="single" pagination="true"
+                  paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
               <div class="row">
                 <div class="col-sm-4">
                   <label>select sparepart</label>
-                  <input id="typeahead-format" type="text" formControlName="recondad" class="form-control" [ngbTypeahead]="searchpart" [resultFormatter]="formatterpart" [inputFormatter]="formatterpart" />
+                  <input id="typeahead-format" type="text" formControlName="recondad" class="form-control"
+                    [ngbTypeahead]="searchpart" [resultFormatter]="formatterpart" [inputFormatter]="formatterpart" />
                 </div>
                 <div class="col-sm-4">
                   <label for=""></label>
-                  <button type="button" class="btn btn-primary" style="margin-top: 31px;" (click)="addPartrecmm(autopart)">Add</button>
+                  <button type="button" class="btn btn-primary" style="margin-top: 31px;"
+                    (click)="addPartrecmm(autopart)">Add</button>
                 </div>
               </div>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClickedPre($event)" class="ag-theme-alpine" (gridReady)="onGridReady($event)" (cellValueChanged)="onCellValueChangedPre($event)"
-                                 [columnDefs]="spRecomandDefs" [rowData]="sparePartRecomanded" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClickedPre($event)"
+                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  (cellValueChanged)="onCellValueChangedPre($event)" [columnDefs]="spRecomandDefs"
+                  [rowData]="sparePartRecomanded" rowSelection="single" pagination="true" paginationPageSize=10>
+                </ag-grid-angular>
               </div>
             </div>
           </div>
@@ -313,7 +335,8 @@
             </div>
             <div class="col-sm-3">
               <label for="reason">Reason</label>
-              <input type="text" formControlName="reason" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.reason.errors }" />
+              <input type="text" formControlName="reason" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.reason.errors }" />
               <div *ngIf="submitted && f.reason.errors" class="invalid-feedback">
                 <div *ngIf="f.reason.errors.required">reason is required</div>
               </div>
@@ -322,14 +345,16 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="nextvisitscheduled">Next Visit</label>
-              <input type="text" formControlName="nextvisitscheduled" bsDatepicker class="form-control" [ngClass]="{ 'is-invalid': submitted && f.nextvisitscheduled.errors }" />
+              <input type="text" formControlName="nextvisitscheduled" bsDatepicker class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.nextvisitscheduled.errors }" />
               <div *ngIf="submitted && f.nextvisitscheduled.errors" class="invalid-feedback">
                 <div *ngIf="f.nextvisitscheduled.errors.required">nextVisitScheduled is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="nextVisitScheduled">Engineer Comment</label>
-              <input type="text" formControlName="engineercomments" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.engineercomments.errors }" />
+              <input type="text" formControlName="engineercomments" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.engineercomments.errors }" />
               <div *ngIf="submitted && f.engineercomments.errors" class="invalid-feedback">
                 <div *ngIf="f.engineercomments.errors.required">engineerComment is required</div>
               </div>
@@ -338,7 +363,8 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="signcustname">Customer Name</label>
-              <input type="text" formControlName="signcustname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.signcustname.errors }" />
+              <input type="text" formControlName="signcustname" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.signcustname.errors }" />
               <div *ngIf="submitted && f.signcustname.errors" class="invalid-feedback">
                 <div *ngIf="f.signcustname.errors.required">Customer Name is required</div>
               </div>
@@ -346,7 +372,8 @@
             <div class="col-sm-9">
               <label for="customerSing">Customer Signature Pad</label>
               <div style="border:medium">
-                <signature-pad #sigpad1 [options]="signaturePadOptions" style="border-bottom:dashed" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+                <signature-pad #sigpad1 [options]="signaturePadOptions" style="border-bottom:dashed"
+                  (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
               </div>
               <div *ngIf="submitted && f.customerSing.errors" class="invalid-feedback">
                 <div *ngIf="f.customerSing.errors.required">Customer Signature is required</div>
@@ -356,7 +383,8 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="signengname">Engineer Name</label>
-              <input type="text" formControlName="signengname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.signengname.errors }" />
+              <input type="text" formControlName="signengname" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.signengname.errors }" />
               <div *ngIf="submitted && f.signengname.errors" class="invalid-feedback">
                 <div *ngIf="f.signengname.errors.required">Engineer Name is required</div>
               </div>
@@ -364,7 +392,8 @@
             <div class="col-sm-9">
               <label for="engineerSing">Engineer Signature Pad</label>
               <div style="border:medium">
-                <signature-pad #sigpad2 [options]="signaturePadOptions" style="border-bottom:dashed" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete2()"></signature-pad>
+                <signature-pad #sigpad2 [options]="signaturePadOptions" style="border-bottom:dashed"
+                  (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete2()"></signature-pad>
               </div>
               <div *ngIf="submitted && f.engineerSing.errors" class="invalid-feedback">
                 <div *ngIf="f.engineerSing.errors.required">Engineer Signature is required</div>
@@ -387,14 +416,13 @@
 
             <div class="col-md-3">
               <input type="file" id="myFile" #file placeholder="Choose file"
-                     (change)="getfil(file.files); listfile(file.files) ;" accept=".pdf" id="pdfUpload" multiple
-                     type='file'/>
+                (change)="getfil(file.files); listfile(file.files) ;" accept=".pdf" id="pdfUpload" multiple
+                type='file' />
             </div>
-            <div id="selectedfiles" class="hidden col-md-4"
-                 style="max-height:200px; overflow-y:auto;display: none;">
+            <div id="selectedfiles" class="hidden col-md-4" style="max-height:200px; overflow-y:auto;display: none;">
               <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
                 <h5>Selected Files:</h5>
-                <hr/>
+                <hr />
               </section>
             </div>
 
@@ -402,12 +430,12 @@
 
           <div class="row" *ngIf="PdffileData">
             <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine" (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"
-                               [columnDefs]="pdfcolumnDefs" [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
+              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
+                (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)" [columnDefs]="pdfcolumnDefs"
+                [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
             </div>
           </div>
           <hr>
-          <hr />
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px">
               <button [disabled]="loading" class="btn btn-primary" *ngIf="hasAddAccess==true || hasUpdateAccess==true">
@@ -415,11 +443,11 @@
                 Save
               </button>
               <a routerLink="/servicereportlist" class="btn btn-secondary" style="margin-left:10px;">Back</a>
-              <button type="button" class="btn btn-secondary" style="margin-left:15px;" (click)="GeneratePDF(true)">Preview</button>
+              <button type="button" class="btn btn-secondary" style="margin-left:15px;"
+                (click)="GeneratePDF(true)">Preview</button>
 
               <button [disabled]="loading" class="btn btn-secondary"
-                      *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true"
-                      (click)="GeneratePDF(false)">
+                *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true" (click)="GeneratePDF(false)">
                 Generate Service Report
               </button>
 

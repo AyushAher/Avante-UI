@@ -1,17 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 
 import {Country, ProfileReadOnly, ServiceRequest, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
+import {FormGroup} from '@angular/forms';
 import {first} from 'rxjs/operators';
 import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
 import {environment} from '../../environments/environment';
 import {
   AccountService,
-  AlertService,
   ContactService,
-  CountryService,
-  CustomerService,
   ListTypeService,
   NotificationService,
   ProfileService,
@@ -50,13 +47,8 @@ export class ServiceRequestListComponent implements OnInit {
   distId: any;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private customerService: CustomerService,
-    private countryService: CountryService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private serviceRequestService: ServiceRequestService,
