@@ -276,6 +276,8 @@ export class UserProfileComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           if (data.result) {
+            console.log(data);
+
             this.regionList = data.object[0]?.regions;
           }
         }
