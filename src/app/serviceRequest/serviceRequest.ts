@@ -1,6 +1,6 @@
 /* tslint:disable */
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {IDropdownSettings} from 'ng-multiselect-dropdown';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import {
   actionList,
   Contact,
@@ -19,16 +19,16 @@ import {
   tickersAssignedHistory,
   User
 } from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
-import {environment} from '../../environments/environment';
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
-import {ModelEngContentComponent} from './modelengcontent';
-import {ModelEngActionContentComponent} from './modelengactioncontent';
-import {DatePipe} from '@angular/common'
-import {EngschedulerService} from "../_services/engscheduler.service";
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { environment } from '../../environments/environment';
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ModelEngContentComponent } from './modelengcontent';
+import { ModelEngActionContentComponent } from './modelengactioncontent';
+import { DatePipe } from '@angular/common'
+import { EngschedulerService } from "../_services/engscheduler.service";
 
 import {
   AccountService,
@@ -50,8 +50,8 @@ import {
   SRAssignedHistoryService,
   UploadService
 } from '../_services';
-import {HttpEventType, HttpResponse} from "@angular/common/http";
-import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.component";
+import { HttpEventType, HttpResponse } from "@angular/common/http";
+import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
 
 
 @Component({
@@ -129,81 +129,80 @@ export class ServiceRequestComponent implements OnInit {
   private hastransaction: boolean;
   private file: any;
 
-    constructor(
-      private formBuilder: FormBuilder,
-      private route: ActivatedRoute,
-      private router: Router,
-      private accountService: AccountService,
-      private alertService: AlertService,
-      private distributorService: DistributorService,
-      private countryService: CountryService,
-      private customerService: CustomerService,
-      private customerSiteService: CustomerSiteService,
-      private notificationService: NotificationService,
-      private profileService: ProfileService,
-      private serviceRequestService: ServiceRequestService,
-      private fileshareService: FileshareService,
-      private uploadService: UploadService,
-      private contactService: ContactService,
-      private listTypeService: ListTypeService,
-      private instrumentService: InstrumentService,
-      private modalService: BsModalService,
-      private engcomservice: EngCommentService,
-      private actionservice: EngActionService,
-      private srAssignedHistoryService: SRAssignedHistoryService,
-      private servicereportService: ServiceReportService,
-      public datepipe: DatePipe,
-      private EngschedulerService: EngschedulerService,
-    ) {
-      this.notificationService.listen().subscribe((m: any) => {
-        console.log(m);
-        if (this.serviceRequestId != null) {
-          this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
-            .subscribe({
-              next: (data: any) => {
-                this.engineerCommentList = data.object.engComments;
+  constructor(
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private accountService: AccountService,
+    private alertService: AlertService,
+    private distributorService: DistributorService,
+    private countryService: CountryService,
+    private customerService: CustomerService,
+    private customerSiteService: CustomerSiteService,
+    private notificationService: NotificationService,
+    private profileService: ProfileService,
+    private serviceRequestService: ServiceRequestService,
+    private fileshareService: FileshareService,
+    private uploadService: UploadService,
+    private contactService: ContactService,
+    private listTypeService: ListTypeService,
+    private instrumentService: InstrumentService,
+    private modalService: BsModalService,
+    private engcomservice: EngCommentService,
+    private actionservice: EngActionService,
+    private srAssignedHistoryService: SRAssignedHistoryService,
+    private servicereportService: ServiceReportService,
+    public datepipe: DatePipe,
+    private EngschedulerService: EngschedulerService,
+  ) {
+    this.notificationService.listen().subscribe((m: any) => {
+      if (this.serviceRequestId != null) {
+        this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              this.engineerCommentList = data.object.engComments;
 
-                this.engineerCommentList.forEach((value, index) => {
-                  value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
-                })
+              this.engineerCommentList.forEach((value, index) => {
+                value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
+              })
 
-                this.actionList = data.object.engAction;
-                this.actionList.forEach((value, index) => {
-                  value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
-                })
-                this.api.refreshCells()
+              this.actionList = data.object.engAction;
+              this.actionList.forEach((value, index) => {
+                value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
+              })
+              this.api.refreshCells()
 
-              },
-              error: error => {
-                // this.alertService.error(error);
-                this.notificationService.showSuccess(error, "Error");
-                this.loading = false;
-              }
-            });
-          this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
-            .subscribe({
-              next: (data: any) => {
-                this.engineerCommentList = data.object.engComments;
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showSuccess(error, "Error");
+              this.loading = false;
+            }
+          });
+        this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              this.engineerCommentList = data.object.engComments;
 
-                this.engineerCommentList.forEach((value, index) => {
-                  value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
-                })
-                this.actionList = data.object.engAction;
-                this.actionList.forEach((value, index) => {
-                  value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
-                })
-                this.api.refreshCells()
+              this.engineerCommentList.forEach((value, index) => {
+                value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
+              })
+              this.actionList = data.object.engAction;
+              this.actionList.forEach((value, index) => {
+                value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
+              })
+              this.api.refreshCells()
 
-              },
-              error: error => {
-                // this.alertService.error(error);
-                this.notificationService.showSuccess(error, "Error");
-                this.loading = false;
-              }
-            });
+            },
+            error: error => {
+              // this.alertService.error(error);
+              this.notificationService.showSuccess(error, "Error");
+              this.loading = false;
+            }
+          });
       }
     })
-    }
+  }
 
   ngOnInit() {
 
@@ -276,7 +275,7 @@ export class ServiceRequestComponent implements OnInit {
       alarmdetails: [''],
       resolveaction: [''],
       currentinstrustatus: ['', Validators.required],
-      accepted: [{value: false, disabled: this.accepted}],
+      accepted: [{ value: false, disabled: this.accepted }],
       serresolutiondate: [''],
       escalation: [''],
       requesttypeid: [''],
@@ -342,7 +341,7 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           let srno = data.object;
-          this.serviceRequestform.patchValue({"serreqno": srno});
+          this.serviceRequestform.patchValue({ "serreqno": srno });
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -429,7 +428,7 @@ export class ServiceRequestComponent implements OnInit {
                 items.push(t);
               }
 
-              this.serviceRequestform.patchValue({"subrequesttypeid": items});
+              this.serviceRequestform.patchValue({ "subrequesttypeid": items });
 
               this.fileshareService.list(this.serviceRequestId)
                 .pipe(first())
@@ -446,38 +445,38 @@ export class ServiceRequestComponent implements OnInit {
 
             }
             //   data.object.subrequesttypeid = "";
-            this.serviceRequestform.patchValue({"sdate": data.object.sdate});
-            this.serviceRequestform.patchValue({"edate": data.object.edate});
-            this.serviceRequestform.patchValue({"serreqno": data.object.serreqno});
-            this.serviceRequestform.patchValue({"serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy")});
-            this.serviceRequestform.patchValue({"serresolutiondate": new Date(data.object.serresolutiondate)});
-            this.serviceRequestform.patchValue({"machmodelname": data.object.machmodelnametext});
-            this.serviceRequestform.patchValue({"serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy")});
-            this.serviceRequestform.patchValue({"serresolutiondate": new Date(data.object.serresolutiondate)});
-            this.serviceRequestform.patchValue({"machmodelname": data.object.machmodelnametext});
-            this.serviceRequestform.patchValue({"distid": data.object.distid});
-            this.serviceRequestform.patchValue({"assignedto": data.object.assignedto});
-            this.serviceRequestform.patchValue({"visittype": data.object.visittype});
-            this.serviceRequestform.patchValue({"companyname": data.object.companyname});
-            this.serviceRequestform.patchValue({"requesttime": data.object.requesttime});
-            this.serviceRequestform.patchValue({"sitename": data.object.sitename});
-            this.serviceRequestform.patchValue({"country": data.object.country});
-            this.serviceRequestform.patchValue({"contactperson": data.object.contactperson});
-            this.serviceRequestform.patchValue({"email": data.object.email});
-            this.serviceRequestform.patchValue({"operatorname": data.object.operatorname});
-            this.serviceRequestform.patchValue({"operatornumber": data.object.operatornumber});
-            this.serviceRequestform.patchValue({"operatoremail": data.object.operatoremail});
-            this.serviceRequestform.patchValue({"machinesno": data.object.machinesno});
-            this.serviceRequestform.patchValue({"machengineer": data.object.machengineer});
-            this.serviceRequestform.patchValue({"xraygenerator": data.object.xraygenerator});
-            this.serviceRequestform.patchValue({"breakdowntype": data.object.breakdowntype});
-            this.serviceRequestform.patchValue({"isrecurring": data.object.isrecurring});
-            this.serviceRequestform.patchValue({"recurringcomments": data.object.recurringcomments});
-            this.serviceRequestform.patchValue({"breakoccurdetailsid": data.object.breakoccurdetailsid});
-            this.serviceRequestform.patchValue({"alarmdetails": data.object.alarmdetails});
-            this.serviceRequestform.patchValue({"resolveaction": data.object.resolveaction});
-            this.serviceRequestform.patchValue({"currentinstrustatus": data.object.currentinstrustatus});
-            this.serviceRequestform.patchValue({"accepted": data.object.accepted});
+            this.serviceRequestform.patchValue({ "sdate": data.object.sdate });
+            this.serviceRequestform.patchValue({ "edate": data.object.edate });
+            this.serviceRequestform.patchValue({ "serreqno": data.object.serreqno });
+            this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy") });
+            this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
+            this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
+            this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy") });
+            this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
+            this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
+            this.serviceRequestform.patchValue({ "distid": data.object.distid });
+            this.serviceRequestform.patchValue({ "assignedto": data.object.assignedto });
+            this.serviceRequestform.patchValue({ "visittype": data.object.visittype });
+            this.serviceRequestform.patchValue({ "companyname": data.object.companyname });
+            this.serviceRequestform.patchValue({ "requesttime": data.object.requesttime });
+            this.serviceRequestform.patchValue({ "sitename": data.object.sitename });
+            this.serviceRequestform.patchValue({ "country": data.object.country });
+            this.serviceRequestform.patchValue({ "contactperson": data.object.contactperson });
+            this.serviceRequestform.patchValue({ "email": data.object.email });
+            this.serviceRequestform.patchValue({ "operatorname": data.object.operatorname });
+            this.serviceRequestform.patchValue({ "operatornumber": data.object.operatornumber });
+            this.serviceRequestform.patchValue({ "operatoremail": data.object.operatoremail });
+            this.serviceRequestform.patchValue({ "machinesno": data.object.machinesno });
+            this.serviceRequestform.patchValue({ "machengineer": data.object.machengineer });
+            this.serviceRequestform.patchValue({ "xraygenerator": data.object.xraygenerator });
+            this.serviceRequestform.patchValue({ "breakdowntype": data.object.breakdowntype });
+            this.serviceRequestform.patchValue({ "isrecurring": data.object.isrecurring });
+            this.serviceRequestform.patchValue({ "recurringcomments": data.object.recurringcomments });
+            this.serviceRequestform.patchValue({ "breakoccurdetailsid": data.object.breakoccurdetailsid });
+            this.serviceRequestform.patchValue({ "alarmdetails": data.object.alarmdetails });
+            this.serviceRequestform.patchValue({ "resolveaction": data.object.resolveaction });
+            this.serviceRequestform.patchValue({ "currentinstrustatus": data.object.currentinstrustatus });
+            this.serviceRequestform.patchValue({ "accepted": data.object.accepted });
 
             if (data.object.accepted) {
               this.serviceRequestform.get('accepted').disable();
@@ -485,11 +484,11 @@ export class ServiceRequestComponent implements OnInit {
               this.serviceRequestform.get('accepted').enable();
             }
 
-            this.serviceRequestform.patchValue({"escalation": data.object.escalation});
-            this.serviceRequestform.patchValue({"requesttypeid": data.object.requesttypeid});
-            this.serviceRequestform.patchValue({"remarks": data.object.remarks});
+            this.serviceRequestform.patchValue({ "escalation": data.object.escalation });
+            this.serviceRequestform.patchValue({ "requesttypeid": data.object.requesttypeid });
+            this.serviceRequestform.patchValue({ "remarks": data.object.remarks });
             //
-            this.serviceRequestform.patchValue({"machmodelname": (data.object.machmodelname)});
+            this.serviceRequestform.patchValue({ "machmodelname": (data.object.machmodelname) });
             this.customerId = data.object.custid;
             this.siteId = data.object.siteid;
             this.getDistRegnContacts(data.object.distid);
@@ -539,13 +538,13 @@ export class ServiceRequestComponent implements OnInit {
             this.siteId = this.logindata.sites[0].id;
             this.customerId = this.logindata.id;
             this.customerSitelist = this.logindata.sites;
-            this.serviceRequestform.patchValue({"country": this.logindata.address.countryid});
-            this.serviceRequestform.patchValue({"companyname": this.logindata.custname});
-            this.serviceRequestform.patchValue({"distid": this.logindata.defdistid});
+            this.serviceRequestform.patchValue({ "country": this.logindata.address.countryid });
+            this.serviceRequestform.patchValue({ "companyname": this.logindata.custname });
+            this.serviceRequestform.patchValue({ "distid": this.logindata.defdistid });
             this.distId = this.logindata.defdistid;
-            this.serviceRequestform.patchValue({"contactperson": this.user.username});
-            this.serviceRequestform.patchValue({"email": this.user.email});
-            this.serviceRequestform.patchValue({"sitename": this.logindata.sites[0].custregname});
+            this.serviceRequestform.patchValue({ "contactperson": this.user.username });
+            this.serviceRequestform.patchValue({ "email": this.user.email });
+            this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
 
 
             //var subreq = this.logindata.sites.id.join(',');
@@ -642,7 +641,6 @@ export class ServiceRequestComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.serviceRequestform.invalid) {
-      console.log(this.serviceRequestform)
       return;
     }
     this.isSave = true;
@@ -822,7 +820,7 @@ export class ServiceRequestComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-                this.serviceRequestform.get('accepted').disable();
+          this.serviceRequestform.get('accepted').disable();
           this.notificationService.showSuccess(data.resultMessage, "Success");
         }, error: (error) => {
 
@@ -832,7 +830,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   generatereport() {
-      this.onSubmit();
+    this.onSubmit();
     this.EngschedulerService.getAll().pipe(first()).subscribe({
       next: (data: any) => {
 
@@ -840,11 +838,12 @@ export class ServiceRequestComponent implements OnInit {
           let scheduleCalls = data.object.filter(x => x.serReqId == this.serviceRequestId)
           if (scheduleCalls != null && scheduleCalls.length > 0) {
             this.servicereport = new ServiceReport();
+            debugger;
             this.servicereport.serviceRequestId = this.serviceRequestId;
             this.servicereport.customer = this.serviceRequestform.get('companyname').value;
-            this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
-            this.servicereport.country = this.countries.filter(x => x.id == this.serviceRequestform.get('country').value)[0].name;
-            this.servicereport.problem = this.breakdownlist.filter(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)[0].itemname + "||" + this.serviceRequestform.get('alarmdetails').value + '||' + this.serviceRequestform.get('remarks').value;
+            this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
+            this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
+            this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + "||" + this.serviceRequestform.get('alarmdetails')?.value + '||' + this.serviceRequestform.get('remarks')?.value;
 
             this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.INS)).length > 0;
             this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.ANAS)).length > 0;
@@ -1063,7 +1062,7 @@ export class ServiceRequestComponent implements OnInit {
             this.download(data.data);
             // this.alertService.success('File Upload Successfully.');
             // this.imagePath = data.path;
-            // console.log(data);
+            // ;
 
           },
           error: error => {
@@ -1077,7 +1076,7 @@ export class ServiceRequestComponent implements OnInit {
   download(fileData: any) {
     //debugger;
     const byteArray = new Uint8Array(atob(fileData).split('').map(char => char.charCodeAt(0)));
-    let b = new Blob([byteArray], {type: 'application/pdf'});
+    let b = new Blob([byteArray], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(b);
     window.open(url);
     // i.e. display the PDF content via iframe
@@ -1110,7 +1109,6 @@ export class ServiceRequestComponent implements OnInit {
       var textnode = document.createTextNode(name)
       node.appendChild(textnode);
 
-      console.log(node, document.getElementById("demo"))
       ul.appendChild(node);
 
     }
@@ -1150,7 +1148,6 @@ export class ServiceRequestComponent implements OnInit {
 
   onCellValueChanged(event) {
     //debugger;
-    //console.log(event) to test it
     var data = event.data;
     event.data.modified = true;
     //if (this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
@@ -1224,12 +1221,12 @@ export class ServiceRequestComponent implements OnInit {
         next: (data: any) => {
           instument = data.object;
           this.siteId = data.object.custSiteId;
-          this.serviceRequestform.patchValue({"machmodelname": instument.instype});
-          this.serviceRequestform.patchValue({"operatorname": instument.operatorEng.fname + '' + instument.operatorEng.lname});
-          this.serviceRequestform.patchValue({"operatornumber": instument.operatorEng.pcontactno});
-          this.serviceRequestform.patchValue({"operatoremail": instument.operatorEng.pemail});
-          this.serviceRequestform.patchValue({"machengineer": instument.machineEng.fname + ' ' + instument.machineEng.lname});
-          this.serviceRequestform.patchValue({"xraygenerator": instument.insversion});
+          this.serviceRequestform.patchValue({ "machmodelname": instument.instype });
+          this.serviceRequestform.patchValue({ "operatorname": instument.operatorEng.fname + '' + instument.operatorEng.lname });
+          this.serviceRequestform.patchValue({ "operatornumber": instument.operatorEng.pcontactno });
+          this.serviceRequestform.patchValue({ "operatoremail": instument.operatorEng.pemail });
+          this.serviceRequestform.patchValue({ "machengineer": instument.machineEng.fname + ' ' + instument.machineEng.lname });
+          this.serviceRequestform.patchValue({ "xraygenerator": instument.insversion });
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -1470,7 +1467,7 @@ export class ServiceRequestComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
-    this.fileshareService.upload(formData, serviceRequestId,"SRREQ").subscribe((event) => {
+    this.fileshareService.upload(formData, serviceRequestId, "SRREQ").subscribe((event) => {
       if (event.type === HttpEventType.UploadProgress)
         this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
       else if (event.type === HttpEventType.Response) {
@@ -1487,8 +1484,7 @@ export class ServiceRequestComponent implements OnInit {
       id: param1,
       engineerid: this.engineerid
     };
-    console.log(initialState);
-    this.bsModalRef = this.modalService.show(ModelEngContentComponent, {initialState});
+    this.bsModalRef = this.modalService.show(ModelEngContentComponent, { initialState });
   }
 
   openaction(param: string, param1: string) {
@@ -1499,7 +1495,7 @@ export class ServiceRequestComponent implements OnInit {
       engineerid: this.engineerid,
       engineerlist: this.appendList
     };
-    this.bsActionModalRef = this.modalService.show(ModelEngActionContentComponent, {initialState});
+    this.bsActionModalRef = this.modalService.show(ModelEngActionContentComponent, { initialState });
   }
 
   public onactionRowClicked(e) {
@@ -1519,7 +1515,7 @@ export class ServiceRequestComponent implements OnInit {
                   if (d.result) {
                     this.notificationService.showSuccess(d.resultMessage, "Success");
                     const selectedData = this.api.getSelectedRows();
-                    this.api.applyTransaction({remove: selectedData});
+                    this.api.applyTransaction({ remove: selectedData });
                   } else {
                     this.notificationService.showError(d.resultMessage, "Error");
                   }
@@ -1540,12 +1536,9 @@ export class ServiceRequestComponent implements OnInit {
 
           if (e.data.teamviewerrecroding != null || params.teamviewerrecroding == null) {
             this.downloadTeamViewerRecording(params)
-            console.log(params.fileUrl)
             break
           } else {
             this.notificationService.showError("No Recording ", "Error")
-            console.log(params.fileUrl, e)
-
             break;
           }
 
@@ -1556,18 +1549,18 @@ export class ServiceRequestComponent implements OnInit {
 
   downloadTeamViewerRecording(params: any) {
     this.fileshareService.download(params.id, "/SRATN").subscribe((event) => {
-        if (event.type === HttpEventType.Response) {
-          this.downloadFile(params, event);
-        }
-      }, error => {
-            this.notificationService.showError("No Recording ", "Error")
+      if (event.type === HttpEventType.Response) {
+        this.downloadFile(params, event);
       }
+    }, error => {
+      this.notificationService.showError("No Recording ", "Error")
+    }
     );
   }
 
-  private downloadFile(params,data: HttpResponse<Blob>) {
+  private downloadFile(params, data: HttpResponse<Blob>) {
     debugger;
-    const downloadedFile = new Blob([data.body], {type: data.body.type});
+    const downloadedFile = new Blob([data.body], { type: data.body.type });
     const a = document.createElement("a");
     a.setAttribute("style", "display:block;");
     document.body.appendChild(a);
