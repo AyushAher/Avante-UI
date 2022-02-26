@@ -21,34 +21,6 @@
               <button class="btn btn-primary" (click)="onSeearchByPartNo()" type="button">Search</button>
             </div>
 
-            <div class="col-sm-4" hidden>
-              <label for="configTypeid">Config Type</label>
-
-              <select id="configTypeid" #configType class="form-control"
-                      (change)="onConfigChange(configType.value)"
-                      [ngClass]="{ 'is-invalid': submitted && f.configType.errors }">
-                <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
-                  {{congfig.itemname}}
-                </option>
-              </select>
-
-              <div *ngIf="submitted && f.configType.errors" class="invalid-feedback">
-                <div *ngIf="f.configType.errors.required">Config Type is required</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4" hidden>
-              <label for="configValueid">Config Value</label>
-              <select id="configValueid" class="form-control" #configvalue
-                      (change)="onConfigVChange(configType.value,configvalue.value)">
-                <!--<option value="0">--All--</option>-->
-                <option *ngFor="let c of configValueList" value={{c.id}}>
-                  {{c.configValue}}
-                </option>
-              </select>
-              <div *ngIf="submitted && f.configValue.errors" class="invalid-feedback">
-                <div *ngIf="f.configValue.errors.required">Config Value is required</div>
-              </div>
-            </div>
             <div class="col-md-4 col-sm-4">
               <label for="partno">Part No.</label>
               <input id="partno" type="text" readonly formControlName="partNo"
@@ -71,7 +43,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="qtyAvailable">Qty. Available</label>
-              <input id="qtyAvailable" type="text" formControlName="qtyAvailable"
+              <input id="qtyAvailable" type="number" formControlName="qtyAvailable"
                      class="form-control" [ngClass]="{ ' is -invalid': submitted && f.qtyAvailable.errors}"/>
               <div *ngIf="submitted && f.qtyAvailable.errors" class="invalid-feedback">
                 <div *ngIf="f.qtyAvailable.errors.required">
