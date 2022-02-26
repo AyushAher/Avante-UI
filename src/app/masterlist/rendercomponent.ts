@@ -18,13 +18,15 @@ import {
   SparePartService,
   UserProfileService
 } from '../_services';
-import {PrevchklocpartelementService} from "../_services/prevchklocpartelement.service";
+import {PrevchklocpartelementService} from '../_services/prevchklocpartelement.service';
 
 @Component({
   template: `
-<button class="btn btn-link" data-action-type="remove" (click)="delete(params)"><i class="fas fa-trash-alt" title="Delete"></i></button>
-<button class="btn btn-link" *ngIf="params.addAccess" data-action-type="add" ><i class="fas fa-plus-circle" title="Add Value" data-action-type="add"></i></button>
-<button class="btn btn-link" *ngIf="params.hasUpdateAccess" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>
+    <button class="btn btn-link" data-action-type="remove" (click)="delete(params)"><i class="fas fa-trash-alt" title="Delete"></i></button>
+    <button class="btn btn-link" [disabled]="!params.addAccess" data-action-type="add"><i class="fas fa-plus-circle" title="Add Value"
+                                                                                         data-action-type="add"></i></button>
+    <button class="btn btn-link" [disabled]="!params.hasUpdateAccess" data-action-type="edit"><i class="fas fas fa-pen" title="Edit Value"
+                                                                                                data-action-type="edit"></i></button>
 `
 })
 export class MRenderComponent implements AgRendererComponent  {
@@ -60,6 +62,7 @@ export class MRenderComponent implements AgRendererComponent  {
 
 
   delete(params: any) {
+      console.log(params);
     //debugger;
     if (confirm("Are you sure, you want to delete the record?") == true) {
       if (params.deleteLink == "D") {
