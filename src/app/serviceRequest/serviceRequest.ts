@@ -1,6 +1,6 @@
 /* tslint:disable */
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {IDropdownSettings} from 'ng-multiselect-dropdown';
 import {
   actionList,
   Contact,
@@ -19,16 +19,16 @@ import {
   tickersAssignedHistory,
   User
 } from '../_models';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
-import { environment } from '../../environments/environment';
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { ModelEngContentComponent } from './modelengcontent';
-import { ModelEngActionContentComponent } from './modelengactioncontent';
-import { DatePipe } from '@angular/common'
-import { EngschedulerService } from "../_services/engscheduler.service";
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {environment} from '../../environments/environment';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ModelEngContentComponent} from './modelengcontent';
+import {ModelEngActionContentComponent} from './modelengactioncontent';
+import {DatePipe} from '@angular/common';
+import {EngschedulerService} from '../_services/engscheduler.service';
 
 import {
   AccountService,
@@ -50,8 +50,8 @@ import {
   SRAssignedHistoryService,
   UploadService
 } from '../_services';
-import { HttpEventType, HttpResponse } from "@angular/common/http";
-import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
+import {HttpEventType, HttpResponse} from '@angular/common/http';
+import {FilerendercomponentComponent} from '../Offerrequest/filerendercomponent.component';
 
 
 @Component({
@@ -128,6 +128,7 @@ export class ServiceRequestComponent implements OnInit {
   private transaction: number;
   private hastransaction: boolean;
   private file: any;
+  role: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -220,18 +221,20 @@ export class ServiceRequestComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin") {
+    if (this.user.username == 'admin') {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else {
+
+      let role = JSON.parse(localStorage.getItem('roles'));
+      this.role = role[0]?.itemCode;
+
     }
 
-
+    let role = this.role;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
-
-    let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
 
     if (role == environment.custRoleCode) {
       this.IsCustomerView = true;
@@ -317,13 +320,13 @@ export class ServiceRequestComponent implements OnInit {
         },
         error: error => {
           //  this.alertService.error(error);
-          this.notificationService.showSuccess(error, "Error");
+          this.notificationService.showSuccess(error, 'Error');
           this.loading = false;
         }
       });
     //SERTY
 
-    this.listTypeService.getById("SERTY")
+    this.listTypeService.getById('SERTY')
       .pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
@@ -368,19 +371,25 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.reqtypelist = data;
+
+          if (this.IsCustomerView) {
+            this.serviceRequestform.get('requesttypeid').setValue(data.find(x => x.itemCode == 'CUSTR')?.listTypeItemId);
+
+          }
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          this.notificationService.showError(error, 'Error');
           this.loading = false;
         }
       });
+
 
     this.dropdownSettings = {
       idField: 'itemCode',
       textField: 'itemname',
     };
 
-    this.listTypeService.getById("SRT")
+    this.listTypeService.getById('SRT')
       .pipe(first())
       .subscribe({
         next: (data: any) => {
