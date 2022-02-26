@@ -822,7 +822,6 @@ export class InstrumentComponent implements OnInit {
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
-    this.api.sizeColumnsToFit();
   }
 
   onConfigChange(param: string) {
@@ -934,7 +933,6 @@ export class InstrumentComponent implements OnInit {
   pdfonGridReady(params): void {
     this.pdfapi = params.api;
     this.pdfcolumnApi = params.columnApi;
-    this.pdfapi.sizeColumnsToFit();
   }
 
   public onPdfRowClicked(e) {
