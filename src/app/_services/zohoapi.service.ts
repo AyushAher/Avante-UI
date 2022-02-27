@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {first, map} from 'rxjs/operators';
 
 import {environment} from '../../environments/environment';
 import {Amc} from '../_models';
@@ -31,7 +31,12 @@ export class zohoapiService {
     window.location.href = environment.zohocodeapi;
   }
 
-  authwithcode(code:string) {
+
+  GetSalesOrder(code, page, orderNumber) {
+    return this.http.get(`${environment.apiUrl}/Zoho/salesorders/${this.accountService.zohoauthValue}/${page}?salesorder_number_startswith=${orderNumber}`);
+  }
+
+  authwithcode(code: string, endPoint?: string) {
     //const formData: FormData = new FormData();
     //formData.append('code', code);
     //formData.append('client_id', environment.client);
@@ -39,7 +44,7 @@ export class zohoapiService {
     //formData.append('redirect_uri', environment.redirecturl);
     //formData.append('grant_type', "authorization_code");
     // let url = "${ environment.apiUrl }/Amc/${id}"
-     return this.http.get(`${environment.apiUrl}/Zoho/GetZToken/${code}`);
+    return this.http.get(`${environment.apiUrl}/Zoho/GetZToken/${code}/${endPoint}`);
     // debugger;
     // var Zdata = this.http.post(`https://accounts.zoho.com/oauth/v2/token?code=${code}&client_id=1000.5H07NQJOLXW69IEHWG3GICTVU8L51W&client_secret=2f54ec5f719c6ee911a367c16211f8d3576378d013&redirect_uri=http://localhost:4200/custpayrpt&grant_type=authorization_code`, null);
     // return Zdata

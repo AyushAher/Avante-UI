@@ -1,17 +1,18 @@
-import { Component, OnInit } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
-import { first } from "rxjs/operators";
-import { RenderComponent } from "../distributor/rendercomponent";
-import { User } from "../_models";
-import { Offerrequest } from "../_models/Offerrequest.model";
-import { AccountService, NotificationService, ProfileService } from "../_services";
-import { OfferrequestService } from "../_services/Offerrequest.service";
+import {Component, OnInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {first} from 'rxjs/operators';
+import {RenderComponent} from '../distributor/rendercomponent';
+import {User} from '../_models';
+import {Offerrequest} from '../_models/Offerrequest.model';
+import {AccountService, NotificationService, ProfileService, zohoapiService} from '../_services';
+import {OfferrequestService} from '../_services/Offerrequest.service';
+import {environment} from '../../environments/environment';
 
 @Component({
-  selector: "app-Offerrequestlist",
-  templateUrl: "./Offerrequestlist.component.html",
+  selector: 'app-Offerrequestlist',
+  templateUrl: './Offerrequestlist.component.html',
 })
 
 export class OfferrequestlistComponent implements OnInit {
@@ -32,6 +33,8 @@ export class OfferrequestlistComponent implements OnInit {
   private columnApi: ColumnApi;
   private api: GridApi;
   profilePermission: any;
+  zohocode: any;
+  role: string;
 
   constructor(
     private router: Router,
@@ -39,10 +42,14 @@ export class OfferrequestlistComponent implements OnInit {
     private notificationService: NotificationService,
     private Service: OfferrequestService,
     private profileService: ProfileService,
-  ) { }
+    private zohoservice: zohoapiService,
+    private route: ActivatedRoute,
+  ) {
+  }
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "OFREQ");
@@ -54,14 +61,37 @@ export class OfferrequestlistComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin") {
+    if (this.user.username == 'admin') {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else {
+      this.role = role[0]?.itemCode;
     }
 
-
+    this.route.queryParams.subscribe(params => {
+      this.zohocode = params['code'];
+    });
+    if (this.role == environment.distRoleCode || this.user.username == 'admin') {
+      if (this.accountService.zohoauthValue == null) {
+        if (this.zohocode == null) {
+          window.location.href = environment.commonzohocodeapi + 'offerrequestlist' + '&access_type=offline';
+        } else {
+          this.zohoservice.authwithcode(this.zohocode, 'offerrequestlist').subscribe({
+            next: (data: any) => {
+              localStorage.setItem('zCode', this.zohocode);
+              localStorage.setItem('zohotoken', JSON.stringify(data.object));
+              this.accountService.zohoauthSet(data.object);
+            },
+            error: error => {
+              this.notificationService.showError(error, 'Error');
+              this.loading = false;
+            }
+          });
+        }
+      }
+    }
     this.columnDefs = this.createColumnDefs();
 
     this.Service.getAll()

@@ -1,14 +1,14 @@
-import {DatePipe} from "@angular/common";
-import {HttpEventType} from "@angular/common/http";
-import {Component, EventEmitter, OnInit, Output} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {Guid} from "guid-typescript";
-import {first} from "rxjs/operators";
-import {AmcInstrumentRendererComponent} from "../amc/amc-instrument-renderer.component";
-import {Currency, Distributor, ResultMsg, User} from "../_models";
-import {Offerrequest} from "../_models/Offerrequest.model";
+import {DatePipe} from '@angular/common';
+import {HttpEventType} from '@angular/common/http';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {Guid} from 'guid-typescript';
+import {first} from 'rxjs/operators';
+import {AmcInstrumentRendererComponent} from '../amc/amc-instrument-renderer.component';
+import {Currency, Distributor, ResultMsg, User} from '../_models';
+import {Offerrequest} from '../_models/Offerrequest.model';
 import {
   AccountService,
   AlertService,
@@ -17,18 +17,20 @@ import {
   FileshareService,
   ListTypeService,
   NotificationService,
-  ProfileService
-} from "../_services";
-import {OfferrequestService} from "../_services/Offerrequest.service";
-import {SparePartsOfferRequestService} from "../_services/sparepartsofferrequest.service";
-import {FilerendercomponentComponent} from "./filerendercomponent.component";
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
-import {SparequotedetComponent} from "./sparequotedet.component";
-import {SparequotedetService} from "../_services/sparequotedet.service";
+  ProfileService,
+  zohoapiService
+} from '../_services';
+import {OfferrequestService} from '../_services/Offerrequest.service';
+import {SparePartsOfferRequestService} from '../_services/sparepartsofferrequest.service';
+import {FilerendercomponentComponent} from './filerendercomponent.component';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {SparequotedetComponent} from './sparequotedet.component';
+import {SparequotedetService} from '../_services/sparequotedet.service';
+import {environment} from '../../environments/environment';
 
 @Component({
-  selector: "app-Offerrequest",
-  templateUrl: "./Offerrequest.component.html",
+  selector: 'app-Offerrequest',
+  templateUrl: './Offerrequest.component.html',
 })
 export class OfferrequestComponent implements OnInit {
   form: FormGroup;
@@ -67,13 +69,17 @@ export class OfferrequestComponent implements OnInit {
 
   @Output() public onUploadFinished = new EventEmitter();
   bsModalRef: BsModalRef;
-  SpareQuotationDetailsList = []
-  datepipie = new DatePipe("en-US");
-  ColumnDefsSPDet: ColDef[]
+  SpareQuotationDetailsList = [];
+  SpareQuotationDetails = [];
+  datepipie = new DatePipe('en-US');
+  ColumnDefsSPDet: ColDef[];
   prevNotCompleted: boolean = false;
 
-  CompletedId = "COMP"
+  CompletedId = 'COMP';
   statusList: any;
+  zohocode: any;
+  role: any;
+  hasQuoteDet: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -91,6 +97,7 @@ export class OfferrequestComponent implements OnInit {
     private modalService: BsModalService,
     private SpareQuoteDetService: SparequotedetService,
     private listTypeService: ListTypeService,
+    private zohoService: zohoapiService,
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       if (this.id != null) {
@@ -139,7 +146,7 @@ export class OfferrequestComponent implements OnInit {
 
     this.transaction = 0;
     this.user = this.accountService.userValue;
-
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "OFREQ");
@@ -151,27 +158,29 @@ export class OfferrequestComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin") {
+    if (this.user.username == 'admin') {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else {
+      this.role = role[0]?.itemCode;
     }
 
 
     this.form = this.formBuilder.group({
       isactive: [true],
-      offReqNo: [""],
-      distributorid: ["", Validators.required],
+      offReqNo: [''],
+      distributorid: ['', Validators.required],
       totalamount: [0],
-      currencyId: [""],
-      status: [""],
-      podate: ["", Validators.required],
+      currencyId: [''],
+      status: [''],
+      podate: ['', Validators.required],
       isdeleted: [false],
-      spareQuoteNo: [{value: "", disabled: true}]
+      spareQuoteNo: [{value: '', disabled: true}]
     })
 
-    this.id = this.route.snapshot.paramMap.get("id");
+    this.id = this.route.snapshot.paramMap.get('id');
     this.columnDefs = this.createColumnDefs();
     this.columnDefsAttachments = this.createColumnDefsAttachments();
     this.ColumnDefsSPDet = this.createColumnDefsSPDet()
@@ -182,9 +191,10 @@ export class OfferrequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.form.patchValue(data.object);
+            this.getZohoData();
           },
           error: (error) => {
-            this.notificationService.showError("Error", "Error");
+            this.notificationService.showError('Error', 'Error');
             this.loading = false;
           },
         });
@@ -276,15 +286,34 @@ export class OfferrequestComponent implements OnInit {
 
   }
 
+  getZohoData() {
+    if (this.role == environment.distRoleCode || this.user.username == 'admin') {
+      this.hasQuoteDet = true;
+      let quoteno = this.form.get('spareQuoteNo').value;
+      let code = localStorage.getItem('zCode');
+      let token = localStorage.getItem('zohotoken');
+      if (code == null || token == null) {
+        this.router.navigate(['offerrequestlist']);
+      }
+      this.zohoService.GetSalesOrder(code, 1, quoteno)
+        .pipe(first())
+        .subscribe((data: any) => {
+          this.SpareQuotationDetails = data.object;
+        });
+
+    }
+  }
+
+
   RemoveSpareParts(event) {
     var cellValue = event.value;
     var rowData = event.data;
     var indexOfSelectedRow = this.sparePartsList.indexOf(rowData);
 
     if (cellValue == rowData.id) {
-      this.sparePartsList.splice(indexOfSelectedRow, 1)
+      this.sparePartsList.splice(indexOfSelectedRow, 1);
       if (rowData.offerRequestId == null && cellValue == rowData.id) {
-        this.api.setRowData(this.sparePartsList)
+        this.api.setRowData(this.sparePartsList);
       }
       else {
         this.SparePartsService
@@ -576,93 +605,57 @@ export class OfferrequestComponent implements OnInit {
 
   createColumnDefsSPDet() {
     return [
-      {
-        headerName: "Action",
-        field: "id",
-        filter: false,
-        editable: false,
-        sortable: false,
+      // {
+      //   headerName: "Action",
+      //   field: "id",
+      //   filter: false,
+      //   editable: false,
+      //   sortable: false,
+      //
+      //   cellRenderer: (params) => {
+      //     if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+      //       return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+      //     } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+      //       return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
+      //     <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+      //     } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+      //       return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+      //     }
+      //   }
+      // },
 
-        cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
-            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-          }
-        }
-      },
-
       {
-        headerName: "Raised Date",
-        field: "raisedDate",
+        headerName: 'Sales Order Number',
+        field: 'salesorder_number',
         filter: true,
-        tooltipField: "Status",
+        tooltipField: 'Status',
         enableSorting: true,
         editable: false,
         sortable: true,
       },
       {
-        headerName: "Raised By",
-        field: "raisedById",
+        headerName: 'Customer Name',
+        field: 'customer_name',
         filter: true,
-        tooltipField: "raisedbyId",
+        tooltipField: 'raisedbyId',
         enableSorting: true,
         editable: false,
         sortable: true,
       },
       {
-        headerName: "Status",
-        field: "statusId",
+        headerName: 'Status',
+        field: 'status',
         filter: true,
-        tooltipField: "Status",
+        tooltipField: 'Status',
         enableSorting: true,
         editable: false,
         sortable: true,
       },
       {
-        headerName: "Comments",
-        field: "comments",
+        headerName: 'Total Amount',
+        field: 'total',
         filter: true,
-        tooltipField: "Comments",
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-      },
-      {
-        headerName: "Customer Response Date",
-        field: "custResponseDate",
-        filter: true,
-        tooltipField: "Comments",
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-      },
-      {
-        headerName: "PO Raised Date",
-        field: "zohoPORaisedDate",
-        filter: true,
-        tooltipField: "Comments",
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-      },
-      {
-        headerName: "Shipped Date",
-        field: "shippedDate",
-        filter: true,
-        tooltipField: "Comments",
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-      },
-      {
-        headerName: "Delivered On",
-        field: "deliveredOn",
-        filter: true,
-        tooltipField: "Comments",
+        tooltipField: 'Comments',
         enableSorting: true,
         editable: false,
         sortable: true,
