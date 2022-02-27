@@ -171,7 +171,7 @@ export class ServiceReportListComponent implements OnInit {
       },
       {
         headerName: 'Download',
-
+        hide: this.role != environment.custRoleCode,
         cellRenderer: (params) => {
           return `<button class="btn btn-link" type="button" data-action-type="download"><i class="fas fa-download" data-action-type="download" title="download"></i></button>`;
         }
