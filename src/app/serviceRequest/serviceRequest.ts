@@ -1,6 +1,6 @@
 /* tslint:disable */
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {IDropdownSettings} from 'ng-multiselect-dropdown';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import {
   actionList,
   Contact,
@@ -19,16 +19,16 @@ import {
   tickersAssignedHistory,
   User
 } from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
-import {environment} from '../../environments/environment';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ModelEngContentComponent} from './modelengcontent';
-import {ModelEngActionContentComponent} from './modelengactioncontent';
-import {DatePipe} from '@angular/common';
-import {EngschedulerService} from '../_services/engscheduler.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { environment } from '../../environments/environment';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ModelEngContentComponent } from './modelengcontent';
+import { ModelEngActionContentComponent } from './modelengactioncontent';
+import { DatePipe } from '@angular/common';
+import { EngschedulerService } from '../_services/engscheduler.service';
 
 import {
   AccountService,
@@ -50,8 +50,9 @@ import {
   SRAssignedHistoryService,
   UploadService
 } from '../_services';
-import {HttpEventType, HttpResponse} from '@angular/common/http';
-import {FilerendercomponentComponent} from '../Offerrequest/filerendercomponent.component';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponent.component';
+import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -95,8 +96,9 @@ export class ServiceRequestComponent implements OnInit {
   engcomment: EngineerCommentList;
   ticketHistoryList: tickersAssignedHistory[] = [];
   actionList: actionList[] = [];
-  customerSitelist: CustomerSite[];
-  customerlist: any;
+  customerSitelist: CustomerSite[] = [];
+  customerlist: any = [];
+  customer: any = [];
   serviceTypeList: ListTypeItem[];
   subreqtypelist: ListTypeItem[];
   reqtypelist: ListTypeItem[];
@@ -129,6 +131,7 @@ export class ServiceRequestComponent implements OnInit {
   private hastransaction: boolean;
   private file: any;
   role: any;
+  instrumentStatus: ListTypeItem[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -139,7 +142,6 @@ export class ServiceRequestComponent implements OnInit {
     private distributorService: DistributorService,
     private countryService: CountryService,
     private customerService: CustomerService,
-    private customerSiteService: CustomerSiteService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private serviceRequestService: ServiceRequestService,
@@ -255,6 +257,8 @@ export class ServiceRequestComponent implements OnInit {
       edate: [""],
       serreqno: ['', Validators.required],
       distid: ['', Validators.required],
+      custid: [''],
+      siteid: [''],
       assignedto: [''],
       serreqdate: ['', Validators.required],
       visittype: ['', Validators.required],
@@ -273,7 +277,7 @@ export class ServiceRequestComponent implements OnInit {
       xraygenerator: [''],
       breakdowntype: ['', Validators.required],
       isrecurring: [false],
-      recurringcomments: ['', Validators.required],
+      recurringcomments: [''],
       breakoccurdetailsid: ['', Validators.required],
       alarmdetails: [''],
       resolveaction: [''],
@@ -311,7 +315,14 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('subrequesttypeid').setValidators([Validators.required]);
       this.serviceRequestform.get('subrequesttypeid').updateValueAndValidity();
     }
-
+    this.serviceRequestform.get('custid').disable();
+    this.serviceRequestform.get('siteid').disable();
+    if (this.IsCustomerView) {
+      this.serviceRequestform.get('siteid').enable();
+    } else if (this.IsDistributorView) {
+      this.serviceRequestform.get('custid').enable();
+      this.serviceRequestform.get('siteid').enable();
+    }
     this.countryService.getAll()
       .pipe(first())
       .subscribe({
@@ -331,6 +342,21 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.serviceTypeList = data;
+          if (this.IsCustomerView) {
+            this.serviceTypeList = this.serviceTypeList.filter(x => x.itemCode != "PREV" && x.itemCode != "PLAN")
+          }
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
+
+    this.listTypeService.getById('CINSS')
+      .pipe(first())
+      .subscribe({
+        next: (data: ListTypeItem[]) => {
+          this.instrumentStatus = data;
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -401,6 +427,19 @@ export class ServiceRequestComponent implements OnInit {
         }
       });
 
+    this.customerService.getAll().pipe(first())
+      .subscribe((data: any) => {
+        data.object.forEach(element => {
+          if (this.user.distRegionsId.split(",").find(x => x == element.defdistregionid) != null) {
+            this.customerlist.push(element)
+          }
+          if (this.user.distRegionsId == "") {
+            this.customerlist = data.object
+          }
+        });
+      })
+
+
     this.distributorService.getAll()
       .pipe(first())
       .subscribe({
@@ -464,6 +503,8 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
             this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
             this.serviceRequestform.patchValue({ "distid": data.object.distid });
+            this.serviceRequestform.patchValue({ "custid": data.object.custid });
+            this.serviceRequestform.patchValue({ "siteid": data.object.siteid });
             this.serviceRequestform.patchValue({ "assignedto": data.object.assignedto });
             this.serviceRequestform.patchValue({ "visittype": data.object.visittype });
             this.serviceRequestform.patchValue({ "companyname": data.object.companyname });
@@ -486,7 +527,7 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({ "resolveaction": data.object.resolveaction });
             this.serviceRequestform.patchValue({ "currentinstrustatus": data.object.currentinstrustatus });
             this.serviceRequestform.patchValue({ "accepted": data.object.accepted });
-
+            this.onCustomerChanged(data.object.custid)
             if (data.object.accepted) {
               this.serviceRequestform.get('accepted').disable();
             } else {
@@ -539,40 +580,18 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.logindata = data.object;
-            //this.customerList = this.logindata.customer;
-            //if (this.customerList != undefined) {
-            //  this.customerId = this.logindata.customer.id;
-            //}
-            this.siteId = this.logindata.sites[0].id;
-            this.customerId = this.logindata.id;
-            this.customerSitelist = this.logindata.sites;
-            this.serviceRequestform.patchValue({ "country": this.logindata.address.countryid });
-            this.serviceRequestform.patchValue({ "companyname": this.logindata.custname });
-            this.serviceRequestform.patchValue({ "distid": this.logindata.defdistid });
-            this.distId = this.logindata.defdistid;
-            this.serviceRequestform.patchValue({ "contactperson": this.user.username });
-            this.serviceRequestform.patchValue({ "email": this.user.email });
-            this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
-
-
-            //var subreq = this.logindata.sites.id.join(',');
-            let subreq = this.logindata.sites.map(x => x.id).join(',');
-
-            this.instrumentService.getinstubysiteIds(subreq)
-              .pipe(first())
-              .subscribe({
-                next: (data: any) => {
-                  this.instrumentList = data.object;
-                },
-                error: error => {
-                  //  this.alertService.error(error);
-                  this.notificationService.showSuccess(error, "Error");
-                  this.loading = false;
-                }
-              });
-
-
+            console.log(data);
+            this.SetCustomerData(data.object)
+            if (this.IsDistributorView) {
+              this.distributorService.getByConId(this.user.contactId).pipe(first())
+                .subscribe({
+                  next: (data: any) => {
+                    if (this.user.username != "admin") {
+                      this.serviceRequestform.get('distid').setValue(data.object[0].id)
+                    }
+                  }
+                })
+            }
             // this.getAllInstrument(this.logindata.sites[0].id);
             // this.getDistRegnContacts(this.logindata.defdistid);
             //if (this.logindata.contacts.length > 0) {
@@ -608,7 +627,7 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('breakdowntype').disable();
       this.serviceRequestform.get('isrecurring').disable();
       this.serviceRequestform.get('recurringcomments').disable();
-      this.serviceRequestform.get('breakoccurdetails').disable();
+      this.serviceRequestform.get('breakoccurdetailsid').disable();
       this.serviceRequestform.get('alarmdetails').disable();
       this.serviceRequestform.get('resolveaction').disable();
       this.serviceRequestform.get('visittype').disable();
@@ -616,21 +635,60 @@ export class ServiceRequestComponent implements OnInit {
     } else if (this.IsDistributorView) {
       this.serviceRequestform.get('assignedto').enable();
       this.serviceRequestform.get('country').disable();
-      this.serviceRequestform.get('machinesno').disable();
-      this.serviceRequestform.get('breakdowntype').disable();
-      this.serviceRequestform.get('isrecurring').disable();
-      this.serviceRequestform.get('recurringcomments').disable();
-      this.serviceRequestform.get('breakoccurdetails').disable();
-      this.serviceRequestform.get('alarmdetails').disable();
-      this.serviceRequestform.get('resolveaction').disable();
-      this.serviceRequestform.get('visittype').disable();
-      this.serviceRequestform.get('currentinstrustatus').disable();
     } else {
       this.serviceRequestform.get('assignedto').disable();
       this.serviceRequestform.get('serreqdate').enable();
 
     }
     // this.ticketcolumnDefs = this.createColumnTicketDefs();
+  }
+
+  onCustomerChanged(value: any) {
+    let object = this.customerlist.find(x => x.id == value);
+    this.SetCustomerData(object)
+
+  }
+
+  SetCustomerData(data: any) {
+    this.logindata = data;
+    //this.customerList = this.logindata.customer;
+    //if (this.customerList != undefined) {
+    //  this.customerId = this.logindata.customer.id;
+    //}
+    this.serviceRequestform.patchValue({ "distid": this.logindata.defdistid });
+    this.distId = this.logindata.defdistid;
+    this.customerId = this.logindata.id;
+    this.serviceRequestform.patchValue({ "country": this.logindata.address?.countryid });
+    this.serviceRequestform.patchValue({ "custid": this.logindata?.id });
+    this.serviceRequestform.patchValue({ "companyname": this.logindata?.custname });
+    this.serviceRequestform.patchValue({ "contactperson": this.user?.username });
+    this.serviceRequestform.patchValue({ "email": this.user?.email });
+    if (this.logindata.sites != null) {
+      this.siteId = this.logindata.sites[0].id
+      this.customerSitelist = this.logindata.sites;
+      this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
+      this.serviceRequestform.patchValue({ "siteid": this.logindata.sites[0].id });
+    }
+    this.getDistRegnContacts(this.distId)
+
+
+    //var subreq = this.logindata.sites.id.join(',');
+    let subreq = this.logindata.sites?.map(x => x.id).join(',');
+
+    this.instrumentService.getinstubysiteIds(subreq)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.instrumentList = data.object;
+        },
+        error: error => {
+          //  this.alertService.error(error);
+          this.notificationService.showSuccess(error, "Error");
+          this.loading = false;
+        }
+      });
+
+
   }
 
   // convenience getter for easy access to form fields
@@ -643,13 +701,12 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submitted = true;
-
     // reset alerts on submit
     this.alertService.clear();
 
     // stop here if form is invalid
     if (this.serviceRequestform.invalid) {
+      console.log(this.serviceRequestform);
       return;
     }
     this.isSave = true;
@@ -776,25 +833,19 @@ export class ServiceRequestComponent implements OnInit {
   onServiceTypeChange(serviceTypeId) {
     this.isAmc = false;
     let servicetypeCode = this.serviceTypeList.filter(x => x.listTypeItemId == serviceTypeId)[0]?.itemCode;
-    if (servicetypeCode == "AMC") {
+    if (servicetypeCode == "AMC" || servicetypeCode == "PLAN") {
       this.isAmc = true;
       this.serviceRequestform.get('sdate').setValidators(Validators.required)
       this.serviceRequestform.get('sdate').updateValueAndValidity()
       this.serviceRequestform.get('edate').setValidators(Validators.required)
       this.serviceRequestform.get('edate').updateValueAndValidity()
 
-      this.serviceRequestform.get('recurringcomments').clearValidators()
-      this.serviceRequestform.get('recurringcomments').updateValueAndValidity()
       this.serviceRequestform.get('breakoccurdetailsid').clearValidators()
       this.serviceRequestform.get('breakoccurdetailsid').updateValueAndValidity()
       this.serviceRequestform.get('alarmdetails').clearValidators()
       this.serviceRequestform.get('alarmdetails').updateValueAndValidity()
-      this.serviceRequestform.get('resolveaction').clearValidators()
-      this.serviceRequestform.get('resolveaction').updateValueAndValidity()
       this.serviceRequestform.get('breakdowntype').clearValidators()
       this.serviceRequestform.get('breakdowntype').updateValueAndValidity()
-      this.serviceRequestform.get('isrecurring').clearValidators()
-      this.serviceRequestform.get('isrecurring').updateValueAndValidity()
 
     } else {
       this.isAmc = false;
@@ -803,18 +854,12 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('edate').clearValidators()
       this.serviceRequestform.get('edate').updateValueAndValidity()
 
-      this.serviceRequestform.get('recurringcomments').setValidators(Validators.required)
-      this.serviceRequestform.get('recurringcomments').updateValueAndValidity()
       this.serviceRequestform.get('breakoccurdetailsid').setValidators(Validators.required)
       this.serviceRequestform.get('breakoccurdetailsid').updateValueAndValidity()
       this.serviceRequestform.get('alarmdetails').setValidators(Validators.required)
       this.serviceRequestform.get('alarmdetails').updateValueAndValidity()
-      this.serviceRequestform.get('resolveaction').setValidators(Validators.required)
-      this.serviceRequestform.get('resolveaction').updateValueAndValidity()
       this.serviceRequestform.get('breakdowntype').setValidators(Validators.required)
       this.serviceRequestform.get('breakdowntype').updateValueAndValidity()
-      this.serviceRequestform.get('isrecurring').setValidators(Validators.required)
-      this.serviceRequestform.get('isrecurring').updateValueAndValidity()
 
     }
   }

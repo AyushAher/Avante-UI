@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {Country, ProfileReadOnly, ServiceRequest, User} from '../_models';
-import {Router} from '@angular/router';
-import {FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
-import {environment} from '../../environments/environment';
+import { Country, ProfileReadOnly, ServiceRequest, User } from '../_models';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { environment } from '../../environments/environment';
 import {
   AccountService,
   ContactService,
@@ -14,7 +14,7 @@ import {
   ProfileService,
   ServiceRequestService
 } from '../_services';
-import {RenderComponent} from '../distributor/rendercomponent';
+import { RenderComponent } from '../distributor/rendercomponent';
 
 
 @Component({
@@ -29,10 +29,7 @@ export class ServiceRequestListComponent implements OnInit {
   srAdminList: ServiceRequest[];
   srEngList: ServiceRequest[];
   loading = false;
-  submitted = false;
-  isSave = false;
   customerId: string;
-  type: string = "D";
   countries: Country[];
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
@@ -114,9 +111,9 @@ export class ServiceRequestListComponent implements OnInit {
         this.columnDefs = this.createDisColumnDefs();
       } else if (this.IsEngineerView) {
         this.columnDefs = this.createDisColumnDefs();
-      } else if(this.IsCustomerView){
+      } else if (this.IsCustomerView) {
         this.columnDefs = this.createCustColumnDefs();
-      }else if(this.IsAdminView){
+      } else if (this.IsAdminView) {
         this.columnDefs = this.createDisColumnDefs()
       }
 
@@ -145,59 +142,65 @@ export class ServiceRequestListComponent implements OnInit {
         deleteaccess: this.hasDeleteAccess
       },
     },
-      {
-        headerName: 'Service Request No.',
-        field: 'serreqno',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'Service Request No.',
-      },
-      {
-        headerName: 'Customer Name',
-        field: 'companyname',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'companyname',
-      }, {
-        headerName: 'Site Name',
-        field: 'sitename',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Machine Serial No.',
-        field: 'machineModelName',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Machine Model Name',
-        field: 'machmodelname',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Contact Person',
-        field: 'contactperson',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Assigned To',
-        field: 'assignedtoName',
-        filter: true,
-        editable: false,
-        sortable: true
-      }
-    ]
+    {
+      headerName: 'Service Request No.',
+      field: 'serreqno',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'Service Request No.',
+    },
+    {
+      headerName: 'Customer Name',
+      field: 'companyname',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'companyname',
+    }, {
+      headerName: 'Site Name',
+      field: 'sitename',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Machine Serial No.',
+      field: 'machineModelName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Machine Model Name',
+      field: 'machmodelname',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Contact Person',
+      field: 'contactperson',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Service Type',
+      field: 'visittypeName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Assigned To',
+      field: 'assignedtoName',
+      filter: true,
+      editable: false,
+      sortable: true
+    }]
   }
 
   private createCustColumnDefs() {
@@ -216,61 +219,65 @@ export class ServiceRequestListComponent implements OnInit {
         deleteaccess: this.hasDeleteAccess
       },
     },
-      {
-        headerName: 'Service Request No.',
-        field: 'serreqno',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'Service Request No.',
-      },
-      {
-        headerName: 'Distributor Name',
-        field: 'distributor',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'distributor',
-      },
-      {
-        headerName: 'Site Name',
-        field: 'sitename',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
+    {
+      headerName: 'Service Request No.',
+      field: 'serreqno',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+    },
+    {
+      headerName: 'Distributor Name',
+      field: 'distributor',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+    },
+    {
+      headerName: 'Site Name',
+      field: 'sitename',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
 
-      {
-        headerName: 'Machine Serial No.',
-        field: 'machineModelName',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Machine Model Name',
-        field: 'machmodelname',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Contact Person',
-        field: 'contactperson',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Country',
-        field: 'countryName',
-        filter: true,
-        editable: false,
-        sortable: true
-      }
-    ]
+    {
+      headerName: 'Machine Serial No.',
+      field: 'machineModelName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Machine Model Name',
+      field: 'machmodelname',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Contact Person',
+      field: 'contactperson',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Service Type',
+      field: 'visittypeName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Country',
+      field: 'countryName',
+      filter: true,
+      editable: false,
+      sortable: true
+    }]
   }
 
 

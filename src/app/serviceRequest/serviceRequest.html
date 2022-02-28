@@ -44,7 +44,7 @@
         <form [formGroup]="serviceRequestform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-3">
-              <label for="serreqno">SrNo</label>
+              <label for="serreqno">Sr. No.</label>
               <input [ngClass]="{ 'is-invalid': submitted && f.serreqno.errors }" class="form-control"
                 formControlName="serreqno" readonly type="text" />
               <div *ngIf="submitted && f.serreqno.errors" class="invalid-feedback">
@@ -64,6 +64,25 @@
                 <div *ngIf="f.distid.errors.required">Distributor is required</div>
               </div>
             </div>
+
+            <div class="col-md-3">
+              <label for="assignedTo">Customer</label>
+              <select class="form-control" formControlName="custid" (change)="onCustomerChanged($event.target.value)">
+                <option *ngFor="let c of customerlist" value={{c.id}}>
+                  {{c.custname}}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label for="assignedTo">Site</label>
+              <select class="form-control" formControlName="siteid">
+                <option *ngFor="let c of customerSitelist" value={{c.id}}>
+                  {{c.custregname}}
+                </option>
+              </select>
+            </div>
+
             <div class="col-md-3 col-sm-3" *ngIf="IsCustomerView==false">
               <label for="assignedTo">Assigned To</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.assignedto.errors }" class="form-control"
@@ -85,8 +104,7 @@
                 <div *ngIf="f.serreqdate.errors.required">Date is required</div>
               </div>
             </div>
-          </div>
-          <div class="row">
+
             <div class="col-md-3 col-sm-3">
               <label for="visittype">Service Type</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }" class="form-control"
@@ -116,7 +134,7 @@
                 <div *ngIf="f.requesttime.errors.required">time is required</div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-3">
+            <div class="col-md-3 col-sm-3" hidden>
               <label for="sitename">Site Name</label>
               <input [ngClass]="{ 'is-invalid': submitted && f.sitename.errors }" class="form-control"
                 formControlName="sitename" readonly type="text" />
@@ -124,9 +142,7 @@
                 <div *ngIf="f.sitename.errors.required">siteName is required</div>
               </div>
             </div>
-
-          </div>
-          <div class="row">
+            
             <div class="col-md-3 col-sm-3">
               <label for="country">Country</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.country.errors }" class="form-control"
@@ -172,8 +188,6 @@
               </div>
             </div>
 
-          </div>
-          <div class="row">
             <div class="col-sm-3">
               <label for="operatorname">Operator Name</label>
               <input [ngClass]="{ 'is-invalid': submitted && f.operatorname.errors }" class="form-control"
@@ -207,8 +221,6 @@
               </div>
             </div>
 
-          </div>
-          <div class="row">
             <div class="col-md-3 col-sm-3">
               <label for="xraygenerator">xRayGenerator</label>
               <input [ngClass]="{ 'is-invalid': submitted && f.xraygenerator.errors }" class="form-control"
@@ -257,7 +269,7 @@
                 <div *ngIf="f.breakdowntype.errors.required">breakdownType is required</div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-3" *ngIf="!isAmc">
+            <div class="col-md-3 col-sm-3" hidden>
               <label for="isrecurring"></label>
               <div class="checkbox">
                 <label for="warranty">
@@ -270,16 +282,11 @@
               </div>
             </div>
 
-          </div>
-          <div class="row">
-            <div class="col-sm-3" *ngIf="!isAmc">
+            <div class="col-sm-3" hidden>
               <label for="recurringcomments">Recurring Comment</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.recurringcomments.errors }" class="form-control"
-                formControlName="recurringcomments" type="text" />
-              <div *ngIf="submitted && f.recurringcomments.errors" class="invalid-feedback">
-                <div *ngIf="f.recurringcomments.errors.required">Recurring Comment is required</div>
-              </div>
+              <input class="form-control" formControlName="recurringcomments" type="text" />
             </div>
+
             <div class="col-sm-3" *ngIf="!isAmc">
               <label for="breakoccurdetailsid">Breakdown Occurance Details</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.breakoccurdetailsid.errors }" class="form-control"
@@ -294,20 +301,16 @@
               </div>
             </div>
             <div class="col-sm-3" *ngIf="!isAmc">
-              <label for="alarmdetails">Alarm Details</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.alarmdetails.errors }" class="form-control"
-                formControlName="alarmdetails" type="text" />
+              <label for="alarmdetails">Alarm No & Details</label>
+              <textarea [ngClass]="{ 'is-invalid': submitted && f.alarmdetails.errors }" class="form-control"
+                formControlName="alarmdetails" type="text" maxlength="500"></textarea>
               <div *ngIf="submitted && f.alarmdetails.errors" class="invalid-feedback">
-                <div *ngIf="f.alarmdetails.errors.required">Alarm Details is required</div>
+                <div *ngIf="f.alarmdetails.errors.required">Alarm No & Details is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3" *ngIf="!isAmc">
-              <label for="resolveaction">ResolveAction</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.resolveaction.errors }" class="form-control"
-                formControlName="resolveaction" type="text" />
-              <div *ngIf="submitted && f.resolveaction.errors" class="invalid-feedback">
-                <div *ngIf="f.resolveaction.errors?.required">ResolveAction is required</div>
-              </div>
+              <label for="resolveaction">Resolve Action</label>
+              <input class="form-control" formControlName="resolveaction" type="text" />
             </div>
 
             <div class="col-sm-3" *ngIf="IsEngineerView">
@@ -334,7 +337,7 @@
             <div class="col-md-3 col-sm-3" [hidden]="IsCustomerView">
               <label for="requesttypeid">Request Type</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.requesttypeid.errors }" class="form-control"
-                      formControlName="requesttypeid">
+                formControlName="requesttypeid">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let req of reqtypelist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
@@ -364,8 +367,12 @@
             </div>
             <div class="col-sm-3">
               <label for="currentinstrustatus">Current Instrument Status</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" class="form-control"
-                formControlName="currentinstrustatus" type="text" />
+              <select [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" class="form-control"
+                formControlName="currentinstrustatus" type="text" >
+                <option *ngFor="let req of instrumentStatus" value={{req.listTypeItemId}}>
+                  {{req.itemname}}
+                </option>
+              </select>
               <div *ngIf="submitted && f.currentinstrustatus.errors" class="invalid-feedback">
                 <div *ngIf="f.currentinstrustatus.errors.required">Current Instrument Status is required</div>
               </div>
