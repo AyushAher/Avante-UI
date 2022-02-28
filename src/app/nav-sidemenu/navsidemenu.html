@@ -22,9 +22,9 @@
     Master
   </div>-->
   <!-- Nav Item - Pages Collapse Menu -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCommon"
-       aria-expanded="true" aria-controls="collapseCommon">
+  <li class="nav-item" *ngIf="hasCommons">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCommon" aria-expanded="true"
+      aria-controls="collapseCommon">
       <i class="fab fa-creative-commons-sa"></i>
       <span>Common</span>
     </a>
@@ -35,16 +35,17 @@
         <a class="collapse-item" routerLink="/countrylist" *ngIf="hasCountry" routerLinkActive="active">Country</a>
         <a class="collapse-item" routerLink="/masterlist" *ngIf="hasMaster" routerLinkActive="active">Master List</a>
         <a class="collapse-item" routerLink="/profilelist" *ngIf="hasProfile" routerLinkActive="active">Profile</a>
-        <a class="collapse-item" routerLink="/userprofilelist" *ngIf="hasUserProfile" routerLinkActive="active">User Profile</a>
+        <a class="collapse-item" routerLink="/userprofilelist" *ngIf="hasUserProfile" routerLinkActive="active">User
+          Profile</a>
       </div>
     </div>
   </li>
 
 
   <!-- Nav Item - Pages Collapse Menu -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-       aria-expanded="true" aria-controls="collapseTwo">
+  <li class="nav-item" *ngIf="hasMasters">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+      aria-controls="collapseTwo">
       <i class="fas fa-fw fa-cog"> </i>
       <span>Masters</span>
     </a>
@@ -60,23 +61,28 @@
         <!--<a class="collapse-item" routerLink="/customersite" routerLinkActive="active">Customer Site</a>-->
 
         <a class="collapse-item" routerLink="/instrumentlist" *ngIf="hasInstrument"
-           routerLinkActive="active">Instrument</a>
+          routerLinkActive="active">Instrument</a>
 
         <a class="collapse-item" routerLink="/sparepartlist" *ngIf="hasSparePart" routerLinkActive="active">Spare
           Part</a>
 
-        <a class="collapse-item" routerLink="/servicerequestlist" *ngIf="hasServiceRequest" routerLinkActive="active">Service
+        <a class="collapse-item" routerLink="/servicerequestlist" *ngIf="hasServiceRequest"
+          routerLinkActive="active">Service
           Request</a>
 
-        <a class="collapse-item" routerLink="/servicereportlist" *ngIf="hasServiceReport" routerLinkActive="active">Service
+        <a class="collapse-item" routerLink="/servicereportlist" *ngIf="hasServiceReport"
+          routerLinkActive="active">Service
           Report</a>
 
-        <a class="collapse-item" routerLink="/offerrequestlist" *ngIf="hasOfferRequest" routerLinkActive="active">Offer Request</a>
+        <a class="collapse-item" routerLink="/offerrequestlist" *ngIf="hasOfferRequest" routerLinkActive="active">Offer
+          Request</a>
 
-        <a class="collapse-item" routerLink="/sparepartsrecommended" *ngIf="hasSparePartRecommended" routerLinkActive="active">Spare Parts <br>
+        <a class="collapse-item" routerLink="/sparepartsrecommended" *ngIf="hasSparePartRecommended"
+          routerLinkActive="active">Spare Parts <br>
           Recommended</a>
 
-        <a class="collapse-item" routerLink="/customerspinventorylist" *ngIf="hasCustomerSparePartsInventory" routerLinkActive="active">Customer Spare <br>
+        <a class="collapse-item" routerLink="/customerspinventorylist" *ngIf="hasCustomerSparePartsInventory"
+          routerLinkActive="active">Customer Spare <br>
           Parts Inventory</a>
 
         <a class="collapse-item" routerLink="/amclist" *ngIf="hasAmc" routerLinkActive="active">AMC</a>
@@ -92,28 +98,29 @@
 
 
   <!-- Nav Item - Utilities Collapse Menu -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-       aria-expanded="true" aria-controls="collapseUtilities">
+  <li class="nav-item" *ngIf="hasUtilities">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true"
+      aria-controls="collapseUtilities">
       <i class="fas fa-fw fa-wrench"> </i>
       <span> Utilities</span>
     </a>
-    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-         data-parent="#accordionSidebar">
+    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Utilities:</h6>
         <a class="collapse-item" routerLink="/search" *ngIf="hasSearch" routerLinkActive="active">Search</a>
-        <a class="collapse-item" routerLink="/exportsparepart" *ngIf="hasexport" routerLinkActive="active">Export template</a>
-        <a class="collapse-item" routerLink="/audittrail" *ngIf="hasAuditTrail" routerLinkActive="active">Audit Trail</a>
+        <a class="collapse-item" routerLink="/exportsparepart" *ngIf="hasexport" routerLinkActive="active">Export
+          template</a>
+        <a class="collapse-item" routerLink="/audittrail" *ngIf="hasAuditTrail" routerLinkActive="active">Audit
+          Trail</a>
       </div>
     </div>
   </li>
   <!-- Nav Item - Utilities Collapse Menu -->
 
 
-  <li class="nav-item">
+  <li class="nav-item" *ngIf="hasTravel">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePhase2" aria-expanded="true"
-       aria-controls="collapseUtilities">
+      aria-controls="collapseUtilities">
       <i class="fas fa-fw fa-wrench"> </i>
       <span> Travel</span>
     </a>
@@ -121,25 +128,29 @@
     <div id="collapsePhase2" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Travel:</h6>
-        <a class="collapse-item" routerLink="/traveldetailslist" *ngIf="hasTravelDetails" routerLinkActive="active">Travel Details</a>
-        <a class="collapse-item" routerLink="/staydetailslist" *ngIf="hasStayDetails" routerLinkActive="active"> Stay Details </a>
-        <a class="collapse-item" routerLink="/visadetailslist" *ngIf="hasVisaDetails" routerLinkActive="active">Visa Details </a>
-        <a class="collapse-item" routerLink="/localexpenseslist" *ngIf="hasLocalExpenses" routerLinkActive="active">Local Expenses</a>
-        <a class="collapse-item" routerLink="/customersatisfactionsurveylist" *ngIf="hascustomersatisfactionsurveylist" routerLinkActive="active">Customer
+        <a class="collapse-item" routerLink="/traveldetailslist" *ngIf="hasTravelDetails"
+          routerLinkActive="active">Travel Details</a>
+        <a class="collapse-item" routerLink="/staydetailslist" *ngIf="hasStayDetails" routerLinkActive="active"> Stay
+          Details </a>
+        <a class="collapse-item" routerLink="/visadetailslist" *ngIf="hasVisaDetails" routerLinkActive="active">Visa
+          Details </a>
+        <a class="collapse-item" routerLink="/localexpenseslist" *ngIf="hasLocalExpenses"
+          routerLinkActive="active">Local Expenses</a>
+        <a class="collapse-item" routerLink="/customersatisfactionsurveylist" *ngIf="hascustomersatisfactionsurveylist"
+          routerLinkActive="active">Customer
           Satisfaction <br> Survey</a>
       </div>
     </div>
 
   </li>
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
-       aria-expanded="true" aria-controls="collapseReport">
+  <li class="nav-item" *ngIf="hasReports">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true"
+      aria-controls="collapseReport">
       <i class="fas fa-fw fa fa-book"> </i>
       <span>Reports</span>
     </a>
-    <div id="collapseReport" class="collapse" aria-labelledby="headingUtilities"
-         data-parent="#accordionSidebar">
+    <div id="collapseReport" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Reports:</h6>
         <a class="collapse-item" routerLink="/custpayrpt" *ngIf="hasSearch" routerLinkActive="active">Customer
@@ -156,24 +167,23 @@
     </div>
   </li>
 
-  <li class="nav-item">
+  <li class="nav-item" *ngIf="hasSettings">
 
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#settings" aria-expanded="true"
-       aria-controls="collapseUtilities">
+      aria-controls="collapseUtilities">
       <i class="fas fa-cogs"></i>
       <span> Settings</span>
     </a>
 
-    <div id="settings" class="collapse" aria-labelledby="headingUtilities"
-         data-parent="#accordionSidebar">
+    <div id="settings" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Settings</h6>
 
         <a class="collapse-item" routerLink="/custdashboardsettings" *ngIf="hasCustomerSettings"
-           routerLinkActive="active">Dashboard
+          routerLinkActive="active">Dashboard
           Settings</a>
         <a class="collapse-item" routerLink="/distdashboardsettings" *ngIf="hasDistributorSettings"
-           routerLinkActive="active">Dashboard
+          routerLinkActive="active">Dashboard
           Settings</a>
 
       </div>
