@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {ProfileReadOnly, User} from "../_models";
+import { Component, OnInit } from '@angular/core';
+import { ProfileReadOnly, User } from "../_models";
 import {
   AccountService,
   CustdashboardsettingsService,
@@ -10,8 +10,8 @@ import {
   ServiceRequestService,
   SrRecomandService
 } from "../_services";
-import {first} from "rxjs/operators";
-import {CustspinventoryService} from "../_services/custspinventory.service";
+import { first } from "rxjs/operators";
+import { CustspinventoryService } from "../_services/custspinventory.service";
 
 declare function CustomerDashboardCharts(): any;
 
@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit {
             label.push(x.partNo)
             chartData.push(x.qtyAvailable)
           })
-          localStorage.setItem('spInventoryChart', JSON.stringify({label: label.reverse(), data: chartData.reverse()}))
+          localStorage.setItem('spInventoryChart', JSON.stringify({ label: label.reverse(), data: chartData.reverse() }))
         }
       });
 
@@ -93,14 +93,16 @@ export class DashboardComponent implements OnInit {
             bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
           })
 
-          let srqType = {label: label, chartData: chartData, bgColor: bgColor}
+          let srqType = { label: label, chartData: chartData, bgColor: bgColor }
           localStorage.setItem('servicerequesttype', JSON.stringify(srqType))
 
           this.srList = data.object.filter(x => x.createdby == this.user.userId);
         }
       });
 
-    setTimeout(CustomerDashboardCharts(), 0)
+    setTimeout(() => {
+      CustomerDashboardCharts()
+    }, 1000)
 
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "CUSDH");
