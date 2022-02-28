@@ -76,7 +76,8 @@
 
             <div class="col-md-3">
               <label for="assignedTo">Site</label>
-              <select class="form-control" (change)="getInstrumnetsBySiteIds($event.target.value)" formControlName="siteid">
+              <select class="form-control" (change)="getInstrumnetsBySiteIds($event.target.value)"
+                formControlName="siteid">
                 <option *ngFor="let c of customerSitelist" value={{c.id}}>
                   {{c.custregname}}
                 </option>
@@ -142,7 +143,7 @@
                 <div *ngIf="f.sitename.errors.required">siteName is required</div>
               </div>
             </div>
-            
+
             <div class="col-md-3 col-sm-3">
               <label for="country">Country</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.country.errors }" class="form-control"
@@ -314,14 +315,14 @@
             </div>
 
             <div class="col-sm-3" *ngIf="IsEngineerView">
-              <label for="accepted"></label>
-              <div class="checkbox">
-                <label for="warranty">
-                  <input class="" [readonly]="accepted" (input)="Accepted($event.target.value)" #accp
-                    formControlName="accepted" type="checkbox" />
-                  Accepted
-                </label>
-              </div>
+              <label for="accepted">Accepted</label>
+
+              <select class="form-control" (input)="Accepted($event.target.value)" #accp
+                formControlName="accepted">
+                <option value="false">Not Accepted</option>
+                <option value="true">Accepted</option>
+              </select>
+
               <div *ngIf="submitted && f.accepted.errors" class="invalid-feedback">
                 <div *ngIf="f.accepted.errors.required">accepted is required</div>
               </div>
@@ -349,7 +350,7 @@
             </div>
             <div class="col-md-6 col-sm-6">
               <label for="subrequesttypeid">SubRequest Type</label>
-              <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="subreqtypelist"
+              <ng-multiselect-dropdown [settings]="dropdownSettings" [disabled]="IsEngineerView" [data]="subreqtypelist"
                 formControlName="subrequesttypeid">
               </ng-multiselect-dropdown>
               <div *ngIf="submitted && f.subrequesttypeid.errors" class="invalid-feedback">
@@ -368,7 +369,7 @@
             <div class="col-sm-3">
               <label for="currentinstrustatus">Current Instrument Status</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" class="form-control"
-                formControlName="currentinstrustatus" type="text" >
+                formControlName="currentinstrustatus" type="text">
                 <option *ngFor="let req of instrumentStatus" value={{req.listTypeItemId}}>
                   {{req.itemname}}
                 </option>
@@ -377,6 +378,20 @@
                 <div *ngIf="f.currentinstrustatus.errors.required">Current Instrument Status is required</div>
               </div>
             </div>
+
+            <div class="col-sm-3">
+              <label for="currentinstrustatus">Status</label>
+              <select [ngClass]="{ 'is-invalid': submitted && f.statusid.errors }" class="form-control"
+                formControlName="statusid" type="text">
+                <option *ngFor="let req of statuslist" value={{req.listTypeItemId}}>
+                  {{req.itemname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.statusid.errors" class="invalid-feedback">
+                <div *ngIf="f.statusid.errors.required">Status is required</div>
+              </div>
+            </div>
+
           </div>
           <br />
 

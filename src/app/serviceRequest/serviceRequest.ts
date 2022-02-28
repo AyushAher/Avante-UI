@@ -132,6 +132,7 @@ export class ServiceRequestComponent implements OnInit {
   private file: any;
   role: any;
   instrumentStatus: ListTypeItem[];
+  statuslist: ListTypeItem[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -229,10 +230,8 @@ export class ServiceRequestComponent implements OnInit {
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     } else {
-
       let role = JSON.parse(localStorage.getItem('roles'));
       this.role = role[0]?.itemCode;
-
     }
 
     let role = this.role;
@@ -258,6 +257,7 @@ export class ServiceRequestComponent implements OnInit {
       serreqno: ['', Validators.required],
       distid: ['', Validators.required],
       custid: [''],
+      statusid: [''],
       siteid: [''],
       assignedto: [''],
       serreqdate: ['', Validators.required],
@@ -312,8 +312,13 @@ export class ServiceRequestComponent implements OnInit {
     if (this.IsEngineerView == true) {
       this.serviceRequestform.get('requesttypeid').setValidators([Validators.required]);
       this.serviceRequestform.get('requesttypeid').updateValueAndValidity();
+      this.serviceRequestform.get('requesttypeid').disable();
       this.serviceRequestform.get('subrequesttypeid').setValidators([Validators.required]);
       this.serviceRequestform.get('subrequesttypeid').updateValueAndValidity();
+      this.serviceRequestform.get('subrequesttypeid').disable();
+      this.serviceRequestform.get('remarks').disable();
+      this.serviceRequestform.get('statusid').disable();
+
     }
     this.serviceRequestform.get('custid').disable();
     this.serviceRequestform.get('siteid').disable();
@@ -345,6 +350,18 @@ export class ServiceRequestComponent implements OnInit {
           if (this.IsCustomerView) {
             this.serviceTypeList = this.serviceTypeList.filter(x => x.itemCode != "PREV" && x.itemCode != "PLAN")
           }
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
+
+    this.listTypeService.getById('SRSAT')
+      .pipe(first())
+      .subscribe({
+        next: (data: ListTypeItem[]) => {
+          this.statuslist = data;
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -527,6 +544,7 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({ "resolveaction": data.object.resolveaction });
             this.serviceRequestform.patchValue({ "currentinstrustatus": data.object.currentinstrustatus });
             this.serviceRequestform.patchValue({ "accepted": data.object.accepted });
+            this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
             this.onCustomerChanged(data.object.custid)
             if (data.object.accepted) {
               this.serviceRequestform.get('accepted').disable();

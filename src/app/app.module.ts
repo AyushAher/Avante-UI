@@ -113,6 +113,7 @@ import {ChangepasswoardComponent} from './account/changepasswoard.component';
 import {ForgotpasswoardComponent} from './account/forgotpasswoard.component';
 import {AudittrailComponent} from './audittrail/audittrail.component';
 import {AudittrailDetailsComponent} from './audittrail/audittraildetails';
+import { ServiceRComponent } from './serviceRequest/ServicerequestRenderer';
 
 
 @NgModule({
@@ -202,7 +203,8 @@ import {AudittrailDetailsComponent} from './audittrail/audittraildetails';
     ChangepasswoardComponent,
     ForgotpasswoardComponent,
     AudittrailComponent,
-    AudittrailDetailsComponent
+    AudittrailDetailsComponent,
+    ServiceRComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

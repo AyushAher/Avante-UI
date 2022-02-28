@@ -9,12 +9,15 @@ import { environment } from '../../environments/environment';
 import {
   AccountService,
   ContactService,
+  DistributorService,
   ListTypeService,
   NotificationService,
   ProfileService,
   ServiceRequestService
 } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
+import { DatePipe } from '@angular/common';
+import { ServiceRComponent } from './ServicerequestRenderer';
 
 
 @Component({
@@ -42,6 +45,8 @@ export class ServiceRequestListComponent implements OnInit {
   IsEngineerView: boolean = false;
   IsAdminView: boolean = false;
   distId: any;
+  datepipe: any = new DatePipe("en-US");
+  appendList: any;
 
   constructor(
     private router: Router,
@@ -50,6 +55,7 @@ export class ServiceRequestListComponent implements OnInit {
     private profileService: ProfileService,
     private serviceRequestService: ServiceRequestService,
     private contcactservice: ContactService,
+    private distributorService: DistributorService,
     private listTypeService: ListTypeService
   ) {
 
@@ -195,8 +201,34 @@ export class ServiceRequestListComponent implements OnInit {
       sortable: true
     },
     {
+      headerName: 'Status',
+      field: 'statusName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Created On',
+      field: 'createdon',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Accepted',
+      field: 'accepted',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
       headerName: 'Assigned To',
-      field: 'assignedtoName',
+      field: 'assignedto',
+      width:400,
+      cellRendererFramework: ServiceRComponent,
+      cellRendererParams: {
+        isDist : this.IsDistributorView
+      },
       filter: true,
       editable: false,
       sortable: true
@@ -291,6 +323,12 @@ export class ServiceRequestListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+
+          data.object.forEach(ser => {
+            ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
+            ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
+          });
+
           if (this.user.username != 'admin') {
             this.srCustList = data.object.filter(x => x.createdby == this.user.userId);
             this.srDistList = data.object.filter(x => x.distid == this.distId);
