@@ -76,7 +76,7 @@
 
             <div class="col-md-3">
               <label for="assignedTo">Site</label>
-              <select class="form-control" formControlName="siteid">
+              <select class="form-control" (change)="getInstrumnetsBySiteIds($event.target.value)" formControlName="siteid">
                 <option *ngFor="let c of customerSitelist" value={{c.id}}>
                   {{c.custregname}}
                 </option>

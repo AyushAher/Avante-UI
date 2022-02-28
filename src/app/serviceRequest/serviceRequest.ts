@@ -668,14 +668,19 @@ export class ServiceRequestComponent implements OnInit {
       this.customerSitelist = this.logindata.sites;
       this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
       this.serviceRequestform.patchValue({ "siteid": this.logindata.sites[0].id });
+
+      this.getInstrumnetsBySiteIds(this.logindata.sites[0].id)
+      //var subreq = this.logindata.sites.id.join(',');
+      // let subreq = this.logindata.sites?.map(x => x.id).join(',');
+
+
     }
     this.getDistRegnContacts(this.distId)
 
 
-    //var subreq = this.logindata.sites.id.join(',');
-    let subreq = this.logindata.sites?.map(x => x.id).join(',');
-
-    this.instrumentService.getinstubysiteIds(subreq)
+  }
+  getInstrumnetsBySiteIds(id: any) {
+    this.instrumentService.getinstubysiteIds(id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
@@ -687,10 +692,7 @@ export class ServiceRequestComponent implements OnInit {
           this.loading = false;
         }
       });
-
-
   }
-
   // convenience getter for easy access to form fields
   get f() {
     return this.serviceRequestform.controls;
