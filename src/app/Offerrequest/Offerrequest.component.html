@@ -144,14 +144,13 @@
                   </div>
 
 
-                  <div class="page-title">
+                  <div class="page-title" *ngIf="hasId">
                     <div class="title_left">
                       <h3 style="padding:15px 0 5px 0">Spare Quotation Details</h3>
                     </div>
                   </div>
                   <div class="clearfix"></div>
                   <hr/>
-                  <br>
                   <div class="row my-4" *ngIf="hasId && hasQuoteDet">
                     <div class="col-md-4">
                       <input type="text" formControlName="spareQuoteNo" class="form-control"
@@ -162,20 +161,30 @@
                       <button type="button" class="btn btn-primary" (click)="getZohoData()"> Get Quote</button>
                     </div>
                     <div class="col-md-4">
-                      <a style="float:right" href="https://www.zoho.com/in/books/" target="_blank"
+                      <a href="https://www.zoho.com/in/books/" target="_blank"
                          class="btn btn-primary" (click)="form.get('spareQuoteNo').enable();">Raise Zoho Request</a>
                     </div>
-                    <!--                    <div class="col-md-12" *ngIf="(!prevNotCompleted)">-->
-                    <!--                      <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;"-->
-                    <!--                              (click)="open(id)"><i class="fas fa-plus-circle" title="Add"></i></button>-->
-                    <!--                    </div>-->
                   </div>
-                  <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
-                                   (gridReady)="onGridReadySPDet($event)" [columnDefs]="ColumnDefsSPDet"
-                                   (rowClicked)="onRowClicked($event)"
-                                   [rowData]="SpareQuotationDetails" pagination="true" paginationPageSize=10>
-                  </ag-grid-angular>
 
+                  <table *ngIf="hasId && SpareQuotationDetails.length>0" class="table" style="border:1px solid black">
+                    <thead style="background: #589b44; color: #FFF;">
+                    <tr>
+                      <td>Customer Name</td>
+                      <td>Sales Order Number</td>
+                      <td>Total</td>
+                      <td>Status</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr *ngFor="let i of SpareQuotationDetails">
+                      <td>{{i.customer_name}}</td>
+                      <td>{{i.salesorder_number}}</td>
+                      <td>{{i.total}}</td>
+                      <td>{{i.status }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
 
                   <div class="row">
                     <div class="col-md-6 col-sm-6" style="padding:10px;">

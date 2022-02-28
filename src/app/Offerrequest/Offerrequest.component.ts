@@ -1,14 +1,14 @@
-import {DatePipe} from '@angular/common';
-import {HttpEventType} from '@angular/common/http';
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
-import {Guid} from 'guid-typescript';
-import {first} from 'rxjs/operators';
-import {AmcInstrumentRendererComponent} from '../amc/amc-instrument-renderer.component';
-import {Currency, Distributor, ResultMsg, User} from '../_models';
-import {Offerrequest} from '../_models/Offerrequest.model';
+import { DatePipe } from '@angular/common';
+import { HttpEventType } from '@angular/common/http';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { Guid } from 'guid-typescript';
+import { first } from 'rxjs/operators';
+import { AmcInstrumentRendererComponent } from '../amc/amc-instrument-renderer.component';
+import { Currency, Distributor, ResultMsg, User } from '../_models';
+import { Offerrequest } from '../_models/Offerrequest.model';
 import {
   AccountService,
   AlertService,
@@ -20,13 +20,13 @@ import {
   ProfileService,
   zohoapiService
 } from '../_services';
-import {OfferrequestService} from '../_services/Offerrequest.service';
-import {SparePartsOfferRequestService} from '../_services/sparepartsofferrequest.service';
-import {FilerendercomponentComponent} from './filerendercomponent.component';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {SparequotedetComponent} from './sparequotedet.component';
-import {SparequotedetService} from '../_services/sparequotedet.service';
-import {environment} from '../../environments/environment';
+import { OfferrequestService } from '../_services/Offerrequest.service';
+import { SparePartsOfferRequestService } from '../_services/sparepartsofferrequest.service';
+import { FilerendercomponentComponent } from './filerendercomponent.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { SparequotedetComponent } from './sparequotedet.component';
+import { SparequotedetService } from '../_services/sparequotedet.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -70,7 +70,7 @@ export class OfferrequestComponent implements OnInit {
   @Output() public onUploadFinished = new EventEmitter();
   bsModalRef: BsModalRef;
   SpareQuotationDetailsList = [];
-  SpareQuotationDetails = [];
+  SpareQuotationDetails: any[] = [];
   datepipie = new DatePipe('en-US');
   ColumnDefsSPDet: ColDef[];
   prevNotCompleted: boolean = false;
@@ -174,10 +174,11 @@ export class OfferrequestComponent implements OnInit {
       distributorid: ['', Validators.required],
       totalamount: [0],
       currencyId: [''],
+      authtoken: [''],
       status: [''],
       podate: ['', Validators.required],
       isdeleted: [false],
-      spareQuoteNo: [{value: '', disabled: true}]
+      spareQuoteNo: [{ value: '', disabled: true }]
     })
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -191,12 +192,27 @@ export class OfferrequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.form.patchValue(data.object);
-            this.getZohoData();
           },
           error: (error) => {
             this.notificationService.showError('Error', 'Error');
             this.loading = false;
           },
+        });
+
+      if (this.role == environment.distRoleCode || this.user.username == 'admin') {
+        this.hasQuoteDet = true;
+        let tokn = localStorage.getItem('zohotoken');
+        if (tokn != null && tokn != '') {
+          this.form.get('authtoken').setValue(tokn);
+        } else {
+          this.router.navigate(['offerrequestlist']);
+        }
+      }
+
+      this.Service.GetSpareQuoteDetailsByParentId(this.id)
+        .pipe(first())
+        .subscribe((data: any) => {
+          this.SpareQuotationDetails = data.object;
         });
 
 
@@ -205,7 +221,7 @@ export class OfferrequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.sparePartsList = data.object;
-            this.api.setRowData(this.sparePartsList)
+            this.api.setRowData(this.sparePartsList);
           },
           error: (error) => {
             this.notificationService.showError("Error", "Error");
@@ -283,16 +299,15 @@ export class OfferrequestComponent implements OnInit {
         })
     }
     this.GetFileList(this.id);
-
   }
 
   getZohoData() {
     if (this.role == environment.distRoleCode || this.user.username == 'admin') {
       this.hasQuoteDet = true;
+
       let quoteno = this.form.get('spareQuoteNo').value;
       let code = localStorage.getItem('zCode');
-      let token = localStorage.getItem('zohotoken');
-      if (code == null || token == null) {
+      if (code == null) {
         this.router.navigate(['offerrequestlist']);
       }
       this.zohoService.GetSalesOrder(code, 1, quoteno)
@@ -406,34 +421,34 @@ export class OfferrequestComponent implements OnInit {
       field: 'hscode',
       filter: true,
     },
-      {
-        headerName: 'Qty',
-        field: 'qty',
-        filter: true,
-        editable: true,
-        sortable: true,
-        defaultValue: 0
-      },
-      {
-        headerName: 'Price',
-        field: 'price',
-        filter: true,
-        editable: true,
-        sortable: true,
-        default: 0
-      },
-      {
-        headerName: 'Amount',
-        field: 'amount',
-        filter: true,
-        sortable: true
-      },
-      {
-        headerName: 'Currency',
-        field: 'currency',
-        filter: true,
-        sortable: true
-      }
+    {
+      headerName: 'Qty',
+      field: 'qty',
+      filter: true,
+      editable: true,
+      sortable: true,
+      defaultValue: 0
+    },
+    {
+      headerName: 'Price',
+      field: 'price',
+      filter: true,
+      editable: true,
+      sortable: true,
+      default: 0
+    },
+    {
+      headerName: 'Amount',
+      field: 'amount',
+      filter: true,
+      sortable: true
+    },
+    {
+      headerName: 'Currency',
+      field: 'currency',
+      filter: true,
+      sortable: true
+    }
     ]
   }
   onCellValueChanged(event) {
@@ -557,7 +572,7 @@ export class OfferrequestComponent implements OnInit {
       parentId: parentId,
       id: id
     };
-    this.bsModalRef = this.modalService.show(SparequotedetComponent, {initialState});
+    this.bsModalRef = this.modalService.show(SparequotedetComponent, { initialState });
   }
 
   onGridReadySPDet(params): void {
