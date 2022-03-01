@@ -1,8 +1,8 @@
-import {createElement, Internationalization, L10n} from '@syncfusion/ej2-base';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {EventSettingsModel, GroupModel, PopupOpenEventArgs, ScheduleComponent} from '@syncfusion/ej2-angular-schedule';
-import {DropDownList} from '@syncfusion/ej2-dropdowns';
-import {first} from "rxjs/operators";
+import { createElement, Internationalization, L10n } from '@syncfusion/ej2-base';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { EventSettingsModel, GroupModel, PopupOpenEventArgs, ScheduleComponent } from '@syncfusion/ej2-angular-schedule';
+import { DropDownList } from '@syncfusion/ej2-dropdowns';
+import { first } from "rxjs/operators";
 import {
   AccountService,
   ContactService,
@@ -12,11 +12,11 @@ import {
   ProfileService,
   ServiceRequestService
 } from "../_services";
-import {ProfileReadOnly, ServiceRequest, User} from "../_models";
-import {EngschedulerService} from "../_services/engscheduler.service";
-import {DatePipe} from "@angular/common";
-import {environment} from "../../environments/environment";
-import {ActivatedRoute} from "@angular/router";
+import { ProfileReadOnly, ServiceRequest, User } from "../_models";
+import { EngschedulerService } from "../_services/engscheduler.service";
+import { DatePipe } from "@angular/common";
+import { environment } from "../../environments/environment";
+import { ActivatedRoute } from "@angular/router";
 
 L10n.load({
   'en-US': {
@@ -139,11 +139,11 @@ export class EngineerschedulerComponent implements OnInit {
                       dataSource: this.dataSrc,
                       fields: {
                         id: 'Id',
-                        subject: {name: 'Subject'},
-                        location: {name: 'Location'},
-                        description: {name: 'Description'},
-                        startTime: {name: 'StartTime'},
-                        endTime: {name: 'EndTime'},
+                        subject: { name: 'Subject' },
+                        location: { name: 'Location' },
+                        description: { name: 'Description' },
+                        startTime: { name: 'StartTime' },
+                        endTime: { name: 'EndTime' },
 
                       }
                     };
@@ -189,7 +189,7 @@ export class EngineerschedulerComponent implements OnInit {
                             }
                           }
                         })
-                      this.roomDataSource.push({text: x.fname + " " + x.lname, id: x.id, startHour: "09:00"})
+                      this.roomDataSource.push({ text: x.fname + " " + x.lname, id: x.id, startHour: "09:00" })
                     })
                   }
                 }
@@ -383,28 +383,29 @@ export class EngineerschedulerComponent implements OnInit {
     }
     if (args.type === 'EventContainer') {
       let instance: Internationalization = new Internationalization();
-      let date: string = instance.formatDate((<any>args.data).date, {skeleton: 'MMMEd'});
+      let date: string = instance.formatDate((<any>args.data).date, { skeleton: 'MMMEd' });
       ((args.element.querySelector('.e-header-date')) as HTMLElement).innerText = date;
       ((args.element.querySelector('.e-header-day')) as HTMLElement).innerText = 'Event count: ' + (<any>args.data).event.length;
     } else if (args.type === 'Editor') {
+      if (this.id == null) args.cancel = true;
       if (!this.hasUpdateAccess) {
         args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
       }
       // Create required custom elements in initial time
       if (!args.element.querySelector('.custom-servicereqno')) {
-        let row: HTMLElement = createElement('div', {className: 'custom-servicereqno'});
+        let row: HTMLElement = createElement('div', { className: 'custom-servicereqno' });
         let formElement: HTMLElement = args.element.querySelector('.e-schedule-form');
         formElement.firstChild.insertBefore(row, args.element.querySelector('.e-title-location-row'));
-        let container: HTMLElement = createElement('div', {className: 'custom-field-container mt-3'});
+        let container: HTMLElement = createElement('div', { className: 'custom-field-container mt-3' });
         let inputEle: HTMLInputElement = createElement('input', {
-          className: 'e-field', attrs: {name: 'SerReqId'}
+          className: 'e-field', attrs: { name: 'SerReqId', disable: 'true' }
         }) as HTMLInputElement;
         container.appendChild(inputEle);
         row.appendChild(container);
         let list = [];
         let dropDownList: DropDownList = new DropDownList({
           dataSource: list,
-          fields: {text: 'text', value: 'value'},
+          fields: { text: 'text', value: 'value' },
           value: (<{ [key: string]: Object }>(args.data)).EventType as string,
           floatLabelType: 'Always', placeholder: 'Service Request No.'
         });
@@ -414,12 +415,12 @@ export class EngineerschedulerComponent implements OnInit {
             this.srEngList = data.object.filter(x => x.assignedto == this.user.contactId);
             if (data.object != null && data.object.length > 0) {
               this.srEngList.forEach(x => {
-                list.push({text: x.serreqno, value: x.id})
+                list.push({ text: x.serreqno, value: x.id })
               })
             }
             dropDownList = new DropDownList({
               dataSource: list,
-              fields: {text: 'text', value: 'value'},
+              fields: { text: 'text', value: 'value' },
               value: (<{ [key: string]: Object }>(args.data)).EventType as string,
               floatLabelType: 'Always', placeholder: 'Service Request No.'
             });
@@ -451,7 +452,7 @@ export class EngineerschedulerComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data: any) => {
-                  data = data.object;
+                  data = data.object
                   let serReqDate = new Date(data.serreqdate)
                   let SDate: Date = x.StartTime;
                   let diff = SDate.valueOf() - serReqDate.valueOf()
@@ -613,12 +614,13 @@ export class EngineerschedulerComponent implements OnInit {
   }
 
   onPopupOpenDist(args: PopupOpenEventArgs): void {
+    args.cancel = true;
     if (args.type === "QuickInfo") {
       args.cancel = true;
     }
     if (args.type === 'EventContainer') {
       let instance: Internationalization = new Internationalization();
-      let date: string = instance.formatDate((<any>args.data).date, {skeleton: 'MMMEd'});
+      let date: string = instance.formatDate((<any>args.data).date, { skeleton: 'MMMEd' });
       ((args.element.querySelector('.e-header-date')) as HTMLElement).innerText = date;
       ((args.element.querySelector('.e-header-day')) as HTMLElement).innerText = 'Event count: ' + (<any>args.data).event.length;
     } else if (args.type === 'Editor') {
@@ -629,19 +631,19 @@ export class EngineerschedulerComponent implements OnInit {
           args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
         }
 
-        let row: HTMLElement = createElement('div', {className: 'custom-servicereqno'});
+        let row: HTMLElement = createElement('div', { className: 'custom-servicereqno' });
         let formElement: HTMLElement = args.element.querySelector('.e-schedule-form');
         formElement.firstChild.insertBefore(row, args.element.querySelector('.e-title-location-row'));
-        let container: HTMLElement = createElement('div', {className: 'custom-field-container mt-3'});
+        let container: HTMLElement = createElement('div', { className: 'custom-field-container mt-3' });
         let inputEle: HTMLInputElement = createElement('input', {
-          className: 'e-field', attrs: {name: 'SerReqId'}
+          className: 'e-field', attrs: { name: 'SerReqId' }
         }) as HTMLInputElement;
         container.appendChild(inputEle);
         row.appendChild(container);
         let list = [];
         let dropDownList: DropDownList = new DropDownList({
           dataSource: list,
-          fields: {text: 'text', value: 'value'},
+          fields: { text: 'text', value: 'value' },
           value: (<{ [key: string]: Object }>(args.data)).EventType as string,
           floatLabelType: 'Always', placeholder: 'Service Request No.'
         });
@@ -650,12 +652,12 @@ export class EngineerschedulerComponent implements OnInit {
           next: (data: any) => {
             if (data.object != null && data.object.length > 0) {
               data.object.forEach(x => {
-                list.push({text: x.serreqno, value: x.id})
+                list.push({ text: x.serreqno, value: x.id })
               })
             }
             dropDownList = new DropDownList({
               dataSource: list,
-              fields: {text: 'text', value: 'value'},
+              fields: { text: 'text', value: 'value' },
               value: (<{ [key: string]: Object }>(args.data)).EventType as string,
               floatLabelType: 'Always', placeholder: 'Service Request No.'
             });
@@ -678,7 +680,7 @@ export class EngineerschedulerComponent implements OnInit {
 
 
 
-//  Dist code
+  //  Dist code
 
   public group: GroupModel = {
     resources: ['Engineers']
