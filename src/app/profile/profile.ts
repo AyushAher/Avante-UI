@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {
   CustomerSite,
@@ -10,20 +10,16 @@ import {
   SparePart,
   User
 } from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
 
 import {
   AccountService,
   AlertService,
-  CustomerSiteService,
-  InstrumentService,
   ListTypeService,
   NotificationService,
-  ProfileService,
-  SparePartService,
-  UploadService
+  ProfileService
 } from '../_services';
 
 
@@ -61,11 +57,7 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private alertService: AlertService,
-    private customerSiteService: CustomerSiteService,
-    private instrumentService: InstrumentService,
     private listTypeService: ListTypeService,
-    private sparePartService: SparePartService,
-    private uploadService: UploadService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) { }
@@ -102,23 +94,20 @@ export class ProfileComponent implements OnInit {
     this.listTypeService.getById("SCRNS")
       .pipe(first())
       .subscribe({
-        next: (data: ListTypeItem[]) => {
+        next: (data: any) => {
           //debugger;
           this.listTypeItems = data;
+
           this.addItem(this.listTypeItems);
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
-           this.loading = false;
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
         }
       });
 
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id != null) {
-      this.hasAddAccess = false;
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
       this.profileService.getById(this.id)
         .pipe(first())
         .subscribe({
@@ -128,7 +117,7 @@ export class ProfileComponent implements OnInit {
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
@@ -137,31 +126,82 @@ export class ProfileComponent implements OnInit {
 
   CreateItem(): FormGroup {
     return this.formBuilder.group({
-      id:'',
-      screenId:'',
+      id: '',
+      screenId: '',
       screenName: '',
       create: '',
       read: '',
       update: '',
-      delete:''
+      delete: '',
+      categoryName: "",
+      screenCode: ""
     });
   }
 
   addItem(value: any): void {
     //debugger;
-    for (let i = 0; i < value.length; i++) {
-      this.listT = value[i];
-      this.permissions = this.profileform.get('permissions') as FormArray;
-      this.permissions.push(this.formBuilder.group({
-        id:'',
-        screenId: this.listT.listTypeItemId,
-        screenName: this.listT.itemname,
-        create: false,
-        read: false,
-        update: false,
-        delete: false
-      }));
-    }
+    this.listTypeService.getById("PRGRP")
+      .pipe(first())
+      .subscribe((data: any) => {
+        //debugger;
+
+        let cat = "";
+        for (let i = 0; i < value.length; i++) {
+          this.listT = value[i];
+          let screencode = this.listT.itemCode
+          if (screencode == "SCURR"
+            || screencode == "SCOUN"
+            || screencode == "PROF"
+            || screencode == "URPRF") {
+            cat = data.find(x => x.itemCode == "COMON")?.itemname;
+          }
+          else if (screencode == "AMC"
+            || screencode == "SCUST"
+            || screencode == "CTSPI"
+            || screencode == "SDIST"
+            || screencode == "SINST"
+            || screencode == "OFREQ"
+            || screencode == "PRVMN"
+            || screencode == "SCDLE"
+            || screencode == "SRREP"
+            || screencode == "SRREQ"
+            || screencode == "SSPAR"
+            || screencode == "SPRCM") {
+            cat = data.find(x => x.itemCode == "MSTRS")?.itemname;
+          }
+          else if (screencode == "AUDIT"
+            || screencode == "SIMXP"
+            || screencode == "SSRCH") {
+            cat = data.find(x => x.itemCode == "UTILS")?.itemname;
+          }
+
+          else if (screencode == "CTSS"
+            || screencode == "LCEXP"
+            || screencode == "STDET"
+            || screencode == "TRDET"
+            || screencode == "VADET") {
+            cat = data.find(x => x.itemCode == "TRAVL")?.itemname;
+          }
+
+          else if (screencode == "CUSDH"
+            || screencode == "DHSET"
+            || screencode == "DISDH") {
+            cat = data.find(x => x.itemCode == "DASH")?.itemname;
+          }
+          this.permissions = this.profileform.get('permissions') as FormArray;
+          this.permissions.push(this.formBuilder.group({
+            id: '',
+            screenId: this.listT.listTypeItemId,
+            screenName: this.listT.itemname,
+            create: false,
+            screenCode: this.listT.itemCode,
+            read: false,
+            categoryName: cat,
+            update: false,
+            delete: false
+          }));
+        }
+      });
   }
 
   // convenience getter for easy access to form fields
@@ -221,7 +261,7 @@ export class ProfileComponent implements OnInit {
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
@@ -243,7 +283,7 @@ export class ProfileComponent implements OnInit {
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });

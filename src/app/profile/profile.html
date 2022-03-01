@@ -27,6 +27,7 @@
               <table class="table">
                 <thead>
                   <tr>
+                    <th>Category</th>
                     <th>Screen Name</th>
                     <th>Create <br> <input type="checkbox" id="selectallcreate" (change)="SelectAll('create')"></th>
                     <th>Read<br> <input type="checkbox" id="selectallread" (change)="SelectAll('read')"></th>
@@ -36,6 +37,9 @@
                 </thead>
                 <tbody>
                   <tr formArrayName="permissions" *ngFor="let item of profileform.get('permissions')['controls'];let i=index">
+                    <td [formGroupName]="i">
+                      {{ getName(i).categoryName}}
+                    </td>
                     <td [formGroupName]="i">
                       <input type="hidden" formControlName="screenId" />
                       <!--<input type="text" formControlName="screenName" readonly />-->
