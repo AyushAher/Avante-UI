@@ -37,14 +37,14 @@ export class ProfileComponent implements OnInit {
   isSave = false;
   id: string;
   code: string = "CONTY";
-  listTypeItems: ListTypeItem[];
+  listTypeItems: any;
   config: instrumentConfig;
   sparePartDetails: SparePart[];
   selectedConfigType: string[] = [];
   imagePath: string;
   instuType: ListTypeItem[];
   permissions: FormArray;
-  listT: ListTypeItem;
+  listT: any;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
   hasUpdateAccess: boolean = false;
@@ -91,20 +91,6 @@ export class ProfileComponent implements OnInit {
       isdeleted: [false],
     });
 
-    this.listTypeService.getById("SCRNS")
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          //debugger;
-          this.listTypeItems = data;
-
-          this.addItem(this.listTypeItems);
-        },
-        error: error => {
-          this.notificationService.showError(error, "Error");
-          this.loading = false;
-        }
-      });
 
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id != null) {
@@ -112,9 +98,32 @@ export class ProfileComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
+            data.object.permissions.forEach(element => {
+              element.itemCode = element.screenCode
+            });
+            this.addItem(data.object.permissions)
             this.profileform.patchValue(data.object);
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
+          }
+        });
+    } else {
+      this.profileService.GetAllScreens()
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            //debugger;
+            this.listTypeItems = data.object;
+            data.object.sort((a, b) => {
+              var value = 0
+              a.categoryName < b.categoryName ? value = -1 : a.categoryName > b.categoryName ? value = 1 : value = 0;
+              return value;
+            });
+            console.log(this.listTypeItems);
 
+            this.addItem(this.listTypeItems);
           },
           error: error => {
             this.notificationService.showError(error, "Error");
@@ -140,68 +149,22 @@ export class ProfileComponent implements OnInit {
 
   addItem(value: any): void {
     //debugger;
-    this.listTypeService.getById("PRGRP")
-      .pipe(first())
-      .subscribe((data: any) => {
-        //debugger;
+    for (let i = 0; i < value.length; i++) {
+      this.listT = value[i];
 
-        let cat = "";
-        for (let i = 0; i < value.length; i++) {
-          this.listT = value[i];
-          let screencode = this.listT.itemCode
-          if (screencode == "SCURR"
-            || screencode == "SCOUN"
-            || screencode == "PROF"
-            || screencode == "URPRF") {
-            cat = data.find(x => x.itemCode == "COMON")?.itemname;
-          }
-          else if (screencode == "AMC"
-            || screencode == "SCUST"
-            || screencode == "CTSPI"
-            || screencode == "SDIST"
-            || screencode == "SINST"
-            || screencode == "OFREQ"
-            || screencode == "PRVMN"
-            || screencode == "SCDLE"
-            || screencode == "SRREP"
-            || screencode == "SRREQ"
-            || screencode == "SSPAR"
-            || screencode == "SPRCM") {
-            cat = data.find(x => x.itemCode == "MSTRS")?.itemname;
-          }
-          else if (screencode == "AUDIT"
-            || screencode == "SIMXP"
-            || screencode == "SSRCH") {
-            cat = data.find(x => x.itemCode == "UTILS")?.itemname;
-          }
-
-          else if (screencode == "CTSS"
-            || screencode == "LCEXP"
-            || screencode == "STDET"
-            || screencode == "TRDET"
-            || screencode == "VADET") {
-            cat = data.find(x => x.itemCode == "TRAVL")?.itemname;
-          }
-
-          else if (screencode == "CUSDH"
-            || screencode == "DHSET"
-            || screencode == "DISDH") {
-            cat = data.find(x => x.itemCode == "DASH")?.itemname;
-          }
-          this.permissions = this.profileform.get('permissions') as FormArray;
-          this.permissions.push(this.formBuilder.group({
-            id: '',
-            screenId: this.listT.listTypeItemId,
-            screenName: this.listT.itemname,
-            create: false,
-            screenCode: this.listT.itemCode,
-            read: false,
-            categoryName: cat,
-            update: false,
-            delete: false
-          }));
-        }
-      });
+      this.permissions = this.profileform.get('permissions') as FormArray;
+      this.permissions.push(this.formBuilder.group({
+        id: this.listT.id == undefined || this.listT.id == null ? '' : this.listT.id,
+        screenId: this.listT.listTypeItemId,
+        screenName: this.listT.itemname,
+        create: this.listT.create == undefined || this.listT.create == null ? false : this.listT.create,
+        screenCode: this.listT.itemCode,
+        read: this.listT.read == undefined || this.listT.read == null ? false : this.listT.read,
+        categoryName: this.listT.categoryName,
+        update: this.listT.update == undefined || this.listT.update == null ? false : this.listT.update,
+        delete: this.listT.delete == undefined || this.listT.delete == null ? false : this.listT.delete,
+      }));
+    }
   }
 
   // convenience getter for easy access to form fields
@@ -210,7 +173,6 @@ export class ProfileComponent implements OnInit {
 
 
   getName(i) {
-
     return this.getControls()[i].value;
   }
 
