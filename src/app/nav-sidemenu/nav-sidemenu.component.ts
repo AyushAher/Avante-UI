@@ -321,11 +321,11 @@ export class NavSideMenuComponent {
       this.hasTravel = true;
     }
 
-    if (this.hasAmc || this.hasServiceRequest || this.hasCustomerSparePartsInventory || this.hasSparePartRecommended || this.hasschedule) {
+    if (this.hasServiceReport  || this.hasAmc || this.hasServiceRequest || this.hasCustomerSparePartsInventory || this.hasSparePartRecommended || this.hasschedule) {
       this.hasTransactions = true;
     }
 
-    if (this.hasServiceReport || this.hasSearch) {
+    if (this.hasSearch) {
       this.hasReports = true;
     }
 
