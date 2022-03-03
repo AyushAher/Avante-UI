@@ -30,7 +30,7 @@ export class JwtInterceptor implements HttpInterceptor {
         else if (request.url.startsWith(environment.bookapi)) {
           request = request.clone({
             setHeaders: {
-              Authorization: `Zoho-oauthtoken ${zohotoken}`
+              Authorization: `Bearer ${zohotoken}`
             }
           });
         }

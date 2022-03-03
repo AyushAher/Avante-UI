@@ -1,184 +1,172 @@
 <layout>
-    <div class="right_col" role="main">
-        <div class="container">
-            <div class="page-title">
-                <div class="title_left">
-                    <h3>Local Expenses</h3>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <hr />
-
-            <div class="col-md-12 col-sm-12 ">
-                <form [formGroup]="travelDetailform" (ngSubmit)="onSubmit()">
-                    <div class="row">
-
-                        <div class="col-sm-4">
-                            <label for="engineername">Distributor</label>
-                            <select formControlName="distId" id="" disabled class="form-control" #distributorid
-                                (input)="getservicerequest($event.target.value);getengineers($event.target.value)"
-                                [ngClass]="{'is-invalid':submitted && f.distId.errors }">
-                                <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
-                            </select>
-
-                            <div *ngIf="submitted && f.distId.errors" class="invalid-feedback">
-                                <div *ngIf="f.distId.errors.required">Distributor is required</div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-sm-4">
-                            <label for="engineername">Engineer Name</label>
-
-                            <select name="" placeholder="Engineer Name" disabled formControlName="engineerid" id=""
-                                class="form-control" [ngClass]="{'is-invalid':submitted && f.engineerid.errors }">
-                                <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname +" "+ i.lname}}</option>
-                            </select>
-
-                            <div *ngIf="submitted && f.engineerid.errors" class="invalid-feedback">
-                                <div *ngIf="f.engineerid.errors.required">Engineer Name is required</div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                            <label for="name">Service Request No</label>
-                            <select name="" placeholder="Service Request Id" formControlName="servicerequestid" id=""
-                                class="form-control" [ngClass]="{'is-invalid':submitted && f.servicerequestid.errors }">
-                                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
-                            </select>
-
-                            <div *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
-                                <div *ngIf="f.servicerequestid.errors.required">Service Request Id is required</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                            <label for="returndate">Date</label>
-                            <input bsDatepicker formControlName="traveldate" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.traveldate.errors }" />
-
-                            <div *ngIf="submitted && f.traveldate.errors" class="invalid-feedback">
-                                <div *ngIf="f.traveldate.errors.required">Date is required</div>
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-md-4 col-sm-4">
-                          <label for="departuredate">City</label>
-                          <input type="text" formControlName="city" class="form-control"
-                                 [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
-
-                          <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
-                            <div *ngIf="f.city.errors.required">City is required</div>
-                          </div>
-
-                        </div>
-
-
-                      <div class="col-md-4 col-sm-4">
-                        <label for="totalamount">Total Amount</label>
-                        <br>
-                        <select id="currency" style="display:inline-block; width:100px;"
-                                formControlName="currencyId" class="form-control"
-                                [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
-                          <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
-                          </option>
-                        </select>
-                        <input id="totalamount" type="number" formControlName="totalamount" class="form-control"
-                               style="display:inline-block; width:270px; margin-left: 5px;"
-                               [ngClass]="{ ' is -invalid': submitted && f.totalamount.errors}"/>
-
-                        <div *ngIf="submitted && f.totalamount.errors" class="invalid-feedback">
-                          <div *ngIf="f.totalamount.errors.required">Amount is required</div>
-                        </div>
-
-                      </div>
-
-                      <div class="col-md-4 col-sm-4">
-                        <label for="returndate">Remarks</label>
-                        <input type="text" formControlName="remarks" class="form-control"
-                               [ngClass]="{ 'is-invalid': submitted && f.remarks.errors }"/>
-
-                        <div *ngIf="submitted && f.remarks.errors" class="invalid-feedback">
-                          <div *ngIf="f.remarks.errors.required">Remarks is required</div>
-                        </div>
-
-                      </div>
-
-
-                        <div class="col-md-4 col-sm-4">
-
-                            <label for="airline">Request Type</label>
-
-                            <select name="" placeholder="Travel Class" formControlName="requesttype"
-                                class="form-control" [ngClass]="{'is-invalid':submitted && f.requesttype.errors }">
-                                <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
-                                </option>
-                            </select>
-
-                            <div *ngIf="submitted && f.requesttype.errors" class="invalid-feedback">
-                                <div *ngIf="f.requesttype.errors.required">Request Type is required</div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-4 col-sm-4" style="display: none;">
-                            <label for="isactive">
-                                <input id="isactive" type="checkbox" formControlName="isactive">
-                                Isactive
-                            </label>
-                        </div>
-
-                    </div>
-                    <br />
-                  <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
-                    <div class="col-md-3">
-                      <input type="file" id="myFile" #file placeholder="Choose file"
-                             (change)="getfil(file.files); listfile(file.files) ;" multiple
-                             accept="text/plain, application/pdf, image/*">
-                    </div>
-                    <div id="selectedfiles" class="hidden col-md-4"
-                         style="max-height:200px; overflow-y:auto;display: none;">
-                      <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
-                        <h5>Selected Files:</h5>
-                        <hr/>
-                      </section>
-
-                    </div>
-                  </div>
-
-                  <div class="attachment my-4" *ngIf="id!=null">
-                    <div class="page-title">
-                      <div class="title_left">
-                        <h3>Attachment List</h3>
-                        <hr>
-                      </div>
-                    </div>
-                    <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
-                                     (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments"
-                                     [rowData]="attachments" rowSelection="single" pagination="true"
-                                     paginationPageSize=10>
-                    </ag-grid-angular>
-
-                  </div>
-
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6" style="padding:10px;">
-                            <button type="submit" class="btn btn-primary"
-                                    *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
-                              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                              Submit
-                            </button>
-                            <a routerLink="/localexpenseslist" class="btn btn-secondary"
-                                style="margin-left: 10px;">Back</a>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>Local Expenses</h3>
         </div>
+      </div>
+      <div class="clearfix"></div>
+      <hr />
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="travelDetailform" (ngSubmit)="onSubmit()">
+          <div class="row">
+
+
+            <div class="col-sm-4">
+              <label>Distributor</label>
+              <select #distributorid (input)="getengineers($event.target.value)"
+                [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-control" formControlName="distId">
+                <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
+              </select>
+
+              <div *ngIf="submitted && f.distId.errors" class="invalid-feedback">
+                <div *ngIf="f.distId.errors.required">Distributor is required</div>
+              </div>
+
+            </div>
+
+            <div class="col-sm-4">
+              <label>Engineer Name</label>
+
+              <select [ngClass]="{'is-invalid':submitted && f.engineerid.errors }"
+                (change)="getservicerequest(distId,$event.target.value)" class="form-control"
+                formControlName="engineerid">
+                <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
+              </select>
+
+              <div *ngIf="submitted && f.engineerid.errors" class="invalid-feedback">
+                <div *ngIf="f.engineerid.errors.required">Engineer Name is required</div>
+              </div>
+            </div>
+            
+            <div class="col-md-4 col-sm-4">
+              <label for="name">Service Request No</label>
+              <select name="" placeholder="Service Request Id" formControlName="servicerequestid" id=""
+                class="form-control" [ngClass]="{'is-invalid':submitted && f.servicerequestid.errors }">
+                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
+              </select>
+
+              <div *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
+                <div *ngIf="f.servicerequestid.errors.required">Service Request Id is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="returndate">Date</label>
+              <input bsDatepicker formControlName="traveldate" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.traveldate.errors }" />
+
+              <div *ngIf="submitted && f.traveldate.errors" class="invalid-feedback">
+                <div *ngIf="f.traveldate.errors.required">Date is required</div>
+              </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="departuredate">City</label>
+              <input type="text" formControlName="city" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.city.errors }" />
+
+              <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                <div *ngIf="f.city.errors.required">City is required</div>
+              </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="totalamount">Total Amount</label>
+              <br>
+              <select id="currency" style="display:inline-block; width:100px;" formControlName="currencyId"
+                class="form-control" [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
+                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                </option>
+              </select>
+              <input id="totalamount" type="number" formControlName="totalamount" class="form-control"
+                style="display:inline-block; width:270px; margin-left: 5px;"
+                [ngClass]="{ ' is -invalid': submitted && f.totalamount.errors}" />
+
+              <div *ngIf="submitted && f.totalamount.errors" class="invalid-feedback">
+                <div *ngIf="f.totalamount.errors.required">Amount is required</div>
+              </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="returndate">Remarks</label>
+              <input type="text" formControlName="remarks" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.remarks.errors }" />
+
+              <div *ngIf="submitted && f.remarks.errors" class="invalid-feedback">
+                <div *ngIf="f.remarks.errors.required">Remarks is required</div>
+              </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4">
+
+              <label for="airline">Request Type</label>
+
+              <select name="" placeholder="Travel Class" formControlName="requesttype" class="form-control"
+                [ngClass]="{'is-invalid':submitted && f.requesttype.errors }">
+                <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
+                </option>
+              </select>
+
+              <div *ngIf="submitted && f.requesttype.errors" class="invalid-feedback">
+                <div *ngIf="f.requesttype.errors.required">Request Type is required</div>
+              </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4" style="display: none;">
+              <label for="isactive">
+                <input id="isactive" type="checkbox" formControlName="isactive">
+                Isactive
+              </label>
+            </div>
+
+          </div>
+          <br />
+
+
+          <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
+            <div class="col-md-3">
+              <input type="file" id="myFile" #file placeholder="Choose file"
+                (change)="getfil(file.files); listfile(file.files) ;" multiple
+                accept="text/plain, application/pdf, image/*">
+            </div>
+            <div id="selectedfiles" class="hidden col-md-4" style="max-height:200px; overflow-y:auto;display: none;">
+              <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                <h5>Selected Files:</h5>
+                <hr />
+              </section>
+
+            </div>
+          </div>
+
+          <div class="attachment my-4" *ngIf="id!=null">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Attachment List</h3>
+                <hr>
+              </div>
+            </div>
+            <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
+              (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments" [rowData]="attachments"
+              rowSelection="single" pagination="true" paginationPageSize=10>
+            </ag-grid-angular>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px;">
+              <button type="submit" class="btn btn-primary" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/localexpenseslist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+            </div>
+          </div>
+
+        </form>
+      </div>
     </div>
+  </div>
 
 </layout>

@@ -42,6 +42,9 @@ export class ProfileService {
     getById(id: string) {
       return this.http.get<Profile>(`${environment.apiUrl}/Profiles/${id}`);
     }
+    GetAllScreens() {
+      return this.http.get(`${environment.apiUrl}/Profiles/GetAllScreens`);
+    }
 
     getUserProfile(value: string) {
       //debugger;

@@ -14,19 +14,21 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="profilename">Profile Name</label>
-              <input type="text" formControlName="profilename" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.profilename.errors }" />
+              <input type="text" formControlName="profilename" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.profilename.errors }" />
               <div *ngIf="submitted && f.profilename.errors" class="invalid-feedback">
                 <div *ngIf="f.profilename.errors.required">Profile Name is required</div>
               </div>
             </div>
           </div>
 
-          <hr/>
+          <hr />
           <div class="row">
             <div class="table-responsive">
-              <table class="table">
+              <table class="table" style="border:1px solid black">
                 <thead>
                   <tr>
+                    <th>Category</th>
                     <th>Screen Name</th>
                     <th>Create <br> <input type="checkbox" id="selectallcreate" (change)="SelectAll('create')"></th>
                     <th>Read<br> <input type="checkbox" id="selectallread" (change)="SelectAll('read')"></th>
@@ -35,7 +37,11 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr formArrayName="permissions" *ngFor="let item of profileform.get('permissions')['controls'];let i=index">
+                  <tr formArrayName="permissions"
+                    *ngFor="let item of profileform.get('permissions')['controls'];let i=index">
+                    <td [formGroupName]="i" style="font-weight: bold;">
+                      {{ getName(i).categoryName}}
+                    </td>
                     <td [formGroupName]="i">
                       <input type="hidden" formControlName="screenId" />
                       <!--<input type="text" formControlName="screenName" readonly />-->
@@ -50,10 +56,10 @@
               </table>
             </div>
           </div>
-          <hr />
+          <br>
           <div class="row">
             <div class="col-md-6 col-sm-6">
-              <button [disabled]="loading"  *ngIf="hasAddAccess==true || hasUpdateAccess==true" class="btn btn-primary">
+              <button [disabled]="loading" *ngIf="hasAddAccess==true || hasUpdateAccess==true" class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
@@ -68,3 +74,10 @@
     </div>
   </div>
 </layout>
+
+<style>
+  thead {
+    background: #5ba046;
+    color: #fff;
+  }
+</style>

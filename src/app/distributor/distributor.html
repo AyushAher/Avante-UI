@@ -31,13 +31,14 @@
              aria-selected="false">Distributor Region</a>
         </li>
       </ul>
-      <!--<div class="page-title">
-        <div class="title_left">
-          <h3>Distributor</h3>
-        </div>
-      </div>-->
 
+      <div class="page-title">
+        <div class="title_left">
+          <h3 style="padding:15px 0 5px 0">Distributor Details</h3>
+        </div>
+      </div>
       <div class="clearfix"></div>
+      <hr/>
 
       <div class="col-md-12 col-sm-12">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -45,7 +46,7 @@
             <div class="col-sm-6">
               <label for="distname">Name</label>
               <input type="text" formControlName="distname" class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f.distname.errors }" />
+                     [ngClass]="{ 'is-invalid': submitted && f.distname.errors }"/>
               <div *ngIf="submitted && f.distname.errors" class="invalid-feedback">
                 <div *ngIf="f.distname.errors.required">Name is required</div>
               </div>
@@ -64,100 +65,112 @@
               <label for=""></label>
               <div class="checkbox">
                 <label for="isblocked">
-                  <input type="checkbox" formControlName="isblocked" class=""  />
+                  <input type="checkbox" formControlName="isblocked" class=""/>
                   Block Distributer Account
                 </label>
               </div>
             </div>
           </div>
-          <br/>
-  <p><b>Address</b></p>
-  <hr>
-  <div formGroupName="address">
-    <div class="row">
-      <div class="col-sm-4">
-        <label for="street">Street</label>
-        <input type="text" formControlName="street" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }" />
-        <div *ngIf="submitted && a.get('street').errors" class="invalid-feedback">
-          <div *ngIf="a.get('street').errors.required">Street is required</div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <label for="area">Area</label>
-        <input type="text" formControlName="area" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('area').errors }" />
-        <div *ngIf="submitted && a.get('area').errors" class="invalid-feedback">
-          <div *ngIf="a.get('area').errors.required">Area is required</div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <label for="place">Place</label>
-        <input type="text" formControlName="place" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('place').errors }" />
-        <div *ngIf="submitted && a.get('place').errors" class="invalid-feedback">
-          <div *ngIf="a.get('place').errors.required">Place is required</div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-4">
-        <label for="city">City</label>
-        <input type="text" formControlName="city" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('city').errors }" />
-        <div *ngIf="submitted && a.get('city').errors" class="invalid-feedback">
-          <div *ngIf="a.get('city').errors.required">City is required</div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <label for="countryid">Country</label>
-        <select formControlName="countryid" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
-          <!--<option value="0">--All--</option>-->
-          <option *ngFor="let country of countries" value={{country.id}}>
-            {{country.name}}
-          </option>
-        </select>
-        <div *ngIf="submitted && a.get('countryid').errors" class="invalid-feedback">
-          <div *ngIf="a.get('countryid').errors.required">Country is required</div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <label for="zip">Zip</label>
-        <input type="tel" maxlength="10" formControlName="zip" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('zip').errors }" />
-        <div *ngIf="submitted && a.get('zip').errors" class="invalid-feedback">
-          <div *ngIf="a.get('zip').errors.required">Zip is required</div>
-          <div *ngIf="a.get('zip').errors?.minlength">Min length is 4</div>
-          <div *ngIf="a.get('zip').errors?.maxlength">Max length is 15</div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-4">
-        <label for="geolat">Latitude</label>
-        <input type="text" formControlName="geolat" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('geolat').errors }" />
-        <div *ngIf="submitted && a.get('geolat').errors" class="invalid-feedback">
-          <div *ngIf="a.get('geolat').errors.required">Latitude is required</div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <label for="geolong">Longitude</label>
-        <input type="text" formControlName="geolong" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('geolong').errors }" />
-        <div *ngIf="submitted && a.get('geolong').errors" class="invalid-feedback">
-          <div *ngIf="a.get('geolong').errors.required">Longitude is required</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <hr />
-  <div class="row">
-    <div class="col-md-6 col-sm-6" style="padding: 10px;">
-      <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && distributorId==null)" class="btn btn-primary">
-        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-        Submit
-      </button>
-      <a routerLink="/distributorlist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
-    </div>
-  </div>
-  <!--<div class="row" *ngIf="isSave">
-    <a routerLink="/contact/{{ type }}/{{ distributorId }}" class="btn btn-link">Add Contact</a>
-  </div>-->
-</form>
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Address</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr/>
+
+          <div formGroupName="address">
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="street">Street</label>
+                <input type="text" formControlName="street" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }"/>
+                <div *ngIf="submitted && a.get('street').errors" class="invalid-feedback">
+                  <div *ngIf="a.get('street').errors.required">Street is required</div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="area">Area</label>
+                <input type="text" formControlName="area" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('area').errors }"/>
+                <div *ngIf="submitted && a.get('area').errors" class="invalid-feedback">
+                  <div *ngIf="a.get('area').errors.required">Area is required</div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="place">Place</label>
+                <input type="text" formControlName="place" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('place').errors }"/>
+                <div *ngIf="submitted && a.get('place').errors" class="invalid-feedback">
+                  <div *ngIf="a.get('place').errors.required">Place is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="city">City</label>
+                <input type="text" formControlName="city" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('city').errors }"/>
+                <div *ngIf="submitted && a.get('city').errors" class="invalid-feedback">
+                  <div *ngIf="a.get('city').errors.required">City is required</div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="countryid">Country</label>
+                <select formControlName="countryid" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
+                  <!--<option value="0">--All--</option>-->
+                  <option *ngFor="let country of countries" value={{country.id}}>
+                    {{country.name}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && a.get('countryid').errors" class="invalid-feedback">
+                  <div *ngIf="a.get('countryid').errors.required">Country is required</div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="zip">Zip</label>
+                <input type="tel" maxlength="10" formControlName="zip" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('zip').errors }"/>
+                <div *ngIf="submitted && a.get('zip').errors" class="invalid-feedback">
+                  <div *ngIf="a.get('zip').errors.required">Zip is required</div>
+                  <div *ngIf="a.get('zip').errors?.minlength">Min length is 4</div>
+                  <div *ngIf="a.get('zip').errors?.maxlength">Max length is 15</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="geolat">Latitude</label>
+                <input type="text" formControlName="geolat" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('geolat').errors }"/>
+                <div *ngIf="submitted && a.get('geolat').errors" class="invalid-feedback">
+                  <div *ngIf="a.get('geolat').errors.required">Latitude is required</div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="geolong">Longitude</label>
+                <input type="text" formControlName="geolong" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('geolong').errors }"/>
+                <div *ngIf="submitted && a.get('geolong').errors" class="invalid-feedback">
+                  <div *ngIf="a.get('geolong').errors.required">Longitude is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr/>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding: 10px;">
+              <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && distributorId==null)"
+                      class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/distributorlist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

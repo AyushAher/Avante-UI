@@ -1,23 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {Country, ProfileReadOnly, ServiceRequest, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
-import {environment} from '../../environments/environment';
+import { Country, ProfileReadOnly, ServiceRequest, User } from '../_models';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { environment } from '../../environments/environment';
 import {
   AccountService,
-  AlertService,
   ContactService,
-  CountryService,
-  CustomerService,
+  DistributorService,
   ListTypeService,
   NotificationService,
   ProfileService,
   ServiceRequestService
 } from '../_services';
-import {RenderComponent} from '../distributor/rendercomponent';
+import { RenderComponent } from '../distributor/rendercomponent';
+import { DatePipe } from '@angular/common';
+import { ServiceRComponent } from './ServicerequestRenderer';
 
 
 @Component({
@@ -32,10 +32,7 @@ export class ServiceRequestListComponent implements OnInit {
   srAdminList: ServiceRequest[];
   srEngList: ServiceRequest[];
   loading = false;
-  submitted = false;
-  isSave = false;
   customerId: string;
-  type: string = "D";
   countries: Country[];
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
@@ -48,19 +45,17 @@ export class ServiceRequestListComponent implements OnInit {
   IsEngineerView: boolean = false;
   IsAdminView: boolean = false;
   distId: any;
+  datepipe: any = new DatePipe("en-US");
+  appendList: any;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private customerService: CustomerService,
-    private countryService: CountryService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private serviceRequestService: ServiceRequestService,
     private contcactservice: ContactService,
+    private distributorService: DistributorService,
     private listTypeService: ListTypeService
   ) {
 
@@ -122,9 +117,9 @@ export class ServiceRequestListComponent implements OnInit {
         this.columnDefs = this.createDisColumnDefs();
       } else if (this.IsEngineerView) {
         this.columnDefs = this.createDisColumnDefs();
-      } else if(this.IsCustomerView){
+      } else if (this.IsCustomerView) {
         this.columnDefs = this.createCustColumnDefs();
-      }else if(this.IsAdminView){
+      } else if (this.IsAdminView) {
         this.columnDefs = this.createDisColumnDefs()
       }
 
@@ -153,59 +148,91 @@ export class ServiceRequestListComponent implements OnInit {
         deleteaccess: this.hasDeleteAccess
       },
     },
-      {
-        headerName: 'Service Request No.',
-        field: 'serreqno',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'Service Request No.',
+    {
+      headerName: 'Service Request No.',
+      field: 'serreqno',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'Service Request No.',
+    },
+    {
+      headerName: 'Customer Name',
+      field: 'companyname',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'companyname',
+    }, {
+      headerName: 'Site Name',
+      field: 'sitename',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Machine Serial No.',
+      field: 'machineModelName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Machine Model Name',
+      field: 'machmodelname',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Contact Person',
+      field: 'contactperson',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Service Type',
+      field: 'visittypeName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Status',
+      field: 'statusName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Created On',
+      field: 'createdon',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Accepted',
+      field: 'accepted',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Assigned To',
+      field: 'assignedto',
+      width:400,
+      cellRendererFramework: ServiceRComponent,
+      cellRendererParams: {
+        isDist : this.IsDistributorView
       },
-      {
-        headerName: 'Customer Name',
-        field: 'companyname',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'companyname',
-      }, {
-        headerName: 'Site Name',
-        field: 'sitename',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Machine Serial No.',
-        field: 'machineModelName',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Machine Model Name',
-        field: 'machmodelname',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Contact Person',
-        field: 'contactperson',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Assigned To',
-        field: 'assignedtoName',
-        filter: true,
-        editable: false,
-        sortable: true
-      }
-    ]
+      filter: true,
+      editable: false,
+      sortable: true
+    }]
   }
 
   private createCustColumnDefs() {
@@ -224,61 +251,65 @@ export class ServiceRequestListComponent implements OnInit {
         deleteaccess: this.hasDeleteAccess
       },
     },
-      {
-        headerName: 'Service Request No.',
-        field: 'serreqno',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'Service Request No.',
-      },
-      {
-        headerName: 'Distributor Name',
-        field: 'distributor',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'distributor',
-      },
-      {
-        headerName: 'Site Name',
-        field: 'sitename',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
+    {
+      headerName: 'Service Request No.',
+      field: 'serreqno',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+    },
+    {
+      headerName: 'Distributor Name',
+      field: 'distributor',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+    },
+    {
+      headerName: 'Site Name',
+      field: 'sitename',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
 
-      {
-        headerName: 'Machine Serial No.',
-        field: 'machineModelName',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Machine Model Name',
-        field: 'machmodelname',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Contact Person',
-        field: 'contactperson',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'Country',
-        field: 'countryName',
-        filter: true,
-        editable: false,
-        sortable: true
-      }
-    ]
+    {
+      headerName: 'Machine Serial No.',
+      field: 'machineModelName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Machine Model Name',
+      field: 'machmodelname',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Contact Person',
+      field: 'contactperson',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Service Type',
+      field: 'visittypeName',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Country',
+      field: 'countryName',
+      filter: true,
+      editable: false,
+      sortable: true
+    }]
   }
 
 
@@ -292,6 +323,12 @@ export class ServiceRequestListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+
+          data.object.forEach(ser => {
+            ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
+            ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
+          });
+
           if (this.user.username != 'admin') {
             this.srCustList = data.object.filter(x => x.createdby == this.user.userId);
             this.srDistList = data.object.filter(x => x.distid == this.distId);

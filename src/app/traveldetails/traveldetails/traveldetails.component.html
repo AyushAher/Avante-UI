@@ -1,254 +1,247 @@
 <layout>
-    <div class="right_col" role="main">
-        <div class="container">
-            <div class="page-title">
-                <div class="title_left">
-                    <h3>Travel Details</h3>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <hr />
-
-            <div class="col-md-12 col-sm-12 ">
-              <form [formGroup]="Form" (ngSubmit)="onSubmit()">
-                <div class="row">
-
-                  <div class="col-sm-4">
-                    <label>Distributor</label>
-                    <select formControlName="distId" disabled class="form-control" #distributorid
-                            (input)="getservicerequest($event.target.value);getengineers($event.target.value)"
-                            [ngClass]="{'is-invalid':submitted && t.distId.errors }">
-                      <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
-                    </select>
-
-                    <div *ngIf="submitted && t.distId.errors" class="invalid-feedback">
-                      <div *ngIf="t.distId.errors.required">Distributor is required</div>
-                    </div>
-
-                  </div>
-
-                  <div class="col-sm-4">
-                    <label>Engineer Name</label>
-                    <select [disabled]="isEng" formControlName="engineerid" class="form-control"
-                            [ngClass]="{'is-invalid':submitted && t.engineerid.errors }">
-                      <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
-                    </select>
-
-                          <div *ngIf="submitted && t.engineerid.errors" class="invalid-feedback">
-                            <div *ngIf="t.engineerid.errors.required">Engineer Name is required</div>
-                          </div>
-
-                        </div>
-
-                      <div class="col-md-4 col-sm-4">
-                        <label>Service Request No</label>
-                        <select name="" placeholder="Service Request Id" formControlName="servicerequestid"
-                                class="form-control"
-                                [ngClass]="{'is-invalid':submitted && t.servicerequestid.errors }">
-                          <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
-                        </select>
-
-                        <div *ngIf="submitted && t.servicerequestid.errors" class="invalid-feedback">
-                          <div *ngIf="t.servicerequestid.errors.required">Service Request Id is required</div>
-                        </div>
-                      </div>
-
-                  <div class="col-md-4 col-sm-4">
-                    <label>Trip Type</label>
-                    <select name="" placeholder="Trip Type" formControlName="triptype" class="form-control"
-                            [ngClass]="{'is-invalid':submitted && t.triptype.errors }">
-                      <option *ngFor="let i of Triptype" value="{{i.listTypeItemId}}">{{i.itemname}}</option>
-                    </select>
-
-                    <div *ngIf="submitted && t.triptype.errors" class="invalid-feedback">
-                      <div *ngIf="t.triptype.errors.required">Trip Type is required</div>
-                    </div>
-
-                  </div>
-
-                        <div class="col-md-4 col-sm-4">
-                          <label>From City</label>
-                          <input type="text" formControlName="fromcity" class="form-control"
-                                 [ngClass]="{ 'is-invalid': submitted && t.fromcity.errors}"/>
-
-                          <div *ngIf="submitted && t.fromcity.errors" class="invalid-feedback">
-                            <div *ngIf="t.fromcity.errors.required">From City is required</div>
-                          </div>
-
-                        </div>
-
-                  <div class="col-md-4 col-sm-4">
-                    <label>To City</label>
-                    <input type="text" id="ToCity" formControlName="tocity" class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && t.tocity.errors}"/>
-
-                    <div *ngIf="submitted && t.tocity.errors" class="invalid-feedback">
-                      <div *ngIf="t.tocity.errors.required">To City is required</div>
-                    </div>
-
-                  </div>
-
-
-                  <div class="col-md-4 col-sm-4">
-                    <label>Travel Class</label>
-                    <select name="" placeholder="Travel Class" formControlName="travelclass" id="travelclass"
-                            class="form-control" [ngClass]="{'is-invalid':submitted && t.travelclass.errors }">
-                      <option *ngFor="let i of classoftravel" value="{{i.listTypeItemId}}">{{i.itemname}}
-                      </option>
-                    </select>
-
-                    <div *ngIf="submitted && t.travelclass.errors" class="invalid-feedback">
-                      <div *ngIf="t.travelclass.errors.required">Travel Class is required</div>
-                    </div>
-
-                  </div>
-
-                  <div class="col-md-4 col-sm-4">
-                    <label>Departure Date</label>
-                    <input type="text" formControlName="departuredate" id="departuredate" class="form-control"
-                           bsDatepicker
-                           [ngClass]="{ 'is-invalid': submitted && t.departuredate.errors }"/>
-
-                    <div *ngIf="submitted && t.departuredate.errors" class="invalid-feedback">
-                      <div *ngIf="t.departuredate.errors.required">Departure Date is required</div>
-                    </div>
-
-                  </div>
-
-                  <div class="col-md-4 col-sm-4">
-                    <label>Return Date</label>
-                    <input bsDatepicker formControlName="returndate" id="returndate" class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && t.returndate.errors }"/>
-
-                    <div *ngIf="submitted && t.returndate.errors" class="invalid-feedback">
-                      <div *ngIf="t.returndate.errors.required">Return Date is required</div>
-                    </div>
-                  </div>
-
-
-                      <div class="col-md-4 col-sm-4">
-
-                        <label>Request Type</label>
-
-                        <select name="" placeholder="Travel Class" formControlName="requesttype" id=""
-                                class="form-control" [ngClass]="{'is-invalid':submitted && t.requesttype.errors }">
-                          <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
-                          </option>
-                        </select>
-
-                        <div *ngIf="submitted && t.requesttype.errors" class="invalid-feedback">
-                          <div *ngIf="t.requesttype.errors.required">Request Type is required</div>
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                    <div formGroupName="flightdetails" *ngIf="flightdetails" class="hide mt-4">
-                      <div class="row">
-                        <div class="col-md-6 col-sm-6">
-
-                          <label>Airline</label>
-                          <input type="text" formControlName="airline" [readonly]="isEng" class="form-control"
-                                 [ngClass]="{ 'is-invalid': submitted && f.get('airline').errors }"/>
-
-                          <div *ngIf="submitted && f.get('airline').errors" class="invalid-feedback">
-                            <div *ngIf="f.get('airline').errors.required">Airline is required</div>
-                          </div>
-
-                            </div>
-
-                            <div class="col-md-6 col-sm-6">
-
-                              <label>Flight No</label>
-                              <input type="text" formControlName="flightno" [readonly]="isEng" class="form-control"
-                                     [ngClass]="{ 'is-invalid': submitted && f.get('flightno').errors }"/>
-
-                                <div *ngIf="submitted && f.get('flightno').errors" class="invalid-feedback">
-                                    <div *ngIf="f.get('flightno').errors.required">Flight No is required</div>
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-6 col-sm-6">
-
-                              <label>Flight Date</label>
-                              <input bsDatepicker formControlName="flightdate" [readonly]="isEng" class="form-control"
-                                     [ngClass]="{ 'is-invalid': submitted && f.get('flightdate').errors }"/>
-
-                              <div *ngIf="submitted &&  f.get('flightdate').errors" class="invalid-feedback">
-                                <div *ngIf=" f.get('flightdate').errors.required">Flight Date is required</div>
-                              </div>
-
-                            </div>
-
-                          <div class="col-md-4 col-sm-4">
-                            <label>Total Amount</label>
-                            <br>
-                            <select id="currency" style="display:inline-block; width:100px;"
-                                    formControlName="currencyId" class="form-control"
-                                    [ngClass]="{ ' is -invalid': submitted && f.get('currencyId').errors}">
-                              <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
-                              </option>
-                            </select>
-                            <input id="totalamount" [readonly]="isEng" type="number" formControlName="flightcost"
-                                   class="form-control"
-                                   style="display:inline-block; width:270px; margin-left: 5px;"
-                                   [ngClass]="{ ' is -invalid': submitted && f.get('flightcost').errors}"/>
-                            <div *ngIf="submitted && f.get('flightcost').errors" class="invalid-feedback">
-                              <div *ngIf="f.get('flightcost').errors.required">Flight Cost is required</div>
-                            </div>
-                          </div>
-
-                        </div>
-                    </div>
-
-                  <br/>
-                  <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
-                    <div class="col-md-3">
-                      <input type="file" id="myFile" #file placeholder="Choose file"
-                             (change)="getfil(file.files); listfile(file.files) ;" multiple
-                             accept="text/plain, application/pdf, image/*">
-                    </div>
-                    <div id="selectedfiles" class="hidden col-md-4"
-                         style="max-height:200px; overflow-y:auto;display: none;">
-                      <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
-                        <h5>Selected Files:</h5>
-                        <hr/>
-                      </section>
-
-                    </div>
-                  </div>
-
-                  <div class="attachment my-4" *ngIf="id!=null">
-                    <div class="page-title">
-                      <div class="title_left">
-                        <h3>Attachment List</h3>
-                        <hr>
-                      </div>
-                    </div>
-                    <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
-                                     (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments"
-                                     [rowData]="attachments" rowSelection="single" pagination="true"
-                                     paginationPageSize=10>
-                    </ag-grid-angular>
-
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-6 col-sm-6" style="padding:10px;">
-                      <button class="btn btn-primary" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                        Submit
-                      </button>
-                      <a routerLink="/traveldetailslist" class="btn btn-secondary"
-                         style="margin-left: 10px;">Back</a>
-                    </div>
-                  </div>
-
-                </form>
-            </div>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>Travel Details</h3>
         </div>
+      </div>
+      <div class="clearfix"></div>
+      <hr />
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+          <div class="row">
+
+            <div class="col-sm-4">
+              <label>Distributor</label>
+              <select formControlName="distId" class="form-control" (input)="getengineers($event.target.value)"
+                [ngClass]="{'is-invalid':submitted && t.distId.errors }">
+                <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
+              </select>
+
+              <div *ngIf="submitted && t.distId.errors" class="invalid-feedback">
+                <div *ngIf="t.distId.errors.required">Distributor is required</div>
+              </div>
+
+            </div>
+
+            <div class="col-sm-4">
+              <label>Engineer Name</label>
+              <select formControlName="engineerid" class="form-control"
+                (change)="getservicerequest(distId ,$event.target.value);"
+                [ngClass]="{'is-invalid':submitted && t.engineerid.errors }">
+                <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
+              </select>
+
+              <div *ngIf="submitted && t.engineerid.errors" class="invalid-feedback">
+                <div *ngIf="t.engineerid.errors.required">Engineer Name is required</div>
+              </div>
+
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label>Service Request No</label>
+              <select name="" placeholder="Service Request Id" formControlName="servicerequestid" class="form-control"
+                [ngClass]="{'is-invalid':submitted && t.servicerequestid.errors }">
+                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
+              </select>
+
+              <div *ngIf="submitted && t.servicerequestid.errors" class="invalid-feedback">
+                <div *ngIf="t.servicerequestid.errors.required">Service Request Id is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label>Trip Type</label>
+              <select name="" placeholder="Trip Type" formControlName="triptype" class="form-control"
+                [ngClass]="{'is-invalid':submitted && t.triptype.errors }">
+                <option *ngFor="let i of Triptype" value="{{i.listTypeItemId}}">{{i.itemname}}</option>
+              </select>
+
+              <div *ngIf="submitted && t.triptype.errors" class="invalid-feedback">
+                <div *ngIf="t.triptype.errors.required">Trip Type is required</div>
+              </div>
+
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label>From City</label>
+              <input type="text" formControlName="fromcity" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && t.fromcity.errors}" />
+
+              <div *ngIf="submitted && t.fromcity.errors" class="invalid-feedback">
+                <div *ngIf="t.fromcity.errors.required">From City is required</div>
+              </div>
+
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label>To City</label>
+              <input type="text" id="ToCity" formControlName="tocity" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && t.tocity.errors}" />
+
+              <div *ngIf="submitted && t.tocity.errors" class="invalid-feedback">
+                <div *ngIf="t.tocity.errors.required">To City is required</div>
+              </div>
+
+            </div>
+
+
+            <div class="col-md-4 col-sm-4">
+              <label>Travel Class</label>
+              <select name="" placeholder="Travel Class" formControlName="travelclass" id="travelclass"
+                class="form-control" [ngClass]="{'is-invalid':submitted && t.travelclass.errors }">
+                <option *ngFor="let i of classoftravel" value="{{i.listTypeItemId}}">{{i.itemname}}
+                </option>
+              </select>
+
+              <div *ngIf="submitted && t.travelclass.errors" class="invalid-feedback">
+                <div *ngIf="t.travelclass.errors.required">Travel Class is required</div>
+              </div>
+
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label>Departure Date</label>
+              <input type="text" formControlName="departuredate" id="departuredate" class="form-control" bsDatepicker
+                [ngClass]="{ 'is-invalid': submitted && t.departuredate.errors }" />
+
+              <div *ngIf="submitted && t.departuredate.errors" class="invalid-feedback">
+                <div *ngIf="t.departuredate.errors.required">Departure Date is required</div>
+              </div>
+
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label>Return Date</label>
+              <input bsDatepicker formControlName="returndate" id="returndate" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && t.returndate.errors }" />
+
+              <div *ngIf="submitted && t.returndate.errors" class="invalid-feedback">
+                <div *ngIf="t.returndate.errors.required">Return Date is required</div>
+              </div>
+            </div>
+
+
+            <div class="col-md-4 col-sm-4">
+
+              <label>Request Type</label>
+
+              <select name="" placeholder="Travel Class" formControlName="requesttype" id="" class="form-control"
+                [ngClass]="{'is-invalid':submitted && t.requesttype.errors }">
+                <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
+                </option>
+              </select>
+
+              <div *ngIf="submitted && t.requesttype.errors" class="invalid-feedback">
+                <div *ngIf="t.requesttype.errors.required">Request Type is required</div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div formGroupName="flightdetails" *ngIf="flightdetails" class="hide mt-4">
+            <div class="row">
+              <div class="col-md-6 col-sm-6">
+
+                <label>Airline</label>
+                <input type="text" formControlName="airline" [readonly]="isEng" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.get('airline').errors }" />
+
+                <div *ngIf="submitted && f.get('airline').errors" class="invalid-feedback">
+                  <div *ngIf="f.get('airline').errors.required">Airline is required</div>
+                </div>
+
+              </div>
+
+              <div class="col-md-6 col-sm-6">
+
+                <label>Flight No</label>
+                <input type="text" formControlName="flightno" [readonly]="isEng" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.get('flightno').errors }" />
+
+                <div *ngIf="submitted && f.get('flightno').errors" class="invalid-feedback">
+                  <div *ngIf="f.get('flightno').errors.required">Flight No is required</div>
+                </div>
+
+              </div>
+
+              <div class="col-md-6 col-sm-6">
+
+                <label>Flight Date</label>
+                <input bsDatepicker formControlName="flightdate" [readonly]="isEng" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.get('flightdate').errors }" />
+
+                <div *ngIf="submitted &&  f.get('flightdate').errors" class="invalid-feedback">
+                  <div *ngIf=" f.get('flightdate').errors.required">Flight Date is required</div>
+                </div>
+
+              </div>
+
+              <div class="col-md-4 col-sm-4">
+                <label>Total Amount</label>
+                <br>
+                <select id="currency" style="display:inline-block; width:100px;" formControlName="currencyId"
+                  class="form-control" [ngClass]="{ ' is -invalid': submitted && f.get('currencyId').errors}">
+                  <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                  </option>
+                </select>
+                <input id="totalamount" [readonly]="isEng" type="number" formControlName="flightcost"
+                  class="form-control" style="display:inline-block; width:270px; margin-left: 5px;"
+                  [ngClass]="{ ' is -invalid': submitted && f.get('flightcost').errors}" />
+                <div *ngIf="submitted && f.get('flightcost').errors" class="invalid-feedback">
+                  <div *ngIf="f.get('flightcost').errors.required">Flight Cost is required</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <br />
+          <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
+            <div class="col-md-3">
+              <input type="file" id="myFile" #file placeholder="Choose file"
+                (change)="getfil(file.files); listfile(file.files) ;" multiple
+                accept="text/plain, application/pdf, image/*">
+            </div>
+            <div id="selectedfiles" class="hidden col-md-4" style="max-height:200px; overflow-y:auto;display: none;">
+              <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                <h5>Selected Files:</h5>
+                <hr />
+              </section>
+
+            </div>
+          </div>
+
+          <div class="attachment my-4" *ngIf="id!=null">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Attachment List</h3>
+                <hr>
+              </div>
+            </div>
+            <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
+              (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments" [rowData]="attachments"
+              rowSelection="single" pagination="true" paginationPageSize=10>
+            </ag-grid-angular>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="padding:10px;">
+              <button class="btn btn-primary" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <a routerLink="/traveldetailslist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+            </div>
+          </div>
+
+        </form>
+      </div>
     </div>
+  </div>
 
 </layout>

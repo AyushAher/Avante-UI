@@ -75,16 +75,20 @@
              aria-selected="false">Site Contact</a>
         </li>
       </ul>
-      <!--<div class="page-title">
-        <div class="title_left">
-          <h3>Contact List</h3>
-        </div>
-      </div>-->
-      <div class="clearfix"></div>
-      <button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="hasAddAccess" (click)="Add()"><i class="fas fa-plus-circle"></i></button>
       <div class="col-md-12 col-sm-12">
+
+        <div class="page-title">
+          <div class="title_left">
+            <h3 style="padding:15px 0 5px 0">Contact Details List</h3>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr/>
+        <button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="hasAddAccess" (click)="Add()"><i
+          class="fas fa-plus-circle"></i></button>
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                         [columnDefs]="columnDefs" [rowData]="contactList" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                         [columnDefs]="columnDefs" [rowData]="contactList" rowSelection="single" pagination="true"
+                         paginationPageSize=10></ag-grid-angular>
       </div>
     </div>
     </div>

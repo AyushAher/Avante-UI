@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {
   CustomerSite,
@@ -10,20 +10,16 @@ import {
   SparePart,
   User
 } from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
 
 import {
   AccountService,
   AlertService,
-  CustomerSiteService,
-  InstrumentService,
   ListTypeService,
   NotificationService,
-  ProfileService,
-  SparePartService,
-  UploadService
+  ProfileService
 } from '../_services';
 
 
@@ -41,14 +37,14 @@ export class ProfileComponent implements OnInit {
   isSave = false;
   id: string;
   code: string = "CONTY";
-  listTypeItems: ListTypeItem[];
+  listTypeItems: any;
   config: instrumentConfig;
   sparePartDetails: SparePart[];
   selectedConfigType: string[] = [];
   imagePath: string;
   instuType: ListTypeItem[];
   permissions: FormArray;
-  listT: ListTypeItem;
+  listT: any;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
   hasUpdateAccess: boolean = false;
@@ -61,11 +57,7 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private alertService: AlertService,
-    private customerSiteService: CustomerSiteService,
-    private instrumentService: InstrumentService,
     private listTypeService: ListTypeService,
-    private sparePartService: SparePartService,
-    private uploadService: UploadService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) { }
@@ -99,36 +91,42 @@ export class ProfileComponent implements OnInit {
       isdeleted: [false],
     });
 
-    this.listTypeService.getById("SCRNS")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          //debugger;
-          this.listTypeItems = data;
-          this.addItem(this.listTypeItems);
-        },
-        error: error => {
-           this.notificationService.showError(error, "Error");
-           this.loading = false;
-        }
-      });
 
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id != null) {
-      this.hasAddAccess = false;
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
       this.profileService.getById(this.id)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
+            data.object.permissions.forEach(element => {
+              element.itemCode = element.screenCode
+            });
+            this.addItem(data.object.permissions)
             this.profileform.patchValue(data.object);
-
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
+          }
+        });
+    } else {
+      this.profileService.GetAllScreens()
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            //debugger;
+            this.listTypeItems = data.object;
+            data.object.sort((a, b) => {
+              var value = 0
+              a.categoryName < b.categoryName ? value = -1 : a.categoryName > b.categoryName ? value = 1 : value = 0;
+              return value;
+            });
+            console.log(this.listTypeItems);
+
+            this.addItem(this.listTypeItems);
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
@@ -137,13 +135,15 @@ export class ProfileComponent implements OnInit {
 
   CreateItem(): FormGroup {
     return this.formBuilder.group({
-      id:'',
-      screenId:'',
+      id: '',
+      screenId: '',
       screenName: '',
       create: '',
       read: '',
       update: '',
-      delete:''
+      delete: '',
+      categoryName: "",
+      screenCode: ""
     });
   }
 
@@ -151,15 +151,18 @@ export class ProfileComponent implements OnInit {
     //debugger;
     for (let i = 0; i < value.length; i++) {
       this.listT = value[i];
+
       this.permissions = this.profileform.get('permissions') as FormArray;
       this.permissions.push(this.formBuilder.group({
-        id:'',
+        id: this.listT.id == undefined || this.listT.id == null ? '' : this.listT.id,
         screenId: this.listT.listTypeItemId,
         screenName: this.listT.itemname,
-        create: false,
-        read: false,
-        update: false,
-        delete: false
+        create: this.listT.create == undefined || this.listT.create == null ? false : this.listT.create,
+        screenCode: this.listT.itemCode,
+        read: this.listT.read == undefined || this.listT.read == null ? false : this.listT.read,
+        categoryName: this.listT.categoryName,
+        update: this.listT.update == undefined || this.listT.update == null ? false : this.listT.update,
+        delete: this.listT.delete == undefined || this.listT.delete == null ? false : this.listT.delete,
       }));
     }
   }
@@ -170,7 +173,6 @@ export class ProfileComponent implements OnInit {
 
 
   getName(i) {
-
     return this.getControls()[i].value;
   }
 
@@ -221,7 +223,7 @@ export class ProfileComponent implements OnInit {
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
@@ -243,7 +245,7 @@ export class ProfileComponent implements OnInit {
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });

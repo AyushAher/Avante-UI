@@ -1,10 +1,10 @@
-import {Component, OnInit} from "@angular/core";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {first} from "rxjs/operators";
-import {RenderComponent} from "../../distributor/rendercomponent";
-import {ProfileReadOnly, Staydetails, User} from "../../_models";
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { first } from "rxjs/operators";
+import { RenderComponent } from "../../distributor/rendercomponent";
+import { ProfileReadOnly, Staydetails, User } from "../../_models";
 import {
   AccountService,
   AlertService,
@@ -14,7 +14,7 @@ import {
   ProfileService,
   StaydetailsService
 } from "../../_services";
-import {environment} from "../../../environments/environment";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-staydetailslist",
@@ -49,7 +49,7 @@ export class StaydetailsListComponent implements OnInit {
     private profileService: ProfileService,
     private listTypeService: ListTypeService,
 
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.user = this.accountService.userValue;
@@ -90,7 +90,7 @@ export class StaydetailsListComponent implements OnInit {
                   if (role == environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
                   } else if (role == environment.engRoleCode) {
-                    data.object = data.object.filter(x => x.createdby == this.user.userId)
+                    data.object = data.object.filter(x => x.engineerid == this.user.contactId)
                     this.List = data.object;
                   } else {
                     this.List = data.object

@@ -30,8 +30,10 @@ import {OfferrequestService} from "../_services/Offerrequest.service";
 
 
 @Component({
-  template: `<a [routerLink]="[params.inRouterLink,params.value]"  style="margin-right: 10px;"><i class="fas fa-pen" title="Edit"></i></a>
-<button class="btn btn-link" *ngIf="params.deleteaccess" (click)="delete(params)"><i class="fas fa-trash-alt" title="Delete"></i></button>`
+  template: `<a [routerLink]="[params.inRouterLink,params.value]" class="btn btn-link"
+                style="margin-right: 10px; padding: 0;"><i class="fas fa-pen" title="Edit"></i></a>
+  <button class="btn btn-link"  [disabled]="!params.deleteaccess" (click)="delete(params)"><i class="fas fa-trash-alt"
+                                                                                       title="Delete"></i></button>`
 })
 export class RenderComponent implements AgRendererComponent  {
   params: any;

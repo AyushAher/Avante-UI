@@ -34,6 +34,14 @@
       <div class="clearfix"></div>
 
       <div class="col-md-12 col-sm-12 ">
+
+      <div class="page-title">
+        <div class="title_left">
+          <h3 style="padding:15px 0 5px 0">Customer Details</h3>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <hr />
         <form [formGroup]="customerform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-md-4 col-sm-4">
@@ -70,14 +78,20 @@
             </div>
 
           </div>
-          <br />
-          <p><b>Address</b></p>
-          <hr>
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Address</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr/>
           <div formGroupName="address">
             <div class="row">
               <div class="col-sm-4">
                 <label for="street">Street</label>
-                <input type="text" formControlName="street" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }" />
+                <input type="text" formControlName="street" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }"/>
                 <div *ngIf="submitted && a.get('street').errors" class="invalid-feedback">
                   <div *ngIf="a.get('street').errors.required">Street is required</div>
                 </div>

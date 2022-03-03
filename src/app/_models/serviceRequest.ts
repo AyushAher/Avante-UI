@@ -4,6 +4,7 @@ export class ServiceRequest {
   serreqdate: string;
   distributor: string;
   assignedto: string;
+  createdon: Date;
   date: string;
   visittype: string;
   companyName: string;

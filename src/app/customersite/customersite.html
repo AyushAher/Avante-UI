@@ -1,11 +1,6 @@
 <layout>
   <div class="right_col" role="main">
     <div class="container">
-      <!--<div class="page-title">
-    <div class="title_left">
-      <h3>Customer Site</h3>
-    </div>
-  </div>-->
       <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
         <li class="nav-item" role="presentation">
           <a class="nav-link active"
@@ -26,39 +21,48 @@
              aria-selected="true">Site Contact</a>
         </li>
       </ul>
+      <div class="clearfix"></div>
+      <div class="col-md-12 col-sm-12 ">
+        <div class="page-title">
+          <div class="title_left">
+            <h3 style="padding:15px 0 5px 0">Customer Site Details</h3>
+          </div>
+        </div>
         <div class="clearfix"></div>
+        <hr/>
 
-        <div class="col-md-12 col-sm-12 ">
-          <form [formGroup]="customersiteform" (ngSubmit)="onSubmit()">
-            <div class="row">
-              <div class="col-sm-4">
-                <label for="custid">Customer</label>
-                <select formControlName="custid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.custid.errors }">
-                  <!--<option value="0">--All--</option>-->
-                  <option *ngFor="let customer of customers" value={{customer.id}}>
-                    {{customer.custname}}
-                  </option>
-                </select>
-                <div *ngIf="submitted && f.custid.errors" class="invalid-feedback">
-                  <div *ngIf="f.custid.errors.required">Customer is required</div>
-                </div>
-              </div>
-              <div class="col-md-4 col-sm-4">
-                <label for="regname">Region Name</label>
-                <input type="text" formControlName="regname" class="form-control" />
-                <!--<div *ngIf="submitted && f.regname.errors" class="invalid-feedback">
-                  <div *ngIf="f.regname.errors.required">Region Name is required</div>
-                </div>-->
-              </div>
-              <div class="col-md-4 col-sm-4">
-                <label for="custregname">Site Name</label>
-                <input type="text" formControlName="custregname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.custregname.errors }" />
-                <div *ngIf="submitted && f.custregname.errors" class="invalid-feedback">
-                  <div *ngIf="f.custregname.errors.required">Site Name is required</div>
-                </div>
+        <form [formGroup]="customersiteform" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-4">
+              <label for="custid">Customer</label>
+              <select formControlName="custid" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.custid.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let customer of customers" value={{customer.id}}>
+                  {{customer.custname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.custid.errors" class="invalid-feedback">
+                <div *ngIf="f.custid.errors.required">Customer is required</div>
               </div>
             </div>
-            <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="regname">Region Name</label>
+              <input type="text" formControlName="regname" class="form-control"/>
+              <!--<div *ngIf="submitted && f.regname.errors" class="invalid-feedback">
+                <div *ngIf="f.regname.errors.required">Region Name is required</div>
+              </div>-->
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="custregname">Site Name</label>
+              <input type="text" formControlName="custregname" class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f.custregname.errors }"/>
+              <div *ngIf="submitted && f.custregname.errors" class="invalid-feedback">
+                <div *ngIf="f.custregname.errors.required">Site Name is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
               <div class="col-sm-4">
                 <label for="regionDistributor">Regional Distributor</label>
                 <select formControlName="distid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.distid.errors }">
@@ -95,26 +99,32 @@
                   <label for=""></label>
                   <div class="checkbox">
                     <label for="isblocked">
-                      <input type="checkbox" formControlName="isblocked" class="" />
+                      <input type="checkbox" formControlName="isblocked" class=""/>
                       Block Distributer Account
                     </label>
                   </div>
                 </div>
               </div>
             </div>
-            <br />
-            <p><b>Address</b></p>
-            <hr>
-            <div formGroupName="address">
-              <div class="row">
-                <div class="col-sm-4">
-                  <label for="street">Street</label>
-                  <input type="text" formControlName="street" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }" />
-                  <div *ngIf="submitted && a.get('street').errors" class="invalid-feedback">
-                    <div *ngIf="a.get('street').errors.required">Street is required</div>
-                  </div>
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Address</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr/>
+          <div formGroupName="address">
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="street">Street</label>
+                <input type="text" formControlName="street" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }"/>
+                <div *ngIf="submitted && a.get('street').errors" class="invalid-feedback">
+                  <div *ngIf="a.get('street').errors.required">Street is required</div>
                 </div>
-                <div class="col-sm-4">
+              </div>
+              <div class="col-sm-4">
                   <label for="area">Area</label>
                   <input type="text" formControlName="area" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('area').errors }" />
                   <div *ngIf="submitted && a.get('area').errors" class="invalid-feedback">

@@ -212,7 +212,7 @@ export class CustSPInventoryComponent implements OnInit {
             this.notificationService.showError(data.resultMessage, "Error")
             return;
           }
-          console.log(data)
+
           this.form.get("sparePartId").setValue(data.object.id)
           this.form.get("partNo").setValue(data.object.partno)
           this.form.get("hscCode").setValue(data.object.hscode)

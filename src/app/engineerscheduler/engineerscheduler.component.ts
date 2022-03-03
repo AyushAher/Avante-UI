@@ -1,8 +1,8 @@
-import {createElement, Internationalization, L10n} from '@syncfusion/ej2-base';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {EventSettingsModel, GroupModel, PopupOpenEventArgs, ScheduleComponent} from '@syncfusion/ej2-angular-schedule';
-import {DropDownList} from '@syncfusion/ej2-dropdowns';
-import {first} from "rxjs/operators";
+import { createElement, Internationalization, L10n } from '@syncfusion/ej2-base';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { EventSettingsModel, GroupModel, PopupOpenEventArgs, ScheduleComponent } from '@syncfusion/ej2-angular-schedule';
+import { DropDownList } from '@syncfusion/ej2-dropdowns';
+import { first } from "rxjs/operators";
 import {
   AccountService,
   ContactService,
@@ -12,11 +12,12 @@ import {
   ProfileService,
   ServiceRequestService
 } from "../_services";
-import {ProfileReadOnly, ServiceRequest, User} from "../_models";
-import {EngschedulerService} from "../_services/engscheduler.service";
-import {DatePipe} from "@angular/common";
-import {environment} from "../../environments/environment";
-import {ActivatedRoute} from "@angular/router";
+import { ProfileReadOnly, ServiceRequest, User } from "../_models";
+import { EngschedulerService } from "../_services/engscheduler.service";
+import { DatePipe } from "@angular/common";
+import { environment } from "../../environments/environment";
+import { ActivatedRoute } from "@angular/router";
+import { TextBox, Input } from '@syncfusion/ej2-inputs';
 
 L10n.load({
   'en-US': {
@@ -60,9 +61,7 @@ export class EngineerschedulerComponent implements OnInit {
     private notificationService: NotificationService,
     private accountService: AccountService,
     private EngschedulerService: EngschedulerService,
-    private contcactservice: ContactService,
     private distributorService: DistributorService,
-    private datepipe: DatePipe,
     private listTypeService: ListTypeService,
     private profileService: ProfileService,
     private route: ActivatedRoute,
@@ -121,8 +120,8 @@ export class EngineerschedulerComponent implements OnInit {
                         StartTime: new Date(x.startTime),
                         EndTime: new Date(x.endTime),
                         IsAllDay: x.isAllDay,
-                        IsBlock: x.isBlock,
-                        IsReadonly: x.isReadonly,
+                        IsBlock: this.id == x.serReqId ? false : true,
+                        IsReadonly: this.id == x.serReqId ? false : true,
                         RoomId: x.roomId,
                         ResourceId: x.resourceId,
                         Description: x.description,
@@ -139,11 +138,11 @@ export class EngineerschedulerComponent implements OnInit {
                       dataSource: this.dataSrc,
                       fields: {
                         id: 'Id',
-                        subject: {name: 'Subject'},
-                        location: {name: 'Location'},
-                        description: {name: 'Description'},
-                        startTime: {name: 'StartTime'},
-                        endTime: {name: 'EndTime'},
+                        subject: { name: 'Subject' },
+                        location: { name: 'Location' },
+                        description: { name: 'Description' },
+                        startTime: { name: 'StartTime' },
+                        endTime: { name: 'EndTime' },
 
                       }
                     };
@@ -189,7 +188,7 @@ export class EngineerschedulerComponent implements OnInit {
                             }
                           }
                         })
-                      this.roomDataSource.push({text: x.fname + " " + x.lname, id: x.id, startHour: "09:00"})
+                      this.roomDataSource.push({ text: x.fname + " " + x.lname, id: x.id, startHour: "09:00" })
                     })
                   }
                 }
@@ -213,54 +212,57 @@ export class EngineerschedulerComponent implements OnInit {
       if (Array.isArray(e.data)) {
         e.data.forEach(x => {
           x.Id = x.Id.toString();
-          if (x.SerReqId != null) {
-            this.serviceRequestService.getById(x.SerReqId)
-              .pipe(first())
-              .subscribe({
-                next: (data: any) => {
-                  data = data.object;
-                  let serReqDate = new Date(data.serreqdate)
-                  let SDate: Date = x.StartTime;
-                  let diff = SDate.valueOf() - serReqDate.valueOf()
-                  if (diff >= 0) {
-                    x.StartTime = x.StartTime.toString();
-                    x.EndTime = x.EndTime.toString();
-                    x.EngId = this.user.contactId;
-                    x.RoomId = this.user.contactId;
-                    x.isactive = true;
-                    x.isdeleted = true;
 
-                    this.EngschedulerService.save(x).pipe(first()).subscribe({
-                      next: (data: any) => {
-                        if (!data.result) {
-                          this.scheduleObj.deleteEvent(x)
-                          this.scheduleObj.refreshEvents();
-                          this.notificationService.showError(data.message, "Error")
-                        }
-                      },
-                      error: (error) => {
+          this.serviceRequestService.getById(this.id)
+            .pipe(first())
+            .subscribe({
+              next: (data: any) => {
+                data = data.object;
+                let serReqDate = new Date(data.serreqdate)
+                let SDate: Date = x.StartTime;
+                let diff = SDate.valueOf() - serReqDate.valueOf()
+                if (diff >= 0) {
+                  x.StartTime = x.StartTime.toString();
+                  x.EndTime = x.EndTime.toString();
+                  x.EngId = this.user.contactId;
+                  x.RoomId = this.user.contactId;
+                  x.isactive = true;
+                  x.isdeleted = true;
+                  x.serReqId = this.id
+
+                  if (this.id == null) {
+                    this.notificationService.showError("Service Request Field Required", "Error")
+                  }
+
+                  this.EngschedulerService.save(x).pipe(first()).subscribe({
+                    next: (data: any) => {
+                      if (!data.result) {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
-                        this.notificationService.showError(error, "Error")
+                        this.notificationService.showError(data.message, "Error")
                       }
-                    })
+                    },
+                    error: (error) => {
+                      this.scheduleObj.deleteEvent(x)
+                      this.scheduleObj.refreshEvents();
+                      this.notificationService.showError(error, "Error")
+                    }
+                  })
 
-                  } else {
-                    this.notificationService.showError("Start Date Should Be greater than or Equal" +
-                      " to Service Request Date", "Error")
-                    this.scheduleObj.deleteEvent(x)
-                    this.scheduleObj.refreshEvents();
-                  }
-                },
-                error: (error: any) => {
+                } else {
+                  this.notificationService.showError("Start Date Should Be greater than or Equal" +
+                    " to Service Request Date", "Error")
                   this.scheduleObj.deleteEvent(x)
                   this.scheduleObj.refreshEvents();
-                  this.notificationService.showError(error, "Error")
                 }
-              });
-          } else {
-            this.notificationService.showError("Service Request Field Required", "Error")
-          }
+              },
+              error: (error: any) => {
+                this.scheduleObj.deleteEvent(x)
+                this.scheduleObj.refreshEvents();
+                this.notificationService.showError(error, "Error")
+              }
+            });
+
 
         })
       } else {
@@ -282,6 +284,7 @@ export class EngineerschedulerComponent implements OnInit {
                   x.RoomId = this.user.contactId;
                   x.isactive = true;
                   x.isdeleted = true;
+                  x.serReqId = this.id
 
                   this.EngschedulerService.save(x).pipe(first()).subscribe({
                     next: (data: any) => {
@@ -383,52 +386,41 @@ export class EngineerschedulerComponent implements OnInit {
     }
     if (args.type === 'EventContainer') {
       let instance: Internationalization = new Internationalization();
-      let date: string = instance.formatDate((<any>args.data).date, {skeleton: 'MMMEd'});
+      let date: string = instance.formatDate((<any>args.data).date, { skeleton: 'MMMEd' });
       ((args.element.querySelector('.e-header-date')) as HTMLElement).innerText = date;
       ((args.element.querySelector('.e-header-day')) as HTMLElement).innerText = 'Event count: ' + (<any>args.data).event.length;
     } else if (args.type === 'Editor') {
+      if (this.id == null) {
+        args.cancel = true;
+        return
+      };
       if (!this.hasUpdateAccess) {
         args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
       }
-      // Create required custom elements in initial time
-      if (!args.element.querySelector('.custom-servicereqno')) {
-        let row: HTMLElement = createElement('div', {className: 'custom-servicereqno'});
+
+      if (!args.element.querySelector('.custom-field-row')) {
+        let row: HTMLElement = createElement('div', { className: 'custom-servicereqno' });
         let formElement: HTMLElement = args.element.querySelector('.e-schedule-form');
         formElement.firstChild.insertBefore(row, args.element.querySelector('.e-title-location-row'));
-        let container: HTMLElement = createElement('div', {className: 'custom-field-container mt-3'});
-        let inputEle: HTMLInputElement = createElement('input', {
-          className: 'e-field', attrs: {name: 'SerReqId'}
-        }) as HTMLInputElement;
+        let container: HTMLElement = createElement('div', { className: 'custom-field-container mt-3' });
+
+        let inputEle: HTMLInputElement = createElement('input', { className: 'e-field e-custom-SerReqNo', attrs: { name: 'SerReqNo' } }) as HTMLInputElement;
         container.appendChild(inputEle);
         row.appendChild(container);
-        let list = [];
-        let dropDownList: DropDownList = new DropDownList({
-          dataSource: list,
-          fields: {text: 'text', value: 'value'},
-          value: (<{ [key: string]: Object }>(args.data)).EventType as string,
-          floatLabelType: 'Always', placeholder: 'Service Request No.'
-        });
 
-        this.serviceRequestService.getAll(this.user.userId).pipe(first()).subscribe({
-          next: (data: any) => {
-            this.srEngList = data.object.filter(x => x.assignedto == this.user.contactId);
-            if (data.object != null && data.object.length > 0) {
-              this.srEngList.forEach(x => {
-                list.push({text: x.serreqno, value: x.id})
-              })
-            }
-            dropDownList = new DropDownList({
-              dataSource: list,
-              fields: {text: 'text', value: 'value'},
-              value: (<{ [key: string]: Object }>(args.data)).EventType as string,
-              floatLabelType: 'Always', placeholder: 'Service Request No.'
-            });
+        Input.createInput({ element: inputEle as HTMLInputElement, floatLabelType: 'Always', properties: { placeholder: 'Service Request No.' } });
 
-          },
-        })
-        dropDownList.appendTo(inputEle);
-        inputEle.setAttribute('name', 'SerReqId');
-      } else {
+        inputEle.setAttribute('name', 'SerReqNo');
+        inputEle.setAttribute('disabled', 'true');
+        this.serviceRequestService.getById(this.id)
+          .pipe(first())
+          .subscribe((data: any) => {
+            inputEle.setAttribute('value', data.object.serreqno);
+
+          })
+      }
+
+      else {
         if (!this.hasAddAccess) {
           args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
         }
@@ -451,7 +443,7 @@ export class EngineerschedulerComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data: any) => {
-                  data = data.object;
+                  data = data.object
                   let serReqDate = new Date(data.serreqdate)
                   let SDate: Date = x.StartTime;
                   let diff = SDate.valueOf() - serReqDate.valueOf()
@@ -613,12 +605,13 @@ export class EngineerschedulerComponent implements OnInit {
   }
 
   onPopupOpenDist(args: PopupOpenEventArgs): void {
+    args.cancel = true;
     if (args.type === "QuickInfo") {
       args.cancel = true;
     }
     if (args.type === 'EventContainer') {
       let instance: Internationalization = new Internationalization();
-      let date: string = instance.formatDate((<any>args.data).date, {skeleton: 'MMMEd'});
+      let date: string = instance.formatDate((<any>args.data).date, { skeleton: 'MMMEd' });
       ((args.element.querySelector('.e-header-date')) as HTMLElement).innerText = date;
       ((args.element.querySelector('.e-header-day')) as HTMLElement).innerText = 'Event count: ' + (<any>args.data).event.length;
     } else if (args.type === 'Editor') {
@@ -629,19 +622,19 @@ export class EngineerschedulerComponent implements OnInit {
           args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
         }
 
-        let row: HTMLElement = createElement('div', {className: 'custom-servicereqno'});
+        let row: HTMLElement = createElement('div', { className: 'custom-servicereqno' });
         let formElement: HTMLElement = args.element.querySelector('.e-schedule-form');
         formElement.firstChild.insertBefore(row, args.element.querySelector('.e-title-location-row'));
-        let container: HTMLElement = createElement('div', {className: 'custom-field-container mt-3'});
+        let container: HTMLElement = createElement('div', { className: 'custom-field-container mt-3' });
         let inputEle: HTMLInputElement = createElement('input', {
-          className: 'e-field', attrs: {name: 'SerReqId'}
+          className: 'e-field', attrs: { name: 'SerReqId' }
         }) as HTMLInputElement;
         container.appendChild(inputEle);
         row.appendChild(container);
         let list = [];
         let dropDownList: DropDownList = new DropDownList({
           dataSource: list,
-          fields: {text: 'text', value: 'value'},
+          fields: { text: 'text', value: 'value' },
           value: (<{ [key: string]: Object }>(args.data)).EventType as string,
           floatLabelType: 'Always', placeholder: 'Service Request No.'
         });
@@ -650,12 +643,12 @@ export class EngineerschedulerComponent implements OnInit {
           next: (data: any) => {
             if (data.object != null && data.object.length > 0) {
               data.object.forEach(x => {
-                list.push({text: x.serreqno, value: x.id})
+                list.push({ text: x.serreqno, value: x.id })
               })
             }
             dropDownList = new DropDownList({
               dataSource: list,
-              fields: {text: 'text', value: 'value'},
+              fields: { text: 'text', value: 'value' },
               value: (<{ [key: string]: Object }>(args.data)).EventType as string,
               floatLabelType: 'Always', placeholder: 'Service Request No.'
             });
@@ -678,7 +671,7 @@ export class EngineerschedulerComponent implements OnInit {
 
 
 
-//  Dist code
+  //  Dist code
 
   public group: GroupModel = {
     resources: ['Engineers']

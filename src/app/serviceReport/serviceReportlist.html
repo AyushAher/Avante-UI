@@ -3,7 +3,7 @@
     <div class="container">
       <div class="page-title">
         <div class="title_left">
-          <h3>ServiceReport List</h3>
+          <h3>Service Report List</h3>
         </div>
       </div>
       <hr />
@@ -11,8 +11,8 @@
       <!--<button class="btn btn-sm btn-success button" *ngIf="hasAddAccess==true" style="margin: 10px;" (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>-->
       <div class="col-md-12 col-sm-12">
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                         [columnDefs]="columnDefs" [rowData]="ServiceReportList" rowSelection="single" pagination="true"
-                         paginationPageSize=10></ag-grid-angular>
+                         (rowClicked)="onRowClicked($event)" [columnDefs]="columnDefs" [rowData]="ServiceReportList"
+                         rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
       </div>
     </div>
     </div>

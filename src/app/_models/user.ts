@@ -1,17 +1,18 @@
 export class User {
-    id: string;
-    username: string;
-    password: string;
-    firstName: string;
-    lastName: string;
+  id: string;
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
   contactid: string;
   contactId: string;
-    token: string;
-    email: string;
+  token: string;
+  email: string;
   userid: string;
   userId: string;
   userProfileId: string;
   roleId: string;
+  distRegionsId: string
 }
 
 export class AuthenticateModel {

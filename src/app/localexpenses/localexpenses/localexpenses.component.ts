@@ -1,8 +1,8 @@
-import {DatePipe} from "@angular/common";
-import {Component, EventEmitter, OnInit, Output} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {first} from "rxjs/operators";
+import { DatePipe } from "@angular/common";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { first } from "rxjs/operators";
 import {
   Currency,
   DistributorRegionContacts,
@@ -24,10 +24,10 @@ import {
   ProfileService,
   ServiceRequestService,
 } from "../../_services";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {FilerendercomponentComponent} from "../../Offerrequest/filerendercomponent.component";
-import {HttpEventType} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { FilerendercomponentComponent } from "../../Offerrequest/filerendercomponent.component";
+import { HttpEventType } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-localexpenses",
@@ -77,6 +77,7 @@ export class LocalexpensesComponent implements OnInit {
   isDist: boolean = false;
 
   @Output() public onUploadFinished = new EventEmitter();
+  distId: string;
 
   constructor(
     private FileShareService: FileshareService,
@@ -100,7 +101,6 @@ export class LocalexpensesComponent implements OnInit {
     this.user = this.accountService.userValue;
 
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
 
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.profilePermission = this.profileService.userProfileValue;
@@ -121,16 +121,18 @@ export class LocalexpensesComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
-    } else if (role == environment.engRoleCode) {
+    } else {
+      role = role[0]?.itemCode;
+    }
+    if (role == environment.engRoleCode) {
       this.isEng = true;
     } else if (role == environment.distRoleCode) {
       this.isDist = true;
     }
 
     this.travelDetailform = this.formBuilder.group({
-      engineerid: ["", [Validators.required]],
-      distId: ["", [Validators.required]],
-      servicerequestid: ["", [Validators.required]],
+      engineerid: [{ value: "", disabled: this.isEng }, [Validators.required]],
+      distId: [{ value: "", disabled: this.isDist || this.isEng }, [Validators.required]], servicerequestid: ["", [Validators.required]],
       city: ["", [Validators.required]],
       traveldate: ["", [Validators.required]],
       totalamount: ["", [Validators.required]],
@@ -157,9 +159,7 @@ export class LocalexpensesComponent implements OnInit {
 
     if (this.id != null) {
       this.hasAddAccess = false;
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
+
 
       this.localExpensesService
         .getById(this.id)
@@ -167,26 +167,28 @@ export class LocalexpensesComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
             this.travelDetailform.patchValue(data.object);
             this.GetFileList(data.object.id)
-
           },
           error: (error) => {
-            console.log(error);
             this.notificationService.showError("Error", "Error");
             this.loading = false;
           },
         });
     }
 
+
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.travelDetailform.get('distId').setValue(data.object[0].id)
-          this.getengineers(data.object[0].id)
+          if (this.user.username != "admin") {
+            this.travelDetailform.get('distId').setValue(data.object[0].id)
+            this.getengineers(data.object[0].id)
+          }
         }
       })
+
     if (role == environment.engRoleCode) {
       this.travelDetailform.get('engineerid').setValue(this.user.contactId)
     }
@@ -196,7 +198,14 @@ export class LocalexpensesComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.DistributorList = data.object;
-          console.log(data);
+          data.object.forEach(x => {
+            x.contacts.forEach(element => {
+              if (element.id == this.user.contactId) {
+                this.travelDetailform.get('distId').setValue(x.id)
+                this.getengineers(x.id)
+              }
+            });
+          })
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
@@ -236,18 +245,15 @@ export class LocalexpensesComponent implements OnInit {
   get f() {
     return this.travelDetailform.controls;
   }
-  getservicerequest(id: string) {
+
+  getservicerequest(id: string, engId: any = null) {
     this.servicerequestservice
       .GetServiceRequestByDist(id)
       .pipe(first())
       .subscribe({
-        next: (data: any) => {
-          this.isEng ? this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId)
-            : this.isDist ? this.servicerequest = data.object.filter(x => x.distid == id) : this.servicerequest = [];
-        },
+        next: (data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId),
 
         error: (error) => {
-          console.log(error);
           this.notificationService.showError("Error", error);
           this.loading = false;
         },
@@ -259,12 +265,11 @@ export class LocalexpensesComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          this.distId = id;
           this.engineer = data.object;
-          this.getservicerequest(id)
         },
 
         error: (error) => {
-          console.log(error);
           this.notificationService.showError("Error", error);
           this.loading = false;
         },

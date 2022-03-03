@@ -1,7 +1,7 @@
-import {Component, OnInit} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {first} from "rxjs/operators";
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { first } from "rxjs/operators";
 import {
   Customersatisfactionsurvey,
   DistributorRegionContacts,
@@ -21,7 +21,7 @@ import {
   ProfileService,
   ServiceRequestService,
 } from "../../_services";
-import {environment} from "../../../environments/environment";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-customersatisfactionsurvey",
@@ -56,6 +56,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   eng: boolean = false;
   isEng: boolean = false;
   isDist: boolean = false;
+  distId: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,7 +77,6 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.user = this.accountService.userValue;
 
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     this.profilePermission = this.profileService.userProfileValue;
 
@@ -96,7 +96,10 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
-    } else if (role == environment.engRoleCode) {
+    } else {
+      role = role[0]?.itemCode;
+    }
+    if (role == environment.engRoleCode) {
       this.isEng = true;
     } else if (role == environment.distRoleCode) {
       this.isDist = true;
@@ -107,29 +110,24 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       engineerid: [""],
       distId: [""],
       servicerequestid: ["", [Validators.required]],
-      ontime: [""],
-      knowledgewithproduct: [""],
-      problemsolveskill: [""],
-      satisfactionlevel: [""],
+      ontime: [false],
+      knowledgewithproduct: [false],
+      problemsolveskill: [false],
+      satisfactionlevel: [false],
       isdeleted: [false],
     });
 
     this.id = this.route.snapshot.paramMap.get("id");
     if (this.id != null) {
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
-
       this.CustomersatisfactionsurveyService.getById(this.id)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
             this.form.patchValue(data.object);
           },
           error: (error) => {
-            console.log(error);
             this.notificationService.showError(Error, "Error");
             this.loading = false;
           },
@@ -141,7 +139,6 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.DistributorList = data.object;
-          console.log(data);
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
@@ -165,14 +162,22 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.form.get('distId').setValue(data.object[0].id)
-          this.getengineers(data.object[0].id)
+          if (this.user.username != "admin") {
+            this.form.get('distId').setValue(data.object[0].id)
+            this.getengineers(data.object[0].id)
+          }
         }
       })
+
     if (role == environment.engRoleCode) {
       this.eng = true
       this.form.get('engineerid').setValue(this.user.contactId)
+      this.form.get('engineerid').disable()
+      this.form.get('distId').disable()
+    } else if (role == environment.distRoleCode) {
+      this.form.get('distId').disable()
     }
+
     this.listTypeService
       .getById(this.code)
       .pipe(first())
@@ -191,18 +196,16 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     return this.form.controls;
   }
 
-  getservicerequest(id: string) {
+  getservicerequest(id: string, engId = null) {
     this.servicerequestservice
       .GetServiceRequestByDist(id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.isEng ? this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId)
-            : this.isDist ? this.servicerequest = data.object.filter(x => x.distid == id) : this.servicerequest = [];
+          this.servicerequest = data.object.filter(x => x.assignedto == engId)
         },
 
         error: (error) => {
-          console.log(error);
           this.notificationService.showError("Error", error);
           this.loading = false;
         },
@@ -210,16 +213,16 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   }
 
   getengineers(id: string) {
+    this.distId = id
     this.distributorservice.getDistributorRegionContacts(id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.engineer = data.object;
-          this.getservicerequest(id)
+          // this.getservicerequest(id)
         },
 
         error: (error) => {
-          console.log(error);
           this.notificationService.showError("Error", error);
           this.loading = false;
         },

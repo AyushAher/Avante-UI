@@ -1,8 +1,8 @@
-import {DatePipe} from "@angular/common";
-import {Component, OnInit} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {first} from "rxjs/operators";
+import { DatePipe } from "@angular/common";
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { first } from "rxjs/operators";
 import {
   Country,
   Currency,
@@ -26,7 +26,7 @@ import {
   ServiceRequestService,
   StaydetailsService
 } from "../../_services";
-import {environment} from "../../../environments/environment";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-staydetails",
@@ -59,6 +59,7 @@ export class StaydetailsComponent implements OnInit {
 
   isDist: boolean = false;
   isEng: boolean = false;
+  distId: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -84,7 +85,6 @@ export class StaydetailsComponent implements OnInit {
   ngOnInit() {
     this.user = this.accountService.userValue;
     let role = JSON.parse(localStorage.getItem('roles'));
-    role = role[0]?.itemCode;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
@@ -102,14 +102,10 @@ export class StaydetailsComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
-      this.isEng = true;
-      this.isDist = true;
-    } else if (role == environment.engRoleCode) {
-      this.isEng = true;
-    } else if (role == environment.distRoleCode) {
-      this.isDist = true;
     }
-
+    else {
+      role = role[0]?.itemCode;
+    }
 
     this.travelDetailform = this.formBuilder.group({
       engineerid: ["", [Validators.required]],
@@ -131,6 +127,15 @@ export class StaydetailsComponent implements OnInit {
       perNightCurrencyId: "",
     });
 
+    if (role == environment.engRoleCode) {
+      this.isEng = true;
+      this.travelDetailform.get('engineerid').disable()
+      this.travelDetailform.get('distId').disable()
+    }
+    else if (role == environment.distRoleCode) {
+      this.isDist = true;
+      this.travelDetailform.get('distId').disable()
+    }
     this.currencyService.getAll()
       .pipe(first())
       .subscribe({
@@ -152,7 +157,7 @@ export class StaydetailsComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
             this.travelDetailform.patchValue(data.object);
           },
           error: (error) => {
@@ -197,8 +202,10 @@ export class StaydetailsComponent implements OnInit {
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.travelDetailform.get('distId').setValue(data.object[0].id)
-          this.getengineers(data.object[0].id)
+          if (this.user.username != "admin") {
+            this.travelDetailform.get('distId').setValue(data.object[0].id)
+            this.getengineers(data.object[0].id)
+          }
         }
       })
     if (role == environment.engRoleCode) {
@@ -230,14 +237,13 @@ export class StaydetailsComponent implements OnInit {
       });
   }
 
-  getservicerequest(id: string) {
+  getservicerequest(id: string, engId: string = null) {
     this.servicerequestservice
       .GetServiceRequestByDist(id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.isEng ? this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId)
-            : this.isDist ? this.servicerequest = data.object.filter(x => x.distid == id) : this.servicerequest = [];
+          this.servicerequest = data.object.filter(x => x.assignedto == engId)
         },
 
         error: (error) => {
@@ -248,12 +254,13 @@ export class StaydetailsComponent implements OnInit {
   }
 
   getengineers(id: string) {
+    this.distId = id
     this.distributorservice.getDistributorRegionContacts(id)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.engineer = data.object
-          this.getservicerequest(id)
+          // this.getservicerequest(id)
         },
 
         error: (error) => {
@@ -262,7 +269,6 @@ export class StaydetailsComponent implements OnInit {
         },
       });
   }
-
   onSubmit() {
     this.submitted = true;
     // reset alerts on submit
@@ -283,7 +289,7 @@ export class StaydetailsComponent implements OnInit {
         dateSent.getFullYear(),
         dateSent.getMonth(),
         dateSent.getDate()
-        ) -
+      ) -
         Date.UTC(
           currentDate.getFullYear(),
           currentDate.getMonth(),

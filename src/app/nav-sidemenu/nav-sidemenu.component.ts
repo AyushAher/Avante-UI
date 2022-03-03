@@ -48,11 +48,17 @@ export class NavSideMenuComponent {
   haspreventivemaintenance: boolean = false;
   hasdashboardsettings: boolean = false;
   hasAuditTrail: boolean = false;
+
+  hasCommons: boolean = false;
+  hasMasters: boolean = false;
+  hasUtilities: boolean = false;
+  hasTravel: boolean = false;
+  hasReports: boolean = false;
+  hasSettings: boolean = false;
+
   constructor(
     private accountService: AccountService,
     private profileService: ProfileService,
-    private profileServicce: ProfileService,
-    private router: Router,
     private notificationService: NotificationService,
     private listTypeService: ListTypeService,
   ) {
@@ -302,6 +308,28 @@ export class NavSideMenuComponent {
           this.notificationService.showError(error, "Error");
         },
       });
+
+
+    if (this.hasCurrency || this.hasCountry || this.hasMaster || this.hasProfile || this.hasUserProfile) {
+      this.hasCommons = true;
+    }
+    if (this.hasDistributor || this.hasCustomer || this.hasCustomer || this.hasInstrument || this.hasSparePart || this.hasServiceRequest || this.hasServiceReport || this.hasOfferRequest || this.hasSparePartRecommended || this.hasCustomerSparePartsInventory || this.hasAmc || this.hasschedule) {
+      this.hasMasters = true;
+    }
+    if (this.hasSearch || this.hasexport || this.hasAuditTrail) {
+      this.hasUtilities = true;
+    }
+    if (this.hasTravelDetails || this.hasStayDetails || this.hasVisaDetails || this.hasLocalExpenses || this.hascustomersatisfactionsurveylist) {
+      this.hasTravel = true;
+    }
+    if (this.hasSearch) {
+      this.hasReports = true;
+    }
+    if (this.hasCustomerSettings || this.hasDistributorSettings) {
+      this.hasSettings = true;
+    }
+
+
 
   }
 }
