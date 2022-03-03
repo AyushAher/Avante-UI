@@ -212,7 +212,7 @@ export class ServiceRequestComponent implements OnInit {
 
     this.transaction = 0;
     this.user = this.accountService.userValue;
-
+    this.serviceRequestId = this.route.snapshot.paramMap.get('id');
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SRREQ");
@@ -317,14 +317,16 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('subrequesttypeid').updateValueAndValidity();
       this.serviceRequestform.get('subrequesttypeid').disable();
       this.serviceRequestform.get('remarks').disable();
-      this.serviceRequestform.get('statusid').disable();
+      // this.serviceRequestform.get('statusid').disable();
 
     }
     this.serviceRequestform.get('custid').disable();
     this.serviceRequestform.get('siteid').disable();
     if (this.IsCustomerView) {
+      this.serviceRequestform.get('statusid').disable();
       this.serviceRequestform.get('siteid').enable();
     } else if (this.IsDistributorView) {
+      this.serviceRequestform.get('statusid').disable();
       this.serviceRequestform.get('custid').enable();
       this.serviceRequestform.get('siteid').enable();
     }
@@ -362,6 +364,7 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.statuslist = data;
+          if (this.serviceRequestId == null) this.serviceRequestform.get('statusid').setValue(data.find(x => x.itemCode == "NTSTD")?.listTypeItemId);
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -470,7 +473,6 @@ export class ServiceRequestComponent implements OnInit {
         }
       });
 
-    this.serviceRequestId = this.route.snapshot.paramMap.get('id');
     this.scheduleLink = `/schedule/${this.serviceRequestId}`;
     if (this.serviceRequestId != null) {
 
