@@ -30,6 +30,10 @@ export class CustomerSiteService {
   getAllCustomerSites() {
     return this.http.get<CustomerSite[]>(`${environment.apiUrl}/Site/GetAllCustomerSites`);
   }
+  
+  GetCustomerSiteContacts() {
+    return this.http.get(`${environment.apiUrl}/Customer/GetCustomerSiteContacts/`);
+  }
   getById(id: string) {
     return this.http.get<CustomerSite>(`${environment.apiUrl}/Site/${id}`);
   }

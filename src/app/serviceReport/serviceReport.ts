@@ -991,7 +991,7 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-
+        width: 100,
         cellRenderer: (params) => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
@@ -1846,7 +1846,7 @@ export class ServiceReportComponent implements OnInit {
                       alignment: 'center',
                       color: '#fff'
                     },
-                
+
                     {
                       table: {
                         widths: ['auto', '*'],

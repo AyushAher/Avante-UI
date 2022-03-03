@@ -590,7 +590,8 @@ export class ServiceRequestComponent implements OnInit {
           }
         });
 
-    } else {
+    }
+    else {
 
       this.serviceRequestform.get('requesttime').setValue(this.datepipe.transform(Date.now(), "H:mm"))
       this.serviceRequestform.get('serreqdate').setValue(this.datepipe.transform(Date.now(), "MM/dd/yyyy"))
@@ -598,7 +599,6 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            console.log(data);
             this.SetCustomerData(data.object)
             if (this.IsDistributorView) {
               this.distributorService.getByConId(this.user.contactId).pipe(first())

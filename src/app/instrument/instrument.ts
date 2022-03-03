@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
 import {
   ConfigTypeValue,
@@ -14,10 +14,10 @@ import {
   SparePart,
   User
 } from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -33,10 +33,10 @@ import {
   SparePartService,
   UploadService
 } from '../_services';
-import {FilerendercomponentComponent} from "../Offerrequest/filerendercomponent.component";
-import {HttpEventType} from "@angular/common/http";
-import {DomSanitizer} from "@angular/platform-browser";
-import {DatePipe} from "@angular/common";
+import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
+import { HttpEventType } from "@angular/common/http";
+import { DomSanitizer } from "@angular/platform-browser";
+import { DatePipe } from "@angular/common";
 
 
 @Component({
@@ -120,6 +120,7 @@ export class InstrumentComponent implements OnInit {
 
     this.transaction = 0;
     this.user = this.accountService.userValue;
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SINST");
@@ -135,6 +136,8 @@ export class InstrumentComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else {
+      role = role[0]?.itemCode;
     }
 
     this.instrumentform = this.formBuilder.group({
@@ -195,20 +198,36 @@ export class InstrumentComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          //debugger;
           this.customersite = data.object;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+          this.notificationService.showError(error, "Error");
           this.loading = false;
         }
       });
+
+    this.customerSiteService.GetCustomerSiteContacts()
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          let siteId = data.object.find(x => x.id == this.user.contactId)?.parentId
+          this.instrumentform.get('custSiteId').setValue(siteId);
+          if (siteId != null || siteId != undefined) {
+            this.instrumentform.get('custSiteId').disable()
+          }
+        },
+        error: error => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        }
+      });
+
 
     this.distributorService.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.distibutorList=data.object;
+          this.distibutorList = data.object;
         },
         error: error => {
           //  this.alertService.error(error);
@@ -225,7 +244,7 @@ export class InstrumentComponent implements OnInit {
           this.instuType = data;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+          this.notificationService.showError(error, "Error");
           this.loading = false;
         }
       });
@@ -237,7 +256,7 @@ export class InstrumentComponent implements OnInit {
           this.listTypeItems = data;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+          this.notificationService.showError(error, "Error");
           this.loading = false;
         }
       });
@@ -270,11 +289,10 @@ export class InstrumentComponent implements OnInit {
                   this.notificationService.showError(err, "Error");
                 },
               });
-            this.fileshareService.getImg(data.object.id,"INST")
+            this.fileshareService.getImg(data.object.id, "INST")
               .pipe(first())
               .subscribe({
                 next: (data: any) => {
-                  console.log(data.object)
                   this.imageUrl = "data:image/jpeg;base64, " + data.object;
                   this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
                   // this.attachments = data.object;
@@ -306,7 +324,7 @@ export class InstrumentComponent implements OnInit {
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
@@ -400,20 +418,20 @@ export class InstrumentComponent implements OnInit {
           },
           error: error => {
             this.notificationService.showError(error, "Error");
-           // this.imageUrl = this.noimageData;
+            // this.imageUrl = this.noimageData;
           }
         });
     }
   }
 
-  download(fileData:any) {
+  download(fileData: any) {
     //debugger;
     const byteArray = new Uint8Array(atob(fileData).split('').map(char => char.charCodeAt(0)));
     let b = new Blob([byteArray], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(b);
     window.open(url);
     // i.e. display the PDF content via iframe
-   // document.querySelector("iframe").src = url;
+    // document.querySelector("iframe").src = url;
   }
 
   getInstrBySerialNo(serialNo: string) {
@@ -450,45 +468,45 @@ export class InstrumentComponent implements OnInit {
       });
   }
 
-  onDropdownChange(value: string,configvalue:string) {
+  onDropdownChange(value: string, configvalue: string) {
     //debugger;
     if (configvalue == "0") {
       configvalue = "";
     }
-    if (this.selectedConfigType.length > 0 && this.selectedConfigType.filter(x => x.id == configvalue && x.listTypeItemId == value).length==0) {
-     // for (let i = 0; i < this.selectedConfigType.length; i++) {
-        this.sparePartService.getByConfignValueId(value, configvalue)
-          .pipe(first())
-          .subscribe({
-            next: (data: any) => {
-              if (data.object.length >0) {
-                this.sparePartDetails = this.sparePartDetails.concat(data.object);
-                this.recomandFilter(this.sparePartDetails);
-                //this.sparePartDetails.push(...data.object);
-                for (let i = 0; i < data.object.length; i++) {
-                  let cnfig: ConfigTypeValue;
-                  cnfig = new ConfigTypeValue;
-                  cnfig.id = configvalue;
-                  cnfig.listTypeItemId = value;
-                  cnfig.sparePartId = data.object[i].id;
-                  this.selectedConfigType.push(cnfig);
-                }
+    if (this.selectedConfigType.length > 0 && this.selectedConfigType.filter(x => x.id == configvalue && x.listTypeItemId == value).length == 0) {
+      // for (let i = 0; i < this.selectedConfigType.length; i++) {
+      this.sparePartService.getByConfignValueId(value, configvalue)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            if (data.object.length > 0) {
+              this.sparePartDetails = this.sparePartDetails.concat(data.object);
+              this.recomandFilter(this.sparePartDetails);
+              //this.sparePartDetails.push(...data.object);
+              for (let i = 0; i < data.object.length; i++) {
+                let cnfig: ConfigTypeValue;
+                cnfig = new ConfigTypeValue;
+                cnfig.id = configvalue;
+                cnfig.listTypeItemId = value;
+                cnfig.sparePartId = data.object[i].id;
+                this.selectedConfigType.push(cnfig);
               }
-            },
-            error: error => {
-               this.notificationService.showError(error, "Error");
-              this.loading = false;
             }
-          });
-     // }
+          },
+          error: error => {
+            this.notificationService.showError(error, "Error");
+            this.loading = false;
+          }
+        });
+      // }
     }
     else {
-      if (this.selectedConfigType.filter(x => x.id == configvalue && x.listTypeItemId == value).length==0) {
+      if (this.selectedConfigType.filter(x => x.id == configvalue && x.listTypeItemId == value).length == 0) {
         this.sparePartService.getByConfignValueId(value, configvalue)
           .pipe(first())
           .subscribe({
             next: (data: any) => {
-              if (data.object.length>0) {
+              if (data.object.length > 0) {
                 if (this.sparePartDetails != null) {
                   this.sparePartDetails = this.sparePartDetails.concat(data.object);
                   this.recomandFilter(this.sparePartDetails);
@@ -508,7 +526,7 @@ export class InstrumentComponent implements OnInit {
               }
             },
             error: error => {
-               this.notificationService.showError(error, "Error");
+              this.notificationService.showError(error, "Error");
               this.loading = false;
             }
           });
@@ -691,7 +709,7 @@ export class InstrumentComponent implements OnInit {
               if (this.file != null) {
                 this.saveFileShare(this.file, data.object.id)
               }
-                this.uploadFile(this.img, data.object.id)
+              this.uploadFile(this.img, data.object.id)
 
             }
             else {
@@ -700,14 +718,14 @@ export class InstrumentComponent implements OnInit {
             this.loading = false;
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
     }
     else {
       this.instrument.id = this.id;
-      this.instrumentService.update(this.id,this.instrument)
+      this.instrumentService.update(this.id, this.instrument)
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
@@ -724,7 +742,7 @@ export class InstrumentComponent implements OnInit {
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
@@ -887,9 +905,9 @@ export class InstrumentComponent implements OnInit {
     var data = event.data;
     event.data.modified = true;
     if (this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
-                && x.sparePartId == data.id).length > 0){
-       var d = this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
-         && x.sparePartId == data.id);
+      && x.sparePartId == data.id).length > 0) {
+      var d = this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
+        && x.sparePartId == data.id);
       d[0].insqty = event.newValue;
     }
   }

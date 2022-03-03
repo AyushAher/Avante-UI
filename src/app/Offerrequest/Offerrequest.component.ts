@@ -143,7 +143,6 @@ export class OfferrequestComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.transaction = 0;
     this.user = this.accountService.userValue;
     let role = JSON.parse(localStorage.getItem('roles'));
@@ -176,6 +175,7 @@ export class OfferrequestComponent implements OnInit {
       currencyId: [''],
       authtoken: [''],
       status: [''],
+      otherSpareDesc: [''],
       podate: ['', Validators.required],
       isdeleted: [false],
       spareQuoteNo: [{ value: '', disabled: true }]
@@ -185,7 +185,8 @@ export class OfferrequestComponent implements OnInit {
     this.columnDefs = this.createColumnDefs();
     this.columnDefsAttachments = this.createColumnDefsAttachments();
     this.ColumnDefsSPDet = this.createColumnDefsSPDet()
-
+    this.form.get('podate').setValue(this.datepipie.transform(new Date, "MM/dd/yyyy"))
+    
     if (this.id != null) {
       this.Service.getById(this.id)
         .pipe(first())
@@ -325,7 +326,7 @@ export class OfferrequestComponent implements OnInit {
     var rowData = event.data;
     var indexOfSelectedRow = this.sparePartsList.indexOf(rowData);
 
-    if (cellValue == rowData.id) {
+    if (cellValue == rowData.id && this.hasDeleteAccess) {
       this.sparePartsList.splice(indexOfSelectedRow, 1);
       if (rowData.offerRequestId == null && cellValue == rowData.id) {
         this.api.setRowData(this.sparePartsList);
@@ -435,19 +436,29 @@ export class OfferrequestComponent implements OnInit {
       filter: true,
       editable: true,
       sortable: true,
-      default: 0
+      default: 0,
+      hide: this.role == environment.custRoleCode,
     },
     {
       headerName: 'Amount',
       field: 'amount',
       filter: true,
-      sortable: true
+      sortable: true,
+      hide: this.role == environment.custRoleCode,
     },
     {
       headerName: 'Currency',
       field: 'currency',
+      hide: this.role == environment.custRoleCode,
       filter: true,
       sortable: true
+    },
+    {
+      headerName: 'Description',
+      field: 'itemDescription',
+      filter: true,
+      sortable: true,
+      tooltipField: 'itemDescription'
     }
     ]
   }
@@ -468,7 +479,6 @@ export class OfferrequestComponent implements OnInit {
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
-    this.api.sizeColumnsToFit();
   }
 
   onGridReadyAttachments(params): void {
