@@ -49,12 +49,12 @@ export class NavSideMenuComponent {
   hasdashboardsettings: boolean = false;
   hasAuditTrail: boolean = false;
 
-  hasCommons: boolean = false;
+  hasAdministrator: boolean = false;
   hasMasters: boolean = false;
   hasUtilities: boolean = false;
   hasTravel: boolean = false;
   hasReports: boolean = false;
-  hasSettings: boolean = false;
+  hasTransactions: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -294,13 +294,11 @@ export class NavSideMenuComponent {
           this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
           switch (this.userrole[0]?.itemname) {
             case "Distributor Support":
-              this.hasDistributorSettings = true
-              // this.router.navigate(["distdashboard"]);
+              this.hasDistributorSettings = true;
               break;
 
             case "Customer":
-              this.hasCustomerSettings = true
-              // this.router.navigate(["custdashboard"]);
+              this.hasCustomerSettings = true;
               break;
           }
         },
@@ -310,26 +308,26 @@ export class NavSideMenuComponent {
       });
 
 
-    if (this.hasCurrency || this.hasCountry || this.hasMaster || this.hasProfile || this.hasUserProfile) {
-      this.hasCommons = true;
+    if (this.hasMaster || this.hasProfile || this.hasUserProfile) {
+      this.hasAdministrator = true;
     }
-    if (this.hasDistributor || this.hasCustomer || this.hasCustomer || this.hasInstrument || this.hasSparePart || this.hasServiceRequest || this.hasServiceReport || this.hasOfferRequest || this.hasSparePartRecommended || this.hasCustomerSparePartsInventory || this.hasAmc || this.hasschedule) {
+    if (this.hasCurrency || this.hasCountry || this.hasDistributor || this.hasCustomer || this.hasInstrument || this.hasSparePart ||  this.hasOfferRequest) {
       this.hasMasters = true;
     }
-    if (this.hasSearch || this.hasexport || this.hasAuditTrail) {
+    if (this.hasSearch || this.hasexport || this.hasAuditTrail || this.hasCustomerSettings || this.hasDistributorSettings || this.hascustomersatisfactionsurveylist) {
       this.hasUtilities = true;
     }
-    if (this.hasTravelDetails || this.hasStayDetails || this.hasVisaDetails || this.hasLocalExpenses || this.hascustomersatisfactionsurveylist) {
+    if (this.hasTravelDetails || this.hasStayDetails || this.hasVisaDetails || this.hasLocalExpenses) {
       this.hasTravel = true;
     }
-    if (this.hasSearch) {
+
+    if (this.hasAmc || this.hasServiceRequest || this.hasCustomerSparePartsInventory || this.hasSparePartRecommended || this.hasschedule) {
+      this.hasTransactions = true;
+    }
+
+    if (this.hasServiceReport || this.hasSearch) {
       this.hasReports = true;
     }
-    if (this.hasCustomerSettings || this.hasDistributorSettings) {
-      this.hasSettings = true;
-    }
-
-
 
   }
 }
