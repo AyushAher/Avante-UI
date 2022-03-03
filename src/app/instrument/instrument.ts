@@ -212,6 +212,7 @@ export class InstrumentComponent implements OnInit {
         next: (data: any) => {
           let siteId = data.object.find(x => x.id == this.user.contactId)?.parentId
           this.instrumentform.get('custSiteId').setValue(siteId);
+          this.onSiteChange(siteId);
           if (siteId != null || siteId != undefined) {
             this.instrumentform.get('custSiteId').disable()
           }
@@ -436,24 +437,23 @@ export class InstrumentComponent implements OnInit {
 
   getInstrBySerialNo(serialNo: string) {
     //debugger;
-    this.instrumentService.searchByKeyword(serialNo, "")
+    this.instrumentService.searchByKeyword(serialNo, this.instrumentform.get('custSiteId').value)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          //debugger;
-
-          this.instrumentform.patchValue(data.object[0]);
-          this.sparePartDetails = data.object[0].spartParts;
+          data = data.object[0];
+          this.instrumentform.patchValue(data);
+          this.sparePartDetails = data?.spartParts;
           this.recomandFilter(this.sparePartDetails);
-          for (let i = 0; i < data.object[0].spartParts.length; i++) {
-            if (this.selectedConfigType.filter(x => x.id == data.object[0].spartParts[i].configValueid && x.listTypeItemId == data.object[0].spartParts[i].configTypeid
-              && x.sparePartId == data.object[0].spartParts[i].id).length == 0) {
+          for (let i = 0; i < data.spartParts.length; i++) {
+            if (this.selectedConfigType?.filter(x => x.id == data.spartParts[i].configValueid && x.listTypeItemId == data.spartParts[i].configTypeid
+              && x.sparePartId == data.spartParts[i].id).length == 0) {
               let cnfig: ConfigTypeValue;
               cnfig = new ConfigTypeValue;
-              cnfig.id = data.object[0].spartParts[i].configValueid;
-              cnfig.listTypeItemId = data.object[0].spartParts[i].configTypeid;
-              cnfig.sparePartId = data.object[0].spartParts[i].id;
-              cnfig.insqty = data.object[0].spartParts[i].insQty;
+              cnfig.id = data.spartParts[i].configValueid;
+              cnfig.listTypeItemId = data.spartParts[i].configTypeid;
+              cnfig.sparePartId = data.spartParts[i].id;
+              cnfig.insqty = data.spartParts[i].insQty;
               this.selectedConfigType.push(cnfig);
             }
           }
