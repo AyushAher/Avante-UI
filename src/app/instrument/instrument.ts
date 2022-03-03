@@ -692,6 +692,7 @@ export class InstrumentComponent implements OnInit {
 
       this.instrument.configuration.push(this.config);
     }
+    this.instrument.custSiteId = this.instrumentform.get('custSiteId').value
     this.instrument.insmfgdt = this.datepipie.transform(this.instrument.insmfgdt, "MM/dd/yyyy")
     this.instrument.shipdt = this.datepipie.transform(this.instrument.shipdt, "MM/dd/yyyy")
     this.instrument.wrntyendt = this.datepipie.transform(this.instrument.wrntyendt, "MM/dd/yyyy")

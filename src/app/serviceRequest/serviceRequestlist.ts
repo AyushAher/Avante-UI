@@ -224,10 +224,11 @@ export class ServiceRequestListComponent implements OnInit {
     {
       headerName: 'Assigned To',
       field: 'assignedto',
-      width:400,
+      width: 400,
       cellRendererFramework: ServiceRComponent,
+      hide: !this.IsDistributorView,
       cellRendererParams: {
-        isDist : this.IsDistributorView
+        isDist: this.IsDistributorView
       },
       filter: true,
       editable: false,

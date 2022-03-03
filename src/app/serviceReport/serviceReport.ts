@@ -115,7 +115,7 @@ export class ServiceReportComponent implements OnInit {
   bsActionModalRef: BsModalRef;
   allcontactlist: Contact[];
   instrumentlist: Instrument[];
-  sparepartlist: SparePart[];
+  sparepartlist: SparePart[] = [];
   sparepartinvontorylist: SparePart[];
   invlist: custSPInventory;
   PdffileData: FileShare[];
@@ -248,6 +248,7 @@ export class ServiceReportComponent implements OnInit {
 
   ngOnInit() {
 
+    this.ServiceReportId = this.route.snapshot.paramMap.get('id');
     this.transaction = 0;
     this.user = this.accountService.userValue;
     const role = JSON.parse(localStorage.getItem('roles'));
@@ -298,7 +299,7 @@ export class ServiceReportComponent implements OnInit {
       workfinishedstr: ['', Validators.required],
       interruptedstr: ['', Validators.required],
       reason: ['', Validators.required],
-      nextvisitscheduled: ['', Validators.required],
+      nextvisitscheduled: [''],
       engineercomments: ['', Validators.required],
       signengname: ['', Validators.required],
       engineerSing: [''],
@@ -351,14 +352,23 @@ export class ServiceReportComponent implements OnInit {
           this.sparepartrecmmlist = data.object;
         },
         error: error => {
-          //  this.alertService.error(error);
-
-
           this.notificationService.showError(error, 'Error');
           this.loading = false;
         }
       });
 
+
+    this.CustSPInventoryService.GetSPInvenrotyForServiceReport(this.ServiceReportId)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.sparepartlist = data.object;
+        },
+        error: (error) => {
+          this.notificationService.showError(error, "Error");
+          this.loading = false;
+        },
+      });
 
     this.distributorService.getAll()
       .pipe(first())
@@ -415,7 +425,6 @@ export class ServiceReportComponent implements OnInit {
       });
 
 
-    this.ServiceReportId = this.route.snapshot.paramMap.get('id');
     if (this.ServiceReportId != null) {
       this.hasAddAccess = false;
       if (this.user.username == 'admin') {
@@ -448,17 +457,6 @@ export class ServiceReportComponent implements OnInit {
               .subscribe({
                 next: (data: any) => {
                   this.ServiceRequest = data.object;
-                  this.CustSPInventoryService.getAll(this.user.contactId, data.object.custid)
-                    .pipe(first())
-                    .subscribe({
-                      next: (data: any) => {
-                        this.sparepartlist = data.object;
-                      },
-                      error: error => {
-                        this.notificationService.showError(error, 'Error');
-                        this.loading = false;
-                      }
-                    });
 
                   this.servicerequest = data.object;
 
@@ -544,8 +542,12 @@ export class ServiceReportComponent implements OnInit {
     this.isSave = true;
     this.loading = true;
     this.ServiceReport = this.ServiceReportform.value;
-    const nextvisitscheduled = new Date(this.ServiceReport.nextvisitscheduled);
-    this.ServiceReport.nextvisitscheduled = this.datepipe.transform(nextvisitscheduled, 'MM/dd/yyyy');
+
+    if (this.ServiceReport.nextvisitscheduled) {
+      const nextvisitscheduled = new Date(this.ServiceReport.nextvisitscheduled);
+      this.ServiceReport.nextvisitscheduled = this.datepipe.transform(nextvisitscheduled, 'MM/dd/yyyy');
+    }
+
     this.ServiceReport.workCompleted = this.ServiceReport.workCompletedstr == '0' ? true : false;
     this.ServiceReport.workfinished = this.ServiceReport.workfinishedstr == '0' ? true : false;
     this.ServiceReport.interrupted = this.ServiceReport.interruptedstr == '0' ? true : false;
@@ -1126,29 +1128,34 @@ export class ServiceReportComponent implements OnInit {
     this.srConsumedModel.partno = v.partNo;
     this.srConsumedModel.hsccode = v.hscCode;
     this.srConsumedModel.servicereportid = this.ServiceReportId;
-    this.srConsumedModel.qtyAvailable = v.qtyAvailable;
+    this.srConsumedModel.qtyAvailable = v.qtyAvailable?.toString();
     this.srConsumedModel.customerSPInventoryId = v.id;
-    this.srConsumedservice.save(this.srConsumedModel)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (data.result) {
-            this.notificationService.filter('itemadded');
-            // this.configList = data.object;
-            // this.listvalue.get("configValue").setValue("");
-          } else {
+    if (v.id != null && v.id != "" && v.id != undefined) {
+
+      this.srConsumedservice.save(this.srConsumedModel)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            if (data.result) {
+              this.notificationService.filter('itemadded');
+              // this.configList = data.object;
+              // this.listvalue.get("configValue").setValue("");
+            } else {
 
 
-            this.notificationService.showError(data.resultMessage, 'Error');
+              this.notificationService.showError(data.resultMessage, 'Error');
+            }
+            this.loading = false;
+          },
+          error: error => {
+
+            this.notificationService.showError(error, 'Error');
+            this.loading = false;
           }
-          this.loading = false;
-        },
-        error: error => {
-
-          this.notificationService.showError(error, 'Error');
-          this.loading = false;
-        }
-      });
+        });
+    } else {
+      this.notificationService.showError("Incorrect Value", "Error")
+    }
   }
 
   private createColumnspDefs() {
@@ -1452,7 +1459,7 @@ export class ServiceReportComponent implements OnInit {
                     totalHrs = totalHrs + Number(x.perdayhrs);
                   });
                   data.nextvisitscheduled = this.datepipe.transform(data.nextvisitscheduled, 'dd-MMM-yy');
-                  if (data.nextvisitscheduled == "" || data.nextvisitscheduled == null) data.nextvisitscheduled = "nil";
+                  if (data.nextvisitscheduled == "" || data.nextvisitscheduled == null) data.nextvisitscheduled = "NIL";
                 }
 
                 const docDefinition = {
@@ -1460,8 +1467,7 @@ export class ServiceReportComponent implements OnInit {
                     return [
                       {
                         columns: [
-
-                          { text: `*This is a system generated PDF.${this.datepipe.transform(new Date, "MM/dd/yyy")}.`, alignment: 'left', margin: [15, 5, 15, 2] },
+                          { text: `${this.datepipe.transform(new Date, "MM/dd/yyy")} - *This is a system generated PDF.`, alignment: 'left', margin: [15, 5, 15, 2] },
                           { text: `${currentPage.toString()} | ${pageCount}`, alignment: 'right', margin: [15, 5, 15, 2] }
                         ]
                       }

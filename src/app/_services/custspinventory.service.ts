@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Router} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
-import {map} from "rxjs/operators";
-import {Custspinventory} from "../_models/custspinventory";
+import { Injectable } from '@angular/core';
+import { Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../environments/environment";
+import { map } from "rxjs/operators";
+import { Custspinventory } from "../_models/custspinventory";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,10 @@ export class CustspinventoryService {
 
   getAll(contactId, custid?) {
     return this.http.get<Custspinventory[]>(`${environment.apiUrl}/CustSPInventory/all/${contactId}/${custid}`);
+  }
+
+  GetSPInvenrotyForServiceReport(id: string) {
+    return this.http.get(`${environment.apiUrl}/CustSPInventory/GetSPInvenrotyForServiceReport/${id}`);
   }
 
   getHistory(contactId, custSPInventoryId) {

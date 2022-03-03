@@ -311,10 +311,10 @@ export class NavSideMenuComponent {
     if (this.hasMaster || this.hasProfile || this.hasUserProfile) {
       this.hasAdministrator = true;
     }
-    if (this.hasCurrency || this.hasCountry || this.hasDistributor || this.hasCustomer || this.hasInstrument || this.hasSparePart ||  this.hasOfferRequest) {
+    if (this.hasCurrency || this.hasCountry || this.hasDistributor || this.hasCustomer || this.hasInstrument || this.hasSparePart || this.hasOfferRequest) {
       this.hasMasters = true;
     }
-    if (this.hasSearch || this.hasexport || this.hasAuditTrail || this.hasCustomerSettings || this.hasDistributorSettings || this.hascustomersatisfactionsurveylist) {
+    if (this.hasSearch || this.hasexport || this.hasdashboardsettings || this.hasAuditTrail || this.hasCustomerSettings || this.hasDistributorSettings || this.hascustomersatisfactionsurveylist) {
       this.hasUtilities = true;
     }
     if (this.hasTravelDetails || this.hasStayDetails || this.hasVisaDetails || this.hasLocalExpenses) {

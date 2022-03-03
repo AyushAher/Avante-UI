@@ -239,7 +239,7 @@
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
                   (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
-                  (gridReady)="onGridReady($event)"  [columnDefs]="columnworkdefs" [rowData]="workdonelist"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnworkdefs" [rowData]="workdonelist"
                   rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
@@ -345,12 +345,9 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="nextvisitscheduled">Next Visit</label>
-              <input type="text" formControlName="nextvisitscheduled" bsDatepicker class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.nextvisitscheduled.errors }" />
-              <div *ngIf="submitted && f.nextvisitscheduled.errors" class="invalid-feedback">
-                <div *ngIf="f.nextvisitscheduled.errors.required">nextVisitScheduled is required</div>
-              </div>
+              <input type="text" formControlName="nextvisitscheduled" bsDatepicker class="form-control" />
             </div>
+
             <div class="col-sm-3">
               <label for="nextVisitScheduled">Engineer Comment</label>
               <input type="text" formControlName="engineercomments" class="form-control"
@@ -447,8 +444,7 @@
                 (click)="GeneratePDF(true)">Preview</button>
 
               <button [disabled]="loading" class="btn btn-secondary" type="button"
-                      *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true"
-                      (click)="GeneratePDF(false)">
+                *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true" (click)="GeneratePDF(false)">
                 Generate Service Report
               </button>
 

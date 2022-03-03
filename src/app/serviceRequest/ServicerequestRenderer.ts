@@ -8,7 +8,7 @@ import { DistributorService, NotificationService, ServiceRequestService } from "
 @Component({
     template: `
     
-    <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+    <form [formGroup]="Form" (ngSubmit)="onSubmit()" *ngIf="!params.isDist">
 <div class="row">
 <div class="col-md-10">
 <select formControlName="assignedto" [disabled]="!params.isDist" class="form-control">
@@ -60,10 +60,10 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
         this.serviceRequest.update(srrqData.id, srrqData)
             .pipe(first())
             .subscribe((data: any) => {
-                if(data.result){
-                    this.notificationService.showSuccess(data.resultMessage,"Success")
-                }else{
-                    this.notificationService.showError(data.resultMessage,"Error")
+                if (data.result) {
+                    this.notificationService.showSuccess(data.resultMessage, "Success")
+                } else {
+                    this.notificationService.showError(data.resultMessage, "Error")
                 }
             })
     }

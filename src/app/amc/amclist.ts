@@ -1,21 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {Amc, Country, ProfileReadOnly, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { Amc, Country, ProfileReadOnly, User } from '../_models';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
-  AlertService,
   AmcService,
-  CountryService,
-  CustomerService,
   NotificationService,
   ProfileService
 } from '../_services';
-import {RenderComponent} from '../distributor/rendercomponent';
+import { RenderComponent } from '../distributor/rendercomponent';
 
 
 @Component({
@@ -40,13 +37,8 @@ export class AmcListComponent implements OnInit {
   private api: GridApi;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private customerService: CustomerService,
-    private countryService: CountryService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private AmcService: AmcService
@@ -106,26 +98,26 @@ export class AmcListComponent implements OnInit {
         deleteaccess: this.hasDeleteAccess
       },
     },
-      {
-        headerName: 'Bill To',
-        field: 'billto',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'Bill To',
-      },
-      {
-        headerName: 'Customer Site',
-        field: 'custSiteName',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'Bill To',
-      },
-      {
-        headerName: 'Service Quote',
+    {
+      headerName: 'Bill To',
+      field: 'billto',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'Bill To',
+    },
+    {
+      headerName: 'Customer Site',
+      field: 'custSiteName',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'Bill To',
+    },
+    {
+      headerName: 'Service Quote',
       field: 'servicequote',
       filter: true,
       editable: false,

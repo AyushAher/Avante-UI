@@ -102,7 +102,7 @@ export class WorkTimeContentComponent implements OnInit {
     ) {
 
       if (diff > 0) {
-        this.workTimeForm.get('perdayhrs').setValue(diff.toString());
+        this.workTimeForm.get('perdayhrs').setValue(diff.toFixed(2).toString());
       } else {
         diff = 0;
         this.workTimeForm.get('perdayhrs').setValue(diff.toString());
