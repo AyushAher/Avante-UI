@@ -993,7 +993,7 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        width: 100,
+        width: 150,
         cellRenderer: (params) => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
@@ -1009,6 +1009,7 @@ export class ServiceReportComponent implements OnInit {
         headerName: 'Work Done',
         field: 'workdone',
         filter: false,
+        width:900,
         enableSorting: false,
         editable: false,
         sortable: false,
@@ -1077,7 +1078,7 @@ export class ServiceReportComponent implements OnInit {
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
-    this.api.sizeColumnsToFit();
+    // this.api.sizeColumnsToFit();
   }
 
   onConfigChange(param: string) {
