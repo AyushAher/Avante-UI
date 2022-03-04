@@ -8,10 +8,10 @@ import { DistributorService, NotificationService, ServiceRequestService } from "
 @Component({
     template: `
     
-    <form [formGroup]="Form" (ngSubmit)="onSubmit()" *ngIf="!params.isDist">
+    <form [formGroup]="Form" (ngSubmit)="onSubmit()">
 <div class="row">
 <div class="col-md-10">
-<select formControlName="assignedto" [disabled]="!params.isDist" class="form-control">
+<select formControlName="assignedto" class="form-control">
         <option *ngFor="let c of appendList" value={{c.id}}> {{c.fname}} {{c.lname}} </option>
         </select>
 </div>   
@@ -55,7 +55,8 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
     onSubmit() {
         let srrqData = this.params.data
         srrqData.createdon = new Date
-        srrqData.accepted == "Accepted" ? srrqData.accepted = true : srrqData.accepted = false
+        srrqData.accepted == "Accepted" ? srrqData.accepted = true : srrqData.accepted = false;
+        srrqData.assignedto = this.Form.get('assignedto').value;
 
         this.serviceRequest.update(srrqData.id, srrqData)
             .pipe(first())
