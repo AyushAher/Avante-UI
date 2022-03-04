@@ -56,6 +56,13 @@ export class EngineerschedulerComponent implements OnInit {
   isAdmin: boolean = false;
   id: string;
   link: string;
+  DistData: any[];
+  public ownerDataSource: Object[] = JSON.parse(localStorage.getItem('ownerDataSrc'))
+  public eventSettings: EventSettingsModel
+  public views: Array<string> = ['Week', 'Month'];
+  public group: GroupModel = {
+    resources: ['Owners']
+  };
   constructor(
     private serviceRequestService: ServiceRequestService,
     private notificationService: NotificationService,
@@ -68,7 +75,7 @@ export class EngineerschedulerComponent implements OnInit {
   ) {
   }
 
-  public eventSettings: EventSettingsModel;
+  // public eventSettings: EventSettingsModel;
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -115,7 +122,7 @@ export class EngineerschedulerComponent implements OnInit {
                     Engdata.object.forEach(x => {
                       let obj = {
                         Id: x.id,
-                        Subject: x.subject,
+                        Subject: x.displayName,
                         Location: x.location,
                         StartTime: new Date(x.startTime),
                         EndTime: new Date(x.endTime),
@@ -151,12 +158,13 @@ export class EngineerschedulerComponent implements OnInit {
               })
           } else if (this.isDistSupp) {
             this.isDistSupp = true;
-            let DistData = [];
+            this.DistData = [];
             this.distributorService.GetDistributorRegionContactsByContactId(this.user.contactId)
               .pipe(first())
               .subscribe({
                 next: (Distdata: any) => {
                   if (Distdata.result && Distdata.object != null) {
+                    let owerner = []
                     Distdata.object.forEach(x => {
                       this.EngschedulerService.getByEngId(x.id)
                         .pipe(first())
@@ -167,36 +175,37 @@ export class EngineerschedulerComponent implements OnInit {
                               engSch.forEach(y => {
                                 let obj = {
                                   Id: y.id,
-                                  Subject: y.subject,
+                                  Subject: y.displayName,
                                   Location: y.location,
                                   StartTime: new Date(y.startTime),
                                   EndTime: new Date(y.endTime),
                                   IsAllDay: y.isAllDay,
-                                  IsBlock: y.isBlock,
-                                  IsReadonly: y.isReadonly,
+                                  IsBlock: false,
+                                  IsReadonly: true,
                                   RoomId: y.roomId,
-                                  ResourceId: y.roomId,
+                                  OwnerId: y.roomId,
                                   Description: y.description,
                                   SerReqId: y.serReqId,
                                   RecurrenceRule: y.recurrenceRule,
-                                  RecurrenceException: y.RecurrenceException,
-                                  StartTimezone: y.StartTimezone,
-                                  EndTimezone: y.EndTimezone,
+                                  RecurrenceException: y.recurrenceException,
+                                  StartTimezone: y.startTimezone,
+                                  EndTimezone: y.endTimezone,
                                 };
-                                DistData.push(obj);
+                                this.DistData.push(obj);
                               })
                             }
+                            this.eventSettings = {
+                              dataSource: this.DistData,
+                            };
                           }
                         })
-                      this.roomDataSource.push({ text: x.fname + " " + x.lname, id: x.id, startHour: "09:00" })
+                      owerner.push({ OwnerText: x.fname + " " + x.lname, Id: x.id })
+                      localStorage.setItem('ownerDataSrc', JSON.stringify(owerner))
                     })
                   }
                 }
               })
 
-            this.eventSettings = {
-              dataSource: DistData,
-            };
           }
 
         },
@@ -398,7 +407,15 @@ export class EngineerschedulerComponent implements OnInit {
         args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
       }
 
-      if (!args.element.querySelector('.custom-field-row')) {
+      var serreq: HTMLInputElement = <HTMLInputElement>document.getElementsByName('Subject')[0];
+
+      serreq.value = serreq.value.split(':')[1]?.trim()
+
+      if (serreq.value == undefined || serreq.value == "undefined" || serreq.value == null) {
+        serreq.value = "";
+      }
+
+      if (!args.element.querySelector('.custom-servicereqno')) {
         let row: HTMLElement = createElement('div', { className: 'custom-servicereqno' });
         let formElement: HTMLElement = args.element.querySelector('.e-schedule-form');
         formElement.firstChild.insertBefore(row, args.element.querySelector('.e-title-location-row'));
@@ -416,11 +433,16 @@ export class EngineerschedulerComponent implements OnInit {
           .pipe(first())
           .subscribe((data: any) => {
             inputEle.setAttribute('value', data.object.serreqno);
-
           })
       }
 
       else {
+        this.serviceRequestService.getById(this.id)
+          .pipe(first())
+          .subscribe((data: any) => {
+            var serreq: HTMLInputElement = <HTMLInputElement>document.getElementsByName('SerReqNo')[0];
+            serreq.value = data.object.serreqno;
+          })
         if (!this.hasAddAccess) {
           args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
         }
@@ -433,7 +455,6 @@ export class EngineerschedulerComponent implements OnInit {
   }
 
   onActionBeginDist(e) {
-
     if (e.requestType == "eventCreate") {
       if (Array.isArray(e.data)) {
         e.data.forEach(x => {
@@ -605,66 +626,23 @@ export class EngineerschedulerComponent implements OnInit {
   }
 
   onPopupOpenDist(args: PopupOpenEventArgs): void {
-    args.cancel = true;
     if (args.type === "QuickInfo") {
-      args.cancel = true;
+      args.element.querySelector('.e-event-save')?.setAttribute('hidden', 'true')
+      args.element.querySelector('.e-event-create')?.setAttribute('hidden', 'true')
+      args.element.querySelector('.e-event-details')?.setAttribute('hidden', 'true')
+      args.element.querySelector('.e-subject')?.setAttribute('disabled', 'true')
     }
     if (args.type === 'EventContainer') {
       let instance: Internationalization = new Internationalization();
       let date: string = instance.formatDate((<any>args.data).date, { skeleton: 'MMMEd' });
       ((args.element.querySelector('.e-header-date')) as HTMLElement).innerText = date;
       ((args.element.querySelector('.e-header-day')) as HTMLElement).innerText = 'Event count: ' + (<any>args.data).event.length;
+      args.element.querySelector('.e-event-save')?.setAttribute('hidden', 'true')
+      args.element.querySelector('.e-event-create')?.setAttribute('hidden', 'true')
+      args.element.querySelector('.e-event-details')?.setAttribute('hidden', 'true')
+      args.element.querySelector('.e-subject')?.setAttribute('disabled', 'true')
     } else if (args.type === 'Editor') {
-      // Create required custom elements in initial time
-      if (!args.element.querySelector('.custom-servicereqno')) {
-
-        if (!this.hasUpdateAccess) {
-          args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
-        }
-
-        let row: HTMLElement = createElement('div', { className: 'custom-servicereqno' });
-        let formElement: HTMLElement = args.element.querySelector('.e-schedule-form');
-        formElement.firstChild.insertBefore(row, args.element.querySelector('.e-title-location-row'));
-        let container: HTMLElement = createElement('div', { className: 'custom-field-container mt-3' });
-        let inputEle: HTMLInputElement = createElement('input', {
-          className: 'e-field', attrs: { name: 'SerReqId' }
-        }) as HTMLInputElement;
-        container.appendChild(inputEle);
-        row.appendChild(container);
-        let list = [];
-        let dropDownList: DropDownList = new DropDownList({
-          dataSource: list,
-          fields: { text: 'text', value: 'value' },
-          value: (<{ [key: string]: Object }>(args.data)).EventType as string,
-          floatLabelType: 'Always', placeholder: 'Service Request No.'
-        });
-
-        this.serviceRequestService.GetServiceRequestByConId(this.user.contactId).pipe(first()).subscribe({
-          next: (data: any) => {
-            if (data.object != null && data.object.length > 0) {
-              data.object.forEach(x => {
-                list.push({ text: x.serreqno, value: x.id })
-              })
-            }
-            dropDownList = new DropDownList({
-              dataSource: list,
-              fields: { text: 'text', value: 'value' },
-              value: (<{ [key: string]: Object }>(args.data)).EventType as string,
-              floatLabelType: 'Always', placeholder: 'Service Request No.'
-            });
-
-          },
-        })
-        dropDownList.appendTo(inputEle);
-        inputEle.setAttribute('name', 'SerReqId');
-      } else {
-        if (!this.hasAddAccess) {
-          args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
-        }
-        if (!this.hasDeleteAccess) {
-          args.element.querySelector('.e-event-delete ')?.setAttribute('disabled', 'true')
-        }
-      }
+      args.cancel = true;
     }
 
   }
@@ -672,11 +650,5 @@ export class EngineerschedulerComponent implements OnInit {
 
 
   //  Dist code
-
-  public group: GroupModel = {
-    resources: ['Engineers']
-  };
-  public allowMultipleRoom: Boolean = false;
-  public roomDataSource: Object[] = [];
 
 }
