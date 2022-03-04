@@ -16,7 +16,7 @@ import { ProfileReadOnly, ServiceRequest, User } from "../_models";
 import { EngschedulerService } from "../_services/engscheduler.service";
 import { DatePipe } from "@angular/common";
 import { environment } from "../../environments/environment";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { TextBox, Input } from '@syncfusion/ej2-inputs';
 
 L10n.load({
@@ -72,6 +72,8 @@ export class EngineerschedulerComponent implements OnInit {
     private listTypeService: ListTypeService,
     private profileService: ProfileService,
     private route: ActivatedRoute,
+    private router: Router,
+
   ) {
   }
 
@@ -200,8 +202,14 @@ export class EngineerschedulerComponent implements OnInit {
                           }
                         })
                       owerner.push({ OwnerText: x.fname + " " + x.lname, Id: x.id })
-                      localStorage.setItem('ownerDataSrc', JSON.stringify(owerner))
                     })
+
+                    let owner = localStorage.getItem('ownerDataSrc')
+                    localStorage.setItem('ownerDataSrc', JSON.stringify(owerner))
+                    if (owner == null) {
+                      window.location.reload()
+                    }
+
                   }
                 }
               })
