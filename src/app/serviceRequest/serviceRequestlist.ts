@@ -331,9 +331,9 @@ export class ServiceRequestListComponent implements OnInit {
           });
 
           if (this.user.username != 'admin') {
-            this.srCustList = data.object.filter(x => x.createdby == this.user.userId);
-            this.srDistList = data.object.filter(x => x.distid == this.distId);
-            this.srEngList = data.object.filter(x => x.assignedto == this.user.contactId);
+            this.srCustList = data.object;
+            this.srDistList = data.object;
+            this.srEngList = data.object;
           } else {
             this.srAdminList = data.object;
           }
