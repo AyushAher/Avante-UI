@@ -182,12 +182,21 @@ export class OfferrequestComponent implements OnInit {
     })
 
     this.id = this.route.snapshot.paramMap.get('id');
+    this.route.queryParams.subscribe(params => {
+      this.zohocode = params['code'];
+    });
+
+    if (this.zohocode != null) {
+      this.getZohoData()
+    }
+
     this.columnDefs = this.createColumnDefs();
     this.columnDefsAttachments = this.createColumnDefsAttachments();
     this.ColumnDefsSPDet = this.createColumnDefsSPDet()
     this.form.get('podate').setValue(this.datepipie.transform(new Date, "MM/dd/yyyy"))
-    
+
     if (this.id != null) {
+      localStorage.setItem('offerrequestid', this.id)
       this.Service.getById(this.id)
         .pipe(first())
         .subscribe({
@@ -205,8 +214,6 @@ export class OfferrequestComponent implements OnInit {
         let tokn = localStorage.getItem('zohotoken');
         if (tokn != null && tokn != '') {
           this.form.get('authtoken').setValue(tokn);
-        } else {
-          this.router.navigate(['offerrequestlist']);
         }
       }
 
@@ -303,23 +310,50 @@ export class OfferrequestComponent implements OnInit {
   }
 
   getZohoData() {
+    let quoteno = this.form.get('spareQuoteNo').value;
+    if (quoteno != null && quoteno != "") {
+      localStorage.setItem('spquoteno', quoteno)
+    } else {
+      this.notificationService.showError("Spare Quote No. is required", "Error")
+      return;
+    }
+
     if (this.role == environment.distRoleCode || this.user.username == 'admin') {
       this.hasQuoteDet = true;
+      if (this.accountService.zohoauthValue == null) {
+        if (this.zohocode == null) {
+          window.location.href = environment.commonzohocodeapi + 'offerrequestlist' + '&access_type=offline';
+        } else {
+          this.zohoService.authwithcode(this.zohocode, 'offerrequestlist').subscribe({
+            next: (data: any) => {
 
-      let quoteno = this.form.get('spareQuoteNo').value;
-      let code = localStorage.getItem('zCode');
-      if (code == null) {
-        this.router.navigate(['offerrequestlist']);
+              let code = localStorage.setItem('zCode', this.zohocode);
+              localStorage.setItem('zohotoken', JSON.stringify(data.object));
+              this.accountService.zohoauthSet(data.object);
+              quoteno = localStorage.getItem('spquoteno')
+
+              this.zohoService.GetSalesOrder(code, 1, quoteno, this.id)
+                .pipe(first())
+                .subscribe((data: any) => {
+                  this.SpareQuotationDetails = data.object;
+                });
+            },
+            error: error => {
+              this.notificationService.showError(error, 'Error');
+              this.loading = false;
+            }
+          });
+        }
+      } else {
+        let quoteno = localStorage.getItem('spquoteno')
+        this.zohoService.GetSalesOrder(this.zohocode, 1, quoteno, this.id)
+          .pipe(first())
+          .subscribe((data: any) => {
+            this.SpareQuotationDetails = data.object;
+          });
       }
-      this.zohoService.GetSalesOrder(code, 1, quoteno)
-        .pipe(first())
-        .subscribe((data: any) => {
-          this.SpareQuotationDetails = data.object;
-        });
-
     }
   }
-
 
   RemoveSpareParts(event) {
     var cellValue = event.value;

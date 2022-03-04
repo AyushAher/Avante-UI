@@ -1,15 +1,15 @@
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {first, map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 
-import {environment} from '../../environments/environment';
-import {Amc} from '../_models';
-import {AccountService} from '../_services';
+import { environment } from '../../environments/environment';
+import { Amc } from '../_models';
+import { AccountService } from '../_services';
 
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class zohoapiService {
   private AmcSubject: BehaviorSubject<Amc>;
   public Amc: Observable<Amc>;
@@ -32,8 +32,8 @@ export class zohoapiService {
   }
 
 
-  GetSalesOrder(code, page, orderNumber) {
-    return this.http.get(`${environment.apiUrl}/Zoho/salesorders/${this.accountService.zohoauthValue}/${page}?salesorder_number_startswith=${orderNumber}`);
+  GetSalesOrder(code, page, orderNumber, id?) {
+    return this.http.get(`${environment.apiUrl}/Zoho/salesorders/${this.accountService.zohoauthValue}/${page}?salesorder_number_startswith=${orderNumber}&offerrequestid=${id}`);
   }
 
   authwithcode(code: string, endPoint?: string) {
@@ -50,8 +50,8 @@ export class zohoapiService {
     // return Zdata
   }
 
-    getAllinvoice() {
-      return this.http.get(`${environment.apiUrl}/zoho/invoices/1`);
+  getAllinvoice() {
+    return this.http.get(`${environment.apiUrl}/zoho/invoices/1`);
   }
 
   getAllCustomerPayments(custname: string, page: number) {
@@ -81,55 +81,55 @@ export class zohoapiService {
     return this.http.get(`${environment.apiUrl}/zoho/purchaseorders/` + this.accountService.zohoauthValue + `/` + page + `?cf_intended_customer=` + custname);
   }
 
-    getAll() {
-      return this.http.get<Amc[]>(`${environment.apiUrl}/Amc`);
-    }
+  getAll() {
+    return this.http.get<Amc[]>(`${environment.apiUrl}/Amc`);
+  }
 
-    getById(id: string) {
-      return this.http.get<Amc>(`${environment.apiUrl}/Amc/${id}`);
-    }
+  getById(id: string) {
+    return this.http.get<Amc>(`${environment.apiUrl}/Amc/${id}`);
+  }
 
   searchByKeyword(param: string, custSiteId: string) {
     param = param == "" ? "undefined" : param;
     return this.http.get<Amc[]>(`${environment.apiUrl}/Amc/GetInstrumentBySerialNo/${param}/${custSiteId}`);
   }
 
-    update(id, params) {
-      return this.http.put(`${environment.apiUrl}/Amc`, params)
-            .pipe(map(x => {
-              // update stored user if the logged in user updated their own record
-              //if (id == this.distributor.id) {
-              //      // update local storage
-              //      const user = { ...this.userValue, ...params };
-              //      localStorage.setItem('user', JSON.stringify(user));
+  update(id, params) {
+    return this.http.put(`${environment.apiUrl}/Amc`, params)
+      .pipe(map(x => {
+        // update stored user if the logged in user updated their own record
+        //if (id == this.distributor.id) {
+        //      // update local storage
+        //      const user = { ...this.userValue, ...params };
+        //      localStorage.setItem('user', JSON.stringify(user));
 
-              //      // publish updated user to subscribers
-              //      this.userSubject.next(user);
-              //  }
-                return x;
-            }));
-    }
+        //      // publish updated user to subscribers
+        //      this.userSubject.next(user);
+        //  }
+        return x;
+      }));
+  }
 
-    delete(id: string) {
-      return this.http.delete(`${environment.apiUrl}/Amc/${id}`)
-            .pipe(map(x => {
-                //// auto logout if the logged in user deleted their own record
-                //if (id == this.userValue.id) {
-                //    this.logout();
-                //}
-                return x;
-            }));
-    }
+  delete(id: string) {
+    return this.http.delete(`${environment.apiUrl}/Amc/${id}`)
+      .pipe(map(x => {
+        //// auto logout if the logged in user deleted their own record
+        //if (id == this.userValue.id) {
+        //    this.logout();
+        //}
+        return x;
+      }));
+  }
 
   deleteConfig(deleteConfig: Amc) {
     return this.http.post(`${environment.apiUrl}/Instrumentconfig/RemoveInsConfigType`, deleteConfig)
-      //.pipe(map(x => {
-      //  //// auto logout if the logged in user deleted their own record
-      //  //if (id == this.userValue.id) {
-      //  //    this.logout();
-      //  //}
-      //  return x;
-      //}));
+    //.pipe(map(x => {
+    //  //// auto logout if the logged in user deleted their own record
+    //  //if (id == this.userValue.id) {
+    //  //    this.logout();
+    //  //}
+    //  return x;
+    //}));
   }
 
 }
