@@ -89,8 +89,8 @@ export class srcontrevComponent implements OnInit {
           next: (data: any) => {
             debugger;
             //alert(data.access_token);
-            localStorage.setItem('zohotoken', JSON.stringify(data.access_token));
-            this.accountService.zohoauthSet(data.access_token);
+            localStorage.setItem('zohotoken', JSON.stringify(data.object));
+            this.accountService.zohoauthSet(data.object);
             this.getsrcontrev("",1);
           },
           error: error => {

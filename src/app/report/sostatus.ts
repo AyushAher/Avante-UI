@@ -4,13 +4,14 @@ import { User, Customer, Country, DistributorRegion, ProfileReadOnly, Amc } from
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import {
   AccountService, AlertService, CustomerService, CountryService,
   NotificationService, ProfileService, ServiceReportService, AmcService, zohoapiService
 } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -51,9 +52,9 @@ export class sostatusComponent implements OnInit {
     private AmcService: AmcService,
     private zohoservice: zohoapiService,
   ) {
-    
+
   }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -81,16 +82,14 @@ export class sostatusComponent implements OnInit {
     //this.accountService.clear();
     if (this.accountService.zohoauthValue == null) {
       if (this.zohocode == null) {
-        this.zohoservice.authservice();
+        window.location.href = environment.commonzohocodeapi + 'sostatus' + '&access_type=offline';
       }
       else {
-        this.zohoservice.authwithcode(this.zohocode).subscribe({
+        this.zohoservice.authwithcode(this.zohocode, "sostatus").subscribe({
           next: (data: any) => {
-            debugger;
-            //alert(data.access_token);
-            localStorage.setItem('zohotoken', JSON.stringify(data.access_token));
-            this.accountService.zohoauthSet(data.access_token);
-            this.getquotation("",1);
+            localStorage.setItem('zohotoken', JSON.stringify(data.object));
+            this.accountService.zohoauthSet(data.object);
+            this.getquotation("", 1);
           },
           error: error => {
             this.notificationService.showError(error, "Error");
@@ -102,15 +101,15 @@ export class sostatusComponent implements OnInit {
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     if (this.accountService.zohoauthValue != null) {
-      this.getquotation("",1);
+      this.getquotation("", 1);
     }
     this.columnDefs = this.createColumnDefs();
   }
 
 
 
-  getquotation(custname: string,page: number) {
-    this.zohoservice.getsostatus(custname,page)
+  getquotation(custname: string, page: number) {
+    this.zohoservice.getsostatus(custname, page)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
@@ -132,8 +131,8 @@ export class sostatusComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    
-    this.getquotation(this.form.value.search,1);
+
+    this.getquotation(this.form.value.search, 1);
   }
 
   onNext() {
@@ -153,74 +152,74 @@ export class sostatusComponent implements OnInit {
       headerName: 'Customer Name',
       field: 'cf_intended_customer',
       filter: true,
-        editable: false,
+      editable: false,
       sortable: true,
       tooltipField: 'cf_intended_customer'
-      },
-      {
-        headerName: 'Payment',
-        field: 'total',
-        filter: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'total'
-      },
-      {
-        headerName: 'PO Number',
-        field: 'purchaseorder_number',
-        filter: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'purchaseorder_number'
-      },
-      {
-        headerName: 'ProjectNo',
-        field: 'cf_project_no',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'cf_project_no',
-      },
-      {
-        headerName: 'MachineMode',
-        field: 'cf_brand',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'cf_brand',
-      },
-      {
-        headerName: 'Reference Number',
-        field: 'reference_number',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'reference_number',
-      },
-      {
-        headerName: 'PO Date',
-        field: 'date',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'date',
-      },
-      {
-        headerName: 'Status',
-        field: 'status',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'status',
-      },
-      
+    },
+    {
+      headerName: 'Payment',
+      field: 'total',
+      filter: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'total'
+    },
+    {
+      headerName: 'PO Number',
+      field: 'purchaseorder_number',
+      filter: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'purchaseorder_number'
+    },
+    {
+      headerName: 'ProjectNo',
+      field: 'cf_project_no',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'cf_project_no',
+    },
+    {
+      headerName: 'MachineMode',
+      field: 'cf_brand',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'cf_brand',
+    },
+    {
+      headerName: 'Reference Number',
+      field: 'reference_number',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'reference_number',
+    },
+    {
+      headerName: 'PO Date',
+      field: 'date',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'date',
+    },
+    {
+      headerName: 'Status',
+      field: 'status',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'status',
+    },
+
     ]
-  }  
+  }
 
   onGridReady(params): void {
     this.api = params.api;

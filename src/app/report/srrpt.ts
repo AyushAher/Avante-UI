@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {Country, ProfileReadOnly, ServiceReport, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { Country, ProfileReadOnly, ServiceReport, User } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -110,14 +110,6 @@ export class srrptComponent implements OnInit {
 
   private createColumnDefs() {
     return [{
-      headerName: 'Sr No',
-      field: 'id',
-      filter: false,
-      enableSorting: false,
-      width: 400,
-      editable: false,
-      sortable: false,
-    }, {
       headerName: 'Customer Name',
       field: 'customer',
       filter: true,

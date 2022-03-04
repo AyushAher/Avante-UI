@@ -11,6 +11,7 @@ import {
   NotificationService, ProfileService, ServiceReportService, AmcService, zohoapiService
 } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -82,15 +83,15 @@ export class qtsentComponent implements OnInit {
     //this.accountService.clear();
     if (this.accountService.zohoauthValue == null) {
       if (this.zohocode == null) {
-        this.zohoservice.authservice();
+        window.location.href = environment.commonzohocodeapi + 'qtsent' + '&access_type=offline';
       }
       else {
-        this.zohoservice.authwithcode(this.zohocode).subscribe({
+        this.zohoservice.authwithcode(this.zohocode,"qtsent").subscribe({
           next: (data: any) => {
             debugger;
             //alert(data.access_token);
-            localStorage.setItem('zohotoken', JSON.stringify(data.access_token));
-            this.accountService.zohoauthSet(data.access_token);
+            localStorage.setItem('zohotoken', JSON.stringify(data.object));
+            this.accountService.zohoauthSet(data.object);
             this.getquotation("",1);
           },
           error: error => {
