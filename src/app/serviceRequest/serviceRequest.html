@@ -144,7 +144,7 @@
               </div>
             </div>
 
-            <div class="col-md-3 col-sm-3">
+            <div class="col-md-3 col-sm-3" *ngIf="!IsCustomerView">
               <label for="country">Country</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.country.errors }" class="form-control"
                 formControlName="country">
@@ -317,8 +317,7 @@
             <div class="col-sm-3" *ngIf="IsEngineerView">
               <label for="accepted">Accepted</label>
 
-              <select class="form-control" (input)="Accepted($event.target.value)" #accp
-                formControlName="accepted">
+              <select class="form-control" (input)="Accepted($event.target.value)" #accp formControlName="accepted">
                 <option value="false">Not Accepted</option>
                 <option value="true">Accepted</option>
               </select>
@@ -379,7 +378,20 @@
               </div>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-sm-3" *ngIf="!IsCustomerView">
+              <label for="stageid">Stage</label>
+              <select [ngClass]="{ 'is-invalid': submitted && f.stageid.errors }" class="form-control"
+                formControlName="stageid" type="text">
+                <option *ngFor="let req of stagelist" value={{req.listTypeItemId}}>
+                  {{req.itemname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.stageid.errors" class="invalid-feedback">
+                <div *ngIf="f.stageid.errors.required">Stage is required</div>
+              </div>
+            </div>
+
+            <div class="col-sm-3" *ngIf="!IsCustomerView">
               <label for="currentinstrustatus">Status</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.statusid.errors }" class="form-control"
                 formControlName="statusid" type="text">
@@ -396,26 +408,30 @@
           <br />
 
           <div class="" style="display: flex;justify-content: space-between">
-            <ul class="nav nav-tabs" id="myTab" role="tablist" *ngIf="IsCustomerView==false">
-              <li class="nav-item" *ngIf="IsEngineerView==true">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+              <li class="nav-item" *ngIf="IsEngineerView">
                 <a aria-controls="home" aria-selected="{{IsEngineerView}}" class="nav-link active" data-toggle="tab"
                   href="#home" id="home-tab" role="tab">Engineer</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="IsDistributorView">
                 <a aria-controls="profile" aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab"
                   href="#profile" id="profile-tab" role="tab">Ticket Assigned History</a>
               </li>
-              <li class="nav-item" *ngIf="IsEngineerView==true">
+              <li class="nav-item">
                 <a aria-controls="contact" aria-selected="false" class="nav-link" data-toggle="tab" href="#contact"
                   id="contact-tab" role="tab">Action</a>
               </li>
+              <li class="nav-item">
+                <a aria-controls="contact" aria-selected="false" class="nav-link" data-toggle="tab" href="#schedule"
+                  id="contact-tab" role="tab">Scheduled Calls</a>
+              </li>
             </ul>
-            <a class="link" *ngIf="IsEngineerView==true && accepted" style="margin-right: 20px;"
-              [routerLink]="scheduleLink">Schedule
-              Call</a>
+            <a class="link" *ngIf="IsEngineerView && accepted" style="margin-right: 20px;"
+              [routerLink]="scheduleLink">Schedule Call</a>
           </div>
 
-          <div class="tab-content" id="myTabContent" *ngIf="IsCustomerView==false">
+          <div class="tab-content" id="myTabContent">
             <div *ngIf="IsEngineerView" aria-labelledby="home-tab" class="tab-pane fade show active" id="home"
               role="tabpanel">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
@@ -427,7 +443,8 @@
                   pagination="true" paginationPageSize=10 rowSelection="single"></ag-grid-angular>
               </div>
             </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div *ngIf="IsCustomerView==false" class="tab-pane fade" id="profile" role="tabpanel"
+              aria-labelledby="profile-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="height: 250px;" (rowClicked)="onhisRowClicked($event)" class="ag-theme-alpine"
                   (gridReady)="historyready($event)" [columnDefs]="ticketcolumnDefs" [rowData]="ticketHistoryList"
@@ -443,10 +460,26 @@
                   </button>
                   <a href="teamviewer8://" class="link-primary mt-3">Open TeamViewer</a>
                 </div>
+
                 <ag-grid-angular (cellValueChanged)="onCellValueChanged($event)" (gridReady)="onGridReady($event)"
                   (rowClicked)="onactionRowClicked($event)" [columnDefs]="actionDefs" [rowData]="actionList"
                   class="ag-theme-alpine" pagination="true" paginationPageSize=10 rowSelection="single"
                   style="width: 100%; height: 250px;"></ag-grid-angular>
+              </div>
+            </div>
+            <div aria-labelledby="contact-tab" class="tab-pane fade" id="contact" role="tabpanel">
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+
+                <ag-grid-angular (gridReady)="onGridReady($event)" [columnDefs]="actionDefs" [rowData]="actionList"
+                  class="ag-theme-alpine" pagination="true" paginationPageSize=10 rowSelection="single"
+                  style="width: 100%; height: 250px;"></ag-grid-angular>
+              </div>
+            </div>
+            <div aria-labelledby="contact-tab" class="tab-pane fade" id="schedule" role="tabpanel">
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular (cellValueChanged)="onCellValueChanged($event)" (gridReady)="onGridReady($event)"
+                  [columnDefs]="scheduleDefs" [rowData]="scheduleData" class="ag-theme-alpine" pagination="true"
+                  paginationPageSize=10 rowSelection="single" style="width: 100%; height: 250px;"></ag-grid-angular>
               </div>
             </div>
           </div>

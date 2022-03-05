@@ -70,9 +70,9 @@ export class CustSPInventoryComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term === '' ? []
-        : this.sparepartlist.filter(v => v.partNo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+        : this.sparepartlist.filter(v => v.partNoDesc.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     )
-  formatterpart = (x: SparePart) => x.partNo;
+  formatterpart = (x: any) => x.partNoDesc;
 
   ngOnInit() {
     this.user = this.accountService.userValue;
