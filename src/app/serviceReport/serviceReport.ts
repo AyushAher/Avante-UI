@@ -106,7 +106,7 @@ export class ServiceReportComponent implements OnInit {
   sparePartsList: SparePart[] = [];
   sparePartRecomanded: sparePartRecomanded[] = [];
   configValueList: ConfigTypeValue[];
-  spconsumedlist: sparePartsConsume[] = [];
+  spconsumedlist: any[] = [];
   selectedConfigType: ConfigTypeValue[] = [];
   signatureImg: string;
   @ViewChild('sigpad1') signaturePad: SignaturePad;
@@ -115,7 +115,7 @@ export class ServiceReportComponent implements OnInit {
   bsActionModalRef: BsModalRef;
   allcontactlist: Contact[];
   instrumentlist: Instrument[];
-  sparepartlist: SparePart[] = [];
+  sparepartlist: any[] = [];
   sparepartinvontorylist: SparePart[];
   invlist: custSPInventory;
   PdffileData: FileShare[];
@@ -232,19 +232,19 @@ export class ServiceReportComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term === '' ? []
-        : this.sparepartrecmmlist.filter(v => v.partNo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+        : this.sparepartrecmmlist.filter(v => v.partNoDesc.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     )
 
-  formatterpart = (x: SparePart) => x.partNo;
+  formatterpart = (x: any) => x.partNoDesc;
 
   searchpartcon: OperatorFunction<string, readonly SparePart[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term === '' ? []
-        : this.sparepartlist.filter(v => v.partNo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+        : this.sparepartlist.filter(v => v.partNoDesc.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     )
-  formatterpartcon = (x: SparePart) => x.partNo;
+  formatterpartcon = (x: any) => x.partNoDesc;
 
   ngOnInit() {
 
@@ -362,6 +362,7 @@ export class ServiceReportComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          console.log(data.object);
           this.sparepartlist = data.object;
         },
         error: (error) => {
@@ -438,7 +439,7 @@ export class ServiceReportComponent implements OnInit {
             this.ServiceReportform.patchValue({ 'workCompletedstr': data.object.workCompleted == true ? '0' : '1' });
             this.ServiceReportform.patchValue({ 'workfinishedstr': data.object.workfinished == true ? '0' : '1' });
             this.ServiceReportform.patchValue({ 'interruptedstr': data.object.interrupted == true ? '0' : '1' });
-            this.ServiceReportform.controls['instrument'].setValue({ serialnos: data.object.instrument });
+            this.ServiceReportform.controls['instrument'].setValue(this.instrumentlist.find(x => x.id == data.object.instrument)?.serialnos);
             this.workdonelist = data.object.lstWorkdone;
             this.workTime = data.object.lstWorktime;
 
@@ -1009,7 +1010,7 @@ export class ServiceReportComponent implements OnInit {
         headerName: 'Work Done',
         field: 'workdone',
         filter: false,
-        width:900,
+        width: 900,
         enableSorting: false,
         editable: false,
         sortable: false,
@@ -1447,6 +1448,8 @@ export class ServiceReportComponent implements OnInit {
                   data.attachment == true ? data.attachment = this.checkedImg : data.attachment = this.unCheckedImg;
                   data.interrupted == true ? data.interrupted = this.checkedImg : data.interrupted = this.unCheckedImg;
                   data.isworkdone == true ? data.isworkdone = this.checkedImg : data.isworkdone = this.unCheckedImg;
+                  console.log(data.spRecomm);
+
                   (data.workTime == [] || data.workTime == null) ? data.workTime = [
                     {
                       worktimedate: 'No Data Avaliable',
@@ -1880,7 +1883,7 @@ export class ServiceReportComponent implements OnInit {
                           [
                             { text: 'Spare Parts Consumed:', fillColor: '#00573F', color: '#fff' },
                           ],
-                          ...data.spConsumed.map(p => ([p.partno + '-' + p.hsccode]))
+                          ...data.spConsumed.map(p => ([p.partno + ' - ' + p.itemDesc + ' - ' + p.qtyAvailable]))
                         ]
                       }
                     },
@@ -1897,51 +1900,10 @@ export class ServiceReportComponent implements OnInit {
                           [
                             { text: 'Spare Parts Recommended:', fillColor: '#00573F', color: '#fff' },
                           ],
-                          ...data.spRecomm.map(p => ([p.partno + '-' + p.hsccode]))
+                          ...data.spRecomm.map(p => ([p.partno + ' - ' + p.itemDesc + ' - ' + p.qtyrecommended]))
                         ]
                       }
                     },
-                    {
-                      text: 'Service Report',
-                      fontSize: 16,
-                      alignment: 'center',
-                      color: '#fff'
-                    },
-                    [
-                      {
-                        table: {
-                          widths: ['*'],
-                          body: [
-                            [
-                              { text: 'Preventive Maintenance Checklist', bold: true, fillColor: '#00573F', color: '#fff' },
-                            ],
-                          ]
-                        }
-                      },
-                      {
-                        table: {
-                          headerRows: 1,
-                          widths: ['*', '*', '*', '*', '*', '*', '*',],
-                          body: [
-                            [
-                              { text: 'Location', fillColor: 'lightgrey', fontSize: 10 },
-                              { text: 'Element', fillColor: 'lightgrey', fontSize: 10 },
-                              { text: 'Weekly', fillColor: 'lightgrey', fontSize: 10 },
-                              { text: 'Monthly', fillColor: 'lightgrey', fontSize: 10 },
-                              { text: 'Yearly', fillColor: 'lightgrey', fontSize: 10 },
-                              { text: 'Every 2 Year', fillColor: 'lightgrey', fontSize: 10 },
-                              { text: 'Every 3 Year', fillColor: 'lightgrey', fontSize: 10 },
-                            ],
-                            ...prev.object.maintenance
-                              .filter(x => x.weekly == true || x.monthly == true || x.yearly == true || x.every2Year == true || x.every3Year == true)
-                              .map(t => (
-                                [t.location, t.element, t.weeklyDate, t.monthlyDate, t.yearlyDate, t.every2YearDate, t.every3YearDate]
-                              ))
-
-                          ]
-                        }
-                      },
-                    ],
                   ],
                   defaultStyle: {
                     columnGap: 10,

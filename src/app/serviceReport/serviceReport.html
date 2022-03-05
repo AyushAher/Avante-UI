@@ -102,8 +102,7 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="instrument">Instrument</label>
-              <input id="typeahead-format" type="text" formControlName="instrument" class="form-control"
-                [ngbTypeahead]="searchinstu" [resultFormatter]="formatterinstu" [inputFormatter]="formatterinstu" />
+              <input id="typeahead-format" type="text" formControlName="instrument" disabled class="form-control" />
               <!--<select formControlName="instrument" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.instrument.errors }">
                 <option value="">--Select--</option>
                 <option *ngFor="let c of instrumentlist" value={{c.id}}>
@@ -226,9 +225,9 @@
               </li>
             </ul>
 
-            <a class="nav-link" *ngIf="ServiceReportform.get('prevmaintenance').value == true"
+            <!-- <a class="nav-link" *ngIf="ServiceReportform.get('prevmaintenance').value == true"
               style="text-decoration: underline;cursor: pointer;" (click)="openPrev(ServiceReportId)">Preventive
-              Maintenance Checklist</a>
+              Maintenance Checklist</a> -->
 
           </div>
 
@@ -277,7 +276,7 @@
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
               <div class="row">
                 <div class="col-sm-4">
-                  <label>select sparepart</label>
+                  <label>select sparepart</label>  
                   <input id="typeahead-format" type="text" formControlName="recondad" class="form-control"
                     [ngbTypeahead]="searchpart" [resultFormatter]="formatterpart" [inputFormatter]="formatterpart" />
                 </div>
