@@ -418,7 +418,7 @@
                 <a aria-controls="profile" aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab"
                   href="#profile" id="profile-tab" role="tab">Ticket Assigned History</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="!IsCustomerView">
                 <a aria-controls="contact" aria-selected="false" class="nav-link" data-toggle="tab" href="#contact"
                   id="contact-tab" role="tab">Action</a>
               </li>
