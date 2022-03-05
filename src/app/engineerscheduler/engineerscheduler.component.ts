@@ -129,7 +129,7 @@ export class EngineerschedulerComponent implements OnInit {
                         StartTime: new Date(x.startTime),
                         EndTime: new Date(x.endTime),
                         IsAllDay: x.isAllDay,
-                        IsBlock: this.id == x.serReqId ? false : true,
+                        IsBlock: false,
                         IsReadonly: this.id == x.serReqId ? false : true,
                         RoomId: x.roomId,
                         ResourceId: x.resourceId,
@@ -399,7 +399,10 @@ export class EngineerschedulerComponent implements OnInit {
 
   onPopupOpen(args: PopupOpenEventArgs): void {
     if (args.type === "QuickInfo") {
-      args.cancel = true;
+      args.element.querySelector('.e-event-save')?.setAttribute('hidden', 'true')
+      args.element.querySelector('.e-event-create')?.setAttribute('hidden', 'true')
+      args.element.querySelector('.e-event-details')?.setAttribute('hidden', 'true')
+      args.element.querySelector('.e-subject')?.setAttribute('disabled', 'true')
     }
     if (args.type === 'EventContainer') {
       let instance: Internationalization = new Internationalization();
