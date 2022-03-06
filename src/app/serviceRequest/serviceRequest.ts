@@ -517,6 +517,8 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('resolveaction').disable();
       this.serviceRequestform.get('visittype').disable();
       this.serviceRequestform.get('currentinstrustatus').disable();
+      this.serviceRequestform.get("contactperson").disable();
+      this.serviceRequestform.get("email").disable();
     } else if (this.IsDistributorView) {
       this.serviceRequestform.get('assignedto').enable();
       this.serviceRequestform.get('country').disable();
@@ -527,7 +529,8 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('statusid').disable();
       this.serviceRequestform.get('stageid').disable();
       this.serviceRequestform.get('siteid').enable();
-
+      this.serviceRequestform.get("contactperson").disable();
+      this.serviceRequestform.get("email").disable();
       this.serviceRequestform.get('assignedto').disable();
       this.serviceRequestform.get('statusid').disable();
       this.serviceRequestform.get('stageid').disable();
@@ -699,8 +702,11 @@ export class ServiceRequestComponent implements OnInit {
     this.serviceRequestform.patchValue({ "country": this.logindata.address?.countryid });
     this.serviceRequestform.patchValue({ "custid": this.logindata?.id });
     this.serviceRequestform.patchValue({ "companyname": this.logindata?.custname });
-    this.serviceRequestform.patchValue({ "contactperson": this.user?.username });
-    this.serviceRequestform.patchValue({ "email": this.user?.email });
+
+    if (!this.IsDistributorView) {
+      this.serviceRequestform.patchValue({ "contactperson": this.user?.username });
+      this.serviceRequestform.patchValue({ "email": this.user?.email });
+    }
 
     if (this.logindata.sites != null) {
       this.siteId = this.logindata.sites[0].id

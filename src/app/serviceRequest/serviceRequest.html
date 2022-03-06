@@ -158,9 +158,9 @@
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="contactperson">contact Person</label>
+              <label for="contactperson">Contact Person</label>
               <input [ngClass]="{ 'is-invalid': submitted && f.contactperson.errors }" class="form-control"
-                formControlName="contactperson" readonly type="text" />
+                formControlName="contactperson" type="text" />
               <div *ngIf="submitted && f.contactperson.errors" class="invalid-feedback">
                 <div *ngIf="f.contactperson.errors.required">contactperson is required</div>
               </div>
@@ -168,7 +168,7 @@
             <div class="col-md-3 col-sm-3">
               <label for="email">Email</label>
               <input [ngClass]="{ 'is-invalid': submitted && f.email.errors }" class="form-control"
-                formControlName="email" readonly type="email" />
+                formControlName="email" type="email" />
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf="f.email.errors?.required">Email is required</div>
                 <div *ngIf="f.email.errors?.pattern">Please provide valid email</div>
