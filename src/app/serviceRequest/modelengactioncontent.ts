@@ -1,10 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 import {actionList, ListTypeItem, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {ColDef} from 'ag-grid-community';
 
 import {AccountService, EngActionService, FileshareService, ListTypeService, NotificationService} from '../_services';
 import {BsModalService} from 'ngx-bootstrap/modal';
@@ -24,8 +23,6 @@ export class ModelEngActionContentComponent implements OnInit {
   //id: string;
   listid: string;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
-  private api: GridApi;
   closeResult: string;
   actiontakenlist: ListTypeItem[];
   @Input() public itemId;
@@ -45,8 +42,6 @@ export class ModelEngActionContentComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
     private FileShareService: FileshareService,
     private accountService: AccountService,
     private listTypeService: ListTypeService,
@@ -141,6 +136,10 @@ export class ModelEngActionContentComponent implements OnInit {
       }
     });
   };
+
+get f(){
+  return this.actionForm.controls
+}
 
   onValueSubmit() {
     //debugger;

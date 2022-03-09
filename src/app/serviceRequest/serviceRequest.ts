@@ -51,7 +51,6 @@ import {
 } from '../_services';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponent.component';
-import { identifierModuleUrl } from '@angular/compiler';
 
 
 @Component({
@@ -186,6 +185,10 @@ export class ServiceRequestComponent implements OnInit {
               this.loading = false;
             }
           });
+        this.EngschedulerService.getByEngId(this.user.contactId).pipe(first())
+          .subscribe((data: any) => {
+            data.object.filter(x => x.serReqId == this.serviceRequestId).length > 0 ? this.hasCallScheduled = true : this.hasCallScheduled = false;
+          })
         this.serviceRequestService.getById(this.serviceRequestId).pipe(first())
           .subscribe({
             next: (data: any) => {
@@ -321,7 +324,7 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('subrequesttypeid').updateValueAndValidity();
       this.serviceRequestform.get('subrequesttypeid').disable();
       this.serviceRequestform.get('remarks').disable();
-      this.serviceRequestform.get('statusid').disable();
+      // this.serviceRequestform.get('statusid').disable();
       this.EngschedulerService.getByEngId(this.user.contactId).pipe(first())
         .subscribe((data: any) => {
           data.object.filter(x => x.serReqId == this.serviceRequestId).length > 0 ? this.hasCallScheduled = true : this.hasCallScheduled = false;
@@ -365,7 +368,9 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.stagelist = data;
-          if (this.serviceRequestId == null) this.serviceRequestform.get('stageid').setValue(data.find(x => x.itemCode == "NTSTD")?.listTypeItemId);
+          if (this.serviceRequestId == null) {
+            this.serviceRequestform.get('stageid').setValue(data.find(x => x.itemCode == "NTSTD")?.listTypeItemId);
+          }
         },
         error: error => {
           this.notificationService.showError(error, "Error");
@@ -379,12 +384,15 @@ export class ServiceRequestComponent implements OnInit {
         next: (data: ListTypeItem[]) => {
           this.statuslist = data;
           if (this.serviceRequestId == null) {
-
             this.serviceRequestform.get('statusid').setValue(data.find(x => x.itemCode == "NTACP")?.listTypeItemId);
-
             if (this.IsCustomerView) {
               this.serviceRequestform.get('statusid').setValue(data.find(x => x.itemCode == "NTASS")?.listTypeItemId);
             }
+          }
+          if (this.IsEngineerView) {
+            this.statuslist = this.statuslist.filter(x => x.itemCode != "NTASS" && x.itemCode != "ASSGN")
+            this.serviceRequestform.get('statusid').setValue(this.statuslist.find(x => x.itemCode == "NTACP")?.listTypeItemId);
+
           }
         },
         error: error => {
@@ -526,7 +534,6 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('custid').enable();
       this.serviceRequestform.get('siteid').enable();
     } else {
-      this.serviceRequestform.get('statusid').disable();
       this.serviceRequestform.get('stageid').disable();
       this.serviceRequestform.get('siteid').enable();
       this.serviceRequestform.get("contactperson").disable();
@@ -542,7 +549,6 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.accepted = data.object.accepted;
             this.onServiceTypeChange(data.object.visittype);
             this.getAllInstrument(data.object.siteid);
             var subreq = data.object.subrequesttypeid.split(',');
@@ -605,28 +611,47 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({ "alarmdetails": data.object.alarmdetails });
             this.serviceRequestform.patchValue({ "resolveaction": data.object.resolveaction });
             this.serviceRequestform.patchValue({ "currentinstrustatus": data.object.currentinstrustatus });
-            this.serviceRequestform.patchValue({ "accepted": data.object.accepted });
-            this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
+            this.serviceRequestform.patchValue({ "stageid": data.object.stageid });
             this.serviceRequestform.patchValue({ "escalation": data.object.escalation });
             this.serviceRequestform.patchValue({ "requesttypeid": data.object.requesttypeid });
             this.serviceRequestform.patchValue({ "remarks": data.object.remarks });
             this.serviceRequestform.patchValue({ "machmodelname": (data.object.machmodelname) });
+            this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
+
+
+            this.listTypeService.getById('SRQST')
+              .pipe(first())
+              .subscribe({
+                next: (status: ListTypeItem[]) => {
+                  if (this.IsEngineerView && status.find(x => x.listTypeItemId == data.object.statusid)?.itemCode == "ASSGN") {
+                    let notAcpted = status.find(x => x.itemCode == "NTACP")?.listTypeItemId
+                    this.serviceRequestform.patchValue({ "statusid": notAcpted });
+                  }
+                }
+              })
 
             this.scheduleData = []
-            if (data.object.assignedto != null && data.object.assignedto != "") {
-              this.EngschedulerService.getByEngId(data.object.assignedto).pipe(first())
-                .subscribe((sch: any) => {
-                  this.scheduleData = sch.object.filter(x => x.serReqId == this.serviceRequestId)
-                  this.scheduleData.forEach(element => {
-                    element.endTime = this.datepipe.transform(element.endTime, "short")
-                    element.startTime = this.datepipe.transform(element.startTime, "short")
-                    element.Time = element.startTime + " - " + element.endTime
-                  });
-                })
+            debugger;
+            setTimeout(() => {
+              if (data.object.assignedto != null && data.object.assignedto != "") {
+                this.EngschedulerService.getByEngId(data.object.assignedto).pipe(first())
+                  .subscribe((sch: any) => {
+                    this.scheduleData = sch.object.filter(x => x.serReqId == this.serviceRequestId)
+                    this.scheduleData.forEach(element => {
+                      let date = new Date(element.endTime)
+                      let datestr = this.datepipe.transform(date, "MM/dd/yyyy")
+                      element.endTime = this.datepipe.transform(element.endTime, "shortTime")
+                      element.startTime = this.datepipe.transform(element.startTime, "shortTime")
+                      element.Time = element.location + " : " + datestr + " At " + element.startTime + " - " + element.endTime
+                    });
+                  })
+              }
+            }, 2000);
+            this.accepted = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId == data.object.statusid
+
+            if (this.accepted && this.IsEngineerView) {
+              this.serviceRequestform.get('statusid').disable();
             }
-
-
-            if (data.object.accepted) this.serviceRequestform.get('accepted').disable();
             this.customerId = data.object.custid;
             this.siteId = data.object.siteid;
             this.engineerCommentList = data.object.engComments
@@ -782,21 +807,6 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('sdate').setValue(datepipie.transform(this.serviceRequestform.get('sdate').value, "MM/dd/yyyy"));
       this.serviceRequestform.get('edate').setValue(datepipie.transform(this.serviceRequestform.get('edate').value, "MM/dd/yyyy"));
     }
-    this.serviceRequestform.get('statusid').setValue(this.statuslist.find(x => x.itemCode == "NTASS")?.listTypeItemId)
-
-    let status = this.statuslist.find(x => x.listTypeItemId == this.serviceRequestform.get('statusid').value)?.itemCode
-    if (status != null) {
-      if (status == "NTASS") {
-        if (this.serviceRequestform.get('assignedto').value != null && this.serviceRequestform.get('assignedto').value != "") {
-          // status is assigned
-          this.serviceRequestform.get('statusid').setValue(this.statuslist.find(x => x.itemCode == "ASSGN")?.listTypeItemId)
-        }
-      } else if (status == "ASSGN") {
-        if (this.serviceRequestform.get('accepted').value) {
-          this.serviceRequestform.get('statusid').setValue(this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId)
-        }
-      }
-    }
 
 
     if (this.serviceRequestId == null) {
@@ -891,6 +901,16 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
 
+  onStatusChange() {
+    let assignedStatusId = this.statuslist.find(x => x.itemCode == "ASSGN")?.listTypeItemId
+    let notAssignedStatusId = this.statuslist.find(x => x.itemCode == "NTASS")?.listTypeItemId
+    if (this.IsDistributorView && this.serviceRequestform.get('assignedto').value != null && this.serviceRequestform.get('assignedto').value != "") {
+      if (this.serviceRequestform.get('statusid').value == notAssignedStatusId) {
+        this.serviceRequestform.get('statusid').setValue(assignedStatusId);
+      }
+    }
+  }
+
   onServiceTypeChange(serviceTypeId) {
     this.isAmc = false;
     let servicetypeCode = this.serviceTypeList.filter(x => x.listTypeItemId == serviceTypeId)[0]?.itemCode;
@@ -932,13 +952,18 @@ export class ServiceRequestComponent implements OnInit {
     serviceRequest.id = this.serviceRequestId;
     serviceRequest.accepted = true
 
+    this.serviceRequestform.get('statusid').disable();
+    let assignedStat = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId
+    this.serviceRequestform.get('statusid').setValue(assignedStat);
+    serviceRequest.statusid = assignedStat
     this.serviceRequestService.updateIsAccepted(this.serviceRequestId, serviceRequest)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.serviceRequestform.get('accepted').disable();
+          this.serviceRequestform.get('accepted').setValue(true)
           this.notificationService.showSuccess(data.resultMessage, "Success");
-          alert("As u have accepted the Service request please schedule a call to process further.")
+          alert("As you have accepted the Service request please schedule a call to process further.")
         }, error: (error) => {
 
           this.notificationService.showError(error, "Error");
@@ -960,6 +985,12 @@ export class ServiceRequestComponent implements OnInit {
             this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
             this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
             this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + '||' + this.serviceRequestform.get('alarmdetails')?.value + '||' + this.serviceRequestform.get('remarks')?.value;
+            this.instrumentService.getAll(this.user.userId)
+              .pipe(first())
+              .subscribe((data: any) => {
+                let instrumentList = data.object;
+                this.servicereport.instrument = instrumentList.find(x => x.id == this.serviceRequestform.get('machinesno').value)?.id;
+              });
 
             if (this.isAmc) {
               this.servicereport.problem = 'AMC';
@@ -970,8 +1001,6 @@ export class ServiceRequestComponent implements OnInit {
             this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.PRMN1)).length > 0;
             this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.REWK)).length > 0;
             this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.CRMA)).length > 0;
-            this.servicereport.instrument = this.instrumentList.find(x => x.id == this.serviceRequestform.get('machinesno').value)?.id;
-
             if (this.customerId != null) {
               this.customerService.getById(this.customerId)
                 .pipe(first())
@@ -980,7 +1009,8 @@ export class ServiceRequestComponent implements OnInit {
                     this.custcityname = data.object.address.city;
                     this.servicereport.town = this.custcityname;
                     //this.getPdffile(data.object.filePath);
-                    this.servicereport
+
+                    console.log(this.servicereport)
                     this.servicereportService.save(this.servicereport)
                       .pipe(first())
                       .subscribe({
@@ -1079,7 +1109,6 @@ export class ServiceRequestComponent implements OnInit {
         } else {
           this.notificationService.showError(data.resultMessage, "Error")
         }
-
       },
       error: (error) => {
         this.notificationService.showError(error, "Error")
@@ -1528,17 +1557,9 @@ export class ServiceRequestComponent implements OnInit {
         tooltipField: 'engineername',
       },
       {
-        headerName: 'Location',
-        field: 'location',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false
-      },
-      {
-        headerName: 'Date ',
+        headerName: 'Location and Date ',
         field: 'Time',
-        width: 250,
+        width: 450,
         filter: false,
         enableSorting: false,
         editable: false,
@@ -1548,6 +1569,7 @@ export class ServiceRequestComponent implements OnInit {
         headerName: 'Description ',
         field: 'description',
         filter: false,
+        width:300,
         enableSorting: false,
         editable: false,
         sortable: false

@@ -58,7 +58,9 @@ export class ServiceRequestListComponent implements OnInit {
     private distributorService: DistributorService,
     private listTypeService: ListTypeService
   ) {
-
+    this.notificationService.listen().subscribe((m: any) => {
+      this.getallrecored();
+    })
   }
 
   ngOnInit() {
@@ -208,15 +210,15 @@ export class ServiceRequestListComponent implements OnInit {
       sortable: true
     },
     {
-      headerName: 'Created On',
-      field: 'createdon',
+      headerName: 'Stage',
+      field: 'stageName',
       filter: true,
       editable: false,
       sortable: true
     },
     {
-      headerName: 'Accepted',
-      field: 'accepted',
+      headerName: 'Raised On',
+      field: 'createdon',
       filter: true,
       editable: false,
       sortable: true
@@ -305,12 +307,14 @@ export class ServiceRequestListComponent implements OnInit {
       sortable: true
     },
     {
-      headerName: 'Country',
-      field: 'countryName',
+      headerName: 'Schedule Details',
+      field: 'scheduledCalls.Time',
       filter: true,
+      width: 350,
       editable: false,
       sortable: true
-    }]
+    }
+    ]
   }
 
 
@@ -324,10 +328,18 @@ export class ServiceRequestListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-
-          data.object.forEach(ser => {
+          data.object?.forEach(ser => {
             ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
             ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
+            if (ser.scheduledCalls.length > 0) {
+              ser.scheduledCalls = ser.scheduledCalls[0]
+              let date = new Date(ser.scheduledCalls.endTime)
+              let datestr = this.datepipe.transform(date, "MM/dd/yyyy")
+              ser.scheduledCalls.endTime = this.datepipe.transform(ser.scheduledCalls.endTime, "shortTime")
+              ser.scheduledCalls.startTime = this.datepipe.transform(ser.scheduledCalls.startTime, "shortTime")
+              ser.scheduledCalls.Time = ser.scheduledCalls.location + " : " + datestr + " At " + ser.scheduledCalls.startTime + " - " + ser.scheduledCalls.endTime
+              
+            }
           });
 
           if (this.user.username != 'admin') {

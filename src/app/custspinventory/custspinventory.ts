@@ -97,7 +97,7 @@ export class CustSPInventoryComponent implements OnInit {
     this.form = this.formBuilder.group({
       partNo: ["", Validators.required],
       hscCode: ["", Validators.required],
-      qtyAvailable: ["", Validators.required],
+      qtyAvailable: [0, Validators.required],
       SearchPartNo: [""],
       sparePartId: [""],
       isactive: [true],
@@ -107,6 +107,8 @@ export class CustSPInventoryComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          console.log(data);
+          
           data.result ? this.sparepartlist = data.object : this.sparepartlist = [];
         }
       })
@@ -216,6 +218,7 @@ export class CustSPInventoryComponent implements OnInit {
           this.form.get("sparePartId").setValue(data.object.id)
           this.form.get("partNo").setValue(data.object.partno)
           this.form.get("hscCode").setValue(data.object.hscode)
+          this.form.get("SearchPartNo").setValue("")
         },
         error: (error: any) => {
           this.notificationService.showError(error, "Error")

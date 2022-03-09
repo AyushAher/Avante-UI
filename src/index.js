@@ -385,121 +385,123 @@ function DistributorDashboardCharts() {
       },
     }
   );
-  let instrumentWithHighestServiceRequest = JSON.parse(
-    localStorage.getItem("instrumentWithHighestServiceRequest")
-  );
-  var ctx5 = document.getElementById("chartBar5").getContext("2d");
-  new Chart(ctx5, {
-    type: "bar",
-    data: {
-      labels: instrumentWithHighestServiceRequest.label,
+  setTimeout(() => {
+    let instrumentWithHighestServiceRequest = JSON.parse(
+      localStorage.getItem("instrumentWithHighestServiceRequest")
+    );
+    var ctx5 = document.getElementById("chartBar5").getContext("2d");
+    new Chart(ctx5, {
+      type: "bar",
+      data: {
+        labels: instrumentWithHighestServiceRequest?.label,
+        datasets: [
+          {
+            data: instrumentWithHighestServiceRequest?.data,
+            backgroundColor: "#560bd0",
+          },
+        ],
+        maxBarThickness: 2,
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5],
+              color: "rgba(255, 255, 255, .2)",
+            },
+            ticks: {
+              suggestedMin: 0,
+              suggestedMax: 200,
+              beginAtZero: true,
+              font: {
+                size: 14,
+                weight: 300,
+                family: "Roboto",
+                style: "normal",
+                lineHeight: 2,
+              },
+              color: "#fff",
+            },
+          },
+          x: {
+            barPercentage: 0.1,
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5],
+              color: "rgba(255, 255, 255, .2)",
+            },
+            ticks: {
+              display: true,
+              color: "#f8f9fa",
+              font: {
+                size: 14,
+                weight: 300,
+                family: "Roboto",
+                style: "normal",
+                lineHeight: 2,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // Donut Chart
+    var datapie = {
+      labels: ["Forbes", "Lafarage", "OBA Cement", "Dangote", "Customer"],
       datasets: [
         {
-          data: instrumentWithHighestServiceRequest.data,
-          backgroundColor: "#560bd0",
+          data: [50, 40, 60, 30, 20],
+          backgroundColor: [
+            "#6f42c1",
+            "#007bff",
+            "#17a2b8",
+            "#00cccc",
+            "#adb2bd",
+          ],
         },
       ],
-      maxBarThickness: 2,
-    },
-    options: {
-      responsive: true,
+    };
+
+    var optionpie = {
       maintainAspectRatio: false,
+      height: 30,
+      responsive: true,
       plugins: {
         legend: {
           display: false,
         },
       },
-      interaction: {
-        intersect: false,
-        mode: "index",
+      animation: {
+        animateScale: true,
+        animateRotate: true,
       },
-      scales: {
-        y: {
-          grid: {
-            drawBorder: false,
-            display: false,
-            drawOnChartArea: true,
-            drawTicks: false,
-            borderDash: [5, 5],
-            color: "rgba(255, 255, 255, .2)",
-          },
-          ticks: {
-            suggestedMin: 0,
-            suggestedMax: 200,
-            beginAtZero: true,
-            font: {
-              size: 14,
-              weight: 300,
-              family: "Roboto",
-              style: "normal",
-              lineHeight: 2,
-            },
-            color: "#fff",
-          },
-        },
-        x: {
-          barPercentage: 0.1,
-          grid: {
-            drawBorder: false,
-            display: false,
-            drawOnChartArea: true,
-            drawTicks: false,
-            borderDash: [5, 5],
-            color: "rgba(255, 255, 255, .2)",
-          },
-          ticks: {
-            display: true,
-            color: "#f8f9fa",
-            font: {
-              size: 14,
-              weight: 300,
-              family: "Roboto",
-              style: "normal",
-              lineHeight: 2,
-            },
-          },
-        },
-      },
-    },
-  });
+    };
 
-  // Donut Chart
-  var datapie = {
-    labels: ["Forbes", "Lafarage", "OBA Cement", "Dangote", "Customer"],
-    datasets: [
-      {
-        data: [50, 40, 60, 30, 20],
-        backgroundColor: [
-          "#6f42c1",
-          "#007bff",
-          "#17a2b8",
-          "#00cccc",
-          "#adb2bd",
-        ],
-      },
-    ],
-  };
-
-  var optionpie = {
-    maintainAspectRatio: false,
-    height: 30,
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-    animation: {
-      animateScale: true,
-      animateRotate: true,
-    },
-  };
-
-  // For a doughnut chart
-  var ctxpie = document.getElementById("chartDonut");
-  new Chart(ctxpie, {
-    type: "doughnut",
-    data: datapie,
-    options: optionpie,
-  });
+    // For a doughnut chart
+    var ctxpie = document.getElementById("chartDonut");
+    new Chart(ctxpie, {
+      type: "doughnut",
+      data: datapie,
+      options: optionpie,
+    });
+  }, 2000);
 }

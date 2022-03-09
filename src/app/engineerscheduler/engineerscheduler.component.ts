@@ -254,6 +254,7 @@ export class EngineerschedulerComponent implements OnInit {
                   this.EngschedulerService.save(x).pipe(first()).subscribe({
                     next: (data: any) => {
                       if (!data.result) {
+                        debugger;
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
                         this.notificationService.showError(data.message, "Error")
@@ -658,7 +659,10 @@ export class EngineerschedulerComponent implements OnInit {
 
   }
 
-
+  onBackclick() {
+    this.notificationService.filter("itemadded");
+    this.router.navigate([this.link])
+  }
 
   //  Dist code
 

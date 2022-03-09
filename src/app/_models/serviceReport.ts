@@ -61,7 +61,7 @@ export class sparePartsConsume {
   partno: string;
   configvalue: string;
   configtype: string;
-  qtyconsumed: string;
+  qtyconsumed: any;
   qtyAvailable: string;
   customerSPInventoryId : string;
 }
@@ -70,7 +70,7 @@ export class sparePartRecomanded {
   sparepartId: string;
   servicereportid: string;
   hsccode: string;
-  qtyrecommended: number;
+  qtyrecommended: any;
   partno: string;
   configvalue: string;
   configtype: string;

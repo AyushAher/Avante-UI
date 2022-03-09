@@ -336,6 +336,7 @@ export class ServiceReportComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          console.log(data.object);
           this.instrumentlist = data.object;
         },
         error: error => {
@@ -439,7 +440,7 @@ export class ServiceReportComponent implements OnInit {
             this.ServiceReportform.patchValue({ 'workCompletedstr': data.object.workCompleted == true ? '0' : '1' });
             this.ServiceReportform.patchValue({ 'workfinishedstr': data.object.workfinished == true ? '0' : '1' });
             this.ServiceReportform.patchValue({ 'interruptedstr': data.object.interrupted == true ? '0' : '1' });
-            this.ServiceReportform.controls['instrument'].setValue(this.instrumentlist.find(x => x.id == data.object.instrument)?.serialnos);
+            this.ServiceReportform.get('instrument').setValue(data.object.instrument);
             this.workdonelist = data.object.lstWorkdone;
             this.workTime = data.object.lstWorktime;
 
@@ -568,7 +569,7 @@ export class ServiceReportComponent implements OnInit {
       this.ServiceReport.engsignature = this.signaturePadcust.toDataURL();
     }
 
-    this.ServiceReport.instrument = this.ServiceReport.instrument.serialnos;
+
     if (this.ServiceReportId == null) {
 
       this.ServiceReportService.save(this.ServiceReport)
@@ -581,10 +582,7 @@ export class ServiceReportComponent implements OnInit {
                 this.uploadPdfFile(this.file, data.object.id);
               }
               this.notificationService.showSuccess(data.resultMessage, 'Success');
-              this.router.navigate(['ServiceReportlist']);
             } else {
-
-
               this.notificationService.showError(data.resultMessage, 'Error');
             }
             this.loading = false;
@@ -612,10 +610,7 @@ export class ServiceReportComponent implements OnInit {
               }
 
               this.notificationService.showSuccess(data.resultMessage, 'Success');
-              this.router.navigate(['servicereportlist']);
             } else {
-
-
               this.notificationService.showError(data.resultMessage, 'Error');
             }
             this.loading = false;
@@ -903,6 +898,7 @@ export class ServiceReportComponent implements OnInit {
     this.srRecomndModel = new sparePartRecomanded();
     this.srRecomndModel.partno = v.partNo;
     this.srRecomndModel.hsccode = v.hsCode;
+    this.srRecomndModel.qtyrecommended = "0";
     this.srRecomndModel.servicereportid = this.ServiceReportId;
     this.srrecomndservice.save(this.srRecomndModel)
       .pipe(first())
@@ -926,6 +922,7 @@ export class ServiceReportComponent implements OnInit {
           this.loading = false;
         }
       });
+    this.ServiceReportform.get('recondad').setValue("");
   }
 
   // private createColumnspDefs() {
@@ -1129,6 +1126,7 @@ export class ServiceReportComponent implements OnInit {
     this.srConsumedModel = new sparePartsConsume();
     this.srConsumedModel.partno = v.partNo;
     this.srConsumedModel.hsccode = v.hscCode;
+    this.srConsumedModel.qtyconsumed = "0";
     this.srConsumedModel.servicereportid = this.ServiceReportId;
     this.srConsumedModel.qtyAvailable = v.qtyAvailable?.toString();
     this.srConsumedModel.customerSPInventoryId = v.id;
@@ -1158,6 +1156,7 @@ export class ServiceReportComponent implements OnInit {
     } else {
       this.notificationService.showError("Incorrect Value", "Error")
     }
+    this.ServiceReportform.get('consumed').setValue("");
   }
 
   private createColumnspDefs() {
@@ -1412,12 +1411,10 @@ export class ServiceReportComponent implements OnInit {
       }
     } else {
       this.pdf(preview);
-
     }
   }
 
   pdf(preview: boolean) {
-    this.onSubmit();
     this.ServiceReportService.getView(this.ServiceReportId)
       .pipe(first())
       .subscribe({
@@ -1471,8 +1468,9 @@ export class ServiceReportComponent implements OnInit {
                     return [
                       {
                         columns: [
-                          { text: `${this.datepipe.transform(new Date, "MM/dd/yyy")} - *This is a system generated PDF.`, alignment: 'left', margin: [15, 5, 15, 2] },
-                          { text: `${currentPage.toString()} | ${pageCount}`, alignment: 'right', margin: [15, 5, 15, 2] }
+                          { text: `${this.datepipe.transform(new Date, "MM/dd/yyy")}`, alignment: 'left', margin: [15, 5, 15, 2]},
+                          { text: `*This is a system generated PDF.`, alignment: 'center', margin: [15, 5, 15, 2]},
+                          { text: `${currentPage.toString()} | ${pageCount}`, alignment: 'right', margin: [15, 5, 15, 2]},
                         ]
                       }
                     ];

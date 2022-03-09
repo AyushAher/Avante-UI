@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
@@ -80,6 +80,7 @@ export class OfferrequestComponent implements OnInit {
   zohocode: any;
   role: any;
   hasQuoteDet: boolean = false;
+  @ViewChild('sparePartsSearch') sparePartsSearch: any
 
   constructor(
     private formBuilder: FormBuilder,
@@ -408,6 +409,7 @@ export class OfferrequestComponent implements OnInit {
       });
   }
   AddSpareParts(instrument: any) {
+
     this.Service
       .searchByKeyword(instrument)
       .pipe(first())
@@ -425,7 +427,10 @@ export class OfferrequestComponent implements OnInit {
           if (this.sparePartsList.filter(x => x.partno == data.partno).length == 0) {
             this.sparePartsList.push(data);
             this.api.setRowData(this.sparePartsList)
+          } else {
+            this.notificationService.showError("Spare Part already exists", "Error");
           }
+          this.sparePartsSearch.nativeElement.value = ""
 
         },
         error: (error) => {

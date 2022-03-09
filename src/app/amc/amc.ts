@@ -1,24 +1,26 @@
-import {DatePipe} from "@angular/common";
-import {Component, OnInit} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {Guid} from "guid-typescript";
-import {first} from "rxjs/operators";
-import {Amc, Currency, Customer, ListTypeItem, ResultMsg, User} from "../_models";
-import {AmcInstrument} from "../_models/Amcinstrument";
+import { DatePipe } from "@angular/common";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { Guid } from "guid-typescript";
+import { first } from "rxjs/operators";
+import { environment } from "src/environments/environment";
+import { Amc, Currency, Customer, ListTypeItem, ResultMsg, User } from "../_models";
+import { AmcInstrument } from "../_models/Amcinstrument";
 import {
   AccountService,
   AlertService,
   AmcService,
+  ContactService,
   CurrencyService,
   CustomerService,
   ListTypeService,
   NotificationService,
   ProfileService
 } from "../_services";
-import {AmcinstrumentService} from "../_services/amcinstrument.service";
-import {AmcInstrumentRendererComponent} from "./amc-instrument-renderer.component";
+import { AmcinstrumentService } from "../_services/amcinstrument.service";
+import { AmcInstrumentRendererComponent } from "./amc-instrument-renderer.component";
 
 @Component({
   selector: "app-Amc",
@@ -55,6 +57,12 @@ export class AmcComponent implements OnInit {
   private api: GridApi;
   hasId: boolean;
 
+  IsCustomerView: boolean = false;
+  IsDistributorView: boolean = false;
+  IsEngineerView: boolean = false;
+  @ViewChild('instrumentSearch') instrumentSearch
+  role: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -68,6 +76,7 @@ export class AmcComponent implements OnInit {
     private customerService: CustomerService,
     private currencyService: CurrencyService,
     private AmcInstrumentService: AmcinstrumentService,
+    private contactService: ContactService
   ) {
 
     this.notificationService.listen().subscribe((m: any) => {
@@ -105,6 +114,28 @@ export class AmcComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+    } else {
+      let role = JSON.parse(localStorage.getItem('roles'));
+      this.role = role[0]?.itemCode;
+    }
+
+
+
+    let role = this.role;
+    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
+
+    if (role == environment.custRoleCode) {
+      this.IsCustomerView = true;
+      this.IsDistributorView = false;
+      this.IsEngineerView = false;
+    } else if (role == environment.distRoleCode) {
+      this.IsCustomerView = false;
+      this.IsDistributorView = true;
+      this.IsEngineerView = false;
+    } else {
+      this.IsCustomerView = false;
+      this.IsDistributorView = false;
+      this.IsEngineerView = true;
     }
 
     this.form = this.formBuilder.group({
@@ -159,6 +190,29 @@ export class AmcComponent implements OnInit {
       this.id = Guid.create();
       this.id = this.id.value;
     }
+    this.contactService.getCustomerSiteByContact(this.user.contactId)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          if (this.IsCustomerView) {
+            this.form.get('billtoid').setValue(data.object?.id)
+            this.form.get('billtoid').disable()
+            this.custSiteList = data.object?.sites;
+            this.custSiteList.forEach(element => {
+              element?.contacts.forEach(con => {
+                if (con?.id == this.user.contactId) {
+                  this.form.get('custSite').setValue(element?.id)
+                  this.form.get('custSite').disable()
+                }
+              });
+            });
+          }
+        },
+        error: error => {
+          this.notificationService.showSuccess(error, "Error");
+          this.loading = false;
+        }
+      });
 
     this.customerService.getAll()
       .pipe(first())
@@ -299,10 +353,13 @@ export class AmcComponent implements OnInit {
           var data = data.object[0];
           data.id = Guid.create();
           data.id = data.id.value;
-          if (this.instrumentList.filter(x => x.id == data.id).length == 0) {
+          if (this.instrumentList.filter(x => x.serialnos == data.serialnos).length == 0) {
             this.instrumentList.push(data);
             this.api.setRowData(this.instrumentList)
+          } else {
+            this.notificationService.showError("Instrument already exists", "Error")
           }
+          this.instrumentSearch.nativeElement.value = ""
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");

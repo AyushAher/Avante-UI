@@ -42,6 +42,7 @@ export class ServiceRequest {
   requesttypeid: string;
   subrequesttypeid: string;
   machinemodelname: string;
+  statusid: string;
 }
 
 export class EngineerCommentList {

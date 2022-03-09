@@ -86,8 +86,8 @@
 
             <div class="col-md-3 col-sm-3" *ngIf="IsCustomerView==false">
               <label for="assignedTo">Assigned To</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.assignedto.errors }" class="form-control"
-                formControlName="assignedto">
+              <select [ngClass]="{ 'is-invalid': submitted && f.assignedto.errors }" (change)="onStatusChange()"
+                class="form-control" formControlName="assignedto">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let c of appendList" value={{c.id}}>
                   {{c.fname}} {{c.lname}}
@@ -314,7 +314,7 @@
               <input class="form-control" formControlName="resolveaction" type="text" />
             </div>
 
-            <div class="col-sm-3" *ngIf="IsEngineerView">
+            <div class="col-sm-3" hidden>
               <label for="accepted">Accepted</label>
 
               <select class="form-control" (input)="Accepted($event.target.value)" #accp formControlName="accepted">
@@ -393,8 +393,8 @@
 
             <div class="col-sm-3" *ngIf="!IsCustomerView">
               <label for="currentinstrustatus">Status</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.statusid.errors }" class="form-control"
-                formControlName="statusid" type="text">
+              <select [ngClass]="{ 'is-invalid': submitted && f.statusid.errors }" (change)="Accepted()"
+                class="form-control" formControlName="statusid" type="text">
                 <option *ngFor="let req of statuslist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
                 </option>
@@ -407,7 +407,7 @@
           </div>
           <br />
 
-          <div class="" style="display: flex;justify-content: space-between">
+          <div class="" style="display: flex;justify-content: space-between" *ngIf="serviceRequestId!=null">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
 
               <li class="nav-item" *ngIf="IsEngineerView">
