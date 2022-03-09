@@ -313,7 +313,8 @@
               <label for="workFinishedstr">
                 Work Finished
               </label>
-              <select class="form-control" formControlName="workfinishedstr">
+              <select class="form-control" (change)="onWorkFinishedChange($event.target.value)"
+                formControlName="workfinishedstr">
                 <option value="0">Yes</option>
                 <option value="1">No</option>
               </select>
@@ -325,7 +326,8 @@
               <label for="interruptedstr">
                 Interrupted
               </label>
-              <select class="form-control" formControlName="interruptedstr">
+              <select class="form-control" (change)="onInteruptedChange($event.target.value)"
+                formControlName="interruptedstr">
                 <option value="0">Yes</option>
                 <option value="1">No</option>
               </select>
@@ -333,7 +335,7 @@
                 <div *ngIf="f.interruptedstr.errors?.required">interrupted is required</div>
               </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" *ngIf="interrupted">
               <label for="reason">Reason</label>
               <input type="text" formControlName="reason" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.reason.errors }" />

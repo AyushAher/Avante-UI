@@ -144,6 +144,8 @@ export class ServiceReportComponent implements OnInit {
   ServiceRequest: any;
   role: any;
   isEng = false;
+  interrupted: boolean = false;
+  finished: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -297,8 +299,8 @@ export class ServiceReportComponent implements OnInit {
       problem: ['', Validators.required],
       workCompletedstr: ['', Validators.required],
       workfinishedstr: ['', Validators.required],
-      interruptedstr: ['', Validators.required],
-      reason: ['', Validators.required],
+      interruptedstr: [''],
+      reason: [''],
       nextvisitscheduled: [''],
       engineercomments: ['', Validators.required],
       signengname: ['', Validators.required],
@@ -428,10 +430,6 @@ export class ServiceReportComponent implements OnInit {
 
 
     if (this.ServiceReportId != null) {
-      this.hasAddAccess = false;
-      if (this.user.username == 'admin') {
-        this.hasAddAccess = true;
-      }
       this.ServiceReportService.getById(this.ServiceReportId)
         .pipe(first())
         .subscribe({
@@ -440,6 +438,8 @@ export class ServiceReportComponent implements OnInit {
             this.ServiceReportform.patchValue({ 'workCompletedstr': data.object.workCompleted == true ? '0' : '1' });
             this.ServiceReportform.patchValue({ 'workfinishedstr': data.object.workfinished == true ? '0' : '1' });
             this.ServiceReportform.patchValue({ 'interruptedstr': data.object.interrupted == true ? '0' : '1' });
+            this.onInteruptedChange(this.ServiceReportform.get('interruptedstr').value)
+            this.onWorkFinishedChange(this.ServiceReportform.get('workfinishedstr').value)
             this.ServiceReportform.get('instrument').setValue(data.object.instrument);
             this.workdonelist = data.object.lstWorkdone;
             this.workTime = data.object.lstWorktime;
@@ -448,7 +448,13 @@ export class ServiceReportComponent implements OnInit {
             this.workTime.forEach((value, index) => {
               value.worktimedate = datepipe.transform(value.worktimedate, 'dd/MM/YYYY');
             });
-
+            if (!this.isEng) {
+              this.ServiceReportform.get('analyticalassit').disable()
+              this.ServiceReportform.get('prevmaintenance').disable()
+              this.ServiceReportform.get('rework').disable()
+              this.ServiceReportform.get('installation').disable()
+              this.ServiceReportform.get('corrmaintenance').disable()
+            }
             this.spconsumedlist = data.object.lstSPConsumed;
             this.sparePartRecomanded = data.object.lstSPRecommend;
             this.custsign = data.object.custsignature;
@@ -467,7 +473,6 @@ export class ServiceReportComponent implements OnInit {
                     .subscribe({
                       next: (data: any) => {
                         this.allcontactlist = data.object;
-                        console.log(data.object);
                       },
                       error: error => {
 
@@ -489,22 +494,6 @@ export class ServiceReportComponent implements OnInit {
             this.loading = false;
           }
         });
-
-      //
-      // this.fileshareService.getById(this.ServiceReportId)
-      //   .pipe(first())
-      //   .subscribe({
-      //     next: (data: any) => {
-      // this.PdffileData = data.object;
-      // this.getPdffile(data.object.filePath);
-      //     },
-      //     error: error => {
-
-      //       this.notificationService.showError(error, "Error");
-      //       this.loading = false;
-      //     }
-      //   });
-
 
       this.fileshareService.list(this.ServiceReportId)
         .pipe(first())
@@ -633,6 +622,38 @@ export class ServiceReportComponent implements OnInit {
 
   drawStart() {
   }
+
+
+  onInteruptedChange(interrupted: any) {
+    this.interrupted = false;
+    this.ServiceReportform.get('reason').clearValidators()
+    this.ServiceReportform.get('reason').disable()
+
+    if (interrupted == 0) {
+      this.interrupted = true;
+      this.ServiceReportform.get('reason').enable()
+      this.ServiceReportform.get('reason').setValidators([Validators.required])
+
+    }
+
+    this.ServiceReportform.get('reason').updateValueAndValidity()
+  }
+
+  onWorkFinishedChange(finished: any) {
+    this.ServiceReportform.get('reason').clearValidators()
+    this.ServiceReportform.get('reason').disable()
+    this.ServiceReportform.get('interruptedstr').disable()
+
+    if (finished == 1) {
+      this.ServiceReportform.get('reason').enable()
+      this.ServiceReportform.get('interruptedstr').enable()
+      this.ServiceReportform.get('reason').setValidators([Validators.required])
+
+    }
+
+    this.ServiceReportform.get('reason').updateValueAndValidity()
+  }
+
 
   clearSignature() {
     this.signaturePad.clear();
@@ -1211,7 +1232,7 @@ export class ServiceReportComponent implements OnInit {
         headerName: 'Description',
         field: 'itemDesc',
         filter: false,
-        width:350,
+        width: 350,
         enableSorting: false,
         editable: false,
         sortable: false
@@ -1423,9 +1444,9 @@ export class ServiceReportComponent implements OnInit {
                     return [
                       {
                         columns: [
-                          { text: `${this.datepipe.transform(new Date, "MM/dd/yyy")}`, alignment: 'left', margin: [15, 5, 15, 2]},
-                          { text: `*This is a system generated PDF.`, alignment: 'center', margin: [15, 5, 15, 2]},
-                          { text: `${currentPage.toString()} | ${pageCount}`, alignment: 'right', margin: [15, 5, 15, 2]},
+                          { text: `${this.datepipe.transform(new Date, "MM/dd/yyy")}`, alignment: 'left', margin: [15, 5, 15, 2] },
+                          { text: `*This is a system generated PDF.`, alignment: 'center', margin: [15, 5, 15, 2] },
+                          { text: `${currentPage.toString()} | ${pageCount}`, alignment: 'right', margin: [15, 5, 15, 2] },
                         ]
                       }
                     ];
