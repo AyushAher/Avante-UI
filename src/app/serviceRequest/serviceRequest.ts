@@ -637,6 +637,8 @@ export class ServiceRequestComponent implements OnInit {
                 this.EngschedulerService.getByEngId(data.object.assignedto).pipe(first())
                   .subscribe((sch: any) => {
                     this.scheduleData = sch.object.filter(x => x.serReqId == this.serviceRequestId)
+                    if (this.scheduleData.length > 0)
+                      this.hasCallScheduled = true;
                     this.scheduleData.forEach(element => {
                       let date = new Date(element.endTime)
                       let datestr = this.datepipe.transform(date, "MM/dd/yyyy")
@@ -767,7 +769,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.IsEngineerView) {
+    if (this.IsEngineerView && this.accepted) {
       if (!this.hasCallScheduled) {
         return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")
       }
@@ -1569,7 +1571,7 @@ export class ServiceRequestComponent implements OnInit {
         headerName: 'Description ',
         field: 'description',
         filter: false,
-        width:300,
+        width: 300,
         enableSorting: false,
         editable: false,
         sortable: false
