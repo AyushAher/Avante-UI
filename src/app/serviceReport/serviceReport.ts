@@ -870,26 +870,13 @@ export class ServiceReportComponent implements OnInit {
   onCellValueChanged(event) {
     const data = event.data;
     event.data.modified = true;
-    // if (this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
-    //  && x.sparePartId == data.id).length > 0) {
-    //  var d = this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
-    //    && x.sparePartId == data.id);
-    //  d[0].insqty = event.newValue;
-    // }
   }
 
   onCellValueChangedPre(event) {
     const data = event.data;
     event.data.modified = true;
-    // if (this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
-    //  && x.sparePartId == data.id).length > 0) {
-    //  var d = this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
-    //    && x.sparePartId == data.id);
-    //  d[0].insqty = event.newValue;
-    // }
   }
 
-  // }
   updateSpareParts(params) {
   }
 
@@ -907,11 +894,7 @@ export class ServiceReportComponent implements OnInit {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, 'Success');
             this.notificationService.filter('itemadded');
-            // this.configList = data.object;
-            // this.listvalue.get("configValue").setValue("");
           } else {
-
-
             this.notificationService.showError(data.resultMessage, 'Error');
           }
           this.loading = false;
@@ -925,45 +908,8 @@ export class ServiceReportComponent implements OnInit {
     this.ServiceReportform.get('recondad').setValue("");
   }
 
-  // private createColumnspDefs() {
-  //  return [
-  //    {
-  //      headerName: 'sparePartName',
-  //      field: 'partNo',
-  //      filter: false,
-  //      enableSorting: false,
-  //      editable: false,
-  //      sortable: false,
-  //      tooltipField: 'sparePartName',
-  //    },
-  //    {
-  //      headerName: 'inventory',
-  //      field: 'inventory',
-  //      filter: false,
-  //      enableSorting: false,
-  //      editable: false,
-  //      sortable: false
-  //    }
-  //  ]
 
   uploadPdfFile(files, id) {
-    // let file = event.target.files;
-    // if (event.target.files && event.target.files[0]) {
-    //   //  this.uploadService.upload(file).subscribe(event => {  });;
-    //   this.uploadService.uploadPdf(file)
-    //     .pipe(first())
-    //     .subscribe({
-    //       next: (data: any) => {
-    //         this.notificationService.showSuccess("File Upload Successfully", "Success");
-    //         this.pdfPath = data.path;
-    //         //this.pdfFileName = file.name;
-    //       },
-    //       error: error => {
-
-    //         this.notificationService.showError(error, "Error");
-    //       }
-    //     });
-    // }
     if (files.length === 0) {
       return;
     }
@@ -1206,7 +1152,7 @@ export class ServiceReportComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'Qty Required',
+        headerName: 'Qty Consumed',
         field: 'qtyconsumed',
         filter: false,
         enableSorting: false,
@@ -1257,6 +1203,15 @@ export class ServiceReportComponent implements OnInit {
         headerName: 'HS Code',
         field: 'hsccode',
         filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Description',
+        field: 'itemDesc',
+        filter: false,
+        width:350,
         enableSorting: false,
         editable: false,
         sortable: false

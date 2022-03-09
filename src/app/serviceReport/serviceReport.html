@@ -156,7 +156,7 @@
           <div class="row">
             <div class="col-md-3 col-sm-3">
               <label for="installation">
-                <input type="checkbox" readonly disabled formControlName="installation"
+                <input type="checkbox" formControlName="installation"
                   [ngClass]="{ 'is-invalid': submitted && f.installation.errors }" />
                 Installation
               </label>
@@ -167,7 +167,7 @@
 
             <div class="col-sm-3">
               <label for="analyticalassit">
-                <input type="checkbox" readonly disabled formControlName="analyticalassit"
+                <input type="checkbox" formControlName="analyticalassit"
                   [ngClass]="{ 'is-invalid': submitted && f.analyticalassit.errors }" />
                 Analytical Assistance
               </label>
@@ -177,7 +177,7 @@
             </div>
             <div class="col-sm-3">
               <label for="prevmaintenance">
-                <input type="checkbox" readonly disabled formControlName="prevmaintenance"
+                <input type="checkbox" formControlName="prevmaintenance"
                   [ngClass]="{ 'is-invalid': submitted && f.prevmaintenance.errors }" />
                 Prev. Maintenance
               </label>
@@ -187,14 +187,14 @@
             </div>
             <div class="col-sm-3">
               <label for="corrmaintenance">
-                <input type="checkbox" readonly disabled formControlName="rework"
+                <input type="checkbox" formControlName="rework"
                   [ngClass]="{ 'is-invalid': submitted && f.corrmaintenance.errors }" />
                 Rework
               </label>
             </div>
             <div class="col-sm-3">
               <label for="corrmaintenance">
-                <input type="checkbox" readonly disabled formControlName="corrmaintenance"
+                <input type="checkbox" formControlName="corrmaintenance"
                   [ngClass]="{ 'is-invalid': submitted && f.corrmaintenance.errors }" />
                 Corr. Maintenance
               </label>
