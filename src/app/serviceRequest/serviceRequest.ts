@@ -135,6 +135,7 @@ export class ServiceRequestComponent implements OnInit {
   scheduleData: any;
   scheduleDefs: ColDef[];
   hasCallScheduled: boolean;
+  isGenerateReport: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -617,7 +618,12 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({ "remarks": data.object.remarks });
             this.serviceRequestform.patchValue({ "machmodelname": (data.object.machmodelname) });
             this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
-
+            setTimeout(() => {
+              if (data.object.isReportGenerated) {
+                this.serviceRequestform.disable()
+                this.isGenerateReport = true;
+              }
+            }, 1000);
 
             this.listTypeService.getById('SRQST')
               .pipe(first())
@@ -631,7 +637,6 @@ export class ServiceRequestComponent implements OnInit {
               })
 
             this.scheduleData = []
-            debugger;
             setTimeout(() => {
               if (data.object.assignedto != null && data.object.assignedto != "") {
                 this.EngschedulerService.getByEngId(data.object.assignedto).pipe(first())
@@ -780,6 +785,7 @@ export class ServiceRequestComponent implements OnInit {
       return this.notificationService.showError("Please Check Form again", "Error");
     }
 
+    if (this.isGenerateReport != false) return
     // stop here if form is invalid
     this.isSave = true;
     this.loading = true;
@@ -948,141 +954,109 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   Accepted(isAccepted?) {
-    this.accepted = true
-    this.hasCallScheduled = false;
-    let serviceRequest = new ServiceRequest();
-    serviceRequest.id = this.serviceRequestId;
-    serviceRequest.accepted = true
+    if (this.isGenerateReport == false) {
+      this.accepted = true
+      this.hasCallScheduled = false;
+      let serviceRequest = new ServiceRequest();
+      serviceRequest.id = this.serviceRequestId;
+      serviceRequest.accepted = true
 
-    this.serviceRequestform.get('statusid').disable();
-    let assignedStat = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId
-    this.serviceRequestform.get('statusid').setValue(assignedStat);
-    serviceRequest.statusid = assignedStat
-    this.serviceRequestService.updateIsAccepted(this.serviceRequestId, serviceRequest)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.serviceRequestform.get('accepted').disable();
-          this.serviceRequestform.get('accepted').setValue(true)
-          this.notificationService.showSuccess(data.resultMessage, "Success");
-          alert("As you have accepted the Service request please schedule a call to process further.")
-        }, error: (error) => {
+      this.serviceRequestform.get('statusid').disable();
+      let assignedStat = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId
+      this.serviceRequestform.get('statusid').setValue(assignedStat);
+      serviceRequest.statusid = assignedStat
+      this.serviceRequestService.updateIsAccepted(this.serviceRequestId, serviceRequest)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            this.serviceRequestform.get('accepted').disable();
+            this.serviceRequestform.get('accepted').setValue(true)
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            alert("As you have accepted the Service request please schedule a call to process further.")
+          }, error: (error) => {
 
-          this.notificationService.showError(error, "Error");
-        }
-      })
+            this.notificationService.showError(error, "Error");
+          }
+        })
+    }
   }
 
   generatereport() {
-    this.onSubmit();
-    this.EngschedulerService.getAll().pipe(first()).subscribe({
-      next: (data: any) => {
+    if (this.isGenerateReport == false) {
+      this.onSubmit();
+      this.EngschedulerService.getAll().pipe(first()).subscribe({
+        next: (data: any) => {
 
-        if (data.result) {
-          let scheduleCalls = data.object.filter(x => x.serReqId == this.serviceRequestId)
-          if (scheduleCalls != null && scheduleCalls.length > 0) {
-            this.servicereport = new ServiceReport();
-            this.servicereport.serviceRequestId = this.serviceRequestId;
-            this.servicereport.customer = this.serviceRequestform.get('companyname').value;
-            this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
-            this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
-            this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + '||' + this.serviceRequestform.get('alarmdetails')?.value + '||' + this.serviceRequestform.get('remarks')?.value;
-            this.instrumentService.getAll(this.user.userId)
-              .pipe(first())
-              .subscribe((data: any) => {
-                let instrumentList = data.object;
-                this.servicereport.instrument = instrumentList.find(x => x.id == this.serviceRequestform.get('machinesno').value)?.id;
-              });
-
-            if (this.isAmc) {
-              this.servicereport.problem = 'AMC';
-            }
-
-            this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.INS)).length > 0;
-            this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.ANAS)).length > 0;
-            this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.PRMN1)).length > 0;
-            this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.REWK)).length > 0;
-            this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.CRMA)).length > 0;
-            if (this.customerId != null) {
-              this.customerService.getById(this.customerId)
+          if (data.result) {
+            let scheduleCalls = data.object.filter(x => x.serReqId == this.serviceRequestId)
+            if (scheduleCalls != null && scheduleCalls.length > 0) {
+              this.servicereport = new ServiceReport();
+              this.servicereport.serviceRequestId = this.serviceRequestId;
+              this.servicereport.customer = this.serviceRequestform.get('companyname').value;
+              this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
+              this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
+              this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + '||' + this.serviceRequestform.get('alarmdetails')?.value + '||' + this.serviceRequestform.get('remarks')?.value;
+              this.instrumentService.getAll(this.user.userId)
                 .pipe(first())
-                .subscribe({
-                  next: (data: any) => {
-                    this.custcityname = data.object.address.city;
-                    this.servicereport.town = this.custcityname;
-                    //this.getPdffile(data.object.filePath);
-
-                    console.log(this.servicereport)
-                    this.servicereportService.save(this.servicereport)
-                      .pipe(first())
-                      .subscribe({
-                        next: (data: any) => {
-                          debugger;
-                          if (data.result) {
-                            this.notificationService.showSuccess(data.resultMessage, "Success");
-
-                            // Add Record with status 'completed' in ticket action
-                            this.srAssignedHistory = new tickersAssignedHistory;
-                            this.srAssignedHistory.engineerid = this.engineerid;
-                            this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-                            this.srAssignedHistory.ticketstatus = "INPRG";
-                            this.srAssignedHistory.assigneddate = new Date()
-
-                            this.srAssignedHistoryService.save(this.srAssignedHistory)
-                              .pipe(first())
-                              .subscribe({
-                                next: (data: any) => {
-                                  if (!data.result) {
-                                    this.notificationService.showError(data.resultMessage, "Error");
-                                  }
-                                },
-                                error: error => {
-                                  // this.alertService.error(error);
-                                  this.notificationService.showSuccess(error, "Error");
-                                  this.loading = false;
-                                }
-                              });
-
-                            this.router.navigate(["servicereport", data.object.id]);
-                          } else {
-                            this.notificationService.showError(data.resultMessage, "Error");
-                          }
-                          this.loading = false;
-                        },
-                        error: error => {
-                          // this.alertService.error(error);
-                          this.notificationService.showSuccess(error, "Error");
-                          this.loading = false;
-                        }
-                      });
-                  },
-                  error: error => {
-                    this.notificationService.showError(error, "Error");
-                    this.loading = false;
-                  }
+                .subscribe((data: any) => {
+                  let instrumentList = data.object;
+                  this.servicereport.instrument = instrumentList.find(x => x.id == this.serviceRequestform.get('machinesno').value)?.id;
                 });
-            } else {
-              this.servicereportService.save(this.servicereport)
-                .pipe(first())
-                .subscribe({
-                  next: (data: any) => {
-                    debugger;
-                    if (data.result) {
-                      this.notificationService.showSuccess(data.resultMessage, "Success");
-                      // Add Record with status 'completed' in ticket action
-                      this.srAssignedHistory = new tickersAssignedHistory;
-                      this.srAssignedHistory.engineerid = this.engineerid;
-                      this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-                      this.srAssignedHistory.ticketstatus = "INPRG";
-                      this.srAssignedHistory.assigneddate = new Date()
 
-                      this.srAssignedHistoryService.save(this.srAssignedHistory)
+              if (this.isAmc) {
+                this.servicereport.problem = 'AMC';
+              }
+
+              this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.INS)).length > 0;
+              this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.ANAS)).length > 0;
+              this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.PRMN1)).length > 0;
+              this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.REWK)).length > 0;
+              this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.CRMA)).length > 0;
+              if (this.customerId != null) {
+                this.customerService.getById(this.customerId)
+                  .pipe(first())
+                  .subscribe({
+                    next: (data: any) => {
+                      this.custcityname = data.object.address.city;
+                      this.servicereport.town = this.custcityname;
+                      //this.getPdffile(data.object.filePath);
+
+                      console.log(this.servicereport)
+                      this.servicereportService.save(this.servicereport)
                         .pipe(first())
                         .subscribe({
                           next: (data: any) => {
-                            if (!data.result) {
+                            debugger;
+                            if (data.result) {
+                              this.notificationService.showSuccess(data.resultMessage, "Success");
+
+                              // Add Record with status 'completed' in ticket action
+                              this.srAssignedHistory = new tickersAssignedHistory;
+                              this.srAssignedHistory.engineerid = this.engineerid;
+                              this.srAssignedHistory.servicerequestid = this.serviceRequestId;
+                              this.srAssignedHistory.ticketstatus = "INPRG";
+                              this.srAssignedHistory.assigneddate = new Date()
+
+                              this.srAssignedHistoryService.save(this.srAssignedHistory)
+                                .pipe(first())
+                                .subscribe({
+                                  next: (data: any) => {
+                                    if (!data.result) {
+                                      this.notificationService.showError(data.resultMessage, "Error");
+                                    }
+                                  },
+                                  error: error => {
+                                    // this.alertService.error(error);
+                                    this.notificationService.showSuccess(error, "Error");
+                                    this.loading = false;
+                                  }
+                                });
+
+                              this.router.navigate(["servicereport", data.object.id]);
+                            } else {
                               this.notificationService.showError(data.resultMessage, "Error");
                             }
+                            this.loading = false;
                           },
                           error: error => {
                             // this.alertService.error(error);
@@ -1090,37 +1064,73 @@ export class ServiceRequestComponent implements OnInit {
                             this.loading = false;
                           }
                         });
-                      this.router.navigate(["servicereport", data.object.id]);
-                    } else {
-                      this.notificationService.showError(data.resultMessage, "Error");
+                    },
+                    error: error => {
+                      this.notificationService.showError(error, "Error");
+                      this.loading = false;
                     }
-                    this.loading = false;
+                  });
+              } else {
+                this.servicereportService.save(this.servicereport)
+                  .pipe(first())
+                  .subscribe({
+                    next: (data: any) => {
+                      debugger;
+                      if (data.result) {
+                        this.notificationService.showSuccess(data.resultMessage, "Success");
+                        // Add Record with status 'completed' in ticket action
+                        this.srAssignedHistory = new tickersAssignedHistory;
+                        this.srAssignedHistory.engineerid = this.engineerid;
+                        this.srAssignedHistory.servicerequestid = this.serviceRequestId;
+                        this.srAssignedHistory.ticketstatus = "INPRG";
+                        this.srAssignedHistory.assigneddate = new Date()
 
-                  },
-                  error: error => {
-                    // this.alertService.error(error);
-                    this.notificationService.showSuccess(error, "Error");
-                    this.loading = false;
-                  }
-                });
+                        this.srAssignedHistoryService.save(this.srAssignedHistory)
+                          .pipe(first())
+                          .subscribe({
+                            next: (data: any) => {
+                              if (!data.result) {
+                                this.notificationService.showError(data.resultMessage, "Error");
+                              }
+                            },
+                            error: error => {
+                              // this.alertService.error(error);
+                              this.notificationService.showSuccess(error, "Error");
+                              this.loading = false;
+                            }
+                          });
+                        this.router.navigate(["servicereport", data.object.id]);
+                      } else {
+                        this.notificationService.showError(data.resultMessage, "Error");
+                      }
+                      this.loading = false;
+
+                    },
+                    error: error => {
+                      // this.alertService.error(error);
+                      this.notificationService.showSuccess(error, "Error");
+                      this.loading = false;
+                    }
+                  });
+              }
+
+            } else {
+              this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
             }
-
           } else {
-            this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
+            this.notificationService.showError(data.resultMessage, "Error")
           }
-        } else {
-          this.notificationService.showError(data.resultMessage, "Error")
+        },
+        error: (error) => {
+          this.notificationService.showError(error, "Error")
         }
-      },
-      error: (error) => {
-        this.notificationService.showError(error, "Error")
-      }
-    })
+      })
+    }
 
   }
 
   addAssignedHistory(sr: ServiceRequest) {
-    if (this.engineerid != null && this.engineerid != sr.assignedto) {
+    if (this.engineerid != null && this.engineerid != sr.assignedto && this.isGenerateReport == false) {
 
       this.srAssignedHistory = new tickersAssignedHistory;
       this.srAssignedHistory.engineerid = this.engineerid;
@@ -1132,7 +1142,6 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["servicerequestlist"]);
@@ -1143,7 +1152,6 @@ export class ServiceRequestComponent implements OnInit {
 
           },
           error: error => {
-            // this.alertService.error(error);
             this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
@@ -1151,23 +1159,14 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
 
-  //onassingedTo(event) {
-  //  //debugger;
-  //  this.engineerid = event.value;
-  //}
-
   getDistRegnContacts(distid: string) {
-    //debugger;
     this.distributorService.getDistributorRegionContacts(distid)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          //debugger;
           this.appendList = data.object;
-          //this.appendList.push(data.object.regions[0].contacts);
         },
         error: error => {
-          //  this.alertService.error(error);
           this.notificationService.showSuccess(error, "Error");
           this.loading = false;
         }
@@ -1175,8 +1174,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   saveFileShare(id: string) {
-    //fileshare: FileShare;
-    if (this.pdfPath != null) {
+    if (this.pdfPath != null && this.isGenerateReport == false) {
       for (var i = 0; i < this.pdfPath.length; i++) {
         let fileshare = new FileShare();
         fileshare.fileName = this.pdfPath[i].fileName;
@@ -1204,35 +1202,25 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   getPdffile(filePath: string) {
-    //debugger;
     if (filePath != null && filePath != "") {
       this.uploadService.getFile(filePath)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
             this.download(data.data);
-            // this.alertService.success('File Upload Successfully.');
-            // this.imagePath = data.path;
-            // ;
-
           },
           error: error => {
             this.notificationService.showError(error, "Error");
-            // this.imageUrl = this.noimageData;
           }
         });
     }
   }
 
   download(fileData: any) {
-    //debugger;
     const byteArray = new Uint8Array(atob(fileData).split('').map(char => char.charCodeAt(0)));
     let b = new Blob([byteArray], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(b);
     window.open(url);
-    // i.e. display the PDF content via iframe
-    // document.querySelector("iframe").src = url;
   }
 
   getfil(x) {
@@ -1268,7 +1256,7 @@ export class ServiceRequestComponent implements OnInit {
 
   public onRowClicked(e) {
     //debugger;
-    if (e.event.target !== undefined) {
+    if (e.event.target !== undefined && this.isGenerateReport == false) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
       //this.serviceRequestId = this.route.snapshot.paramMap.get('id');
@@ -1302,12 +1290,6 @@ export class ServiceRequestComponent implements OnInit {
     //debugger;
     var data = event.data;
     event.data.modified = true;
-    //if (this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
-    //  && x.sparePartId == data.id).length > 0) {
-    //  var d = this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
-    //    && x.sparePartId == data.id);
-    //  d[0].insqty = event.newValue;
-    //}
   }
 
   private pdfcreateColumnDefs() {
@@ -1321,7 +1303,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess,
+          deleteaccess: this.hasDeleteAccess && this.isGenerateReport == false,
           id: this.serviceRequestId
         },
       },
@@ -1364,7 +1346,6 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   public oninstuchange(id: string) {
-    debugger;
     var instument;
 
     this.instrumentService.getSerReqInstrument(id)
@@ -1397,6 +1378,7 @@ export class ServiceRequestComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
+        hide: this.isGenerateReport == false,
         cellRenderer: (params) => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
@@ -1475,7 +1457,7 @@ export class ServiceRequestComponent implements OnInit {
         filter: false,
         enableSorting: false,
         editable: false,
-        hide: !this.IsEngineerView,
+        hide: !this.IsEngineerView && this.isGenerateReport == false,
         sortable: false,
         cellRenderer: (params) => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
@@ -1588,74 +1570,63 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   uploadPdfFile(files, serviceRequestId) {
-    //
-    // let file = event.target.files;
-    // if (event.target.files && event.target.files[0]) {
-    //   //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
-    //   this.uploadService.uploadPdf(file)
-    //     .pipe(first())
-    //     .subscribe({
-    //       next: (data: any) => {
-    //         //debugger;
-    //         this.notificationService.showSuccess("File Upload Successfully", "Success");
-    //         this.pdfPath = data.path;
-    //         //this.pdfFileName = file.name;
-    //       },
-    //       error: error => {
-    //         this.notificationService.showError(error, "Error");
-    //       }
-    //     });
-    // }
-
-    if (files.length === 0) {
-      return;
-    }
-    let filesToUpload: File[] = files;
-    const formData = new FormData();
-
-    Array.from(filesToUpload).map((file, index) => {
-      return formData.append("file" + index, file, file.name);
-    });
-    this.fileshareService.upload(formData, serviceRequestId, "SRREQ").subscribe((event) => {
-      if (event.type === HttpEventType.UploadProgress)
-        this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
-      else if (event.type === HttpEventType.Response) {
-        this.onUploadFinished.emit(event.body);
+    if (this.isGenerateReport == false) {
+      if (files.length === 0) {
+        return;
       }
-    });
+
+      let filesToUpload: File[] = files;
+      const formData = new FormData();
+
+      Array.from(filesToUpload).map((file, index) => {
+        return formData.append("file" + index, file, file.name);
+      });
+      this.fileshareService.upload(formData, serviceRequestId, "SRREQ").subscribe((event) => {
+        if (event.type === HttpEventType.UploadProgress)
+          this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
+        else if (event.type === HttpEventType.Response) {
+          this.onUploadFinished.emit(event.body);
+        }
+      });
+    }
   }
 
 
   open(param: string, param1: string, param2: string) {
-    //debugger;
-    const initialState = {
-      itemId: param,
-      id: param1,
-      engineerid: this.engineerid
-    };
-    this.bsModalRef = this.modalService.show(ModelEngContentComponent, { initialState });
+    //debugger;v
+    if (this.isGenerateReport == false) {
+
+      const initialState = {
+        itemId: param,
+        id: param1,
+        engineerid: this.engineerid
+      };
+      this.bsModalRef = this.modalService.show(ModelEngContentComponent, { initialState });
+    }
   }
 
   openaction(param: string, param1: string) {
     //debugger;
-    if (this.IsEngineerView) {
-      if (!this.hasCallScheduled) {
-        return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")
+    if (this.isGenerateReport == false) {
+      if (this.IsEngineerView) {
+        if (!this.hasCallScheduled) {
+          return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")
+        }
       }
-    }
 
-    const initialState = {
-      itemId: param,
-      id: param1,
-      engineerid: this.engineerid,
-      engineerlist: this.appendList
-    };
-    this.bsActionModalRef = this.modalService.show(ModelEngActionContentComponent, { initialState });
+      const initialState = {
+        itemId: param,
+        id: param1,
+        engineerid: this.engineerid,
+        engineerlist: this.appendList
+      };
+      this.bsActionModalRef = this.modalService.show(ModelEngActionContentComponent, { initialState });
+    }
   }
 
   public onactionRowClicked(e) {
     //debugger;
-    if (e.event.target !== undefined) {
+    if (e.event.target !== undefined && this.isGenerateReport == false) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
       //this.serviceRequestId = this.route.snapshot.paramMap.get('id');

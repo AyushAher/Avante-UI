@@ -98,18 +98,16 @@
                 <div *ngIf="f.computerarlsn.errors.required">computerArl is required</div>
               </div>
             </div>
-          </div>
-          <div class="row">
             <div class="col-sm-3">
               <label for="instrument">Instrument</label>
-              <!-- <input id="typeahead-format" type="text" formControlName="instrument" disabled class="form-control" /> -->
-              <select formControlName="instrument" disabled class="form-control"
+              <input id="typeahead-format" type="text" formControlName="instrument" disabled class="form-control" />
+              <!-- <select formControlName="instrument" disabled class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.instrument.errors }">
                 <option value="">--Select--</option>
                 <option *ngFor="let c of instrumentlist" value={{c.id}}>
                   {{c.insversion}} - {{c.serialnos}}
                 </option>
-              </select>
+              </select> -->
               <div *ngIf="submitted && f.instrument.errors" class="invalid-feedback">
 
 
@@ -117,11 +115,11 @@
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="software">software</label>
+              <label for="software">Software</label>
               <input type="text" formControlName="software" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.software.errors }" />
               <div *ngIf="submitted && f.software.errors" class="invalid-feedback">
-                <div *ngIf="f.software.errors.required">software is required</div>
+                <div *ngIf="f.software.errors.required">Software is required</div>
               </div>
             </div>
             <div class="col-sm-3">
@@ -149,7 +147,7 @@
           <div class="row mb-4">
             <div class="col-sm-12">
               <label for="problem">Problem</label>
-              <textarea formControlName="problem" readonly class="form-control"
+              <textarea formControlName="problem" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.problem.errors }"></textarea>
             </div>
           </div>
@@ -256,7 +254,7 @@
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
               <div class="row">
                 <div class="col-sm-4">
-                  <label>select sparepart</label>
+                  <label>Select Sparepart</label>
                   <input id="typeahead-format" type="text" formControlName="consumed" class="form-control"
                     [ngbTypeahead]="searchpartcon" [resultFormatter]="formatterpartcon"
                     [inputFormatter]="formatterpartcon" />
@@ -277,7 +275,7 @@
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
               <div class="row">
                 <div class="col-sm-4">
-                  <label>select sparepart</label>
+                  <label>Select Sparepart</label>
                   <input id="typeahead-format" type="text" formControlName="recondad" class="form-control"
                     [ngbTypeahead]="searchpart" [resultFormatter]="formatterpart" [inputFormatter]="formatterpart" />
                 </div>
@@ -427,7 +425,7 @@
 
           </div>
 
-          <div class="row" *ngIf="PdffileData">
+          <div class="row" *ngIf="ServiceReportId != null">
             <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
               <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
                 (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)" [columnDefs]="pdfcolumnDefs"

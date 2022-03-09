@@ -5,15 +5,15 @@
 export const environment = {
   //for dev:
 
-  production: false,
-  apiUrl: 'https://localhost:44317/api',
-  uiUrl: 'https://localhost:44378/',
+  // production: false,
+  // apiUrl: 'https://localhost:44317/api',
+  // uiUrl: 'https://localhost:44378/',
 
   // for prod
 
-  // production: true,
-  // apiUrl: 'https://service.avantgardeinc.com/api/api',
-  // uiUrl: 'https://service.avantgardeinc.com/',
+  production: true,
+  apiUrl: 'https://service.avantgardeinc.com/api/api',
+  uiUrl: 'https://service.avantgardeinc.com/',
 
   custRoleCode: 'RCUST',
   distRoleCode: 'RDTSP',

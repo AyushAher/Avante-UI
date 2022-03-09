@@ -146,6 +146,7 @@ export class ServiceReportComponent implements OnInit {
   isEng = false;
   interrupted: boolean = false;
   finished: boolean = false;
+  @ViewChild('file') fileInput
 
   constructor(
     private formBuilder: FormBuilder,
@@ -249,7 +250,6 @@ export class ServiceReportComponent implements OnInit {
   formatterpartcon = (x: any) => x.partNoDesc;
 
   ngOnInit() {
-
     this.ServiceReportId = this.route.snapshot.paramMap.get('id');
     this.transaction = 0;
     this.user = this.accountService.userValue;
@@ -440,7 +440,7 @@ export class ServiceReportComponent implements OnInit {
             this.ServiceReportform.patchValue({ 'interruptedstr': data.object.interrupted == true ? '0' : '1' });
             this.onInteruptedChange(this.ServiceReportform.get('interruptedstr').value)
             this.onWorkFinishedChange(this.ServiceReportform.get('workfinishedstr').value)
-            this.ServiceReportform.get('instrument').setValue(data.object.instrument);
+            this.ServiceReportform.get('instrument').setValue(data.object.instrumentName);
             this.workdonelist = data.object.lstWorkdone;
             this.workTime = data.object.lstWorktime;
 
@@ -454,6 +454,7 @@ export class ServiceReportComponent implements OnInit {
               this.ServiceReportform.get('rework').disable()
               this.ServiceReportform.get('installation').disable()
               this.ServiceReportform.get('corrmaintenance').disable()
+              this.ServiceReportform.get('problem').disable()
             }
             this.spconsumedlist = data.object.lstSPConsumed;
             this.sparePartRecomanded = data.object.lstSPRecommend;
@@ -569,6 +570,22 @@ export class ServiceReportComponent implements OnInit {
               this.saveFileShare(data.object.id);
               if (this.file != null) {
                 this.uploadPdfFile(this.file, data.object.id);
+                this.notificationService.filter("itemadded");
+                document.getElementById('selectedfiles').style.display = 'none';
+                console.log(document.getElementById('myFile'));
+
+
+                this.fileshareService.list(this.ServiceReportId)
+                  .pipe(first())
+                  .subscribe({
+                    next: (data: any) => {
+                      this.PdffileData = data.object;
+                    },
+                    error: (err: any) => {
+
+                      this.notificationService.showError(err, 'Error');
+                    },
+                  });
               }
               this.notificationService.showSuccess(data.resultMessage, 'Success');
             } else {
@@ -596,6 +613,23 @@ export class ServiceReportComponent implements OnInit {
 
               if (this.file != null) {
                 this.uploadPdfFile(this.file, this.ServiceReportId);
+                this.notificationService.filter("itemadded");
+                document.getElementById('selectedfiles').style.display = 'none';
+                setTimeout(() => {
+
+                  this.fileshareService.list(this.ServiceReportId)
+                    .pipe(first())
+                    .subscribe({
+                      next: (data: any) => {
+                        this.PdffileData = data.object;
+                      },
+                      error: (err: any) => {
+
+                        this.notificationService.showError(err, 'Error');
+                      },
+                    });
+
+                }, 3000);
               }
 
               this.notificationService.showSuccess(data.resultMessage, 'Success');
@@ -625,14 +659,16 @@ export class ServiceReportComponent implements OnInit {
 
 
   onInteruptedChange(interrupted: any) {
-    this.interrupted = false;
-    this.ServiceReportform.get('reason').clearValidators()
-    this.ServiceReportform.get('reason').disable()
 
     if (interrupted == 0) {
       this.interrupted = true;
       this.ServiceReportform.get('reason').enable()
       this.ServiceReportform.get('reason').setValidators([Validators.required])
+    } else {
+      this.interrupted = false;
+      this.ServiceReportform.get('reason').clearValidators()
+      this.ServiceReportform.get('reason').disable()
+      this.ServiceReportform.get('reason').setValue("")
 
     }
 
@@ -643,14 +679,16 @@ export class ServiceReportComponent implements OnInit {
     this.ServiceReportform.get('reason').clearValidators()
     this.ServiceReportform.get('reason').disable()
     this.ServiceReportform.get('interruptedstr').disable()
+    this.ServiceReportform.get('interruptedstr').setValue("1")
 
     if (finished == 1) {
       this.ServiceReportform.get('reason').enable()
       this.ServiceReportform.get('interruptedstr').enable()
+      this.ServiceReportform.get('interruptedstr').setValue("0")
       this.ServiceReportform.get('reason').setValidators([Validators.required])
 
     }
-
+    this.onInteruptedChange(this.ServiceReportform.get('interruptedstr').value)
     this.ServiceReportform.get('reason').updateValueAndValidity()
   }
 
@@ -1180,6 +1218,14 @@ export class ServiceReportComponent implements OnInit {
         editable: true,
         sortable: false
       },
+      {
+        headerName: 'Description',
+        field: 'itemDesc',
+        filter: false,
+        enableSorting: false,
+        editable: true,
+        sortable: false
+      },
     ];
   }
 
@@ -1363,7 +1409,7 @@ export class ServiceReportComponent implements OnInit {
             next: (data: ResultMsg) => {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, 'Success');
-                // this.router.navigate(["ServiceReportlist"]);
+                this.notificationService.filter("itemadded");
               } else {
 
                 this.notificationService.showError(data.resultMessage, 'Error');
@@ -1421,7 +1467,6 @@ export class ServiceReportComponent implements OnInit {
                   data.attachment == true ? data.attachment = this.checkedImg : data.attachment = this.unCheckedImg;
                   data.interrupted == true ? data.interrupted = this.checkedImg : data.interrupted = this.unCheckedImg;
                   data.isworkdone == true ? data.isworkdone = this.checkedImg : data.isworkdone = this.unCheckedImg;
-                  console.log(data.spRecomm);
 
                   (data.workTime == [] || data.workTime == null) ? data.workTime = [
                     {

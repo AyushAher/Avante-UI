@@ -29,6 +29,7 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
     statuslist: any;
     hasUpdate: boolean = false;
     profilePermission: ProfileReadOnly;
+    isGenerateReport: boolean = false;
 
     constructor(
         private distributorService: DistributorService,
@@ -131,33 +132,40 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
             .subscribe((data: any) => {
                 this.appendList = data.object;
             });
+        setTimeout(() => {
+            if (this.params.data.isReportGenerated) {
+                this.Form.disable()
+                this.isGenerateReport = true;
+            }
+        }, 100);
+
     }
 
     onSubmit() {
-        let srrqData = this.params.data
-        srrqData.createdon = new Date
-        srrqData.accepted == "Accepted" ? srrqData.accepted = true : srrqData.accepted = false;
-        srrqData.assignedto = this.Form.get('assignedto').value;
+        if (this.isGenerateReport == false) {
+            let srrqData = this.params.data
+            srrqData.createdon = new Date
+            srrqData.accepted == "Accepted" ? srrqData.accepted = true : srrqData.accepted = false;
+            srrqData.assignedto = this.Form.get('assignedto').value;
 
-        let status = this.statuslist.find(x => x.listTypeItemId == this.Form.get('statusid').value)?.itemCode
-        if (status == "NTASS" && this.Form.get('assignedto').value != null && this.Form.get('assignedto').value != "") {
-            srrqData.statusid = (this.statuslist.find(x => x.itemCode == "ASSGN")?.listTypeItemId)
+            let status = this.statuslist.find(x => x.listTypeItemId == this.Form.get('statusid').value)?.itemCode
+            if (status == "NTASS" && this.Form.get('assignedto').value != null && this.Form.get('assignedto').value != "") {
+                srrqData.statusid = (this.statuslist.find(x => x.itemCode == "ASSGN")?.listTypeItemId)
+            }
+
+            srrqData.scheduledCalls = []
+            this.serviceRequest.update(srrqData.id, srrqData)
+                .pipe(first())
+                .subscribe((data: any) => {
+                    if (data.result) {
+                        this.notificationService.showSuccess(data.resultMessage, "Success")
+                        this.notificationService.filter("itemadded");
+                    } else {
+                        this.notificationService.showError(data.resultMessage, "Error")
+                    }
+                })
         }
-
-
-        srrqData.scheduledCalls = []
-        this.serviceRequest.update(srrqData.id, srrqData)
-            .pipe(first())
-            .subscribe((data: any) => {
-                if (data.result) {
-                    this.notificationService.showSuccess(data.resultMessage, "Success")
-                    this.notificationService.filter("itemadded");
-                } else {
-                    this.notificationService.showError(data.resultMessage, "Error")
-                }
-            })
     }
-
     refresh(params: any): boolean {
         return false;
     }

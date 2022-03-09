@@ -349,8 +349,8 @@
             </div>
             <div class="col-md-6 col-sm-6">
               <label for="subrequesttypeid">SubRequest Type</label>
-              <ng-multiselect-dropdown [settings]="dropdownSettings" [disabled]="IsEngineerView" [data]="subreqtypelist"
-                formControlName="subrequesttypeid">
+              <ng-multiselect-dropdown [settings]="dropdownSettings" [disabled]="IsEngineerView || isGenerateReport"
+                [data]="subreqtypelist" formControlName="subrequesttypeid">
               </ng-multiselect-dropdown>
               <div *ngIf="submitted && f.subrequesttypeid.errors" class="invalid-feedback">
                 <div *ngIf="f.subrequesttypeid.errors.required">subreqtype is required</div>
@@ -427,7 +427,7 @@
                   id="contact-tab" role="tab">Scheduled Calls</a>
               </li>
             </ul>
-            <a class="link" *ngIf="IsEngineerView && accepted" style="margin-right: 20px;"
+            <a class="link" *ngIf="IsEngineerView && accepted &&!isGenerateReport" style="margin-right: 20px;"
               [routerLink]="scheduleLink">Schedule Call</a>
           </div>
 
@@ -435,8 +435,9 @@
             <div *ngIf="IsEngineerView" aria-labelledby="home-tab" class="tab-pane fade show active" id="home"
               role="tabpanel">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <button (click)="open(serviceRequestId)" *ngIf="!accepted" class="btn btn-sm btn-success button"
-                  style="margin: 10px;" type="button"><i class="fas fa-plus-circle" title="Add"></i></button>
+                <button (click)="open(serviceRequestId)" *ngIf="!accepted && !isGenerateReport"
+                  class="btn btn-sm btn-success button" style="margin: 10px;" type="button"><i
+                    class="fas fa-plus-circle" title="Add"></i></button>
                 <ag-grid-angular style="width: 100%; height: 250px;" (rowClicked)="onRowClicked($event)"
                   (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
                   (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="engineerCommentList"
@@ -454,7 +455,8 @@
             <div *ngIf="IsEngineerView" aria-labelledby="contact-tab" class="tab-pane fade" id="contact"
               role="tabpanel">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <div class="" style="display: flex; justify-content:space-between" *ngIf="accepted">
+                <div class="" style="display: flex; justify-content:space-between"
+                  *ngIf="accepted && !isGenerateReport">
                   <button (click)="openaction(serviceRequestId)" class="btn btn-sm btn-success button"
                     style="margin: 10px;" type="button"><i class="fas fa-plus-circle" title="Add"></i>
                   </button>
@@ -529,14 +531,14 @@
           <hr />
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px">
-              <button *ngIf="hasAddAccess==true || hasUpdateAccess==true" [disabled]="loading" type="submit"
-                class="btn btn-primary">
+              <button *ngIf="hasAddAccess==true || hasUpdateAccess==true" [disabled]="loading || isGenerateReport==true"
+                type="submit" class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
               <a class="btn btn-secondary" routerLink="/servicerequestlist" style="margin-left:10px;">Back</a>
-              <button (click)="generatereport()" *ngIf="IsEngineerView==true && accepted" class="btn btn-secondary"
-                style="margin-left:10px;" type="button">Generate report
+              <button (click)="generatereport()" *ngIf="IsEngineerView==true && accepted && !isGenerateReport"
+                class="btn btn-secondary" style="margin-left:10px;" type="button">Generate report
               </button>
             </div>
           </div>
