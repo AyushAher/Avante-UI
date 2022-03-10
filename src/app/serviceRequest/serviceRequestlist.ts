@@ -224,6 +224,15 @@ export class ServiceRequestListComponent implements OnInit {
       sortable: true
     },
     {
+      headerName: 'Eng. Comments',
+      field: 'engComments',
+      filter: true,
+      hide: !this.IsDistributorView,
+      editable: false,
+      sortable: true,
+      tooltipField: 'engComments',
+    },
+    {
       headerName: 'Assigned To',
       field: 'assignedto',
       width: 400,
@@ -338,7 +347,11 @@ export class ServiceRequestListComponent implements OnInit {
               ser.scheduledCalls.endTime = this.datepipe.transform(ser.scheduledCalls.endTime, "shortTime")
               ser.scheduledCalls.startTime = this.datepipe.transform(ser.scheduledCalls.startTime, "shortTime")
               ser.scheduledCalls.Time = ser.scheduledCalls.location + " : " + datestr + " At " + ser.scheduledCalls.startTime + " - " + ser.scheduledCalls.endTime
-              
+
+            }
+            if (ser.engComments?.length > 0) {
+              let date = this.datepipe.transform(ser.engComments[0]?.nextdate, "MM/dd/yyyy")
+              ser.engComments = date + " : " + ser.engComments[0].comments
             }
           });
 
