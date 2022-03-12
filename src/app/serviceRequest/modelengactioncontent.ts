@@ -1,13 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import {actionList, ListTypeItem, User} from '../_models';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef} from 'ag-grid-community';
+import { actionList, ListTypeItem, User } from '../_models';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef } from 'ag-grid-community';
 
-import {AccountService, EngActionService, FileshareService, ListTypeService, NotificationService} from '../_services';
-import {BsModalService} from 'ngx-bootstrap/modal';
-import {HttpEventType} from "@angular/common/http";
+import { AccountService, EngActionService, FileshareService, ListTypeService, NotificationService } from '../_services';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { HttpEventType } from "@angular/common/http";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-modelcomponent',
@@ -47,7 +48,8 @@ export class ModelEngActionContentComponent implements OnInit {
     private listTypeService: ListTypeService,
     private notificationService: NotificationService,
     private actionService: EngActionService,
-    public activeModal: BsModalService
+    public activeModal: BsModalService,
+    private router: Router
   ) { }
 
 
@@ -62,7 +64,7 @@ export class ModelEngActionContentComponent implements OnInit {
       actiontaken: [''],
       isactive: [true],
       isdeleted: [false],
-      teamviewrecording:['']
+      teamviewrecording: ['']
     });
 
 
@@ -137,9 +139,9 @@ export class ModelEngActionContentComponent implements OnInit {
     });
   };
 
-get f(){
-  return this.actionForm.controls
-}
+  get f() {
+    return this.actionForm.controls
+  }
 
   onValueSubmit() {
     //debugger;
@@ -168,6 +170,7 @@ get f(){
                 this.uploadFile(this.file, data.object.id);
               }
 
+              this.router.navigate([`/schedule/${this.itemId}`])
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
               //this.configList = data.object;
@@ -196,11 +199,11 @@ get f(){
         .subscribe({
           next: (data: any) => {
             if (data.result) {
+
+              this.router.navigate([`/schedule/${this.itemId}`])
+              this.notificationService.showSuccess(data.resultMessage, "Success");
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
-              //this.configList = data.object;
-              //this.listvalue.get("configValue").setValue("");
-              //this.id = null;
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
               this.close();

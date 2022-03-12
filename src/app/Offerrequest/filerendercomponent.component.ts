@@ -66,7 +66,6 @@ export class FilerendercomponentComponent implements AgRendererComponent {
   }
 
   private downloadFile(data: HttpResponse<Blob>) {
-    debugger;
     const downloadedFile = new Blob([data.body], { type: data.body.type });
     const a = document.createElement("a");
     a.setAttribute("style", "display:block;");

@@ -1,13 +1,13 @@
-import {Component, OnInit} from "@angular/core";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {FormGroup} from "@angular/forms";
-import {Router} from "@angular/router";
-import {AccountService, NotificationService, ProfileService} from "../_services";
-import {CustspinventoryService} from "../_services/custspinventory.service";
-import {RenderComponent} from "../distributor/rendercomponent";
-import {Custspinventory} from "../_models/custspinventory";
-import {first} from "rxjs/operators";
-import {User} from "../_models";
+import { Component, OnInit } from "@angular/core";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { FormGroup } from "@angular/forms";
+import { Router } from "@angular/router";
+import { AccountService, NotificationService, ProfileService } from "../_services";
+import { CustspinventoryService } from "../_services/custspinventory.service";
+import { RenderComponent } from "../distributor/rendercomponent";
+import { Custspinventory } from "../_models/custspinventory";
+import { first } from "rxjs/operators";
+import { User } from "../_models";
 
 @Component({
   selector: "app-Custspinventorylist",
@@ -57,11 +57,13 @@ export class CustspinventorylistComponent implements OnInit {
       this.hasDeleteAccess = true;
     }
 
-    this.Service.getAll(this.user.contactId,null)
+    this.Service.getAll(this.user.contactId, null)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.model = data.object;
+          console.log(data.object);
+
         },
         error: (error) => {
           this.notificationService.showError(error, "Error");
@@ -111,6 +113,15 @@ export class CustspinventorylistComponent implements OnInit {
       {
         headerName: "Qty. Available",
         field: "qtyAvailable",
+        filter: true,
+        tooltipField: "qtyavailable",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "Qty. Available",
+        field: "sparePart.itemDesc",
         filter: true,
         tooltipField: "qtyavailable",
         enableSorting: true,

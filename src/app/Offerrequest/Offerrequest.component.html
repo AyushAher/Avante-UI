@@ -80,8 +80,8 @@
           <div class="row" style="margin-top:50px">
             <div class="col-md-9">
               <label for="browser">Search SpareParts By Part No. </label>
-              <input (input)="SparePartsSearch($event.target.value?.split('==>')[0]?.trim())" #sparePartsSearch list="browsers"
-                name="browser" id="browser" class="form-control">
+              <input (input)="SparePartsSearch($event.target.value?.split('==>')[0]?.trim())" #sparePartsSearch
+                list="browsers" name="browser" id="browser" class="form-control">
               <datalist id="browsers">
                 <option *ngFor="let i of sparePartsAutoComplete" value="{{i.partno}} ==> {{i.itemDescription}}">
               </datalist>
@@ -127,7 +127,7 @@
             <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
               <div class="col-md-3">
                 <input type="file" id="myFile" #file placeholder="Choose file"
-                  (change)="getfil(file.files); listfile(file.files) ;" multiple
+                  (change)="getfil(file.files,true); listfile(file.files);" multiple
                   accept="text/plain, application/pdf, image/*">
               </div>
               <div id="selectedfiles" class="hidden col-md-4" style="max-height:200px; overflow-y:auto;display: none;">
@@ -146,7 +146,7 @@
 
           </div>
 
-
+          <!-- 
           <div class="page-title" *ngIf="hasId && hasQuoteDet">
             <div class="title_left">
               <h3 style="padding:15px 0 5px 0">Spare Quotation Details</h3>
@@ -186,7 +186,192 @@
                 <td>{{i.status }}</td>
               </tr>
             </tbody>
-          </table>
+          </table> -->
+          <div class="offerRequestProccess" *ngIf="hasId">
+            <div class="page-title">
+              <div class="title_left">
+                <h3 style="padding:15px 0 5px 0">Offer Request Stages</h3>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th style="width: 70px;">Action</th>
+                      <th style="width: 170px;">Stage</th>
+                      <th style="width: 400px;">Comments</th>
+                      <th>Upload Files <i class="mx-2 fas fa-upload"></i></th>
+                      <th>Download Files <i class="mx-2 fas fa-download"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="onProcessSubmit(offerComment.value,'offer')"
+                          class="offer btn btn-primary"> <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Offer</td>
+                      <td>
+                        <textarea #offerComment id="offer_Comment" class="offer form-control"></textarea>
+                      </td>
+                      <td>
+                        <input class="offer" #offer_file
+                          (change)="getfil(offer_file.files); listfile(offer_file.files,'offer_selectedfiles');"
+                          multiple type="file" />
+                      </td>
+                      <td>
+                        <div id="offer_selectedfiles" class="hidden" style="display: none;"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="onProcessSubmit(upload_po_Comment.value,'upload_po')"
+                          class="upload_po btn btn-primary"> <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Upload PO</td>
+                      <td>
+                        <textarea #upload_po_Comment id="upload_po_Comment" class=" upload_po form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #upload_po_file class="upload_po" type="file"
+                          (change)="getfil(upload_po_file.files); listfile(upload_po_file.files,'upload_po_selectedfiles');">
+                      </td>
+                      <td>
+                        <div id="upload_po_selectedfiles" class="hidden" style="display: none;"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="onProcessSubmit(pfi_Comment.value,'pfi')"
+                          class="pfi btn btn-primary"> <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>PFI</td>
+                      <td>
+                        <textarea #pfi_Comment id="pfi_Comment" class="pfi form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #pfi_file class="pfi" type="file"
+                          (change)="getfil(pfi_file.files); listfile(pfi_file.files,'pfi_selectedfiles');">
+                      </td>
+                      <td>
+                        <div id="pfi_selectedfiles" class="hidden" style="display: none;"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button"
+                          (click)="onProcessSubmit(payment_revision_Comment.value,'payment_revision')"
+                          class="payment_revision btn btn-primary"> <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Payment Revision</td>
+                      <td>
+                        <textarea #payment_revision_Comment id="payment_revision_Comment"
+                          class="payment_revision form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #payment_revision_file class="payment_revision" type="file"
+                          (change)="getfil(payment_revision_file.files); listfile(payment_revision_file.files,'payment_revision_selectedfiles');">
+                      </td>
+                      <td>
+                        <div id="payment_revision_selectedfiles" class="hidden" style="display: none;"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="onProcessSubmit(payment_done_Comment.value,'payment_done')"
+                          class="payment_done btn btn-primary"> <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Payment Done</td>
+                      <td>
+                        <textarea #payment_done_Comment id="payment_done_Comment"
+                          class="payment_done form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #payment_done_file class="payment_done" type="file"
+                          (change)="getfil(payment_done_file.files); listfile(payment_done_file.files,'payment_done_selectedfiles');">
+                      </td>
+                      <td>
+                        <div id="payment_done_selectedfiles" class="hidden" style="display: none;"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button"
+                          (click)="onProcessSubmit(payment_received_Comment.value,'payment_received')"
+                          class="payment_received btn btn-primary"> <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Payment Received</td>
+                      <td>
+                        <textarea #payment_received_Comment id="payment_received_Comment"
+                          class="payment_received form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #payment_received_file class="payment_received" type="file"
+                          (change)="getfil(payment_received_file.files); listfile(payment_received_file.files,'payment_received_selectedfiles');">
+                      </td>
+                      <td>
+                        <div id="payment_received_selectedfiles" class="hidden" style="display: none;"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="onProcessSubmit(under_process_Comment.value,'under_process')"
+                          class="under_process btn btn-primary"> <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Under Process</td>
+                      <td>
+                        <textarea #under_process_Comment id="under_process_Comment"
+                          class=" under_process form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #under_process_file class="under_process" type="file"
+                          (change)="getfil(under_process_file.files); listfile(under_process_file.files,'under_process_selectedfiles');">
+                      </td>
+                      <td>
+                        <div id="under_process_selectedfiles" class="hidden" style="display: none;"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="onProcessSubmit(shipped_Comment.value,'shipped')"
+                          class="shipped btn btn-primary"> <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Shipped</td>
+                      <td>
+                        <textarea #shipped_Comment id="shipped_Comment" class=" shipped form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #shipped_file class="shipped" type="file"
+                          (change)="getfil(shipped_file.files); listfile(shipped_file.files,'shipped_selectedfiles');">
+                      </td>
+                      <td>
+                        <div id="shipped_selectedfiles" class="hidden" style="display: none;"></div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
 
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px;">
@@ -203,3 +388,20 @@
     </div>
   </div>
 </layout>
+
+
+<style>
+  th>button {
+    padding: 6px 9px;
+  }
+
+  thead {
+    background-color: #5ba146;
+    color: white;
+  }
+
+  tbody {
+    border: 0.5px solid rgb(202 170 170);
+
+  }
+</style>

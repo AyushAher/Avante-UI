@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { HttpEventType } from '@angular/common/http';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,6 +27,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SparequotedetComponent } from './sparequotedet.component';
 import { SparequotedetService } from '../_services/sparequotedet.service';
 import { environment } from '../../environments/environment';
+import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -81,6 +82,21 @@ export class OfferrequestComponent implements OnInit {
   role: any;
   hasQuoteDet: boolean = false;
   @ViewChild('sparePartsSearch') sparePartsSearch: any
+  processList: any;
+  processFile: any
+
+  stages = ["offer", "upload_po", "pfi", "payment_revision", "payment_done", "payment_received", "under_process", "shipped"]
+  roleBasedStatusList = [
+    { stage: "offer", user: environment.distRoleCode },
+    { stage: "upload_po", user: environment.custRoleCode },
+    { stage: "pfi", user: environment.distRoleCode },
+    { stage: "payment_revision" },
+    { stage: "payment_done", user: environment.custRoleCode },
+    { stage: "payment_received", user: environment.distRoleCode },
+    { stage: "under_process", user: environment.distRoleCode },
+    { stage: "shipped", user: environment.distRoleCode },
+  ]
+  activeStage: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -99,6 +115,7 @@ export class OfferrequestComponent implements OnInit {
     private SpareQuoteDetService: SparequotedetService,
     private listTypeService: ListTypeService,
     private zohoService: zohoapiService,
+    private offerRequestProcess: OfferRequestProcessesService
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       if (this.id != null) {
@@ -138,6 +155,12 @@ export class OfferrequestComponent implements OnInit {
                 });
             }
           })
+        this.stages.forEach(x => {
+          var selectedfiles = document.getElementById(x + "_selectedfiles");
+
+        })
+
+        this.getAllOfferRequestProcess()
       }
     });
 
@@ -203,6 +226,7 @@ export class OfferrequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.form.patchValue(data.object);
+            this.getAllOfferRequestProcess();
           },
           error: (error) => {
             this.notificationService.showError('Error', 'Error');
@@ -310,6 +334,110 @@ export class OfferrequestComponent implements OnInit {
     this.GetFileList(this.id);
   }
 
+  disableRows(stage, disable = true) {
+    let disabledStagesList = <any>document.getElementsByClassName(stage)
+    for (let index = 0; index < disabledStagesList.length; index++) {
+      const item = disabledStagesList[index];
+      item.disabled = disable;
+
+    }
+  }
+
+  getAllOfferRequestProcess() {
+    this.offerRequestProcess.getAll(this.id)
+      .pipe(first())
+      .subscribe((data: any) => {
+        setTimeout(() => {
+          this.activeStage = data.object.find(x => x.isactive == true)?.stage
+          data.object.forEach(element => {
+            var ele = <HTMLInputElement>document.getElementById(element.stage + "_Comment")
+            ele.value = element.comments
+
+            this.FileShareService.list(element.id)
+              .pipe(first())
+              .subscribe({
+                next: (files: any) => {
+                  document.getElementById(element.stage + "_selectedfiles").style.display = "block";
+                  var selectedfiles = document.getElementById(element.stage + "_selectedfiles");
+                  selectedfiles.innerHTML = ""
+                  var ulist = document.createElement("ul");
+                  ulist.id = element.stage + "_demo";
+                  ulist.style.width = "max-content"
+                  ulist.style.padding = "0"
+                  ulist.style.listStyle = "none"
+
+                  files.object?.forEach(element => {
+
+                    this.FileShareService.download(element.id).subscribe((event) => {
+                      if (event.type === HttpEventType.Response) {
+
+                        const downloadedFile = new Blob([event.body], { type: event.body.type });
+                        const a = document.createElement("a");
+                        a.setAttribute("style", "display:block;");
+                        a.download = element.id;
+                        a.href = URL.createObjectURL(downloadedFile);
+                        a.innerHTML = "- " + element.displayName;
+                        a.target = "_blank";
+
+                        var node = document.createElement("li");
+                        node.appendChild(a);
+                        ulist.appendChild(node);
+
+                      }
+                    })
+
+                  });
+
+                  selectedfiles.appendChild(ulist);
+
+                },
+                error: (err: any) => {
+                  this.notificationService.showError(err, "Error");
+                },
+              });
+
+          });
+          this.ProcessAccordingToRoles()
+        }, 1000);
+        data.object.filter(x => x.isactive != true).forEach(element => this.disableRows(element.stage));
+
+      })
+  }
+
+  ProcessAccordingToRoles() {
+    let activeStageUser = this.roleBasedStatusList.find(x => x.stage == this.activeStage)?.user
+    if (activeStageUser != null) {
+      if (activeStageUser != this.role) {
+        let disabledStagesList = <any>document.getElementsByClassName(this.activeStage)
+        for (let index = 0; index < disabledStagesList.length; index++) {
+          const item = disabledStagesList[index];
+          item.disabled = true;
+        }
+      }
+      else {
+        let disabledStagesList = <any>document.getElementsByClassName(this.activeStage)
+        for (let index = 0; index < disabledStagesList.length; index++) {
+          const item = disabledStagesList[index];
+          item.disabled = false;
+        }
+      }
+    } else {
+      let disabledStagesList = <any>document.getElementsByClassName(this.activeStage)
+      for (let index = 0; index < disabledStagesList.length; index++) {
+        const item = disabledStagesList[index];
+        item.disabled = false;
+      }
+
+      if (this.role == environment.custRoleCode) {
+        let currentIndex = this.stages.indexOf(this.stages.find(x => x == this.activeStage))
+        currentIndex++;
+        let stage = this.stages[currentIndex]
+        this.disableRows(stage, false)
+      }
+    }
+  }
+
+
   getZohoData() {
     let quoteno = this.form.get('spareQuoteNo').value;
     if (quoteno != null && quoteno != "") {
@@ -356,6 +484,44 @@ export class OfferrequestComponent implements OnInit {
     }
   }
 
+  onProcessSubmit(comments, stage) {
+    let offerProcess = {
+      isactive: false,
+      comments,
+      parentId: this.id,
+      stage
+    }
+
+    this.offerRequestProcess.update(offerProcess).pipe(first())
+      .subscribe((data: any) => {
+        let currentIndex = this.stages.indexOf(this.stages.find(x => x == stage))
+        if (currentIndex >= 0) {
+          let stage = this.stages[currentIndex]
+
+          this.disableRows(stage, true)
+          currentIndex++;
+          stage = this.stages[currentIndex]
+          this.activeStage = stage;
+          this.disableRows(stage, false)
+          offerProcess.isactive = true;
+          offerProcess.comments = null;
+          offerProcess.stage = stage;
+          this.ProcessAccordingToRoles()
+          this.offerRequestProcess.update(offerProcess).pipe(first())
+            .subscribe((data1: any) => {
+              if (this.processFile != null) {
+                this.uploadFile(this.processFile, data.extraObject);
+                this.notificationService.filter("itemadded");
+
+              }
+            })
+        }
+      })
+
+
+  }
+
+
   RemoveSpareParts(event) {
     var cellValue = event.value;
     var rowData = event.data;
@@ -392,6 +558,7 @@ export class OfferrequestComponent implements OnInit {
     }
 
   }
+
   SparePartsSearch = (searchtext) => {
     this.sparePartPartNo = searchtext;
 
@@ -408,6 +575,7 @@ export class OfferrequestComponent implements OnInit {
         },
       });
   }
+
   AddSpareParts(instrument: any) {
 
     this.Service
@@ -440,6 +608,7 @@ export class OfferrequestComponent implements OnInit {
       });
 
   }
+
   private createColumnDefs() {
     return [{
       headerName: 'Action',
@@ -501,6 +670,7 @@ export class OfferrequestComponent implements OnInit {
     }
     ]
   }
+
   onCellValueChanged(event) {
     var data = event.data;
     event.data.modified = true;
@@ -530,16 +700,22 @@ export class OfferrequestComponent implements OnInit {
     return this.form.controls
   }
 
+  getfil(x, isParentAttachment = false) {
+    if (isParentAttachment) {
+      this.file = x;
+    } else {
+      this.processFile = x;
+    }
 
-  getfil(x) {
-    this.file = x;
   }
-  listfile = (x) => {
-    document.getElementById("selectedfiles").style.display = "block";
 
-    var selectedfiles = document.getElementById("selectedfiles");
+  listfile = (x, lstId = "selectedfiles") => {
+    document.getElementById(lstId).style.display = "block";
+
+    var selectedfiles = document.getElementById(lstId);
     var ulist = document.createElement("ul");
     ulist.id = "demo";
+    ulist.style.width = "max-content"
     selectedfiles.appendChild(ulist);
 
     if (this.transaction != 0) {
@@ -557,6 +733,7 @@ export class OfferrequestComponent implements OnInit {
       ul.appendChild(node);
     }
   };
+
   createColumnDefsAttachments() {
     return [
       {
@@ -583,7 +760,9 @@ export class OfferrequestComponent implements OnInit {
     ]
   }
 
-  uploadFile = (files, id) => {
+  // offerrequestno_stage_filename
+
+  uploadFile = (files, id, code = "OFREQ") => {
     if (files.length === 0) {
       return;
     }
@@ -593,7 +772,8 @@ export class OfferrequestComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
-    this.FileShareService.upload(formData, id, "OFREQ").subscribe((event) => {
+
+    this.FileShareService.upload(formData, id, code).subscribe((event) => {
       if (event.type === HttpEventType.UploadProgress)
         this.progress = Math.round((100 * event.loaded) / event.total);
       else if (event.type === HttpEventType.Response) {
@@ -602,6 +782,7 @@ export class OfferrequestComponent implements OnInit {
       }
     });
   };
+
   GetFileList(id: string) {
     this.FileShareService.list(id)
       .pipe(first())
@@ -669,25 +850,6 @@ export class OfferrequestComponent implements OnInit {
 
   createColumnDefsSPDet() {
     return [
-      // {
-      //   headerName: "Action",
-      //   field: "id",
-      //   filter: false,
-      //   editable: false,
-      //   sortable: false,
-      //
-      //   cellRenderer: (params) => {
-      //     if (this.hasDeleteAccess && !this.hasUpdateAccess) {
-      //       return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
-      //     } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
-      //       return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-      //     <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-      //     } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
-      //       return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-      //     }
-      //   }
-      // },
-
       {
         headerName: 'Sales Order Number',
         field: 'salesorder_number',
@@ -759,7 +921,6 @@ export class OfferrequestComponent implements OnInit {
           next: (data: any) => {
             if (this.file != null) {
               this.uploadFile(this.file, data.object.id);
-              ``
             }
             this.notificationService.showSuccess(
               data.resultMessage,

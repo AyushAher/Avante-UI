@@ -418,7 +418,7 @@
                 <a aria-controls="profile" aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab"
                   href="#profile" id="profile-tab" role="tab">Ticket Assigned History</a>
               </li>
-              <li class="nav-item" *ngIf="!IsCustomerView">
+              <li class="nav-item">
                 <a aria-controls="contact" aria-selected="false" class="nav-link" data-toggle="tab" href="#contact"
                   id="contact-tab" role="tab">Action</a>
               </li>
@@ -427,8 +427,8 @@
                   id="contact-tab" role="tab">Scheduled Calls</a>
               </li>
             </ul>
-            <a class="link" *ngIf="IsEngineerView && accepted &&!isGenerateReport" style="margin-right: 20px;"
-              [routerLink]="scheduleLink">Schedule Call</a>
+            <!-- <a class="link" *ngIf="IsEngineerView && accepted &&!isGenerateReport" style="margin-right: 20px;"
+              [routerLink]="scheduleLink">Schedule Call</a> -->
           </div>
 
           <div class="tab-content" id="myTabContent">
@@ -531,7 +531,7 @@
           <hr />
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px">
-              <button *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isGenerateReport==true"
+              <button *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isGenerateReport==false"
                 [disabled]="loading" type="submit" class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
