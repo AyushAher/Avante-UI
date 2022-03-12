@@ -227,9 +227,6 @@ export class ServiceReportListComponent implements OnInit {
                 this.serviceRequestService.getById(data.serviceRequestId)
                   .pipe(first())
                   .subscribe((serReq: any) => {
-
-
-
                     {
 
                       if (data.custsignature == null) {
@@ -249,7 +246,6 @@ export class ServiceReportListComponent implements OnInit {
                       data.attachment == true ? data.attachment = this.checkedImg : data.attachment = this.unCheckedImg;
                       data.interrupted == true ? data.interrupted = this.checkedImg : data.interrupted = this.unCheckedImg;
                       data.isworkdone == true ? data.isworkdone = this.checkedImg : data.isworkdone = this.unCheckedImg;
-                      console.log(data.spRecomm);
 
                       (data.workTime == [] || data.workTime == null) ? data.workTime = [
                         {
@@ -271,7 +267,6 @@ export class ServiceReportListComponent implements OnInit {
                     serReq.forEach((value) => {
                       value.actiondate = this.datepipe.transform(value.actiondate, "dd/MM/YYYY")
                     })
-                    console.log(serReq);
 
                     const docDefinition = {
                       footer: (currentPage, pageCount) => {
@@ -720,18 +715,16 @@ export class ServiceReportListComponent implements OnInit {
                         },
                         {
                           table: {
-                            widths: ['*', '*', '*', '*'],
+                            widths: ['20%', '15%', '15%', '50%'],
                             body: [
                               [
                                 { text: 'Engineer Name:', bold: true, fillColor: '#00573F', color: '#fff' },
                                 { text: 'Action Taken:', bold: true, fillColor: '#00573F', color: '#fff' },
-                                { text: 'Comments:', bold: true, fillColor: '#00573F', color: '#fff' },
                                 { text: 'Action Date:', bold: true, fillColor: '#00573F', color: '#fff' },
+                                { text: 'Comments:', bold: true, fillColor: '#00573F', color: '#fff' },
                               ],
 
-                              ...serReq.map(p => ([p.engineername, p.actiontakenId, p.comments, p.actiondate]))
-
-
+                              ...serReq.map(p => ([p.engineername, p.actiontakenId, p.actiondate, p.comments]))
                             ]
                           }
                         },

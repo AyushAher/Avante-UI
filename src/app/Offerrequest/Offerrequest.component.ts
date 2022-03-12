@@ -589,7 +589,6 @@ export class OfferrequestComponent implements OnInit {
           data.id = Guid.create();
           data.id = data.id.value;
 
-          data.offerRequestId = this.id;
           data.amount = Number(data.price) * Number(data.qty)
 
           if (this.sparePartsList.filter(x => x.partno == data.partno).length == 0) {
@@ -613,9 +612,12 @@ export class OfferrequestComponent implements OnInit {
     return [{
       headerName: 'Action',
       field: 'id',
-      cellRendererFramework: AmcInstrumentRendererComponent,
-      cellRendererParams: {
-        deleteaccess: this.hasDeleteAccess,
+      cellRenderer: (params) => {
+        return `
+        <button class="btn btn-link" [disabled]="!params.deleteaccess" type="button">
+        <i class="fas fa-trash-alt" title="Delete"></i>
+      </button>
+        `
       },
 
     }, {
@@ -901,6 +903,7 @@ export class OfferrequestComponent implements OnInit {
 
       this.sparePartsList.forEach(instrument => {
         instrument.offerRequest = this.id;
+        instrument.offerRequestId = this.id;
       })
     }
 

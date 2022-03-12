@@ -63,6 +63,7 @@ export class EngineerschedulerComponent implements OnInit {
   public group: GroupModel = {
     resources: ['Owners']
   };
+
   constructor(
     private serviceRequestService: ServiceRequestService,
     private notificationService: NotificationService,
@@ -228,6 +229,7 @@ export class EngineerschedulerComponent implements OnInit {
     if (e.requestType == "eventCreate") {
       if (Array.isArray(e.data)) {
         e.data.forEach(x => {
+          this.loading = true;
           x.Id = x.Id.toString();
 
           this.serviceRequestService.getById(this.id)
@@ -253,14 +255,15 @@ export class EngineerschedulerComponent implements OnInit {
 
                   this.EngschedulerService.save(x).pipe(first()).subscribe({
                     next: (data: any) => {
+                      this.loading = false;
                       if (!data.result) {
-                        debugger;
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
                         this.notificationService.showError(data.message, "Error")
                       }
                     },
                     error: (error) => {
+                      this.loading = false;
                       this.scheduleObj.deleteEvent(x)
                       this.scheduleObj.refreshEvents();
                       this.notificationService.showError(error, "Error")
@@ -268,6 +271,7 @@ export class EngineerschedulerComponent implements OnInit {
                   })
 
                 } else {
+                  this.loading = false;
                   this.notificationService.showError("Start Date Should Be greater than or Equal" +
                     " to Service Request Date", "Error")
                   this.scheduleObj.deleteEvent(x)
@@ -275,6 +279,7 @@ export class EngineerschedulerComponent implements OnInit {
                 }
               },
               error: (error: any) => {
+                this.loading = false;
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
                 this.notificationService.showError(error, "Error")
@@ -291,6 +296,7 @@ export class EngineerschedulerComponent implements OnInit {
             .pipe(first())
             .subscribe({
               next: (data: any) => {
+                this.loading = true;
                 data = data.object;
                 let serReqDate = new Date(data.serreqdate)
                 let SDate: Date = x.StartTime;
@@ -306,6 +312,7 @@ export class EngineerschedulerComponent implements OnInit {
 
                   this.EngschedulerService.save(x).pipe(first()).subscribe({
                     next: (data: any) => {
+                      this.loading = false;
                       if (!data.result) {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
@@ -313,6 +320,7 @@ export class EngineerschedulerComponent implements OnInit {
                       }
                     },
                     error: (error) => {
+                      this.loading = false;
                       this.scheduleObj.deleteEvent(x)
                       this.scheduleObj.refreshEvents();
                       this.notificationService.showError(error, "Error")
@@ -320,6 +328,7 @@ export class EngineerschedulerComponent implements OnInit {
                   })
 
                 } else {
+                  this.loading = false;
                   this.notificationService.showError("Start Date Should Be greater than or Equal" +
                     " to Service Request Date", "Error")
                   this.scheduleObj.deleteEvent(x)
@@ -327,6 +336,7 @@ export class EngineerschedulerComponent implements OnInit {
                 }
               },
               error: (error: any) => {
+                this.loading = false;
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
                 this.notificationService.showError(error, "Error")
@@ -338,9 +348,10 @@ export class EngineerschedulerComponent implements OnInit {
       }
 
     } else if (e.requestType == "eventChange") {
-
+      this.loading = true;
       this.EngschedulerService.update(e.data.Id, e.data).pipe(first()).subscribe({
         next: (data: any) => {
+          this.loading = false;
           if (!data.result) {
             this.scheduleObj.deleteEvent(e.data)
             this.scheduleObj.refreshEvents();
@@ -348,6 +359,7 @@ export class EngineerschedulerComponent implements OnInit {
           }
         },
         error: (error) => {
+          this.loading = false;
           this.scheduleObj.deleteEvent(e.data)
           this.scheduleObj.saveEvent(e.data)
           this.scheduleObj.refreshEvents();
@@ -357,11 +369,13 @@ export class EngineerschedulerComponent implements OnInit {
     } else if (e.requestType == "eventRemove") {
       if (Array.isArray(e.data)) {
         e.data.forEach(x => {
+          this.loading = true;
           x.Id = x.Id.toString()
           this.EngschedulerService.delete(x.Id)
             .pipe(first())
             .subscribe({
               next: (data: any) => {
+                this.loading = false;
                 if (!data.result) {
                   this.scheduleObj.deleteEvent(x)
                   this.scheduleObj.refreshEvents();
@@ -369,6 +383,7 @@ export class EngineerschedulerComponent implements OnInit {
                 }
               },
               error: (error: any) => {
+                this.loading = false;
                 this.scheduleObj.saveEvent(x)
                 this.scheduleObj.refreshEvents();
                 this.notificationService.showError(error, "Error")
@@ -376,12 +391,14 @@ export class EngineerschedulerComponent implements OnInit {
             })
         })
       } else {
+        this.loading = true;
         let x = e.data;
         x.Id = x.Id.toString()
         this.EngschedulerService.delete(x.Id)
           .pipe(first())
           .subscribe({
             next: (data: any) => {
+              this.loading = false;
               if (!data.result) {
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
@@ -389,6 +406,7 @@ export class EngineerschedulerComponent implements OnInit {
               }
             },
             error: (error: any) => {
+              this.loading = false;
               this.scheduleObj.saveEvent(x)
               this.scheduleObj.refreshEvents();
               this.notificationService.showError(error, "Error")

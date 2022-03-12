@@ -10,8 +10,10 @@
       <hr />
 
       <div class="col-md-12 col-sm-12 ">
-        <button *ngIf="id!=null" class="btn btn-secondary" (click)="onBackclick()"
-          style="margin-left:10px;">Back</button>
+        <button *ngIf="id!=null" [disabled]="loading" class="btn btn-secondary" (click)="onBackclick()"
+          style="margin-left:10px;">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Back</button>
         <ejs-schedule *ngIf="isEng==true" width='100%' height='100%' #scheduleObj [currentView]="setView"
           (actionBegin)="onActionBegin($event)" (popupOpen)='onPopupOpen($event)' [eventSettings]="eventSettings">
         </ejs-schedule>

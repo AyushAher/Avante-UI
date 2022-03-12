@@ -2,8 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { AgRendererComponent } from "ag-grid-angular";
 import { first } from "rxjs/operators";
-import { ListTypeItem, ProfileReadOnly, ServiceRequest } from "../_models";
-import { DistributorService, ListTypeService, NotificationService, ProfileService, ServiceRequestService } from "../_services";
+import { ListTypeItem, ProfileReadOnly, ServiceRequest, tickersAssignedHistory } from "../_models";
+import { DistributorService, ListTypeService, NotificationService, ProfileService, ServiceRequestService, SRAssignedHistoryService } from "../_services";
 
 @Component({
     template: `
@@ -30,6 +30,8 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
     hasUpdate: boolean = false;
     profilePermission: ProfileReadOnly;
     isGenerateReport: boolean = false;
+    engineerid: any;
+    srAssignedHistory: any;
 
     constructor(
         private distributorService: DistributorService,
@@ -38,6 +40,7 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
         private serviceRequest: ServiceRequestService,
         private listTypeService: ListTypeService,
         private profileService: ProfileService,
+        private srAssignedHistoryService: SRAssignedHistoryService,
 
     ) {
     }
@@ -126,6 +129,7 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
 
         this.Form.patchValue(this.params.data)
         this.Form.get('assignedto').setValue(this.params.value)
+        this.engineerid = this.params.data.assignedto;
 
         this.distributorService.getDistributorRegionContacts(this.params.data.distid)
             .pipe(first())
@@ -141,6 +145,33 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
 
     }
 
+    addAssignedHistory(sr: ServiceRequest) {
+        if (this.engineerid != null && this.engineerid != sr.assignedto && this.isGenerateReport == false) {
+
+            this.srAssignedHistory = new tickersAssignedHistory;
+            this.srAssignedHistory.engineerid = this.engineerid;
+            this.srAssignedHistory.servicerequestid = sr.id;
+            this.srAssignedHistory.ticketstatus = "INPRG";
+            this.srAssignedHistory.assigneddate = new Date()
+
+            this.srAssignedHistoryService.save(this.srAssignedHistory)
+                .pipe(first())
+                .subscribe({
+                    next: (data: any) => {
+                        if (data.result) {
+                            // this.notificationService.showSuccess(data.resultMessage, "Success");
+                            this.notificationService.filter("itemadded");
+                        } else {
+                            this.notificationService.showError(data.resultMessage, "Error");
+                        }
+                    },
+                    error: error => {
+                        this.notificationService.showSuccess(error, "Error");
+                    }
+                });
+        }
+    }
+
     onSubmit() {
         if (this.isGenerateReport == false) {
             let srrqData = this.params.data
@@ -154,10 +185,12 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
             }
 
             srrqData.scheduledCalls = []
+            srrqData.engComments = []
             this.serviceRequest.update(srrqData.id, srrqData)
                 .pipe(first())
                 .subscribe((data: any) => {
                     if (data.result) {
+                        this.addAssignedHistory(srrqData)
                         this.notificationService.showSuccess(data.resultMessage, "Success")
                         this.notificationService.filter("itemadded");
                     } else {

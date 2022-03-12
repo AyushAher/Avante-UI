@@ -411,15 +411,16 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
 
               <li class="nav-item" *ngIf="IsEngineerView">
-                <a aria-controls="home" aria-selected="{{IsEngineerView}}" class="nav-link active" data-toggle="tab"
-                  href="#home" id="home-tab" role="tab">Engineer</a>
+                <a aria-controls="home" aria-selected="{{IsEngineerView}}" class="nav-link"
+                  [ngClass]="{ 'active': IsEngineerView && !IsDistributorView }" data-toggle="tab" href="#home"
+                  id="home-tab" role="tab">Engineer</a>
               </li>
               <li class="nav-item" *ngIf="IsDistributorView">
-                <a aria-controls="profile" aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab"
+                <a aria-controls="profile" [ngClass]="{ 'active': !IsEngineerView && IsDistributorView }" aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab"
                   href="#profile" id="profile-tab" role="tab">Ticket Assigned History</a>
               </li>
               <li class="nav-item">
-                <a aria-controls="contact" aria-selected="false" class="nav-link" data-toggle="tab" href="#contact"
+                <a aria-controls="contact" [ngClass]="{ 'active': !IsEngineerView && !IsDistributorView }" aria-selected="false" class="nav-link" data-toggle="tab" href="#contact"
                   id="contact-tab" role="tab">Action</a>
               </li>
               <li class="nav-item">
@@ -432,8 +433,8 @@
           </div>
 
           <div class="tab-content" id="myTabContent">
-            <div *ngIf="IsEngineerView" aria-labelledby="home-tab" class="tab-pane fade show active" id="home"
-              role="tabpanel">
+            <div *ngIf="IsEngineerView" aria-labelledby="home-tab" class="tab-pane fade" id="home" role="tabpanel"
+              [ngClass]="{ 'show active': IsEngineerView && !IsDistributorView }">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <button (click)="open(serviceRequestId)" *ngIf="!accepted && !isGenerateReport"
                   class="btn btn-sm btn-success button" style="margin: 10px;" type="button"><i
@@ -444,8 +445,8 @@
                   pagination="true" paginationPageSize=10 rowSelection="single"></ag-grid-angular>
               </div>
             </div>
-            <div *ngIf="IsCustomerView==false" class="tab-pane fade" id="profile" role="tabpanel"
-              aria-labelledby="profile-tab">
+            <div *ngIf="IsCustomerView==false" [ngClass]="{ 'show active': !IsEngineerView && IsDistributorView }"
+              class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="height: 250px;" (rowClicked)="onhisRowClicked($event)" class="ag-theme-alpine"
                   (gridReady)="historyready($event)" [columnDefs]="ticketcolumnDefs" [rowData]="ticketHistoryList"
@@ -469,7 +470,8 @@
                   style="width: 100%; height: 250px;"></ag-grid-angular>
               </div>
             </div>
-            <div aria-labelledby="contact-tab" class="tab-pane fade" id="contact" role="tabpanel">
+            <div aria-labelledby="contact-tab" [ngClass]="{ 'show active': !IsEngineerView && !IsDistributorView }"
+              class="tab-pane fade" id="contact" role="tabpanel">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
 
                 <ag-grid-angular (gridReady)="onGridReady($event)" [columnDefs]="actionDefs" [rowData]="actionList"

@@ -623,7 +623,7 @@ export class ServiceRequestComponent implements OnInit {
                 this.serviceRequestform.disable()
                 this.isGenerateReport = true;
               }
-            }, 1000);
+            }, 0);
 
             this.listTypeService.getById('SRQST')
               .pipe(first())
@@ -774,6 +774,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   onSubmit() {
+    debugger;
     if (this.IsEngineerView && this.accepted) {
       if (!this.hasCallScheduled) {
         return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")
@@ -850,6 +851,10 @@ export class ServiceRequestComponent implements OnInit {
               if (this.file != null) {
 
                 this.uploadPdfFile(this.file, data.object.id)
+              }
+
+              if (this.IsDistributorView) {
+                this.addAssignedHistory(this.serviceRequest);
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
 
@@ -1143,7 +1148,7 @@ export class ServiceRequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
+              // this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["servicerequestlist"]);
             } else {
               this.notificationService.showError(data.resultMessage, "Error");
@@ -1378,7 +1383,7 @@ export class ServiceRequestComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        hide: this.isGenerateReport == false,
+        hide: this.isGenerateReport,
         cellRenderer: (params) => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
@@ -1433,19 +1438,12 @@ export class ServiceRequestComponent implements OnInit {
       {
         headerName: 'Comments',
         field: 'comments',
+        width:600,
         filter: false,
         enableSorting: false,
         editable: false,
         sortable: false
       },
-      {
-        headerName: 'Status',
-        field: 'ticketstatus',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false
-      }
     ]
   }
 
@@ -1608,12 +1606,6 @@ export class ServiceRequestComponent implements OnInit {
   openaction(param: string, param1: string) {
     //debugger;
     if (this.isGenerateReport == false) {
-      if (this.IsEngineerView) {
-        if (!this.hasCallScheduled) {
-          return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")
-        }
-      }
-
       const initialState = {
         itemId: param,
         id: param1,
