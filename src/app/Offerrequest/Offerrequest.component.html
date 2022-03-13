@@ -274,7 +274,7 @@
                           class="payment_revision payment_revision{{index}} btn btn-primary"> <i
                             class="fas fa-save"></i>
                         </button>
-                        <button type="button" (click)="onAddPaymentRevision()"
+                        <button type="button" *ngIf="index == 0" [disabled]="!addPayRev" (click)="onAddPaymentRevision()"
                           class="payment_revision_Add btn btn-primary">
                           <i class="fas fa-plus"></i>
                         </button>

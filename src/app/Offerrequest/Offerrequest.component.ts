@@ -97,7 +97,7 @@ export class OfferrequestComponent implements OnInit {
     { stage: "shipped", user: environment.distRoleCode },
   ]
   activeStage: any;
-
+  addPayRev = false
   list = []
 
   constructor(
@@ -349,12 +349,13 @@ export class OfferrequestComponent implements OnInit {
     this.offerRequestProcess.getAll(this.id)
       .pipe(first())
       .subscribe((data: any) => {
-
         let lstRevision = data.object.filter(x => x.stage == "payment_revision").length
         for (let index = 0; index < lstRevision; index++) {
           this.onAddPaymentRevision();
         }
-        
+        if (data.object.find(x => x.stage == "payment_revision" && x.isactive == true) != null || data.object.find(x => x.stage == "payment_done")?.isactive) {
+          this.addPayRev = true;
+        }
         setTimeout(() => {
           data.object.filter(x => x.isactive != true).forEach(element => {
             if (element.stage == "payment_revision") {
@@ -446,6 +447,7 @@ export class OfferrequestComponent implements OnInit {
 
 
   ProcessAccordingToRoles() {
+    debugger;
     let activeStageUser = this.roleBasedStatusList.find(x => x.stage == this.activeStage)?.user
     if (activeStageUser != null) {
       if (activeStageUser != this.role) {
@@ -469,11 +471,16 @@ export class OfferrequestComponent implements OnInit {
         item.disabled = false;
       }
 
+      // this.addPayRev = true;
+
+
       if (this.role == environment.custRoleCode) {
         let currentIndex = this.stages.indexOf(this.stages.find(x => x == this.activeStage))
-        currentIndex++;
-        let stage = this.stages[currentIndex]
-        this.disableRows(stage, false)
+        if (currentIndex >= 0) {
+          currentIndex++;
+          let stage = this.stages[currentIndex]
+          this.disableRows(stage, false)
+        }
       }
     }
   }
@@ -540,6 +547,10 @@ export class OfferrequestComponent implements OnInit {
       parentId: this.id,
       stage,
       index
+    }
+
+    if (stage == "payment_done") {
+      this.addPayRev = false
     }
 
     this.offerRequestProcess.update(offerProcess).pipe(first())
