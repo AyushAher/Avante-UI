@@ -197,10 +197,10 @@
             <hr />
             <div class="row">
               <div class="col-md-12">
-                <table class="table">
+                <table class="table" id="offerProcess">
                   <thead>
                     <tr>
-                      <th style="width: 70px;">Action</th>
+                      <th style="width: 120px;">Action</th>
                       <th style="width: 170px;">Stage</th>
                       <th style="width: 400px;">Comments</th>
                       <th>Upload Files <i class="mx-2 fas fa-upload"></i></th>
@@ -267,24 +267,30 @@
                       </td>
                     </tr>
 
-                    <tr>
+                    <tr *ngFor="let item of list; let index = index;" class="payment_revision_row">
                       <th>
                         <button type="button"
-                          (click)="onProcessSubmit(payment_revision_Comment.value,'payment_revision')"
-                          class="payment_revision btn btn-primary"> <i class="fas fa-save"></i>
+                          (click)="onProcessSubmit(payment_revision_Comment.value,'payment_revision',index)"
+                          class="payment_revision payment_revision{{index}} btn btn-primary"> <i
+                            class="fas fa-save"></i>
+                        </button>
+                        <button type="button" (click)="onAddPaymentRevision()"
+                          class="payment_revision_Add btn btn-primary">
+                          <i class="fas fa-plus"></i>
                         </button>
                       </th>
                       <td>Payment Revision</td>
                       <td>
-                        <textarea #payment_revision_Comment id="payment_revision_Comment"
-                          class="payment_revision form-control"></textarea>
+                        <textarea #payment_revision_Comment id="payment_revision_Comment{{index}}"
+                          class="payment_revision payment_revision{{index}}  form-control"></textarea>
                       </td>
                       <td>
-                        <input multiple #payment_revision_file class="payment_revision" type="file"
-                          (change)="getfil(payment_revision_file.files); listfile(payment_revision_file.files,'payment_revision_selectedfiles');">
+                        <input multiple #payment_revision_file class="payment_revision payment_revision{{index}}"
+                          type="file"
+                          (change)="getfil($event.target.files); listfile($event.target.files,'payment_revision_selectedfiles'+ index);">
                       </td>
                       <td>
-                        <div id="payment_revision_selectedfiles" class="hidden" style="display: none;"></div>
+                        <div id="payment_revision_selectedfiles{{index}}" class="hidden" style="display: block;"></div>
                       </td>
                     </tr>
 

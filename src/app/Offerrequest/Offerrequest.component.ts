@@ -98,6 +98,8 @@ export class OfferrequestComponent implements OnInit {
   ]
   activeStage: any;
 
+  list = []
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -347,19 +349,53 @@ export class OfferrequestComponent implements OnInit {
     this.offerRequestProcess.getAll(this.id)
       .pipe(first())
       .subscribe((data: any) => {
+
+        let lstRevision = data.object.filter(x => x.stage == "payment_revision").length
+        for (let index = 0; index < lstRevision; index++) {
+          this.onAddPaymentRevision();
+        }
+        
+        setTimeout(() => {
+          data.object.filter(x => x.isactive != true).forEach(element => {
+            if (element.stage == "payment_revision") {
+              this.disableRows(element.stage + element.index.toString())
+            } else {
+              this.disableRows(element.stage)
+            }
+          });
+        }, 10)
+
         setTimeout(() => {
           this.activeStage = data.object.find(x => x.isactive == true)?.stage
           data.object.forEach(element => {
-            var ele = <HTMLInputElement>document.getElementById(element.stage + "_Comment")
-            ele.value = element.comments
+            switch (element.stage) {
+              case 'payment_revision':
+                var ele = <HTMLInputElement>document.getElementById(element.stage + "_Comment" + element.index.toString())
+                ele.value = element.comments
+                break;
+
+              default:
+                var ele = <HTMLInputElement>document.getElementById(element.stage + "_Comment")
+                ele.value = element.comments
+                break;
+            }
 
             this.FileShareService.list(element.id)
               .pipe(first())
               .subscribe({
                 next: (files: any) => {
-                  document.getElementById(element.stage + "_selectedfiles").style.display = "block";
-                  var selectedfiles = document.getElementById(element.stage + "_selectedfiles");
-                  selectedfiles.innerHTML = ""
+                  switch (element.stage) {
+                    case 'payment_revision':
+                      var selectedfiles = document.getElementById(element.stage + "_selectedfiles" + element.index);
+                      selectedfiles.innerHTML = ""
+                      break;
+
+                    default:
+                      document.getElementById(element.stage + "_selectedfiles").style.display = "block";
+                      var selectedfiles = document.getElementById(element.stage + "_selectedfiles");
+                      selectedfiles.innerHTML = ""
+                      break;
+                  }
                   var ulist = document.createElement("ul");
                   ulist.id = element.stage + "_demo";
                   ulist.style.width = "max-content"
@@ -399,10 +435,15 @@ export class OfferrequestComponent implements OnInit {
           });
           this.ProcessAccordingToRoles()
         }, 1000);
-        data.object.filter(x => x.isactive != true).forEach(element => this.disableRows(element.stage));
 
       })
   }
+
+
+  onAddPaymentRevision() {
+    this.list.push(1)
+  }
+
 
   ProcessAccordingToRoles() {
     let activeStageUser = this.roleBasedStatusList.find(x => x.stage == this.activeStage)?.user
@@ -484,12 +525,21 @@ export class OfferrequestComponent implements OnInit {
     }
   }
 
-  onProcessSubmit(comments, stage) {
+  onProcessSubmit(comments, stage, index = 0) {
+    debugger;
+    switch (stage) {
+      case 'payment_revision':
+        let element: any = document.getElementById('payment_revision_Comment' + index)
+        comments = element.value
+        break;
+    }
+
     let offerProcess = {
       isactive: false,
       comments,
       parentId: this.id,
-      stage
+      stage,
+      index
     }
 
     this.offerRequestProcess.update(offerProcess).pipe(first())
@@ -498,7 +548,12 @@ export class OfferrequestComponent implements OnInit {
         if (currentIndex >= 0) {
           let stage = this.stages[currentIndex]
 
-          this.disableRows(stage, true)
+          if (stage == "payment_revision") {
+            this.disableRows(stage + index.toString(), true)
+          }
+          else {
+            this.disableRows(stage, true)
+          }
           currentIndex++;
           stage = this.stages[currentIndex]
           this.activeStage = stage;
