@@ -976,8 +976,8 @@ export class ServiceRequestComponent implements OnInit {
           next: (data: any) => {
             this.serviceRequestform.get('accepted').disable();
             this.serviceRequestform.get('accepted').setValue(true)
-            // this.notificationService.showSuccess(data.resultMessage, "Success");
-            alert("As you have accepted the Service request please schedule a call to process further.")
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            // alert("As you have accepted the Service request please schedule a call to process further.")
           }, error: (error) => {
 
             this.notificationService.showError(error, "Error");

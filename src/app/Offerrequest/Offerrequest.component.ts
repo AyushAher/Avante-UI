@@ -1,14 +1,13 @@
-import { DatePipe } from '@angular/common';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
-import { Guid } from 'guid-typescript';
-import { first } from 'rxjs/operators';
-import { AmcInstrumentRendererComponent } from '../amc/amc-instrument-renderer.component';
-import { Currency, Distributor, ResultMsg, User } from '../_models';
-import { Offerrequest } from '../_models/Offerrequest.model';
+import {DatePipe} from '@angular/common';
+import {HttpEventType} from '@angular/common/http';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import {Guid} from 'guid-typescript';
+import {first} from 'rxjs/operators';
+import {Currency, Distributor, ResultMsg, User} from '../_models';
+import {Offerrequest} from '../_models/Offerrequest.model';
 import {
   AccountService,
   AlertService,
@@ -20,14 +19,14 @@ import {
   ProfileService,
   zohoapiService
 } from '../_services';
-import { OfferrequestService } from '../_services/Offerrequest.service';
-import { SparePartsOfferRequestService } from '../_services/sparepartsofferrequest.service';
-import { FilerendercomponentComponent } from './filerendercomponent.component';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { SparequotedetComponent } from './sparequotedet.component';
-import { SparequotedetService } from '../_services/sparequotedet.service';
-import { environment } from '../../environments/environment';
-import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
+import {OfferrequestService} from '../_services/Offerrequest.service';
+import {SparePartsOfferRequestService} from '../_services/sparepartsofferrequest.service';
+import {FilerendercomponentComponent} from './filerendercomponent.component';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {SparequotedetComponent} from './sparequotedet.component';
+import {SparequotedetService} from '../_services/sparequotedet.service';
+import {environment} from '../../environments/environment';
+import {OfferRequestProcessesService} from '../_services/offer-request-processes.service';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -162,7 +161,7 @@ export class OfferrequestComponent implements OnInit {
 
         })
 
-        this.getAllOfferRequestProcess()
+        this.getAllOfferRequestProcess(true);
       }
     });
 
@@ -345,97 +344,122 @@ export class OfferrequestComponent implements OnInit {
     }
   }
 
-  getAllOfferRequestProcess() {
+  getAllOfferRequestProcess(reRendered = false) {
     this.offerRequestProcess.getAll(this.id)
       .pipe(first())
       .subscribe((data: any) => {
-        let lstRevision = data.object.filter(x => x.stage == "payment_revision").length
-        for (let index = 0; index < lstRevision; index++) {
-          this.onAddPaymentRevision();
-        }
-        if (data.object.find(x => x.stage == "payment_revision" && x.isactive == true) != null || data.object.find(x => x.stage == "payment_done")?.isactive) {
-          this.addPayRev = true;
-        }
-        setTimeout(() => {
-          data.object.filter(x => x.isactive != true).forEach(element => {
-            if (element.stage == "payment_revision") {
-              this.disableRows(element.stage + element.index.toString())
-            } else {
-              this.disableRows(element.stage)
-            }
-          });
-        }, 10)
-
-        setTimeout(() => {
-          this.activeStage = data.object.find(x => x.isactive == true)?.stage
-          data.object.forEach(element => {
-            switch (element.stage) {
-              case 'payment_revision':
-                var ele = <HTMLInputElement>document.getElementById(element.stage + "_Comment" + element.index.toString())
-                ele.value = element.comments
+        // let existingRow = document.getElementsByClassName("payment_revision_row").length
+        // if (data.object.find(x => x.stage == "payment_revision" && x.isactive == true) != null || data.object.find(x => x.stage == "payment_done")?.isactive) {
+        //   this.addPayRev = true;
+        // }
+        // setTimeout(() => {
+        //   data.object.filter(x => x.isactive != true).forEach(element => {
+        //     if (element.stage == "payment_revision") {
+        //       this.disableRows(element.stage + element.index.toString())
+        //     } else {
+        //     }
+        //   });
+        // }, 10)
+        let isPayRevStageDone = false;
+        // setTimeout(() => {
+        this.activeStage = data.object.find(x => x.isactive == true)?.stage;
+        data.object.forEach(element => {
+          switch (element.stage) {
+            case 'payment_revision':
+              if (isPayRevStageDone) {
                 break;
+              }
+              let lstRevision = data.object.filter(x => x.stage == 'payment_revision');
+              for (let index = 0; index < lstRevision.length; index++) {
+                if (!reRendered) {
+                  this.onAddPaymentRevision();
+                }
+              }
 
-              default:
-                var ele = <HTMLInputElement>document.getElementById(element.stage + "_Comment")
-                ele.value = element.comments
-                break;
-            }
+              if (data.object.find(x => x.stage == 'payment_revision' && x.isactive == true) != null || data.object.find(x => x.stage == 'payment_done')?.isactive) {
+                this.addPayRev = true;
+              }
+              setTimeout(() => {
+                for (let index = 0; index < lstRevision.length; index++) {
+                  var ele = <HTMLInputElement>document.getElementById(element.stage + '_Comment' + index.toString());
+                  ele.value = lstRevision[index].comments;
+                  this.disableRows(element.stage + index.toString());
+                }
+              }, 10);
+              // if (element.stage == "payment_revision") {
+              //   // this.disableRows(element.stage + element.index.toString())
+              // }
 
-            this.FileShareService.list(element.id)
-              .pipe(first())
-              .subscribe({
-                next: (files: any) => {
-                  switch (element.stage) {
-                    case 'payment_revision':
-                      var selectedfiles = document.getElementById(element.stage + "_selectedfiles" + element.index);
-                      selectedfiles.innerHTML = ""
-                      break;
+              isPayRevStageDone = true;
+              break;
 
-                    default:
-                      document.getElementById(element.stage + "_selectedfiles").style.display = "block";
-                      var selectedfiles = document.getElementById(element.stage + "_selectedfiles");
-                      selectedfiles.innerHTML = ""
-                      break;
-                  }
-                  var ulist = document.createElement("ul");
-                  ulist.id = element.stage + "_demo";
-                  ulist.style.width = "max-content"
-                  ulist.style.padding = "0"
-                  ulist.style.listStyle = "none"
+            default:
+              if (element.isactive != true) {
+                this.disableRows(element.stage);
+              }
+              var ele = <HTMLInputElement>document.getElementById(element.stage + '_Comment');
+              ele.value = element.comments;
+              break;
+          }
 
-                  files.object?.forEach(element => {
+          this.FileShareService.list(element.id)
+            .pipe(first())
+            .subscribe({
+              next: (files: any) => {
+                switch (element.stage) {
+                  case 'payment_revision':
+                    debugger;
+                    var selectedfiles = document.getElementById(element.stage + '_selectedfiles' + element.index.toString());
+                    selectedfiles.innerHTML = '';
+                    break;
 
-                    this.FileShareService.download(element.id).subscribe((event) => {
-                      if (event.type === HttpEventType.Response) {
+                  default:
+                    document.getElementById(element.stage + '_selectedfiles').style.display = 'block';
+                    var selectedfiles = document.getElementById(element.stage + '_selectedfiles');
+                    selectedfiles.innerHTML = '';
+                    break;
+                }
+                var ulist = document.createElement('ul');
+                ulist.id = element.stage + '_demo';
+                ulist.style.width = 'max-content';
+                ulist.style.padding = '0';
+                ulist.style.listStyle = 'none';
 
-                        const downloadedFile = new Blob([event.body], { type: event.body.type });
-                        const a = document.createElement("a");
-                        a.setAttribute("style", "display:block;");
-                        a.download = element.id;
-                        a.href = URL.createObjectURL(downloadedFile);
-                        a.innerHTML = "- " + element.displayName;
-                        a.target = "_blank";
+                files.object?.forEach(element => {
 
-                        var node = document.createElement("li");
-                        node.appendChild(a);
-                        ulist.appendChild(node);
+                  this.FileShareService.download(element.id).subscribe((event) => {
+                    if (event.type === HttpEventType.Response) {
 
-                      }
-                    })
+                      const downloadedFile = new Blob([event.body], {type: event.body.type});
+                      const a = document.createElement('a');
+                      a.setAttribute('style', 'display:block;');
+                      a.download = element.id;
+                      a.href = URL.createObjectURL(downloadedFile);
+                      a.innerHTML = '- ' + element.displayName;
+                      a.target = '_blank';
 
+                      var node = document.createElement('li');
+                      node.appendChild(a);
+                      ulist.appendChild(node);
+
+                    }
                   });
 
-                  selectedfiles.appendChild(ulist);
+                });
 
-                },
-                error: (err: any) => {
-                  this.notificationService.showError(err, "Error");
-                },
-              });
+                selectedfiles.appendChild(ulist);
 
-          });
-          this.ProcessAccordingToRoles()
-        }, 1000);
+              },
+              error: (err: any) => {
+                this.notificationService.showError(err, 'Error');
+              },
+            });
+
+        });
+        setTimeout(() => {
+          this.ProcessAccordingToRoles();
+        }, 50);
+        // }, 1000);
 
       })
   }
@@ -447,18 +471,17 @@ export class OfferrequestComponent implements OnInit {
 
 
   ProcessAccordingToRoles() {
-    debugger;
-    let activeStageUser = this.roleBasedStatusList.find(x => x.stage == this.activeStage)?.user
+    let activeStageUserc = this.roleBasedStatusList.find(x => x.stage == this.activeStage);
+    let activeStageUser = activeStageUserc?.user;
     if (activeStageUser != null) {
       if (activeStageUser != this.role) {
-        let disabledStagesList = <any>document.getElementsByClassName(this.activeStage)
+        let disabledStagesList = <any>document.getElementsByClassName(this.activeStage);
         for (let index = 0; index < disabledStagesList.length; index++) {
           const item = disabledStagesList[index];
           item.disabled = true;
         }
-      }
-      else {
-        let disabledStagesList = <any>document.getElementsByClassName(this.activeStage)
+      } else {
+        let disabledStagesList = <any>document.getElementsByClassName(this.activeStage);
         for (let index = 0; index < disabledStagesList.length; index++) {
           const item = disabledStagesList[index];
           item.disabled = false;
