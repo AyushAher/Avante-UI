@@ -432,7 +432,7 @@
               [routerLink]="scheduleLink">Schedule Call</a> -->
           </div>
 
-          <div class="tab-content" id="myTabContent">
+          <div class="tab-content" id="myTabContent" *ngIf="serviceRequestId!=null">
             <div *ngIf="IsEngineerView" aria-labelledby="home-tab" class="tab-pane fade" id="home" role="tabpanel"
               [ngClass]="{ 'show active': IsEngineerView && !IsDistributorView }">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">

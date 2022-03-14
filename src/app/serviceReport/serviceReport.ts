@@ -147,6 +147,7 @@ export class ServiceReportComponent implements OnInit {
   interrupted: boolean = false;
   finished: boolean = false;
   @ViewChild('file') fileInput
+  isCompleted: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -204,10 +205,13 @@ export class ServiceReportComponent implements OnInit {
 
   ngAfterViewInit() {
     // this.signaturePad is now available
-    this.signaturePad.set('minWidth', 2);
-    this.signaturePad.clear();
-    this.signaturePadcust.set('minWidth', 2);
-    this.signaturePadcust.clear();
+    if (!this.isCompleted) {
+
+      this.signaturePad.set('minWidth', 2);
+      this.signaturePad.clear();
+      this.signaturePadcust.set('minWidth', 2);
+      this.signaturePadcust.clear();
+    }
   }
 
   // formatter = (result: { name: string }) => result.name.toUpperCase();
@@ -488,9 +492,18 @@ export class ServiceReportComponent implements OnInit {
                   this.loading = false;
                 }
               });
+
+            this.isCompleted = data.object.isCompleted
+            if (this.isCompleted) {
+              this.ServiceReportform.disable()
+              this.fileInput.nativeElement.disabled = true
+              this.hasAddAccess = false;
+              this.hasReadAccess = false;
+              this.hasUpdateAccess = false;
+              this.hasDeleteAccess = false
+            }
           },
           error: error => {
-            // this.alertService.error(error);
             this.notificationService.showSuccess(error, 'Error');
             this.loading = false;
           }
@@ -526,7 +539,7 @@ export class ServiceReportComponent implements OnInit {
 
     // reset alerts on submit
     this.alertService.clear();
-
+    if (this.isCompleted) return
     // stop here if form is invalid
     if (this.ServiceReportform.invalid) {
       return;
@@ -659,215 +672,171 @@ export class ServiceReportComponent implements OnInit {
 
 
   onInteruptedChange(interrupted: any) {
+    if (!this.isCompleted) {
+      if (interrupted == 0) {
+        this.interrupted = true;
+        this.ServiceReportform.get('reason').enable()
+        this.ServiceReportform.get('reason').setValidators([Validators.required])
+      } else {
+        this.interrupted = false;
+        this.ServiceReportform.get('reason').clearValidators()
+        this.ServiceReportform.get('reason').disable()
+        this.ServiceReportform.get('reason').setValue("")
 
-    if (interrupted == 0) {
-      this.interrupted = true;
-      this.ServiceReportform.get('reason').enable()
-      this.ServiceReportform.get('reason').setValidators([Validators.required])
-    } else {
-      this.interrupted = false;
-      this.ServiceReportform.get('reason').clearValidators()
-      this.ServiceReportform.get('reason').disable()
-      this.ServiceReportform.get('reason').setValue("")
+      }
 
+      this.ServiceReportform.get('reason').updateValueAndValidity()
     }
-
-    this.ServiceReportform.get('reason').updateValueAndValidity()
   }
 
   onWorkFinishedChange(finished: any) {
-    this.ServiceReportform.get('reason').clearValidators()
-    this.ServiceReportform.get('reason').disable()
-    this.ServiceReportform.get('interruptedstr').disable()
-    this.ServiceReportform.get('interruptedstr').setValue("1")
+    if (!this.isCompleted) {
+      this.ServiceReportform.get('reason').clearValidators()
+      this.ServiceReportform.get('reason').disable()
+      this.ServiceReportform.get('interruptedstr').disable()
+      this.ServiceReportform.get('interruptedstr').setValue("1")
 
-    if (finished == 1) {
-      this.ServiceReportform.get('reason').enable()
-      this.ServiceReportform.get('interruptedstr').enable()
-      this.ServiceReportform.get('interruptedstr').setValue("0")
-      this.ServiceReportform.get('reason').setValidators([Validators.required])
+      if (finished == 1) {
+        this.ServiceReportform.get('reason').enable()
+        this.ServiceReportform.get('interruptedstr').enable()
+        this.ServiceReportform.get('interruptedstr').setValue("0")
+        this.ServiceReportform.get('reason').setValidators([Validators.required])
 
+      }
+      this.onInteruptedChange(this.ServiceReportform.get('interruptedstr').value)
+      this.ServiceReportform.get('reason').updateValueAndValidity()
     }
-    this.onInteruptedChange(this.ServiceReportform.get('interruptedstr').value)
-    this.ServiceReportform.get('reason').updateValueAndValidity()
   }
 
 
   clearSignature() {
-    this.signaturePad.clear();
+    if (!this.isCompleted) {
+      this.signaturePad.clear();
+    }
   }
 
   savePad() {
-    const base64Data = this.signaturePad.toDataURL();
-    this.signatureImg = base64Data;
+    if (!this.isCompleted) {
+      const base64Data = this.signaturePad.toDataURL();
+      this.signatureImg = base64Data;
+    }
   }
 
   getfil(x) {
-    this.file = x;
+    if (!this.isCompleted) {
+      this.file = x;
+    }
   }
 
   listfile = (x) => {
-    document.getElementById('selectedfiles').style.display = 'block';
+    if (!this.isCompleted) {
+      document.getElementById('selectedfiles').style.display = 'block';
 
-    const selectedfiles = document.getElementById('selectedfiles');
-    const ulist = document.createElement('ul');
-    ulist.id = 'demo';
-    selectedfiles.appendChild(ulist);
+      const selectedfiles = document.getElementById('selectedfiles');
+      const ulist = document.createElement('ul');
+      ulist.id = 'demo';
+      selectedfiles.appendChild(ulist);
 
-    if (this.transaction != 0) {
-      document.getElementById('demo').remove();
-    }
+      if (this.transaction != 0) {
+        document.getElementById('demo').remove();
+      }
 
-    this.transaction++;
-    this.hastransaction = true;
+      this.transaction++;
+      this.hastransaction = true;
 
-    for (let i = 0; i <= x.length; i++) {
-      const name = x[i].name;
-      const ul = document.getElementById('demo');
-      const node = document.createElement('li');
-      const textnode = document.createTextNode(name);
-      node.appendChild(textnode);
+      for (let i = 0; i <= x.length; i++) {
+        const name = x[i].name;
+        const ul = document.getElementById('demo');
+        const node = document.createElement('li');
+        const textnode = document.createTextNode(name);
+        node.appendChild(textnode);
 
-      ul.appendChild(node);
+        ul.appendChild(node);
 
+      }
     }
   }
 
   public onRowClicked(e) {
-    if (e.event.target !== undefined) {
-      const data = e.data;
-      const actionType = e.event.target.getAttribute('data-action-type');
-      // this.serviceRequestId = this.route.snapshot.paramMap.get('id');
-      switch (actionType) {
-        case 'remove':
-          if (confirm('Are you sure, you want to remove the engineer comment?') == true) {
-            // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
-            this.workdoneservice.delete(data.id)
-              .pipe(first())
-              .subscribe({
-                next: (d: any) => {
-                  if (d.result) {
-                    this.notificationService.showSuccess(d.resultMessage, 'Success');
-                  } else {
+    if (!this.isCompleted) {
+      if (e.event.target !== undefined) {
+        const data = e.data;
+        const actionType = e.event.target.getAttribute('data-action-type');
+        // this.serviceRequestId = this.route.snapshot.paramMap.get('id');
+        switch (actionType) {
+          case 'remove':
+            if (confirm('Are you sure, you want to remove the engineer comment?') == true) {
+              // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
+              this.workdoneservice.delete(data.id)
+                .pipe(first())
+                .subscribe({
+                  next: (d: any) => {
+                    if (d.result) {
+                      this.notificationService.showSuccess(d.resultMessage, 'Success');
+                    } else {
 
 
-                    this.notificationService.showError(d.resultMessage, 'Error');
+                      this.notificationService.showError(d.resultMessage, 'Error');
+                    }
+                  },
+                  error: error => {
+
+                    this.notificationService.showError(error, 'Error');
+                    this.loading = false;
                   }
-                },
-                error: error => {
-
-                  this.notificationService.showError(error, 'Error');
-                  this.loading = false;
-                }
-              });
-          }
-        case 'edit':
-          this.open(this.ServiceReportId, data.id);
+                });
+            }
+          case 'edit':
+            this.open(this.ServiceReportId, data.id);
+        }
       }
     }
   }
 
   public onRowClickedPre(e) {
-    if (e.event.target !== undefined) {
-      const data = e.data;
-      const actionType = e.event.target.getAttribute('data-action-type');
-      // this.serviceRequestId = this.route.snapshot.paramMap.get('id');
-      switch (actionType) {
-        case 'remove':
-          if (confirm('Are you sure, you want to remove the sparepart?') == true) {
-            // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
-            this.srrecomndservice.delete(data.id)
-              .pipe(first())
-              .subscribe({
-                next: (d: any) => {
-                  if (d.result) {
-                    this.notificationService.showSuccess(d.resultMessage, 'Success');
-                    this.notificationService.filter('itemadded');
-                  } else {
+    if (!this.isCompleted) {
+      if (e.event.target !== undefined) {
+        const data = e.data;
+        const actionType = e.event.target.getAttribute('data-action-type');
+        // this.serviceRequestId = this.route.snapshot.paramMap.get('id');
+        switch (actionType) {
+          case 'remove':
+            if (confirm('Are you sure, you want to remove the sparepart?') == true) {
+              // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
+              this.srrecomndservice.delete(data.id)
+                .pipe(first())
+                .subscribe({
+                  next: (d: any) => {
+                    if (d.result) {
+                      this.notificationService.showSuccess(d.resultMessage, 'Success');
+                      this.notificationService.filter('itemadded');
+                    } else {
 
 
-                    this.notificationService.showError(d.resultMessage, 'Error');
+                      this.notificationService.showError(d.resultMessage, 'Error');
+                    }
+                  },
+                  error: error => {
+
+                    this.notificationService.showError(error, 'Error');
+                    this.loading = false;
                   }
-                },
-                error: error => {
-
-                  this.notificationService.showError(error, 'Error');
-                  this.loading = false;
-                }
-              });
-          }
-        case 'edit':
-          let sprec: sparePartRecomanded;
-          sprec = data;
-          this.srrecomndservice.update(sprec.id, sprec)
-            .pipe(first())
-            .subscribe({
-              next: (data: any) => {
-                if (data.result) {
-                  this.notificationService.showSuccess(data.resultMessage, 'Success');
-                  this.notificationService.filter('itemadded');
-                  // this.configList = data.object;
-                  // this.listvalue.get("configValue").setValue("");
-                } else {
-
-
-                  this.notificationService.showError(data.resultMessage, 'Error');
-                }
-                this.loading = false;
-              },
-              error: error => {
-
-                this.notificationService.showError(error, 'Error');
-                this.loading = false;
-              }
-            });
-        // this.open(this.ServiceReportId, data.id);
-      }
-    }
-  }
-
-  public onRowClickedCon(e) {
-    if (e.event.target !== undefined) {
-      const data = e.data;
-      const actionType = e.event.target.getAttribute('data-action-type');
-      // this.serviceRequestId = this.route.snapshot.paramMap.get('id');
-      switch (actionType) {
-        case 'remove':
-          if (confirm('Are you sure, you want to remove the sparepart?') == true) {
-            // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
-            this.srConsumedservice.delete(data.id)
-              .pipe(first())
-              .subscribe({
-                next: (d: any) => {
-                  if (d.result) {
-                    this.notificationService.showSuccess(d.resultMessage, 'Success');
-                    this.notificationService.filter('itemadded');
-                  } else {
-                    this.notificationService.showError(d.resultMessage, 'Error');
-                  }
-                },
-                // error: error => {
-
-                //   this.notificationService.showError(error, "Error");
-                //   this.loading = false;
-                // }
-              });
-          }
-        case 'edit':
-          let sprec: sparePartsConsume;
-          sprec = data;
-          if (Number(sprec.qtyconsumed) <= Number(sprec.qtyAvailable)) {
-            this.srConsumedservice.update(sprec.id, sprec)
+                });
+            }
+          case 'edit':
+            let sprec: sparePartRecomanded;
+            sprec = data;
+            this.srrecomndservice.update(sprec.id, sprec)
               .pipe(first())
               .subscribe({
                 next: (data: any) => {
                   if (data.result) {
-                    const newQtyAvailable: number = Number(sprec.qtyAvailable) - Number(sprec.qtyconsumed);
-                    this.CustSPInventoryService.updateqty(sprec.customerSPInventoryId, newQtyAvailable.toString()).pipe(first()).subscribe();
+                    this.notificationService.showSuccess(data.resultMessage, 'Success');
                     this.notificationService.filter('itemadded');
                     // this.configList = data.object;
                     // this.listvalue.get("configValue").setValue("");
                   } else {
+
 
                     this.notificationService.showError(data.resultMessage, 'Error');
                   }
@@ -879,110 +848,182 @@ export class ServiceReportComponent implements OnInit {
                   this.loading = false;
                 }
               });
-          } else {
-            this.notificationService.showError('The Consumed Qty. is not Available. Please Recommend the Spare' +
-              ' Parts', 'Error');
-          }
+          // this.open(this.ServiceReportId, data.id);
+        }
+      }
+    }
+  }
 
-        // this.open(this.ServiceReportId, data.id);
+  public onRowClickedCon(e) {
+    if (!this.isCompleted) {
+      if (e.event.target !== undefined) {
+        const data = e.data;
+        const actionType = e.event.target.getAttribute('data-action-type');
+        // this.serviceRequestId = this.route.snapshot.paramMap.get('id');
+        switch (actionType) {
+          case 'remove':
+            if (confirm('Are you sure, you want to remove the sparepart?') == true) {
+              // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
+              this.srConsumedservice.delete(data.id)
+                .pipe(first())
+                .subscribe({
+                  next: (d: any) => {
+                    if (d.result) {
+                      this.notificationService.showSuccess(d.resultMessage, 'Success');
+                      this.notificationService.filter('itemadded');
+                    } else {
+                      this.notificationService.showError(d.resultMessage, 'Error');
+                    }
+                  },
+                  // error: error => {
+
+                  //   this.notificationService.showError(error, "Error");
+                  //   this.loading = false;
+                  // }
+                });
+            }
+          case 'edit':
+            let sprec: sparePartsConsume;
+            sprec = data;
+            if (Number(sprec.qtyconsumed) <= Number(sprec.qtyAvailable)) {
+              this.srConsumedservice.update(sprec.id, sprec)
+                .pipe(first())
+                .subscribe({
+                  next: (data: any) => {
+                    if (data.result) {
+                      const newQtyAvailable: number = Number(sprec.qtyAvailable) - Number(sprec.qtyconsumed);
+                      this.CustSPInventoryService.updateqty(sprec.customerSPInventoryId, newQtyAvailable.toString()).pipe(first()).subscribe();
+                      this.notificationService.filter('itemadded');
+                      // this.configList = data.object;
+                      // this.listvalue.get("configValue").setValue("");
+                    } else {
+
+                      this.notificationService.showError(data.resultMessage, 'Error');
+                    }
+                    this.loading = false;
+                  },
+                  error: error => {
+
+                    this.notificationService.showError(error, 'Error');
+                    this.loading = false;
+                  }
+                });
+            } else {
+              this.notificationService.showError('The Consumed Qty. is not Available. Please Recommend the Spare' +
+                ' Parts', 'Error');
+            }
+
+          // this.open(this.ServiceReportId, data.id);
+        }
       }
     }
   }
 
   public onworktimeRowClicked(e) {
-    if (e.event.target !== undefined) {
-      const data = e.data;
-      const actionType = e.event.target.getAttribute('data-action-type');
-      // this.serviceRequestId = this.route.snapshot.paramMap.get('id');
-      switch (actionType) {
-        case 'remove':
-          if (confirm('Are you sure, you want to remove the worktime?') == true) {
-            // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
-            this.worktimeservice.delete(data.id)
-              .pipe(first())
-              .subscribe({
-                next: (d: any) => {
-                  if (d.result) {
-                    this.notificationService.showSuccess(d.resultMessage, 'Success');
-                    this.notificationService.filter('itemadded');
-                  } else {
+    if (!this.isCompleted) {
+      if (e.event.target !== undefined) {
+        const data = e.data;
+        const actionType = e.event.target.getAttribute('data-action-type');
+        // this.serviceRequestId = this.route.snapshot.paramMap.get('id');
+        switch (actionType) {
+          case 'remove':
+            if (confirm('Are you sure, you want to remove the worktime?') == true) {
+              // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
+              this.worktimeservice.delete(data.id)
+                .pipe(first())
+                .subscribe({
+                  next: (d: any) => {
+                    if (d.result) {
+                      this.notificationService.showSuccess(d.resultMessage, 'Success');
+                      this.notificationService.filter('itemadded');
+                    } else {
 
 
-                    this.notificationService.showError(d.resultMessage, 'Error');
+                      this.notificationService.showError(d.resultMessage, 'Error');
+                    }
+                  },
+                  error: error => {
+
+                    this.notificationService.showError(error, 'Error');
+                    this.loading = false;
                   }
-                },
-                error: error => {
-
-                  this.notificationService.showError(error, 'Error');
-                  this.loading = false;
-                }
-              });
-          }
-        case 'edit':
-          this.opentime(this.ServiceReportId, data.id);
+                });
+            }
+          case 'edit':
+            this.opentime(this.ServiceReportId, data.id);
+        }
       }
     }
   }
 
   onCellValueChanged(event) {
-    const data = event.data;
-    event.data.modified = true;
+    if (!this.isCompleted) {
+      const data = event.data;
+      event.data.modified = true;
+    }
   }
 
   onCellValueChangedPre(event) {
-    const data = event.data;
-    event.data.modified = true;
+    if (!this.isCompleted) {
+      const data = event.data;
+      event.data.modified = true;
+    }
   }
 
   updateSpareParts(params) {
   }
 
   addPartrecmm() {
-    const v = this.ServiceReportform.get('recondad').value;
-    this.srRecomndModel = new sparePartRecomanded();
-    this.srRecomndModel.partno = v.partNo;
-    this.srRecomndModel.hsccode = v.hsCode;
-    this.srRecomndModel.qtyrecommended = "0";
-    this.srRecomndModel.servicereportid = this.ServiceReportId;
-    this.srrecomndservice.save(this.srRecomndModel)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, 'Success');
-            this.notificationService.filter('itemadded');
-          } else {
-            this.notificationService.showError(data.resultMessage, 'Error');
-          }
-          this.loading = false;
-        },
-        error: error => {
+    if (!this.isCompleted) {
+      const v = this.ServiceReportform.get('recondad').value;
+      if (v == "" || v == null) return;
+      this.srRecomndModel = new sparePartRecomanded();
+      this.srRecomndModel.partno = v.partNo;
+      this.srRecomndModel.hsccode = v.hsCode;
+      this.srRecomndModel.qtyrecommended = "0";
+      this.srRecomndModel.servicereportid = this.ServiceReportId;
+      this.srrecomndservice.save(this.srRecomndModel)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            if (data.result) {
+              this.notificationService.showSuccess(data.resultMessage, 'Success');
+              this.notificationService.filter('itemadded');
+            } else {
+              this.notificationService.showError(data.resultMessage, 'Error');
+            }
+            this.loading = false;
+          },
+          error: error => {
 
-          this.notificationService.showError(error, 'Error');
-          this.loading = false;
-        }
-      });
-    this.ServiceReportform.get('recondad').setValue("");
+            this.notificationService.showError(error, 'Error');
+            this.loading = false;
+          }
+        });
+      this.ServiceReportform.get('recondad').setValue("");
+    }
   }
 
 
   uploadPdfFile(files, id) {
-    if (files.length === 0) {
-      return;
-    }
-    const filesToUpload: File[] = files;
-    const formData = new FormData();
-
-    Array.from(filesToUpload).map((file, index) => {
-      return formData.append('file' + index, file, file.name);
-    });
-    this.fileshareService.upload(formData, id, 'SRREP').subscribe((event) => {
-      if (event.type === HttpEventType.UploadProgress) {
-        this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
-      } else if (event.type === HttpEventType.Response) {
-        this.onUploadFinished.emit(event.body);
+    if (!this.isCompleted) {
+      if (files.length === 0) {
+        return;
       }
-    });
+      const filesToUpload: File[] = files;
+      const formData = new FormData();
+
+      Array.from(filesToUpload).map((file, index) => {
+        return formData.append('file' + index, file, file.name);
+      });
+      this.fileshareService.upload(formData, id, 'SRREP').subscribe((event) => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
+        } else if (event.type === HttpEventType.Response) {
+          this.onUploadFinished.emit(event.body);
+        }
+      });
+    }
   }
 
   private createworkdoneColumnDefs() {
@@ -1083,72 +1124,12 @@ export class ServiceReportComponent implements OnInit {
   }
 
   onConfigChange(param: string) {
-    this.configService.getById(param)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.configValueList = data.object;
-        },
-        error: error => {
-
-          this.notificationService.showError(error, 'Error');
-          this.loading = false;
-        }
-      });
-  }
-
-  open(param: string, param1: string) {
-    const initialState = {
-      itemId: param,
-      id: param1
-    };
-    this.bsModalRef = this.modalService.show(WorkdoneContentComponent, { initialState });
-  }
-
-  openPrev(param: string) {
-
-    const initialState = {
-      id: param
-    };
-
-    this.bsModalRef = this.modalService.show(PreventivemaintenancetableComponent, { initialState });
-  }
-
-  // opentime
-  opentime(param: string, param1: string) {
-    const initialState = {
-      itemId: param,
-      id: param1
-    };
-    this.bsModalRef = this.modalService.show(WorkTimeContentComponent, { initialState });
-  }
-
-  // addPartcons
-  addPartcons() {
-    const v = this.ServiceReportform.get('consumed').value;
-    this.srConsumedModel = new sparePartsConsume();
-    this.srConsumedModel.partno = v.partNo;
-    this.srConsumedModel.hsccode = v.hscCode;
-    this.srConsumedModel.qtyconsumed = "0";
-    this.srConsumedModel.servicereportid = this.ServiceReportId;
-    this.srConsumedModel.qtyAvailable = v.qtyAvailable?.toString();
-    this.srConsumedModel.customerSPInventoryId = v.id;
-    if (v.id != null && v.id != "" && v.id != undefined) {
-
-      this.srConsumedservice.save(this.srConsumedModel)
+    if (!this.isCompleted) {
+      this.configService.getById(param)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            if (data.result) {
-              this.notificationService.filter('itemadded');
-              // this.configList = data.object;
-              // this.listvalue.get("configValue").setValue("");
-            } else {
-
-
-              this.notificationService.showError(data.resultMessage, 'Error');
-            }
-            this.loading = false;
+            this.configValueList = data.object;
           },
           error: error => {
 
@@ -1156,10 +1137,79 @@ export class ServiceReportComponent implements OnInit {
             this.loading = false;
           }
         });
-    } else {
-      this.notificationService.showError("Incorrect Value", "Error")
     }
-    this.ServiceReportform.get('consumed').setValue("");
+  }
+
+  open(param: string, param1: string) {
+    if (!this.isCompleted) {
+      const initialState = {
+        itemId: param,
+        id: param1
+      };
+      this.bsModalRef = this.modalService.show(WorkdoneContentComponent, { initialState });
+    }
+  }
+
+  openPrev(param: string) {
+    if (!this.isCompleted) {
+      const initialState = {
+        id: param
+      };
+
+      this.bsModalRef = this.modalService.show(PreventivemaintenancetableComponent, { initialState });
+    }
+  }
+  // opentime
+  opentime(param: string, param1: string) {
+    if (!this.isCompleted) {
+      const initialState = {
+        itemId: param,
+        id: param1
+      };
+      this.bsModalRef = this.modalService.show(WorkTimeContentComponent, { initialState });
+    }
+  }
+
+  // addPartcons
+  addPartcons() {
+    if (!this.isCompleted) {
+      const v = this.ServiceReportform.get('consumed').value;
+      if (v == null || v == "") return;
+      this.srConsumedModel = new sparePartsConsume();
+      this.srConsumedModel.partno = v.partNo;
+      this.srConsumedModel.hsccode = v.hscCode;
+      this.srConsumedModel.qtyconsumed = "0";
+      this.srConsumedModel.servicereportid = this.ServiceReportId;
+      this.srConsumedModel.qtyAvailable = v.qtyAvailable?.toString();
+      this.srConsumedModel.customerSPInventoryId = v.id;
+      if (v.id != null && v.id != "" && v.id != undefined) {
+
+        this.srConsumedservice.save(this.srConsumedModel)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result) {
+                this.notificationService.filter('itemadded');
+                // this.configList = data.object;
+                // this.listvalue.get("configValue").setValue("");
+              } else {
+
+
+                this.notificationService.showError(data.resultMessage, 'Error');
+              }
+              this.loading = false;
+            },
+            error: error => {
+
+              this.notificationService.showError(error, 'Error');
+              this.loading = false;
+            }
+          });
+      } else {
+        this.notificationService.showError("Incorrect Value", "Error")
+      }
+      this.ServiceReportform.get('consumed').setValue("");
+    }
   }
 
   private createColumnspDefs() {
@@ -1285,48 +1335,50 @@ export class ServiceReportComponent implements OnInit {
   }
 
   public onPdfRowClicked(e) {
-    if (e.event.target !== undefined) {
-      const data = e.data;
-      const actionType = e.event.target.getAttribute('data-action-type');
-      this.ServiceReportId = this.route.snapshot.paramMap.get('id');
-      switch (actionType) {
-        case 'remove':
-          if (confirm('Are you sure, you want to remove the config type?') == true) {
-            // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
-            this.fileshareService.delete(data.id)
-              .pipe(first())
-              .subscribe({
-                next: (d: any) => {
-                  if (d.result) {
-                    this.notificationService.showSuccess(d.resultMessage, 'Success');
-                    this.fileshareService.getById(this.ServiceReportId)
-                      .pipe(first())
-                      .subscribe({
-                        next: (data: any) => {
-                          this.PdffileData = data.object;
-                          // this.getPdffile(data.object.filePath);
-                        },
-                        error: error => {
+    if (!this.isCompleted) {
+      if (e.event.target !== undefined) {
+        const data = e.data;
+        const actionType = e.event.target.getAttribute('data-action-type');
+        this.ServiceReportId = this.route.snapshot.paramMap.get('id');
+        switch (actionType) {
+          case 'remove':
+            if (confirm('Are you sure, you want to remove the config type?') == true) {
+              // this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
+              this.fileshareService.delete(data.id)
+                .pipe(first())
+                .subscribe({
+                  next: (d: any) => {
+                    if (d.result) {
+                      this.notificationService.showSuccess(d.resultMessage, 'Success');
+                      this.fileshareService.getById(this.ServiceReportId)
+                        .pipe(first())
+                        .subscribe({
+                          next: (data: any) => {
+                            this.PdffileData = data.object;
+                            // this.getPdffile(data.object.filePath);
+                          },
+                          error: error => {
 
-                          this.notificationService.showError(error, 'Error');
-                          this.loading = false;
-                        }
-                      });
-                  } else {
+                            this.notificationService.showError(error, 'Error');
+                            this.loading = false;
+                          }
+                        });
+                    } else {
 
-                    this.notificationService.showError(d.resultMessage, 'Error');
+                      this.notificationService.showError(d.resultMessage, 'Error');
+                    }
+                  },
+                  error: error => {
+
+                    this.notificationService.showError(error, 'Error');
+                    this.loading = false;
                   }
-                },
-                error: error => {
-
-                  this.notificationService.showError(error, 'Error');
-                  this.loading = false;
-                }
-              });
-          }
-          break;
-        case 'download':
-          this.getPdffile(data.filePath);
+                });
+            }
+            break;
+          case 'download':
+            this.getPdffile(data.filePath);
+        }
       }
     }
   }
@@ -1395,39 +1447,43 @@ export class ServiceReportComponent implements OnInit {
 
   saveFileShare(id: string) {
     // fileshare: FileShare;
-    if (this.pdfPath != null) {
-      for (let i = 0; i < this.pdfPath.length; i++) {
-        const fileshare = new FileShare();
-        fileshare.fileName = this.pdfPath[i].fileName;
-        fileshare.filePath = this.pdfPath[i].filepath;
-        fileshare.parentId = id;
-        this.fileshareService.save(fileshare)
-          .pipe(first())
-          .subscribe({
-            next: (data: ResultMsg) => {
-              if (data.result) {
-                this.notificationService.showSuccess(data.resultMessage, 'Success');
-                this.notificationService.filter("itemadded");
-              } else {
+    if (!this.isCompleted) {
+      if (this.pdfPath != null) {
+        for (let i = 0; i < this.pdfPath.length; i++) {
+          const fileshare = new FileShare();
+          fileshare.fileName = this.pdfPath[i].fileName;
+          fileshare.filePath = this.pdfPath[i].filepath;
+          fileshare.parentId = id;
+          this.fileshareService.save(fileshare)
+            .pipe(first())
+            .subscribe({
+              next: (data: ResultMsg) => {
+                if (data.result) {
+                  this.notificationService.showSuccess(data.resultMessage, 'Success');
+                  this.notificationService.filter("itemadded");
+                } else {
 
-                this.notificationService.showError(data.resultMessage, 'Error');
+                  this.notificationService.showError(data.resultMessage, 'Error');
+                }
+                this.loading = false;
+              },
+              error: error => {
+
+                this.notificationService.showError(error, 'Error');
+                this.loading = false;
               }
-              this.loading = false;
-            },
-            error: error => {
-
-              this.notificationService.showError(error, 'Error');
-              this.loading = false;
-            }
-          });
+            });
+        }
       }
     }
   }
 
   GeneratePDF(preview: boolean) {
     if (!preview) {
-      if (confirm(`Do you really want to send the service report to below customer emails:\n \t${this.ServiceRequest.operatoremail} \n\t ${this.ServiceRequest.email}`)) {
-        this.pdf(preview);
+      if (!this.isCompleted) {
+        if (confirm(`Do you really want to send the service report to below customer emails:\n \t${this.ServiceRequest.operatoremail} \n\t ${this.ServiceRequest.email}`)) {
+          this.pdf(preview);
+        }
       }
     } else {
       this.pdf(preview);
@@ -1891,7 +1947,7 @@ export class ServiceReportComponent implements OnInit {
                               [
                                 { text: 'Engineer\'s Comments:', fillColor: '#00573F', color: '#fff' },
                                 {
-                                  ul: [...data.engComments.map(p => ([p.comments]))]
+                                  text: data.engineercomments
                                 }
                               ]
                             ]
@@ -1969,7 +2025,14 @@ export class ServiceReportComponent implements OnInit {
                           serReqId: this.ServiceRequestId,
                           pdf: data
                         };
-                        this.ServiceReportService.GenerateServciesReport(obj).pipe(first()).subscribe();
+                        this.ServiceReportService.GenerateServciesReport(obj).pipe(first()).subscribe((data: any) => {
+                          if (data.result) {
+                            this.notificationService.showSuccess(data.resultMessage, "Success")
+                            this.router.navigate(['servicereportlist'])
+                          } else {
+                            this.notificationService.showError(data.resultMessage, "Error")
+                          }
+                        });
                       });
                   })
 

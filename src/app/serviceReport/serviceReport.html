@@ -232,7 +232,7 @@
 
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
-              <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;"
+              <button type="button" [disabled]="this.isCompleted" class="btn btn-sm btn-success button" style="margin: 10px;"
                 (click)="open(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
@@ -242,7 +242,7 @@
               </div>
             </div>
             <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-              <button type="button" class="btn btn-sm btn-success button" style="margin: 10px;"
+              <button type="button" [disabled]="this.isCompleted" class="btn btn-sm btn-success button" style="margin: 10px;"
                 (click)="opentime(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onworktimeRowClicked($event)"
@@ -255,13 +255,13 @@
               <div class="row">
                 <div class="col-sm-4">
                   <label>Select Sparepart</label>
-                  <input id="typeahead-format" type="text" formControlName="consumed" class="form-control"
-                    [ngbTypeahead]="searchpartcon" [resultFormatter]="formatterpartcon"
+                  <input id="typeahead-format" [disabled]="this.isCompleted" type="text" formControlName="consumed"
+                    class="form-control" [ngbTypeahead]="searchpartcon" [resultFormatter]="formatterpartcon"
                     [inputFormatter]="formatterpartcon" />
                 </div>
                 <div class="col-sm-4">
                   <label for=""></label>
-                  <button type="button" class="btn btn-primary" style="margin-top: 31px;"
+                  <button type="button" [disabled]="this.isCompleted" class="btn btn-primary" style="margin-top: 31px;"
                     (click)="addPartcons()">Add</button>
                 </div>
               </div>
@@ -276,12 +276,13 @@
               <div class="row">
                 <div class="col-sm-4">
                   <label>Select Sparepart</label>
-                  <input id="typeahead-format" type="text" formControlName="recondad" class="form-control"
-                    [ngbTypeahead]="searchpart" [resultFormatter]="formatterpart" [inputFormatter]="formatterpart" />
+                  <input id="typeahead-format" [disabled]="this.isCompleted" type="text" formControlName="recondad"
+                    class="form-control" [ngbTypeahead]="searchpart" [resultFormatter]="formatterpart"
+                    [inputFormatter]="formatterpart" />
                 </div>
                 <div class="col-sm-4">
                   <label for=""></label>
-                  <button type="button" class="btn btn-primary" style="margin-top: 31px;"
+                  <button type="button" [disabled]="this.isCompleted" class="btn btn-primary" style="margin-top: 31px;"
                     (click)="addPartrecmm(autopart)">Add</button>
                 </div>
               </div>
@@ -366,7 +367,7 @@
                 <div *ngIf="f.signcustname.errors.required">Customer Name is required</div>
               </div>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-9" *ngIf="!this.isCompleted">
               <label for="customerSing">Customer Signature Pad</label>
               <div style="border:medium">
                 <signature-pad #sigpad1 [options]="signaturePadOptions" style="border-bottom:dashed"
@@ -386,7 +387,7 @@
                 <div *ngIf="f.signengname.errors.required">Engineer Name is required</div>
               </div>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-9" *ngIf="!this.isCompleted">
               <label for="engineerSing">Engineer Signature Pad</label>
               <div style="border:medium">
                 <signature-pad #sigpad2 [options]="signaturePadOptions" style="border-bottom:dashed"
@@ -435,7 +436,8 @@
           <hr>
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px">
-              <button [disabled]="loading" class="btn btn-primary" *ngIf="hasAddAccess==true || hasUpdateAccess==true">
+              <button [disabled]="loading" class="btn btn-primary"
+                *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && !this.isCompleted">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Save
               </button>
@@ -444,7 +446,8 @@
                 (click)="GeneratePDF(true)">Preview</button>
 
               <button [disabled]="loading" class="btn btn-secondary" type="button"
-                *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true" (click)="GeneratePDF(false)">
+                *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !this.isCompleted"
+                (click)="GeneratePDF(false)">
                 Generate Service Report
               </button>
 

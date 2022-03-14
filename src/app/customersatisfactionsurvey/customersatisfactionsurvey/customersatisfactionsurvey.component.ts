@@ -165,6 +165,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
           if (this.user.username != "admin") {
             this.form.get('distId').setValue(data.object[0].id)
             this.getengineers(data.object[0].id)
+            this.getservicerequest(data.object[0].id,this.user.contactId)
           }
         }
       })
@@ -202,7 +203,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = data.object.filter(x => x.assignedto == engId)
+          this.servicerequest = data.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
         },
 
         error: (error) => {

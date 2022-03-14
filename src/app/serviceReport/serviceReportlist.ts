@@ -667,7 +667,7 @@ export class ServiceReportListComponent implements OnInit {
                               [
                                 { text: 'Engineer\'s Comments:', fillColor: '#00573F', color: '#fff' },
                                 {
-                                  ul: [...data.engComments.map(p => ([p.comments]))]
+                                  text: data.engineercomments
                                 }
                               ]
                             ]

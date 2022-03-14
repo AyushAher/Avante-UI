@@ -230,6 +230,7 @@ export class TraveldetailsComponent implements OnInit {
           if (this.user.username != "admin") {
             this.Form.get('distId').setValue(data.object[0].id);
             this.getengineers(data.object[0].id)
+            this.getservicerequest(data.object[0].id,this.user.contactId)
           }
         }
       })
@@ -291,7 +292,7 @@ export class TraveldetailsComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.servicerequest = data.object.filter(x => x.assignedto == engId)
+          this.servicerequest = data.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
         },
 
         error: (error) => {

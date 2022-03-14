@@ -78,6 +78,7 @@ export class LocalexpensesComponent implements OnInit {
 
   @Output() public onUploadFinished = new EventEmitter();
   distId: string;
+  engId: string;
 
   constructor(
     private FileShareService: FileshareService,
@@ -157,34 +158,16 @@ export class LocalexpensesComponent implements OnInit {
         }
       })
 
-    if (this.id != null) {
-      this.hasAddAccess = false;
-
-
-      this.localExpensesService
-        .getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            this.travelDetailform.patchValue(data.object);
-            this.GetFileList(data.object.id)
-          },
-          error: (error) => {
-            this.notificationService.showError("Error", "Error");
-            this.loading = false;
-          },
-        });
-    }
-
-
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe({
         next: (data: any) => {
           if (this.user.username != "admin") {
             this.travelDetailform.get('distId').setValue(data.object[0].id)
+            if (this.isEng) {
+              this.engId = this.user.contactId
+            }
             this.getengineers(data.object[0].id)
+            this.getservicerequest(data.object[0].id, this.user.contactId)
           }
         }
       })
@@ -238,6 +221,26 @@ export class LocalexpensesComponent implements OnInit {
           this.loading = false;
         },
       });
+
+    if (this.id != null) {
+      this.localExpensesService
+        .getById(this.id)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            this.getengineers(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
+            this.GetFileList(data.object.id)
+            this.travelDetailform.patchValue(data.object);
+          },
+          error: (error) => {
+            this.notificationService.showError("Error", "Error");
+            this.loading = false;
+          },
+        });
+    }
+
+
     this.columnDefsAttachments = this.createColumnDefsAttachments();
 
   }
@@ -251,7 +254,7 @@ export class LocalexpensesComponent implements OnInit {
       .GetServiceRequestByDist(id)
       .pipe(first())
       .subscribe({
-        next: (data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId),
+        next: (data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId && !x.isReportGenerated),
 
         error: (error) => {
           this.notificationService.showError("Error", error);
@@ -393,7 +396,11 @@ export class LocalexpensesComponent implements OnInit {
     if (!this.travelDetailform.value.isactive) {
       this.travelDetailform.value.isactive = false;
     }
-    // console.log(this.travelDetailform.value);
+
+    this.travelDetailform.value.distId = this.distId;
+    if (this.isEng) {
+      this.travelDetailform.value.engineerid = this.engId;
+    }
 
     if (this.id == null) {
       this.travelDetail = this.travelDetailform.value;
