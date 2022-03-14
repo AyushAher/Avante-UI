@@ -29,7 +29,7 @@ import { environment } from "../../../environments/environment";
 })
 export class CustomersatisfactionsurveyComponent implements OnInit {
   form: FormGroup;
-  customersatisfactionsurvey: Customersatisfactionsurvey;
+  customersatisfactionsurvey: any;
   loading = false;
   submitted = false;
   isSave = false;
@@ -58,6 +58,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   isDist: boolean = false;
   distId: string;
 
+  engId: string;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -117,23 +118,6 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       isdeleted: [false],
     });
 
-    this.id = this.route.snapshot.paramMap.get("id");
-    if (this.id != null) {
-      this.CustomersatisfactionsurveyService.getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            this.form.patchValue(data.object);
-          },
-          error: (error) => {
-            this.notificationService.showError(Error, "Error");
-            this.loading = false;
-          },
-        });
-    }
-
     this.distributorservice.getAll()
       .pipe(first())
       .subscribe({
@@ -163,9 +147,10 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           if (this.user.username != "admin") {
+            this.distId = data.object[0].id;
             this.form.get('distId').setValue(data.object[0].id)
             this.getengineers(data.object[0].id)
-            this.getservicerequest(data.object[0].id,this.user.contactId)
+            this.getservicerequest(data.object[0].id, this.user.contactId)
           }
         }
       })
@@ -173,6 +158,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     if (role == environment.engRoleCode) {
       this.eng = true
       this.form.get('engineerid').setValue(this.user.contactId)
+      this.engId = this.user.contactId;
       this.form.get('engineerid').disable()
       this.form.get('distId').disable()
     } else if (role == environment.distRoleCode) {
@@ -191,6 +177,24 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
           this.loading = false;
         },
       });
+      
+    this.id = this.route.snapshot.paramMap.get("id");
+    if (this.id != null) {
+      this.CustomersatisfactionsurveyService.getById(this.id)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            this.getengineers(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
+            setTimeout(() => this.form.patchValue(data.object), 100);
+          },
+          error: (error) => {
+            this.notificationService.showError(Error, "Error");
+            this.loading = false;
+          },
+        });
+    }
+
   }
 
   get f() {
@@ -267,6 +271,9 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       }
 
       this.customersatisfactionsurvey = this.form.value;
+
+      if (this.isEng) this.customersatisfactionsurvey.engineerid = this.user.contactId
+      this.customersatisfactionsurvey.distId = this.distId
       this.CustomersatisfactionsurveyService.save(this.form.value)
         .pipe(first())
         .subscribe({
@@ -291,6 +298,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
         });
     } else {
       this.customersatisfactionsurvey = this.form.value;
+      if (this.isEng) this.customersatisfactionsurvey.engineerid = this.user.contactId
+      this.customersatisfactionsurvey.distId = this.distId
       this.customersatisfactionsurvey.id = this.id;
       this.CustomersatisfactionsurveyService.update(
         this.id,

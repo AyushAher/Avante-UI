@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
@@ -184,7 +184,7 @@ export class LocalexpensesComponent implements OnInit {
           data.object.forEach(x => {
             x.contacts.forEach(element => {
               if (element.id == this.user.contactId) {
-                this.travelDetailform.get('distId').setValue(x.id)
+                this.travelDetailform.get('distId').setValue(x.id)                
                 this.getengineers(x.id)
               }
             });
@@ -230,8 +230,10 @@ export class LocalexpensesComponent implements OnInit {
           next: (data: any) => {
             this.getengineers(data.object.distId)
             this.getservicerequest(data.object.distId, data.object.engineerid)
-            this.GetFileList(data.object.id)
-            this.travelDetailform.patchValue(data.object);
+            this.GetFileList(data.object.id);
+            setTimeout(() => {
+              this.travelDetailform.patchValue(data.object);
+            }, 100);
           },
           error: (error) => {
             this.notificationService.showError("Error", "Error");

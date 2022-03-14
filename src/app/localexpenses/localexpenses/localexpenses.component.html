@@ -30,9 +30,8 @@
             <div class="col-sm-4">
               <label>Engineer Name</label>
 
-              <select [ngClass]="{'is-invalid':submitted && f.engineerid.errors }"
-                (change)="getservicerequest(distId,$event.target.value)" class="form-control"
-                formControlName="engineerid">
+              <select formControlName="engineerid" #engineerId [ngClass]="{'is-invalid':submitted && f.engineerid.errors }"
+                (change)="getservicerequest(distId,$event.target.value)" class="form-control">
                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
               </select>
 
@@ -40,7 +39,7 @@
                 <div *ngIf="f.engineerid.errors.required">Engineer Name is required</div>
               </div>
             </div>
-            
+
             <div class="col-md-4 col-sm-4">
               <label for="name">Service Request No</label>
               <select name="" placeholder="Service Request Id" formControlName="servicerequestid" id=""
