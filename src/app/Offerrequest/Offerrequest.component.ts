@@ -1,13 +1,13 @@
-import {DatePipe} from '@angular/common';
-import {HttpEventType} from '@angular/common/http';
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
-import {Guid} from 'guid-typescript';
-import {first} from 'rxjs/operators';
-import {Currency, Distributor, ResultMsg, User} from '../_models';
-import {Offerrequest} from '../_models/Offerrequest.model';
+import { DatePipe } from '@angular/common';
+import { HttpEventType } from '@angular/common/http';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { Guid } from 'guid-typescript';
+import { first } from 'rxjs/operators';
+import { Currency, Distributor, ResultMsg, User } from '../_models';
+import { Offerrequest } from '../_models/Offerrequest.model';
 import {
   AccountService,
   AlertService,
@@ -16,17 +16,16 @@ import {
   FileshareService,
   ListTypeService,
   NotificationService,
-  ProfileService,
-  zohoapiService
+  ProfileService
 } from '../_services';
-import {OfferrequestService} from '../_services/Offerrequest.service';
-import {SparePartsOfferRequestService} from '../_services/sparepartsofferrequest.service';
-import {FilerendercomponentComponent} from './filerendercomponent.component';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {SparequotedetComponent} from './sparequotedet.component';
-import {SparequotedetService} from '../_services/sparequotedet.service';
-import {environment} from '../../environments/environment';
-import {OfferRequestProcessesService} from '../_services/offer-request-processes.service';
+import { OfferrequestService } from '../_services/Offerrequest.service';
+import { SparePartsOfferRequestService } from '../_services/sparepartsofferrequest.service';
+import { FilerendercomponentComponent } from './filerendercomponent.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { SparequotedetComponent } from './sparequotedet.component';
+import { SparequotedetService } from '../_services/sparequotedet.service';
+import { environment } from '../../environments/environment';
+import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -115,7 +114,6 @@ export class OfferrequestComponent implements OnInit {
     private modalService: BsModalService,
     private SpareQuoteDetService: SparequotedetService,
     private listTypeService: ListTypeService,
-    private zohoService: zohoapiService,
     private offerRequestProcess: OfferRequestProcessesService
   ) {
     this.notificationService.listen().subscribe((m: any) => {
@@ -207,13 +205,13 @@ export class OfferrequestComponent implements OnInit {
     })
 
     this.id = this.route.snapshot.paramMap.get('id');
-    this.route.queryParams.subscribe(params => {
-      this.zohocode = params['code'];
-    });
+    // this.route.queryParams.subscribe(params => {
+    //   this.zohocode = params['code'];
+    // });
 
-    if (this.zohocode != null) {
-      this.getZohoData()
-    }
+    // if (this.zohocode != null) {
+    //   this.getZohoData()
+    // }
 
     this.columnDefs = this.createColumnDefs();
     this.columnDefsAttachments = this.createColumnDefsAttachments();
@@ -235,13 +233,13 @@ export class OfferrequestComponent implements OnInit {
           },
         });
 
-      if (this.role == environment.distRoleCode || this.user.username == 'admin') {
-        this.hasQuoteDet = true;
-        let tokn = localStorage.getItem('zohotoken');
-        if (tokn != null && tokn != '') {
-          this.form.get('authtoken').setValue(tokn);
-        }
-      }
+      // if (this.role == environment.distRoleCode || this.user.username == 'admin') {
+      //   this.hasQuoteDet = true;
+      //   let tokn = localStorage.getItem('zohotoken');
+      //   if (tokn != null && tokn != '') {
+      //     this.form.get('authtoken').setValue(tokn);
+      //   }
+      // }
 
       this.Service.GetSpareQuoteDetailsByParentId(this.id)
         .pipe(first())
@@ -408,7 +406,7 @@ export class OfferrequestComponent implements OnInit {
               next: (files: any) => {
                 switch (element.stage) {
                   case 'payment_revision':
-                    debugger;
+
                     var selectedfiles = document.getElementById(element.stage + '_selectedfiles' + element.index.toString());
                     selectedfiles.innerHTML = '';
                     break;
@@ -430,7 +428,7 @@ export class OfferrequestComponent implements OnInit {
                   this.FileShareService.download(element.id).subscribe((event) => {
                     if (event.type === HttpEventType.Response) {
 
-                      const downloadedFile = new Blob([event.body], {type: event.body.type});
+                      const downloadedFile = new Blob([event.body], { type: event.body.type });
                       const a = document.createElement('a');
                       a.setAttribute('style', 'display:block;');
                       a.download = element.id;
@@ -509,54 +507,53 @@ export class OfferrequestComponent implements OnInit {
   }
 
 
-  getZohoData() {
-    let quoteno = this.form.get('spareQuoteNo').value;
-    if (quoteno != null && quoteno != "") {
-      localStorage.setItem('spquoteno', quoteno)
-    } else {
-      this.notificationService.showError("Spare Quote No. is required", "Error")
-      return;
-    }
+  // getZohoData() {
+  //   let quoteno = this.form.get('spareQuoteNo').value;
+  //   if (quoteno != null && quoteno != "") {
+  //     localStorage.setItem('spquoteno', quoteno)
+  //   } else {
+  //     this.notificationService.showError("Spare Quote No. is required", "Error")
+  //     return;
+  //   }
 
-    if (this.role == environment.distRoleCode || this.user.username == 'admin') {
-      this.hasQuoteDet = true;
-      if (this.accountService.zohoauthValue == null) {
-        if (this.zohocode == null) {
-          window.location.href = environment.commonzohocodeapi + 'offerrequestlist' + '&access_type=offline';
-        } else {
-          this.zohoService.authwithcode(this.zohocode, 'offerrequestlist').subscribe({
-            next: (data: any) => {
+  //   if (this.role == environment.distRoleCode || this.user.username == 'admin') {
+  //     this.hasQuoteDet = true;
+  //     if (this.accountService.zohoauthValue == null) {
+  //       if (this.zohocode == null) {
+  //         window.location.href = environment.commonzohocodeapi + 'offerrequestlist' + '&access_type=offline';
+  //       } else {
+  //         this.zohoService.authwithcode(this.zohocode, 'offerrequestlist').subscribe({
+  //           next: (data: any) => {
 
-              let code = localStorage.setItem('zCode', this.zohocode);
-              localStorage.setItem('zohotoken', JSON.stringify(data.object));
-              this.accountService.zohoauthSet(data.object);
-              quoteno = localStorage.getItem('spquoteno')
+  //             let code = localStorage.setItem('zCode', this.zohocode);
+  //             localStorage.setItem('zohotoken', JSON.stringify(data.object));
+  //             this.accountService.zohoauthSet(data.object);
+  //             quoteno = localStorage.getItem('spquoteno')
 
-              this.zohoService.GetSalesOrder(code, 1, quoteno, this.id)
-                .pipe(first())
-                .subscribe((data: any) => {
-                  this.SpareQuotationDetails = data.object;
-                });
-            },
-            error: error => {
-              this.notificationService.showError(error, 'Error');
-              this.loading = false;
-            }
-          });
-        }
-      } else {
-        let quoteno = localStorage.getItem('spquoteno')
-        this.zohoService.GetSalesOrder(this.zohocode, 1, quoteno, this.id)
-          .pipe(first())
-          .subscribe((data: any) => {
-            this.SpareQuotationDetails = data.object;
-          });
-      }
-    }
-  }
+  //             this.zohoService.GetSalesOrder(code, 1, quoteno, this.id)
+  //               .pipe(first())
+  //               .subscribe((data: any) => {
+  //                 this.SpareQuotationDetails = data.object;
+  //               });
+  //           },
+  //           error: error => {
+  //             this.notificationService.showError(error, 'Error');
+  //             this.loading = false;
+  //           }
+  //         });
+  //       }
+  //     } else {
+  //       let quoteno = localStorage.getItem('spquoteno')
+  //       this.zohoService.GetSalesOrder(this.zohocode, 1, quoteno, this.id)
+  //         .pipe(first())
+  //         .subscribe((data: any) => {
+  //           this.SpareQuotationDetails = data.object;
+  //         });
+  //     }
+  //   }
+  // }
 
   onProcessSubmit(comments, stage, index = 0) {
-    debugger;
     switch (stage) {
       case 'payment_revision':
         let element: any = document.getElementById('payment_revision_Comment' + index)

@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { RenderComponent } from '../distributor/rendercomponent';
 import { User } from '../_models';
 import { Offerrequest } from '../_models/Offerrequest.model';
-import { AccountService, NotificationService, ProfileService, zohoapiService } from '../_services';
+import { AccountService, NotificationService, ProfileService } from '../_services';
 import { OfferrequestService } from '../_services/Offerrequest.service';
-import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-Offerrequestlist',
@@ -42,8 +41,6 @@ export class OfferrequestlistComponent implements OnInit {
     private notificationService: NotificationService,
     private Service: OfferrequestService,
     private profileService: ProfileService,
-    private zohoservice: zohoapiService,
-    private route: ActivatedRoute,
   ) {
   }
 
@@ -70,15 +67,15 @@ export class OfferrequestlistComponent implements OnInit {
       this.role = role[0]?.itemCode;
     }
 
-    this.route.queryParams.subscribe(params => {
-      this.zohocode = params['code'];
-    });
+    // this.route.queryParams.subscribe(params => {
+    //   this.zohocode = params['code'];
+    // });
 
-    if (this.zohocode != null) {
-      var ofreqid = localStorage.getItem('offerrequestid')
-      localStorage.setItem('zCode', this.zohocode)
-      this.router.navigate([`offerrequest/${ofreqid}`], { queryParams: { code: this.zohocode } })
-    }
+    // if (this.zohocode != null) {
+    //   var ofreqid = localStorage.getItem('offerrequestid')
+    //   localStorage.setItem('zCode', this.zohocode)
+    //   this.router.navigate([`offerrequest/${ofreqid}`], { queryParams: { code: this.zohocode } })
+    // }
 
     this.columnDefs = this.createColumnDefs();
 
