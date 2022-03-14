@@ -150,23 +150,6 @@ export class StaydetailsComponent implements OnInit {
 
     this.id = this.route.snapshot.paramMap.get("id");
 
-    if (this.id != null) {
-      this.travelDetailService
-        .getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            this.travelDetailform.patchValue(data.object);
-          },
-          error: (error) => {
-            this.notificationService.showError("Error", "Error");
-            this.loading = false;
-          },
-        });
-    }
-
     if (this.isEng) {
       this.travelDetailform.get('hotelname').disable()
       this.travelDetailform.get('stayaddress').disable()
@@ -205,7 +188,7 @@ export class StaydetailsComponent implements OnInit {
           if (this.user.username != "admin") {
             this.travelDetailform.get('distId').setValue(data.object[0].id)
             this.getengineers(data.object[0].id)
-            this.getservicerequest(data.object[0].id,this.user.contactId)
+            this.getservicerequest(data.object[0].id, this.user.contactId)
           }
         }
       })
@@ -236,6 +219,24 @@ export class StaydetailsComponent implements OnInit {
           this.loading = false;
         },
       });
+
+    if (this.id != null) {
+      this.travelDetailService
+        .getById(this.id)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            this.getengineers(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
+            setTimeout(() => this.travelDetailform.patchValue(data.object), 100);
+          },
+          error: (error) => {
+            this.notificationService.showError("Error", "Error");
+            this.loading = false;
+          },
+        });
+    }
+
   }
 
   getservicerequest(id: string, engId: string = null) {
@@ -326,6 +327,10 @@ export class StaydetailsComponent implements OnInit {
     if (!this.travelDetailform.value.isactive) {
       this.travelDetailform.value.isactive = false;
     }
+
+    this.travelDetail.distId = this.distId
+    if (this.isEng) this.travelDetail.engineerid = this.user.contactId;
+
     if (this.valid) {
       if (this.id == null) {
         this.travelDetailService
@@ -333,7 +338,6 @@ export class StaydetailsComponent implements OnInit {
           .pipe(first())
           .subscribe({
             next: (data: ResultMsg) => {
-              debugger;
               if (data.result) {
                 this.notificationService.showSuccess(
                   data.resultMessage,
@@ -353,6 +357,8 @@ export class StaydetailsComponent implements OnInit {
           });
       } else {
         this.travelDetail = this.travelDetailform.value;
+        this.travelDetail.distId = this.distId
+        if (this.isEng) this.travelDetail.engineerid = this.user.contactId;
         this.travelDetail.id = this.id;
         this.travelDetailService
           .update(this.id, this.travelDetail)

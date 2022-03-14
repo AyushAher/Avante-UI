@@ -160,27 +160,6 @@ export class VisadetailsComponent implements OnInit {
         }
       })
 
-    this.id = this.route.snapshot.paramMap.get("id");
-
-    if (this.id != null) {
-      this.hasAddAccess = false;
-      this.travelDetailService
-        .getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            this.travelDetailform.patchValue(data.object);
-            this.GetFileList(data.object.id)
-          },
-          error: (error) => {
-            this.notificationService.showError("Error", "Error");
-            this.loading = false;
-          },
-        });
-    }
-
     this.distributorservice.getAll()
       .pipe(first())
       .subscribe({
@@ -251,6 +230,27 @@ export class VisadetailsComponent implements OnInit {
         },
       });
     this.columnDefsAttachments = this.createColumnDefsAttachments();
+
+    this.id = this.route.snapshot.paramMap.get("id");
+
+    if (this.id != null) {
+      this.hasAddAccess = false;
+      this.travelDetailService
+        .getById(this.id)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            this.getengineers(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
+            this.GetFileList(data.object.id)
+            setTimeout(() => this.travelDetailform.patchValue(data.object), 1000);
+          },
+          error: (error) => {
+            this.notificationService.showError("Error", "Error");
+            this.loading = false;
+          },
+        });
+    }
 
   }
 
@@ -391,8 +391,6 @@ export class VisadetailsComponent implements OnInit {
 
 
   onSubmit() {
-
-    debugger;
     this.submitted = true;
     // reset alerts on submit
     this.alertService.clear();
@@ -405,7 +403,6 @@ export class VisadetailsComponent implements OnInit {
     this.loading = true;
 
     this.travelDetail = this.travelDetailform.value;
-
 
     let currentDate = new Date(this.travelDetailform.value.startdate);
     let dateSent = new Date(this.travelDetailform.value.enddate);
@@ -443,6 +440,9 @@ export class VisadetailsComponent implements OnInit {
       );
       this.dateValid = false;
     }
+    if (this.isEng) this.travelDetail.engineerid = this.user.contactId
+    this.travelDetail.distId = this.distId;
+
     if (this.dateValid) {
       if (this.id == null) {
         this.travelDetailService
@@ -450,7 +450,6 @@ export class VisadetailsComponent implements OnInit {
           .pipe(first())
           .subscribe({
             next: (data: any) => {
-              debugger;
               if (data.result) {
 
                 if (this.file != null) {
@@ -476,6 +475,8 @@ export class VisadetailsComponent implements OnInit {
       } else {
         this.travelDetail = this.travelDetailform.value;
         this.travelDetail.id = this.id;
+        if (this.isEng) this.travelDetail.engineerid = this.user.contactId
+        this.travelDetail.distId = this.distId;
         this.travelDetailService
           .update(this.id, this.travelDetail)
           .pipe(first())

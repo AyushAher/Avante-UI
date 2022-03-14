@@ -11,6 +11,7 @@ export class travelDetails {
   travelclass: string;
   isactive: boolean;
   flightdetails: FlightDetails;
+  engineerid: string;
 }
 
 export class FlightDetails {

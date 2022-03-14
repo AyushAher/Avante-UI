@@ -171,34 +171,6 @@ export class TraveldetailsComponent implements OnInit {
       }
     }
 
-
-    this.id = this.route.snapshot.paramMap.get("id");
-
-    if (this.id != null) {
-      this.hasAddAccess = false;
-
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
-
-      this.Service
-        .getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.flightdetails = true;
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            this.Form.patchValue(data.object);
-            this.GetFileList(data.object.id)
-          },
-          error: (error) => {
-            this.notificationService.showError("Error", "Error");
-            this.loading = false;
-          },
-        });
-    }
-
     this.currencyService.getAll()
       .pipe(first())
       .subscribe({
@@ -230,7 +202,7 @@ export class TraveldetailsComponent implements OnInit {
           if (this.user.username != "admin") {
             this.Form.get('distId').setValue(data.object[0].id);
             this.getengineers(data.object[0].id)
-            this.getservicerequest(data.object[0].id,this.user.contactId)
+            this.getservicerequest(data.object[0].id, this.user.contactId)
           }
         }
       })
@@ -275,6 +247,35 @@ export class TraveldetailsComponent implements OnInit {
           this.loading = false;
         },
       });
+
+
+    this.id = this.route.snapshot.paramMap.get("id");
+
+    if (this.id != null) {
+      this.hasAddAccess = false;
+
+      if (this.user.username == "admin") {
+        this.hasAddAccess = true;
+      }
+
+      this.Service
+        .getById(this.id)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            this.flightdetails = true;
+            this.getengineers(data.object.distId)
+            this.getservicerequest(data.object.distId, data.object.engineerid)
+            this.GetFileList(data.object.id)
+            setTimeout(() => this.Form.patchValue(data.object), 500);
+          },
+          error: (error) => {
+            this.notificationService.showError("Error", "Error");
+            this.loading = false;
+          },
+        });
+    }
+
     this.columnDefsAttachments = this.createColumnDefsAttachments();
 
   }
@@ -489,6 +490,11 @@ export class TraveldetailsComponent implements OnInit {
       );
       this.dateValid = false;
     }
+
+    this.Model.distId = this.distId
+    if (this.isEng) this.Model.engineerid = this.user.contactId;
+
+
     if (this.dateValid && this.cityValid) {
       if (this.id == null) {
         this.Service
@@ -521,6 +527,9 @@ export class TraveldetailsComponent implements OnInit {
       } else {
         this.Model = this.Form.value;
         this.Model.id = this.id;
+        this.Model.distId = this.distId
+        if (this.isEng) this.Model.engineerid = this.user.contactId;
+
         this.Service
           .update(this.id, this.Model)
           .pipe(first())

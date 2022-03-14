@@ -15,4 +15,5 @@ export class Visadetails {
     startenddate:string
     visatypenme:string
     countryname:string
+  distId: any
 }
