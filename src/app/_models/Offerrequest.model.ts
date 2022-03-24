@@ -12,4 +12,5 @@ export class Offerrequest {
   status !: string;
   podate !: string;
   offReqNo !: string;
+  paymentTerms: any;
 }

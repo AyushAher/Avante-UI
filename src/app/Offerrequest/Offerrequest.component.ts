@@ -26,6 +26,7 @@ import { SparequotedetComponent } from './sparequotedet.component';
 import { SparequotedetService } from '../_services/sparequotedet.service';
 import { environment } from '../../environments/environment';
 import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -82,21 +83,29 @@ export class OfferrequestComponent implements OnInit {
   @ViewChild('sparePartsSearch') sparePartsSearch: any
   processList: any;
   processFile: any
-
-  stages = ["offer", "upload_po", "pfi", "payment_revision", "payment_done", "payment_received", "under_process", "shipped"]
+  isDist: boolean = false;
+  // stages = ["offer", "upload_po", "pfi", "payment_revision", "payment_done", "payment_received", "under_process", "shipped"]
+  stages = ["offer", "upload_po", "pfi", "pay_terms", "mode_of_payment", "payment_done", "incase_of_lc", "inspection", "shipment", "shipping_documents_for_lc"]
   roleBasedStatusList = [
     { stage: "offer", user: environment.distRoleCode },
     { stage: "upload_po", user: environment.custRoleCode },
     { stage: "pfi", user: environment.distRoleCode },
-    { stage: "payment_revision" },
-    { stage: "payment_done", user: environment.custRoleCode },
-    { stage: "payment_received", user: environment.distRoleCode },
-    { stage: "under_process", user: environment.distRoleCode },
-    { stage: "shipped", user: environment.distRoleCode },
+    { stage: "pay_terms", user: environment.custRoleCode },
+    { stage: "mode_of_payment", user: environment.custRoleCode },
+    { stage: "payment_done", user: environment.distRoleCode },
+    { stage: "incase_of_lc", user: environment.distRoleCode },
+    { stage: "inspection", user: environment.distRoleCode },
+    { stage: "shipment", user: environment.distRoleCode },
+    { stage: "shipping_documents_for_lc", user: environment.distRoleCode },
   ]
   activeStage: any;
   addPayRev = false
   list = []
+  hasOfferRaised: boolean = false;
+  paymentTypes: any;
+  dropdownSettings: IDropdownSettings = {};
+  tempActiveStage: string
+  payTypes: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -170,6 +179,7 @@ export class OfferrequestComponent implements OnInit {
     this.user = this.accountService.userValue;
     let role = JSON.parse(localStorage.getItem('roles'));
     this.profilePermission = this.profileService.userProfileValue;
+
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "OFREQ");
       if (profilePermission.length > 0) {
@@ -190,6 +200,11 @@ export class OfferrequestComponent implements OnInit {
     }
 
 
+    this.dropdownSettings = {
+      idField: 'listTypeItemId',
+      textField: 'itemname',
+    };
+
     this.form = this.formBuilder.group({
       isactive: [true],
       offReqNo: [''],
@@ -201,22 +216,18 @@ export class OfferrequestComponent implements OnInit {
       otherSpareDesc: [''],
       podate: ['', Validators.required],
       isdeleted: [false],
-      spareQuoteNo: [{ value: '', disabled: true }]
+      spareQuoteNo: [{ value: '', disabled: true }],
+      payterms: [''],
+      paymentTerms: [""]
     })
 
     this.id = this.route.snapshot.paramMap.get('id');
-    // this.route.queryParams.subscribe(params => {
-    //   this.zohocode = params['code'];
-    // });
-
-    // if (this.zohocode != null) {
-    //   this.getZohoData()
-    // }
-
     this.columnDefs = this.createColumnDefs();
     this.columnDefsAttachments = this.createColumnDefsAttachments();
     this.ColumnDefsSPDet = this.createColumnDefsSPDet()
     this.form.get('podate').setValue(this.datepipie.transform(new Date, "MM/dd/yyyy"))
+
+    if (this.role == environment.distRoleCode) this.isDist = true;
 
     if (this.id != null) {
       localStorage.setItem('offerrequestid', this.id)
@@ -224,8 +235,35 @@ export class OfferrequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.form.patchValue(data.object);
-            this.getAllOfferRequestProcess();
+            this.listTypeService.getById("ORQPT")
+              .pipe(first())
+              .subscribe((mstData: any) => {
+                var subreq = data.object.paymentTerms.split(',');
+
+                this.paymentTypes = []
+                this.payTypes = mstData;
+                subreq.forEach(y => {
+                  mstData.forEach(x => {
+                    if (y == x.listTypeItemId) {
+                      this.paymentTypes.push(x)
+                    }
+                  });
+                });
+
+                let items = [];
+
+                for (var i = 0; i < subreq.length; i++) {
+                  if (subreq[i]) {
+                    let t = {
+                      listTypeItemId: subreq[i]
+                    };
+                    items.push(t);
+                  }
+                }
+                data.object.paymentTerms = items;
+                this.form.patchValue(data.object);
+                this.getAllOfferRequestProcess();
+              })
           },
           error: (error) => {
             this.notificationService.showError('Error', 'Error');
@@ -333,6 +371,10 @@ export class OfferrequestComponent implements OnInit {
     this.GetFileList(this.id);
   }
 
+  refreshStages() {
+    this.notificationService.filter("itemadded");
+  }
+
   disableRows(stage, disable = true) {
     let disabledStagesList = <any>document.getElementsByClassName(stage)
     for (let index = 0; index < disabledStagesList.length; index++) {
@@ -341,42 +383,36 @@ export class OfferrequestComponent implements OnInit {
 
     }
   }
-
   getAllOfferRequestProcess(reRendered = false) {
     this.offerRequestProcess.getAll(this.id)
       .pipe(first())
       .subscribe((data: any) => {
-        // let existingRow = document.getElementsByClassName("payment_revision_row").length
-        // if (data.object.find(x => x.stage == "payment_revision" && x.isactive == true) != null || data.object.find(x => x.stage == "payment_done")?.isactive) {
-        //   this.addPayRev = true;
-        // }
-        // setTimeout(() => {
-        //   data.object.filter(x => x.isactive != true).forEach(element => {
-        //     if (element.stage == "payment_revision") {
-        //       this.disableRows(element.stage + element.index.toString())
-        //     } else {
-        //     }
-        //   });
-        // }, 10)
         let isPayRevStageDone = false;
-        // setTimeout(() => {
         this.activeStage = data.object.find(x => x.isactive == true)?.stage;
+
         data.object.forEach(element => {
           switch (element.stage) {
-            case 'payment_revision':
+            case 'offer':
               if (isPayRevStageDone) {
                 break;
               }
-              let lstRevision = data.object.filter(x => x.stage == 'payment_revision');
+
+              let lstRevision = data.object.filter(x => x.stage == 'offer');
               for (let index = 0; index < lstRevision.length; index++) {
                 if (!reRendered) {
-                  this.onAddPaymentRevision();
+                  this.onOfferAdd();
                 }
               }
 
-              if (data.object.find(x => x.stage == 'payment_revision' && x.isactive == true) != null || data.object.find(x => x.stage == 'payment_done')?.isactive) {
+              if (data.object.find(x => x.stage == 'offer' && x.isactive == true) != null || data.object.find(x => x.stage == 'upload_po')?.isactive) {
+                let lntOffer = data.object.filter(x => x.stage == "offer" && x.isCompleted == true).length
                 this.addPayRev = true;
+                debugger
+                if (this.role == environment.custRoleCode && lntOffer < 1) {
+                  this.addPayRev = false;
+                }
               }
+
               setTimeout(() => {
                 for (let index = 0; index < lstRevision.length; index++) {
                   var ele = <HTMLInputElement>document.getElementById(element.stage + '_Comment' + index.toString());
@@ -384,9 +420,6 @@ export class OfferrequestComponent implements OnInit {
                   this.disableRows(element.stage + index.toString());
                 }
               }, 10);
-              // if (element.stage == "payment_revision") {
-              //   // this.disableRows(element.stage + element.index.toString())
-              // }
 
               isPayRevStageDone = true;
               break;
@@ -395,17 +428,28 @@ export class OfferrequestComponent implements OnInit {
               if (element.isactive != true) {
                 this.disableRows(element.stage);
               }
+
+              if (element.stage == "pay_terms") {
+                this.form.get('payterms').setValue(element.paymentTypeId)
+              }
+
               var ele = <HTMLInputElement>document.getElementById(element.stage + '_Comment');
               ele.value = element.comments;
               break;
           }
+
+          if (data.object.filter(x => x.stage == "offer" && x.isCompleted == true).length > 0) {
+            this.hasOfferRaised == true;
+          }
+
+          this.enableLastRows()
 
           this.FileShareService.list(element.id)
             .pipe(first())
             .subscribe({
               next: (files: any) => {
                 switch (element.stage) {
-                  case 'payment_revision':
+                  case 'offer':
 
                     var selectedfiles = document.getElementById(element.stage + '_selectedfiles' + element.index.toString());
                     selectedfiles.innerHTML = '';
@@ -422,6 +466,17 @@ export class OfferrequestComponent implements OnInit {
                 ulist.style.width = 'max-content';
                 ulist.style.padding = '0';
                 ulist.style.listStyle = 'none';
+
+                if (files.object == null) {
+                  if (element.stage == "offer") {
+                    let checkBox = <HTMLInputElement>document.getElementById(element.stage + element.index + `_Attachment`)
+                    checkBox.checked = true;
+
+                  } else {
+                    let checkBox = <HTMLInputElement>document.getElementById(element.stage + `_Attachment`)
+                    checkBox.checked = true;
+                  }
+                }
 
                 files.object?.forEach(element => {
 
@@ -457,13 +512,31 @@ export class OfferrequestComponent implements OnInit {
         setTimeout(() => {
           this.ProcessAccordingToRoles();
         }, 50);
-        // }, 1000);
-
       })
   }
 
 
-  onAddPaymentRevision() {
+  enableLastRows() {
+    setTimeout(() => {
+      if (this.tempActiveStage == undefined || this.tempActiveStage == null) {
+        this.tempActiveStage = this.activeStage
+      }
+
+      let currentStage = this.roleBasedStatusList.find(x => x.stage == this.tempActiveStage)
+      let currentStageIndex = this.roleBasedStatusList.indexOf(currentStage);
+
+      if (currentStageIndex >= 5 && this.isDist) {
+        currentStageIndex
+        currentStageIndex++
+        this.tempActiveStage = this.roleBasedStatusList[currentStageIndex]?.stage
+        this.disableRows(this.tempActiveStage, false)
+      }
+
+    }, 500);
+  }
+
+
+  onOfferAdd() {
     this.list.push(1)
   }
 
@@ -471,6 +544,7 @@ export class OfferrequestComponent implements OnInit {
   ProcessAccordingToRoles() {
     let activeStageUserc = this.roleBasedStatusList.find(x => x.stage == this.activeStage);
     let activeStageUser = activeStageUserc?.user;
+
     if (activeStageUser != null) {
       if (activeStageUser != this.role) {
         let disabledStagesList = <any>document.getElementsByClassName(this.activeStage);
@@ -491,86 +565,50 @@ export class OfferrequestComponent implements OnInit {
         const item = disabledStagesList[index];
         item.disabled = false;
       }
+    }
 
-      // this.addPayRev = true;
-
-
-      if (this.role == environment.custRoleCode) {
-        let currentIndex = this.stages.indexOf(this.stages.find(x => x == this.activeStage))
-        if (currentIndex >= 0) {
-          currentIndex++;
-          let stage = this.stages[currentIndex]
-          this.disableRows(stage, false)
-        }
+    if (this.activeStage == "offer" && this.role == environment.custRoleCode && this.hasOfferRaised) {
+      let currentIndex = this.stages.indexOf(this.stages.find(x => x == this.activeStage))
+      if (currentIndex >= 0) {
+        currentIndex++;
+        let stage = this.stages[currentIndex]
+        this.disableRows(stage, false)
       }
     }
+
+    this.enableLastRows()
+
   }
 
 
-  // getZohoData() {
-  //   let quoteno = this.form.get('spareQuoteNo').value;
-  //   if (quoteno != null && quoteno != "") {
-  //     localStorage.setItem('spquoteno', quoteno)
-  //   } else {
-  //     this.notificationService.showError("Spare Quote No. is required", "Error")
-  //     return;
-  //   }
-
-  //   if (this.role == environment.distRoleCode || this.user.username == 'admin') {
-  //     this.hasQuoteDet = true;
-  //     if (this.accountService.zohoauthValue == null) {
-  //       if (this.zohocode == null) {
-  //         window.location.href = environment.commonzohocodeapi + 'offerrequestlist' + '&access_type=offline';
-  //       } else {
-  //         this.zohoService.authwithcode(this.zohocode, 'offerrequestlist').subscribe({
-  //           next: (data: any) => {
-
-  //             let code = localStorage.setItem('zCode', this.zohocode);
-  //             localStorage.setItem('zohotoken', JSON.stringify(data.object));
-  //             this.accountService.zohoauthSet(data.object);
-  //             quoteno = localStorage.getItem('spquoteno')
-
-  //             this.zohoService.GetSalesOrder(code, 1, quoteno, this.id)
-  //               .pipe(first())
-  //               .subscribe((data: any) => {
-  //                 this.SpareQuotationDetails = data.object;
-  //               });
-  //           },
-  //           error: error => {
-  //             this.notificationService.showError(error, 'Error');
-  //             this.loading = false;
-  //           }
-  //         });
-  //       }
-  //     } else {
-  //       let quoteno = localStorage.getItem('spquoteno')
-  //       this.zohoService.GetSalesOrder(this.zohocode, 1, quoteno, this.id)
-  //         .pipe(first())
-  //         .subscribe((data: any) => {
-  //           this.SpareQuotationDetails = data.object;
-  //         });
-  //     }
-  //   }
-  // }
-
   onProcessSubmit(comments, stage, index = 0) {
+    let hasNoAttachment = false;
+    let payment_type = null;
+
     switch (stage) {
-      case 'payment_revision':
-        let element: any = document.getElementById('payment_revision_Comment' + index)
+      case 'offer':
+        let element: any = document.getElementById('offer_Comment' + index)
         comments = element.value
+        let Attachment = <HTMLInputElement>document.getElementById(stage + index + "_Attachment")
+        hasNoAttachment = Attachment.checked
+        break;
+
+      case "pay_terms":
+        let ele: any = document.getElementById('payment_type')
+        payment_type = ele.value
         break;
     }
+
+    let Attachment = <HTMLInputElement>document.getElementById(stage + "_Attachment")
+    hasNoAttachment = Attachment?.checked
 
     let offerProcess = {
       isactive: false,
       comments,
       parentId: this.id,
       stage,
-      index
-    }
-
-    if (stage == "payment_done") {
-      this.addPayRev = false
+      index,
+      paymentTypeId: payment_type,
     }
 
     this.offerRequestProcess.update(offerProcess).pipe(first())
@@ -579,7 +617,7 @@ export class OfferrequestComponent implements OnInit {
         if (currentIndex >= 0) {
           let stage = this.stages[currentIndex]
 
-          if (stage == "payment_revision") {
+          if (stage == "offer") {
             this.disableRows(stage + index.toString(), true)
           }
           else {
@@ -592,14 +630,15 @@ export class OfferrequestComponent implements OnInit {
           offerProcess.isactive = true;
           offerProcess.comments = null;
           offerProcess.stage = stage;
+          offerProcess.paymentTypeId = null;
           this.ProcessAccordingToRoles()
           this.offerRequestProcess.update(offerProcess).pipe(first())
             .subscribe((data1: any) => {
-              if (this.processFile != null) {
+              this.enableLastRows()
+              if (this.processFile != null && !hasNoAttachment) {
                 this.uploadFile(this.processFile, data.extraObject);
-                this.notificationService.filter("itemadded");
-
               }
+              this.notificationService.filter("itemadded");
             })
         }
       })
@@ -813,7 +852,7 @@ export class OfferrequestComponent implements OnInit {
     this.transaction++;
     this.hastransaction = true;
 
-    for (let i = 0; i <= x.length; i++) {
+    for (let i = 0; i < x.length; i++) {
       var name = x[i].name;
       var ul = document.getElementById("demo");
       var node = document.createElement("li");
@@ -999,6 +1038,12 @@ export class OfferrequestComponent implements OnInit {
       this.model.podate,
       "MM/dd/yyyy"
     );
+
+
+    if (this.form.get('paymentTerms').value.length > 0) {
+      var selectarray = this.form.get('paymentTerms').value;
+      this.model.paymentTerms = selectarray.map(x => x.listTypeItemId).join(',');
+    }
 
     if (!this.hasId && this.hasAddAccess) {
       this.model = this.form.value;

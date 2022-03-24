@@ -3,24 +3,25 @@
     <div class="container">
       <div class="page-title">
         <div class="title_left">
-          <h3 style="padding:15px 0 5px 0">Offer Request</h3>
+          <h3 style="padding: 15px 0 5px 0">Offer Request</h3>
         </div>
       </div>
       <div class="clearfix"></div>
       <hr />
-      <div class="col-md-12 col-sm-12 ">
-
+      <div class="col-md-12 col-sm-12">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
-            <div class="col-md-4 col-sm-4" [style.display]="(hasId)?'block':'none'">
+            <div class="col-md-4 col-sm-4" [style.display]="hasId ? 'block' : 'none'">
               <label for="offReqNo">Offer Request No.</label>
-              <input id="offReqNo" readonly type="text" formControlName="offReqNo" class="form-control">
+              <input id="offReqNo" readonly type="text" formControlName="offReqNo" class="form-control" />
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="distributor">Distributor</label>
-              <select id="distributor" type="text" formControlName="distributorid" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.distributorid.errors}">
-                <option *ngFor="let i of distributorList" value="{{i.id}}">{{i.distname}}
+              <select id="distributor" type="text" formControlName="distributorid" class="form-control" [ngClass]="{
+                  ' is -invalid': submitted && f.distributorid.errors
+                }">
+                <option *ngFor="let i of distributorList" value="{{ i.id }}">
+                  {{ i.distname }}
                 </option>
               </select>
               <div Style="display: block" *ngIf="submitted && f.distributorid.errors" class="invalid-feedback">
@@ -31,16 +32,18 @@
             </div>
             <div class="col-md-4 col-sm-4" hidden>
               <label for="totalamount">Total Amount</label>
-              <br>
-              <select id="currency" style="display:inline-block; width:100px;" formControlName="currencyId"
-                class="form-control" [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
-                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+              <br />
+              <select id="currency" style="display: inline-block; width: 100px" formControlName="currencyId"
+                class="form-control" [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors }">
+                <option *ngFor="let i of currencyList" value="{{ i.id }}">
+                  {{ i.code }}
                 </option>
               </select>
 
               <input id="totalamount" type="number" formControlName="totalamount" class="form-control"
-                style="display:inline-block; width:270px; margin-left: 5px;"
-                [ngClass]="{ ' is -invalid': submitted && f.totalamount.errors}" />
+                style="display: inline-block; width: 270px; margin-left: 5px" [ngClass]="{
+                  ' is -invalid': submitted && f.totalamount.errors
+                }" />
               <div Style="display: block" *ngIf="submitted && f.totalamount.errors" class="invalid-feedback">
                 <div *ngIf="f.totalamount.errors.required">
                   totalamount is required
@@ -50,20 +53,26 @@
             <div class="col-md-4 col-sm-4" hidden>
               <label for="status">Status</label>
               <input id="status" type="text" formControlName="status" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.status.errors}" />
+                [ngClass]="{ ' is -invalid': submitted && f.status.errors }" />
               <div Style="display: block" *ngIf="submitted && f.status.errors" class="invalid-feedback">
-                <div *ngIf="f.status.errors.required">
-                  status is required
-                </div>
+                <div *ngIf="f.status.errors.required">status is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="podate">RFQ Date</label>
               <input id="podate" type="text" disabled bsDatepicker formControlName="podate" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.podate.errors}" />
+                [ngClass]="{ ' is -invalid': submitted && f.podate.errors }" />
               <div Style="display: block" *ngIf="submitted && f.podate.errors" class="invalid-feedback">
-                <div *ngIf="f.podate.errors.required">
-                  RFQ Date is required
+                <div *ngIf="f.podate.errors.required">RFQ Date is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="isDist">
+              <label for="PaymentTerms">Payment Terms</label>
+              <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="payTypes" formControlName="paymentTerms">
+              </ng-multiselect-dropdown>
+              <div Style="display: block" *ngIf="submitted && f.paymentTerms.errors" class="invalid-feedback">
+                <div *ngIf="f.paymentTerms.errors.required">
+                  Payment Terms is required
                 </div>
               </div>
             </div>
@@ -71,37 +80,42 @@
 
           <div class="page-title">
             <div class="title_left">
-              <h3 style="padding:15px 0 5px 0">Add Spare Parts</h3>
+              <h3 style="padding: 15px 0 5px 0">Add Spare Parts</h3>
             </div>
           </div>
           <div class="clearfix"></div>
           <hr />
 
-          <div class="row" style="margin-top:50px">
+          <div class="row" style="margin-top: 50px">
             <div class="col-md-9">
               <label for="browser">Search SpareParts By Part No. </label>
-              <input (input)="SparePartsSearch($event.target.value?.split('==>')[0]?.trim())" #sparePartsSearch
-                list="browsers" name="browser" id="browser" class="form-control">
+              <input (input)="
+                  SparePartsSearch($event.target.value?.split('==>')[0]?.trim())
+                " #sparePartsSearch list="browsers" name="browser" id="browser" class="form-control" />
               <datalist id="browsers">
-                <option *ngFor="let i of sparePartsAutoComplete" value="{{i.partno}} ==> {{i.itemDescription}}">
+                <option *ngFor="let i of sparePartsAutoComplete" value="{{ i.partno }} ==> {{ i.itemDescription }}">
+                </option>
               </datalist>
-              <p style="color: red;">
+
+              <p style="color: red">
                 *If you dont find spare part above please add Description below
               </p>
             </div>
 
-            <div class="col-md-3" style="margin-top:30px">
-              <button class="btn btn-primary" (click)="AddSpareParts(sparePartsSearch.value?.split('==>')[0]?.trim())"
-                type="button" class="btn btn-primary">Add SpareParts
+            <div class="col-md-3" style="margin-top: 30px">
+              <button class="btn btn-primary" (click)="
+                  AddSpareParts(sparePartsSearch.value?.split('==>')[0]?.trim())
+                " type="button" class="btn btn-primary">
+                Add SpareParts
               </button>
             </div>
           </div>
 
           <div class="row">
-            <ag-grid-angular style="width: 100%; margin-top: 2.5%; height: 250px;" class="ag-theme-alpine"
+            <ag-grid-angular style="width: 100%; margin-top: 2.5%; height: 250px" class="ag-theme-alpine"
               (cellValueChanged)="onCellValueChanged($event)" (cellClicked)="RemoveSpareParts($event)"
               (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="sparePartsList"
-              rowSelection="single" pagination="true" paginationPageSize=10>
+              rowSelection="single" pagination="true" paginationPageSize="10">
             </ag-grid-angular>
           </div>
 
@@ -115,35 +129,37 @@
           <br />
 
           <div class="attachment my-4">
-
             <div class="page-title">
               <div class="title_left">
-                <h3 style="padding:15px 0 5px 0">Attachments</h3>
+                <h3 style="padding: 15px 0 5px 0">Attachments</h3>
               </div>
             </div>
             <div class="clearfix"></div>
             <hr />
 
-            <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
+            <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin: 15px">
               <div class="col-md-3">
                 <input type="file" id="myFile" #file placeholder="Choose file"
-                  (change)="getfil(file.files,true); listfile(file.files);" multiple
-                  accept="text/plain, application/pdf, image/*">
+                  (change)="getfil(file.files, true); listfile(file.files)" multiple
+                  accept="text/plain, application/pdf, image/*" />
               </div>
-              <div id="selectedfiles" class="hidden col-md-4" style="max-height:200px; overflow-y:auto;display: none;">
-                <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+              <div id="selectedfiles" class="hidden col-md-4"
+                style="max-height: 200px; overflow-y: auto; display: none">
+                <section style="
+                    margin: 30px 0 0 50px;
+                    max-width: 600px;
+                    min-width: 300px;
+                  ">
                   <h5>Selected Files:</h5>
                   <hr />
                 </section>
-
               </div>
             </div>
 
-            <ag-grid-angular *ngIf="hasId" style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
+            <ag-grid-angular *ngIf="hasId" style="width: 100%; height: 250px" class="my-4 ag-theme-alpine"
               (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments" [rowData]="attachments"
-              rowSelection="single" pagination="true" paginationPageSize=10>
+              rowSelection="single" pagination="true" paginationPageSize="10">
             </ag-grid-angular>
-
           </div>
 
           <!-- 
@@ -190,14 +206,22 @@
           <div class="offerRequestProccess" *ngIf="hasId">
             <div class="page-title">
               <div class="title_left">
-                <h3 style="padding:15px 0 5px 0">Offer Request Stages</h3>
+                <div class="row">
+                  <div class="col-md-10">
+                    <h3 style="padding: 15px 0 5px 0">Offer Request Stages</h3>
+                  </div>
+                  <!-- <div class="col-md-2">
+                    <button type="button" style="margin-top: 20px;" class="btn btn-primary" (click)="refreshStages()"><i
+                        class="mx-2 fas fa-sync"></i></button>
+                  </div> -->
+                </div>
               </div>
             </div>
             <div class="clearfix"></div>
             <hr />
             <div class="row">
               <div class="col-md-12">
-                <table class="table" id="offerProcess">
+                <!-- <table class="table" id="offerProcess">
                   <thead>
                     <tr>
                       <th style="width: 120px;">Action</th>
@@ -374,19 +398,381 @@
                       </td>
                     </tr>
                   </tbody>
+                </table> -->
+
+                <table class="table" id="offerProcess">
+                  <thead>
+                    <tr>
+                      <th style="width: 120px">Action</th>
+                      <th style="width: 170px">Stage</th>
+                      <th style="width: 400px">Comments</th>
+                      <th>Upload Files <i class="mx-2 fas fa-upload"></i></th>
+                      <th>
+                        Download Files <i class="mx-2 fas fa-download"></i>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of list; let index = index" class="offer_row">
+                      <th>
+                        <button type="button" style="margin: 3px" (click)="
+                            onProcessSubmit(offer_Comment.value, 'offer', index)
+                          " class="offer offer{{ index }} btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+
+                        <button type="button" *ngIf="index == 0" [disabled]="!addPayRev" (click)="onOfferAdd()"
+                          class="offer_Add btn btn-primary">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </th>
+                      <td>Offer</td>
+                      <td>
+                        <textarea #offer_Comment id="offer_Comment{{ index }}"
+                          class="offer offer{{ index }}  form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #offer_file class="offer offer{{ index }}" type="file" (change)="
+                            getfil($event.target.files);
+                            listfile(
+                              $event.target.files,
+                              'offer_selectedfiles' + index
+                            )
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="offer offer{{ index }}" id="offer{{ index }}_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="offer_selectedfiles{{ index }}" class="hidden" style="display: block"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="
+                            onProcessSubmit(
+                              upload_po_Comment.value,
+                              'upload_po'
+                            )
+                          " class="upload_po btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Upload PO</td>
+                      <td>
+                        <textarea #upload_po_Comment id="upload_po_Comment" class="upload_po form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #upload_po_file class="upload_po" type="file" (change)="
+                            getfil(upload_po_file.files);
+                            listfile(
+                              upload_po_file.files,
+                              'upload_po_selectedfiles'
+                            )
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="upload_po" id="upload_po_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="upload_po_selectedfiles" class="hidden" style="display: none"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="onProcessSubmit(pfi_Comment.value, 'pfi')"
+                          class="pfi btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>PFI</td>
+                      <td>
+                        <textarea #pfi_Comment id="pfi_Comment" class="pfi form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #pfi_file class="pfi" type="file" (change)="
+                            getfil(pfi_file.files);
+                            listfile(pfi_file.files, 'pfi_selectedfiles')
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="pfi" id="pfi_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="pfi_selectedfiles" class="hidden" style="display: none"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="onProcessSubmit(pay_terms_Comment.value, 'pay_terms')"
+                          class="pay_terms btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Payment Terms</td>
+                      <td>
+                        <div>
+                          <label>Payment Type</label>
+                          <select class="pay_terms form-control" formControlName="payterms" id="payment_type">
+                            <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
+                              {{ i.itemname }}
+                            </option>
+                          </select>
+                        </div>
+                        <div>
+                          <label>Comments</label>
+                          <textarea #pay_terms_Comment id="pay_terms_Comment" class="pay_terms form-control"></textarea>
+                        </div>
+                      </td>
+                      <td>
+                        <input multiple #pay_terms_file class="pay_terms" type="file" (change)="
+                            getfil(pay_terms_file.files);
+                            listfile(
+                              pay_terms_file.files,
+                              'pay_terms_selectedfiles'
+                            )
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="pay_terms" id="pay_terms_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="pay_terms_selectedfiles" class="hidden" style="display: none"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="
+                            onProcessSubmit(
+                              mode_of_payment_Comment.value,
+                              'mode_of_payment'
+                            )
+                          " class="mode_of_payment btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Mode Of Payment</td>
+                      <td>
+                        <textarea #mode_of_payment_Comment id="mode_of_payment_Comment"
+                          class="mode_of_payment form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #mode_of_payment_file class="mode_of_payment" type="file" (change)="
+                            getfil(mode_of_payment_file.files);
+                            listfile(
+                              mode_of_payment_file.files,
+                              'mode_of_payment_selectedfiles'
+                            )
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="mode_of_payment" id="mode_of_payment_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="mode_of_payment_selectedfiles" class="hidden" style="display: none"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="
+                            onProcessSubmit(
+                              payment_done_Comment.value,
+                              'payment_done'
+                            )
+                          " class="payment_done btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Payment Done</td>
+                      <td>
+                        <textarea #payment_done_Comment id="payment_done_Comment"
+                          class="payment_done form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #payment_done_file class="payment_done" type="file" (change)="
+                            getfil(payment_done_file.files);
+                            listfile(
+                              payment_done_file.files,
+                              'payment_done_selectedfiles'
+                            )
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="payment_done" id="payment_done_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="payment_done_selectedfiles" class="hidden" style="display: none"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="
+                            onProcessSubmit(
+                              incase_of_lc_Comment.value,
+                              'incase_of_lc'
+                            )
+                          " class="incase_of_lc btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Incase Of LC</td>
+                      <td>
+                        <textarea #incase_of_lc_Comment id="incase_of_lc_Comment"
+                          class="incase_of_lc form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #incase_of_lc_file class="incase_of_lc" type="file" (change)="
+                            getfil(incase_of_lc_file.files);
+                            listfile(
+                              incase_of_lc_file.files,
+                              'incase_of_lc_selectedfiles'
+                            )
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="incase_of_lc" id="incase_of_lc_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="incase_of_lc_selectedfiles" class="hidden" style="display: none"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="
+                            onProcessSubmit(
+                              inspection_Comment.value,
+                              'inspection'
+                            )
+                          " class="inspection btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Inspection</td>
+                      <td>
+                        <textarea #inspection_Comment id="inspection_Comment"
+                          class="inspection form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #inspection_file class="inspection" type="file" (change)="
+                            getfil(inspection_file.files);
+                            listfile(
+                              inspection_file.files,
+                              'inspection_selectedfiles'
+                            )
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="inspection" id="inspection_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="inspection_selectedfiles" class="hidden" style="display: none"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="
+                            onProcessSubmit(shipment_Comment.value, 'shipment')
+                          " class="shipment btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Shipment</td>
+                      <td>
+                        <textarea #shipment_Comment id="shipment_Comment" class="shipment form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #shipment_file class="shipment" type="file" (change)="
+                            getfil(shipment_file.files);
+                            listfile(
+                              shipment_file.files,
+                              'shipment_selectedfiles'
+                            )
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="shipment" id="shipment_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="shipment_selectedfiles" class="hidden" style="display: none"></div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
+                        <button type="button" (click)="
+                            onProcessSubmit(
+                              shipping_documents_for_lc_Comment.value,
+                              'shipping_documents_for_lc'
+                            )
+                          " class="shipping_documents_for_lc btn btn-primary">
+                          <i class="fas fa-save"></i>
+                        </button>
+                      </th>
+                      <td>Shipping Documents For LC</td>
+                      <td>
+                        <textarea #shipping_documents_for_lc_Comment id="shipping_documents_for_lc_Comment"
+                          class="shipping_documents_for_lc form-control"></textarea>
+                      </td>
+                      <td>
+                        <input multiple #shipping_documents_for_lc_file class="shipping_documents_for_lc" type="file"
+                          (change)="
+                            getfil(shipping_documents_for_lc_file.files);
+                            listfile(
+                              shipping_documents_for_lc_file.files,
+                              'shipping_documents_for_lc_selectedfiles'
+                            )
+                          " />
+
+                        <div class="">
+                          <input type="checkbox" class="shipping_documents_for_lc"
+                            id="shipping_documents_for_lc_Attachment" />
+                          <span> No Attachment</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div id="shipping_documents_for_lc_selectedfiles" class="hidden" style="display: none"></div>
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
           </div>
 
           <div class="row">
-            <div class="col-md-6 col-sm-6" style="padding:10px;">
-              <button *ngIf="(hasUpdateAccess) || (hasAddAccess && !hasId)" class="btn btn-primary" type="submit"
+            <div class="col-md-6 col-sm-6" style="padding: 10px">
+              <button *ngIf="hasUpdateAccess || (hasAddAccess && !hasId)" class="btn btn-primary" type="submit"
                 class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
-              <a routerLink="/offerrequestlist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
+              <a routerLink="/offerrequestlist" class="btn btn-secondary" style="margin-left: 10px">Back</a>
             </div>
           </div>
         </form>
@@ -394,7 +780,6 @@
     </div>
   </div>
 </layout>
-
 
 <style>
   th>button {
@@ -408,6 +793,5 @@
 
   tbody {
     border: 0.5px solid rgb(202 170 170);
-
   }
 </style>
