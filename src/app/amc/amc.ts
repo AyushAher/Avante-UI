@@ -385,7 +385,7 @@ export class AmcComponent implements OnInit {
       },
 
     }, {
-      headerName: 'instrument',
+      headerName: 'Instrument',
       field: 'insType',
       filter: true,
       enableSorting: true,
@@ -393,7 +393,7 @@ export class AmcComponent implements OnInit {
       sortable: true,
       tooltipField: 'instrument',
     }, {
-      headerName: 'serialnos',
+      headerName: 'Serial No.',
       field: 'serialnos',
       filter: true,
       editable: true,
