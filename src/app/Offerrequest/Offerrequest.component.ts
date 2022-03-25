@@ -607,7 +607,7 @@ export class OfferrequestComponent implements OnInit {
     }
 
     if (!hasNoAttachment && this.processFile == null) {
-      this.notificationService.showError("No Attahments Selected.", "Error")
+      this.notificationService.showInfo("No Attachments Selected.", "Error")
       return;
     }
 
@@ -649,6 +649,7 @@ export class OfferrequestComponent implements OnInit {
               if (this.processFile != null && !hasNoAttachment) {
                 this.uploadFile(this.processFile, data.extraObject);
               }
+              this.processFile = null;
               this.notificationService.filter("itemadded");
             })
         }
