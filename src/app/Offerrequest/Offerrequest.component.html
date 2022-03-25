@@ -441,7 +441,8 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="offer offer{{ index }}" id="offer{{ index }}_Attachment" />
+                          <input type="checkbox" (click)="DisableChoseFile('offer'+ index)"
+                            class="offer offer{{ index }}" id="offer{{ index }}_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>
@@ -475,7 +476,8 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="upload_po" id="upload_po_Attachment" />
+                          <input type="checkbox" class="upload_po" (click)="DisableChoseFile('upload_po')"
+                            id="upload_po_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>
@@ -502,7 +504,7 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="pfi" id="pfi_Attachment" />
+                          <input type="checkbox" (click)="DisableChoseFile('pfi')" class="pfi" id="pfi_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>
@@ -543,7 +545,8 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="pay_terms" id="pay_terms_Attachment" />
+                          <input type="checkbox" class="pay_terms" (click)="DisableChoseFile('pay_terms')"
+                            id="pay_terms_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>
@@ -578,7 +581,8 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="mode_of_payment" id="mode_of_payment_Attachment" />
+                          <input type="checkbox" class="mode_of_payment" (click)="DisableChoseFile('mode_of_payment')"
+                            id="mode_of_payment_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>
@@ -613,7 +617,8 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="payment_done" id="payment_done_Attachment" />
+                          <input type="checkbox" (click)="DisableChoseFile('payment_done')" class="payment_done"
+                            id="payment_done_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>
@@ -648,7 +653,8 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="incase_of_lc" id="incase_of_lc_Attachment" />
+                          <input type="checkbox" (click)="DisableChoseFile('incase_of_lc')" class="incase_of_lc"
+                            id="incase_of_lc_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>
@@ -683,7 +689,8 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="inspection" id="inspection_Attachment" />
+                          <input type="checkbox" (click)="DisableChoseFile('inspection')" class="inspection"
+                            id="inspection_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>
@@ -714,7 +721,8 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="shipment" id="shipment_Attachment" />
+                          <input type="checkbox" (click)="DisableChoseFile('shipment')" class="shipment"
+                            id="shipment_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>
@@ -750,8 +758,8 @@
                           " />
 
                         <div class="">
-                          <input type="checkbox" class="shipping_documents_for_lc"
-                            id="shipping_documents_for_lc_Attachment" />
+                          <input type="checkbox" (click)="DisableChoseFile('shipping_documents_for_lc')"
+                            class="shipping_documents_for_lc" id="shipping_documents_for_lc_Attachment" />
                           <span> No Attachment</span>
                         </div>
                       </td>

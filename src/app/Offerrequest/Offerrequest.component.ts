@@ -407,7 +407,6 @@ export class OfferrequestComponent implements OnInit {
               if (data.object.find(x => x.stage == 'offer' && x.isactive == true) != null || data.object.find(x => x.stage == 'upload_po')?.isactive) {
                 let lntOffer = data.object.filter(x => x.stage == "offer" && x.isCompleted == true).length
                 this.addPayRev = true;
-                debugger
                 if (this.role == environment.custRoleCode && lntOffer < 1) {
                   this.addPayRev = false;
                 }
@@ -467,7 +466,7 @@ export class OfferrequestComponent implements OnInit {
                 ulist.style.padding = '0';
                 ulist.style.listStyle = 'none';
 
-                if (files.object == null) {
+                if (files.object == null && element.isCompleted) {
                   if (element.stage == "offer") {
                     let checkBox = <HTMLInputElement>document.getElementById(element.stage + element.index + `_Attachment`)
                     checkBox.checked = true;
@@ -580,10 +579,18 @@ export class OfferrequestComponent implements OnInit {
 
   }
 
+  DisableChoseFile(className) {
+    let ofer = <HTMLInputElement>document.querySelector(`input[type="file"].` + className)
+    ofer.disabled = !ofer.disabled
+  }
+
 
   onProcessSubmit(comments, stage, index = 0) {
     let hasNoAttachment = false;
     let payment_type = null;
+
+    let Attachment = <HTMLInputElement>document.getElementById(stage + "_Attachment")
+    hasNoAttachment = Attachment?.checked
 
     switch (stage) {
       case 'offer':
@@ -599,8 +606,10 @@ export class OfferrequestComponent implements OnInit {
         break;
     }
 
-    let Attachment = <HTMLInputElement>document.getElementById(stage + "_Attachment")
-    hasNoAttachment = Attachment?.checked
+    if (!hasNoAttachment && this.processFile == null) {
+      this.notificationService.showError("No Attahments Selected.", "Error")
+      return;
+    }
 
     let offerProcess = {
       isactive: false,
@@ -613,6 +622,8 @@ export class OfferrequestComponent implements OnInit {
 
     this.offerRequestProcess.update(offerProcess).pipe(first())
       .subscribe((data: any) => {
+        if (offerProcess.stage == "pfi")
+          this.notificationService.showInfo('Please select payment terms for Customer', "");
         let currentIndex = this.stages.indexOf(this.stages.find(x => x == stage))
         if (currentIndex >= 0) {
           let stage = this.stages[currentIndex]
