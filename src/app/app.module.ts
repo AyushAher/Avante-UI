@@ -114,6 +114,7 @@ import {ForgotpasswoardComponent} from './account/forgotpasswoard.component';
 import {AudittrailComponent} from './audittrail/audittrail.component';
 import {AudittrailDetailsComponent} from './audittrail/audittraildetails';
 import { ServiceRComponent } from './serviceRequest/ServicerequestRenderer';
+import { NotificationspopupComponent } from './notificationspopup/notificationspopup.component';
 
 
 @NgModule({
@@ -204,7 +205,8 @@ import { ServiceRComponent } from './serviceRequest/ServicerequestRenderer';
     ForgotpasswoardComponent,
     AudittrailComponent,
     AudittrailDetailsComponent,
-    ServiceRComponent
+    ServiceRComponent,
+    NotificationspopupComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

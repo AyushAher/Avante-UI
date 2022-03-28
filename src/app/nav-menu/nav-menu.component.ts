@@ -1,8 +1,10 @@
-import {Component} from '@angular/core';
-import {User} from '../_models';
-import {AccountService} from '../_services';
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
-import {ChangepasswoardComponent} from "../account/changepasswoard.component";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { User } from '../_models';
+import { AccountService } from '../_services';
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ChangepasswoardComponent } from "../account/changepasswoard.component";
+import { UsernotificationService } from '../_services/usernotification.service';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav-menu',
@@ -12,12 +14,27 @@ import {ChangepasswoardComponent} from "../account/changepasswoard.component";
 export class NavMenuComponent {
   user: User;
   bsModalRef: BsModalRef;
+  notifications = 0;
+  @Output() showNotifications = new EventEmitter<boolean>()
 
   constructor(
     private accountService: AccountService,
     private modalService: BsModalService,
+    private userNotificationService: UsernotificationService
   ) {
     this.user = this.accountService.userValue;
+    setTimeout(() => {
+      setInterval(() => {
+        this.userNotificationService.getAll().pipe(first())
+          .subscribe((data: any) => {
+            this.notifications = data.object.length
+          })
+      }, 1000)
+    }, 100);
+  }
+
+  Notifications() {
+    this.showNotifications.emit(true)
   }
 
   ChangePassword() {

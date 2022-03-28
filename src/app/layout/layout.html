@@ -1,5 +1,3 @@
-
-
 <div id="wrapper" style="height: 618px;">
 
   <!-- Sidebar -->
@@ -13,12 +11,12 @@
 
       <!-- Topbar -->
       <!-- Topbar Navbar -->
+      <app-notificationspopup (closePopup)="Notifications($event)" *ngIf="shownotifications"></app-notificationspopup>
 
-
-      <app-nav-menu></app-nav-menu>
+      <app-nav-menu (showNotifications)="Notifications($event)"></app-nav-menu>
       <!-- End of Topbar -->
       <!-- Begin Page Content -->
-      <div class="container-fluid">
+      <div class=" container-fluid">
         <ng-content></ng-content>
       </div>
       <!-- /.container-fluid -->
