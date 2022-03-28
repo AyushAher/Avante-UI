@@ -306,6 +306,11 @@ export class OfferrequestComponent implements OnInit {
       this.hasId = false;
       this.id = Guid.create();
       this.id = this.id.value;
+      this.listTypeService.getById("ORQPT")
+        .pipe(first())
+        .subscribe((mstData: any) => {
+          this.payTypes = mstData;
+        })
     }
 
     this.currencyService.getAll()
