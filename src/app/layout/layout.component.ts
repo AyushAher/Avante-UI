@@ -9,9 +9,10 @@ export class LayoutComponent implements OnInit {
   shownotifications: boolean = false;
 
   showSpinner = false;
+  isClosed: any;
 
   constructor(private spinnerService: LoaderService, private cdRef: ChangeDetectorRef) { }
-  
+
   ngOnInit(): void {
     this.spinnerService.getSpinnerObserver().subscribe((status) => {
       this.showSpinner = (status === 'start');
@@ -21,5 +22,10 @@ export class LayoutComponent implements OnInit {
 
   Notifications(event) {
     this.shownotifications = event;
+  }
+
+  popUpClosed(event) {
+    console.log(event);
+    this.isClosed = event
   }
 }

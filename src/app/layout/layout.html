@@ -1,5 +1,6 @@
 <div id="wrapper" style="height: 618px;">
-  <app-loader *ngIf="showSpinner" style="position: absolute;top: 40%;left: 40%;transform: translate(50%, 50%);z-index: 60;"></app-loader>
+  <app-loader *ngIf="showSpinner"
+    style="position: absolute;top: 40%;left: 50%;transform: translate(50%, 50%);z-index: 60;"></app-loader>
 
   <!-- Sidebar -->
   <app-nav-sidemenu></app-nav-sidemenu>
@@ -12,9 +13,10 @@
 
       <!-- Topbar -->
       <!-- Topbar Navbar -->
-      <app-notificationspopup (closePopup)="Notifications($event)" *ngIf="shownotifications"></app-notificationspopup>
+      <app-notificationspopup (popUpClosed)="popUpClosed($event)" (closePopup)="Notifications($event)"
+        *ngIf="shownotifications"></app-notificationspopup>
 
-      <app-nav-menu (showNotifications)="Notifications($event)"></app-nav-menu>
+      <app-nav-menu [isClosed]="isClosed" (showNotifications)="Notifications($event)"></app-nav-menu>
       <!-- End of Topbar -->
       <!-- Begin Page Content -->
       <div class=" container-fluid">

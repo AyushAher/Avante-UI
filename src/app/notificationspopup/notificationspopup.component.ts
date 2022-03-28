@@ -12,8 +12,9 @@ export class NotificationspopupComponent implements OnInit {
   notification: HTMLElement;
   checdiv: HTMLElement;
   flag3: boolean;
-  notificationList: any;
+  notificationList: any = [];
   @Output() closePopup = new EventEmitter<boolean>()
+  @Output() popUpClosed = new EventEmitter<boolean>()
 
   constructor(private userNotification: UsernotificationService, private _location: Location) { }
 
@@ -28,6 +29,7 @@ export class NotificationspopupComponent implements OnInit {
 
   close() {
     this.closePopup.emit(false);
+    this.popUpClosed.emit(true)
   }
 
   deleteNotification(id) {

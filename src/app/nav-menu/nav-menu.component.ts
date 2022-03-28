@@ -16,6 +16,7 @@ export class NavMenuComponent {
   bsModalRef: BsModalRef;
   notifications = 0;
   @Output() showNotifications = new EventEmitter<boolean>()
+  @Input() isClosed = false;
 
   constructor(
     private accountService: AccountService,
@@ -24,13 +25,25 @@ export class NavMenuComponent {
   ) {
     this.user = this.accountService.userValue;
     setTimeout(() => {
-      setInterval(() => {
-        this.userNotificationService.getAll().pipe(first())
-          .subscribe((data: any) => {
-            this.notifications = data.object.length
-          })
-      }, 1000)
+      this.userNotificationService.getAll().pipe(first())
+        .subscribe((data: any) => {
+          this.notifications = data.object.length
+        })
     }, 100);
+
+    setInterval(() => {
+      if (this.isClosed) this.closed()
+    }, 1000)
+
+
+  }
+
+  closed() {
+    this.userNotificationService.getAll().pipe(first())
+      .subscribe((data: any) => {
+        this.notifications = data.object.length
+        this.isClosed = false;
+      })
   }
 
   Notifications() {
