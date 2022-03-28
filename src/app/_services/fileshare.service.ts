@@ -34,7 +34,6 @@ export class FileshareService {
   }
 
   upload(fileshare: FormData, id: string, code: string, IMG?) {
-    debugger;
     return this.http.post(`${environment.apiUrl}/FileShares/upload/${code}/${id}/${IMG}`, fileshare, {
       reportProgress: true,
       observe: "events",

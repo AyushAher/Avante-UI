@@ -911,7 +911,7 @@ export class OfferrequestComponent implements OnInit {
     var selectedfiles = document.getElementById(lstId);
     var ulist = document.createElement("ul");
     ulist.id = "demo";
-    ulist.style.width = "max-content"
+    ulist.style.width = "max-content" 
     selectedfiles.appendChild(ulist);
 
     if (this.transaction != 0) {
@@ -970,10 +970,14 @@ export class OfferrequestComponent implements OnInit {
     });
 
     this.FileShareService.upload(formData, id, code).subscribe((event) => {
-      if (event.type === HttpEventType.UploadProgress)
+      if (event.type === HttpEventType.UploadProgress) {
         this.progress = Math.round((100 * event.loaded) / event.total);
+        if (this.progress == 100)
+          this.notificationService.filter("itemadded");
+      }
       else if (event.type === HttpEventType.Response) {
         this.message = "Upload success.";
+        this.notificationService.filter("itemadded");
         this.onUploadFinished.emit(event.body);
       }
     });

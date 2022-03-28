@@ -115,6 +115,7 @@ import {AudittrailComponent} from './audittrail/audittrail.component';
 import {AudittrailDetailsComponent} from './audittrail/audittraildetails';
 import { ServiceRComponent } from './serviceRequest/ServicerequestRenderer';
 import { NotificationspopupComponent } from './notificationspopup/notificationspopup.component';
+import { LoaderComponent } from './loader/loader.component';
 
 
 @NgModule({
@@ -206,7 +207,8 @@ import { NotificationspopupComponent } from './notificationspopup/notificationsp
     AudittrailComponent,
     AudittrailDetailsComponent,
     ServiceRComponent,
-    NotificationspopupComponent
+    NotificationspopupComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

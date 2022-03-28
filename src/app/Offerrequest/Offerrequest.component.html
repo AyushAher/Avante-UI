@@ -254,7 +254,7 @@
             <hr />
             <p style="color: red;">*Upload File Size should not exceed 10MB.</p>
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-12" style="overflow: auto;">
                 <!-- <table class="table" id="offerProcess">
                   <thead>
                     <tr>
@@ -434,12 +434,12 @@
                   </tbody>
                 </table> -->
 
-                <table class="table" id="offerProcess">
+                <table class="table" id="offerProcess" style="width: max-content;">
                   <thead>
                     <tr>
-                      <th style="width: 120px">Action</th>
-                      <th style="width: 170px">Stage</th>
-                      <th style="width: 400px">Comments</th>
+                      <th>Action</th>
+                      <th>Stage</th>
+                      <th>Comments</th>
                       <th>Upload Files <i class="mx-2 fas fa-upload"></i></th>
                       <th>
                         Download Files <i class="mx-2 fas fa-download"></i>
@@ -451,7 +451,7 @@
                       <th>
                         <button type="button" style="margin: 3px" (click)="
                             onProcessSubmit(offer_Comment.value, 'offer', index)
-                          " class="offer offer{{ index }} btn btn-primary">
+                          " class="offer offer{{ index }} btn-xs btn btn-primary">
                           <i class="fas fa-save"></i>
                         </button>
 
@@ -836,4 +836,9 @@
   tbody {
     border: 0.5px solid rgb(202 170 170);
   }
+
+  td>textarea{
+    width: 300px;
+  }
+
 </style>
