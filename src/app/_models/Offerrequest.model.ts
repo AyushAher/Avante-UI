@@ -13,5 +13,6 @@ export class Offerrequest {
   podate !: string;
   offReqNo !: string;
   paymentTerms: any;
-  customerId:any
+  customerId:any;
+  instrumentsList:any
 }

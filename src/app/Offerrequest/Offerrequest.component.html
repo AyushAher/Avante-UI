@@ -31,7 +31,6 @@
                 </div>
               </div>
             </div>
-
             <div class="col-md-4 col-sm-4">
               <label for="distributor">Distributor</label>
               <select id="distributor" type="text" formControlName="distributorid" class="form-control" [ngClass]="{
@@ -85,14 +84,31 @@
             </div>
             <div class="col-md-4 col-sm-4" *ngIf="isDist">
               <label for="PaymentTerms">Payment Terms</label>
-              <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="payTypes" formControlName="paymentTerms">
-              </ng-multiselect-dropdown>
+              <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
+                formControlName="paymentTerms">
+                <ng-option *ngFor="let i of payTypes" value="{{i.listTypeItemId}}">{{i.itemname}}</ng-option>
+              </ng-select>
               <div Style="display: block" *ngIf="submitted && f.paymentTerms.errors" class="invalid-feedback">
                 <div *ngIf="f.paymentTerms.errors.required">
                   Payment Terms is required
                 </div>
               </div>
             </div>
+
+
+            <div class="col-sm-4">
+              <label for="instrumentsList">Instruments</label>
+              <ng-select formControlName="instrumentsList" [multiple]="true" id="instrumentsList" [virtualScroll]="true"
+                [ngClass]="{'is-invalid':submitted && f.instrumentsList.errors }">
+                <ng-option *ngFor="let i of instruments" value="{{i.id}}">{{i.instypeName}} - {{i.serialnos}}
+                </ng-option>
+              </ng-select>
+
+              <div *ngIf="submitted && f.instrumentsList.errors" class="invalid-feedback">
+                <div *ngIf="f.instrumentsList.errors.required">Internal Request Country is required</div>
+              </div>
+            </div>
+
           </div>
 
           <div class="page-title">
@@ -236,6 +252,7 @@
             </div>
             <div class="clearfix"></div>
             <hr />
+            <p style="color: red;">*Upload File Size should not exceed 10MB.</p>
             <div class="row">
               <div class="col-md-12">
                 <!-- <table class="table" id="offerProcess">

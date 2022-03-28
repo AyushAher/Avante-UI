@@ -15,6 +15,7 @@ import {
   CustomerService,
   DistributorService,
   FileshareService,
+  InstrumentService,
   ListTypeService,
   NotificationService,
   ProfileService
@@ -107,7 +108,10 @@ export class OfferrequestComponent implements OnInit {
   dropdownSettings: IDropdownSettings = {};
   tempActiveStage: string
   payTypes: any;
+
   customerList: any[];
+  instruments
+  vScroll: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -126,7 +130,8 @@ export class OfferrequestComponent implements OnInit {
     private SpareQuoteDetService: SparequotedetService,
     private listTypeService: ListTypeService,
     private offerRequestProcess: OfferRequestProcessesService,
-    private custService: CustomerService
+    private custService: CustomerService,
+    private instrumentService: InstrumentService
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       if (this.id != null) {
@@ -221,7 +226,8 @@ export class OfferrequestComponent implements OnInit {
       spareQuoteNo: [{ value: '', disabled: true }],
       payterms: [''],
       paymentTerms: [""],
-      customerId: ["", Validators.required]
+      customerId: ["", Validators.required],
+      instrumentsList: ['', Validators.required]
     })
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -230,6 +236,12 @@ export class OfferrequestComponent implements OnInit {
     this.ColumnDefsSPDet = this.createColumnDefsSPDet()
     this.form.get('podate').setValue(this.datepipie.transform(new Date, "MM/dd/yyyy"))
 
+
+    this.instrumentService.getAll(this.user.userId)
+      .pipe(first())
+      .subscribe((data: any) => {
+        this.instruments = data.object
+      })
 
     this.custService.getAll().pipe(first())
       .subscribe((data: any) => {
@@ -284,11 +296,13 @@ export class OfferrequestComponent implements OnInit {
             this.listTypeService.getById("ORQPT")
               .pipe(first())
               .subscribe((mstData: any) => {
-                var subreq = data.object.paymentTerms?.split(',');
 
+                data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
+                data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
                 this.paymentTypes = []
                 this.payTypes = mstData;
-                subreq.forEach(y => {
+
+                data.object.paymentTerms?.forEach(y => {
                   mstData.forEach(x => {
                     if (y == x.listTypeItemId) {
                       this.paymentTypes.push(x)
@@ -296,17 +310,6 @@ export class OfferrequestComponent implements OnInit {
                   });
                 });
 
-                let items = [];
-
-                for (var i = 0; i < subreq.length; i++) {
-                  if (subreq[i]) {
-                    let t = {
-                      listTypeItemId: subreq[i]
-                    };
-                    items.push(t);
-                  }
-                }
-                data.object.paymentTerms = items;
                 this.form.patchValue(data.object);
                 this.getAllOfferRequestProcess();
               })
@@ -1110,15 +1113,24 @@ export class OfferrequestComponent implements OnInit {
 
     if (this.form.get('paymentTerms').value.length > 0) {
       var selectarray = this.form.get('paymentTerms').value;
-      this.model.paymentTerms = selectarray.map(x => x.listTypeItemId).join(',');
+      this.model.paymentTerms = selectarray.toString();
     }
 
     else if (this.form.get('paymentTerms').value.length == 0) {
       this.model.paymentTerms = ""
     }
 
+    if (this.form.get('instrumentsList').value.length > 0) {
+      var selectarray = this.form.get('instrumentsList').value;
+      this.model.instrumentsList = selectarray.toString();
+    }
+
+    else if (this.form.get('instrumentsList').value.length == 0) {
+      this.model.instrumentsList = ""
+    }
+
     if (!this.hasId && this.hasAddAccess) {
-      this.model = this.form.value;
+      // this.model = this.form.value;
       this.model.id = this.id;
 
       this.Service.save(this.model)
@@ -1154,7 +1166,7 @@ export class OfferrequestComponent implements OnInit {
 
       }
     } else if (this.hasUpdateAccess) {
-      this.model = this.form.value;
+      // this.model = this.form.value;
       this.model.id = this.id;
       this.Service.update(this.id, this.model)
         .pipe(first())
