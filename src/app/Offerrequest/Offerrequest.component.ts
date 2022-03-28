@@ -218,7 +218,6 @@ export class OfferrequestComponent implements OnInit {
       status: [''],
       otherSpareDesc: [''],
       podate: ['', Validators.required],
-      isdeleted: [false],
       spareQuoteNo: [{ value: '', disabled: true }],
       payterms: [''],
       paymentTerms: [""],
@@ -231,6 +230,49 @@ export class OfferrequestComponent implements OnInit {
     this.ColumnDefsSPDet = this.createColumnDefsSPDet()
     this.form.get('podate').setValue(this.datepipie.transform(new Date, "MM/dd/yyyy"))
 
+
+    this.custService.getAll().pipe(first())
+      .subscribe((data: any) => {
+        let custList = []
+        if (this.role == environment.distRoleCode) {
+          let regions = this.user.distRegionsId.split(',')
+
+          data.object.forEach(element => {
+            if (regions.includes(element.defdistregionid)) {
+              custList.push(element)
+            }
+          });
+
+        }
+
+        else if (this.role == environment.custRoleCode) {
+          this.custService.getAllByConId(this.user.contactId)
+            .pipe(first())
+            .subscribe((custData: any) => {
+              custData.object.forEach(element => {
+                custList.push(element)
+              });
+
+              this.form.get('customerId').setValue(custData.object[0]?.id)
+              this.form.get('customerId').disable()
+              this.form.get('customerId').updateValueAndValidity()
+            })
+        }
+
+        this.customerList = custList
+      })
+
+
+    if (this.role == environment.distRoleCode) {
+      this.DistributorService.getByConId(this.user.contactId).pipe(first())
+        .subscribe((data: any) => {
+          this.form.get('distributorid').setValue(data.object[0]?.id)
+          this.form.get('distributorid').disable()
+          this.form.get('distributorid').clearValidators()
+          this.form.get('distributorid').updateValueAndValidity()
+        })
+    }
+
     if (this.role == environment.distRoleCode) this.isDist = true;
 
     if (this.id != null) {
@@ -242,7 +284,7 @@ export class OfferrequestComponent implements OnInit {
             this.listTypeService.getById("ORQPT")
               .pipe(first())
               .subscribe((mstData: any) => {
-                var subreq = data.object.paymentTerms.split(',');
+                var subreq = data.object.paymentTerms?.split(',');
 
                 this.paymentTypes = []
                 this.payTypes = mstData;
@@ -317,15 +359,6 @@ export class OfferrequestComponent implements OnInit {
         })
     }
 
-    if (this.role == environment.distRoleCode) {
-      this.DistributorService.getByConId(this.user.contactId).pipe(first())
-        .subscribe((data: any) => {
-          this.form.get('distributorid').setValue(data.object[0]?.id)
-          this.form.get('distributorid').disable()
-          this.form.get('distributorid').clearValidators()
-          this.form.get('distributorid').updateValueAndValidity()
-        })
-    }
 
     this.currencyService.getAll()
       .pipe(first())
@@ -339,37 +372,6 @@ export class OfferrequestComponent implements OnInit {
         }
       })
 
-
-    this.custService.getAll().pipe(first())
-      .subscribe((data: any) => {
-        let custList = []
-        if (this.role == environment.distRoleCode) {
-          let regions = this.user.distRegionsId.split(',')
-
-          data.object.forEach(element => {
-            if (regions.includes(element.defdistregionid)) {
-              custList.push(element)
-            }
-          });
-
-        }
-
-        else if (this.role == environment.custRoleCode) {
-          this.custService.getAllByConId(this.user.contactId)
-            .pipe(first())
-            .subscribe((custData: any) => {
-              custData.object.forEach(element => {
-                custList.push(element)
-              });
-
-              this.form.get('customerId').setValue(custData.object[0]?.id)
-              this.form.get('customerId').disable()
-              this.form.get('customerId').updateValueAndValidity()
-            })
-        }
-
-        this.customerList = custList
-      })
 
 
     this.DistributorService.getAll()
@@ -1097,6 +1099,8 @@ export class OfferrequestComponent implements OnInit {
     }
 
     this.model = this.form.value;
+    this.model.customerId = this.form.get('customerId').value
+    this.model.distributorid = this.form.get('distributorid').value
     const datepipie = new DatePipe("en-US");
     this.model.podate = datepipie.transform(
       this.model.podate,
@@ -1107,6 +1111,10 @@ export class OfferrequestComponent implements OnInit {
     if (this.form.get('paymentTerms').value.length > 0) {
       var selectarray = this.form.get('paymentTerms').value;
       this.model.paymentTerms = selectarray.map(x => x.listTypeItemId).join(',');
+    }
+
+    else if (this.form.get('paymentTerms').value.length == 0) {
+      this.model.paymentTerms = ""
     }
 
     if (!this.hasId && this.hasAddAccess) {
