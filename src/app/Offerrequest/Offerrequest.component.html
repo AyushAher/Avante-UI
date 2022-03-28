@@ -15,6 +15,23 @@
               <label for="offReqNo">Offer Request No.</label>
               <input id="offReqNo" readonly type="text" formControlName="offReqNo" class="form-control" />
             </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="Customer">Customer</label>
+              <select id="Customer" type="text" formControlName="customerId" class="form-control" [ngClass]="{
+                  ' is -invalid': submitted && f.customerId.errors
+                }">
+                <option *ngFor="let i of customerList" value="{{ i.id }}">
+                  {{ i.custname }}
+                </option>
+              </select>
+              <div Style="display: block" *ngIf="submitted && f.customerId.errors" class="invalid-feedback">
+                <div *ngIf="f.customerId.errors.required">
+                  Customer is required
+                </div>
+              </div>
+            </div>
+
             <div class="col-md-4 col-sm-4">
               <label for="distributor">Distributor</label>
               <select id="distributor" type="text" formControlName="distributorid" class="form-control" [ngClass]="{

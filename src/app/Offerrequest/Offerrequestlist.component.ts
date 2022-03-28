@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { RenderComponent } from '../distributor/rendercomponent';
 import { User } from '../_models';
 import { Offerrequest } from '../_models/Offerrequest.model';
@@ -83,7 +84,6 @@ export class OfferrequestlistComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data);
           this.model = data.object;
         },
         error: (error) => {
@@ -115,6 +115,16 @@ export class OfferrequestlistComponent implements OnInit {
         field: "distributor",
         filter: true,
         tooltipField: "Distributor",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: "Customer",
+        field: "customerName",
+        filter: true,
+        hide: this.role != environment.distRoleCode,
+        tooltipField: "customerName",
         enableSorting: true,
         editable: false,
         sortable: true,

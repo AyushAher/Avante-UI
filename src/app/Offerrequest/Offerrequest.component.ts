@@ -12,6 +12,7 @@ import {
   AccountService,
   AlertService,
   CurrencyService,
+  CustomerService,
   DistributorService,
   FileshareService,
   ListTypeService,
@@ -106,6 +107,7 @@ export class OfferrequestComponent implements OnInit {
   dropdownSettings: IDropdownSettings = {};
   tempActiveStage: string
   payTypes: any;
+  customerList: any[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -123,7 +125,8 @@ export class OfferrequestComponent implements OnInit {
     private modalService: BsModalService,
     private SpareQuoteDetService: SparequotedetService,
     private listTypeService: ListTypeService,
-    private offerRequestProcess: OfferRequestProcessesService
+    private offerRequestProcess: OfferRequestProcessesService,
+    private custService: CustomerService
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       if (this.id != null) {
@@ -218,7 +221,8 @@ export class OfferrequestComponent implements OnInit {
       isdeleted: [false],
       spareQuoteNo: [{ value: '', disabled: true }],
       payterms: [''],
-      paymentTerms: [""]
+      paymentTerms: [""],
+      customerId: ["", Validators.required]
     })
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -313,6 +317,16 @@ export class OfferrequestComponent implements OnInit {
         })
     }
 
+    if (this.role == environment.distRoleCode) {
+      this.DistributorService.getByConId(this.user.contactId).pipe(first())
+        .subscribe((data: any) => {
+          this.form.get('distributorid').setValue(data.object[0]?.id)
+          this.form.get('distributorid').disable()
+          this.form.get('distributorid').clearValidators()
+          this.form.get('distributorid').updateValueAndValidity()
+        })
+    }
+
     this.currencyService.getAll()
       .pipe(first())
       .subscribe({
@@ -324,6 +338,39 @@ export class OfferrequestComponent implements OnInit {
           this.loading = false;
         }
       })
+
+
+    this.custService.getAll().pipe(first())
+      .subscribe((data: any) => {
+        let custList = []
+        if (this.role == environment.distRoleCode) {
+          let regions = this.user.distRegionsId.split(',')
+
+          data.object.forEach(element => {
+            if (regions.includes(element.defdistregionid)) {
+              custList.push(element)
+            }
+          });
+
+        }
+
+        else if (this.role == environment.custRoleCode) {
+          this.custService.getAllByConId(this.user.contactId)
+            .pipe(first())
+            .subscribe((custData: any) => {
+              custData.object.forEach(element => {
+                custList.push(element)
+              });
+
+              this.form.get('customerId').setValue(custData.object[0]?.id)
+              this.form.get('customerId').disable()
+              this.form.get('customerId').updateValueAndValidity()
+            })
+        }
+
+        this.customerList = custList
+      })
+
 
     this.DistributorService.getAll()
       .pipe(first())
