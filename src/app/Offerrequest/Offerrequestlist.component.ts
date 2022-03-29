@@ -139,6 +139,15 @@ export class OfferrequestlistComponent implements OnInit {
         sortable: true,
       },
       {
+        headerName: "Process Stage",
+        field: "stageName",
+        filter: true,
+        tooltipField: "stage",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
         headerName: "RFQ Date",
         field: "podate",
         filter: true,
