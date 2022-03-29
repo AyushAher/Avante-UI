@@ -59,7 +59,6 @@ export class RenderComponent implements AgRendererComponent  {
               private LocalExpensesService: LocalExpensesService,
               private CustomerSatisfactionSurveyService: CustomersatisfactionsurveyService,
               private CustomerSPInventoory: CustspinventoryService,
-              private OfferrequestService: OfferrequestService,
               private AMCService: AmcService
   ) {
 
@@ -447,24 +446,6 @@ export class RenderComponent implements AgRendererComponent  {
           });
       } else if (params.deleteLink == "CUSTS") {
         this.CustomerSPInventoory.delete(params.value)
-          .pipe(first())
-          .subscribe({
-            next: (data: any) => {
-              if (data.result) {
-                this.notificationService.showSuccess(data.resultMessage, "Success");
-                const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
-              } else {
-                this.notificationService.showError(data.resultMessage, "Error");
-              }
-            },
-            error: error => {
-              // this.alertService.error(error);
-              this.notificationService.showError(error, "Error");
-            }
-          });
-      } else if (params.deleteLink == "OFFER") {
-        this.OfferrequestService.delete(params.value)
           .pipe(first())
           .subscribe({
             next: (data: any) => {

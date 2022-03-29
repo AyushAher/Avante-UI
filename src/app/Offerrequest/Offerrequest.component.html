@@ -105,7 +105,7 @@
               </ng-select>
 
               <div *ngIf="submitted && f.instrumentsList.errors" class="invalid-feedback">
-                <div *ngIf="f.instrumentsList.errors.required">Internal Request Country is required</div>
+                <div *ngIf="f.instrumentsList.errors.required">Instruments is required</div>
               </div>
             </div>
 
@@ -122,7 +122,7 @@
           <div class="row" style="margin-top: 50px">
             <div class="col-md-9">
               <label for="browser">Search SpareParts By Part No. </label>
-              <input (input)="
+              <input [disabled]="isLocked" (input)="
                   SparePartsSearch($event.target.value?.split('==>')[0]?.trim())
                 " #sparePartsSearch list="browsers" name="browser" id="browser" class="form-control" />
               <datalist id="browsers">
@@ -136,7 +136,7 @@
             </div>
 
             <div class="col-md-3" style="margin-top: 30px">
-              <button class="btn btn-primary" (click)="
+              <button class="btn btn-primary" [disabled]="isLocked" (click)="
                   AddSpareParts(sparePartsSearch.value?.split('==>')[0]?.trim())
                 " type="button" class="btn btn-primary">
                 Add SpareParts
@@ -172,7 +172,7 @@
 
             <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin: 15px">
               <div class="col-md-3">
-                <input type="file" id="myFile" #file placeholder="Choose file"
+                <input type="file" id="myFile" [disabled]="isLocked" #file placeholder="Choose file"
                   (change)="getfil(file.files, true); listfile(file.files)" multiple
                   accept="text/plain, application/pdf, image/*" />
               </div>
@@ -809,8 +809,8 @@
 
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding: 10px">
-              <button *ngIf="hasUpdateAccess || (hasAddAccess && !hasId)" class="btn btn-primary" type="submit"
-                class="btn btn-primary">
+              <button *ngIf="(hasUpdateAccess || (hasAddAccess && !hasId)) && !isLocked" class="btn btn-primary"
+                type="submit" class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
@@ -837,8 +837,7 @@
     border: 0.5px solid rgb(202 170 170);
   }
 
-  td>textarea{
+  td>textarea {
     width: 300px;
   }
-
 </style>

@@ -9,6 +9,7 @@ import { User } from '../_models';
 import { Offerrequest } from '../_models/Offerrequest.model';
 import { AccountService, NotificationService, ProfileService } from '../_services';
 import { OfferrequestService } from '../_services/Offerrequest.service';
+import { OfferRequestListRenderer } from './offerrequestlistrenderer';
 
 @Component({
   selector: 'app-Offerrequestlist',
@@ -103,7 +104,7 @@ export class OfferrequestlistComponent implements OnInit {
         filter: false, enableSorting: false,
         editable: false,
         sortable: false,
-        cellRendererFramework: RenderComponent,
+        cellRendererFramework: OfferRequestListRenderer,
         cellRendererParams: {
           inRouterLink: "/offerrequest",
           deleteLink: "OFFER",

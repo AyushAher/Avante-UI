@@ -112,6 +112,7 @@ export class OfferrequestComponent implements OnInit {
   customerList: any[];
   instruments
   vScroll: boolean = true;
+  isLocked: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -446,7 +447,10 @@ export class OfferrequestComponent implements OnInit {
       .subscribe((data: any) => {
         let isPayRevStageDone = false;
         this.activeStage = data.object.find(x => x.isactive == true)?.stage;
-
+        this.isLocked = data.object.filter(x => !x.isCompleted).length == 0
+        if (this.isLocked) {
+          this.form.disable()
+        }
         data.object.forEach(element => {
           switch (element.stage) {
             case 'offer':
@@ -911,7 +915,7 @@ export class OfferrequestComponent implements OnInit {
     var selectedfiles = document.getElementById(lstId);
     var ulist = document.createElement("ul");
     ulist.id = "demo";
-    ulist.style.width = "max-content" 
+    ulist.style.width = "max-content"
     selectedfiles.appendChild(ulist);
 
     if (this.transaction != 0) {
