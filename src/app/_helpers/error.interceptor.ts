@@ -3,12 +3,12 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-import { AccountService } from '../_services';
+import { AccountService, NotificationService } from '../_services';
 import { LoaderService } from '../_services/loader.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private accountService: AccountService, private loaderService: LoaderService) { }
+    constructor(private accountService: AccountService, private loaderService: LoaderService, private notificationService: NotificationService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -30,6 +30,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
                 //stop spinner
                 this.loaderService.requestEnded()
+                this.notificationService.showError("Some Error Occured. Please Login again.", "Error")
             }
 
             //stop spinner
@@ -37,8 +38,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
             const error = err.error?.message || err.statusText;
             console.error(err);
-            return throwError(error);
-
+            this.notificationService.showError("Some error ocurred. Please contact system administrator.", "Error")
         }
         ))
 

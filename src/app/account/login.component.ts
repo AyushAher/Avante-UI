@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
 
-import {AccountService, AlertService, NotificationService} from '../_services';
-import {ChangepasswoardComponent} from "./changepasswoard.component";
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
-import {ForgotpasswoardComponent} from "./forgotpasswoard.component";
+import { AccountService, AlertService, NotificationService } from '../_services';
+import { ChangepasswoardComponent } from "./changepasswoard.component";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ForgotpasswoardComponent } from "./forgotpasswoard.component";
 
-@Component({templateUrl: 'login.component.html'})
+@Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;
@@ -69,7 +69,6 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl(returnUrl);
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
           this.loading = false;
         }
       });
