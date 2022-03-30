@@ -7,7 +7,7 @@ import { first } from 'rxjs/operators';
 
 import {
   AccountService, AlertService, ContactService, CountryService, ListTypeService, DistributorService, ProfileService,
-  NotificationService, CustomerSiteService, DistributorRegionService
+  NotificationService, CustomerSiteService, DistributorRegionService, CustomerService
 } from '../_services';
 import { ViewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
@@ -61,7 +61,8 @@ export class ContactComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private customersiteService: CustomerSiteService,
-    private distRegions: DistributorRegionService
+    private distRegions: DistributorRegionService,
+    private customerService: CustomerService
   ) { }
 
   ngOnInit() {
@@ -191,7 +192,11 @@ export class ContactComponent implements OnInit {
     } else if (this.type === "DR") {
       this.distRegions.getById(this.masterId).pipe(first())
         .subscribe((data: any) => {
-          console.log(data);
+          this.contactform.patchValue({ address: data.object.address });
+        })
+    } else if (this.type === "C") {
+      this.customerService.getById(this.masterId).pipe(first())
+        .subscribe((data: any) => {
           this.contactform.patchValue({ address: data.object.address });
         })
     }
