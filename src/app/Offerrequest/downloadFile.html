@@ -1,0 +1,11 @@
+<ul>
+    <li *ngFor="let item of list;let index = index" (click)="download(item?.id)"
+        style="background-color: transparent;border: none;padding: 0;margin-top: 0px;" class="text-primary">
+        {{item?.displayName}}</li>
+</ul>
+
+<style>
+    li:hover {
+        cursor: pointer;
+    }
+</style>

@@ -243,198 +243,14 @@
                   <div class="col-md-10">
                     <h3 style="padding: 15px 0 5px 0">Offer Request Stages</h3>
                   </div>
-                  <!-- <div class="col-md-2">
-                    <button type="button" style="margin-top: 20px;" class="btn btn-primary" (click)="refreshStages()"><i
-                        class="mx-2 fas fa-sync"></i></button>
-                  </div> -->
+
                 </div>
               </div>
             </div>
             <div class="clearfix"></div>
             <hr />
             <p style="color: red;">*Upload File Size should not exceed 10MB.</p>
-            <div class="row">
-              <div class="col-md-12" style="overflow: auto;">
-                <!-- <table class="table" id="offerProcess">
-                  <thead>
-                    <tr>
-                      <th style="width: 120px;">Action</th>
-                      <th style="width: 170px;">Stage</th>
-                      <th style="width: 400px;">Comments</th>
-                      <th>Upload Files <i class="mx-2 fas fa-upload"></i></th>
-                      <th>Download Files <i class="mx-2 fas fa-download"></i></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                    <tr>
-                      <th>
-                        <button type="button" (click)="onProcessSubmit(offerComment.value,'offer')"
-                          class="offer btn btn-primary"> <i class="fas fa-save"></i>
-                        </button>
-                      </th>
-                      <td>Offer</td>
-                      <td>
-                        <textarea #offerComment id="offer_Comment" class="offer form-control"></textarea>
-                      </td>
-                      <td>
-                        <input class="offer" #offer_file
-                          (change)="getfil(offer_file.files); listfile(offer_file.files,'offer_selectedfiles');"
-                          multiple type="file" />
-                      </td>
-                      <td>
-                        <div id="offer_selectedfiles" class="hidden" style="display: none;"></div>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <th>
-                        <button type="button" (click)="onProcessSubmit(upload_po_Comment.value,'upload_po')"
-                          class="upload_po btn btn-primary"> <i class="fas fa-save"></i>
-                        </button>
-                      </th>
-                      <td>Upload PO</td>
-                      <td>
-                        <textarea #upload_po_Comment id="upload_po_Comment" class=" upload_po form-control"></textarea>
-                      </td>
-                      <td>
-                        <input multiple #upload_po_file class="upload_po" type="file"
-                          (change)="getfil(upload_po_file.files); listfile(upload_po_file.files,'upload_po_selectedfiles');">
-                      </td>
-                      <td>
-                        <div id="upload_po_selectedfiles" class="hidden" style="display: none;"></div>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <th>
-                        <button type="button" (click)="onProcessSubmit(pfi_Comment.value,'pfi')"
-                          class="pfi btn btn-primary"> <i class="fas fa-save"></i>
-                        </button>
-                      </th>
-                      <td>PFI</td>
-                      <td>
-                        <textarea #pfi_Comment id="pfi_Comment" class="pfi form-control"></textarea>
-                      </td>
-                      <td>
-                        <input multiple #pfi_file class="pfi" type="file"
-                          (change)="getfil(pfi_file.files); listfile(pfi_file.files,'pfi_selectedfiles');">
-                      </td>
-                      <td>
-                        <div id="pfi_selectedfiles" class="hidden" style="display: none;"></div>
-                      </td>
-                    </tr>
-
-                    <tr *ngFor="let item of list; let index = index;" class="payment_revision_row">
-                      <th>
-                        <button type="button"
-                          (click)="onProcessSubmit(payment_revision_Comment.value,'payment_revision',index)"
-                          class="payment_revision payment_revision{{index}} btn btn-primary"> <i
-                            class="fas fa-save"></i>
-                        </button>
-                        <button type="button" *ngIf="index == 0" [disabled]="!addPayRev" (click)="onAddPaymentRevision()"
-                          class="payment_revision_Add btn btn-primary">
-                          <i class="fas fa-plus"></i>
-                        </button>
-                      </th>
-                      <td>Payment Revision</td>
-                      <td>
-                        <textarea #payment_revision_Comment id="payment_revision_Comment{{index}}"
-                          class="payment_revision payment_revision{{index}}  form-control"></textarea>
-                      </td>
-                      <td>
-                        <input multiple #payment_revision_file class="payment_revision payment_revision{{index}}"
-                          type="file"
-                          (change)="getfil($event.target.files); listfile($event.target.files,'payment_revision_selectedfiles'+ index);">
-                      </td>
-                      <td>
-                        <div id="payment_revision_selectedfiles{{index}}" class="hidden" style="display: block;"></div>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <th>
-                        <button type="button" (click)="onProcessSubmit(payment_done_Comment.value,'payment_done')"
-                          class="payment_done btn btn-primary"> <i class="fas fa-save"></i>
-                        </button>
-                      </th>
-                      <td>Payment Done</td>
-                      <td>
-                        <textarea #payment_done_Comment id="payment_done_Comment"
-                          class="payment_done form-control"></textarea>
-                      </td>
-                      <td>
-                        <input multiple #payment_done_file class="payment_done" type="file"
-                          (change)="getfil(payment_done_file.files); listfile(payment_done_file.files,'payment_done_selectedfiles');">
-                      </td>
-                      <td>
-                        <div id="payment_done_selectedfiles" class="hidden" style="display: none;"></div>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <th>
-                        <button type="button"
-                          (click)="onProcessSubmit(payment_received_Comment.value,'payment_received')"
-                          class="payment_received btn btn-primary"> <i class="fas fa-save"></i>
-                        </button>
-                      </th>
-                      <td>Payment Received</td>
-                      <td>
-                        <textarea #payment_received_Comment id="payment_received_Comment"
-                          class="payment_received form-control"></textarea>
-                      </td>
-                      <td>
-                        <input multiple #payment_received_file class="payment_received" type="file"
-                          (change)="getfil(payment_received_file.files); listfile(payment_received_file.files,'payment_received_selectedfiles');">
-                      </td>
-                      <td>
-                        <div id="payment_received_selectedfiles" class="hidden" style="display: none;"></div>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <th>
-                        <button type="button" (click)="onProcessSubmit(under_process_Comment.value,'under_process')"
-                          class="under_process btn btn-primary"> <i class="fas fa-save"></i>
-                        </button>
-                      </th>
-                      <td>Under Process</td>
-                      <td>
-                        <textarea #under_process_Comment id="under_process_Comment"
-                          class=" under_process form-control"></textarea>
-                      </td>
-                      <td>
-                        <input multiple #under_process_file class="under_process" type="file"
-                          (change)="getfil(under_process_file.files); listfile(under_process_file.files,'under_process_selectedfiles');">
-                      </td>
-                      <td>
-                        <div id="under_process_selectedfiles" class="hidden" style="display: none;"></div>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <th>
-                        <button type="button" (click)="onProcessSubmit(shipped_Comment.value,'shipped')"
-                          class="shipped btn btn-primary"> <i class="fas fa-save"></i>
-                        </button>
-                      </th>
-                      <td>Shipped</td>
-                      <td>
-                        <textarea #shipped_Comment id="shipped_Comment" class=" shipped form-control"></textarea>
-                      </td>
-                      <td>
-                        <input multiple #shipped_file class="shipped" type="file"
-                          (change)="getfil(shipped_file.files); listfile(shipped_file.files,'shipped_selectedfiles');">
-                      </td>
-                      <td>
-                        <div id="shipped_selectedfiles" class="hidden" style="display: none;"></div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table> -->
-
-                <table class="table" id="offerProcess">
+            <!-- <table class="table" id="offerProcess">
                   <thead>
                     <tr>
                       <th>Action</th>
@@ -802,9 +618,103 @@
                       </td>
                     </tr>
                   </tbody>
-                </table>
-              </div>
-            </div>
+                </table> -->
+
+            <!-- <ag-grid-angular style="width: 100%; height: 400px" class="my-4 ag-theme-alpine"
+              (gridReady)="onGridReadyAttachments($event)" [columnDefs]="processGridDefs" [rowData]="rowData"
+              rowSelection="single" pagination="true" paginationPageSize="10">
+            </ag-grid-angular> -->
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Stage</th>
+                  <th>Comments</th>
+                  <th>Date</th>
+                  <th>Download File <i class="mx-2 fas fa-download"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of rowData">
+                  <td>
+                    <button type="button" (click)="deleteProcess(item.id)"
+                      style="background-color: transparent;color: #5ba146;border: none;">
+                      <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                    </button>
+                  </td>
+
+                  <td>{{item.stageName}}</td>
+
+                  <td> {{item.paymentType}} <br *ngIf="item.paymentType"><br *ngIf="item.paymentType"> {{item.comments}}
+                  </td>
+
+                  <td>{{item.createdOn}}</td>
+                  <td>
+                    <app-ProcessFileRenderer [parameters]="item"></app-ProcessFileRenderer>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
+                <tr>
+                  <td>
+                    <button type="button" (click)="submitStageData()"
+                      style="background-color: transparent; color: #5ba146; border: none;">
+                      <i class="fas fa-save" style="font-size: 20px;"></i>
+                    </button>
+                  </td>
+
+                  <td style="width: 250px;">
+                    <ng-select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
+                      [virtualScroll]="true" [ngClass]="{'is-invalid':submitted && f.stageName.errors }">
+                      <ng-option *ngFor="let i of stagesList" value="{{i.listTypeItemId}}">{{i.itemname}}
+                      </ng-option>
+                    </ng-select>
+
+                    <div *ngIf="submitted && f.stageName.errors" class="invalid-feedback">
+                      <div *ngIf="f.stageName.errors.required">Stage Name is required</div>
+                    </div>
+                  </td>
+                  <td>
+
+                    <div *ngIf="isPaymentTerms">
+
+                      <label>Payment Type</label>
+                      <select class="pay_terms form-control" formControlName="payterms" id="payment_type">
+                        <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
+                          {{ i.itemname }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <label for="stageComments" *ngIf="isPaymentTerms">Comments</label>
+                    <textarea formControlName="stageComments" class="form-control"
+                      [ngClass]="{'is-invalid':submitted && f.stageComments.errors }"></textarea>
+
+                    <div *ngIf="submitted && f.stageComments.errors" class="invalid-feedback">
+                      <div *ngIf="f.stageComments.errors.required">Stage Comments is required</div>
+                    </div>
+                  </td>
+
+                  <td></td>
+                  <td>
+                    <input multiple #stageFiles class="stageFilesList_class" type="file" (change)="
+                      getfil(stageFiles.files);
+                      listfile(stageFiles.files,'stageFilesList')" />
+
+                    <div>
+                      <input type="checkbox" (click)="DisableChoseFile('stageFilesList_class')"
+                        id="stageFilesList_Attachment" />
+                      <span> No Attachment</span>
+                    </div>
+
+                    <div id="stageFilesList" class="hidden" style="display: none; overflow-wrap: break-word;"></div>
+                  </td>
+                </tr>
+              </tfoot>
+
+            </table>
+
           </div>
 
           <div class="row">

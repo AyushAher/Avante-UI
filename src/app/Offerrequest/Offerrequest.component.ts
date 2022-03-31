@@ -29,6 +29,7 @@ import { SparequotedetService } from '../_services/sparequotedet.service';
 import { environment } from '../../environments/environment';
 import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { OfferRequeestProcessFileRenderer } from './OfferRequeestProcessFileRenderer';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -86,34 +87,20 @@ export class OfferrequestComponent implements OnInit {
   processList: any;
   processFile: any
   isDist: boolean = false;
-  // stages = ["offer", "upload_po", "pfi", "payment_revision", "payment_done", "payment_received", "under_process", "shipped"]
-  stages = ["offer", "upload_po", "pfi", "pay_terms", "mode_of_payment", "payment_done", "incase_of_lc", "inspection", "shipment", "shipping_documents_for_lc"]
-  roleBasedStatusList = [
-    { stage: "offer", user: environment.distRoleCode },
-    { stage: "upload_po", user: environment.custRoleCode },
-    { stage: "pfi", user: environment.distRoleCode },
-    { stage: "pay_terms", user: environment.custRoleCode },
-    { stage: "mode_of_payment", user: environment.custRoleCode },
-    { stage: "payment_done", user: environment.distRoleCode },
-    { stage: "incase_of_lc", user: environment.distRoleCode },
-    { stage: "inspection", user: environment.distRoleCode },
-    { stage: "shipment", user: environment.distRoleCode },
-    { stage: "shipping_documents_for_lc", user: environment.distRoleCode },
-  ]
-  activeStage: any;
-  addPayRev = false
-  list = []
   hasOfferRaised: boolean = false;
   paymentTypes: any;
-  dropdownSettings: IDropdownSettings = {};
-  tempActiveStage: string
   payTypes: any;
 
   customerList: any[];
+  rowData: any[] = [];
   instruments
   vScroll: boolean = true;
   isLocked: boolean;
-
+  processGridDefs: ColDef[];
+  stagesList: any;
+  isPaymentTerms: boolean;
+  datepipe = new DatePipe('en-US')
+  @ViewChild('stageFiles') stageFiles;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -172,12 +159,18 @@ export class OfferrequestComponent implements OnInit {
                 });
             }
           })
-        this.stages.forEach(x => {
-          var selectedfiles = document.getElementById(x + "_selectedfiles");
 
-        })
+        this.offerRequestProcess.getAll(this.id).pipe(first())
+          .subscribe((stageData: any) => {
+            this.rowData = stageData.object;
+            this.form.get('stageName').reset()
+            this.form.get('stageComments').reset()
+            this.form.get('payterms').reset()
+            this.stageFiles.nativeElement.value = "";
+            var selectedfiles = document.getElementById("stageFilesList");
+            selectedfiles.innerHTML = '';
+          })
 
-        this.getAllOfferRequestProcess(true);
       }
     });
 
@@ -209,11 +202,6 @@ export class OfferrequestComponent implements OnInit {
     }
 
 
-    this.dropdownSettings = {
-      idField: 'listTypeItemId',
-      textField: 'itemname',
-    };
-
     this.form = this.formBuilder.group({
       isactive: [true],
       offReqNo: [''],
@@ -228,7 +216,11 @@ export class OfferrequestComponent implements OnInit {
       payterms: [''],
       paymentTerms: [""],
       customerId: ["", Validators.required],
-      instrumentsList: ['', Validators.required]
+      instrumentsList: ['', Validators.required],
+
+      stageName: [],
+      stageComments: [],
+      stagePaymentType: []
     })
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -236,7 +228,6 @@ export class OfferrequestComponent implements OnInit {
     this.columnDefsAttachments = this.createColumnDefsAttachments();
     this.ColumnDefsSPDet = this.createColumnDefsSPDet()
     this.form.get('podate').setValue(this.datepipie.transform(new Date, "MM/dd/yyyy"))
-
 
     this.instrumentService.getAll(this.user.userId)
       .pipe(first())
@@ -275,6 +266,10 @@ export class OfferrequestComponent implements OnInit {
         this.customerList = custList
       })
 
+    this.listTypeService.getById("ORQST").pipe(first())
+      .subscribe((data: any) => {
+        this.stagesList = data
+      })
 
     if (this.role == environment.distRoleCode) {
       this.DistributorService.getByConId(this.user.contactId).pipe(first())
@@ -311,8 +306,16 @@ export class OfferrequestComponent implements OnInit {
                   });
                 });
 
-                this.form.patchValue(data.object);
-                this.getAllOfferRequestProcess();
+                this.offerRequestProcess.getAll(this.id).pipe(first())
+                  .subscribe((stageData: any) => {
+                    stageData.object.forEach(element => {
+                      element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+                    });
+                    
+                    this.rowData = stageData.object
+                    this.form.patchValue(data.object);
+                    this.form.get('stageName').reset()
+                  })
               })
           },
           error: (error) => {
@@ -320,14 +323,6 @@ export class OfferrequestComponent implements OnInit {
             this.loading = false;
           },
         });
-
-      // if (this.role == environment.distRoleCode || this.user.username == 'admin') {
-      //   this.hasQuoteDet = true;
-      //   let tokn = localStorage.getItem('zohotoken');
-      //   if (tokn != null && tokn != '') {
-      //     this.form.get('authtoken').setValue(tokn);
-      //   }
-      // }
 
       this.Service.GetSpareQuoteDetailsByParentId(this.id)
         .pipe(first())
@@ -433,290 +428,63 @@ export class OfferrequestComponent implements OnInit {
     this.notificationService.filter("itemadded");
   }
 
-  disableRows(stage, disable = true) {
-    let disabledStagesList = <any>document.getElementsByClassName(stage)
-    for (let index = 0; index < disabledStagesList.length; index++) {
-      const item = disabledStagesList[index];
-      item.disabled = disable;
-
-    }
-  }
-  getAllOfferRequestProcess(reRendered = false) {
-    this.offerRequestProcess.getAll(this.id)
-      .pipe(first())
-      .subscribe((data: any) => {
-        let isPayRevStageDone = false;
-        this.activeStage = data.object.find(x => x.isactive == true)?.stage;
-        this.isLocked = data.object.filter(x => !x.isCompleted).length == 0
-        if (this.isLocked) {
-          this.form.disable()
-        }
-        data.object.forEach(element => {
-          switch (element.stage) {
-            case 'offer':
-              if (isPayRevStageDone) {
-                break;
-              }
-
-              let lstRevision = data.object.filter(x => x.stage == 'offer');
-              for (let index = 0; index < lstRevision.length; index++) {
-                if (!reRendered) {
-                  this.onOfferAdd();
-                }
-              }
-
-              if (data.object.find(x => x.stage == 'offer' && x.isactive == true) != null || data.object.find(x => x.stage == 'upload_po')?.isactive) {
-                let lntOffer = data.object.filter(x => x.stage == "offer" && x.isCompleted == true).length
-                this.addPayRev = true;
-                if (this.role == environment.custRoleCode && lntOffer < 1) {
-                  this.addPayRev = false;
-                }
-              }
-
-              setTimeout(() => {
-                for (let index = 0; index < lstRevision.length; index++) {
-                  var ele = <HTMLInputElement>document.getElementById(element.stage + '_Comment' + index.toString());
-                  ele.value = lstRevision[index].comments;
-                  this.disableRows(element.stage + index.toString());
-                }
-              }, 10);
-
-              isPayRevStageDone = true;
-              break;
-
-            default:
-              if (element.isactive != true) {
-                this.disableRows(element.stage);
-              }
-
-              if (element.stage == "pay_terms") {
-                this.form.get('payterms').setValue(element.paymentTypeId)
-              }
-
-              var ele = <HTMLInputElement>document.getElementById(element.stage + '_Comment');
-              ele.value = element.comments;
-              break;
-          }
-
-          if (data.object.filter(x => x.stage == "offer" && x.isCompleted == true).length > 0) {
-            this.hasOfferRaised == true;
-          }
-
-          this.enableLastRows()
-
-          this.FileShareService.list(element.id)
-            .pipe(first())
-            .subscribe({
-              next: (files: any) => {
-                switch (element.stage) {
-                  case 'offer':
-
-                    var selectedfiles = document.getElementById(element.stage + '_selectedfiles' + element.index.toString());
-                    selectedfiles.innerHTML = '';
-                    break;
-
-                  default:
-                    document.getElementById(element.stage + '_selectedfiles').style.display = 'block';
-                    var selectedfiles = document.getElementById(element.stage + '_selectedfiles');
-                    selectedfiles.innerHTML = '';
-                    break;
-                }
-                var ulist = document.createElement('ul');
-                ulist.id = element.stage + '_demo';
-                ulist.style.width = 'max-content';
-                ulist.style.padding = '0';
-                ulist.style.listStyle = 'none';
-
-                if (files.object == null && element.isCompleted) {
-                  if (element.stage == "offer") {
-                    let checkBox = <HTMLInputElement>document.getElementById(element.stage + element.index + `_Attachment`)
-                    checkBox.checked = true;
-
-                  } else {
-                    let checkBox = <HTMLInputElement>document.getElementById(element.stage + `_Attachment`)
-                    checkBox.checked = true;
-                  }
-                }
-
-                files.object?.forEach(element => {
-
-                  this.FileShareService.download(element.id).subscribe((event) => {
-                    if (event.type === HttpEventType.Response) {
-
-                      const downloadedFile = new Blob([event.body], { type: event.body.type });
-                      const a = document.createElement('a');
-                      a.setAttribute('style', 'display:block;');
-                      a.download = element.id;
-                      a.href = URL.createObjectURL(downloadedFile);
-                      a.innerHTML = '- ' + element.displayName;
-                      a.target = '_blank';
-
-                      var node = document.createElement('li');
-                      node.appendChild(a);
-                      ulist.appendChild(node);
-
-                    }
-                  });
-
-                });
-
-                selectedfiles.appendChild(ulist);
-
-              },
-              error: (err: any) => {
-                this.notificationService.showError(err, 'Error');
-              },
-            });
-
-        });
-        setTimeout(() => {
-          this.ProcessAccordingToRoles();
-        }, 50);
-      })
-  }
-
-
-  enableLastRows() {
-    setTimeout(() => {
-      if (this.tempActiveStage == undefined || this.tempActiveStage == null) {
-        this.tempActiveStage = this.activeStage
-      }
-
-      let currentStage = this.roleBasedStatusList.find(x => x.stage == this.tempActiveStage)
-      let currentStageIndex = this.roleBasedStatusList.indexOf(currentStage);
-
-      if (currentStageIndex >= 5 && this.isDist) {
-        currentStageIndex
-        currentStageIndex++
-        this.tempActiveStage = this.roleBasedStatusList[currentStageIndex]?.stage
-        this.disableRows(this.tempActiveStage, false)
-      }
-
-    }, 500);
-  }
-
-
-  onOfferAdd() {
-    this.list.push(1)
-  }
-
-
-  ProcessAccordingToRoles() {
-    let activeStageUserc = this.roleBasedStatusList.find(x => x.stage == this.activeStage);
-    let activeStageUser = activeStageUserc?.user;
-
-    if (activeStageUser != null) {
-      if (activeStageUser != this.role) {
-        let disabledStagesList = <any>document.getElementsByClassName(this.activeStage);
-        for (let index = 0; index < disabledStagesList.length; index++) {
-          const item = disabledStagesList[index];
-          item.disabled = true;
-        }
-      } else {
-        let disabledStagesList = <any>document.getElementsByClassName(this.activeStage);
-        for (let index = 0; index < disabledStagesList.length; index++) {
-          const item = disabledStagesList[index];
-          item.disabled = false;
-        }
-      }
-    } else {
-      let disabledStagesList = <any>document.getElementsByClassName(this.activeStage)
-      for (let index = 0; index < disabledStagesList.length; index++) {
-        const item = disabledStagesList[index];
-        item.disabled = false;
-      }
-    }
-
-    if (this.activeStage == "offer" && this.role == environment.custRoleCode && this.hasOfferRaised) {
-      let currentIndex = this.stages.indexOf(this.stages.find(x => x == this.activeStage))
-      if (currentIndex >= 0) {
-        currentIndex++;
-        let stage = this.stages[currentIndex]
-        this.disableRows(stage, false)
-      }
-    }
-
-    this.enableLastRows()
-
-  }
-
   DisableChoseFile(className) {
     let ofer = <HTMLInputElement>document.querySelector(`input[type="file"].` + className)
     ofer.disabled = !ofer.disabled
   }
 
 
-  onProcessSubmit(comments, stage, index = 0) {
+  submitStageData() {
     let hasNoAttachment = false;
-    let payment_type = null;
 
-    let Attachment = <HTMLInputElement>document.getElementById(stage + "_Attachment")
+    let Attachment = <HTMLInputElement>document.getElementById("stageFilesList_Attachment")
     hasNoAttachment = Attachment?.checked
 
-    switch (stage) {
-      case 'offer':
-        let element: any = document.getElementById('offer_Comment' + index)
-        comments = element.value
-        let Attachment = <HTMLInputElement>document.getElementById(stage + index + "_Attachment")
-        hasNoAttachment = Attachment.checked
-        break;
 
-      case "pay_terms":
-        let ele: any = document.getElementById('payment_type')
-        payment_type = ele.value
-        break;
-    }
+    let comments = this.form.get('stageComments').value;
 
     if (!hasNoAttachment && this.processFile == null) {
       this.notificationService.showInfo("No Attachments Selected.", "Error")
       return;
     }
 
+    let stage = this.form.get('stageName').value
+    let index = 0;
+    let paymentTerms = this.form.get('payterms').value
+
     let offerProcess = {
       isactive: false,
       comments,
+      IsCompleted: true,
       parentId: this.id,
       stage,
       index,
-      paymentTypeId: payment_type,
+      paymentTypeId: paymentTerms,
     }
 
-    this.offerRequestProcess.update(offerProcess).pipe(first())
+    this.offerRequestProcess.save(offerProcess).pipe(first())
       .subscribe((data: any) => {
-        if (offerProcess.stage == "pfi")
+        if (offerProcess.stage == this.stagesList.find(x => x.itemCode == "PFI")?.listTypeItemId)
           this.notificationService.showInfo('Please select payment terms for Customer', "");
-        let currentIndex = this.stages.indexOf(this.stages.find(x => x == stage))
-        if (currentIndex >= 0) {
-          let stage = this.stages[currentIndex]
 
-          if (stage == "offer") {
-            this.disableRows(stage + index.toString(), true)
-          }
-          else {
-            this.disableRows(stage, true)
-          }
-          currentIndex++;
-          stage = this.stages[currentIndex]
-          this.activeStage = stage;
-          this.disableRows(stage, false)
-          offerProcess.isactive = true;
-          offerProcess.comments = null;
-          offerProcess.stage = stage;
-          offerProcess.paymentTypeId = null;
-          this.ProcessAccordingToRoles()
-          this.offerRequestProcess.update(offerProcess).pipe(first())
-            .subscribe((data1: any) => {
-              this.enableLastRows()
-              if (this.processFile != null && !hasNoAttachment) {
-                this.uploadFile(this.processFile, data.extraObject);
-              }
-              this.processFile = null;
-              this.notificationService.filter("itemadded");
-            })
-        }
+        if (this.processFile != null && !hasNoAttachment)
+          this.uploadFile(this.processFile, data.extraObject);
+
+        this.processFile = null;
+        this.notificationService.filter("itemadded");
+        this.rowData = data.object
       })
+  }
 
 
+  onstageNameChanged(stage) {
+    stage = this.stagesList.find(x => x.listTypeItemId == stage)?.itemCode
+    this.isPaymentTerms = stage == "PYTMS";
+  }
+
+  deleteProcess(id) {
+    this.offerRequestProcess.delete(id).pipe(first())
+      .subscribe((data: any) => this.rowData = data.object)
   }
 
 
@@ -896,6 +664,12 @@ export class OfferrequestComponent implements OnInit {
     this.api.sizeColumnsToFit();
   }
 
+  onProcessGridReady(params): void {
+    this.api = params.api;
+    this.columnApi = params.columnApi;
+    // this.api.sizeColumnsToFit();
+  }
+
   get f() {
     return this.form.controls
   }
@@ -928,7 +702,10 @@ export class OfferrequestComponent implements OnInit {
     for (let i = 0; i < x.length; i++) {
       var name = x[i].name;
       var ul = document.getElementById("demo");
+      ul.style.marginTop = "5px"
       var node = document.createElement("li");
+      node.style.wordBreak = "break-word";
+      node.style.width = "300px"
       node.appendChild(document.createTextNode(name));
       ul.appendChild(node);
     }
@@ -959,8 +736,6 @@ export class OfferrequestComponent implements OnInit {
       },
     ]
   }
-
-  // offerrequestno_stage_filename
 
   uploadFile = (files, id, code = "OFREQ") => {
     if (files.length === 0) {

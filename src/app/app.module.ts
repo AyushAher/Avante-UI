@@ -117,6 +117,7 @@ import { ServiceRComponent } from './serviceRequest/ServicerequestRenderer';
 import { NotificationspopupComponent } from './notificationspopup/notificationspopup.component';
 import { LoaderComponent } from './loader/loader.component';
 import { OfferRequestListRenderer } from './Offerrequest/offerrequestlistrenderer';
+import { OfferRequeestProcessFileRenderer } from './Offerrequest/OfferRequeestProcessFileRenderer';
 
 
 @NgModule({
@@ -210,7 +211,8 @@ import { OfferRequestListRenderer } from './Offerrequest/offerrequestlistrendere
     ServiceRComponent,
     NotificationspopupComponent,
     LoaderComponent,
-    OfferRequestListRenderer
+    OfferRequestListRenderer,
+    OfferRequeestProcessFileRenderer
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
