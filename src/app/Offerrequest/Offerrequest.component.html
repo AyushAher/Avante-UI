@@ -698,7 +698,9 @@
 
                   <td></td>
                   <td>
-                    <input multiple #stageFiles class="stageFilesList_class" type="file" (change)="
+                    <input multiple #stageFiles class="stageFilesList_class" type="file"
+                      accept=".pdf, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/pdf"
+                      (change)="
                       getfil(stageFiles.files);
                       listfile(stageFiles.files,'stageFilesList')" />
 

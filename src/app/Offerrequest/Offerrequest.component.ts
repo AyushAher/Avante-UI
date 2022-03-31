@@ -162,6 +162,9 @@ export class OfferrequestComponent implements OnInit {
 
         this.offerRequestProcess.getAll(this.id).pipe(first())
           .subscribe((stageData: any) => {
+            stageData.object.forEach(element => {
+              element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+            });
             this.rowData = stageData.object;
             this.form.get('stageName').reset()
             this.form.get('stageComments').reset()
@@ -311,7 +314,7 @@ export class OfferrequestComponent implements OnInit {
                     stageData.object.forEach(element => {
                       element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
                     });
-                    
+
                     this.rowData = stageData.object
                     this.form.patchValue(data.object);
                     this.form.get('stageName').reset()
@@ -472,6 +475,9 @@ export class OfferrequestComponent implements OnInit {
 
         this.processFile = null;
         this.notificationService.filter("itemadded");
+        data.object.forEach(element => {
+          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+        });
         this.rowData = data.object
       })
   }
@@ -484,7 +490,13 @@ export class OfferrequestComponent implements OnInit {
 
   deleteProcess(id) {
     this.offerRequestProcess.delete(id).pipe(first())
-      .subscribe((data: any) => this.rowData = data.object)
+      .subscribe((data: any) => {
+        data.object.forEach(element => {
+          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+        });
+
+        this.rowData = data.object
+      })
   }
 
 
