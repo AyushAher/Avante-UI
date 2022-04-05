@@ -287,7 +287,7 @@ export class InstrumentComponent implements OnInit {
                   this.attachments = data.object;
                 },
                 error: (err: any) => {
-                  (err, "Error");
+                  
                 },
               });
             this.fileshareService.getImg(data.object.id, "INST")
@@ -299,7 +299,7 @@ export class InstrumentComponent implements OnInit {
                   // this.attachments = data.object;
                 },
                 error: (err: any) => {
-                  (err, "Error");
+                  
                 },
               });
 

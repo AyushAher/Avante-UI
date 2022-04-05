@@ -364,7 +364,7 @@ export class LocalexpensesComponent implements OnInit {
           this.attachments = data.object;
         },
         error: (err: any) => {
-          (err, "Error");
+          
         },
       });
   }
