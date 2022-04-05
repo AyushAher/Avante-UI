@@ -70,7 +70,7 @@ export class CountryListComponent implements OnInit {
           this.countryList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

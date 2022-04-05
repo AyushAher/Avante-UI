@@ -137,7 +137,7 @@ export class SparePartComponent implements OnInit {
           this.countries = data.object;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+           
           this.loading = false;
         }
       });
@@ -149,7 +149,7 @@ export class SparePartComponent implements OnInit {
           this.currency = data.object;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+           
           this.loading = false;
         }
       });
@@ -161,7 +161,7 @@ export class SparePartComponent implements OnInit {
           this.listTypeItems = data;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+           
           this.loading = false;
         }
       });
@@ -174,7 +174,7 @@ export class SparePartComponent implements OnInit {
           this.parttypes = data;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+           
           this.loading = false;
         }
       });
@@ -195,7 +195,7 @@ export class SparePartComponent implements OnInit {
             this.replacementParts = data.object;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -212,7 +212,7 @@ export class SparePartComponent implements OnInit {
             this.sparepartform.patchValue(data.object);
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+             
             this.loading = false;
           }
         });
@@ -237,7 +237,7 @@ export class SparePartComponent implements OnInit {
           this.sparepartform.patchValue(data.object);
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -258,7 +258,7 @@ export class SparePartComponent implements OnInit {
     //     },
     //     error: error => {
     //       this.imageUrl = this.noimageData;
-    //       this.notificationService.showError(error, "Error");
+    //       
     //     }
     //   });
     this.fileshareService.getImg(id,"SPPRT")
@@ -269,9 +269,6 @@ export class SparePartComponent implements OnInit {
           this.imageUrl = "data:image/jpeg;base64, " + data.object;
           this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
           // this.attachments = data.object;
-        },
-        error: (err: any) => {
-          this.notificationService.showError(err, "Error");
         },
       });
 
@@ -304,7 +301,7 @@ export class SparePartComponent implements OnInit {
     //
     //       },
     //       error: error => {
-    //          this.notificationService.showError(error, "Error");
+    //          
     //       }
     //     });
 
@@ -363,13 +360,13 @@ export class SparePartComponent implements OnInit {
               this.router.navigate(["sparepartlist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+             
             this.loading = false;
           }
         });
@@ -386,13 +383,13 @@ export class SparePartComponent implements OnInit {
               this.router.navigate(["sparepartlist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+             
             this.loading = false;
           }
         });
@@ -407,7 +404,7 @@ export class SparePartComponent implements OnInit {
           this.configValueList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -422,7 +419,7 @@ export class SparePartComponent implements OnInit {
           this.replacementParts = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

@@ -49,11 +49,11 @@ export class OfferRequestListRenderer implements OnInit {
                         const selectedData = params.api.getSelectedRows();
                         params.api.applyTransaction({ remove: selectedData });
                     } else {
-                        this.notificationService.showError(data.resultMessage, "Error");
+                        
                     }
                 },
                 error: error => {
-                    this.notificationService.showError(error, "Error");
+                    
                 }
             });
     }

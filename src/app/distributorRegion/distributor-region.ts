@@ -91,7 +91,7 @@ export class DistributorRegionComponent implements OnInit {
           this.countries = data.object;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+           
           this.loading = false;
         }
       });
@@ -103,7 +103,7 @@ export class DistributorRegionComponent implements OnInit {
           this.distributors = data.object;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+           
           this.loading = false;
         }
       });
@@ -123,7 +123,7 @@ export class DistributorRegionComponent implements OnInit {
             this.destributorRegionform.patchValue(data.object);
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+             
             this.loading = false;
           }
         });
@@ -158,14 +158,14 @@ export class DistributorRegionComponent implements OnInit {
               this.router.navigate(["distregionlist", this.distributorId]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             //this.alertService.success('Data save successfull');
             this.loading = false;
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+             
             this.loading = false;
           }
         });
@@ -182,13 +182,13 @@ export class DistributorRegionComponent implements OnInit {
               this.router.navigate(["distregionlist", this.distributorId]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-             this.notificationService.showError(error, "Error");
+             
             this.loading = false;
           }
         });

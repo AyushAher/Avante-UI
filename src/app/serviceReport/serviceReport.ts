@@ -359,7 +359,7 @@ export class ServiceReportComponent implements OnInit {
           this.sparepartrecmmlist = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, 'Error');
+
           this.loading = false;
         }
       });
@@ -373,7 +373,6 @@ export class ServiceReportComponent implements OnInit {
           this.sparepartlist = data.object;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
           this.loading = false;
         },
       });
@@ -388,7 +387,7 @@ export class ServiceReportComponent implements OnInit {
           // this.alertService.error(error);
 
 
-          this.notificationService.showError(error, 'Error');
+
           this.loading = false;
         }
       });
@@ -401,7 +400,7 @@ export class ServiceReportComponent implements OnInit {
         },
         error: error => {
 
-          this.notificationService.showError(error, 'Error');
+
           this.loading = false;
         }
       });
@@ -414,7 +413,7 @@ export class ServiceReportComponent implements OnInit {
         },
         error: error => {
 
-          this.notificationService.showError(error, 'Error');
+
           this.loading = false;
         }
       });
@@ -427,7 +426,7 @@ export class ServiceReportComponent implements OnInit {
         },
         error: error => {
 
-          this.notificationService.showError(error, 'Error');
+
           this.loading = false;
         }
       });
@@ -481,14 +480,14 @@ export class ServiceReportComponent implements OnInit {
                       },
                       error: error => {
 
-                        this.notificationService.showError(error, 'Error');
+
                         this.loading = false;
                       }
                     });
                 },
                 error: error => {
 
-                  this.notificationService.showError(error, 'Error');
+
                   this.loading = false;
                 }
               });
@@ -516,8 +515,6 @@ export class ServiceReportComponent implements OnInit {
             this.PdffileData = data.object;
           },
           error: (err: any) => {
-
-            this.notificationService.showError(err, 'Error');
           },
         });
 
@@ -594,15 +591,9 @@ export class ServiceReportComponent implements OnInit {
                     next: (data: any) => {
                       this.PdffileData = data.object;
                     },
-                    error: (err: any) => {
-
-                      this.notificationService.showError(err, 'Error');
-                    },
                   });
               }
               this.notificationService.showSuccess(data.resultMessage, 'Success');
-            } else {
-              this.notificationService.showError(data.resultMessage, 'Error');
             }
             this.loading = false;
 
@@ -610,7 +601,7 @@ export class ServiceReportComponent implements OnInit {
           error: error => {
             // this.alertService.error(error);
 
-            this.notificationService.showError(error, 'Error');
+
             this.loading = false;
           }
         });
@@ -636,25 +627,19 @@ export class ServiceReportComponent implements OnInit {
                       next: (data: any) => {
                         this.PdffileData = data.object;
                       },
-                      error: (err: any) => {
-
-                        this.notificationService.showError(err, 'Error');
-                      },
                     });
 
                 }, 3000);
               }
 
               this.notificationService.showSuccess(data.resultMessage, 'Success');
-            } else {
-              this.notificationService.showError(data.resultMessage, 'Error');
             }
             this.loading = false;
 
           },
           error: error => {
             //  this.alertService.error(error);
-            this.notificationService.showError(error, 'Error');
+
             this.loading = false;
           }
         });
@@ -771,17 +756,11 @@ export class ServiceReportComponent implements OnInit {
                 .pipe(first())
                 .subscribe({
                   next: (d: any) => {
-                    if (d.result) {
-                      this.notificationService.showSuccess(d.resultMessage, 'Success');
-                    } else {
-
-
-                      this.notificationService.showError(d.resultMessage, 'Error');
-                    }
+                    if (d.result) this.notificationService.showSuccess(d.resultMessage, 'Success');
                   },
                   error: error => {
 
-                    this.notificationService.showError(error, 'Error');
+
                     this.loading = false;
                   }
                 });
@@ -810,15 +789,11 @@ export class ServiceReportComponent implements OnInit {
                     if (d.result) {
                       this.notificationService.showSuccess(d.resultMessage, 'Success');
                       this.notificationService.filter('itemadded');
-                    } else {
-
-
-                      this.notificationService.showError(d.resultMessage, 'Error');
                     }
                   },
                   error: error => {
 
-                    this.notificationService.showError(error, 'Error');
+
                     this.loading = false;
                   }
                 });
@@ -835,16 +810,12 @@ export class ServiceReportComponent implements OnInit {
                     this.notificationService.filter('itemadded');
                     // this.configList = data.object;
                     // this.listvalue.get("configValue").setValue("");
-                  } else {
-
-
-                    this.notificationService.showError(data.resultMessage, 'Error');
-                  }
+                  } 
                   this.loading = false;
                 },
                 error: error => {
 
-                  this.notificationService.showError(error, 'Error');
+
                   this.loading = false;
                 }
               });
@@ -871,15 +842,8 @@ export class ServiceReportComponent implements OnInit {
                     if (d.result) {
                       this.notificationService.showSuccess(d.resultMessage, 'Success');
                       this.notificationService.filter('itemadded');
-                    } else {
-                      this.notificationService.showError(d.resultMessage, 'Error');
-                    }
+                    } 
                   },
-                  // error: error => {
-
-                  //   this.notificationService.showError(error, "Error");
-                  //   this.loading = false;
-                  // }
                 });
             }
           case 'edit':
@@ -896,15 +860,12 @@ export class ServiceReportComponent implements OnInit {
                       this.notificationService.filter('itemadded');
                       // this.configList = data.object;
                       // this.listvalue.get("configValue").setValue("");
-                    } else {
-
-                      this.notificationService.showError(data.resultMessage, 'Error');
                     }
                     this.loading = false;
                   },
                   error: error => {
 
-                    this.notificationService.showError(error, 'Error');
+
                     this.loading = false;
                   }
                 });
@@ -936,15 +897,11 @@ export class ServiceReportComponent implements OnInit {
                     if (d.result) {
                       this.notificationService.showSuccess(d.resultMessage, 'Success');
                       this.notificationService.filter('itemadded');
-                    } else {
-
-
-                      this.notificationService.showError(d.resultMessage, 'Error');
-                    }
+                    } 
                   },
                   error: error => {
 
-                    this.notificationService.showError(error, 'Error');
+
                     this.loading = false;
                   }
                 });
@@ -989,14 +946,12 @@ export class ServiceReportComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, 'Success');
               this.notificationService.filter('itemadded');
-            } else {
-              this.notificationService.showError(data.resultMessage, 'Error');
-            }
+            } 
             this.loading = false;
           },
           error: error => {
 
-            this.notificationService.showError(error, 'Error');
+
             this.loading = false;
           }
         });
@@ -1133,7 +1088,7 @@ export class ServiceReportComponent implements OnInit {
           },
           error: error => {
 
-            this.notificationService.showError(error, 'Error');
+
             this.loading = false;
           }
         });
@@ -1190,18 +1145,12 @@ export class ServiceReportComponent implements OnInit {
             next: (data: any) => {
               if (data.result) {
                 this.notificationService.filter('itemadded');
-                // this.configList = data.object;
-                // this.listvalue.get("configValue").setValue("");
-              } else {
-
-
-                this.notificationService.showError(data.resultMessage, 'Error');
               }
               this.loading = false;
             },
             error: error => {
 
-              this.notificationService.showError(error, 'Error');
+
               this.loading = false;
             }
           });
@@ -1359,18 +1308,15 @@ export class ServiceReportComponent implements OnInit {
                           },
                           error: error => {
 
-                            this.notificationService.showError(error, 'Error');
+
                             this.loading = false;
                           }
                         });
-                    } else {
-
-                      this.notificationService.showError(d.resultMessage, 'Error');
                     }
                   },
                   error: error => {
 
-                    this.notificationService.showError(error, 'Error');
+
                     this.loading = false;
                   }
                 });
@@ -1396,7 +1342,7 @@ export class ServiceReportComponent implements OnInit {
           },
           error: error => {
 
-            this.notificationService.showError(error, 'Error');
+
             // this.imageUrl = this.noimageData;
           }
         });
@@ -1461,15 +1407,12 @@ export class ServiceReportComponent implements OnInit {
                 if (data.result) {
                   this.notificationService.showSuccess(data.resultMessage, 'Success');
                   this.notificationService.filter("itemadded");
-                } else {
-
-                  this.notificationService.showError(data.resultMessage, 'Error');
                 }
                 this.loading = false;
               },
               error: error => {
 
-                this.notificationService.showError(error, 'Error');
+
                 this.loading = false;
               }
             });
@@ -2030,7 +1973,7 @@ export class ServiceReportComponent implements OnInit {
                             this.notificationService.showSuccess(data.resultMessage, "Success")
                             this.router.navigate(['servicereportlist'])
                           } else {
-                            this.notificationService.showError(data.resultMessage, "Error")
+         
                           }
                         });
                       });

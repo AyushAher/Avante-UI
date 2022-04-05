@@ -52,7 +52,7 @@ export class FilerendercomponentComponent implements AgRendererComponent {
           }
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
         },
       });
   }

@@ -88,7 +88,7 @@ export class OfferrequestlistComponent implements OnInit {
           this.model = data.object;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });

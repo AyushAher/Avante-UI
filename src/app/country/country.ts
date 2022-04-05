@@ -85,7 +85,7 @@ export class CountryComponent implements OnInit {
           this.currency = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -97,7 +97,7 @@ export class CountryComponent implements OnInit {
           this.continents = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -115,7 +115,7 @@ export class CountryComponent implements OnInit {
             this.countryform.patchValue(data.object);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -150,13 +150,13 @@ export class CountryComponent implements OnInit {
               this.router.navigate(['countrylist']);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -173,13 +173,13 @@ export class CountryComponent implements OnInit {
               this.router.navigate(['countrylist']);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

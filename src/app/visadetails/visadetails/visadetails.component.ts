@@ -155,7 +155,7 @@ export class VisadetailsComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       })
@@ -167,7 +167,7 @@ export class VisadetailsComponent implements OnInit {
           this.DistributorList = data.object;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       })
@@ -199,7 +199,7 @@ export class VisadetailsComponent implements OnInit {
           this.country = data.object;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -212,7 +212,7 @@ export class VisadetailsComponent implements OnInit {
           this.travelrequesttype = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -225,7 +225,7 @@ export class VisadetailsComponent implements OnInit {
           this.visatype = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -246,7 +246,7 @@ export class VisadetailsComponent implements OnInit {
             setTimeout(() => this.travelDetailform.patchValue(data.object), 1000);
           },
           error: (error) => {
-            this.notificationService.showError("Error", "Error");
+            
             this.loading = false;
           },
         });
@@ -341,9 +341,6 @@ export class VisadetailsComponent implements OnInit {
         next: (data: any) => {
           this.attachments = data.object;
         },
-        error: (err: any) => {
-          this.notificationService.showError(err, "Error");
-        },
       });
   }
 
@@ -366,7 +363,7 @@ export class VisadetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -383,7 +380,7 @@ export class VisadetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -462,13 +459,13 @@ export class VisadetailsComponent implements OnInit {
 
                 this.router.navigate(["visadetailslist"]);
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
               this.loading = false;
             },
             error: (error) => {
               // this.alertService.error(error);
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             },
           });
@@ -493,12 +490,12 @@ export class VisadetailsComponent implements OnInit {
                 );
                 this.router.navigate(["visadetailslist"]);
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
               this.loading = false;
             },
             error: (error) => {
-              this.notificationService.showError(error, "Error");
+              
 
               this.loading = false;
             },

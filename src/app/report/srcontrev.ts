@@ -94,7 +94,7 @@ export class srcontrevComponent implements OnInit {
             this.getsrcontrev("",1);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -122,7 +122,7 @@ export class srcontrevComponent implements OnInit {
 
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

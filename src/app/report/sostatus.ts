@@ -92,7 +92,7 @@ export class sostatusComponent implements OnInit {
             this.getquotation("", 1);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -119,7 +119,7 @@ export class sostatusComponent implements OnInit {
           this.has_more_data = this.pageData.has_more_page;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

@@ -189,7 +189,7 @@ export class CustomerComponent implements OnInit {
               this.router.navigate(["customerlist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
@@ -213,7 +213,7 @@ export class CustomerComponent implements OnInit {
               this.router.navigate(["customerlist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 

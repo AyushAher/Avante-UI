@@ -322,7 +322,6 @@ export class OfferrequestComponent implements OnInit {
               })
           },
           error: (error) => {
-            this.notificationService.showError('Error', 'Error');
             this.loading = false;
           },
         });
@@ -342,7 +341,7 @@ export class OfferrequestComponent implements OnInit {
             this.api.setRowData(this.sparePartsList);
           },
           error: (error) => {
-            this.notificationService.showError("Error", "Error");
+            
             this.loading = false;
           },
         });
@@ -369,7 +368,7 @@ export class OfferrequestComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       })
@@ -384,7 +383,7 @@ export class OfferrequestComponent implements OnInit {
 
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       })
@@ -524,12 +523,12 @@ export class OfferrequestComponent implements OnInit {
                 const selectedData = event.api.getSelectedRows();
                 event.api.applyTransaction({ remove: selectedData });
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
             },
             error: (error) => {
               // this.alertService.error(error);
-              this.notificationService.showError(error, "Error");
+              
             },
           });
       }
@@ -548,7 +547,7 @@ export class OfferrequestComponent implements OnInit {
           this.sparePartsAutoComplete = data.object;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -579,7 +578,7 @@ export class OfferrequestComponent implements OnInit {
 
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -781,9 +780,6 @@ export class OfferrequestComponent implements OnInit {
         next: (data: any) => {
           this.attachments = data.object;
         },
-        error: (err: any) => {
-          this.notificationService.showError(err, "Error");
-        },
       });
   }
 
@@ -819,11 +815,10 @@ export class OfferrequestComponent implements OnInit {
                     if (d.result) {
                       this.notificationService.filter("itemadded");
                     } else {
-                      this.notificationService.showError(d.resultMessage, "Error");
                     }
                   },
                   error: error => {
-                    this.notificationService.showError(error, "Error");
+                    
                     this.loading = false;
                   }
                 });
@@ -944,7 +939,7 @@ export class OfferrequestComponent implements OnInit {
 
           },
           error: (error) => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           },
         });
@@ -954,7 +949,7 @@ export class OfferrequestComponent implements OnInit {
           .pipe(first())
           .subscribe({
             error: (error) => {
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             },
           });
@@ -979,7 +974,7 @@ export class OfferrequestComponent implements OnInit {
 
           },
           error: (error) => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           },
         });
@@ -989,7 +984,7 @@ export class OfferrequestComponent implements OnInit {
           .pipe(first())
           .subscribe({
             error: (error) => {
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             },
           });

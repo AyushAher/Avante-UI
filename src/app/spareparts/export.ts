@@ -56,7 +56,7 @@ export class ExportSparePartComponent implements OnInit {
           this.listTypeItems = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -68,7 +68,7 @@ export class ExportSparePartComponent implements OnInit {
           this.countries = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -80,7 +80,7 @@ export class ExportSparePartComponent implements OnInit {
           this.currency = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -92,7 +92,7 @@ export class ExportSparePartComponent implements OnInit {
           this.parttypes = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -104,7 +104,7 @@ export class ExportSparePartComponent implements OnInit {
           this.configValueAllList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -118,7 +118,7 @@ export class ExportSparePartComponent implements OnInit {
           this.configValueList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -141,7 +141,7 @@ export class ExportSparePartComponent implements OnInit {
             }
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -199,14 +199,14 @@ export class ExportSparePartComponent implements OnInit {
               this.notificationService.showSuccess("File Upload Successfully", "Success");
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             // this.imagePath = data.path;
             // console.log(data);
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
           }
         });
     }

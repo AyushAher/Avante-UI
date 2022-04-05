@@ -79,7 +79,7 @@ export class CustomerListComponent implements OnInit {
             this.customerList = data.object;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -92,7 +92,7 @@ export class CustomerListComponent implements OnInit {
             this.customerList = data.object;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

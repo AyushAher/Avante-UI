@@ -152,7 +152,7 @@ export class ContactComponent implements OnInit {
         },
         error: error => {
           // this.alertService.error(error);
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -165,7 +165,7 @@ export class ContactComponent implements OnInit {
         },
         error: error => {
           // this.alertService.error(error);
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -180,7 +180,7 @@ export class ContactComponent implements OnInit {
           },
           error: error => {
             // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -227,7 +227,7 @@ export class ContactComponent implements OnInit {
           },
           error: error => {
             //this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -255,13 +255,13 @@ export class ContactComponent implements OnInit {
             this.notificationService.showSuccess(data.resultMessage, "Success");
           }
           else {
-            this.notificationService.showError(data.resultMessage, "Error");
+            
           }
           // this.notificationService.showSuccess("User Added successful", "Success");
         },
         error: error => {
           //  this.alertService.error(error);
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -373,7 +373,7 @@ export class ContactComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             // this.alertService.success('Data save successfull');
             //  this.notificationService.showSuccess("Data Save Successful", "Success");
@@ -397,7 +397,7 @@ export class ContactComponent implements OnInit {
           },
           error: error => {
             // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -414,7 +414,7 @@ export class ContactComponent implements OnInit {
               this.back();
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
 
             this.contact.id = data.id;
@@ -422,7 +422,7 @@ export class ContactComponent implements OnInit {
           },
           error: error => {
             // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

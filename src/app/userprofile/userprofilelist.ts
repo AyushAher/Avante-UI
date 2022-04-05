@@ -77,7 +77,7 @@ export class UserProfileListComponent implements OnInit {
           this.userprofileList = data.object;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+           
           this.loading = false;
         }
       });

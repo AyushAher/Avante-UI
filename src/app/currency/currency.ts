@@ -84,7 +84,7 @@ export class CurrencyComponent implements OnInit {
             this.currencyform.patchValue(data.object);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -120,13 +120,13 @@ export class CurrencyComponent implements OnInit {
               this.router.navigate(['currencylist']);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: error => {
             // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -144,13 +144,13 @@ export class CurrencyComponent implements OnInit {
 
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

@@ -66,12 +66,9 @@ export class ChangepasswoardComponent implements OnInit {
               this.close();
               this.notificationService.showSuccess(data.resultMessage, "Success");
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
           },
-          error: (error: any) => {
-            this.notificationService.showError(error.resultMessage, "Error");
-          }
         })
     } else {
       this.notificationService.showError("Password Does Not Match", "Error");

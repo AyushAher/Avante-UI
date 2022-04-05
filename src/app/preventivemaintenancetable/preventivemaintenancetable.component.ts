@@ -83,7 +83,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
             }
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -173,7 +173,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
             this.list = this.listTypeItems;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         }
@@ -255,13 +255,13 @@ export class PreventivemaintenancetableComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.close();
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -274,13 +274,13 @@ export class PreventivemaintenancetableComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.close();
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

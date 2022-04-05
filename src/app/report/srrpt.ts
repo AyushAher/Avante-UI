@@ -92,7 +92,7 @@ export class srrptComponent implements OnInit {
           this.ServiceReportList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

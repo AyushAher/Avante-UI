@@ -70,7 +70,7 @@ export class SparePartListComponent implements OnInit {
           this.sparePartList = data.object;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+           
           this.loading = false;
         }
       });

@@ -88,7 +88,7 @@ export class CustdashboardsettingsComponent implements OnInit {
           this.rowdata1 = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -101,7 +101,7 @@ export class CustdashboardsettingsComponent implements OnInit {
           this.rowdata2 = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -114,7 +114,7 @@ export class CustdashboardsettingsComponent implements OnInit {
           this.rowdata3 = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -136,7 +136,7 @@ export class CustdashboardsettingsComponent implements OnInit {
           console.log(this.localData)
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -175,12 +175,12 @@ export class CustdashboardsettingsComponent implements OnInit {
               this.router.navigate(['']);
 
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -236,13 +236,13 @@ export class CustdashboardsettingsComponent implements OnInit {
               this.router.navigate(['']);
 
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

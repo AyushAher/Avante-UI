@@ -95,7 +95,7 @@ export class MasterListItemComponent implements OnInit {
           //  this.masterlistitemform.patchValue(this.itemList[0]);
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -115,7 +115,7 @@ export class MasterListItemComponent implements OnInit {
     //        this.masterlistitemform.patchValue(data.object);
     //      },
     //      error: error => {
-    //        this.notificationService.showError(error, "Error");
+    //        
     //        this.loading = false;
     //      }
     //    });
@@ -228,12 +228,12 @@ export class MasterListItemComponent implements OnInit {
             this.masterlistitemform.get("code").setValue('');
           }
           else {
-            this.notificationService.showError(data.resultMessage, "Error");
+            
           }
           this.loading = false;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -253,13 +253,13 @@ export class MasterListItemComponent implements OnInit {
             this.itemList = data.object;
           }
           else {
-            this.notificationService.showError(data.resultMessage, "Error");
+            
           }
           this.loading = false;
 
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

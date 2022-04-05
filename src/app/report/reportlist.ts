@@ -85,7 +85,7 @@ export class ReportListComponent implements OnInit {
             this.getinvoice();
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -107,7 +107,7 @@ export class ReportListComponent implements OnInit {
           this.AmcList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

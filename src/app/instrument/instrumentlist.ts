@@ -73,7 +73,7 @@ export class InstrumentListComponent implements OnInit {
           this.instrumentList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

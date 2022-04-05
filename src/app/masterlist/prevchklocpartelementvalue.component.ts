@@ -61,7 +61,7 @@ export class PrevchklocpartelementvalueComponent implements OnInit {
           this.configList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -113,12 +113,12 @@ export class PrevchklocpartelementvalueComponent implements OnInit {
               this.configList = data.object;
               this.listvalue.get("element").setValue("");
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -134,12 +134,12 @@ export class PrevchklocpartelementvalueComponent implements OnInit {
               this.listvalue.get("element").setValue("");
               this.id = null;
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

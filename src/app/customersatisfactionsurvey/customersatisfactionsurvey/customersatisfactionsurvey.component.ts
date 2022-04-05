@@ -125,7 +125,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
           this.DistributorList = data.object;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       })
@@ -138,7 +138,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
           this.travelrequesttype = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -173,7 +173,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
           this.accomodationtype = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -189,7 +189,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
             setTimeout(() => this.form.patchValue(data.object), 100);
           },
           error: (error) => {
-            this.notificationService.showError(Error, "Error");
+            
             this.loading = false;
           },
         });
@@ -211,7 +211,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
         },
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -228,7 +228,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
         },
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -285,14 +285,14 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
               );
               this.router.navigate(["/customersatisfactionsurveylist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               console.log(data.resultMessage);
             }
             this.loading = false;
           },
           error: (error) => {
             // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           },
         });
@@ -315,13 +315,13 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
               );
               this.router.navigate(["/customersatisfactionsurveylist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               console.log(data.resultMessage);
             }
             this.loading = false;
           },
           error: (error) => {
-            this.notificationService.showError(error, "Error");
+            
             console.log(error);
             this.loading = false;
           },

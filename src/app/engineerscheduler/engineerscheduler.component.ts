@@ -219,7 +219,7 @@ export class EngineerschedulerComponent implements OnInit {
 
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
         }
       });
   }
@@ -259,14 +259,14 @@ export class EngineerschedulerComponent implements OnInit {
                       if (!data.result) {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
-                        this.notificationService.showError(data.message, "Error")
+                        
                       }
                     },
                     error: (error) => {
                       this.loading = false;
                       this.scheduleObj.deleteEvent(x)
                       this.scheduleObj.refreshEvents();
-                      this.notificationService.showError(error, "Error")
+                      
                     }
                   })
 
@@ -282,7 +282,7 @@ export class EngineerschedulerComponent implements OnInit {
                 this.loading = false;
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                this.notificationService.showError(error, "Error")
+                
               }
             });
 
@@ -316,14 +316,14 @@ export class EngineerschedulerComponent implements OnInit {
                       if (!data.result) {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
-                        this.notificationService.showError(data.message, "Error")
+                        
                       }
                     },
                     error: (error) => {
                       this.loading = false;
                       this.scheduleObj.deleteEvent(x)
                       this.scheduleObj.refreshEvents();
-                      this.notificationService.showError(error, "Error")
+                      
                     }
                   })
 
@@ -339,7 +339,7 @@ export class EngineerschedulerComponent implements OnInit {
                 this.loading = false;
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                this.notificationService.showError(error, "Error")
+                
               }
             });
         } else {
@@ -355,7 +355,7 @@ export class EngineerschedulerComponent implements OnInit {
           if (!data.result) {
             this.scheduleObj.deleteEvent(e.data)
             this.scheduleObj.refreshEvents();
-            this.notificationService.showError(data.message, "Error")
+            
           }
         },
         error: (error) => {
@@ -363,7 +363,7 @@ export class EngineerschedulerComponent implements OnInit {
           this.scheduleObj.deleteEvent(e.data)
           this.scheduleObj.saveEvent(e.data)
           this.scheduleObj.refreshEvents();
-          this.notificationService.showError(error, "Error")
+          
         }
       })
     } else if (e.requestType == "eventRemove") {
@@ -379,14 +379,14 @@ export class EngineerschedulerComponent implements OnInit {
                 if (!data.result) {
                   this.scheduleObj.deleteEvent(x)
                   this.scheduleObj.refreshEvents();
-                  this.notificationService.showError(data.message, "Error")
+                  
                 }
               },
               error: (error: any) => {
                 this.loading = false;
                 this.scheduleObj.saveEvent(x)
                 this.scheduleObj.refreshEvents();
-                this.notificationService.showError(error, "Error")
+                
               }
             })
         })
@@ -402,14 +402,14 @@ export class EngineerschedulerComponent implements OnInit {
               if (!data.result) {
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                this.notificationService.showError(data.message, "Error")
+                
               }
             },
             error: (error: any) => {
               this.loading = false;
               this.scheduleObj.saveEvent(x)
               this.scheduleObj.refreshEvents();
-              this.notificationService.showError(error, "Error")
+              
             }
           })
       }
@@ -511,13 +511,13 @@ export class EngineerschedulerComponent implements OnInit {
                         if (!data.result) {
                           this.scheduleObj.deleteEvent(x)
                           this.scheduleObj.refreshEvents();
-                          this.notificationService.showError(data.message, "Error")
+                          
                         }
                       },
                       error: (error) => {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
-                        this.notificationService.showError(error, "Error")
+                        
                       }
                     })
 
@@ -531,7 +531,7 @@ export class EngineerschedulerComponent implements OnInit {
                 error: (error: any) => {
                   this.scheduleObj.deleteEvent(x)
                   this.scheduleObj.refreshEvents();
-                  this.notificationService.showError(error, "Error")
+                  
                 }
               });
           } else {
@@ -564,13 +564,13 @@ export class EngineerschedulerComponent implements OnInit {
                       if (!data.result) {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
-                        this.notificationService.showError(data.message, "Error")
+                        
                       }
                     },
                     error: (error) => {
                       this.scheduleObj.deleteEvent(x)
                       this.scheduleObj.refreshEvents();
-                      this.notificationService.showError(error, "Error")
+                      
                     }
                   })
 
@@ -584,7 +584,7 @@ export class EngineerschedulerComponent implements OnInit {
               error: (error: any) => {
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                this.notificationService.showError(error, "Error")
+                
               }
             });
         } else {
@@ -601,14 +601,14 @@ export class EngineerschedulerComponent implements OnInit {
             if (!data.result) {
               this.scheduleObj.deleteEvent(e.data)
               this.scheduleObj.refreshEvents();
-              this.notificationService.showError(data.message, "Error")
+              
             }
           },
           error: (error) => {
             this.scheduleObj.deleteEvent(e.data)
             this.scheduleObj.saveEvent(e.data)
             this.scheduleObj.refreshEvents();
-            this.notificationService.showError(error, "Error")
+            
           }
         })
     } else if (e.requestType == "eventRemove") {
@@ -622,13 +622,13 @@ export class EngineerschedulerComponent implements OnInit {
                 if (!data.result) {
                   this.scheduleObj.deleteEvent(x)
                   this.scheduleObj.refreshEvents();
-                  this.notificationService.showError(data.message, "Error")
+                  
                 }
               },
               error: (error: any) => {
                 this.scheduleObj.saveEvent(x)
                 this.scheduleObj.refreshEvents();
-                this.notificationService.showError(error, "Error")
+                
               }
             })
         })
@@ -642,13 +642,13 @@ export class EngineerschedulerComponent implements OnInit {
               if (!data.result) {
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                this.notificationService.showError(data.message, "Error")
+                
               }
             },
             error: (error: any) => {
               this.scheduleObj.saveEvent(x)
               this.scheduleObj.refreshEvents();
-              this.notificationService.showError(error, "Error")
+              
             }
           })
       }

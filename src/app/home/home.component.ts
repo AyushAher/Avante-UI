@@ -52,7 +52,7 @@ export class HomeComponent {
                 }
               },
               error: (error) => {
-                this.notificationService.showError(error, "Error");
+                
               },
             });
         }

@@ -359,7 +359,7 @@ export class ServiceRequestComponent implements OnInit {
           }
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+
           this.loading = false;
         }
       });
@@ -374,7 +374,7 @@ export class ServiceRequestComponent implements OnInit {
           }
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+
           this.loading = false;
         }
       });
@@ -397,7 +397,7 @@ export class ServiceRequestComponent implements OnInit {
           }
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+
           this.loading = false;
         }
       });
@@ -409,7 +409,7 @@ export class ServiceRequestComponent implements OnInit {
           this.instrumentStatus = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+
           this.loading = false;
         }
       });
@@ -423,7 +423,7 @@ export class ServiceRequestComponent implements OnInit {
           this.serviceRequestform.patchValue({ "serreqno": srno });
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+
           this.loading = false;
         }
       });
@@ -436,7 +436,7 @@ export class ServiceRequestComponent implements OnInit {
           this.breakdownlist = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+
           this.loading = false;
         }
       });
@@ -454,7 +454,6 @@ export class ServiceRequestComponent implements OnInit {
           }
         },
         error: error => {
-          this.notificationService.showError(error, 'Error');
           this.loading = false;
         }
       });
@@ -472,7 +471,7 @@ export class ServiceRequestComponent implements OnInit {
           this.subreqtypelist = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+
           this.loading = false;
         }
       });
@@ -571,7 +570,7 @@ export class ServiceRequestComponent implements OnInit {
                     this.PdffileData = data.object;
                   },
                   error: error => {
-                    this.notificationService.showError(error, "Error");
+
                     this.loading = false;
                   }
                 });
@@ -860,7 +859,7 @@ export class ServiceRequestComponent implements OnInit {
 
               this.router.navigate(["servicerequestlist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+
             }
             this.loading = false;
 
@@ -900,7 +899,7 @@ export class ServiceRequestComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["servicerequestlist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+
             }
             this.loading = false;
 
@@ -980,7 +979,7 @@ export class ServiceRequestComponent implements OnInit {
             // alert("As you have accepted the Service request please schedule a call to process further.")
           }, error: (error) => {
 
-            this.notificationService.showError(error, "Error");
+
           }
         })
     }
@@ -1047,7 +1046,7 @@ export class ServiceRequestComponent implements OnInit {
                                 .subscribe({
                                   next: (data: any) => {
                                     if (!data.result) {
-                                      this.notificationService.showError(data.resultMessage, "Error");
+
                                     }
                                   },
                                   error: error => {
@@ -1059,7 +1058,7 @@ export class ServiceRequestComponent implements OnInit {
 
                               this.router.navigate(["servicereport", data.object.id]);
                             } else {
-                              this.notificationService.showError(data.resultMessage, "Error");
+
                             }
                             this.loading = false;
                           },
@@ -1071,7 +1070,7 @@ export class ServiceRequestComponent implements OnInit {
                         });
                     },
                     error: error => {
-                      this.notificationService.showError(error, "Error");
+
                       this.loading = false;
                     }
                   });
@@ -1095,7 +1094,7 @@ export class ServiceRequestComponent implements OnInit {
                           .subscribe({
                             next: (data: any) => {
                               if (!data.result) {
-                                this.notificationService.showError(data.resultMessage, "Error");
+
                               }
                             },
                             error: error => {
@@ -1106,7 +1105,7 @@ export class ServiceRequestComponent implements OnInit {
                           });
                         this.router.navigate(["servicereport", data.object.id]);
                       } else {
-                        this.notificationService.showError(data.resultMessage, "Error");
+
                       }
                       this.loading = false;
 
@@ -1123,11 +1122,10 @@ export class ServiceRequestComponent implements OnInit {
               this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
             }
           } else {
-            this.notificationService.showError(data.resultMessage, "Error")
           }
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error")
+
         }
       })
     }
@@ -1151,7 +1149,7 @@ export class ServiceRequestComponent implements OnInit {
               // this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["servicerequestlist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+
             }
             this.loading = false;
 
@@ -1193,12 +1191,12 @@ export class ServiceRequestComponent implements OnInit {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 this.router.navigate(["servicerequestlist"]);
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+
               }
               this.loading = false;
             },
             error: error => {
-              this.notificationService.showError(error, "Error");
+
               this.loading = false;
             }
           });
@@ -1215,7 +1213,7 @@ export class ServiceRequestComponent implements OnInit {
             this.download(data.data);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+
           }
         });
     }
@@ -1273,14 +1271,10 @@ export class ServiceRequestComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (d: any) => {
-                  if (d.result) {
-                    this.notificationService.showSuccess(d.resultMessage, "Success");
-                  } else {
-                    this.notificationService.showError(d.resultMessage, "Error");
-                  }
+                  if (d.result) this.notificationService.showSuccess(d.resultMessage, "Success");
                 },
                 error: error => {
-                  this.notificationService.showError(error, "Error");
+
                   this.loading = false;
                 }
               });
@@ -1367,7 +1361,7 @@ export class ServiceRequestComponent implements OnInit {
           this.serviceRequestform.patchValue({ "xraygenerator": instument.insversion });
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+
           this.loading = false;
         }
       });
@@ -1438,7 +1432,7 @@ export class ServiceRequestComponent implements OnInit {
       {
         headerName: 'Comments',
         field: 'comments',
-        width:600,
+        width: 600,
         filter: false,
         enableSorting: false,
         editable: false,
@@ -1634,12 +1628,10 @@ export class ServiceRequestComponent implements OnInit {
                     this.notificationService.showSuccess(d.resultMessage, "Success");
                     const selectedData = this.api.getSelectedRows();
                     this.api.applyTransaction({ remove: selectedData });
-                  } else {
-                    this.notificationService.showError(d.resultMessage, "Error");
                   }
                 },
                 error: error => {
-                  this.notificationService.showError(error, "Error");
+
                   this.loading = false;
                 }
               });

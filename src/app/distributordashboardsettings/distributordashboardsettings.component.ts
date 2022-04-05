@@ -90,7 +90,7 @@ export class DistributordashboardsettingsComponent implements OnInit {
           this.rowdata1 = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -103,7 +103,7 @@ export class DistributordashboardsettingsComponent implements OnInit {
           this.rowdata2 = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -125,7 +125,7 @@ export class DistributordashboardsettingsComponent implements OnInit {
           )
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -166,12 +166,12 @@ export class DistributordashboardsettingsComponent implements OnInit {
               this.router.navigate(['']);
 
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -219,13 +219,13 @@ export class DistributordashboardsettingsComponent implements OnInit {
               this.router.navigate(['']);
 
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

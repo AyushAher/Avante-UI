@@ -190,7 +190,7 @@ export class poComponent implements OnInit {
               this.router.navigate(["polist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
            
@@ -214,7 +214,7 @@ export class poComponent implements OnInit {
               this.router.navigate(["polist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
             
@@ -260,11 +260,11 @@ export class poComponent implements OnInit {
   //                  this.recomandFilter(this.sparePartDetails);
   //                }
   //                else {
-  //                  this.notificationService.showError(d.resultMessage, "Error");
+  //                  (d.resultMessage, "Error");
   //                }
   //              },
   //              error: error => {
-  //                this.notificationService.showError(error, "Error");
+  //                
   //                this.loading = false;
   //              }
   //            });
@@ -358,7 +358,7 @@ export class poComponent implements OnInit {
   //        this.figValueList = data.object;
   //      },
   //      error: error => {
-  //        this.notificationService.showError(error, "Error");
+  //        
   //        this.loading = false;
   //      }
   //    });

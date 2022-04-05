@@ -105,7 +105,7 @@ export class ProfileComponent implements OnInit {
             this.profileform.patchValue(data.object);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -126,7 +126,7 @@ export class ProfileComponent implements OnInit {
             this.addItem(this.listTypeItems);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -216,14 +216,14 @@ export class ProfileComponent implements OnInit {
               this.router.navigate(["profilelist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
 
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -239,13 +239,13 @@ export class ProfileComponent implements OnInit {
               this.router.navigate(["profilelist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

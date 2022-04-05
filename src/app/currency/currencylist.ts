@@ -70,7 +70,7 @@ export class CurrencyListComponent implements OnInit {
           this.currencyList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

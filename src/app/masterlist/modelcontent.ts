@@ -67,7 +67,7 @@ export class ModelContentComponent implements OnInit {
           //  this.masterlistitemform.patchValue(this.itemList[0]);
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -138,12 +138,12 @@ export class ModelContentComponent implements OnInit {
               this.listvalue.get("configValue").setValue("");
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -160,12 +160,12 @@ export class ModelContentComponent implements OnInit {
               this.id = null;
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

@@ -78,12 +78,12 @@ export class MRenderComponent implements AgRendererComponent  {
                 params.api.applyTransaction({ remove: selectedData });
               }
               else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
             },
             error: error => {
               // this.alertService.error(error);
-              this.notificationService.showError(error, "Error");
+              
             }
           });
       }
@@ -98,12 +98,12 @@ export class MRenderComponent implements AgRendererComponent  {
                 const selectedData = params.api.getSelectedRows();
                 params.api.applyTransaction({ remove: selectedData });
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
             },
             error: error => {
               // this.alertService.error(error);
-              this.notificationService.showError(error, "Error");
+              
             }
           });
       }
@@ -118,12 +118,12 @@ export class MRenderComponent implements AgRendererComponent  {
                 const selectedData = params.api.getSelectedRows();
                 params.api.applyTransaction({remove: selectedData});
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
             },
             error: error => {
               // this.alertService.error(error);
-              this.notificationService.showError(error, "Error");
+              
             }
           });
       } else if (params.deleteLink == "CNG") {
@@ -137,12 +137,12 @@ export class MRenderComponent implements AgRendererComponent  {
                 const selectedData = params.api.getSelectedRows();
                 params.api.applyTransaction({remove: selectedData});
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
             },
             error: error => {
               // this.alertService.error(error);
-              this.notificationService.showError(error, "Error");
+              
             }
           });
       }

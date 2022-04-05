@@ -87,7 +87,7 @@ export class DistributorComponent implements OnInit {
         },
         error: error => {
           //   this.alertService.error(error);
-          this.notificationService.showError("Error", "Error");
+          
           this.loading = false;
         }
       });
@@ -106,7 +106,7 @@ export class DistributorComponent implements OnInit {
           },
           error: error => {
           //  this.alertService.error(error);
-            this.notificationService.showError("Error", "Error");
+            
             this.loading = false;
           }
         });
@@ -149,7 +149,7 @@ export class DistributorComponent implements OnInit {
               this.router.navigate(["distributorlist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
              //console.log(data);
 
@@ -158,7 +158,7 @@ export class DistributorComponent implements OnInit {
           },
           error: error => {
             //this.alertService.error(error);
-            this.notificationService.showError("Error", "Error");
+            
             this.loading = false;
           }
         });
@@ -176,7 +176,7 @@ export class DistributorComponent implements OnInit {
               this.router.navigate(["distributorlist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
              //console.log(data);
 
@@ -184,7 +184,7 @@ export class DistributorComponent implements OnInit {
 
           },
           error: error => {
-            this.notificationService.showError("Error", "Error");
+            
             //this.alertService.error(error);
             this.loading = false;
           }

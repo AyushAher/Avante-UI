@@ -110,7 +110,7 @@ export class CustomerSiteComponent implements OnInit {
         },
         error: error => {
           //  this.alertService.error(error);
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -123,7 +123,7 @@ export class CustomerSiteComponent implements OnInit {
         },
         error: error => {
          // this.alertService.error(error);
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -141,7 +141,7 @@ export class CustomerSiteComponent implements OnInit {
           },
           error: error => {
            // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -160,7 +160,7 @@ export class CustomerSiteComponent implements OnInit {
           },
           error: error => {
            // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -174,7 +174,7 @@ export class CustomerSiteComponent implements OnInit {
           },
           error: error => {
            // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -209,14 +209,14 @@ export class CustomerSiteComponent implements OnInit {
               this.router.navigate(["customersitelist", this.customerid]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
            // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -234,14 +234,14 @@ export class CustomerSiteComponent implements OnInit {
               this.router.navigate(["customersitelist", this.customerid]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
           //  this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

@@ -201,7 +201,7 @@ export class InstrumentComponent implements OnInit {
           this.customersite = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -218,7 +218,7 @@ export class InstrumentComponent implements OnInit {
           }
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -232,7 +232,7 @@ export class InstrumentComponent implements OnInit {
         },
         error: error => {
           //  this.alertService.error(error);
-          this.notificationService.showError("Error", "Error");
+          
           this.loading = false;
         }
       });
@@ -245,7 +245,7 @@ export class InstrumentComponent implements OnInit {
           this.instuType = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -257,7 +257,7 @@ export class InstrumentComponent implements OnInit {
           this.listTypeItems = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -287,7 +287,7 @@ export class InstrumentComponent implements OnInit {
                   this.attachments = data.object;
                 },
                 error: (err: any) => {
-                  this.notificationService.showError(err, "Error");
+                  (err, "Error");
                 },
               });
             this.fileshareService.getImg(data.object.id, "INST")
@@ -299,7 +299,7 @@ export class InstrumentComponent implements OnInit {
                   // this.attachments = data.object;
                 },
                 error: (err: any) => {
-                  this.notificationService.showError(err, "Error");
+                  (err, "Error");
                 },
               });
 
@@ -325,7 +325,7 @@ export class InstrumentComponent implements OnInit {
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -339,7 +339,7 @@ export class InstrumentComponent implements OnInit {
             //this.getPdffile(data.object.filePath);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -418,7 +418,7 @@ export class InstrumentComponent implements OnInit {
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             // this.imageUrl = this.noimageData;
           }
         });
@@ -462,7 +462,7 @@ export class InstrumentComponent implements OnInit {
           });
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -494,7 +494,7 @@ export class InstrumentComponent implements OnInit {
             }
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -526,7 +526,7 @@ export class InstrumentComponent implements OnInit {
               }
             },
             error: error => {
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             }
           });
@@ -559,7 +559,7 @@ export class InstrumentComponent implements OnInit {
     //
     //       },
     //       error: error => {
-    //          this.notificationService.showError(error, "Error");
+    //          
     //       }
     // });
     // When file uploads set it to file formcontrol
@@ -603,7 +603,7 @@ export class InstrumentComponent implements OnInit {
             //this.pdfFileName = file.name;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
           }
         });
     }
@@ -625,12 +625,12 @@ export class InstrumentComponent implements OnInit {
     //           this.router.navigate(["instrumentlist"]);
     //         }
     //         else {
-    //           this.notificationService.showError(data.resultMessage, "Error");
+    //           
     //         }
     //         this.loading = false;
     //       },
     //       error: error => {
-    //         this.notificationService.showError(error, "Error");
+    //         
     //         this.loading = false;
     //       }
     //     });
@@ -714,12 +714,12 @@ export class InstrumentComponent implements OnInit {
 
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -737,13 +737,13 @@ export class InstrumentComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["instrumentlist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -851,7 +851,7 @@ export class InstrumentComponent implements OnInit {
           this.configValueList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -887,11 +887,11 @@ export class InstrumentComponent implements OnInit {
                     this.recomandFilter(this.sparePartDetails);
                   }
                   else {
-                    this.notificationService.showError(d.resultMessage, "Error");
+                    (d.resultMessage, "Error");
                   }
                 },
                 error: error => {
-                  this.notificationService.showError(error, "Error");
+                  
                   this.loading = false;
                 }
               });
@@ -978,17 +978,17 @@ export class InstrumentComponent implements OnInit {
                           //this.getPdffile(data.object.filePath);
                         },
                         error: error => {
-                          this.notificationService.showError(error, "Error");
+                          
                           this.loading = false;
                         }
                       });
                   }
                   else {
-                    this.notificationService.showError(d.resultMessage, "Error");
+                    (d.resultMessage, "Error");
                   }
                 },
                 error: error => {
-                  this.notificationService.showError(error, "Error");
+                  
                   this.loading = false;
                 }
               });

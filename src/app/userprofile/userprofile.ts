@@ -129,7 +129,7 @@ export class UserProfileComponent implements OnInit {
           //this.addItem(this.listTypeItems);
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -144,7 +144,7 @@ export class UserProfileComponent implements OnInit {
           //this.addItem(this.listTypeItems);
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -157,7 +157,7 @@ export class UserProfileComponent implements OnInit {
           this.profilelist = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -170,7 +170,7 @@ export class UserProfileComponent implements OnInit {
           this.userlist = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -235,7 +235,7 @@ export class UserProfileComponent implements OnInit {
             this.onprofileClick(data.object.profileForId);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -350,7 +350,7 @@ export class UserProfileComponent implements OnInit {
           //this.profilewithregdata = [];
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -374,7 +374,7 @@ export class UserProfileComponent implements OnInit {
           this.contactId = data.object.contactid;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -409,13 +409,13 @@ export class UserProfileComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["userprofilelist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -431,13 +431,13 @@ export class UserProfileComponent implements OnInit {
               this.router.navigate(["userprofilelist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

@@ -128,7 +128,7 @@ export class CustSPInventoryComponent implements OnInit {
                   this.configValueList = data.object;
                 },
                 error: error => {
-                  this.notificationService.showError(error, "Error");
+                  
                   this.loading = false;
                 }
               });
@@ -145,13 +145,13 @@ export class CustSPInventoryComponent implements OnInit {
                 this.historyModel = data.object;
               },
               error: (error) => {
-                this.notificationService.showError(error, "Error");
+                
                 this.loading = false;
               }
             })
           },
           error: (error) => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           },
         });
@@ -163,7 +163,7 @@ export class CustSPInventoryComponent implements OnInit {
           this.listTypeItems = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -178,7 +178,7 @@ export class CustSPInventoryComponent implements OnInit {
           this.configValueList = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -193,7 +193,7 @@ export class CustSPInventoryComponent implements OnInit {
           this.replacementParts = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -210,19 +210,13 @@ export class CustSPInventoryComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          if (!data.result || data.object == null) {
-            this.notificationService.showError(data.resultMessage, "Error")
-            return;
-          }
+          if (!data.result || data.object == null) return;
 
           this.form.get("sparePartId").setValue(data.object.id)
           this.form.get("partNo").setValue(data.object.partno)
           this.form.get("hscCode").setValue(data.object.hscode)
           this.form.get("SearchPartNo").setValue("")
         },
-        error: (error: any) => {
-          this.notificationService.showError(error, "Error")
-        }
       })
   }
 
@@ -292,12 +286,12 @@ export class CustSPInventoryComponent implements OnInit {
               );
               this.router.navigate(["customerspinventorylist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: (error) => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           },
         });
@@ -315,12 +309,12 @@ export class CustSPInventoryComponent implements OnInit {
               );
               this.router.navigate(["customerspinventorylist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: (error) => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           },
         });

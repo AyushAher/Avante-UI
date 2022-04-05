@@ -110,13 +110,13 @@ export class WorkdoneContentComponent implements OnInit {
              // this.listvalue.get("configValue").setValue("");
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -135,13 +135,13 @@ export class WorkdoneContentComponent implements OnInit {
               //this.id = null;
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

@@ -178,7 +178,7 @@ export class TraveldetailsComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       })
@@ -189,7 +189,7 @@ export class TraveldetailsComponent implements OnInit {
           this.DistributorList = data.object;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       })
@@ -217,7 +217,7 @@ export class TraveldetailsComponent implements OnInit {
           this.classoftravel = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -230,7 +230,7 @@ export class TraveldetailsComponent implements OnInit {
           this.Triptype = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -243,7 +243,7 @@ export class TraveldetailsComponent implements OnInit {
           this.travelrequesttype = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -270,7 +270,7 @@ export class TraveldetailsComponent implements OnInit {
             setTimeout(() => this.Form.patchValue(data.object), 500);
           },
           error: (error) => {
-            this.notificationService.showError("Error", "Error");
+            
             this.loading = false;
           },
         });
@@ -297,7 +297,7 @@ export class TraveldetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -314,7 +314,7 @@ export class TraveldetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -403,9 +403,6 @@ export class TraveldetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.attachments = data.object;
-        },
-        error: (err: any) => {
-          this.notificationService.showError(err, "Error");
         },
       });
   }
@@ -514,13 +511,13 @@ export class TraveldetailsComponent implements OnInit {
 
                 this.router.navigate(["traveldetailslist"]);
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
               this.loading = false;
             },
             error: (error) => {
               // this.alertService.error(error);
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             },
           });
@@ -547,12 +544,12 @@ export class TraveldetailsComponent implements OnInit {
                 );
                 this.router.navigate(["traveldetailslist"]);
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
               this.loading = false;
             },
             error: (error) => {
-              this.notificationService.showError(error, "Error");
+              
 
               this.loading = false;
             },

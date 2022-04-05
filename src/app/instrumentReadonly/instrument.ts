@@ -157,7 +157,7 @@ export class InstrumentRonlyComponent implements OnInit {
           this.customersite = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -170,7 +170,7 @@ export class InstrumentRonlyComponent implements OnInit {
           this.instuType = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -183,7 +183,7 @@ export class InstrumentRonlyComponent implements OnInit {
         },
         error: error => {
           //  this.alertService.error(error);
-          this.notificationService.showError("Error", "Error");
+          
           this.loading = false;
         }
       });
@@ -195,7 +195,7 @@ export class InstrumentRonlyComponent implements OnInit {
           this.listTypeItems = data;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -223,7 +223,7 @@ export class InstrumentRonlyComponent implements OnInit {
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -236,7 +236,7 @@ export class InstrumentRonlyComponent implements OnInit {
            // this.getPdffile(data.object.filePath);
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -269,7 +269,7 @@ export class InstrumentRonlyComponent implements OnInit {
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.imageUrl = this.noimageData;
           }
         });
@@ -292,7 +292,7 @@ export class InstrumentRonlyComponent implements OnInit {
               this.recomandFilter(this.sparePartDetails);
             },
             error: error => {
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             }
           });
@@ -310,7 +310,7 @@ export class InstrumentRonlyComponent implements OnInit {
               this.selectedConfigType.push(value);
             },
             error: error => {
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             }
           });
@@ -333,7 +333,7 @@ export class InstrumentRonlyComponent implements OnInit {
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             // this.imageUrl = this.noimageData;
           }
         });
@@ -368,7 +368,7 @@ export class InstrumentRonlyComponent implements OnInit {
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
           }
         });
       //// When file uploads set it to file formcontrol
@@ -420,12 +420,12 @@ export class InstrumentRonlyComponent implements OnInit {
               this.router.navigate(["instrumentlist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -441,13 +441,13 @@ export class InstrumentRonlyComponent implements OnInit {
               this.router.navigate(["instrumentlist"]);
             }
             else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
             }
             this.loading = false;
 
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

@@ -267,13 +267,13 @@ export class SparequotedetComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -287,13 +287,13 @@ export class SparequotedetComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });

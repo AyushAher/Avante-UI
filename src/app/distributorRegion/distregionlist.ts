@@ -71,7 +71,7 @@ export class DistributorRegionListComponent implements OnInit {
         },
         error: error => {
           //this.alertService.error(error);
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

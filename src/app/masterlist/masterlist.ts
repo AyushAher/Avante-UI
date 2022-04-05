@@ -92,7 +92,7 @@ export class MasterListComponent implements OnInit {
           })
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

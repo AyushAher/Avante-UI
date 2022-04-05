@@ -70,7 +70,7 @@ export class ProfileListComponent implements OnInit {
           this.profileList = data;
         },
         error: error => {
-           this.notificationService.showError(error, "Error");
+           
           this.loading = false;
         }
       });

@@ -97,7 +97,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
           }
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });

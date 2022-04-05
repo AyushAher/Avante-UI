@@ -88,7 +88,7 @@ export class AmcComponent implements OnInit {
               this.instrumentList = data.object;
             },
             error: (error) => {
-              this.notificationService.showError("Error", "Error");
+              
               this.loading = false;
             },
           });
@@ -167,7 +167,7 @@ export class AmcComponent implements OnInit {
             this.form.patchValue(data.object);
           },
           error: (error) => {
-            this.notificationService.showError("Error", "Error");
+            
             this.loading = false;
           },
         });
@@ -179,7 +179,7 @@ export class AmcComponent implements OnInit {
             this.instrumentList = data.object;
           },
           error: (error) => {
-            this.notificationService.showError("Error", "Error");
+            
             this.loading = false;
           },
         });
@@ -221,7 +221,7 @@ export class AmcComponent implements OnInit {
           this.customersList = data.object
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       })
@@ -233,7 +233,7 @@ export class AmcComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       })
@@ -247,7 +247,7 @@ export class AmcComponent implements OnInit {
           this.serviceType = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -260,7 +260,7 @@ export class AmcComponent implements OnInit {
           this.supplierList = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -281,7 +281,7 @@ export class AmcComponent implements OnInit {
         },
         error: error => {
           // this.alertService.error(error);
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -313,12 +313,12 @@ export class AmcComponent implements OnInit {
                   const selectedData = event.api.getSelectedRows();
                   event.api.applyTransaction({ remove: selectedData });
                 } else {
-                  this.notificationService.showError(data.resultMessage, "Error");
+                  
                 }
               },
               error: (error) => {
                 // this.alertService.error(error);
-                this.notificationService.showError(error, "Error");
+                
               },
             });
         }
@@ -338,7 +338,7 @@ export class AmcComponent implements OnInit {
           this.instrumentAutoComplete = data.object;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -362,7 +362,7 @@ export class AmcComponent implements OnInit {
           this.instrumentSearch.nativeElement.value = ""
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -508,7 +508,7 @@ export class AmcComponent implements OnInit {
             }
           },
           error: (error) => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           },
         });
@@ -521,7 +521,7 @@ export class AmcComponent implements OnInit {
               this.router.navigate(["amclist"]);
             },
             error: (error) => {
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             },
           });
@@ -544,7 +544,7 @@ export class AmcComponent implements OnInit {
             }
           },
           error: (error) => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           },
         });
@@ -556,7 +556,7 @@ export class AmcComponent implements OnInit {
               this.router.navigate(["amclist"]);
             },
             error: (error) => {
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             },
           });

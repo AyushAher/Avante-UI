@@ -153,7 +153,7 @@ export class LocalexpensesComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       })
@@ -191,7 +191,7 @@ export class LocalexpensesComponent implements OnInit {
           })
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       })
@@ -204,7 +204,7 @@ export class LocalexpensesComponent implements OnInit {
           this.travelrequesttype = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -217,7 +217,7 @@ export class LocalexpensesComponent implements OnInit {
           this.accomodationtype = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -236,7 +236,7 @@ export class LocalexpensesComponent implements OnInit {
             }, 100);
           },
           error: (error) => {
-            this.notificationService.showError("Error", "Error");
+            
             this.loading = false;
           },
         });
@@ -259,7 +259,7 @@ export class LocalexpensesComponent implements OnInit {
         next: (data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId && !x.isReportGenerated),
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -275,7 +275,7 @@ export class LocalexpensesComponent implements OnInit {
         },
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -364,7 +364,7 @@ export class LocalexpensesComponent implements OnInit {
           this.attachments = data.object;
         },
         error: (err: any) => {
-          this.notificationService.showError(err, "Error");
+          (err, "Error");
         },
       });
   }
@@ -422,14 +422,14 @@ export class LocalexpensesComponent implements OnInit {
               );
               this.router.navigate(["/localexpenseslist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               console.log(data.resultMessage);
             }
             this.loading = false;
           },
           error: (error) => {
             // this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           },
         });
@@ -452,13 +452,13 @@ export class LocalexpensesComponent implements OnInit {
               );
               this.router.navigate(["/localexpenseslist"]);
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               console.log(data.resultMessage);
             }
             this.loading = false;
           },
           error: (error) => {
-            this.notificationService.showError(error, "Error");
+            
             console.log(error);
             this.loading = false;
           },

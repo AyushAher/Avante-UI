@@ -143,7 +143,7 @@ export class StaydetailsComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       })
@@ -202,7 +202,7 @@ export class StaydetailsComponent implements OnInit {
           this.DistributorList = data.object;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       })
@@ -215,7 +215,7 @@ export class StaydetailsComponent implements OnInit {
           this.accomodationtype = data;
         },
         error: (error) => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         },
       });
@@ -231,7 +231,7 @@ export class StaydetailsComponent implements OnInit {
             setTimeout(() => this.travelDetailform.patchValue(data.object), 100);
           },
           error: (error) => {
-            this.notificationService.showError("Error", "Error");
+            
             this.loading = false;
           },
         });
@@ -249,7 +249,7 @@ export class StaydetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -266,7 +266,7 @@ export class StaydetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          this.notificationService.showError("Error", error);
+          
           this.loading = false;
         },
       });
@@ -345,13 +345,13 @@ export class StaydetailsComponent implements OnInit {
                 );
                 this.router.navigate(["/staydetailslist"]);
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
               this.loading = false;
             },
             error: (error) => {
               // this.alertService.error(error);
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             },
           });
@@ -372,12 +372,12 @@ export class StaydetailsComponent implements OnInit {
                 );
                 this.router.navigate(["/staydetailslist"]);
               } else {
-                this.notificationService.showError(data.resultMessage, "Error");
+                
               }
               this.loading = false;
             },
             error: (error) => {
-              this.notificationService.showError(error, "Error");
+              
               this.loading = false;
             },
           });

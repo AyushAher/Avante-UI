@@ -56,7 +56,7 @@ export class SearchComponent implements OnInit {
           this.customersite = data.object;
         },
         error: error => {
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -94,7 +94,7 @@ export class SearchComponent implements OnInit {
           },
           error: error => {
             //this.alertService.error(error);
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -171,7 +171,7 @@ export class SearchComponent implements OnInit {
         },
         error: error => {
           //this.alertService.error(error);
-          this.notificationService.showError(error, "Error");
+          
           this.loading = false;
         }
       });

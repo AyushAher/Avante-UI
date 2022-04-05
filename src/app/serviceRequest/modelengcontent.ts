@@ -113,13 +113,13 @@ export class ModelEngContentComponent implements OnInit {
               //this.configList = data.object;
               // this.listvalue.get("configValue").setValue("");
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -137,13 +137,13 @@ export class ModelEngContentComponent implements OnInit {
               //this.listvalue.get("configValue").setValue("");
               //this.id = null;
             } else {
-              this.notificationService.showError(data.resultMessage, "Error");
+              
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            this.notificationService.showError(error, "Error");
+            
             this.loading = false;
           }
         });
