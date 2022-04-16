@@ -15,8 +15,8 @@
             <div class="col-md-4 col-sm-4">
               <label for="billto">Bill To</label>
               <select id="billto" formControlName="billtoid" class="form-control"
-                      (change)="GetSites($event.target['value'])"
-                      [ngClass]="{ ' is -invalid': submitted && f.billtoid.errors}">
+                (change)="GetSites($event.target['value'])"
+                [ngClass]="{ ' is -invalid': submitted && f.billtoid.errors}">
                 <option *ngFor="let i of customersList" value="{{i.id}}">{{i.custname}}
                 </option>
               </select>
@@ -31,7 +31,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="CustSite">Customer Site</label>
               <select id="CustSite" formControlName="custSite" class="form-control"
-                      [ngClass]="{ ' is -invalid': submitted && f.custSite.errors}">
+                [ngClass]="{ ' is -invalid': submitted && f.custSite.errors}">
                 <option *ngFor="let i of custSiteList" value="{{i.id}}">{{i.custregname}}
                 </option>
               </select>
@@ -46,7 +46,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="servicequote">Service Quote</label>
               <input id="servicequote" type="text" formControlName="servicequote" class="form-control"
-                     [ngClass]="{ ' is -invalid': submitted && f.servicequote.errors}"/>
+                [ngClass]="{ ' is -invalid': submitted && f.servicequote.errors}" />
               <div Style="display: block" *ngIf="submitted && f.servicequote.errors" class="invalid-feedback">
                 <div *ngIf="f.servicequote.errors.required">
                   Service Quote is required
@@ -57,7 +57,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="sqdate">SQ Date</label>
               <input id="sqdate" bsDatepicker type="text" formControlName="sqdate" class="form-control"
-                     [ngClass]="{ ' is -invalid': submitted && f.sqdate.errors}"/>
+                [ngClass]="{ ' is -invalid': submitted && f.sqdate.errors}" />
               <div Style="display: block" *ngIf="submitted && f.sqdate.errors" class="invalid-feedback">
                 <div *ngIf="f.sqdate.errors.required">
                   SQ Date is required
@@ -68,7 +68,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="sdate">Start Date</label>
               <input id="sdate" bsDatepicker type="text" formControlName="sdate" class="form-control"
-                     [ngClass]="{ ' is -invalid': submitted && f.sdate.errors}"/>
+                [ngClass]="{ ' is -invalid': submitted && f.sdate.errors}" />
               <div Style="display: block" *ngIf="submitted && f.sdate.errors" class="invalid-feedback">
                 <div *ngIf="f.sdate.errors.required">
                   Start Date is required
@@ -79,7 +79,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="edate">End Date</label>
               <input id="edate" bsDatepicker type="text" formControlName="edate" class="form-control"
-                     [ngClass]="{ ' is -invalid': submitted && f.edate.errors}"/>
+                [ngClass]="{ ' is -invalid': submitted && f.edate.errors}" />
               <div Style="display: block" *ngIf="submitted && f.edate.errors" class="invalid-feedback">
                 <div *ngIf="f.edate.errors.required">
                   End Date is required
@@ -90,7 +90,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="project">Project</label>
               <input id="project" type="text" formControlName="project" class="form-control"
-                     [ngClass]="{ ' is -invalid': submitted && f.project.errors}"/>
+                [ngClass]="{ ' is -invalid': submitted && f.project.errors}" />
               <div Style="display: block" *ngIf="submitted && f.project.errors" class="invalid-feedback">
                 <div *ngIf="f.project.errors.required">
                   Project is required
@@ -140,7 +140,7 @@
               </select>
 
               <input id="zerorate" type="number" formControlName="zerorate" class="form-control"
-                style="display:inline-block; width:270px; margin-left: 5px;"
+                style="display:inline-block; width:220px; margin-left: 5px;"
                 [ngClass]="{ ' is -invalid': submitted && f.zerorate.errors}" />
               <div Style="display: block" *ngIf="submitted && f.zerorate.errors" class="invalid-feedback">
                 <div *ngIf="f.zerorate.errors.required">
@@ -152,7 +152,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="tnc">TNC</label>
               <textarea id="tnc" type="text" formControlName="tnc" class="form-control"
-                        [ngClass]="{ ' is -invalid': submitted && f.tnc.errors}"></textarea>
+                [ngClass]="{ ' is -invalid': submitted && f.tnc.errors}"></textarea>
               <div Style="display: block" *ngIf="submitted && f.tnc.errors" class="invalid-feedback">
                 <div *ngIf="f.tnc.errors.required">
                   TNC is required
@@ -160,8 +160,21 @@
               </div>
             </div>
 
+            <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView && hasId">
+              <label for="PaymentTerms">Payment Terms</label>
+              <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
+                formControlName="paymentTerms">
+                <ng-option *ngFor="let i of payTypes" value="{{i.listTypeItemId}}">{{i.itemname}}</ng-option>
+              </ng-select>
+              <div Style="display: block" *ngIf="submitted && f.paymentTerms.errors" class="invalid-feedback">
+                <div *ngIf="f.paymentTerms.errors.required">
+                  Payment Terms is required
+                </div>
+              </div>
+            </div>
+
           </div>
-          <br/>
+          <br />
 
 
           <div class="page-title">
@@ -170,13 +183,13 @@
             </div>
           </div>
           <div class="clearfix"></div>
-          <hr/>
+          <hr />
           <div class="row">
             <div class="col-md-9">
               <label>Search Instruments By Serial No. </label>
 
               <input (input)="InstrumentSearch($event.target['value'])" #instrumentSearch list="browsers" name="browser"
-                     id="browser" class="form-control">
+                id="browser" class="form-control">
               <datalist id="browsers">
                 <option *ngFor="let i of instrumentAutoComplete" value="{{i.serialnos}}">
               </datalist>
@@ -198,6 +211,115 @@
 
           </div>
 
+          <div class="offerRequestProccess" *ngIf="hasId">
+            <div class="page-title">
+              <div class="title_left">
+                <div class="row">
+                  <div class="col-md-10">
+                    <h3 style="padding: 15px 0 5px 0">AMC Stages</h3>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+            <p style="color: red;">*Upload File Size should not exceed 10MB.</p>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Stage</th>
+                  <th>Comments</th>
+                  <th>Date</th>
+                  <th>Download File <i class="mx-2 fas fa-download"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of rowData">
+                  <td>
+                    <button type="button" (click)="deleteProcess(item.id)"
+                      style="background-color: transparent;color: #5ba146;border: none;">
+                      <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                    </button>
+                  </td>
+
+                  <td>{{item.stageName}}</td>
+
+                  <td> {{item.paymentType}} <br *ngIf="item.paymentType"><br *ngIf="item.paymentType"> {{item.comments}}
+                  </td>
+
+                  <td>{{item.createdOn}}</td>
+                  <td>
+                    <app-ProcessFileRenderer [parameters]="item"></app-ProcessFileRenderer>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
+                <tr>
+                  <td>
+                    <button type="button" (click)="submitStageData()"
+                      style="background-color: transparent; color: #5ba146; border: none;">
+                      <i class="fas fa-save" style="font-size: 20px;"></i>
+                    </button>
+                  </td>
+
+                  <td style="width: 250px;">
+                    <ng-select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
+                      [virtualScroll]="true" [ngClass]="{'is-invalid':submitted && f.stageName.errors }">
+                      <ng-option *ngFor="let i of stagesList" value="{{i.listTypeItemId}}">{{i.itemname}}
+                      </ng-option>
+                    </ng-select>
+
+                    <div *ngIf="submitted && f.stageName.errors" class="invalid-feedback">
+                      <div *ngIf="f.stageName.errors.required">Stage Name is required</div>
+                    </div>
+                  </td>
+                  <td>
+
+                    <div *ngIf="isPaymentTerms">
+
+                      <label>Payment Type</label>
+                      <select class="pay_terms form-control" formControlName="payterms" id="payment_type">
+                        <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
+                          {{ i.itemname }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <label for="stageComments" *ngIf="isPaymentTerms">Comments</label>
+                    <textarea formControlName="stageComments" class="form-control"
+                      [ngClass]="{'is-invalid':submitted && f.stageComments.errors }"></textarea>
+
+                    <div *ngIf="submitted && f.stageComments.errors" class="invalid-feedback">
+                      <div *ngIf="f.stageComments.errors.required">Stage Comments is required</div>
+                    </div>
+                  </td>
+
+                  <td></td>
+                  <td>
+                    <input multiple #stageFiles class="stageFilesList_class" type="file"
+                      accept=".pdf, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/pdf"
+                      (change)="
+                      getfil(stageFiles.files);
+                      listfile(stageFiles.files,'stageFilesList')" />
+
+                    <div>
+                      <input type="checkbox" (click)="DisableChoseFile('stageFilesList_class')"
+                        id="stageFilesList_Attachment" />
+                      <span> No Attachment</span>
+                    </div>
+
+                    <div id="stageFilesList" class="hidden" style="display: none; overflow-wrap: break-word;"></div>
+                  </td>
+                </tr>
+              </tfoot>
+
+            </table>
+
+          </div>
+
+
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding:10px;">
               <button *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)" class="btn btn-primary" type="submit"
@@ -211,3 +333,23 @@
     </div>
   </div>
 </layout>
+
+
+<style>
+  th>button {
+    padding: 6px 9px;
+  }
+
+  thead {
+    background-color: #5ba146;
+    color: white;
+  }
+
+  tbody {
+    border: 0.5px solid rgb(202 170 170);
+  }
+
+  td>textarea {
+    width: 300px;
+  }
+</style>

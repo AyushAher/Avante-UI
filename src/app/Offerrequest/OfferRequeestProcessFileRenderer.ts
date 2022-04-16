@@ -13,7 +13,6 @@ export class OfferRequeestProcessFileRenderer implements OnInit {
     @Input() parameters: any;
 
     constructor(
-        private offerRequestProcess: OfferRequestProcessesService,
         private FileShareService: FileshareService,
     ) { }
 
@@ -22,7 +21,7 @@ export class OfferRequeestProcessFileRenderer implements OnInit {
         this.FileShareService.list(this.parameters.id)
             .pipe(first())
             .subscribe((data: any) => this.list = data.object);
-            
+
     }
 
     download(params: any) {

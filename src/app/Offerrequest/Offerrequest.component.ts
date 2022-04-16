@@ -93,7 +93,7 @@ export class OfferrequestComponent implements OnInit {
 
   customerList: any[];
   rowData: any[] = [];
-  instruments
+  instruments = []
   vScroll: boolean = true;
   isLocked: boolean;
   processGridDefs: ColDef[];
@@ -101,6 +101,7 @@ export class OfferrequestComponent implements OnInit {
   isPaymentTerms: boolean;
   datepipe = new DatePipe('en-US')
   @ViewChild('stageFiles') stageFiles;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,

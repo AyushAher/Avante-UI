@@ -12,6 +12,7 @@ export class Amc {
   currency: string;
   zerorate: number;
   tnc: string;
+  paymentTerms: any;
 }
 
 export class instrumentList {

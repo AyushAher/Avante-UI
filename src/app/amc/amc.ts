@@ -1,11 +1,13 @@
 import { DatePipe } from "@angular/common";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { HttpEventType } from "@angular/common/http";
+import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { Guid } from "guid-typescript";
 import { first } from "rxjs/operators";
 import { environment } from "src/environments/environment";
+import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
 import { Amc, Currency, Customer, ListTypeItem, ResultMsg, User } from "../_models";
 import { AmcInstrument } from "../_models/Amcinstrument";
 import {
@@ -15,11 +17,13 @@ import {
   ContactService,
   CurrencyService,
   CustomerService,
+  FileshareService,
   ListTypeService,
   NotificationService,
   ProfileService
 } from "../_services";
 import { AmcinstrumentService } from "../_services/amcinstrument.service";
+import { AmcstagesService } from "../_services/amcstages.service";
 import { AmcInstrumentRendererComponent } from "./amc-instrument-renderer.component";
 
 @Component({
@@ -55,13 +59,30 @@ export class AmcComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
-  hasId: boolean;
+  hasId: boolean = false;
 
   IsCustomerView: boolean = false;
   IsDistributorView: boolean = false;
   IsEngineerView: boolean = false;
   @ViewChild('instrumentSearch') instrumentSearch
   role: any;
+  datepipe = new DatePipe('en-US')
+  rowData: any;
+  stagesList: any;
+  processFile: any;
+  isPaymentTerms: boolean;
+  attachments: any;
+  file: any;
+  fileList: [] = [];
+  transaction: number;
+  hastransaction: boolean;
+  public progress: number;
+  public message: string;
+  @ViewChild('stageFiles') stageFiles;
+  @Output() public onUploadFinished = new EventEmitter();
+  vScroll: boolean = true;
+  paymentTypes: any;
+  payTypes: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,22 +97,34 @@ export class AmcComponent implements OnInit {
     private customerService: CustomerService,
     private currencyService: CurrencyService,
     private AmcInstrumentService: AmcinstrumentService,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private amcStagesService: AmcstagesService,
+    private FileShareService: FileshareService
   ) {
 
     this.notificationService.listen().subscribe((m: any) => {
       if (this.id != null) {
         this.AmcInstrumentService.getAmcInstrumentsByAmcId(this.id)
           .pipe(first())
-          .subscribe({
-            next: (data: any) => {
-              this.instrumentList = data.object;
-            },
-            error: (error) => {
-              
-              this.loading = false;
-            },
+          .subscribe((data: any) => {
+            this.instrumentList = data.object;
           });
+
+
+        this.amcStagesService.getAll(this.id).pipe(first())
+          .subscribe((stageData: any) => {
+            stageData.object.forEach(element => {
+              element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+            });
+
+            this.rowData = stageData.object;
+            this.form.get('stageName').reset()
+            this.form.get('stageComments').reset()
+            this.form.get('payterms').reset()
+            this.stageFiles.nativeElement.value = "";
+            var selectedfiles = document.getElementById("stageFilesList");
+            selectedfiles.innerHTML = '';
+          })
       }
     });
   }
@@ -153,36 +186,63 @@ export class AmcComponent implements OnInit {
       zerorate: [0, Validators.required],
       tnc: ["", Validators.required],
       custSite: ["", Validators.required],
+
+      payterms: [''],
+      paymentTerms: [""],
+      stageName: [],
+      stageComments: [],
+      stagePaymentType: []
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
     this.columnDefs = this.createColumnDefs();
 
+    this.listTypeService.getById("AMCSG").pipe(first())
+      .subscribe((data: any) => {
+        this.stagesList = data
+      })
+
     if (this.id != null) {
       this.Service.getById(this.id)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.GetSites(data.object.billtoid);
-            this.form.patchValue(data.object);
-          },
-          error: (error) => {
-            
-            this.loading = false;
-          },
+        .subscribe((data: any) => {
+
+          this.listTypeService.getById("ORQPT")
+            .pipe(first())
+            .subscribe((mstData: any) => {
+
+              data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
+              this.paymentTypes = []
+              this.payTypes = mstData;
+
+              data.object.paymentTerms?.forEach(y => {
+                mstData.forEach(x => {
+                  if (y == x.listTypeItemId) {
+                    this.paymentTypes.push(x)
+                  }
+                });
+              });
+
+              this.amcStagesService.getAll(this.id).pipe(first())
+                .subscribe((stageData: any) => {
+                  stageData.object?.forEach(element => {
+                    element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+                  });
+
+                  this.rowData = stageData.object;
+                  this.GetSites(data.object.billtoid);
+                  this.form.patchValue(data.object);
+                  this.form.get('stageName').reset()
+                })
+            })
         });
 
       this.AmcInstrumentService.getAmcInstrumentsByAmcId(this.id)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.instrumentList = data.object;
-          },
-          error: (error) => {
-            
-            this.loading = false;
-          },
+        .subscribe((data: any) => {
+          this.instrumentList = data.object;
         });
+
       this.hasId = true;
     }
     else {
@@ -221,7 +281,7 @@ export class AmcComponent implements OnInit {
           this.customersList = data.object
         },
         error: (error) => {
-          
+
           this.loading = false;
         }
       })
@@ -233,7 +293,7 @@ export class AmcComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          
+
           this.loading = false;
         }
       })
@@ -242,27 +302,15 @@ export class AmcComponent implements OnInit {
     this.listTypeService
       .getById("SERTY")
       .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.serviceType = data;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
+      .subscribe((data: ListTypeItem[]) => {
+        this.serviceType = data;
       });
 
     this.listTypeService
       .getById("SUPPL")
       .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.supplierList = data;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
+      .subscribe((data: any) => {
+        this.supplierList = data;
       });
 
   }
@@ -271,21 +319,150 @@ export class AmcComponent implements OnInit {
     return this.form.controls;
   }
 
+  DisableChoseFile(className) {
+    let ofer = <HTMLInputElement>document.querySelector(`input[type="file"].` + className)
+    ofer.disabled = !ofer.disabled
+  }
+
+
+  submitStageData() {
+    let hasNoAttachment = false;
+
+    let Attachment = <HTMLInputElement>document.getElementById("stageFilesList_Attachment")
+    hasNoAttachment = Attachment?.checked
+
+
+    let comments = this.form.get('stageComments').value;
+
+    if (!hasNoAttachment && this.processFile == null) {
+      this.notificationService.showInfo("No Attachments Selected.", "Error")
+      return;
+    }
+
+    let stage = this.form.get('stageName').value
+    let index = 0;
+    let paymentTerms = this.form.get('payterms').value
+
+    let offerProcess = {
+      isactive: false,
+      comments,
+      IsCompleted: true,
+      parentId: this.id,
+      stage,
+      index,
+      paymentTypeId: paymentTerms,
+    }
+
+    this.amcStagesService.save(offerProcess).pipe(first())
+      .subscribe((data: any) => {
+        if (offerProcess.stage == this.stagesList.find(x => x.itemCode == "AMPFI")?.listTypeItemId)
+          this.notificationService.showInfo('Please select payment terms for Customer', "");
+
+        if (this.processFile != null && !hasNoAttachment)
+          this.uploadFile(this.processFile, data.extraObject);
+
+        this.processFile = null;
+        this.notificationService.filter("itemadded");
+
+        data.object.forEach(element => {
+          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+        });
+
+        this.rowData = data.object
+        this.form.get("stageName").reset()
+        this.form.get("stageComments").reset()
+        this.form.get("stagePaymentType").reset()
+      })
+  }
+
+
+  onstageNameChanged(stage) {
+    stage = this.stagesList.find(x => x.listTypeItemId == stage)?.itemCode
+    this.isPaymentTerms = stage == "PYTMS";
+  }
+
+  deleteProcess(id) {
+    this.amcStagesService.delete(id).pipe(first())
+      .subscribe((data: any) => {
+        data.object.forEach(element => {
+          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+        });
+
+        this.rowData = data.object
+      })
+  }
+
   GetSites(customerId) {
     this.customerService.getById(customerId)
       .pipe(first())
+      .subscribe((data: any) => {
+        this.custSiteList = data.object.sites;
+      });
+  }
+
+  getfil(x, isParentAttachment = false) {
+    isParentAttachment ? this.file = x : this.processFile = x;
+  }
+
+  listfile = (x, lstId = "selectedfiles") => {
+    console.log(x, lstId);
+    debugger
+    document.getElementById(lstId).style.display = "block";
+
+    var selectedfiles = document.getElementById(lstId);
+    var ulist = document.createElement("ul");
+    ulist.id = "demo";
+    ulist.style.width = "max-content"
+    selectedfiles.appendChild(ulist);
+
+    this.transaction++;
+    this.hastransaction = true;
+
+    for (let i = 0; i < x.length; i++) {
+      var name = x[i]?.name;
+      ulist.style.marginTop = "5px"
+      var node = document.createElement("li");
+      node.style.wordBreak = "break-word";
+      node.style.width = "300px"
+      node.appendChild(document.createTextNode(name));
+      ulist.appendChild(node);
+    }
+  };
+
+  uploadFile = (files, id, code = "AMC") => {
+    if (files.length === 0) {
+      return;
+    }
+
+    let filesToUpload: File[] = files;
+    const formData = new FormData();
+
+    Array.from(filesToUpload).map((file, index) => {
+      return formData.append("file" + index, file, file.name);
+    });
+
+    this.FileShareService.upload(formData, id, code).subscribe((event) => {
+      if (event.type === HttpEventType.UploadProgress) {
+        this.progress = Math.round((100 * event.loaded) / event.total);
+        if (this.progress == 100)
+          this.notificationService.filter("itemadded");
+      }
+      else if (event.type === HttpEventType.Response) {
+        this.message = "Upload success.";
+        this.onUploadFinished.emit(event.body);
+      }
+      this.notificationService.filter("itemadded");
+    });
+  }
+
+  GetFileList(id: string) {
+    this.FileShareService.list(id)
+      .pipe(first())
       .subscribe({
         next: (data: any) => {
-          //debugger;
-          this.custSiteList = data.object.sites;
+          this.attachments = data.object;
         },
-        error: error => {
-          // this.alertService.error(error);
-          
-          this.loading = false;
-        }
       });
-
   }
 
   RemoveInnstrument(event) {
@@ -313,12 +490,12 @@ export class AmcComponent implements OnInit {
                   const selectedData = event.api.getSelectedRows();
                   event.api.applyTransaction({ remove: selectedData });
                 } else {
-                  
+
                 }
               },
               error: (error) => {
                 // this.alertService.error(error);
-                
+
               },
             });
         }
@@ -328,6 +505,7 @@ export class AmcComponent implements OnInit {
   }
 
   InstrumentSearch = (searchtext) => {
+    debugger;
     this.instrumentserialno = searchtext;
 
     this.Service
@@ -338,11 +516,12 @@ export class AmcComponent implements OnInit {
           this.instrumentAutoComplete = data.object;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
   }
+
   AddInstrument(instrument: any) {
     this.Service
       .searchByKeyword(instrument)
@@ -362,7 +541,7 @@ export class AmcComponent implements OnInit {
           this.instrumentSearch.nativeElement.value = ""
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -467,6 +646,15 @@ export class AmcComponent implements OnInit {
 
     this.model = this.form.value;
 
+    if (this.form.get('paymentTerms').value.length > 0) {
+      var selectarray = this.form.get('paymentTerms').value;
+      this.model.paymentTerms = selectarray.toString();
+    }
+
+    else if (this.form.get('paymentTerms').value.length == 0) {
+      this.model.paymentTerms = ""
+    }
+
     const datepipie = new DatePipe("en-US");
     let dateSent = new Date(this.model.sdate);
     let currentDate = new Date(this.model.edate);
@@ -482,6 +670,7 @@ export class AmcComponent implements OnInit {
       )) /
       (1000 * 60 * 60 * 24)
     );
+
     if (calc <= 0) {
       this.notificationService.showError("End Date should not be greater than Start Date", "Error");
       return;
@@ -508,7 +697,7 @@ export class AmcComponent implements OnInit {
             }
           },
           error: (error) => {
-            
+
             this.loading = false;
           },
         });
@@ -521,7 +710,7 @@ export class AmcComponent implements OnInit {
               this.router.navigate(["amclist"]);
             },
             error: (error) => {
-              
+
               this.loading = false;
             },
           });
@@ -544,7 +733,7 @@ export class AmcComponent implements OnInit {
             }
           },
           error: (error) => {
-            
+
             this.loading = false;
           },
         });
@@ -556,7 +745,7 @@ export class AmcComponent implements OnInit {
               this.router.navigate(["amclist"]);
             },
             error: (error) => {
-              
+
               this.loading = false;
             },
           });
