@@ -189,8 +189,8 @@ export class AmcComponent implements OnInit {
 
       payterms: [''],
       paymentTerms: [""],
-      stageName: [],
-      stageComments: [],
+      stageName: ['', Validators.required],
+      stageComments: ['', Validators.required],
       stagePaymentType: []
     })
 
@@ -326,6 +326,18 @@ export class AmcComponent implements OnInit {
 
 
   submitStageData() {
+
+    if (this.isPaymentTerms) {
+      this.form.get('payterms').setValidators([Validators.required])
+      this.form.get('payterms').updateValueAndValidity();
+
+      if (this.f.payterms.errors) return this.notificationService.showInfo("Payterms is required", "Info")
+    }
+
+    if (this.f.stageName.errors) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
+
+    if (this.f.stageComments.errors) return this.notificationService.showInfo("Comments cannot be empty", "Info")
+
     let hasNoAttachment = false;
 
     let Attachment = <HTMLInputElement>document.getElementById("stageFilesList_Attachment")

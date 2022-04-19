@@ -222,8 +222,8 @@ export class OfferrequestComponent implements OnInit {
       customerId: ["", Validators.required],
       instrumentsList: ['', Validators.required],
 
-      stageName: [],
-      stageComments: [],
+      stageName: ['', Validators.required],
+      stageComments: ['', Validators.required],
       stagePaymentType: []
     })
 
@@ -342,7 +342,7 @@ export class OfferrequestComponent implements OnInit {
             this.api.setRowData(this.sparePartsList);
           },
           error: (error) => {
-            
+
             this.loading = false;
           },
         });
@@ -369,7 +369,7 @@ export class OfferrequestComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          
+
           this.loading = false;
         }
       })
@@ -384,7 +384,7 @@ export class OfferrequestComponent implements OnInit {
 
         },
         error: (error) => {
-          
+
           this.loading = false;
         }
       })
@@ -438,6 +438,17 @@ export class OfferrequestComponent implements OnInit {
 
 
   submitStageData() {
+    if (this.isPaymentTerms) {
+      this.form.get('payterms').setValidators([Validators.required])
+      this.form.get('payterms').updateValueAndValidity();
+
+      if (this.f.payterms.errors) return this.notificationService.showInfo("Payterms is required", "Info")
+    }
+
+    if (this.f.stageName.errors) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
+
+    if (this.f.stageComments.errors) return this.notificationService.showInfo("Comments cannot be empty", "Info")
+
     let hasNoAttachment = false;
 
     let Attachment = <HTMLInputElement>document.getElementById("stageFilesList_Attachment")
@@ -446,10 +457,8 @@ export class OfferrequestComponent implements OnInit {
 
     let comments = this.form.get('stageComments').value;
 
-    if (!hasNoAttachment && this.processFile == null) {
-      this.notificationService.showInfo("No Attachments Selected.", "Error")
-      return;
-    }
+    if (!hasNoAttachment && this.processFile == null) return this.notificationService.showInfo("No Attachments Selected.", "Error")
+
 
     let stage = this.form.get('stageName').value
     let index = 0;
@@ -524,12 +533,12 @@ export class OfferrequestComponent implements OnInit {
                 const selectedData = event.api.getSelectedRows();
                 event.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: (error) => {
               // this.alertService.error(error);
-              
+
             },
           });
       }
@@ -548,7 +557,7 @@ export class OfferrequestComponent implements OnInit {
           this.sparePartsAutoComplete = data.object;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -579,7 +588,7 @@ export class OfferrequestComponent implements OnInit {
 
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -819,7 +828,7 @@ export class OfferrequestComponent implements OnInit {
                     }
                   },
                   error: error => {
-                    
+
                     this.loading = false;
                   }
                 });
@@ -940,7 +949,7 @@ export class OfferrequestComponent implements OnInit {
 
           },
           error: (error) => {
-            
+
             this.loading = false;
           },
         });
@@ -950,7 +959,7 @@ export class OfferrequestComponent implements OnInit {
           .pipe(first())
           .subscribe({
             error: (error) => {
-              
+
               this.loading = false;
             },
           });
@@ -975,7 +984,7 @@ export class OfferrequestComponent implements OnInit {
 
           },
           error: (error) => {
-            
+
             this.loading = false;
           },
         });
@@ -985,7 +994,7 @@ export class OfferrequestComponent implements OnInit {
           .pipe(first())
           .subscribe({
             error: (error) => {
-              
+
               this.loading = false;
             },
           });
