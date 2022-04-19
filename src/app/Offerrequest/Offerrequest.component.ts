@@ -285,7 +285,11 @@ export class OfferrequestComponent implements OnInit {
         })
     }
 
-    if (this.role == environment.distRoleCode) this.isDist = true;
+    if (this.role == environment.distRoleCode) {
+      this.isDist = true;
+      this.form.get('podate').enable();
+    }
+    else this.form.get('podate').disable();
 
     if (this.id != null) {
       localStorage.setItem('offerrequestid', this.id)
