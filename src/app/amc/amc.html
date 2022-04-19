@@ -150,12 +150,12 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="tnc">TNC</label>
+              <label for="tnc">Comments</label>
               <textarea id="tnc" type="text" formControlName="tnc" class="form-control"
                 [ngClass]="{ ' is -invalid': submitted && f.tnc.errors}"></textarea>
               <div Style="display: block" *ngIf="submitted && f.tnc.errors" class="invalid-feedback">
                 <div *ngIf="f.tnc.errors.required">
-                  TNC is required
+                  Comments is required
                 </div>
               </div>
             </div>
