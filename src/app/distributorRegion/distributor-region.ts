@@ -70,6 +70,7 @@ export class DistributorRegionComponent implements OnInit {
       payterms: ['', Validators.required],
       isblocked: false,
       isActive: true,
+      countries: [],
       isdeleted: [false],
       address: this.formBuilder.group({
         street: ['', Validators.required],
@@ -91,7 +92,7 @@ export class DistributorRegionComponent implements OnInit {
           this.countries = data.object;
         },
         error: error => {
-           
+
           this.loading = false;
         }
       });
@@ -102,11 +103,8 @@ export class DistributorRegionComponent implements OnInit {
         next: (data: any) => {
           this.distributors = data.object;
         },
-        error: error => {
-           
-          this.loading = false;
-        }
       });
+
     this.distributorId = this.route.snapshot.paramMap.get('id');
     this.distributorRegionId = this.route.snapshot.paramMap.get('rid');
     this.destributorRegionform.controls['distid'].setValue(this.distributorId, { onlySelf: true });
@@ -121,18 +119,24 @@ export class DistributorRegionComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.destributorRegionform.patchValue(data.object);
+            var countLst = []
+            data.object.countries = data.object.countries?.split(',').filter(x => x != "");
+            data.object.countries?.forEach(y => {
+              this.countries.forEach(x => {
+                if (y == x.id) countLst.push(x.id)
+              });
+            });
+
+            this.destributorRegionform.patchValue({ 'countries': countLst })
+
           },
-          error: error => {
-             
-            this.loading = false;
-          }
         });
     }
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.destributorRegionform.controls; }
-  get a() { return this.destributorRegionform.controls.address;}
+  get a() { return this.destributorRegionform.controls.address; }
 
   onSubmit() {
     //debugger;
@@ -145,6 +149,16 @@ export class DistributorRegionComponent implements OnInit {
     if (this.destributorRegionform.invalid) {
       return;
     }
+
+    if (this.destributorRegionform.get('countries').value.length > 0) {
+      var selectarray = this.destributorRegionform.get('countries').value;
+      this.destributorRegionform.get('countries').setValue(selectarray.toString())
+    }
+
+    else if (this.destributorRegionform.get('countries').value.length == 0) {
+      this.destributorRegionform.get('countries').setValue("");
+    }
+
     this.isSave = true;
     this.loading = true;
     if (this.distributorRegionId == null) {
@@ -158,14 +172,14 @@ export class DistributorRegionComponent implements OnInit {
               this.router.navigate(["distregionlist", this.distributorId]);
             }
             else {
-              
+
             }
             //this.alertService.success('Data save successfull');
             this.loading = false;
 
           },
           error: error => {
-             
+
             this.loading = false;
           }
         });
@@ -182,13 +196,13 @@ export class DistributorRegionComponent implements OnInit {
               this.router.navigate(["distregionlist", this.distributorId]);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-             
+
             this.loading = false;
           }
         });
