@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {Country, Customer, ProfileReadOnly, ResultMsg, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
+import { Country, Customer, ProfileReadOnly, ResultMsg, User } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
 
 import {
   AccountService,
@@ -11,6 +11,7 @@ import {
   CountryService,
   CustomerService,
   DistributorService,
+  ListTypeService,
   NotificationService,
   ProfileService
 } from '../_services';
@@ -37,6 +38,7 @@ export class CustomerComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   distRegionsList: any;
+  industrySegmentList: any;
   //public defaultdistributors: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
 
   constructor(
@@ -50,6 +52,7 @@ export class CustomerComponent implements OnInit {
     private customerService: CustomerService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
+    private listtypeService: ListTypeService,
   ) { }
 
   ngOnInit() {
@@ -76,6 +79,7 @@ export class CustomerComponent implements OnInit {
     this.customerform = this.formBuilder.group({
       custname: ['', Validators.required],
       defdistid: ['', Validators.required],
+      industrySegment: ['', Validators.required],
       defdistregionid: ['', Validators.required],
       isactive: [true],
       isdeleted: [true],
@@ -100,10 +104,19 @@ export class CustomerComponent implements OnInit {
           this.countries = data.object;
         },
         error: error => {
-        //  this.alertService.error(error);
+          //  this.alertService.error(error);
           this.notificationService.showSuccess(error, "Error");
           this.loading = false;
         }
+      });
+
+    this.listtypeService.getById("INSEG")
+      .pipe(first())
+      .subscribe((data: any) => {
+        this.industrySegmentList = data;
+        console.log(data);
+
+
       });
 
     this.distributorService.getAll()
@@ -113,7 +126,7 @@ export class CustomerComponent implements OnInit {
           this.defaultdistributors = data.object;
         },
         error: error => {
-         // this.alertService.error(error);
+          // this.alertService.error(error);
           this.notificationService.showSuccess(error, "Error");
           this.loading = false;
         }
@@ -121,10 +134,6 @@ export class CustomerComponent implements OnInit {
 
     this.customerId = this.route.snapshot.paramMap.get('id');
     if (this.customerId != null) {
-      this.hasAddAccess = false;
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
       this.customerService.getById(this.customerId)
         .pipe(first())
         .subscribe({
@@ -189,13 +198,13 @@ export class CustomerComponent implements OnInit {
               this.router.navigate(["customerlist"]);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-           // this.alertService.error(error);
+            // this.alertService.error(error);
             this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
@@ -213,13 +222,13 @@ export class CustomerComponent implements OnInit {
               this.router.navigate(["customerlist"]);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-          //  this.alertService.error(error);
+            //  this.alertService.error(error);
             this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
