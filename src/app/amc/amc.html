@@ -131,7 +131,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="zerorate">Zerorate</label>
               <br>
-              <select id="currency" type="text" style="display:inline-block; width:100px;" formControlName="currency"
+              <select id="currency" type="text" style="display:inline-block; width:30%;" formControlName="currency"
                 class="form-control" [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
 
                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
@@ -145,6 +145,52 @@
               <div Style="display: block" *ngIf="submitted && f.zerorate.errors" class="invalid-feedback">
                 <div *ngIf="f.zerorate.errors.required">
                   Zero Rate is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4 mt-2">
+              <label for="tnc">First Visit Date</label><br>
+
+              <div class="mr-2" style="width: 47%; display: inline-block;">
+                <small style="margin: 0;" id="emailHelp" class="form-text text-muted">From</small>
+                <!-- <label style="font-weight: 300;" for="tnc">From</label><br> -->
+                <input type="text" formControlName="firstVisitDateFrom" placeholder="From" class="form-control"
+                  bsDatepicker>
+              </div>
+
+              <div class="ml-2" style="width: 47%; display: inline-block;">
+                <small style="margin: 0;" id="emailHelp" class="form-text text-muted">To</small>
+                <!-- <label style="font-weight: 300;" for="tnc">To</label><br> -->
+                <input type="text" formControlName="firstVisitDateTo" placeholder="To" class="form-control"
+                  bsDatepicker>
+              </div>
+
+              <div Style="display: block" *ngIf="submitted && f.tnc.errors" class="invalid-feedback">
+                <div *ngIf="f.tnc.errors.required">
+                  First Visit Date is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4 mt-2">
+              <label for="tnc">Second Visit Date</label><br>
+
+              <div class="mr-2" style="width: 47%; display: inline-block;">
+                <small style="margin: 0;" id="emailHelp" class="form-text text-muted">From</small>
+                <input type="text" formControlName="secondVisitDateFrom" placeholder="From" class="form-control mr-2"
+                  bsDatepicker>
+              </div>
+
+              <div class="mr-2" style="width: 47%; display: inline-block;">
+                <small style="margin: 0;" id="emailHelp" class="form-text text-muted">To</small>
+                <input type="text" formControlName="secondVisitDateTo" placeholder="To" class="form-control ml-2"
+                  bsDatepicker>
+              </div>
+
+              <div Style="display: block" *ngIf="submitted && f.tnc.errors" class="invalid-feedback">
+                <div *ngIf="f.tnc.errors.required">
+                  Second Visit Date is required
                 </div>
               </div>
             </div>

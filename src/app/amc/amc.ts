@@ -189,9 +189,15 @@ export class AmcComponent implements OnInit {
 
       payterms: [''],
       paymentTerms: [""],
-      stageName: ['', Validators.required],
-      stageComments: ['', Validators.required],
-      stagePaymentType: []
+      stageName: [''],
+      stageComments: [''],
+      stagePaymentType: [],
+
+      secondVisitDateFrom: [],
+      secondVisitDateTo: [],
+      firstVisitDateFrom: [],
+      firstVisitDateTo: [],
+
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
@@ -214,6 +220,19 @@ export class AmcComponent implements OnInit {
               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
               this.paymentTypes = []
               this.payTypes = mstData;
+
+              if (data.object.firstVisitDate) {
+                var dateRange = data.object.firstVisitDate.split("-")
+                this.form.get('firstVisitDateFrom').setValue(dateRange[0])
+                this.form.get('firstVisitDateTo').setValue(dateRange[1])
+              }
+
+              if (data.object.secondVisitDate) {
+                debugger;
+                var dateRange = data.object.secondVisitDate.split("-")
+                this.form.get('secondVisitDateFrom').setValue(dateRange[0])
+                this.form.get('secondVisitDateTo').setValue(dateRange[1])
+              }
 
               data.object.paymentTerms?.forEach(y => {
                 mstData.forEach(x => {
@@ -327,16 +346,12 @@ export class AmcComponent implements OnInit {
 
   submitStageData() {
 
-    if (this.isPaymentTerms) {
-      this.form.get('payterms').setValidators([Validators.required])
-      this.form.get('payterms').updateValueAndValidity();
+    if (this.isPaymentTerms && !this.f.payterms.value) return this.notificationService.showInfo("Payterms is required", "Info")
 
-      if (this.f.payterms.errors) return this.notificationService.showInfo("Payterms is required", "Info")
-    }
+    if (!this.f.stageName.value) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
 
-    if (this.f.stageName.errors) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
+    if (!this.f.stageComments.value) return this.notificationService.showInfo("Comments cannot be empty", "Info")
 
-    if (this.f.stageComments.errors) return this.notificationService.showInfo("Comments cannot be empty", "Info")
 
     let hasNoAttachment = false;
 
@@ -417,8 +432,6 @@ export class AmcComponent implements OnInit {
   }
 
   listfile = (x, lstId = "selectedfiles") => {
-    console.log(x, lstId);
-    debugger
     document.getElementById(lstId).style.display = "block";
 
     var selectedfiles = document.getElementById(lstId);
@@ -642,6 +655,24 @@ export class AmcComponent implements OnInit {
     }
   }
 
+  DateDiff(date1, date2) {
+    let dateSent = new Date(date1);//early
+    let currentDate = new Date(date2);//later
+    return Math.floor(
+      (Date.UTC(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate()
+      ) - Date.UTC(
+        dateSent.getFullYear(),
+        dateSent.getMonth(),
+        dateSent.getDate()
+      )) /
+      (1000 * 60 * 60 * 24)
+    );
+
+  }
+
   onSubmit() {
 
     this.submitted = true;
@@ -668,25 +699,44 @@ export class AmcComponent implements OnInit {
     }
 
     const datepipie = new DatePipe("en-US");
-    let dateSent = new Date(this.model.sdate);
-    let currentDate = new Date(this.model.edate);
-    let calc = Math.floor(
-      (Date.UTC(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getDate()
-      ) - Date.UTC(
-        dateSent.getFullYear(),
-        dateSent.getMonth(),
-        dateSent.getDate()
-      )) /
-      (1000 * 60 * 60 * 24)
-    );
 
+    if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value) {
+      let FirstFromToDiff = this.DateDiff(this.form.get('firstVisitDateFrom').value, this.form.get('firstVisitDateTo').value)
+      if (FirstFromToDiff <= 0) {
+        this.notificationService.showInfo("To Date Should not be greater than From Date in First Visit Date", "Info");
+        return;
+      }
+    }
+
+    if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value) {
+      let SecondFromToDiff = this.DateDiff(this.form.get('secondVisitDateFrom').value, this.form.get('secondVisitDateTo').value)
+      if (SecondFromToDiff <= 0) {
+        this.notificationService.showInfo("To Date Should not be greater than From Date in Second Visit Date", "Info");
+        return;
+      }
+    }
+
+
+    let calc = this.DateDiff(this.model.sdate, this.model.edate)
     if (calc <= 0) {
-      this.notificationService.showError("End Date should not be greater than Start Date", "Error");
+      this.notificationService.showInfo("End Date should not be greater than Start Date", "Info");
       return;
     }
+
+
+    this.model.firstVisitDateFrom = datepipie.transform(this.model.firstVisitDateFrom, "MM/dd/yyyy");
+    this.model.secondVisitDateFrom = datepipie.transform(this.model.secondVisitDateFrom, "MM/dd/yyyy");
+
+    this.model.firstVisitDateTo = datepipie.transform(this.model.firstVisitDateTo, "MM/dd/yyyy");
+    this.model.secondVisitDateTo = datepipie.transform(this.model.secondVisitDateTo, "MM/dd/yyyy");
+    
+    if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value)
+      this.model.secondVisitDate = this.model.secondVisitDateFrom + "-" + this.model.secondVisitDateTo;
+
+    if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value)
+      this.model.firstVisitDate = this.model.firstVisitDateFrom + "-" + this.model.firstVisitDateTo
+
+
     this.model.sqdate = datepipie.transform(this.model.sqdate, "MM/dd/yyyy");
     this.model.sdate = datepipie.transform(this.model.sdate, "MM/dd/yyyy");
     this.model.edate = datepipie.transform(this.model.edate, "MM/dd/yyyy");
@@ -729,7 +779,6 @@ export class AmcComponent implements OnInit {
       }
     }
     else if (this.hasUpdateAccess) {
-      this.model = this.form.value;
       this.model.id = this.id;
 
       this.Service.update(this.id, this.model)

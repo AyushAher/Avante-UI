@@ -13,6 +13,12 @@ export class Amc {
   zerorate: number;
   tnc: string;
   paymentTerms: any;
+  firstVisitDateFrom: string;
+  secondVisitDateFrom: string;
+  firstVisitDateTo: string;
+  secondVisitDateTo: string;
+  secondVisitDate: string;
+  firstVisitDate: string;
 }
 
 export class instrumentList {
