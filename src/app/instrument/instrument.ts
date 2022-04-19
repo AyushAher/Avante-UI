@@ -117,7 +117,6 @@ export class InstrumentComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.transaction = 0;
     this.user = this.accountService.userValue;
     let role = JSON.parse(localStorage.getItem('roles'));
@@ -201,25 +200,27 @@ export class InstrumentComponent implements OnInit {
           this.customersite = data.object;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
 
     this.customerSiteService.GetCustomerSiteContacts()
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          let siteId = data.object.find(x => x.id == this.user.contactId)?.parentId
-          this.instrumentform.get('custSiteId').setValue(siteId);
-          this.onSiteChange(siteId);
+      .subscribe((data: any) => {
+        let siteId = data.object.find(x => x.id == this.user.contactId)?.parentId
+        this.instrumentform.get('custSiteId').setValue(siteId);
+
+        if (siteId) {
+          this.customerSiteService.getById(siteId)
+            .pipe(first())
+            .subscribe((dataa: any) => {
+              this.contactList = dataa.object.contacts;
+            });
+
           if (siteId != null || siteId != undefined) {
             this.instrumentform.get('custSiteId').disable()
           }
-        },
-        error: error => {
-          
-          this.loading = false;
         }
       });
 
@@ -232,23 +233,14 @@ export class InstrumentComponent implements OnInit {
         },
         error: error => {
           //  this.alertService.error(error);
-          
+
           this.loading = false;
         }
       });
 
     this.listTypeService.getById("INSTY")
       .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          //debugger;
-          this.instuType = data;
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
+      .subscribe((data: any) => this.instuType = data);
 
     this.listTypeService.getById(this.code)
       .pipe(first())
@@ -257,7 +249,7 @@ export class InstrumentComponent implements OnInit {
           this.listTypeItems = data;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -269,14 +261,18 @@ export class InstrumentComponent implements OnInit {
       if (this.user.username == "admin") {
         this.hasAddAccess = true;
       }
+
       this.instrumentService.getById(this.id)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
-            this.onSiteChange(data.object.custSiteId);
-            if (data.object.image != null) {
-            } else {
+            this.customerSiteService.getById(data.object.custSiteId)
+              .pipe(first())
+              .subscribe((dataa: any) => {
+                this.contactList = dataa.object.contacts;
+              });
+
+            if (data.object.image == null) {
               this.imageUrl = this.noimageData;
             }
 
@@ -286,10 +282,8 @@ export class InstrumentComponent implements OnInit {
                 next: (data: any) => {
                   this.attachments = data.object;
                 },
-                error: (err: any) => {
-                  
-                },
               });
+
             this.fileshareService.getImg(data.object.id, "INST")
               .pipe(first())
               .subscribe({
@@ -297,9 +291,6 @@ export class InstrumentComponent implements OnInit {
                   this.imageUrl = "data:image/jpeg;base64, " + data.object;
                   this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
                   // this.attachments = data.object;
-                },
-                error: (err: any) => {
-                  
                 },
               });
 
@@ -320,13 +311,9 @@ export class InstrumentComponent implements OnInit {
               }
             }
             this.instrumentform.setValue({
-              shipdt: new Date(data.object.shipdt)
+              shipdt: new Date(data.object?.shipdt)
             });
 
-          },
-          error: error => {
-            
-            this.loading = false;
           }
         });
 
@@ -339,7 +326,7 @@ export class InstrumentComponent implements OnInit {
             //this.getPdffile(data.object.filePath);
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -388,20 +375,6 @@ export class InstrumentComponent implements OnInit {
     }
   };
 
-  onSiteChange(id: string) {
-    this.customerSiteService.getById(id)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.contactList = data.object.contacts;
-        },
-        error: error => {
-          this.notificationService.showSuccess(error, "Error");
-          this.loading = false;
-        }
-      });
-  }
-
 
   getPdffile(filePath: string) {
     //debugger;
@@ -418,7 +391,7 @@ export class InstrumentComponent implements OnInit {
 
           },
           error: error => {
-            
+
             // this.imageUrl = this.noimageData;
           }
         });
@@ -462,7 +435,7 @@ export class InstrumentComponent implements OnInit {
           });
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -494,7 +467,7 @@ export class InstrumentComponent implements OnInit {
             }
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -526,7 +499,7 @@ export class InstrumentComponent implements OnInit {
               }
             },
             error: error => {
-              
+
               this.loading = false;
             }
           });
@@ -603,7 +576,7 @@ export class InstrumentComponent implements OnInit {
             //this.pdfFileName = file.name;
           },
           error: error => {
-            
+
           }
         });
     }
@@ -714,12 +687,12 @@ export class InstrumentComponent implements OnInit {
 
             }
             else {
-              
+
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -737,13 +710,13 @@ export class InstrumentComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["instrumentlist"]);
             } else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -851,7 +824,7 @@ export class InstrumentComponent implements OnInit {
           this.configValueList = data.object;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -891,7 +864,7 @@ export class InstrumentComponent implements OnInit {
                   }
                 },
                 error: error => {
-                  
+
                   this.loading = false;
                 }
               });
@@ -978,7 +951,7 @@ export class InstrumentComponent implements OnInit {
                           //this.getPdffile(data.object.filePath);
                         },
                         error: error => {
-                          
+
                           this.loading = false;
                         }
                       });
@@ -988,7 +961,7 @@ export class InstrumentComponent implements OnInit {
                   }
                 },
                 error: error => {
-                  
+
                   this.loading = false;
                 }
               });
