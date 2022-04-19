@@ -22,6 +22,8 @@ export class Instrument {
   operatorId: string;
   instruEngineerId: string;
   configuration: instrumentConfig[];
+  cost: string;
+  dateOfPurchase: string;
 }
 
 export class instrumentConfig {

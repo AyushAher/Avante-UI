@@ -161,6 +161,8 @@ export class InstrumentComponent implements OnInit {
       configvalueid: [''],
       installbyOther: [''],
       operatorId: ['', Validators.required],
+      dateOfPurchase: [],
+      cost: [0],
       instruEngineerId: ['', Validators.required]
     });
     this.imageUrl = this.noimageData;
@@ -635,10 +637,7 @@ export class InstrumentComponent implements OnInit {
   onSubmit() {
     //debugger;
     this.submitted = true;
-    //const allRowData = [];
-    //this.api.forEachNode(node => allRowData.push(node.data));
-    //const modifiedRows = allRowData.filter(row => row['modified']);
-    // reset alerts on submit
+  
     this.alertService.clear();
 
     // stop here if form is invalid
@@ -649,6 +648,7 @@ export class InstrumentComponent implements OnInit {
     this.loading = true;
     this.instrument = this.instrumentform.value;
     this.instrument.image = this.imagePath;
+    this.instrument.dateOfPurchase = this.datepipie.transform(this.instrument.dateOfPurchase,"MM/dd/yyyy") 
     this.instrument.engcontact = String(this.instrument.engcontact);
     this.instrument.configuration = [];
     for (let i = 0; i < this.selectedConfigType.length; i++) {

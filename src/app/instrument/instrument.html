@@ -14,7 +14,9 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="custSiteId">Customer Site</label>
-              <select formControlName="custSiteId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }" #ddlcust (change)="onSiteChange(ddlcust.value)">
+              <select formControlName="custSiteId" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }" #ddlcust
+                (change)="onSiteChange(ddlcust.value)">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of customersite" value={{config.id}}>
                   {{config.customerSite}}
@@ -26,19 +28,22 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="serialnos">Instrumnent Serial No</label>
-              <input type="text" #serialnos formControlName="serialnos" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.serialnos.errors }" />
+              <input type="text" #serialnos formControlName="serialnos" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.serialnos.errors }" />
               <div *ngIf="submitted && f.serialnos.errors" class="invalid-feedback">
                 <div *ngIf="f.serialnos.errors.required">Instrument Serial No is required</div>
               </div>
             </div>
             <div class="col-md-1 col-sm-1">
               <label for=""></label>
-              <button type="button" class="btn btn-primary" style="margin-top: 31px;" *ngIf="isEditMode==false" (click)="getInstrBySerialNo(serialnos.value)">Get</button>
+              <button type="button" class="btn btn-primary" style="margin-top: 31px;" *ngIf="isEditMode==false"
+                (click)="getInstrBySerialNo(serialnos.value)">Get</button>
             </div>
 
             <div class="col-md-4 col-sm-4">
               <label for="insmfgdt">Instrument Manufacturing Date</label>
-              <input formControlName="insmfgdt" class="form-control" bsDatepicker [ngClass]="{ 'is-invalid': submitted && f.insmfgdt.errors }" />
+              <input formControlName="insmfgdt" class="form-control" bsDatepicker
+                [ngClass]="{ 'is-invalid': submitted && f.insmfgdt.errors }" />
               <div *ngIf="submitted && f.insmfgdt.errors" class="invalid-feedback">
                 <div *ngIf="f.insmfgdt.errors.required">Instrument Manufacturing Date is required</div>
               </div>
@@ -48,7 +53,8 @@
             <div class="col-sm-4">
               <label for="instype">Instrument Type</label>
               <!--<input type="text" formControlName="instype" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.instype.errors }" />-->
-              <select formControlName="instype" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.instype.errors }">
+              <select formControlName="instype" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.instype.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of instuType" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
@@ -60,7 +66,8 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="insversion">Instrument Version</label>
-              <input type="text" formControlName="insversion" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.insversion.errors }" />
+              <input type="text" formControlName="insversion" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.insversion.errors }" />
               <div *ngIf="submitted && f.insversion.errors" class="invalid-feedback">
                 <div *ngIf="f.insversion.errors.required">Instrument Version is required</div>
               </div>
@@ -68,7 +75,8 @@
             <div class="col-md-4 col-sm-4">
               <label for="shipdt">Shipment Date</label>
               <!--<input type="text" formControlName="shipdt" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.shipdt.errors shipdt}" />-->
-              <input formControlName="shipdt" class="form-control" bsDatepicker [ngClass]="{ 'is-invalid': submitted && f.shipdt.errors }">
+              <input formControlName="shipdt" class="form-control" bsDatepicker
+                [ngClass]="{ 'is-invalid': submitted && f.shipdt.errors }">
               <div *ngIf="submitted && f.shipdt.errors" class="invalid-feedback">
                 <div *ngIf="f.shipdt.errors.required">Shipment Date is required</div>
               </div>
@@ -80,7 +88,8 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="installby">Installed By Distributor</label>
-              <select formControlName="installby" #installedBy class="form-control" [ngClass]="{ 'is-invalid': submitted && f.installby.errors }">
+              <select formControlName="installby" #installedBy class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.installby.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of distibutorList" value={{config.id}}>
                   {{config.distname}}
@@ -94,18 +103,21 @@
             </div>
             <div class="col-md-4 col-sm-4" *ngIf="installedBy.value==0">
               <label for="installbyOther">Other</label>
-              <input type="text" formControlName="installbyOther" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.installbyOther.errors }" />
+              <input type="text" formControlName="installbyOther" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.installbyOther.errors }" />
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="engname">Engineer Name</label>
-              <input type="text" formControlName="engname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.engname.errors }" />
+              <input type="text" formControlName="engname" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.engname.errors }" />
               <div *ngIf="submitted && f.engname.errors" class="invalid-feedback">
                 <div *ngIf="f.engname.errors.required">Engineer Name is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="engcontact">Engineer Contact No</label>
-              <input type="tel" formControlName="engcontact" maxlength="10" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.engcontact.errors }" />
+              <input type="tel" formControlName="engcontact" maxlength="10" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.engcontact.errors }" />
               <div *ngIf="submitted && f.engcontact.errors" class="invalid-feedback">
                 <div *ngIf="f.engcontact.errors.required">Engineer Contact No is required</div>
                 <div *ngIf="f.engcontact.errors?.maxlength">Max length is 10</div>
@@ -114,7 +126,8 @@
             </div>
             <div class="col-sm-4">
               <label for="operatorId">Operator Name</label>
-              <select formControlName="operatorId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.operatorId.errors }">
+              <select formControlName="operatorId" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.operatorId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of contactList" value={{config.id}}>
                   {{config.fname}} {{config.lname}}
@@ -126,7 +139,8 @@
             </div>
             <div class="col-sm-4">
               <label for="instruEngineerId">Instrumentation Engineer</label>
-              <select formControlName="instruEngineerId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
+              <select formControlName="instruEngineerId" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of contactList" value={{config.id}}>
                   {{config.fname}} {{config.lname}}
@@ -140,7 +154,8 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="engemail">Engineer Email</label>
-              <input type="text" formControlName="engemail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.engemail.errors }" />
+              <input type="text" formControlName="engemail" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.engemail.errors }" />
               <div *ngIf="submitted && f.engemail.errors" class="invalid-feedback">
                 <div *ngIf="f.engemail.errors.required">Engineer Email is required</div>
               </div>
@@ -177,7 +192,8 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="installdt">Instrument Installation</label>
-              <input placeholder="date" formControlName="installdt" bsDatepicker class="form-control" [ngClass]="{ 'is-invalid': submitted && f.installdt.errors }" />
+              <input placeholder="date" formControlName="installdt" bsDatepicker class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.installdt.errors }" />
               <div *ngIf="submitted && f.installdt.errors" class="invalid-feedback">
                 <div *ngIf="f.installdt.errors.required">Instrument Installation is required</div>
               </div>
@@ -185,10 +201,21 @@
             <div class="col-md-4 col-sm-4">
               <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
               <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput
-                     (change)="uploadFile(fileInput.files,id)"/>
+                (change)="uploadFile(fileInput.files,id)" />
               <!--<label for="imageUpload" *ngIf="editFile" [ngClass]="['custom-label', 'upload-image']"></label>-->
               <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
-                     (click)="removeUploadedFile()"></label>
+                (click)="removeUploadedFile()"></label>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4 col-sm-4">
+              <label for="dateOfPurchase">Date Of Purchase</label>
+              <input formControlName="dateOfPurchase" bsDatepicker class="form-control" />
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="dateOfPurchase">Cost</label>
+              <input formControlName="cost" type="number" class="form-control" />
             </div>
           </div>
 
@@ -198,13 +225,13 @@
             </div>
           </div>
           <div class="clearfix"></div>
-          <hr/>
+          <hr />
 
           <div class="row">
             <div class="col-sm-4">
               <label for="configtypeid">Config Type</label>
               <select formControlName="" class="form-control" #mySelect (change)="onConfigChange(mySelect.value)"
-                      [ngClass]="{ 'is-invalid': submitted && f.configtypeid.errors }">
+                [ngClass]="{ 'is-invalid': submitted && f.configtypeid.errors }">
                 <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
                 </option>
@@ -227,7 +254,8 @@
             </div>
             <div class="col-sm-4">
               <label for=""></label>
-              <button type="button" class="btn btn-primary" style="margin-top: 31px;" (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Add</button>
+              <button type="button" class="btn btn-primary" style="margin-top: 31px;"
+                (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Add</button>
             </div>
           </div>
           <!--<div class="row">
@@ -257,49 +285,53 @@
           <br />
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Recommended</a>
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                aria-selected="true">Recommended</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Consumables</a>
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                aria-selected="false">Consumables</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Full Spare</a>
+              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                aria-selected="false">Full Spare</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="otherspare-tab" data-toggle="tab" href="#otherspare" role="tab" aria-controls="otherspare" aria-selected="false">Other Spare</a>
+              <a class="nav-link" id="otherspare-tab" data-toggle="tab" href="#otherspare" role="tab"
+                aria-controls="otherspare" aria-selected="false">Other Spare</a>
             </li>
           </ul>
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
-                                 (cellValueChanged)="onCellValueChanged($event)"
-                                 class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnDefs" [rowData]="recomandedFilter" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="recomandedFilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
-                                 (cellValueChanged)="onCellValueChanged($event)"
-                                 class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnDefs" [rowData]="consumfilter" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="consumfilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)" class="ag-theme-alpine" (gridReady)="onGridReady($event)" (cellValueChanged)="onCellValueChanged($event)"
-                                 [columnDefs]="columnDefs" [rowData]="fullsparefilter" rowSelection="single"
-                                 pagination="true" paginationPageSize=10></ag-grid-angular>
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  (cellValueChanged)="onCellValueChanged($event)" [columnDefs]="columnDefs" [rowData]="fullsparefilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="otherspare" role="tabpanel" aria-labelledby="otherspare-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
-                                 class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 (cellValueChanged)="onCellValueChanged($event)"
-                                 [columnDefs]="columnDefs" [rowData]="othersparefilter" rowSelection="single"
-                                 pagination="true" paginationPageSize=10></ag-grid-angular>
+                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  (cellValueChanged)="onCellValueChanged($event)" [columnDefs]="columnDefs" [rowData]="othersparefilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
           </div>
@@ -321,19 +353,18 @@
             </div>
           </div>
           <div class="clearfix"></div>
-          <hr/>
+          <hr />
 
           <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
             <div class="col-md-3">
               <input type="file" id="myFile" #file placeholder="Choose file"
-                     (change)="getfil(file.files); listfile(file.files) ;" multiple
-                     accept="text/plain, application/pdf, image/*">
+                (change)="getfil(file.files); listfile(file.files) ;" multiple
+                accept="text/plain, application/pdf, image/*">
             </div>
-            <div id="selectedfiles" class="hidden col-md-4"
-                 style="max-height:200px; overflow-y:auto;display: none;">
+            <div id="selectedfiles" class="hidden col-md-4" style="max-height:200px; overflow-y:auto;display: none;">
               <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
                 <h5>Selected Files:</h5>
-                <hr/>
+                <hr />
               </section>
 
             </div>
@@ -342,16 +373,15 @@
           <div class="row" *ngIf="PdffileData">
             <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
               <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
-                               (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"
-                               [columnDefs]="pdfcolumnDefs" [rowData]="PdffileData" rowSelection="single"
-                               pagination="true" paginationPageSize=5></ag-grid-angular>
+                (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)" [columnDefs]="pdfcolumnDefs"
+                [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
             </div>
           </div>
-          <hr/>
+          <hr />
           <div class="row">
             <div class="col-md-6 col-sm-6">
               <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)"
-                      class="btn btn-primary">
+                class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>
