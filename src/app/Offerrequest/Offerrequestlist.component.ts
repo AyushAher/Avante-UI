@@ -131,10 +131,10 @@ export class OfferrequestlistComponent implements OnInit {
         sortable: true,
       },
       {
-        headerName: "Offer Request No.",
+        headerName: "Spare Parts Quote No.",
         field: "offReqNo",
         filter: true,
-        tooltipField: "Offer Request No.",
+        tooltipField: "Spare Parts Quote No.",
         enableSorting: true,
         editable: false,
         sortable: true,
