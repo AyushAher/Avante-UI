@@ -283,6 +283,7 @@ export class ServiceReportComponent implements OnInit {
     this.ServiceReportform = this.formBuilder.group({
       customer: [''],
       srOf: [''],
+      servicereportNo: [],
       department: [''],
       country: [''],
       town: [''],
@@ -384,10 +385,6 @@ export class ServiceReportComponent implements OnInit {
           this.defaultdistributors = data.object;
         },
         error: error => {
-          // this.alertService.error(error);
-
-
-
           this.loading = false;
         }
       });
@@ -478,18 +475,8 @@ export class ServiceReportComponent implements OnInit {
                       next: (data: any) => {
                         this.allcontactlist = data.object;
                       },
-                      error: error => {
-
-
-                        this.loading = false;
-                      }
                     });
                 },
-                error: error => {
-
-
-                  this.loading = false;
-                }
               });
 
             this.isCompleted = data.object.isCompleted
@@ -810,7 +797,7 @@ export class ServiceReportComponent implements OnInit {
                     this.notificationService.filter('itemadded');
                     // this.configList = data.object;
                     // this.listvalue.get("configValue").setValue("");
-                  } 
+                  }
                   this.loading = false;
                 },
                 error: error => {
@@ -842,7 +829,7 @@ export class ServiceReportComponent implements OnInit {
                     if (d.result) {
                       this.notificationService.showSuccess(d.resultMessage, 'Success');
                       this.notificationService.filter('itemadded');
-                    } 
+                    }
                   },
                 });
             }
@@ -897,7 +884,7 @@ export class ServiceReportComponent implements OnInit {
                     if (d.result) {
                       this.notificationService.showSuccess(d.resultMessage, 'Success');
                       this.notificationService.filter('itemadded');
-                    } 
+                    }
                   },
                   error: error => {
 
@@ -946,7 +933,7 @@ export class ServiceReportComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, 'Success');
               this.notificationService.filter('itemadded');
-            } 
+            }
             this.loading = false;
           },
           error: error => {
@@ -1973,7 +1960,7 @@ export class ServiceReportComponent implements OnInit {
                             this.notificationService.showSuccess(data.resultMessage, "Success")
                             this.router.navigate(['servicereportlist'])
                           } else {
-         
+
                           }
                         });
                       });

@@ -25,6 +25,14 @@
         <form [formGroup]="ServiceReportform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-3">
+              <label for="serreqno">Service Report No.</label>
+              <input [ngClass]="{ 'is-invalid': submitted && f.servicereportNo .errors }" class="form-control"
+                formControlName="servicereportNo" readonly type="text" />
+              <div *ngIf="submitted && f.servicereportNo.errors" class="invalid-feedback">
+                <div *ngIf="f.servicereportNo.errors.required">SrNo is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
               <label for="customer">Customer</label>
               <input type="text" formControlName="customer" class="form-control" readonly />
             </div>
@@ -232,8 +240,9 @@
 
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
-              <button type="button" [disabled]="this.isCompleted" class="btn btn-sm btn-success button" style="margin: 10px;"
-                (click)="open(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
+              <button type="button" [disabled]="this.isCompleted" class="btn btn-sm btn-success button"
+                style="margin: 10px;" (click)="open(ServiceReportId)"><i class="fas fa-plus-circle"
+                  title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
                   (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
@@ -242,8 +251,9 @@
               </div>
             </div>
             <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-              <button type="button" [disabled]="this.isCompleted" class="btn btn-sm btn-success button" style="margin: 10px;"
-                (click)="opentime(ServiceReportId)"><i class="fas fa-plus-circle" title="Add"></i></button>
+              <button type="button" [disabled]="this.isCompleted" class="btn btn-sm btn-success button"
+                style="margin: 10px;" (click)="opentime(ServiceReportId)"><i class="fas fa-plus-circle"
+                  title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onworktimeRowClicked($event)"
                   (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
