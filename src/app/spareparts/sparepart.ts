@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import {
   ConfigPartCombo,
@@ -11,9 +11,9 @@ import {
   SparePart,
   User
 } from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
 
 import {
   AccountService,
@@ -22,14 +22,16 @@ import {
   CountryService,
   CurrencyService,
   FileshareService,
+  InstrumentService,
   ListTypeService,
   NotificationService,
   ProfileService,
   SparePartService,
   UploadService
 } from '../_services';
-import {DomSanitizer} from "@angular/platform-browser";
-import {HttpEventType} from "@angular/common/http";
+import { DomSanitizer } from "@angular/platform-browser";
+import { HttpEventType } from "@angular/common/http";
+import { AnalyticalTechniqueService } from '../_services/analytical-technique.service';
 
 
 @Component({
@@ -72,6 +74,10 @@ export class SparePartComponent implements OnInit {
 
   @Output() public onUploadFinished = new EventEmitter();
   img: any;
+  businessUnitList: ListTypeItem[];
+  instrumentList: any;
+  analyticalDataList: any;
+  analyticalList: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -82,19 +88,20 @@ export class SparePartComponent implements OnInit {
     private sparePartService: SparePartService,
     private currencyService: CurrencyService,
     private listTypeService: ListTypeService,
-    private uploadService: UploadService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private configService: ConfigTypeValueService,
     private fileshareService: FileshareService,
     private _sanitizer: DomSanitizer,
+    private instrumentService: InstrumentService,
+    private analyticalService: AnalyticalTechniqueService
   ) { }
 
   ngOnInit() {
 
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
-    if (this.profilePermission!=null) {
+    if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SSPAR");
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
@@ -128,6 +135,9 @@ export class SparePartComponent implements OnInit {
       replacepPartNoId: [''],
       isActive: [true],
       isdeleted: [false],
+      businessUnit: [],
+      analyticalTechnique: [],
+      instrument: [],
     });
 
     this.countryService.getAll()
@@ -135,22 +145,29 @@ export class SparePartComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.countries = data.object;
-        },
-        error: error => {
-           
-          this.loading = false;
         }
       });
+
+    this.instrumentService.getAll(this.user.userId).pipe(first())
+      .subscribe((data: any) => this.instrumentList = data.object)
+
+    this.analyticalService.getAll().pipe(first())
+      .subscribe((data: any) => this.analyticalDataList = data.object)
+
 
     this.currencyService.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.currency = data.object;
-        },
-        error: error => {
-           
-          this.loading = false;
+        }
+      });
+
+    this.listTypeService.getById("BUSUT")
+      .pipe(first())
+      .subscribe({
+        next: (data: ListTypeItem[]) => {
+          this.businessUnitList = data;
         }
       });
 
@@ -159,10 +176,6 @@ export class SparePartComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.listTypeItems = data;
-        },
-        error: error => {
-           
-          this.loading = false;
         }
       });
 
@@ -172,10 +185,6 @@ export class SparePartComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.parttypes = data;
-        },
-        error: error => {
-           
-          this.loading = false;
         }
       });
 
@@ -184,36 +193,25 @@ export class SparePartComponent implements OnInit {
     this.imageUrl = this.noimageData;
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id != null) {
-      this.hasAddAccess = false;
-      if (this.user.username == "admin") {
-        this.hasAddAccess = true;
-      }
+
       this.sparePartService.getAll()
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.replacementParts = data.object;
-          },
-          error: error => {
-            
-            this.loading = false;
           }
         });
       this.sparePartService.getById(this.id)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-
-              this.getfileImage(data.object.id);
+            this.getfileImage(data.object.id);
 
             this.onConfigChange(data.object.configTypeid);
             this.onConfigVChange(data.object.configTypeid, data.object.configValueid);
 
             this.sparepartform.patchValue(data.object);
-          },
-          error: error => {
-             
-            this.loading = false;
+            this.onBusinessUnitChange(data.object.businessUnit)
           }
         });
     }
@@ -237,7 +235,7 @@ export class SparePartComponent implements OnInit {
           this.sparepartform.patchValue(data.object);
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -261,11 +259,10 @@ export class SparePartComponent implements OnInit {
     //       
     //     }
     //   });
-    this.fileshareService.getImg(id,"SPPRT")
+    this.fileshareService.getImg(id, "SPPRT")
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data.object)
           this.imageUrl = "data:image/jpeg;base64, " + data.object;
           this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
           // this.attachments = data.object;
@@ -274,7 +271,7 @@ export class SparePartComponent implements OnInit {
 
   }
 
-  uploadFile(files,id) {
+  uploadFile(files, id) {
     //debugger;
     let reader = new FileReader(); // HTML5 FileReader API
     let file = files[0];
@@ -331,6 +328,11 @@ export class SparePartComponent implements OnInit {
 
   }
 
+  onBusinessUnitChange(Bu = null) {
+    var bu = this.sparepartform.get('businessUnit').value
+    this.analyticalList = this.analyticalDataList.filter(x => x.businessUnitId == bu || x.businessUnitId == Bu)
+  }
+
   onSubmit() {
     //debugger;
     this.submitted = true;
@@ -360,19 +362,19 @@ export class SparePartComponent implements OnInit {
               this.router.navigate(["sparepartlist"]);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-             
+
             this.loading = false;
           }
         });
     }
     else {
-     // this.sparePart = this.sparepartform.value;
+      // this.sparePart = this.sparepartform.value;
       this.sparePart.id = this.id;
       this.sparePartService.update(this.id, this.sparePart)
         .pipe(first())
@@ -383,13 +385,13 @@ export class SparePartComponent implements OnInit {
               this.router.navigate(["sparepartlist"]);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-             
+
             this.loading = false;
           }
         });
@@ -404,7 +406,7 @@ export class SparePartComponent implements OnInit {
           this.configValueList = data.object;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -419,7 +421,7 @@ export class SparePartComponent implements OnInit {
           this.replacementParts = data.object;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
