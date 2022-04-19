@@ -337,6 +337,7 @@ export class ServiceRequestListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          data.object = data.object.filter(x => !x.isReportGenerated)
           data.object?.forEach(ser => {
             ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
             ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
@@ -364,7 +365,7 @@ export class ServiceRequestListComponent implements OnInit {
           }
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
