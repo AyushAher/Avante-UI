@@ -30,7 +30,8 @@
             <div class="col-sm-4">
               <label>Engineer Name</label>
 
-              <select formControlName="engineerid" #engineerId [ngClass]="{'is-invalid':submitted && f.engineerid.errors }"
+              <select formControlName="engineerid" #engineerId
+                [ngClass]="{'is-invalid':submitted && f.engineerid.errors }"
                 (change)="getservicerequest(distId,$event.target.value)" class="form-control">
                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
               </select>
@@ -74,13 +75,13 @@
             <div class="col-md-4 col-sm-4">
               <label for="totalamount">Total Amount</label>
               <br>
-              <select id="currency" style="display:inline-block; width:100px;" formControlName="currencyId"
+              <select id="currency" style="display:inline-block; width:30%;" formControlName="currencyId"
                 class="form-control" [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                 </option>
               </select>
               <input id="totalamount" type="number" formControlName="totalamount" class="form-control"
-                style="display:inline-block; width:270px; margin-left: 5px;"
+                style="display:inline-block; width:68%; margin-left: 5px;"
                 [ngClass]="{ ' is -invalid': submitted && f.totalamount.errors}" />
 
               <div *ngIf="submitted && f.totalamount.errors" class="invalid-feedback">
@@ -139,6 +140,92 @@
             </div>
           </div>
 
+          <div class="receipts">
+
+            <div class="page-title">
+              <div class="title_left">
+                <div class="row">
+                  <div class="col-md-10">
+                    <h3 style="padding: 15px 0 5px 0">Receipts</h3>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+            <p style="color: red;">*Upload File Size should not exceed 10MB.</p>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th *ngIf="hasDeleteAccess || hasAddAccess">Action</th>
+                  <th>Amount</th>
+                  <th>Remarks</th>
+                  <th>Date</th>
+                  <th>Download File <i class="mx-2 fas fa-download"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of rowData">
+                  <td *ngIf="hasDeleteAccess || hasAddAccess">
+                    <button type="button" *ngIf="hasDeleteAccess" (click)="deleteReceipts(item.id)"
+                      style="background-color: transparent;color: #5ba146;border: none;">
+                      <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                    </button>
+                  </td>
+
+                  <td>{{item.amount}}</td>
+
+                  <td>{{item.remarks}}</td>
+
+                  <td>{{item.createdOn}}</td>
+                  <td>
+                    <app-ProcessFileRenderer [parameters]="item"></app-ProcessFileRenderer>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot *ngIf="hasAddAccess" style="background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
+                <tr>
+                  <td>
+                    <button type="button" (click)="submitReceipts()"
+                      style="background-color: transparent; color: #5ba146; border: none;">
+                      <i class="fas fa-save" style="font-size: 20px;"></i>
+                    </button>
+                  </td>
+
+                  <td style="width: 250px;">
+                    <input type="number" class="form-control" formControlName="amount">
+                  </td>
+
+                  <td>
+                    <textarea formControlName="comment" class="form-control"></textarea>
+                  </td>
+
+                  <td></td>
+                  <td>
+                    <input #stageFiles class="receiptsList_class" type="file"
+                      accept=".pdf, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/pdf"
+                      (change)="
+                      getfil(stageFiles.files);
+                      listfile(stageFiles.files,'receiptsFilesList')" />
+
+                    <div>
+                      <input type="checkbox" (click)="DisableChoseFile('receiptsList_class')"
+                        id="receiptsFilesList_Attachment" />
+                      <span> No Attachment</span>
+                    </div>
+
+                    <div id="receiptsFilesList" class="hidden" style="display: none; overflow-wrap: break-word;"></div>
+                  </td>
+                </tr>
+              </tfoot>
+
+            </table>
+
+          </div>
+
+
           <div class="attachment my-4" *ngIf="id!=null">
             <div class="page-title">
               <div class="title_left">
@@ -169,3 +256,23 @@
   </div>
 
 </layout>
+
+
+<style>
+  th>button {
+    padding: 6px 9px;
+  }
+
+  thead {
+    background-color: #5ba146;
+    color: white;
+  }
+
+  tbody {
+    border: 0.5px solid rgb(202 170 170);
+  }
+
+  td>textarea {
+    width: 300px;
+  }
+</style>
