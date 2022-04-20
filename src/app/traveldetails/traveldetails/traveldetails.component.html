@@ -41,14 +41,14 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label>Service Request No</label>
-              <select name="" placeholder="Service Request Id" formControlName="servicerequestid" class="form-control"
-                [ngClass]="{'is-invalid':submitted && t.servicerequestid.errors }">
-                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
-              </select>
-
-              <div *ngIf="submitted && t.servicerequestid.errors" class="invalid-feedback">
-                <div *ngIf="t.servicerequestid.errors.required">Service Request Id is required</div>
+              <label for="servicerequestid">Service Request No.</label>
+              <ng-select [multiple]="true" formControlName="servicerequestid">
+                <ng-option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</ng-option>
+              </ng-select>
+              <div Style="display: block" *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
+                <div *ngIf="f.servicerequestid.errors.required">
+                  Service Request is required
+                </div>
               </div>
             </div>
 
@@ -125,19 +125,31 @@
 
 
             <div class="col-md-4 col-sm-4">
-
               <label>Request Type</label>
-
               <select name="" placeholder="Travel Class" formControlName="requesttype" id="" class="form-control"
                 [ngClass]="{'is-invalid':submitted && t.requesttype.errors }">
                 <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
                 </option>
               </select>
-
               <div *ngIf="submitted && t.requesttype.errors" class="invalid-feedback">
                 <div *ngIf="t.requesttype.errors.required">Request Type is required</div>
               </div>
+            </div>
 
+            <div class="col-md-4 col-sm-4">
+              <label>Amount</label>
+              <input formControlName="amount" type="number" class="form-control"
+                [ngClass]="{'is-invalid':submitted && t.amount.errors }" />
+              <div *ngIf="submitted && t.amount.errors" class="invalid-feedback">
+                <div *ngIf="t.amount.errors.required">Amount is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 mt-4">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" formControlName="combined" id="customSwitch1">
+                <label class="custom-control-label" for="customSwitch1">Combined</label>
+              </div>
             </div>
 
           </div>
@@ -183,13 +195,13 @@
               <div class="col-md-4 col-sm-4">
                 <label>Total Amount</label>
                 <br>
-                <select id="currency" style="display:inline-block; width:100px;" formControlName="currencyId"
+                <select id="currency" style="display:inline-block; width:30%;" formControlName="currencyId"
                   class="form-control" [ngClass]="{ ' is -invalid': submitted && f.get('currencyId').errors}">
                   <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                   </option>
                 </select>
                 <input id="totalamount" [readonly]="isEng" type="number" formControlName="flightcost"
-                  class="form-control" style="display:inline-block; width:270px; margin-left: 5px;"
+                  class="form-control" style="display:inline-block; width:68%; margin-left: 5px;"
                   [ngClass]="{ ' is -invalid': submitted && f.get('flightcost').errors}" />
                 <div *ngIf="submitted && f.get('flightcost').errors" class="invalid-feedback">
                   <div *ngIf="f.get('flightcost').errors.required">Flight Cost is required</div>

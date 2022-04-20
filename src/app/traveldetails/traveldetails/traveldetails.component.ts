@@ -102,6 +102,7 @@ export class TraveldetailsComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
     let role = JSON.parse(localStorage.getItem('roles'));
+    this.id = this.route.snapshot.paramMap.get("id");
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -125,6 +126,8 @@ export class TraveldetailsComponent implements OnInit {
       tocity: ["", [Validators.required]],
       departuredate: ["", [Validators.required]],
       returndate: ["", [Validators.required]],
+      amount: ["", [Validators.required]],
+      combined: [false],
       isactive: [true],
       isdeleted: [false],
       requesttype: ["", [Validators.required]],
@@ -178,7 +181,7 @@ export class TraveldetailsComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          
+
           this.loading = false;
         }
       })
@@ -189,7 +192,7 @@ export class TraveldetailsComponent implements OnInit {
           this.DistributorList = data.object;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       })
@@ -217,7 +220,7 @@ export class TraveldetailsComponent implements OnInit {
           this.classoftravel = data;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -230,7 +233,7 @@ export class TraveldetailsComponent implements OnInit {
           this.Triptype = data;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -243,13 +246,12 @@ export class TraveldetailsComponent implements OnInit {
           this.travelrequesttype = data;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
 
 
-    this.id = this.route.snapshot.paramMap.get("id");
 
     if (this.id != null) {
       this.hasAddAccess = false;
@@ -263,16 +265,23 @@ export class TraveldetailsComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+
             this.flightdetails = true;
             this.getengineers(data.object.distId)
             this.getservicerequest(data.object.distId, data.object.engineerid)
             this.GetFileList(data.object.id)
             setTimeout(() => this.Form.patchValue(data.object), 500);
-          },
-          error: (error) => {
-            
-            this.loading = false;
-          },
+
+            var countLst = []
+            data.object.servicerequestid = data.object.servicerequestid?.split(',').filter(x => x != "");
+            data.object.servicerequestid?.forEach(y => {
+              this.servicerequest.forEach(x => {
+                if (y == x.id) countLst.push(x.id)
+              });
+            });
+
+            this.Form.patchValue({ 'servicerequestid': countLst })
+          }
         });
     }
 
@@ -297,7 +306,7 @@ export class TraveldetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -314,7 +323,7 @@ export class TraveldetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -491,6 +500,15 @@ export class TraveldetailsComponent implements OnInit {
     this.Model.distId = this.distId
     if (this.isEng) this.Model.engineerid = this.user.contactId;
 
+    if (this.Form.get('servicerequestid').value.length > 0) {
+      var selectarray = this.Form.get('servicerequestid').value;
+      this.Model.servicerequestid = selectarray.toString();
+    }
+
+    else if (this.Form.get('servicerequestid').value.length == 0) {
+      this.Model.servicerequestid = ""
+    }
+
 
     if (this.dateValid && this.cityValid) {
       if (this.id == null) {
@@ -511,13 +529,13 @@ export class TraveldetailsComponent implements OnInit {
 
                 this.router.navigate(["traveldetailslist"]);
               } else {
-                
+
               }
               this.loading = false;
             },
             error: (error) => {
               // this.alertService.error(error);
-              
+
               this.loading = false;
             },
           });
@@ -544,12 +562,12 @@ export class TraveldetailsComponent implements OnInit {
                 );
                 this.router.navigate(["traveldetailslist"]);
               } else {
-                
+
               }
               this.loading = false;
             },
             error: (error) => {
-              
+
 
               this.loading = false;
             },

@@ -1,10 +1,10 @@
-import {Component, OnInit} from "@angular/core";
-import {FormGroup} from "@angular/forms";
-import {Router} from "@angular/router";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {first} from "rxjs/operators";
-import {RenderComponent} from "../../distributor/rendercomponent";
-import {ProfileReadOnly, travelDetails, User} from "../../_models";
+import { Component, OnInit } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { Router } from "@angular/router";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { first } from "rxjs/operators";
+import { RenderComponent } from "../../distributor/rendercomponent";
+import { ProfileReadOnly, travelDetails, User } from "../../_models";
 import {
   AccountService,
   DistributorService,
@@ -13,7 +13,7 @@ import {
   ProfileService,
   TravelDetailService
 } from "../../_services";
-import {environment} from "../../../environments/environment";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-traveldetailslist",
@@ -45,7 +45,7 @@ export class TraveldetailslistComponent implements OnInit {
     private profileService: ProfileService,
     private distributorService: DistributorService,
     private listTypeService: ListTypeService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.user = this.accountService.userValue;
@@ -79,6 +79,9 @@ export class TraveldetailslistComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          
+          data.object.forEach(element =>  element.servicerequestno = element.servicerequestno.slice(0, -1));
+
           if (this.user.username != "admin") {
             if (role == environment.engRoleCode) {
               data.object = data.object.filter(x => x.createdby == this.user.userId || x.engineerid == this.user.contactId)
@@ -98,7 +101,7 @@ export class TraveldetailslistComponent implements OnInit {
           }
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
