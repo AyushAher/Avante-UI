@@ -521,33 +521,10 @@ export class InstrumentComponent implements OnInit {
         imageUrl: reader.result as string
       });
     }
-    // if (event.target.files && event.target.files[0]) {
-    // //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
-    //   this.fileshareService.upload(file,id,"INSTIMG","INST")
-    //     .pipe(first())
-    //     .subscribe({
-    //       next: (data: any) => {
-    //         //debugger;
-    //         this.alertService.success('File Upload Successfully.');
-    //         this.imagePath = data.path;
-    //         console.log(data);
-    //
-    //       },
-    //       error: error => {
-    //          
-    //       }
-    // });
-    // When file uploads set it to file formcontrol
-    //  this.removeUpload = true;
-    //  this.editFile = false;
-    // ChangeDetectorRef since file is loading outside the zone
-    // this.cd.markForCheck();
-    // }
 
     if (files.length === 0 || id == null) {
       return;
     }
-    console.log("img")
     let filesToUpload: File[] = files;
     const formData = new FormData();
     Array.from(filesToUpload).map((file, index) => {
@@ -585,32 +562,6 @@ export class InstrumentComponent implements OnInit {
   }
 
   saveFileShare(files, id) {
-    //fileshare: FileShare;
-    // for (var i = 0; i < this.pdfPath.length; i++) {
-    //   let fileshare = new FileShare();
-    //   fileshare.fileName = this.pdfPath[i].fileName;
-    //   fileshare.filePath = this.pdfPath[i].filepath;
-    //   fileshare.parentId = id;
-    //   this.fileshareService.save(fileshare)
-    //     .pipe(first())
-    //     .subscribe({
-    //       next: (data: ResultMsg) => {
-    //         if (data.result) {
-    //           this.notificationService.showSuccess(data.resultMessage, "Success");
-    //           this.router.navigate(["instrumentlist"]);
-    //         }
-    //         else {
-    //           
-    //         }
-    //         this.loading = false;
-    //       },
-    //       error: error => {
-    //         
-    //         this.loading = false;
-    //       }
-    //     });
-    // }
-
     if (files.length === 0) {
       return;
     }
@@ -637,7 +588,7 @@ export class InstrumentComponent implements OnInit {
   onSubmit() {
     //debugger;
     this.submitted = true;
-  
+
     this.alertService.clear();
 
     // stop here if form is invalid
@@ -648,7 +599,7 @@ export class InstrumentComponent implements OnInit {
     this.loading = true;
     this.instrument = this.instrumentform.value;
     this.instrument.image = this.imagePath;
-    this.instrument.dateOfPurchase = this.datepipie.transform(this.instrument.dateOfPurchase,"MM/dd/yyyy") 
+    this.instrument.dateOfPurchase = this.datepipie.transform(this.instrument.dateOfPurchase, "MM/dd/yyyy")
     this.instrument.engcontact = String(this.instrument.engcontact);
     this.instrument.configuration = [];
     for (let i = 0; i < this.selectedConfigType.length; i++) {
@@ -972,5 +923,17 @@ export class InstrumentComponent implements OnInit {
       }
     }
   }
+
+  onSiteChange(custSite: any) {
+    this.customerSiteService.getById(custSite)
+      .pipe(first())
+      .subscribe((dataa: any) => {
+        console.log(dataa);
+        this.contactList = dataa.object.contacts;
+        
+      });
+
+  }
+
 
 }
