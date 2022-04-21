@@ -249,23 +249,25 @@ export class LocalexpensesComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            this.GetFileList(data.object.id);
-            this.localExpReService.getAll(this.id).pipe(first()).subscribe((Redata: any) => {
-              Redata.object?.forEach(element => {
-                element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+            this.distributorservice.getDistributorRegionContacts(data.object.distId)
+              .pipe(first())
+              .subscribe((Engdata: any) => {
+                this.distId = data.object.distId
+                this.engineer = Engdata.object;
+
+                this.servicerequestservice
+                  .GetServiceRequestByDist(data.object.distId)
+                  .pipe(first())
+                  .subscribe((Srqdata: any) => {
+                    this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerid && !x.isReportGenerated)
+                    this.GetFileList(data.object.id)
+                    data.object.servicerequestid = data.object.servicerequestid?.split(',').filter(x => x != "");
+                    this.form.patchValue(data.object)
+                  });
               });
-
-              this.rowData = Redata.object;
-
-              setTimeout(() => this.form.patchValue(data.object), 100);
-            })
           }
         });
     }
-
-
     this.columnDefsAttachments = this.createColumnDefsAttachments();
 
   }

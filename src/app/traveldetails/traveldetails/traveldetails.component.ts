@@ -267,20 +267,22 @@ export class TraveldetailsComponent implements OnInit {
           next: (data: any) => {
 
             this.flightdetails = true;
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            this.GetFileList(data.object.id)
-            setTimeout(() => this.Form.patchValue(data.object), 500);
+            this.distributorservice.getDistributorRegionContacts(data.object.distId)
+              .pipe(first())
+              .subscribe((Engdata: any) => {
+                this.distId = data.object.distId
+                this.engineer = Engdata.object;
 
-            var countLst = []
-            data.object.servicerequestid = data.object.servicerequestid?.split(',').filter(x => x != "");
-            data.object.servicerequestid?.forEach(y => {
-              this.servicerequest.forEach(x => {
-                if (y == x.id) countLst.push(x.id)
+                this.servicerequestservice
+                  .GetServiceRequestByDist(data.object.distId)
+                  .pipe(first())
+                  .subscribe((Srqdata: any) => {
+                    this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerid && !x.isReportGenerated)
+                    this.GetFileList(data.object.id)
+                    data.object.servicerequestid = data.object.servicerequestid?.split(',').filter(x => x != "");
+                    this.Form.patchValue(data.object)
+                  });
               });
-            });
-
-            this.Form.patchValue({ 'servicerequestid': countLst })
           }
         });
     }
@@ -300,32 +302,17 @@ export class TraveldetailsComponent implements OnInit {
     this.servicerequestservice
       .GetServiceRequestByDist(id)
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.servicerequest = data.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
-        },
-
-        error: (error) => {
-
-          this.loading = false;
-        },
+      .subscribe((Srqdata: any) => {
+        this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
       });
   }
 
   getengineers(id: string) {
     this.distributorservice.getDistributorRegionContacts(id)
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.distId = id
-          this.engineer = data.object;
-          // this.getservicerequest(id)
-        },
-
-        error: (error) => {
-
-          this.loading = false;
-        },
+      .subscribe((Engdata: any) => {
+        this.distId = id
+        this.engineer = Engdata.object;
       });
   }
 

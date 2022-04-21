@@ -39,7 +39,7 @@ import { environment } from "../../../environments/environment";
   templateUrl: "./visadetails.component.html",
 })
 export class VisadetailsComponent implements OnInit {
-  travelDetailform: FormGroup;
+  form: FormGroup;
   travelDetail: Visadetails;
   loading = false;
   submitted = false;
@@ -133,7 +133,7 @@ export class VisadetailsComponent implements OnInit {
       this.isDist = true;
     }
 
-    this.travelDetailform = this.formBuilder.group({
+    this.form = this.formBuilder.group({
       engineerid: ["", [Validators.required]],
       distId: ["", [Validators.required]],
       servicerequestid: ["", [Validators.required]],
@@ -146,6 +146,8 @@ export class VisadetailsComponent implements OnInit {
       isactive: [true],
       isdeleted: [false],
       currencyId: ["", Validators.required],
+      amount: [0],
+      combined: [false],
     });
 
     this.currencyService.getAll()
@@ -155,7 +157,7 @@ export class VisadetailsComponent implements OnInit {
           this.currencyList = data.object
         },
         error: (error) => {
-          
+
           this.loading = false;
         }
       })
@@ -167,7 +169,7 @@ export class VisadetailsComponent implements OnInit {
           this.DistributorList = data.object;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       })
@@ -177,18 +179,18 @@ export class VisadetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           if (this.user.username != "admin") {
-            this.travelDetailform.get('distId').setValue(data.object[0].id)
+            this.form.get('distId').setValue(data.object[0].id)
             this.getengineers(data.object[0].id)
             this.getservicerequest(data.object[0].id, this.user.contactId)
           }
         }
       })
     if (role == environment.engRoleCode) {
-      this.travelDetailform.get('engineerid').setValue(this.user.contactId)
-      this.travelDetailform.get('engineerid').disable()
-      this.travelDetailform.get('distId').disable()
+      this.form.get('engineerid').setValue(this.user.contactId)
+      this.form.get('engineerid').disable()
+      this.form.get('distId').disable()
     } else if (role == environment.distRoleCode) {
-      this.travelDetailform.get('distId').disable()
+      this.form.get('distId').disable()
     }
 
     this.countryservice
@@ -199,7 +201,7 @@ export class VisadetailsComponent implements OnInit {
           this.country = data.object;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -212,7 +214,7 @@ export class VisadetailsComponent implements OnInit {
           this.travelrequesttype = data;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -225,7 +227,7 @@ export class VisadetailsComponent implements OnInit {
           this.visatype = data;
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -240,14 +242,21 @@ export class VisadetailsComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            this.GetFileList(data.object.id)
-            setTimeout(() => this.travelDetailform.patchValue(data.object), 1000);
-          },
-          error: (error) => {
-            
-            this.loading = false;
+            this.distributorservice.getDistributorRegionContacts(data.object.distId)
+              .pipe(first())
+              .subscribe((Engdata: any) => {
+                this.distId = data.object.distId
+                this.engineer = Engdata.object;
+                this.servicerequestservice
+                  .GetServiceRequestByDist(data.object.distId)
+                  .pipe(first())
+                  .subscribe((Srqdata: any) => {
+                    this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerid && !x.isReportGenerated)
+                    this.GetFileList(data.object.id)
+                    data.object.servicerequestid = data.object.servicerequestid?.split(',').filter(x => x != "");
+                    this.form.patchValue(data.object);
+                  });
+              });
           },
         });
     }
@@ -255,7 +264,7 @@ export class VisadetailsComponent implements OnInit {
   }
 
   get f() {
-    return this.travelDetailform.controls;
+    return this.form.controls;
   }
 
 
@@ -363,7 +372,7 @@ export class VisadetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -380,7 +389,7 @@ export class VisadetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -393,16 +402,16 @@ export class VisadetailsComponent implements OnInit {
     this.alertService.clear();
 
     // stop here if form is invalid
-    if (this.travelDetailform.invalid) {
+    if (this.form.invalid) {
       return;
     }
     // this.isSave = true;
     this.loading = true;
 
-    this.travelDetail = this.travelDetailform.value;
+    this.travelDetail = this.form.value;
 
-    let currentDate = new Date(this.travelDetailform.value.startdate);
-    let dateSent = new Date(this.travelDetailform.value.enddate);
+    let currentDate = new Date(this.form.value.startdate);
+    let dateSent = new Date(this.form.value.enddate);
 
     let calc = Math.floor(
       (Date.UTC(
@@ -419,11 +428,11 @@ export class VisadetailsComponent implements OnInit {
     );
 
     const datepipie = new DatePipe("en-US");
-    this.travelDetailform.value.startdate = datepipie.transform(
+    this.form.value.startdate = datepipie.transform(
       currentDate,
       "MM/dd/yyyy"
     );
-    this.travelDetailform.value.enddate = datepipie.transform(
+    this.form.value.enddate = datepipie.transform(
       dateSent,
       "MM/dd/yyyy"
     );
@@ -440,6 +449,16 @@ export class VisadetailsComponent implements OnInit {
     if (this.isEng) this.travelDetail.engineerid = this.user.contactId
     this.travelDetail.distId = this.distId;
 
+    if (this.form.get('servicerequestid').value.length > 0) {
+      var selectarray = this.form.get('servicerequestid').value;
+      this.travelDetail.servicerequestid = selectarray.toString();
+    }
+
+    else if (this.form.get('servicerequestid').value.length == 0) {
+      this.travelDetail.servicerequestid = ""
+    }
+
+
     if (this.dateValid) {
       if (this.id == null) {
         this.travelDetailService
@@ -448,7 +467,6 @@ export class VisadetailsComponent implements OnInit {
           .subscribe({
             next: (data: any) => {
               if (data.result) {
-
                 if (this.file != null) {
                   this.uploadFile(this.file, data.object.id);
                 }
@@ -458,19 +476,12 @@ export class VisadetailsComponent implements OnInit {
                 );
 
                 this.router.navigate(["visadetailslist"]);
-              } else {
-                
               }
-              this.loading = false;
-            },
-            error: (error) => {
-              // this.alertService.error(error);
-              
               this.loading = false;
             },
           });
       } else {
-        this.travelDetail = this.travelDetailform.value;
+        this.travelDetail = this.form.value;
         this.travelDetail.id = this.id;
         if (this.isEng) this.travelDetail.engineerid = this.user.contactId
         this.travelDetail.distId = this.distId;
@@ -490,12 +501,12 @@ export class VisadetailsComponent implements OnInit {
                 );
                 this.router.navigate(["visadetailslist"]);
               } else {
-                
+
               }
               this.loading = false;
             },
             error: (error) => {
-              
+
 
               this.loading = false;
             },

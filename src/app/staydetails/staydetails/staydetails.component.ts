@@ -34,7 +34,7 @@ import { environment } from "../../../environments/environment";
   // styleUrls: ['./staydetails.component.css']
 })
 export class StaydetailsComponent implements OnInit {
-  travelDetailform: FormGroup;
+  form: FormGroup;
   travelDetail: Staydetails;
   loading = false;
   submitted = false;
@@ -73,13 +73,12 @@ export class StaydetailsComponent implements OnInit {
     private distributorservice: DistributorService,
     private servicerequestservice: ServiceRequestService,
     private listTypeService: ListTypeService,
-    private countryservice: CountryService,
     private currencyService: CurrencyService,
   ) {
   }
 
   get f() {
-    return this.travelDetailform.controls;
+    return this.form.controls;
   }
 
   ngOnInit() {
@@ -107,7 +106,7 @@ export class StaydetailsComponent implements OnInit {
       role = role[0]?.itemCode;
     }
 
-    this.travelDetailform = this.formBuilder.group({
+    this.form = this.formBuilder.group({
       engineerid: ["", [Validators.required]],
       distId: ["", [Validators.required]],
       servicerequestid: ["", [Validators.required]],
@@ -125,16 +124,18 @@ export class StaydetailsComponent implements OnInit {
       isdeleted: false,
       totalCurrencyId: "",
       perNightCurrencyId: "",
+      amount: [0],
+      combined: [false]
     });
 
     if (role == environment.engRoleCode) {
       this.isEng = true;
-      this.travelDetailform.get('engineerid').disable()
-      this.travelDetailform.get('distId').disable()
+      this.form.get('engineerid').disable()
+      this.form.get('distId').disable()
     }
     else if (role == environment.distRoleCode) {
       this.isDist = true;
-      this.travelDetailform.get('distId').disable()
+      this.form.get('distId').disable()
     }
     this.currencyService.getAll()
       .pipe(first())
@@ -142,43 +143,39 @@ export class StaydetailsComponent implements OnInit {
         next: (data: any) => {
           this.currencyList = data.object
         },
-        error: (error) => {
-          
-          this.loading = false;
-        }
       })
 
     this.id = this.route.snapshot.paramMap.get("id");
 
     if (this.isEng) {
-      this.travelDetailform.get('hotelname').disable()
-      this.travelDetailform.get('stayaddress').disable()
-      this.travelDetailform.get('roomdetails').disable()
-      this.travelDetailform.get('pricepernight').disable()
-      this.travelDetailform.get('totalcost').disable()
-      this.travelDetailform.get('totalCurrencyId').disable()
-      this.travelDetailform.get('perNightCurrencyId').disable()
+      this.form.get('hotelname').disable()
+      this.form.get('stayaddress').disable()
+      this.form.get('roomdetails').disable()
+      this.form.get('pricepernight').disable()
+      this.form.get('totalcost').disable()
+      this.form.get('totalCurrencyId').disable()
+      this.form.get('perNightCurrencyId').disable()
     } else if (this.isDist) {
-      this.travelDetailform.get('hotelname').setValidators([Validators.required]);
-      this.travelDetailform.get('hotelname').updateValueAndValidity();
+      this.form.get('hotelname').setValidators([Validators.required]);
+      this.form.get('hotelname').updateValueAndValidity();
 
-      this.travelDetailform.get('stayaddress').setValidators([Validators.required]);
-      this.travelDetailform.get('stayaddress').updateValueAndValidity();
+      this.form.get('stayaddress').setValidators([Validators.required]);
+      this.form.get('stayaddress').updateValueAndValidity();
 
-      this.travelDetailform.get('roomdetails').setValidators([Validators.required]);
-      this.travelDetailform.get('roomdetails').updateValueAndValidity();
+      this.form.get('roomdetails').setValidators([Validators.required]);
+      this.form.get('roomdetails').updateValueAndValidity();
 
-      this.travelDetailform.get('pricepernight').setValidators([Validators.required]);
-      this.travelDetailform.get('pricepernight').updateValueAndValidity();
+      this.form.get('pricepernight').setValidators([Validators.required]);
+      this.form.get('pricepernight').updateValueAndValidity();
 
-      this.travelDetailform.get('totalcost').setValidators([Validators.required]);
-      this.travelDetailform.get('totalcost').updateValueAndValidity();
+      this.form.get('totalcost').setValidators([Validators.required]);
+      this.form.get('totalcost').updateValueAndValidity();
 
-      this.travelDetailform.get('totalCurrencyId').setValidators([Validators.required]);
-      this.travelDetailform.get('totalCurrencyId').updateValueAndValidity();
+      this.form.get('totalCurrencyId').setValidators([Validators.required]);
+      this.form.get('totalCurrencyId').updateValueAndValidity();
 
-      this.travelDetailform.get('perNightCurrencyId').setValidators([Validators.required]);
-      this.travelDetailform.get('perNightCurrencyId').updateValueAndValidity();
+      this.form.get('perNightCurrencyId').setValidators([Validators.required]);
+      this.form.get('perNightCurrencyId').updateValueAndValidity();
     }
 
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
@@ -186,25 +183,21 @@ export class StaydetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           if (this.user.username != "admin") {
-            this.travelDetailform.get('distId').setValue(data.object[0].id)
+            this.form.get('distId').setValue(data.object[0].id)
             this.getengineers(data.object[0].id)
             this.getservicerequest(data.object[0].id, this.user.contactId)
           }
         }
       })
     if (role == environment.engRoleCode) {
-      this.travelDetailform.get('engineerid').setValue(this.user.contactId)
+      this.form.get('engineerid').setValue(this.user.contactId)
     }
     this.distributorservice.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.DistributorList = data.object;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
+        }
       })
 
     this.listTypeService
@@ -214,10 +207,6 @@ export class StaydetailsComponent implements OnInit {
         next: (data: ListTypeItem[]) => {
           this.accomodationtype = data;
         },
-        error: (error) => {
-          
-          this.loading = false;
-        },
       });
 
     if (this.id != null) {
@@ -226,14 +215,22 @@ export class StaydetailsComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            setTimeout(() => this.travelDetailform.patchValue(data.object), 100);
-          },
-          error: (error) => {
-            
-            this.loading = false;
-          },
+            this.distributorservice.getDistributorRegionContacts(data.object.distId)
+              .pipe(first())
+              .subscribe((Engdata: any) => {
+                this.engineer = Engdata.object
+                this.distId = data.object.distId
+                
+                this.servicerequestservice
+                  .GetServiceRequestByDist(data.object.distId)
+                  .pipe(first())
+                  .subscribe((Srqdata: any) => {
+                    this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerid && !x.isReportGenerated)
+                    data.object.servicerequestid = data.object.servicerequestid?.split(',').filter(x => x != "");
+                    this.form.patchValue(data.object)
+                  });
+              });
+          }
         });
     }
 
@@ -246,11 +243,6 @@ export class StaydetailsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.servicerequest = data.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
-        },
-
-        error: (error) => {
-          
-          this.loading = false;
         },
       });
   }
@@ -266,25 +258,26 @@ export class StaydetailsComponent implements OnInit {
         },
 
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
   }
+
   onSubmit() {
     this.submitted = true;
     // reset alerts on submit
     this.alertService.clear();
 
     // stop here if form is invalid
-    if (this.travelDetailform.invalid) {
+    if (this.form.invalid) {
       return;
     }
     // this.isSave = true;
     this.loading = true;
 
-    let currentDate = new Date(this.travelDetailform.value.checkindate);
-    let dateSent = new Date(this.travelDetailform.value.checkoutdate);
+    let currentDate = new Date(this.form.value.checkindate);
+    let dateSent = new Date(this.form.value.checkoutdate);
 
     let calc = Math.floor(
       (Date.UTC(
@@ -301,20 +294,30 @@ export class StaydetailsComponent implements OnInit {
     );
 
     const datepipie = new DatePipe("en-US");
-    this.travelDetailform.value.checkindate = datepipie.transform(
+    this.form.value.checkindate = datepipie.transform(
       currentDate,
       "MM/dd/yyyy"
     );
 
-    this.travelDetailform.value.checkoutdate = datepipie.transform(
+    this.form.value.checkoutdate = datepipie.transform(
       dateSent,
       "MM/dd/yyyy"
     );
-    this.travelDetail = this.travelDetailform.value;
+    this.travelDetail = this.form.value;
 
-    if (calc > 1) {
-      this.valid = true;
-    } else {
+    if (this.form.get('servicerequestid').value.length > 0) {
+      var selectarray = this.form.get('servicerequestid').value;
+      this.travelDetail.servicerequestid = selectarray.toString();
+    }
+
+    else if (this.form.get('servicerequestid').value.length == 0) {
+      this.travelDetail.servicerequestid = ""
+    }
+
+
+    if (calc > 1) this.valid = true
+
+    else {
       this.notificationService.showError(
         "The difference between start date and end date should be more than 1 day !",
         "Error"
@@ -324,8 +327,8 @@ export class StaydetailsComponent implements OnInit {
       return;
     }
 
-    if (!this.travelDetailform.value.isactive) {
-      this.travelDetailform.value.isactive = false;
+    if (!this.form.value.isactive) {
+      this.form.value.isactive = false;
     }
 
     this.travelDetail.distId = this.distId
@@ -345,18 +348,18 @@ export class StaydetailsComponent implements OnInit {
                 );
                 this.router.navigate(["/staydetailslist"]);
               } else {
-                
+
               }
               this.loading = false;
             },
             error: (error) => {
               // this.alertService.error(error);
-              
+
               this.loading = false;
             },
           });
       } else {
-        this.travelDetail = this.travelDetailform.value;
+        this.travelDetail = this.form.value;
         this.travelDetail.distId = this.distId
         if (this.isEng) this.travelDetail.engineerid = this.user.contactId;
         this.travelDetail.id = this.id;
@@ -372,12 +375,12 @@ export class StaydetailsComponent implements OnInit {
                 );
                 this.router.navigate(["/staydetailslist"]);
               } else {
-                
+
               }
               this.loading = false;
             },
             error: (error) => {
-              
+
               this.loading = false;
             },
           });

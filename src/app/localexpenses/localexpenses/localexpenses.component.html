@@ -10,7 +10,7 @@
       <hr />
 
       <div class="col-md-12 col-sm-12 ">
-        <form [formGroup]="travelDetailform" (ngSubmit)="onSubmit()">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
 
 
@@ -42,16 +42,17 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="name">Service Request No</label>
-              <select name="" placeholder="Service Request Id" formControlName="servicerequestid" id=""
-                class="form-control" [ngClass]="{'is-invalid':submitted && f.servicerequestid.errors }">
-                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
-              </select>
-
-              <div *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
-                <div *ngIf="f.servicerequestid.errors.required">Service Request Id is required</div>
+              <label for="servicerequestid">Service Request No.</label>
+              <ng-select [multiple]="true" formControlName="servicerequestid">
+                <ng-option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</ng-option>
+              </ng-select>
+              <div Style="display: block" *ngIf="submitted && f.servicerequestid.errors" class="invalid-feedback">
+                <div *ngIf="f.servicerequestid.errors.required">
+                  Service Request is required
+                </div>
               </div>
             </div>
+
             <div class="col-md-4 col-sm-4">
               <label for="returndate">Date</label>
               <input bsDatepicker formControlName="traveldate" class="form-control"
@@ -89,6 +90,14 @@
               </div>
 
             </div>
+
+            <div class="col-md-4 mt-4">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" formControlName="combined" id="customSwitch1">
+                <label class="custom-control-label" for="customSwitch1">Combined</label>
+              </div>
+            </div>
+
             <div class="col-md-4 col-sm-4">
               <label for="returndate">Remarks</label>
               <input type="text" formControlName="remarks" class="form-control"
