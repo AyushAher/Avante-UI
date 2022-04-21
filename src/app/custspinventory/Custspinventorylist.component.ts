@@ -59,17 +59,9 @@ export class CustspinventorylistComponent implements OnInit {
 
     this.Service.getAll(this.user.contactId, null)
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.model = data.object;
-          console.log(data.object);
-
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
-      });
+      .subscribe((data: any) =>
+        this.model = data.object
+      );
     this.columnDefs = this.createColumnDefs();
   }
 

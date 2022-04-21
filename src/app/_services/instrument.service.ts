@@ -33,6 +33,11 @@ export class InstrumentService {
     return this.http.get<Instrument[]>(`${environment.apiUrl}/Instrument/GetByAssignedRegions/${userId}`);
   }
 
+
+  getInstrumentConfif(insId: string) {
+    return this.http.get(`${environment.apiUrl}/Instrumentconfig/GetByInstrument/${insId}`);
+  }
+
   getById(id: string) {
     return this.http.get<Instrument>(`${environment.apiUrl}/Instrument/${id}`);
   }

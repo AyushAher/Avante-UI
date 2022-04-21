@@ -13,7 +13,20 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
 
-            <div class="col-md-12" *ngIf="id==null">
+            <div class="col-sm-4">
+              <label for="instrument">Instrument</label>
+              <select formControlName="instrument" [disabled]="id != null" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.instrument.errors }" (change)="onInstrumentChange()">
+                <option *ngFor="let config of instruments" value={{config.id}}>
+                  {{config.instypeName}} - {{config.serialnos}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.instrument.errors" class="invalid-feedback">
+                <div *ngIf="f.instrument.errors.required">Instrument is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-8" *ngIf="id==null">
               <div class="input" style="width: 85%; display: inline-block; margin-right: 5%">
                 <label for="SearchPartNo">Search Spare Part by Part No.</label>
                 <input id="SearchPartNo" type="text" formControlName="SearchPartNo" class="form-control"
@@ -32,6 +45,7 @@
                 </div>
               </div>
             </div>
+
             <div class="col-md-4 col-sm-4">
               <label for="hsccode">HSC Code</label>
               <input id="hsccode" type="text" readonly formControlName="hscCode" class="form-control"
@@ -42,6 +56,7 @@
                 </div>
               </div>
             </div>
+
             <div class="col-md-4 col-sm-4">
               <label for="qtyAvailable">Qty. Available</label>
               <input id="qtyAvailable" type="number" formControlName="qtyAvailable" class="form-control"
