@@ -339,94 +339,42 @@ export class ServiceReportComponent implements OnInit {
         }
       });
 
-    this.instrumentservice.getAll(this.user.userId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          console.log(data.object);
-          this.instrumentlist = data.object;
-        },
-        error: error => {
-          //  this.alertService.error(error);
-          this.notificationService.showSuccess(error, 'Error');
-          this.loading = false;
-        }
-      });
-
     this.sparePartService.getAll()
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.sparepartrecmmlist = data.object;
-        },
-        error: error => {
-
-          this.loading = false;
-        }
-      });
+      .subscribe((data: any) =>
+        this.sparepartrecmmlist = data.object
+      );
 
 
     this.CustSPInventoryService.GetSPInvenrotyForServiceReport(this.ServiceReportId)
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          console.log(data.object);
-          this.sparepartlist = data.object;
-        },
-        error: (error) => {
-          this.loading = false;
-        },
-      });
+      .subscribe((data: any) =>
+        this.sparepartlist = data.object
+      );
 
     this.distributorService.getAll()
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.defaultdistributors = data.object;
-        },
-        error: error => {
-          this.loading = false;
-        }
-      });
+      .subscribe((data: any) =>
+        this.defaultdistributors = data.object
+      );
 
     this.listTypeService.getById('DPART')
       .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.departmentList = data;
-        },
-        error: error => {
-
-
-          this.loading = false;
-        }
-      });
+      .subscribe((data: ListTypeItem[]) =>
+        this.departmentList = data
+      );
 
     this.listTypeService.getById('SUPPL')
       .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.brandlist = data;
-        },
-        error: error => {
-
-
-          this.loading = false;
-        }
-      });
+      .subscribe((data: ListTypeItem[]) =>
+        this.brandlist = data
+      );
 
     this.listTypeService.getById('CONTY')
       .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.listTypeItems = data;
-        },
-        error: error => {
-
-
-          this.loading = false;
-        }
-      });
+      .subscribe((data: ListTypeItem[]) =>
+        this.listTypeItems = data
+      );
 
 
     if (this.ServiceReportId != null) {
@@ -461,6 +409,13 @@ export class ServiceReportComponent implements OnInit {
             this.custsign = data.object.custsignature;
             this.engsign = data.object.engsignature;
             this.ServiceRequestId = data.object.serviceRequestId;
+
+            this.ServiceReportService.getSparePartRecomm(this.ServiceRequestId)
+              .pipe(first())
+              .subscribe((data: any) =>
+                this.sparepartrecmmlist = data.object
+              );
+
             this.serviceRequestService.getById(data.object.serviceRequestId)
               .pipe(first())
               .subscribe({
