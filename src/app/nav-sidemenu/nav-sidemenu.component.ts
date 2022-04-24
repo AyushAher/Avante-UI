@@ -37,6 +37,7 @@ export class NavSideMenuComponent {
   hasServiceReport: boolean = false;
   hasSparePartRecommended: boolean = false;
   hasCustomerSparePartsInventory: boolean = false;
+  hasTravelExpenses: boolean = false;
 
   roles: ListTypeItem[];
   userrole: ListTypeItem[];
@@ -170,6 +171,12 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'CTSPI')[0].read == true
           || this.profile.permissions.filter(x => x.screenCode == 'CTSPI')[0].delete == true
       }
+      if (this.profile.permissions.filter(x => x.screenCode == 'TREXP').length > 0) {
+        this.hasTravelExpenses = this.profile.permissions.filter(x => x.screenCode == 'TREXP')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'TREXP')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'TREXP')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'TREXP')[0].delete == true
+      }
       if (this.profile.permissions.filter(x => x.screenCode == 'SPRCM').length > 0) {
         this.hasSparePartRecommended = this.profile.permissions.filter(x => x.screenCode == 'SPRCM')[0].create == true
           || this.profile.permissions.filter(x => x.screenCode == 'SPRCM')[0].update == true
@@ -282,6 +289,7 @@ export class NavSideMenuComponent {
       this.hasdistributordashboard = true;
       this.haspreventivemaintenance = true;
       this.hasdashboardsettings = true;
+      this.hasTravelExpenses = true;
       this.hasAuditTrail = true;
     }
 
@@ -303,7 +311,7 @@ export class NavSideMenuComponent {
           }
         },
         error: (error) => {
-          
+
         },
       });
 
@@ -321,7 +329,7 @@ export class NavSideMenuComponent {
       this.hasTravel = true;
     }
 
-    if (this.hasServiceReport  || this.hasAmc || this.hasServiceRequest || this.hasCustomerSparePartsInventory || this.hasSparePartRecommended || this.hasschedule) {
+    if (this.hasServiceReport || this.hasAmc || this.hasServiceRequest || this.hasCustomerSparePartsInventory || this.hasSparePartRecommended || this.hasschedule || this.hasTravelExpenses) {
       this.hasTransactions = true;
     }
 

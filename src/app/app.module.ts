@@ -118,6 +118,9 @@ import { NotificationspopupComponent } from './notificationspopup/notificationsp
 import { LoaderComponent } from './loader/loader.component';
 import { OfferRequestListRenderer } from './Offerrequest/offerrequestlistrenderer';
 import { OfferRequeestProcessFileRenderer } from './Offerrequest/OfferRequeestProcessFileRenderer';
+import { TravelexpenseComponent } from './travelexpense/travelexpense.component';
+import { TravelexpenseListComponent } from './travelexpense/travelexpenseslist.component';
+import { TravelexpenseItemComponent } from './travelexpense/travelexpenseitem.component';
 
 
 @NgModule({
@@ -212,7 +215,10 @@ import { OfferRequeestProcessFileRenderer } from './Offerrequest/OfferRequeestPr
     NotificationspopupComponent,
     LoaderComponent,
     OfferRequestListRenderer,
-    OfferRequeestProcessFileRenderer
+    OfferRequeestProcessFileRenderer,
+    TravelexpenseComponent,
+    TravelexpenseListComponent,
+    TravelexpenseItemComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -100,6 +100,9 @@
           routerLinkActive="active">Spare Parts <br>
           Recommended</a>
 
+        <a class="collapse-item" routerLink="/travelexpenselist" *ngIf="hasTravelExpenses"
+          routerLinkActive="active">Travel Expenses</a>
+
         <a class="collapse-item" routerLink="/schedule" *ngIf="hasschedule" routerLinkActive="active">Schedule</a>
 
       </div>

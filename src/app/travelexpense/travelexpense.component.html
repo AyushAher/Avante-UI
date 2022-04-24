@@ -1,0 +1,166 @@
+<layout>
+    <div class="right_col" role="main">
+        <div class="container">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>Travel Expense</h3>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+            <div class="col-md-12 col-sm-12 ">
+                <form [formGroup]="form" (ngSubmit)="OnSubmit()">
+                    <div class="row">
+
+                        <div class="col-sm-4" hidden>
+                            <label>Distributor</label>
+                            <select formControlName="distributorId" class="form-control"
+                                (input)="getengineers($event.target.value)"
+                                [ngClass]="{'is-invalid':submitted && f.distributorId.errors }">
+                                <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
+                            </select>
+
+                            <div *ngIf="submitted && f.distributorId.errors" class="invalid-feedback">
+                                <div *ngIf="f.distributorId.errors.required">Distributor is required</div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label>Engineer Name</label>
+                            <select formControlName="engineerId" class="form-control"
+                                (change)="getservicerequest(distId ,$event.target.value);"
+                                [ngClass]="{'is-invalid':submitted && f.engineerId.errors }">
+                                <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
+                            </select>
+
+                            <div *ngIf="submitted && f.engineerId.errors" class="invalid-feedback">
+                                <div *ngIf="f.engineerId.errors.required">Engineer Name is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label for="serviceRequestId">Service Request No.</label>
+                            <select formControlName="serviceRequestId" class="form-control"
+                                (change)="onServiceRequestChange()"
+                                [ngClass]="{'is-invalid':submitted && f.serviceRequestId.errors }">
+                                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
+                            </select>
+                            <div Style="display: block" *ngIf="submitted && f.serviceRequestId.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.serviceRequestId.errors.required">
+                                    Service Request is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label>Customer</label>
+                            <select disabled formControlName="customerId" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.customerId.errors}">
+
+                                <option *ngFor="let i of customerList" value="{{i.id}}">{{i.custname}}</option>
+                            </select>
+
+                            <div *ngIf="submitted && f.customerId.errors" class="invalid-feedback">
+                                <div *ngIf="f.customerId.errors.required">Customer is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label>Start Date</label>
+                            <input type="text" bsDatepicker formControlName="startDate" class="form-control"
+                                (change)="OnDateChange()"
+                                [ngClass]="{ 'is-invalid': submitted && f.startDate.errors}" />
+
+                            <div *ngIf="submitted && f.startDate.errors" class="invalid-feedback">
+                                <div *ngIf="f.startDate.errors.required">Start Date is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label>End Date</label>
+                            <input type="text" id="endDate" bsDatepicker formControlName="endDate" class="form-control"
+                                (change)="OnDateChange()" [ngClass]="{ 'is-invalid': submitted && f.endDate.errors}" />
+
+                            <div *ngIf="submitted && f.endDate.errors" class="invalid-feedback">
+                                <div *ngIf="f.endDate.errors.required">End Date is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label>No. Of Days</label>
+                            <input formControlName="totalDays" class="form-control" disabled />
+                        </div>
+
+
+                        <div class="col-md-4 col-sm-4">
+                            <label>Designation</label>
+                            <select disabled formControlName="designation" class="form-control">
+                                <option *ngFor="let i of designationList" value="{{i.listTypeItemId}}">{{i.itemname}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4" *ngIf="id!=null">
+                            <label>Grand Total</label>
+                            <input formControlName="grandTotal" type="number" disabled class="form-control" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <br />
+                        <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
+                            <div class="col-md-3">
+                                <input type="file" id="myFile" #file placeholder="Choose file"
+                                    (change)="getfil(file.files); listfile(file.files) ;" multiple
+                                    accept="text/plain, application/pdf, image/*">
+                            </div>
+                            <div id="selectedfiles" class="hidden col-md-4"
+                                style="max-height:200px; overflow-y:auto;display: none;">
+                                <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                                    <h5>Selected Files:</h5>
+                                    <hr />
+                                </section>
+
+                            </div>
+                        </div>
+
+                        <div class="attachment my-4" *ngIf="id!=null">
+                            <div class="page-title">
+                                <div class="title_left">
+                                    <h3>Attachment List</h3>
+                                    <hr>
+                                </div>
+                            </div>
+                            <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
+                                (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments"
+                                [rowData]="attachments" rowSelection="single" pagination="true" paginationPageSize=10>
+                            </ag-grid-angular>
+
+                        </div>
+                    </div>
+                    <app-travelexpenseitem *ngIf="id!=null" [StartDate]="form.get('startDate').value"
+                        [EndDate]="form.get('endDate').value" [ParentId]="id" (GrandTotal)="onGrandTotal($event)">
+                    </app-travelexpenseitem>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6" style="padding:10px;">
+                            <button class="btn btn-primary" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Submit
+                            </button>
+                            <a routerLink="/travelexpenselist" class="btn btn-secondary"
+                                style="margin-left: 10px;">Back</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</layout>

@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {first} from 'rxjs/operators';
-import {AgRendererComponent} from 'ag-grid-angular';
+import { Component } from '@angular/core';
+import { first } from 'rxjs/operators';
+import { AgRendererComponent } from 'ag-grid-angular';
 import {
   AlertService,
   AmcService,
@@ -25,8 +25,9 @@ import {
   UserProfileService,
   VisadetailsService
 } from '../_services';
-import {CustspinventoryService} from "../_services/custspinventory.service";
-import {OfferrequestService} from "../_services/Offerrequest.service";
+import { CustspinventoryService } from "../_services/custspinventory.service";
+import { OfferrequestService } from "../_services/Offerrequest.service";
+import { TravelExpenseService } from '../_services/travel-expense.service';
 
 
 @Component({
@@ -35,36 +36,37 @@ import {OfferrequestService} from "../_services/Offerrequest.service";
   <button class="btn btn-link"  [disabled]="!params.deleteaccess" (click)="delete(params)"><i class="fas fa-trash-alt"
                                                                                        title="Delete"></i></button>`
 })
-export class RenderComponent implements AgRendererComponent  {
+export class RenderComponent implements AgRendererComponent {
   params: any;
   constructor(private distributorService: DistributorService,
-              private distributorRegionService: DistributorRegionService,
-              private alertService: AlertService,
-              private contactService: ContactService,
-              private custsiteService: CustomerSiteService,
-              private sparepartService: SparePartService,
-              private instrumnetservice: InstrumentService,
-              private customerservice: CustomerService,
-              private notificationService: NotificationService,
-              private profileService: ProfileService,
-              private userprofileService: UserProfileService,
-              private currencyService: CurrencyService,
-              private countryService: CountryService,
-              private listTypeService: ListTypeService,
-              private servicerequestService: ServiceRequestService,
-              private servicereportservice: ServiceReportService,
-              private TravelDetailService: TravelDetailService,
-              private VisaDetailsService: VisadetailsService,
-              private StayDetailsService: StaydetailsService,
-              private LocalExpensesService: LocalExpensesService,
-              private CustomerSatisfactionSurveyService: CustomersatisfactionsurveyService,
-              private CustomerSPInventoory: CustspinventoryService,
-              private AMCService: AmcService
+    private distributorRegionService: DistributorRegionService,
+    private alertService: AlertService,
+    private contactService: ContactService,
+    private custsiteService: CustomerSiteService,
+    private sparepartService: SparePartService,
+    private instrumnetservice: InstrumentService,
+    private customerservice: CustomerService,
+    private notificationService: NotificationService,
+    private profileService: ProfileService,
+    private userprofileService: UserProfileService,
+    private currencyService: CurrencyService,
+    private countryService: CountryService,
+    private listTypeService: ListTypeService,
+    private servicerequestService: ServiceRequestService,
+    private servicereportservice: ServiceReportService,
+    private TravelDetailService: TravelDetailService,
+    private VisaDetailsService: VisadetailsService,
+    private StayDetailsService: StaydetailsService,
+    private LocalExpensesService: LocalExpensesService,
+    private CustomerSatisfactionSurveyService: CustomersatisfactionsurveyService,
+    private CustomerSPInventoory: CustspinventoryService,
+    private AMCService: AmcService,
+    private TravelExpensesService: TravelExpenseService
   ) {
 
   }
   agInit(params: any): void {
-   // //debugger;
+    // //debugger;
     this.params = params;
 
   }
@@ -89,14 +91,14 @@ export class RenderComponent implements AgRendererComponent  {
                 params.api.applyTransaction({ remove: selectedData });
               }
               else {
-                
+
               }
 
 
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       }
@@ -110,13 +112,13 @@ export class RenderComponent implements AgRendererComponent  {
                 const selectedData = params.api.getSelectedRows();
                 params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
 
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "AMC") {
@@ -127,15 +129,15 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
 
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "C") {
@@ -146,14 +148,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "CU") {
@@ -164,14 +166,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               //this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "CS") {
@@ -182,14 +184,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "I") {
@@ -200,14 +202,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "S") {
@@ -218,14 +220,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "P") {
@@ -236,14 +238,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "CUR") {
@@ -255,14 +257,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "COU") {
@@ -273,13 +275,13 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
-              
+
             }
           });
       } else if (params.deleteLink == "UP") {
@@ -290,14 +292,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "SR") {
@@ -308,14 +310,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "SRE") {
@@ -326,14 +328,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "TRDET") {
@@ -344,14 +346,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "VSDET") {
@@ -362,14 +364,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "LITYIT") {
@@ -380,14 +382,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "STDET") {
@@ -398,14 +400,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "LCEXP") {
@@ -416,14 +418,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "CSS") {
@@ -434,14 +436,14 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
             }
           });
       } else if (params.deleteLink == "CUSTS") {
@@ -452,14 +454,25 @@ export class RenderComponent implements AgRendererComponent  {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = params.api.getSelectedRows();
-                params.api.applyTransaction({remove: selectedData});
+                params.api.applyTransaction({ remove: selectedData });
               } else {
-                
+
               }
             },
             error: error => {
               // this.alertService.error(error);
-              
+
+            }
+          });
+      }
+      else if (params.deleteLink == "TREXP") {
+        this.TravelExpensesService.delete(params.value)
+          .pipe(first())
+          .subscribe((data: any) => {
+            if (data.result) {
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              const selectedData = params.api.getSelectedRows();
+              params.api.applyTransaction({ remove: selectedData });
             }
           });
       }

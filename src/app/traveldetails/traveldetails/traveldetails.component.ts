@@ -422,9 +422,8 @@ export class TraveldetailsComponent implements OnInit {
     this.loading = true;
     this.Model = this.Form.value;
 
-    let dateSent;
     let currentDate = new Date(this.Form.value.departuredate);
-    dateSent = new Date(this.Form.value.returndate);
+    let dateSent = new Date(this.Form.value.returndate);
     let flightdate = new Date(
       this.Form.value.flightdetails.flightdate
     );
@@ -474,9 +473,8 @@ export class TraveldetailsComponent implements OnInit {
       this.loading = false;
     }
 
-    if (calc > 1) {
-      this.dateValid = true;
-    } else {
+    if (calc > 1) this.dateValid = true;
+    else {
       this.notificationService.showError(
         "The difference between Departure Date and Return Date should be more than 1 day !",
         "Error"
@@ -502,31 +500,22 @@ export class TraveldetailsComponent implements OnInit {
         this.Service
           .save(this.Model)
           .pipe(first())
-          .subscribe({
-            next: (data: any) => {
+          .subscribe((data: any) => {
 
-              if (this.file != null) {
-                this.uploadFile(this.file, data.object.id);
-              }
-              if (data.result) {
-                this.notificationService.showSuccess(
-                  data.resultMessage,
-                  "Success"
-                );
+            if (this.file != null) this.uploadFile(this.file, data.object.id);
 
-                this.router.navigate(["traveldetailslist"]);
-              } else {
+            if (data.result) {
+              this.notificationService.showSuccess(
+                data.resultMessage,
+                "Success"
+              );
 
-              }
-              this.loading = false;
-            },
-            error: (error) => {
-              // this.alertService.error(error);
-
-              this.loading = false;
-            },
+              this.router.navigate(["traveldetailslist"]);
+            }
+            this.loading = false;
           });
-      } else {
+      }
+      else {
         this.Model = this.Form.value;
         this.Model.id = this.id;
         this.Model.distId = this.distId

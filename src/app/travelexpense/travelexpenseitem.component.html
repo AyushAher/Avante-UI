@@ -1,0 +1,183 @@
+<div class="page-title">
+    <div class="title_left">
+        <h3>Travel Expense Items</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<hr />
+
+<div class="col-md-12 col-sm-12 expItems">
+
+    <form [formGroup]="form">
+        <p style="color: red;">*Upload File Size should not exceed 10MB.</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th *ngIf="hasDeleteAccess || hasAddAccess">Action</th>
+                    <th>Date</th>
+                    <th>Nature</th>
+                    <th>Details</th>
+                    <th>Currency</th>
+                    <th>Amount(BCY)</th>
+                    <th>Amount(USD)</th>
+                    <th>Remarks</th>
+                    <th>Download File <i class="mx-2 fas fa-download"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of itemList">
+                    <td *ngIf="hasDeleteAccess || hasAddAccess">
+                        <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
+                            style="background-color: transparent;color: #5ba146;border: none;">
+                            <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                        </button>
+                    </td>
+
+                    <td>{{item.expDate}}</td>
+
+                    <td> {{item.expNatureName}} </td>
+
+                    <td>{{item.expDetails}}</td>
+
+                    <td>{{item.currencyName}}</td>
+
+                    <td>{{item.bcyAmt}}</td>
+
+                    <td>{{item.usdAmt}}</td>
+
+                    <td>{{item.remarks}}</td>
+
+                    <td>
+                        <app-ProcessFileRenderer [parameters]="item"></app-ProcessFileRenderer>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot *ngIf="hasAddAccess" style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
+                <tr>
+                    <td>
+                        <button type="button" *ngIf="hasAddAccess" (click)="submitStageData()"
+                            style="background-color: transparent; color: #5ba146; border: none;">
+                            <i class="fas fa-save" style="font-size: 20px;"></i>
+                        </button>
+                    </td>
+
+                    <td>
+                        <input formControlName="expDate" bsDatepicker type="text" id="expNature" class="form-control"
+                            [ngClass]="{'is-invalid':submitted && f.expNature.errors }" />
+
+                        <div *ngIf="submitted && f.expNature.errors" class="invalid-feedback">
+                            <div *ngIf="f.expNature.errors.required">Expense Nature is required</div>
+                        </div>
+                    </td>
+
+                    <td style="width: 250px;">
+                        <select formControlName="expNature" class="ddl form-control" id="expNature"
+                            [ngClass]="{'is-invalid':submitted && f.expNature.errors }">
+                            <option *ngFor="let i of natureOfExpense" value="{{i.listTypeItemId}}">{{i.itemname}}
+                            </option>
+                        </select>
+
+                        <div *ngIf="submitted && f.expNature.errors" class="invalid-feedback">
+                            <div *ngIf="f.expNature.errors.required">Expense Nature is required</div>
+                        </div>
+                    </td>
+                    <td>
+                        <textarea formControlName="expDetails" class="form-control"
+                            [ngClass]="{'is-invalid':submitted && f.expDetails.errors }"></textarea>
+
+                        <div *ngIf="submitted && f.expDetails.errors" class="invalid-feedback">
+                            <div *ngIf="f.expDetails.errors.required">Expense Details is required</div>
+                        </div>
+                    </td>
+
+                    <td style="width: 250px;">
+                        <select formControlName="currency" id="currency" class="ddl form-control"
+                            [ngClass]="{'is-invalid':submitted && f.currency.errors }">
+                            <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                            </option>
+                        </select>
+
+                        <div *ngIf="submitted && f.currency.errors" class="invalid-feedback">
+                            <div *ngIf="f.currency.errors.required">Currency is required</div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <input formControlName="bcyAmt" type="number" id="bcyAmt" class="form-control"
+                            [ngClass]="{'is-invalid':submitted && f.bcyAmt.errors }" />
+
+                        <div *ngIf="submitted && f.bcyAmt.errors" class="invalid-feedback">
+                            <div *ngIf="f.bcyAmt.errors.required">Expense Nature is required</div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <input formControlName="usdAmt" type="number" id="usdAmt" class="form-control"
+                            [ngClass]="{'is-invalid':submitted && f.usdAmt.errors }" />
+
+                        <div *ngIf="submitted && f.usdAmt.errors" class="invalid-feedback">
+                            <div *ngIf="f.usdAmt.errors.required">Expense Nature is required</div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <textarea formControlName="remarks" id="remarks" class="form-control"
+                            [ngClass]="{'is-invalid':submitted && f.remarks.errors }"></textarea>
+
+                        <div *ngIf="submitted && f.remarks.errors" class="invalid-feedback">
+                            <div *ngIf="f.remarks.errors.required">Expense Nature is required</div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <input multiple #itemFiles class="expItemFilesList_class" type="file"
+                            accept=".pdf, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/pdf"
+                            (change)="getfil(itemFiles.files);listfile(itemFiles.files,'expFilesList')" />
+
+                        <div>
+                            <input type="checkbox" formControlName="isBillsAttached" (click)="DisableChoseFile()"
+                                id="expFilesList_Attachment" />
+                            <span> No Attachment</span>
+                        </div>
+
+                        <div id="expFilesList" class="hidden" style="display: none; overflow-wrap: break-word;">
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+
+        </table>
+    </form>
+</div>
+
+
+
+<style>
+    th>button {
+        padding: 6px 9px;
+    }
+
+    thead {
+        background-color: #5ba146;
+        color: white;
+    }
+
+    tbody {
+        border: 0.5px solid rgb(202 170 170);
+    }
+
+    td>textarea {
+        width: 200px;
+    }
+
+    input[type=text],
+    input[type=number],
+    .ddl {
+        width: 150px;
+    }
+
+    .expItems {
+        max-width: fit-content;
+        overflow-x: auto;
+    }
+</style>

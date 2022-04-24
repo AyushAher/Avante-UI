@@ -67,6 +67,8 @@ import { EngineerschedulerComponent } from "./engineerscheduler/engineerschedule
 import { AudittrailComponent } from "./audittrail/audittrail.component";
 import { AudittrailDetailsComponent } from "./audittrail/audittraildetails";
 import { NotificationspopupComponent } from './notificationspopup/notificationspopup.component';
+import { TravelexpenseComponent } from './travelexpense/travelexpense.component';
+import { TravelexpenseListComponent } from './travelexpense/travelexpenseslist.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
@@ -339,6 +341,21 @@ const routes: Routes = [
   {
     path: "usernotifications",
     component: NotificationspopupComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "travelexpense",
+    component: TravelexpenseComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "travelexpense/:id",
+    component: TravelexpenseComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "travelexpenselist",
+    component: TravelexpenseListComponent,
     canActivate: [AuthGuard],
   },
   { path: 'account', loadChildren: accountModule },
