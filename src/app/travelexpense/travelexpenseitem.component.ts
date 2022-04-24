@@ -40,6 +40,7 @@ export class TravelexpenseItemComponent implements OnInit {
     attachments: any;
     natureOfExpense: any[] = [];
     currencyList: any[] = [];
+    submitted: boolean = false;
 
     constructor(
         private TravelExpenseItemService: TravelExpenseitemService,
@@ -139,6 +140,11 @@ export class TravelexpenseItemComponent implements OnInit {
 
 
     submitStageData() {
+        this.submitted = true;
+
+        if (this.form.invalid) {
+            return;
+        }
 
         let hasNoAttachment = this.form.get('isBillsAttached').value
 

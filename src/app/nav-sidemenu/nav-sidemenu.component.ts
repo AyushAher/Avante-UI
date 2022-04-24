@@ -56,6 +56,8 @@ export class NavSideMenuComponent {
   hasTravel: boolean = false;
   hasReports: boolean = false;
   hasTransactions: boolean = false;
+  hasTravelInvoice: boolean = false;
+
 
   constructor(
     private accountService: AccountService,
@@ -177,6 +179,12 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'TREXP')[0].read == true
           || this.profile.permissions.filter(x => x.screenCode == 'TREXP')[0].delete == true
       }
+      if (this.profile.permissions.filter(x => x.screenCode == 'TRINV').length > 0) {
+        this.hasTravelInvoice = this.profile.permissions.filter(x => x.screenCode == 'TRINV')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'TRINV')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'TRINV')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'TRINV')[0].delete == true
+      }
       if (this.profile.permissions.filter(x => x.screenCode == 'SPRCM').length > 0) {
         this.hasSparePartRecommended = this.profile.permissions.filter(x => x.screenCode == 'SPRCM')[0].create == true
           || this.profile.permissions.filter(x => x.screenCode == 'SPRCM')[0].update == true
@@ -290,6 +298,7 @@ export class NavSideMenuComponent {
       this.haspreventivemaintenance = true;
       this.hasdashboardsettings = true;
       this.hasTravelExpenses = true;
+      this.hasTravelInvoice = true;
       this.hasAuditTrail = true;
     }
 
@@ -329,7 +338,7 @@ export class NavSideMenuComponent {
       this.hasTravel = true;
     }
 
-    if (this.hasServiceReport || this.hasAmc || this.hasServiceRequest || this.hasCustomerSparePartsInventory || this.hasSparePartRecommended || this.hasschedule || this.hasTravelExpenses) {
+    if (this.hasServiceReport || this.hasAmc || this.hasServiceRequest || this.hasCustomerSparePartsInventory || this.hasSparePartRecommended || this.hasschedule || this.hasTravelExpenses || this.hasTravelInvoice) {
       this.hasTransactions = true;
     }
 

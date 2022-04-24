@@ -69,6 +69,8 @@ import { AudittrailDetailsComponent } from "./audittrail/audittraildetails";
 import { NotificationspopupComponent } from './notificationspopup/notificationspopup.component';
 import { TravelexpenseComponent } from './travelexpense/travelexpense.component';
 import { TravelexpenseListComponent } from './travelexpense/travelexpenseslist.component';
+import { TravelInvoiceListComponent } from './travelinvoice/travelinvoicelist.component';
+import { TravelinvoiceComponent } from './travelinvoice/travelinvoice.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
@@ -356,6 +358,21 @@ const routes: Routes = [
   {
     path: "travelexpenselist",
     component: TravelexpenseListComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "travelinvoice",
+    component: TravelinvoiceComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "travelinvoice/:id",
+    component: TravelinvoiceComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "travelinvoicelist",
+    component: TravelInvoiceListComponent,
     canActivate: [AuthGuard],
   },
   { path: 'account', loadChildren: accountModule },

@@ -121,6 +121,8 @@ import { OfferRequeestProcessFileRenderer } from './Offerrequest/OfferRequeestPr
 import { TravelexpenseComponent } from './travelexpense/travelexpense.component';
 import { TravelexpenseListComponent } from './travelexpense/travelexpenseslist.component';
 import { TravelexpenseItemComponent } from './travelexpense/travelexpenseitem.component';
+import { TravelinvoiceComponent } from './travelinvoice/travelinvoice.component';
+import { TravelInvoiceListComponent } from './travelinvoice/travelinvoicelist.component';
 
 
 @NgModule({
@@ -218,7 +220,9 @@ import { TravelexpenseItemComponent } from './travelexpense/travelexpenseitem.co
     OfferRequeestProcessFileRenderer,
     TravelexpenseComponent,
     TravelexpenseListComponent,
-    TravelexpenseItemComponent
+    TravelexpenseItemComponent,
+    TravelinvoiceComponent,
+    TravelInvoiceListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
