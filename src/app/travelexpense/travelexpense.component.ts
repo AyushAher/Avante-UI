@@ -192,7 +192,9 @@ export class TravelexpenseComponent implements OnInit {
                 .subscribe((Srqdata: any) => {
                   this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
                   this.GetFileList(data.object.id)
-                  this.form.patchValue(data.object)
+                  setTimeout(() => {
+                    this.form.patchValue(data.object)
+                  }, 1000);
                 });
             });
         })

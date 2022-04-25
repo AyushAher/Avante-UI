@@ -1,0 +1,24 @@
+<div class="modal" style="display: block" id="modal" role="dialog">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" style="width: 40vw">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #589b44; color: #fff">
+                <h4 class="modal-title" id="modal-basic-title">Import Travel Expense</h4>
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal" (click)="close()"
+                    aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="py-3 px-3-pb-3">
+                    <div class="container">
+
+                        <div class="col-md-12 col-sm-12 ">
+                            <input type="file" placeholder="Choose file" #files> <br>
+                            <button type="submit" class="btn btn-primary mt-4" (click)="readData()">Import</button>
+                            <a (click)="close()" class="btn mt-4" style="margin-left: 10px;">Back</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

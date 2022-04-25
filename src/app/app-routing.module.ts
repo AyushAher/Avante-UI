@@ -71,6 +71,8 @@ import { TravelexpenseComponent } from './travelexpense/travelexpense.component'
 import { TravelexpenseListComponent } from './travelexpense/travelexpenseslist.component';
 import { TravelInvoiceListComponent } from './travelinvoice/travelinvoicelist.component';
 import { TravelinvoiceComponent } from './travelinvoice/travelinvoice.component';
+import { ImportdataService } from './_services/importdata.service';
+import { ImportDataComponent } from './importdata/import.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 

@@ -1,8 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { first } from "rxjs/operators";
 import { RenderComponent } from "../distributor/rendercomponent";
+import { ImportDataComponent } from "../importdata/import.component";
 import { ProfileReadOnly, User } from "../_models";
 import { AccountService, TravelDetailService, NotificationService, ProfileService, DistributorService, ListTypeService } from "../_services";
 import { TravelExpenseService } from "../_services/travel-expense.service";
@@ -24,6 +26,7 @@ export class TravelexpenseListComponent implements OnInit {
     hasDeleteAccess: boolean = false;
     hasAddAccess: boolean = false;
     user: User;
+    bsModalRef: BsModalRef;
 
     List: any;
     constructor(
@@ -32,7 +35,7 @@ export class TravelexpenseListComponent implements OnInit {
         private Service: TravelExpenseService,
         private notificationService: NotificationService,
         private profileService: ProfileService,
-        private distributorService: DistributorService,
+        private modalService: BsModalService,
         private listTypeService: ListTypeService,
     ) { }
 
@@ -135,5 +138,17 @@ export class TravelexpenseListComponent implements OnInit {
         this.api = params.api;
         this.columnApi = params.columnApi;
         // this.api.sizeColumnsToFit();
+    }
+
+    ImportData() {
+        const config: any = {
+            backdrop: 'static',
+            keyboard: false,
+            animated: true,
+            ignoreBackdropClick: true,
+        };
+
+        this.bsModalRef = this.modalService.show(ImportDataComponent, config);
+
     }
 }
