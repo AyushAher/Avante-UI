@@ -5,6 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 
 import { AccountService, NotificationService } from '../_services';
 import { LoaderService } from '../_services/loader.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -13,7 +14,16 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         //start spinner
+
         this.loaderService.requestStarted()
+        if (request.url.startsWith(environment.currencyConvert)) {
+            request = request.clone({
+                setHeaders: {
+                    Authorization: `Basic ${btoa("ayushaher494865898:kd0t5dra52rsc50jp4d13642g6")}`
+                }
+            });
+        }
+
         return this.handler(next, request);
     }
 

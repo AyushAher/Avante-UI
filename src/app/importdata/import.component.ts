@@ -4,6 +4,7 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { first } from 'rxjs/operators';
 import * as XLSX from 'xlsx'
+import { ListTypeItem } from '../_models';
 import { NotificationService } from '../_services';
 import { ImportdataService } from '../_services/importdata.service';
 
@@ -40,7 +41,8 @@ export class ImportDataComponent implements OnInit {
       endDate: "",
       totalDays: "",
       designation: "",
-      grandTotal: 0
+      grandCompanyTotal: 0,
+      grandEngineerTotal: 0,
     })
   }
 
@@ -75,6 +77,7 @@ export class ImportDataComponent implements OnInit {
         isBillsAttached: false,
         bcyAmt: [""],
         usdAmt: [""],
+        expenseBy: [""]
       })
 
       if (index == 0) {
@@ -89,8 +92,11 @@ export class ImportDataComponent implements OnInit {
         !isNaN(element.no_of_Days) ? this.form.get('totalDays').setValue(element.no_of_Days)
           : this.form.get('totalDays').setValue(0)
 
-        !isNaN(element.grand_Total) ? this.form.get('grandTotal').setValue(element.Grand_Total)
-          : this.form.get('grandTotal').setValue(0)
+        !isNaN(element.Grand_Company_Total) ? this.form.get('grandCompanyTotal').setValue(element.Grand_Company_Total)
+          : this.form.get('grandCompanyTotal').setValue(0)
+
+        !isNaN(element.Grand_Company_Total) ? this.form.get('grandEngineerTotal').setValue(element.Grand_Company_Total)
+          : this.form.get('grandEngineerTotal').setValue(0)
       }
 
       var permissions = this.form.get('items') as FormArray;
@@ -100,14 +106,8 @@ export class ImportDataComponent implements OnInit {
       item.get('expNature').setValue(element.Nature_of_expense)
       item.get('expDetails').setValue(element.Details_of_the_expense)
       item.get('currency').setValue(element.Currency)
-
-      !isNaN(element.Amount_in_BCY) ? item.get('bcyAmt').setValue(element.Amount_in_BCY)
-        : item.get('bcyAmt').setValue(0)
-
-      !isNaN(element.Amount_in_USD) ? item.get('usdAmt').setValue(element.Amount_in_USD)
-        : item.get('usdAmt').setValue(0)
-
       item.get('remarks').setValue(element.Remarks)
+      item.get('expenseBy').setValue(element.Expenses_Incurred_By)
 
       let calc = this.CalculateDateDiff(this.form.value.startDate, this.form.value.endDate)
       this.form.value.startDate = this.datepipe.transform(this.form.value.startDate, "MM/dd/yyyy");
@@ -127,11 +127,24 @@ export class ImportDataComponent implements OnInit {
 
       if (StartCalc < 0 || EndCalc < 0) return this.notificationService.showError("Expense Date should be between Start Date and End Date", "Error")
 
-      this.form.get('grandTotal').value += item.get('usdAmt').value
       this.form.get('startDate').value = this.datepipe.transform(this.form.get('startDate').value, "MM/dd/yyyy")
       this.form.get('endDate').value = this.datepipe.transform(this.form.get('endDate').value, "MM/dd/yyyy")
 
-      if (item.get('expNature').value && item.get('expDetails').value && item.get('expDate').value) permissions.push(item)
+      if (!isNaN(element.Amount_in_BCY) && element.Amount_in_BCY > 0 && isNaN(element.Amount_in_USD) && element.Currency != undefined) {
+        this.service.convertCurrency(element.Currency, element.Amount_in_BCY).pipe(first())
+          .subscribe((data: any) => {
+            item.get('usdAmt').setValue(data.from[0].mid)
+          })
+      }
+
+      !isNaN(element.Amount_in_BCY) ? item.get('bcyAmt').setValue(element.Amount_in_BCY)
+        : item.get('bcyAmt').setValue(0)
+
+      !isNaN(element.Amount_in_USD) ? item.get('usdAmt').setValue(element.Amount_in_USD)
+        : item.get('usdAmt').setValue(0)
+
+      if (item.get('expNature').value && item.get('expDetails').value && item.get('expDate').value && item.get('expenseBy').value) permissions.push(item)
+
       else return this.notificationService.showError("All Fields are required.", "Error in row data")
     });
 
@@ -150,6 +163,8 @@ export class ImportDataComponent implements OnInit {
             delete element.createdon
             delete element.isactive
             delete element.isdeleted
+            delete element.expenseByName
+            delete element.Grand_Total
 
             element.uploaded ? element.uploaded = "yes"
               : element.uploaded = "No"

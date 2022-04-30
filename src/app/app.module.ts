@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule, DatePipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -245,8 +245,8 @@ import { ImportDataComponent } from './importdata/import.component';
     AgGridModule.withComponents([]),
     ScheduleModule, RecurrenceEditorModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  providers: [DecimalPipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     fakeBackendProvider, DatePipe, DayService, WeekService, MonthService, WorkWeekService, MonthAgendaService, TimelineMonthService,
   ],
   bootstrap: [AppComponent]

@@ -8,7 +8,7 @@ export const environment = {
   production: false,
   apiUrl: 'https://localhost:44317/api',
   uiUrl: 'https://localhost:44378/',
-
+  currencyConvert:` https://xecdapi.xe.com/v1/convert_to.json`,
   // for prod
 
   // production: true,

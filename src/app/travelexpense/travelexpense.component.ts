@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -58,6 +58,8 @@ export class TravelexpenseComponent implements OnInit {
   customerList: Customer[];
   datepipe = new DatePipe('en-US')
   designationList: any;
+  grandCompanyTotalAmt: any;
+  grandEngineerTotalAmt: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -74,8 +76,7 @@ export class TravelexpenseComponent implements OnInit {
     private customerService: CustomerService,
     private notificationService: NotificationService,
     private router: Router,
-
-
+    private numberPipe: DecimalPipe,
   ) { }
 
   ngOnInit(): void {
@@ -108,7 +109,8 @@ export class TravelexpenseComponent implements OnInit {
       endDate: ["", Validators.required],
       totalDays: 0,
       designation: "",
-      grandTotal: 0,
+      grandCompanyTotal: 0,
+      grandEngineerTotal: 0,
     })
 
 
@@ -192,8 +194,11 @@ export class TravelexpenseComponent implements OnInit {
                 .subscribe((Srqdata: any) => {
                   this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
                   this.GetFileList(data.object.id)
+
                   setTimeout(() => {
                     this.form.patchValue(data.object)
+                    this.form.patchValue({ "grandEngineerTotal": this.numberPipe.transform(this.grandEngineerTotalAmt) })
+                    this.form.patchValue({ "grandCompanyTotal": this.numberPipe.transform(this.grandCompanyTotalAmt) })
                   }, 1000);
                 });
             });
@@ -205,8 +210,14 @@ export class TravelexpenseComponent implements OnInit {
     return this.form.controls
   }
 
-  onGrandTotal = (e) => {
-    setTimeout(() => this.form.get('grandTotal').setValue(e), 1000);
+  onGrandEngineerTotal = (e) => {
+    this.grandEngineerTotalAmt = e
+    // setTimeout(() => this.form.get('grandEngineerTotal').setValue(e), 1000);
+  }
+
+  onGrandCompanyTotal = (e) => {
+    this.grandCompanyTotalAmt = e
+    // setTimeout(() => this.form.get('grandCompanyTotal').setValue(e), 1000);
   }
 
 

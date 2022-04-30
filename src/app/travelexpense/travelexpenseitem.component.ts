@@ -1,11 +1,12 @@
-import { DatePipe } from "@angular/common";
+import { DatePipe, DecimalPipe } from "@angular/common";
 import { HttpEventType } from "@angular/common/http";
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { first } from "rxjs/operators";
 import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
-import { ProfileReadOnly, User } from "../_models";
+import { ListTypeItem, ProfileReadOnly, User } from "../_models";
 import { ListTypeService, ServiceRequestService, CurrencyService, CustomerService, NotificationService, FileshareService, AccountService, ProfileService } from "../_services";
+import { ImportdataService } from "../_services/importdata.service";
 import { TravelExpenseitemService } from "../_services/travel-expenseitem.service";
 
 @Component({
@@ -23,11 +24,14 @@ export class TravelexpenseItemComponent implements OnInit {
     user: User;
     form: any
 
-    @Output() GrandTotal = new EventEmitter<Number>()
+    @Output() GrandCompanyTotal = new EventEmitter<number>();
+    @Output() GrandEngineerTotal = new EventEmitter<number>();
     @Output() public onUploadFinished = new EventEmitter();
+
     @Input() ParentId: string
     @Input() StartDate: any
     @Input() EndDate: any
+
     @ViewChild('itemFiles') itemFiles
 
     datepipe = new DatePipe('en-US')
@@ -41,6 +45,7 @@ export class TravelexpenseItemComponent implements OnInit {
     natureOfExpense: any[] = [];
     currencyList: any[] = [];
     submitted: boolean = false;
+    lstExpenseBy: any;
 
     constructor(
         private TravelExpenseItemService: TravelExpenseitemService,
@@ -51,7 +56,8 @@ export class TravelexpenseItemComponent implements OnInit {
         private FileShareService: FileshareService,
         private accountService: AccountService,
         private profileService: ProfileService,
-
+        private helperService: ImportdataService,
+        private numberPipe: DecimalPipe
     ) {
 
         this.notificationService.listen().subscribe((m: any) => {
@@ -92,6 +98,9 @@ export class TravelexpenseItemComponent implements OnInit {
         this.listTypeService.getById("NOEXP").pipe(first())
             .subscribe((data: any) => this.natureOfExpense = data);
 
+        this.listTypeService.getById("EXINB").pipe(first())
+            .subscribe((data: any) => this.lstExpenseBy = data);
+
 
         this.currencyService.getAll().pipe(first())
             .subscribe((data: any) => this.currencyList = data.object)
@@ -106,16 +115,29 @@ export class TravelexpenseItemComponent implements OnInit {
             bcyAmt: [""],
             usdAmt: [""],
             remarks: [""],
-            travelExpenseId: ""
+            travelExpenseId: "",
+            expenseBy: ''
         })
 
         if (this.ParentId != null) {
             this.TravelExpenseItemService.getById(this.ParentId).pipe(first())
                 .subscribe((data: any) => {
                     this.itemList = data.object
-                    var total = 0
-                    data.object.forEach((element: any) => total += element.usdAmt);
-                    setTimeout(() => this.GrandTotal.emit(total), 300);
+                    var EngTotal = 0
+                    var CompTotal = 0
+
+                    var CompExp = this.lstExpenseBy.find((x: ListTypeItem) => x.itemCode == "COMPN")
+                    var EngExp = this.lstExpenseBy.find((x: ListTypeItem) => x.itemCode == "ENGNR")
+                    data.object.forEach((element: any) => {
+                        if (element.expenseBy == CompExp.listTypeItemId) CompTotal += element.usdAmt
+                        else if (element.expenseBy == EngExp.listTypeItemId) EngTotal += element.usdAmt
+
+                        element.bcyAmt = this.numberPipe.transform(element.bcyAmt)
+                        element.usdAmt = this.numberPipe.transform(element.usdAmt)
+                    });
+                    debugger;
+                    this.GrandCompanyTotal.emit(CompTotal)
+                    this.GrandEngineerTotal.emit(EngTotal)
                 })
 
             this.form.get('travelExpenseId').value = this.ParentId
@@ -153,9 +175,22 @@ export class TravelexpenseItemComponent implements OnInit {
 
         let StartCalc = this.CalculateDateDiff(this.StartDate, this.form.get('expDate').value)
         let EndCalc = this.CalculateDateDiff(this.form.get('expDate').value, this.EndDate)
-        console.log(StartCalc, EndCalc);
+
         if (StartCalc < 0 || EndCalc < 0) return this.notificationService.showInfo("Expense Date should be between Start Date and End Date", "Error")
 
+        if (!isNaN(this.form.get('bcyAmt').value) && this.form.get('bcyAmt').value > 0 && this.form.get('usdAmt').value == "") {
+            var cur = this.currencyList.find(x => x.id == this.form.get('currency').value)?.code
+            this.helperService.convertCurrency(cur, this.form.get('bcyAmt').value).pipe(first())
+                .subscribe((data: any) => {
+                    this.form.get('usdAmt').setValue(data.from[0].mid)
+                    this.save(hasNoAttachment)
+                })
+        }
+        else this.save(hasNoAttachment)
+
+    }
+
+    save(hasNoAttachment) {
         this.TravelExpenseItemService.save(this.form.value).pipe(first())
             .subscribe((data: any) => {
                 if (this.processFile != null && !hasNoAttachment)
@@ -170,6 +205,7 @@ export class TravelexpenseItemComponent implements OnInit {
 
                 this.itemList = data.object
             })
+
     }
 
     CalculateDateDiff(startDate, endDate) {

@@ -107,8 +107,13 @@
                         </div>
 
                         <div class="col-md-4 col-sm-4" *ngIf="id!=null">
-                            <label>Grand Total</label>
-                            <input formControlName="grandTotal" type="number" disabled class="form-control" />
+                            <label>Company Grand Total</label>
+                            <input formControlName="grandCompanyTotal" type="text" disabled class="form-control" />
+                        </div>
+
+                        <div class="col-md-4 col-sm-4" *ngIf="id!=null">
+                            <label>Engineer Grand Total</label>
+                            <input formControlName="grandEngineerTotal" type="text" disabled class="form-control" />
                         </div>
                     </div>
 
@@ -145,7 +150,9 @@
                         </div>
                     </div>
                     <app-travelexpenseitem *ngIf="id!=null" [StartDate]="form.get('startDate').value"
-                        [EndDate]="form.get('endDate').value" [ParentId]="id" (GrandTotal)="onGrandTotal($event)">
+                        [EndDate]="form.get('endDate').value" [ParentId]="id"
+                        (GrandCompanyTotal)="onGrandCompanyTotal($event)"
+                        (GrandEngineerTotal)="onGrandEngineerTotal($event)">
                     </app-travelexpenseitem>
                     <div class="row">
                         <div class="col-md-6 col-sm-6" style="padding:10px;">

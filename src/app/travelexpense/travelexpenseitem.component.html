@@ -13,20 +13,21 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th *ngIf="hasDeleteAccess || hasAddAccess">Action</th>
+                    <th *ngIf="hasDeleteAccess || !hasAddAccess">Action</th>
                     <th>Date</th>
                     <th>Nature</th>
                     <th>Details</th>
                     <th>Currency</th>
                     <th>Amount(BCY)</th>
                     <th>Amount(USD)</th>
+                    <th>Expense Incurred By</th>
                     <th>Remarks</th>
                     <th>Download File <i class="mx-2 fas fa-download"></i></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of itemList">
-                    <td *ngIf="hasDeleteAccess || hasAddAccess">
+                    <td *ngIf="hasDeleteAccess || !hasAddAccess">
                         <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
                             style="background-color: transparent;color: #5ba146;border: none;">
                             <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
@@ -45,6 +46,8 @@
 
                     <td>{{item.usdAmt}}</td>
 
+                    <td>{{item.expenseByName}}</td>
+
                     <td>{{item.remarks}}</td>
 
                     <td>
@@ -52,10 +55,10 @@
                     </td>
                 </tr>
             </tbody>
-            <tfoot *ngIf="hasAddAccess" style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
+            <tfoot *ngIf="!hasAddAccess" style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
                 <tr>
                     <td>
-                        <button type="button" *ngIf="hasAddAccess" (click)="submitStageData()"
+                        <button type="button" *ngIf="!hasAddAccess" (click)="submitStageData()"
                             style="background-color: transparent; color: #5ba146; border: none;">
                             <i class="fas fa-save" style="font-size: 20px;"></i>
                         </button>
@@ -117,6 +120,18 @@
 
                         <div *ngIf="submitted && f.usdAmt.errors" class="invalid-feedback">
                             <div *ngIf="f.usdAmt.errors.required">Expense Nature is required</div>
+                        </div>
+                    </td>
+
+                    <td style="width: 250px;">
+                        <select formControlName="expenseBy" id="expenseBy" class="ddl form-control"
+                            [ngClass]="{'is-invalid':submitted && f.expenseBy.errors }">
+                            <option *ngFor="let i of lstExpenseBy" value="{{i.listTypeItemId}}">{{i.itemname}}
+                            </option>
+                        </select>
+
+                        <div *ngIf="submitted && f.expenseBy.errors" class="invalid-feedback">
+                            <div *ngIf="f.expenseBy.errors.required">Expense By is required</div>
                         </div>
                     </td>
 

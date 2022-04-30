@@ -11,5 +11,7 @@ export class ImportdataService {
 
   importData = (data: any, screen: any) => { return this.http.post(`${environment.apiUrl}/ImportData`, data) }
 
-
+  convertCurrency = (cur: string, amt: number) => {
+    return this.http.get(`${environment.currencyConvert}/?from=USD&to=${cur}&amount=${amt}`)
+  }
 }
