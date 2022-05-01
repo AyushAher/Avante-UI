@@ -1,0 +1,274 @@
+<layout>
+    <div class="right_col" role="main">
+        <div class="container">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>Advance Request Form</h3>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+            <div class="col-md-12 col-sm-12 mb-3 ">
+                <form [formGroup]="form" (ngSubmit)="OnSubmit()">
+                    <div class="row">
+
+                        <div class="col-sm-4" hidden>
+                            <label>Distributor</label>
+                            <select formControlName="distributorId" class="form-control"
+                                (input)="getengineers($event.target.value)"
+                                [ngClass]="{'is-invalid':submitted && f.distributorId.errors }">
+                                <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
+                            </select>
+
+                            <div *ngIf="submitted && f.distributorId.errors" class="invalid-feedback">
+                                <div *ngIf="f.distributorId.errors.required">Distributor is required</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Full Name of Employee</label>
+                            <select formControlName="engineerId" class="form-control"
+                                (change)="getservicerequest(distId ,$event.target.value);"
+                                [ngClass]="{'is-invalid':submitted && f.engineerId.errors }">
+                                <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
+                            </select>
+
+                            <div *ngIf="submitted && f.engineerId.errors" class="invalid-feedback">
+                                <div *ngIf="f.engineerId.errors.required">Engineer Name is required</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label for="serviceRequestId">Service Request No. in CIM (If applicable)</label>
+                            <select formControlName="serviceRequestId" class="form-control"
+                                (change)="onServiceRequestChange()"
+                                [ngClass]="{'is-invalid':submitted && f.serviceRequestId.errors }">
+                                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
+                            </select>
+                            <div Style="display: block" *ngIf="submitted && f.serviceRequestId.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.serviceRequestId.errors.required">
+                                    Service Request is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3" hidden>
+                            <label>Customer</label>
+                            <select disabled formControlName="customerId" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.customerId.errors}">
+
+                                <option *ngFor="let i of customerList" value="{{i.id}}">{{i.custname}}</option>
+                            </select>
+
+                            <div *ngIf="submitted && f.customerId.errors" class="invalid-feedback">
+                                <div *ngIf="f.customerId.errors.required">Customer is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Employee's Office Location</label>
+                            <select id="country" formControlName="officeLocationId" class="form-control"
+                                [ngClass]="{ ' is -invalid': submitted && f.officeLocationId.errors}">
+                                <option *ngFor="let i of country" value="{{i.id}}">{{i.name}}
+                                </option>
+                            </select>
+                            <div *ngIf="submitted && f.officeLocationId.errors" class="invalid-feedback">
+                                <div *ngIf="f.officeLocationId.errors.required">Office Location is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Advance Amount in USD / Local Currency</label>
+                            <br>
+                            <select id="currency" style="display:inline-block; width:15%;"
+                                formControlName="advanceCurrency" class="form-control"
+                                [ngClass]="{ ' is -invalid': submitted && f.advanceCurrency.errors}">
+                                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                                </option>
+                            </select>
+
+                            <input id="totalamount" type="number" formControlName="advanceAmount" class="form-control"
+                                style="display:inline-block; width:84%; margin-left: 5px;"
+                                [ngClass]="{ ' is -invalid': submitted && f.advanceAmount.errors}" />
+
+                            <div *ngIf="submitted && f.advanceAmount.errors" class="invalid-feedback">
+                                <div *ngIf="f.advanceAmount.errors.required">Advance Amount is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Wheather its billable to client or not?</label>
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="isBillable" type="radio"
+                                    name="isBillable" id="isBillable-true" value="1">
+                                <label class="form-check-label" for="isBillable-true">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="isBillable" type="radio"
+                                    name="isBillable" id="isBillable-false" value="0">
+                                <label class="form-check-label" for="isBillable-false">No</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Client Name, Location to be visited and period of visit</label>
+                            <input formControlName="clientNameLocation" type="text" class="form-control" />
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <p style="font-weight: bold;"> I HEREBY CONFIRM THAT ALL BILLS AND DETAILS OF EXPENSES WILL
+                                BE PROVIDED AFTER
+                                COMPLETION OF TRIP/TRAINING. IF THE SAME IS NOT RECEIVED WITHIN 5 WORKING DAYS AFTER THE
+                                TRIP/TRAINING/OFFICE RESUMPTION, IT WILL BE DEDUCTED FROM MY SALARY/(IES). I UNDERSTAND
+                                THAT NO FURTHER ADVANCE WILL BE PROVIDED IF ALL DOCUMENTS ARE NOT SUBMITTED AGAINST
+                                ADVANCE </p>
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="underTaking" type="radio" value="1"
+                                    id="undertaking-true">
+                                <label class="form-check-label" for="undertaking-true">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="underTaking" type="radio" value="0"
+                                    id="undertaking-false">
+                                <label class="form-check-label" for="undertaking-false">No</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Approved by reporting manager (Name)</label>
+                            <input formControlName="reportingManager" class="form-control" />
+                        </div>
+
+                        <div>
+                            <br />
+                            <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
+                                <div class="col-md-12">
+                                    <label>Budgeted expenses in excel (as per company format)</label>
+                                    <br>
+                                    <input type="file" id="myFile" #file placeholder="Choose file"
+                                        (change)="getfil(file.files); listfile(file.files) ;" multiple
+                                        accept="text/plain, application/pdf, image/*">
+                                </div>
+                                <div id="selectedfiles" class="hidden col-md-4"
+                                    style="max-height:200px; overflow-y:auto;display: none;">
+                                    <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                                        <h5>Selected Files:</h5>
+                                        <hr />
+                                    </section>
+
+                                </div>
+                            </div>
+
+                            <div class="attachment my-4" *ngIf="id!=null">
+                                <div class="page-title">
+                                    <div class="title_left">
+                                        <h3>Attachment List</h3>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
+                                    (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments"
+                                    [rowData]="attachments" rowSelection="single" pagination="true"
+                                    paginationPageSize=10>
+                                </ag-grid-angular>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="my-3" formGroupName="bankDetails">
+
+                        <div class="page-title">
+                            <div class="title_left">
+                                <h3>Bank Details</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Bank Name</label>
+                                <input [ngClass]="{'is-invalid':submitted && b.bankName.errors }"
+                                    formControlName="bankName" type="text" class="form-control" />
+
+                                <div *ngIf="submitted && b.bankName.errors" class="invalid-feedback">
+                                    <div *ngIf="b.bankName.errors.required">Bank Name is required</div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Branch</label>
+                                <input [ngClass]="{'is-invalid':submitted && b.branch.errors }" formControlName="branch"
+                                    type="text" class="form-control" />
+
+                                <div *ngIf="submitted && b.branch.errors" class="invalid-feedback">
+                                    <div *ngIf="b.branch.errors.required">branch is required</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Name in Branch</label>
+                                <input [ngClass]="{'is-invalid':submitted && b.nameInBank.errors }"
+                                    formControlName="nameInBank" type="text" class="form-control" />
+
+                                <div *ngIf="submitted && b.nameInBank.errors" class="invalid-feedback">
+                                    <div *ngIf="b.nameInBank.errors.required">Name In Bank is required</div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Banks Swift code</label>
+                                <input [ngClass]="{'is-invalid':submitted && b.bankSwiftCode.errors }"
+                                    formControlName="bankSwiftCode" type="text" class="form-control" />
+
+                                <div *ngIf="submitted && b.bankSwiftCode.errors" class="invalid-feedback">
+                                    <div *ngIf="b.bankSwiftCode.errors.required">Bank Swift Code is required</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Bank Account No.</label>
+                                <input [ngClass]="{'is-invalid':submitted && b.bankAccountNo.errors }"
+                                    formControlName="bankAccountNo" type="text" class="form-control" />
+
+                                <div *ngIf="submitted && b.bankAccountNo.errors" class="invalid-feedback">
+                                    <div *ngIf="b.bankAccountNo.errors.required">Bank Account No. is required</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>IBAN No.</label>
+                                <input [ngClass]="{'is-invalid':submitted && b.ibanNo.errors }" formControlName="ibanNo"
+                                    type="text" class="form-control" />
+
+                                <div *ngIf="submitted && b.ibanNo.errors" class="invalid-feedback">
+                                    <div *ngIf="b.ibanNo.errors.required">IBAN No. is required</div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6" style="padding:10px;">
+                            <button class="btn btn-primary" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Submit
+                            </button>
+                            <a routerLink="/travelexpenselist" class="btn btn-secondary"
+                                style="margin-left: 10px;">Back</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</layout>

@@ -73,6 +73,8 @@ import { TravelInvoiceListComponent } from './travelinvoice/travelinvoicelist.co
 import { TravelinvoiceComponent } from './travelinvoice/travelinvoice.component';
 import { ImportdataService } from './_services/importdata.service';
 import { ImportDataComponent } from './importdata/import.component';
+import { AdvancerequestformComponent } from './advancerequestform/advancerequestform.component';
+import { AdvancerequestlistformComponent } from './advancerequestform/advancerequestformlist.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
@@ -375,6 +377,21 @@ const routes: Routes = [
   {
     path: "travelinvoicelist",
     component: TravelInvoiceListComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "advancerequestform",
+    component: AdvancerequestformComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "advancerequestform/:id",
+    component: AdvancerequestformComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "advancerequestformlist",
+    component: AdvancerequestlistformComponent,
     canActivate: [AuthGuard],
   },
   { path: 'account', loadChildren: accountModule },

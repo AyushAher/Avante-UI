@@ -107,91 +107,75 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     }
 
     this.form = this.formBuilder.group({
-      isactive: [true],
-      engineerid: [""],
+      engineerId: [""],
       distId: [""],
-      servicerequestid: ["", [Validators.required]],
-      ontime: [false],
-      knowledgewithproduct: [false],
-      problemsolveskill: [false],
-      satisfactionlevel: [false],
-      isdeleted: [false],
+      serviceRequestId: ["", [Validators.required]],
+
+      name: ["", [Validators.required]],
+      email: ["", [Validators.required]],
+      onTime: [false],
+      isProfessional: [false],
+      isNotified: [false],
+      isSatisfied: [false],
+      isAreaClean: [false],
+      isNote: [false],
+      comments: [""],
     });
 
     this.distributorservice.getAll()
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.DistributorList = data.object;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
-      })
-
-    this.listTypeService
-      .getById("TRRQT")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.travelrequesttype = data;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
-      });
+      .subscribe((data: any) => this.DistributorList = data.object)
 
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (this.user.username != "admin") {
-            this.distId = data.object[0].id;
-            this.form.get('distId').setValue(data.object[0].id)
-            this.getengineers(data.object[0].id)
-            this.getservicerequest(data.object[0].id, this.user.contactId)
-          }
+      .subscribe((data: any) => {
+        if (this.user.username != "admin") {
+          this.distId = data.object[0].id;
+          this.form.get('distId').setValue(data.object[0].id)
+          // this.getengineers(data.object[0].id)
+          this.distributorservice.getDistributorRegionContacts(data.object[0].id)
+            .pipe(first())
+            .subscribe((data: any) => {
+              this.engineer = data.object
+              this.servicerequestservice
+                .GetServiceRequestByDist(data.object[0].id)
+                .pipe(first())
+                .subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId && !x.isReportGenerated));
+
+            });
+
         }
       })
 
     if (role == environment.engRoleCode) {
       this.eng = true
-      this.form.get('engineerid').setValue(this.user.contactId)
+      this.form.get('engineerId').setValue(this.user.contactId)
       this.engId = this.user.contactId;
-      this.form.get('engineerid').disable()
+      this.form.get('engineerId').disable()
       this.form.get('distId').disable()
     } else if (role == environment.distRoleCode) {
       this.form.get('distId').disable()
     }
 
-    this.listTypeService
-      .getById(this.code)
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.accomodationtype = data;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
-      });
-      
     this.id = this.route.snapshot.paramMap.get("id");
     if (this.id != null) {
       this.CustomersatisfactionsurveyService.getById(this.id)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.getengineers(data.object.distId)
-            this.getservicerequest(data.object.distId, data.object.engineerid)
-            setTimeout(() => this.form.patchValue(data.object), 100);
-          },
-          error: (error) => {
-            
-            this.loading = false;
-          },
+        .subscribe((data: any) => {
+          this.distributorservice.getDistributorRegionContacts(data.object.distId)
+            .pipe(first())
+            .subscribe((engData: any) => {
+              this.engineer = engData.object;
+
+              this.servicerequestservice
+                .GetServiceRequestByDist(data.object.distId)
+                .pipe(first())
+                .subscribe((sreqData: any) => {
+                  this.servicerequest = sreqData.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
+                  setTimeout(() => this.form.patchValue(data.object), 100);
+                });
+
+            });
+
         });
     }
 
@@ -205,33 +189,23 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.servicerequestservice
       .GetServiceRequestByDist(id)
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.servicerequest = data.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
-        },
+      .subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId && !x.isReportGenerated));
+  }
 
-        error: (error) => {
-          
-          this.loading = false;
-        },
-      });
+  onServiceRequestChange() {
+    var sreq = this.form.get('serviceRequestId').value
+    var serviceRequest = this.servicerequest.find(x => x.id == sreq)
+
+    this.form.get('name').setValue(serviceRequest.contactperson)
+    this.form.get('email').setValue(serviceRequest.email)
+
   }
 
   getengineers(id: string) {
     this.distId = id
     this.distributorservice.getDistributorRegionContacts(id)
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.engineer = data.object;
-          // this.getservicerequest(id)
-        },
-
-        error: (error) => {
-          
-          this.loading = false;
-        },
-      });
+      .subscribe((data: any) => this.engineer = data.object);
   }
 
   onSubmit() {
@@ -243,88 +217,39 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    // this.isSave = true;
+
     this.loading = true;
     this.customersatisfactionsurvey = this.form.value;
 
-    if (!this.form.value.isactive) {
-      this.form.value.isactive = false;
-    }
-    // console.log(this.travelDetailform.value);
-
     if (this.id == null) {
-      if (!this.form.value.isactive) {
-        this.form.value.isactive = false;
-      }
-      if (!this.form.value.ontime) {
-        this.form.value.ontime = false;
-      }
-      if (!this.form.value.knowledgewithproduct) {
-        this.form.value.knowledgewithproduct = false;
-      }
-
-      if (!this.form.value.problemsolveskill) {
-        this.form.value.problemsolveskill = false;
-      }
-      if (!this.form.value.satisfactionlevel) {
-        this.form.value.satisfactionlevel = false;
-      }
 
       this.customersatisfactionsurvey = this.form.value;
 
-      if (this.isEng) this.customersatisfactionsurvey.engineerid = this.user.contactId
+      if (this.isEng) this.customersatisfactionsurvey.engineerId = this.user.contactId
       this.customersatisfactionsurvey.distId = this.distId
       this.CustomersatisfactionsurveyService.save(this.form.value)
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
             if (data.result) {
-              this.notificationService.showSuccess(
-                data.resultMessage,
-                "Success"
-              );
+              this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["/customersatisfactionsurveylist"]);
-            } else {
-              
-              console.log(data.resultMessage);
             }
-            this.loading = false;
-          },
-          error: (error) => {
-            // this.alertService.error(error);
-            
             this.loading = false;
           },
         });
-    } else {
-      this.customersatisfactionsurvey = this.form.value;
-      if (this.isEng) this.customersatisfactionsurvey.engineerid = this.user.contactId
-      this.customersatisfactionsurvey.distId = this.distId
+    }
+    else {
       this.customersatisfactionsurvey.id = this.id;
-      this.CustomersatisfactionsurveyService.update(
-        this.id,
-        this.customersatisfactionsurvey
-      )
+      this.CustomersatisfactionsurveyService.update(this.id, this.customersatisfactionsurvey)
         .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess(
-                data.resultMessage,
-                "Success"
-              );
-              this.router.navigate(["/customersatisfactionsurveylist"]);
-            } else {
-              
-              console.log(data.resultMessage);
-            }
-            this.loading = false;
-          },
-          error: (error) => {
-            
-            console.log(error);
-            this.loading = false;
-          },
+        .subscribe((data: ResultMsg) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(["/customersatisfactionsurveylist"]);
+          }
+          this.loading = false;
+
         });
     }
   }

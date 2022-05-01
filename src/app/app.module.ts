@@ -124,6 +124,8 @@ import { TravelexpenseItemComponent } from './travelexpense/travelexpenseitem.co
 import { TravelinvoiceComponent } from './travelinvoice/travelinvoice.component';
 import { TravelInvoiceListComponent } from './travelinvoice/travelinvoicelist.component';
 import { ImportDataComponent } from './importdata/import.component';
+import { AdvancerequestformComponent } from './advancerequestform/advancerequestform.component';
+import { AdvancerequestlistformComponent } from './advancerequestform/advancerequestformlist.component';
 
 
 @NgModule({
@@ -224,7 +226,9 @@ import { ImportDataComponent } from './importdata/import.component';
     TravelexpenseItemComponent,
     TravelinvoiceComponent,
     TravelInvoiceListComponent,
-    ImportDataComponent
+    ImportDataComponent,
+    AdvancerequestformComponent,
+    AdvancerequestlistformComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -84,7 +84,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
                   if (role == environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
                   } else if (role == environment.engRoleCode) {
-                    data.object = data.object.filter(x => x.engineerid == this.user.contactId) 
+                    data.object = data.object.filter(x => x.engineerId == this.user.contactId)
                     this.List = data.object;
                   } else {
                     this.List = data.object
@@ -97,7 +97,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
           }
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -127,7 +127,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
       },
       {
         headerName: "Engineer Name",
-        field: "engineername",
+        field: "engineerName",
         filter: true,
         enableSorting: true,
         editable: false,
@@ -136,7 +136,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
       },
       {
         headerName: "Service Request No",
-        field: "servicerequestno",
+        field: "serviceRequestNo",
         filter: true,
         editable: false,
         sortable: true,
