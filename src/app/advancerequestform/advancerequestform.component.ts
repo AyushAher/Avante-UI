@@ -87,21 +87,17 @@ export class AdvancerequestformComponent implements OnInit {
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(
-        (x) => x.screenCode == "TREXP"
+        (x) => x.screenCode == "ADREQ"
       );
       if (profilePermission.length > 0) {
-        // this.hasReadAccess = profilePermission[0].read;
-        // this.hasAddAccess = profilePermission[0].create;
-        // this.hasDeleteAccess = profilePermission[0].delete;
-        // this.hasUpdateAccess = profilePermission[0].update;
+        this.hasReadAccess = profilePermission[0].read;
+        this.hasAddAccess = profilePermission[0].create;
+        this.hasDeleteAccess = profilePermission[0].delete;
+        this.hasUpdateAccess = profilePermission[0].update;
 
       }
     }
-    this.hasReadAccess = true;
-    this.hasAddAccess = true;
-    this.hasDeleteAccess = true;
-    this.hasUpdateAccess = true;
-
+    
     this.form = this.formBuilder.group({
       engineerId: ["", [Validators.required]],
       serviceRequestId: ["", [Validators.required]],

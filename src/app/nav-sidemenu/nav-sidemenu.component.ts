@@ -57,7 +57,7 @@ export class NavSideMenuComponent {
   hasReports: boolean = false;
   hasTransactions: boolean = false;
   hasTravelInvoice: boolean = false;
-
+  hasAdvanceRequest: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -99,6 +99,12 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'SSPAR')[0].update == true
           || this.profile.permissions.filter(x => x.screenCode == 'SSPAR')[0].read == true
           || this.profile.permissions.filter(x => x.screenCode == 'SSPAR')[0].delete == true
+      }
+      if (this.profile.permissions.filter(x => x.screenCode == 'ADREQ').length > 0) {
+        this.hasAdvanceRequest = this.profile.permissions.filter(x => x.screenCode == 'ADREQ')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'ADREQ')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'ADREQ')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'ADREQ')[0].delete == true
       }
 
       if (this.profile.permissions.filter(x => x.screenCode == 'URPRF').length > 0) {
@@ -300,6 +306,7 @@ export class NavSideMenuComponent {
       this.hasTravelExpenses = true;
       this.hasTravelInvoice = true;
       this.hasAuditTrail = true;
+      this.hasAdvanceRequest = true;
     }
 
     this.listTypeService
@@ -328,17 +335,29 @@ export class NavSideMenuComponent {
     if (this.hasMaster || this.hasProfile || this.hasUserProfile) {
       this.hasAdministrator = true;
     }
-    if (this.hasCurrency || this.hasCountry || this.hasDistributor || this.hasCustomer || this.hasInstrument || this.hasSparePart || this.hasOfferRequest) {
+
+    if (
+      this.hasCurrency || this.hasCountry || this.hasDistributor || this.hasCustomer || this.hasInstrument || this.hasSparePart
+      || this.hasOfferRequest
+    ) {
       this.hasMasters = true;
     }
-    if (this.hasSearch || this.hasexport || this.hasdashboardsettings || this.hasAuditTrail || this.hasCustomerSettings || this.hasDistributorSettings || this.hascustomersatisfactionsurveylist) {
+    
+    if (
+      this.hasSearch || this.hasexport || this.hasdashboardsettings || this.hasAuditTrail || this.hasCustomerSettings || this.hasDistributorSettings
+      || this.hascustomersatisfactionsurveylist
+    ) {
       this.hasUtilities = true;
     }
+    
     if (this.hasTravelDetails || this.hasStayDetails || this.hasVisaDetails || this.hasLocalExpenses) {
       this.hasTravel = true;
     }
 
-    if (this.hasServiceReport || this.hasAmc || this.hasServiceRequest || this.hasCustomerSparePartsInventory || this.hasSparePartRecommended || this.hasschedule || this.hasTravelExpenses || this.hasTravelInvoice) {
+    if (
+      this.hasServiceReport || this.hasAmc || this.hasServiceRequest || this.hasCustomerSparePartsInventory || this.hasSparePartRecommended
+      || this.hasschedule || this.hasTravelExpenses || this.hasTravelInvoice || this.hasAdvanceRequest || this.hascustomersatisfactionsurveylist
+    ) {
       this.hasTransactions = true;
     }
 
