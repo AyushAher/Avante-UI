@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import {environment} from '../../environments/environment';
-import {ChangePasswordModel, User} from '../_models';
+import { environment } from '../../environments/environment';
+import { ChangePasswordModel, User } from '../_models';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AccountService {
   private userSubject: BehaviorSubject<User>;
   private zohoSubject: BehaviorSubject<string>;
@@ -31,7 +31,11 @@ export class AccountService {
     return this.zohoSubject.value;
   }
 
-  zohoauthSet(v:string) {
+  public GetUserRegions() {
+    return this.http.get(`${environment.apiUrl}/user/GetUserRegions`)
+  }
+
+  zohoauthSet(v: string) {
     this.zohoSubject.next(v);
   }
 
@@ -45,7 +49,7 @@ export class AccountService {
   login(username, password) {
 
     password = window.btoa(password);
-    return this.http.post<User>(`${environment.apiUrl}/user/authenticate`, { username, password})
+    return this.http.post<User>(`${environment.apiUrl}/user/authenticate`, { username, password })
       .pipe(map(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('user', JSON.stringify(user));
@@ -73,8 +77,8 @@ export class AccountService {
     return this.http.post(`${environment.apiUrl}/user/changepassword`, changePassword);
   }
 
-  ForgotPassword( email: string) {
-    return this.http.post(`${environment.apiUrl}/user/forgotpassword/` + email,null);
+  ForgotPassword(email: string) {
+    return this.http.post(`${environment.apiUrl}/user/forgotpassword/` + email, null);
   }
 
   getAll() {
