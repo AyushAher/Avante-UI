@@ -7,9 +7,16 @@
         </div>
       </div>
       <hr />
-      <app-distributorfilter *ngIf="isDist" (nData)="DataFilter($event)" controller="ServiceReports">
-      </app-distributorfilter>
       <div class="clearfix"></div>
+
+      <a *ngIf="showGrid" (click)="toggleFilter()" class="nav-link">
+        <i class="fas fa-arrow-left" title="filter"></i>
+      </a>
+
+      <app-distributorfilter (showData)="ShowData($event)" *ngIf="!showGrid" (nData)="DataFilter($event)"
+        controller="ServiceReports">
+      </app-distributorfilter>
+
       <!--<button class="btn btn-sm btn-success button" *ngIf="hasAddAccess==true" style="margin: 10px;" (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>-->
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"

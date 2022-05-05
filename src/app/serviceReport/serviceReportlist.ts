@@ -71,7 +71,7 @@ export class ServiceReportListComponent implements OnInit {
       this.role = JSON.parse(localStorage.getItem('roles'));
       this.role = this.role[0]?.itemCode;
     }
-    
+
     if (this.role == environment.distRoleCode) this.isDist = true;
 
     this.columnDefs = this.createColumnDefs();
@@ -80,6 +80,15 @@ export class ServiceReportListComponent implements OnInit {
   Add() {
     this.router.navigate(['servicereport']);
   }
+
+  ShowData(event) {
+    this.showGrid = event
+  }
+
+  toggleFilter() {
+    this.showGrid = !this.showGrid
+  }
+
 
   DataFilter(data) {
     this.showGrid = true;

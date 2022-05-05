@@ -32,6 +32,7 @@ export class CustspinventorylistComponent implements OnInit {
   private columnApi: ColumnApi;
   private api: GridApi;
   profilePermission: any;
+  showGrid: boolean;
 
   constructor(
     private router: Router,
@@ -57,16 +58,23 @@ export class CustspinventorylistComponent implements OnInit {
       this.hasDeleteAccess = true;
     }
 
-    this.Service.getAll(this.user.contactId, null)
-      .pipe(first())
-      .subscribe((data: any) =>
-        this.model = data.object
-      );
     this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
     this.router.navigate(["customerspinventory"]);
+  }
+
+  ShowData(event) {
+    this.showGrid = event
+  }
+
+  DataFilter(event) {
+    this.model = event
+  }
+
+  toggleFilter() {
+    this.showGrid = !this.showGrid
   }
 
   private createColumnDefs() {
