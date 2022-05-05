@@ -43,10 +43,10 @@
             <div class="col-md-4 col-sm-4">
               <label>Industry Segment</label>
               <select type="text" formControlName="industrySegment" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.industrySegment.errors }" >
+                [ngClass]="{ 'is-invalid': submitted && f.industrySegment.errors }">
                 <option *ngFor="let item of industrySegmentList" value={{item.listTypeItemId}}>
                   {{item.itemname}}
-                </option>    
+                </option>
               </select>
               <div *ngIf="submitted && f.industrySegment.errors" class="invalid-feedback">
                 <div *ngIf="f.industrySegment.errors.required">Industry Segment is required</div>
@@ -77,6 +77,19 @@
               </select>
               <div *ngIf="submitted && f.defdistregionid.errors" class="invalid-feedback">
                 <div *ngIf="f.defdistregionid.errors.required">Distributor Region is required</div>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <label for="countryid">Country</label>
+              <select formControlName="countryid" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.countryid.errors }">
+                <option *ngFor="let country of countries" value={{country.id}}>
+                  {{country.name}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.countryid.errors" class="invalid-feedback">
+                <div *ngIf="f.countryid.errors.required">Country is required</div>
               </div>
             </div>
 

@@ -78,6 +78,7 @@ export class CustomerComponent implements OnInit {
 
     this.customerform = this.formBuilder.group({
       custname: ['', Validators.required],
+      countryid: ['', Validators.required],
       defdistid: ['', Validators.required],
       industrySegment: ['', Validators.required],
       defdistregionid: ['', Validators.required],
