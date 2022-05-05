@@ -4,10 +4,11 @@ import { User, Country, SparePart, ProfileReadOnly } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community';
+import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, CountryService, SparePartService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -30,16 +31,15 @@ export class SparePartListComponent implements OnInit {
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
+  showGrid = false;
+
+  isDist: boolean= false;
+  isEng: boolean= false;
+  isCust: boolean= false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private sparePartService: SparePartService,
-    private countryService: CountryService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
 
@@ -48,33 +48,34 @@ export class SparePartListComponent implements OnInit {
   ngOnInit() {
 
     this.user = this.accountService.userValue;
+    let role = JSON.parse(localStorage.getItem('roles'));
+
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SSPAR");
       if (profilePermission.length > 0) {
-
         this.hasAddAccess = profilePermission[0].create;
         this.hasDeleteAccess = profilePermission[0].delete;
-
       }
     }
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
     }
-    // this.distributorId = this.route.snapshot.paramMap.get('id');
-    this.sparePartService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.sparePartList = data.object;
-        },
-        error: error => {
-           
-          this.loading = false;
-        }
-      });
+    else {
+      role = role[0]?.itemCode;
+    }
+
+    if (role == environment.distRoleCode) this.isDist = true;
+    else if (role == environment.engRoleCode) this.isEng = true;
+    else if (role == environment.custRoleCode) this.isCust = true;
+
     this.columnDefs = this.createColumnDefs();
+  }
+
+  DataFilter(event) {
+    this.showGrid = true
+    this.sparePartList = event;
   }
 
   Add() {
@@ -101,11 +102,11 @@ export class SparePartListComponent implements OnInit {
         },
       },
       {
-      headerName: 'Config Type',
-      field: 'configTypeName',
-      filter: true,
-      enableSorting: true,
-      editable: false,
+        headerName: 'Config Type',
+        field: 'configTypeName',
+        filter: true,
+        enableSorting: true,
+        editable: false,
         sortable: true,
         tooltipField: 'configTypeName',
       },
@@ -144,14 +145,14 @@ export class SparePartListComponent implements OnInit {
         editable: false,
         sortable: true,
         tooltipField: 'qty',
-      },{
-      headerName: 'Item Description',
+      }, {
+        headerName: 'Item Description',
         field: 'itemDesc',
-      filter: true,
-      editable: false,
+        filter: true,
+        editable: false,
         sortable: true,
         tooltipField: 'itemDesc',
-    },
+      },
 
     ]
   }

@@ -126,6 +126,7 @@ import { TravelInvoiceListComponent } from './travelinvoice/travelinvoicelist.co
 import { ImportDataComponent } from './importdata/import.component';
 import { AdvancerequestformComponent } from './advancerequestform/advancerequestform.component';
 import { AdvancerequestlistformComponent } from './advancerequestform/advancerequestformlist.component';
+import { DistributorfilterComponent } from './distributorfilter/distributorfilter.component';
 
 
 @NgModule({
@@ -228,7 +229,8 @@ import { AdvancerequestlistformComponent } from './advancerequestform/advancereq
     TravelInvoiceListComponent,
     ImportDataComponent,
     AdvancerequestformComponent,
-    AdvancerequestlistformComponent
+    AdvancerequestlistformComponent,
+    DistributorfilterComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

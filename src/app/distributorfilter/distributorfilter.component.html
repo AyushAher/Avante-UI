@@ -1,0 +1,132 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div style="display: flex;justify-content: center;">
+        <div>
+            <div class="mx-2" style="margin: 2% 0;">
+                <div class="col">
+                    <label>Region</label>
+                    <select formControlName="region" (change)="onRegionChange()" class="form-control">
+                        <option *ngFor="let item of regionsList" [value]="item.id">{{item.region}}</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="mx-2">
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="col">
+                    <label>Country</label>
+                    <select formControlName="country" class="form-control">
+                        <option *ngFor="let item of regionCountryList" [value]="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mx-2">
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="col">
+                    <label>Customer</label>
+                    <select formControlName="customer" (change)="onCustomerChange()" class="form-control">
+                        <option *ngFor="let item of customerList" [value]="item.id">{{item.custname}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mx-2">
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="col">
+                    <label>Site</label>
+                    <select formControlName="site" class="form-control">
+                        <option *ngFor="let item of siteList" [value]="item.id">{{item.custregname}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mx-2 " *ngIf="hasInstrument">
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="vline"></div>
+                <div class="vdline"></div>
+                <div class="col">
+                    <label>Serial No.</label>
+                    <select formControlName="insSerialNo" class="form-control">
+                        <option *ngFor="let item of instrumentList" [value]="item.id">{{item.instypeName +' - ' +
+                            item.serialnos}}
+                        </option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="btngrp my-2">
+                <a class="nav-link">
+                    <i class="fas fa-search" (click)="onSubmit()" title="Add"></i>
+                </a>
+                <a (click)="clear()" class="nav-link ">
+                    <i class="fas fa-times" title="Add"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<style>
+    .btngrp {
+        float: right;
+    }
+
+    .btngrp>* {
+        display: inline;
+    }
+
+    select {
+        width: 350px;
+        margin-left: 50px;
+    }
+
+    .col {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .vline {
+
+        height: 15px;
+        /* margin: 2% 0; */
+        left: 55%;
+        position: relative;
+        border-left: 2px solid grey;
+    }
+
+    .vdline {
+        height: 3px;
+        /* margin: 2% 0; */
+        left: 54.9%;
+        position: relative;
+        border: 1px solid;
+        width: 3px;
+        border-radius: 50%;
+        top: -8px;
+    }
+</style>

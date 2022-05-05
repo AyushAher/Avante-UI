@@ -8,6 +8,7 @@ import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, CountryService, InstrumentService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -30,23 +31,23 @@ export class InstrumentListComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
+  filterData: any;
+  showGrid = false;
+
+  isDist: boolean = false;
+  isEng: boolean = false;
+  isCust: boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private instrumentService: InstrumentService,
-    private countryService: CountryService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
 
   }
 
   ngOnInit() {
-
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -61,22 +62,15 @@ export class InstrumentListComponent implements OnInit {
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
+    } 
+    else {
+      role = role[0]?.itemCode;
     }
 
+    if (role == environment.distRoleCode) this.isDist = true;
+    else if (role == environment.engRoleCode) this.isEng = true;
+    else if (role == environment.custRoleCode) this.isCust = true;
 
-
-    // this.distributorId = this.route.snapshot.paramMap.get('id');
-    this.instrumentService.getAll(this.user.userId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.instrumentList = data.object;
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
     this.columnDefs = this.createColumnDefs();
   }
 
@@ -84,6 +78,10 @@ export class InstrumentListComponent implements OnInit {
     this.router.navigate(['instrument']);
   }
 
+  DataFilter(event) {
+    this.showGrid = true;
+    this.instrumentList = event
+  }
 
   private createColumnDefs() {
     return [
