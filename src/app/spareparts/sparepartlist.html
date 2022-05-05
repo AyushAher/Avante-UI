@@ -8,10 +8,14 @@
       </div>
       <hr />
 
-      <app-distributorfilter *ngIf="isDist" (nData)="DataFilter($event)" controller="SpareParts">
+      <div class="clearfix"></div>
+      <a *ngIf="showGrid" style="display: inline;margin-right: 1%;" (click)="toggleFilter()" class="nav-link">
+        <i class="fas fa-arrow-left" title="filter"></i>
+      </a>
+      <app-distributorfilter (showData)="ShowData($event)" *ngIf="!showGrid" (nData)="DataFilter($event)"
+        controller="SpareParts">
       </app-distributorfilter>
 
-      <div class="clearfix"></div>
       <button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="hasAddAccess && showGrid"
         (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>
       <!--<button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="hasAddAccess==true" (click)="export()"><i class="fas fa-download" title="export"></i></button>-->

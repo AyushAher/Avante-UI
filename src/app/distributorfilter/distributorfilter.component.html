@@ -60,7 +60,7 @@
                 <div class="col">
                     <label>Instrument Serial No.</label>
                     <select formControlName="insSerialNo" (change)="InstrumentChange()" class="form-control">
-                        <option *ngFor="let item of instrumentList" [value]="item.id">{{item.instypeName +' - ' +
+                        <option *ngFor="let item of siteBInstrumentList" [value]="item.id">{{item.instypeName +' - ' +
                             item.serialnos}}
                         </option>
                     </select>

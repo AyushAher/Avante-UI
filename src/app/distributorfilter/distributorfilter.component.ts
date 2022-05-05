@@ -45,6 +45,7 @@ export class DistributorfilterComponent implements OnInit {
   customerList: any;
   siteList: any;
   instrumentList: any;
+  siteBInstrumentList: any;
   customerBCountryList: any[] = []
 
   constructor(
@@ -102,7 +103,9 @@ export class DistributorfilterComponent implements OnInit {
   }
 
   SiteChange() {
-    this.hasInstrument ? this.stage = 5 : this.stage = 6
+    this.hasInstrument ? this.stage = 5 : this.stage = 6;
+    this.siteBInstrumentList = this.instrumentList.filter(x => x.custSiteId == this.form.get('site').value)
+    setTimeout(() => this.form.get('insSerialNo').reset(), 200);
   }
 
   InstrumentChange() {

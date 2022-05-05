@@ -33,9 +33,9 @@ export class SparePartListComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   showGrid = false;
 
-  isDist: boolean= false;
-  isEng: boolean= false;
-  isCust: boolean= false;
+  isDist: boolean = false;
+  isEng: boolean = false;
+  isCust: boolean = false;
 
   constructor(
     private router: Router,
@@ -71,6 +71,14 @@ export class SparePartListComponent implements OnInit {
     else if (role == environment.custRoleCode) this.isCust = true;
 
     this.columnDefs = this.createColumnDefs();
+  }
+
+  ShowData(event) {
+    this.showGrid = event
+  }
+
+  toggleFilter() {
+    this.showGrid = !this.showGrid
   }
 
   DataFilter(event) {
