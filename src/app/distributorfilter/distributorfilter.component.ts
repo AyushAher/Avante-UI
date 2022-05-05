@@ -26,22 +26,26 @@ import { AccountService, CountryService, CustomerService, DistributorRegionServi
 export class DistributorfilterComponent implements OnInit {
 
   @Output() nData = new EventEmitter<any[]>()
+  @Output() showData = new EventEmitter<boolean>()
 
   @Input() controller: string;
   @Input() hasInstrument: boolean = true;
 
   form: FormGroup;
   modal: any;
-  nlist: any[] = []
   user: User
-  regionsList: any[] = [];
-  allRegionsList: any;
+  nlist: any[] = []
+  stage = 1;
+
   countryList: any;
+
+  allRegionsList: any;
+  regionsList: any[] = [];
   regionCountryList: any;
   customerList: any;
   siteList: any;
   instrumentList: any;
-  stage = 1;
+  customerBCountryList: any[] = []
 
   constructor(
     private formBuilder: FormBuilder,
@@ -106,7 +110,9 @@ export class DistributorfilterComponent implements OnInit {
   }
 
   countryChange() {
-    this.stage = 3
+    this.stage = 3;
+    this.customerBCountryList = this.customerList.filter(x => x.countryid == this.form.get('country').value)
+    setTimeout(() => this.form.get('customer').reset(), 100);
   }
 
   onRegionChange() {
@@ -127,6 +133,7 @@ export class DistributorfilterComponent implements OnInit {
 
   clear() {
     // this.nData.emit(this.list)
+    this.showData.emit(false)
     this.form.reset();
     this.stage = 1
 
@@ -139,6 +146,7 @@ export class DistributorfilterComponent implements OnInit {
       this.instrumentService.getFilteredAll(this.modal, this.controller).pipe(first())
         .subscribe((data: any) => {
           this.nData.emit(data.object)
+          this.showData.emit(true)
         })
     } else {
       this.notificationService.showError("Please fill all fields", "Form Invalid")

@@ -62,7 +62,7 @@ export class InstrumentListComponent implements OnInit {
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
-    } 
+    }
     else {
       role = role[0]?.itemCode;
     }
@@ -79,8 +79,11 @@ export class InstrumentListComponent implements OnInit {
   }
 
   DataFilter(event) {
-    this.showGrid = true;
     this.instrumentList = event
+  }
+
+  ShowData(event) {
+    this.showGrid = event
   }
 
   private createColumnDefs() {

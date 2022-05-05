@@ -8,8 +8,11 @@
       </div>
       <hr />
       <div class="clearfix"></div>
-      <app-distributorfilter [hasInstrument]="false" (nData)="DataFilter($event)" controller="Instrument">
+      
+      <app-distributorfilter [hasInstrument]="false" (showData)="ShowData($event)" *ngIf="!showGrid"
+        (nData)="DataFilter($event)" controller="Instrument">
       </app-distributorfilter>
+
       <button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="hasAddAccess && showGrid"
         (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">

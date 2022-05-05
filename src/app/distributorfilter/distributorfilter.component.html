@@ -34,7 +34,7 @@
                 <div class="col">
                     <label>Customer</label>
                     <select formControlName="customer" (change)="onCustomerChange()" class="form-control">
-                        <option *ngFor="let item of customerList" [value]="item.id">{{item.custname}}</option>
+                        <option *ngFor="let item of customerBCountryList" [value]="item.id">{{item.custname}}</option>
                     </select>
                 </div>
             </div>
