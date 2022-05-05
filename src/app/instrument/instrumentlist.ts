@@ -86,6 +86,10 @@ export class InstrumentListComponent implements OnInit {
     this.showGrid = event
   }
 
+  toggleFilter() {
+    this.showGrid = !this.showGrid
+  }
+
   private createColumnDefs() {
     return [
       {

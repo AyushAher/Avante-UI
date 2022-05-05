@@ -8,7 +8,10 @@
       </div>
       <hr />
       <div class="clearfix"></div>
-      
+
+      <a *ngIf="showGrid" style="display: inline;margin-right: 1%;" (click)="toggleFilter()" class="nav-link">
+        <i class="fas fa-arrow-left" title="filter"></i>
+      </a>
       <app-distributorfilter [hasInstrument]="false" (showData)="ShowData($event)" *ngIf="!showGrid"
         (nData)="DataFilter($event)" controller="Instrument">
       </app-distributorfilter>
