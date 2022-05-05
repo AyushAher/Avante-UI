@@ -47,21 +47,16 @@ export class ServiceRequestListComponent implements OnInit {
   distId: any;
   datepipe: any = new DatePipe("en-US");
   appendList: any;
+  showGrid: boolean;
 
   constructor(
     private router: Router,
     private accountService: AccountService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
-    private serviceRequestService: ServiceRequestService,
     private contcactservice: ContactService,
-    private distributorService: DistributorService,
     private listTypeService: ListTypeService
-  ) {
-    this.notificationService.listen().subscribe((m: any) => {
-      this.getallrecored();
-    })
-  }
+  ) {}
 
   ngOnInit() {
     this.user = this.accountService.userValue;
@@ -77,7 +72,7 @@ export class ServiceRequestListComponent implements OnInit {
       this.hasAddAccess = false;
       this.hasDeleteAccess = true;
       this.IsAdminView = true;
-      this.getallrecored();
+      // this.getallrecored();
       this.columnDefs = this.createCustColumnDefs();
     } else {
       this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
@@ -104,7 +99,7 @@ export class ServiceRequestListComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.distId = data.object.defdistid;
-            this.getallrecored();
+            // this.getallrecored();
           },
           error: error => {
             //  this.alertService.error(error);
@@ -332,43 +327,33 @@ export class ServiceRequestListComponent implements OnInit {
     this.columnApi = params.columnApi;
   }
 
-  getallrecored() {
-    this.serviceRequestService.getAll(this.user.userId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          data.object = data.object.filter(x => !x.isReportGenerated)
-          data.object?.forEach(ser => {
-            ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
-            ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
-            if (ser.scheduledCalls.length > 0) {
-              ser.scheduledCalls = ser.scheduledCalls[0]
-              let date = new Date(ser.scheduledCalls.endTime)
-              let datestr = this.datepipe.transform(date, "MM/dd/yyyy")
-              ser.scheduledCalls.endTime = this.datepipe.transform(ser.scheduledCalls.endTime, "shortTime")
-              ser.scheduledCalls.startTime = this.datepipe.transform(ser.scheduledCalls.startTime, "shortTime")
-              ser.scheduledCalls.Time = ser.scheduledCalls.location + " : " + datestr + " At " + ser.scheduledCalls.startTime + " - " + ser.scheduledCalls.endTime
+  getallrecored(data) {
+    this.showGrid = true; 
+    data?.forEach(ser => {
+      ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
+      ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
+      if (ser.scheduledCalls.length > 0) {
+        ser.scheduledCalls = ser.scheduledCalls[0]
+        let date = new Date(ser.scheduledCalls.endTime)
+        let datestr = this.datepipe.transform(date, "MM/dd/yyyy")
+        ser.scheduledCalls.endTime = this.datepipe.transform(ser.scheduledCalls.endTime, "shortTime")
+        ser.scheduledCalls.startTime = this.datepipe.transform(ser.scheduledCalls.startTime, "shortTime")
+        ser.scheduledCalls.Time = ser.scheduledCalls.location + " : " + datestr + " At " + ser.scheduledCalls.startTime + " - " + ser.scheduledCalls.endTime
 
-            }
-            if (ser.engComments?.length > 0) {
-              let date = this.datepipe.transform(ser.engComments[0]?.nextdate, "MM/dd/yyyy")
-              ser.engComments = date + " : " + ser.engComments[0].comments
-            }
-          });
+      }
+      if (ser.engComments?.length > 0) {
+        let date = this.datepipe.transform(ser.engComments[0]?.nextdate, "MM/dd/yyyy")
+        ser.engComments = date + " : " + ser.engComments[0].comments
+      }
+    });
 
-          if (this.user.username != 'admin') {
-            this.srCustList = data.object;
-            this.srDistList = data.object;
-            this.srEngList = data.object;
-          } else {
-            this.srAdminList = data.object;
-          }
-        },
-        error: error => {
+    if (this.user.username != 'admin') {
+      this.srCustList = data;
+      this.srDistList = data;
+      this.srEngList = data;
+    }
+    else this.srAdminList = data;
 
-          this.loading = false;
-        }
-      });
   }
 
 }
