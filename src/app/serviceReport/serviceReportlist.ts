@@ -35,9 +35,11 @@ export class ServiceReportListComponent implements OnInit {
   private columnApi: ColumnApi;
   private api: GridApi;
   role: any;
+  isDist = false;
   datepipe = new DatePipe('en-US');
   checkedImg = 'data:image/png;base64,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';
   unCheckedImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcAAAAIACAMAAAAi+0xoAAABnlBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///+WSgAsAAAAiHRSTlMAAQIDBAUGCwwNDg8QERMUFR0eHyAhLi8xMjM0NTY3ODk6QUJERkdISUpLTU5PUFFVV1haW1xeYGFiY2RlgIGCg4iLjI2OkZKTlJWZmpydoqeoqaq+v8DBxMXGyMnKzM3Oz9DR0tPU1dna29zd3uDk5ebo6err7O3u8PHy8/T19vf4+fr7/P3+w2NfOQAAAAFiS0dEiRxhJswAAAaoSURBVHja7dzpWxVlHMfhHxyUTdOyRXFDMyOxVHADN9QktxI0FwxXMJfQLELMLOFIwJ/dC0lRAVkcmcfr/rz3zfe+Rmc8M0+EJEmSJEmSJEmSJEmSJEmSJEmSJEl6T6taub3l9MXunofFUWVa8WFP18XTLdtXVr01vPINBy8PW/ad13Ni6+K561XvOf+vLeeroXN7queiV1LXPmDF+W2gva5klnyl9Vfsl4d+3lk2C76y5jumy0u3mwoz9Vt5yWx56vq6GfEtbnXbmbNGTi2dvt/mBwbLX32bp/uv3z6XXz4vwtaF0/H7uNNUee2nZdO4e+m1U37rX/smv88fWSnP/f3l1H5b/M9Lzis2TOXX4PYl9w1vm+Lvz0H75L+nGye9f3lsnRT6p3aS54c/bJNGvRM+TSy4aJlU6pzoif6IXdLp8Ot+m0bMkk4j37zqt8T/XydV3wevAP5gk7Q6+bLfak/wqT3Pv/QsUbhmkdTqHv+iTLM90mv3uAvwtjnS65cXl2CjNVLs+e8SJd3GSLGbpWOAdbZIs7oxwHZTpFnb2KdjT0yRZgOLIiJiryVSrTkiIs4bItXORkRUDhki1YaqIqLeDum2yQ+5aXc4Iq6bId2uRlT5ISnhhitjlRVSriZ2GCHlGqPFCCm3P84YIeXao8MIKXchbhgh5brinhFS7m70GyHl+sL5kUk3GLP4M9+tKXeC6tuvfO3RWVxNMwf89TNbZ9Xy+9kDDvLLsBXFzAFbrZxlxzIHXG3kLFubOWCFkbOsInNAG2cbQIAAAQogQIAAAQIUQIAAAQIEKIAAAQI0MUABBAgQoAAKIECAAAVQAAECBCiAAAECBAhQAAECBAgQoAACBAgQIEABBAgQoAAKIECAAAVQAAECBCiAAggQIEABBAgQIECAAggQIECAAAUQIECAAAEKIECAAAVQAAECBCiAAggQIEABFECAAAEKIECAAAECFECAAAECBCiAAAECBAhQAAECBCiAAggQIEABFECAAAEKIECAAAECFECAAAECBCiAAAECBAhQAAECBCiAAggQIEABFECAAAEKoAACBAhQAAECBAgQoAACBAgQIEABBAgQIECAAggQIEABFECAAAEKoAACBAhQAAUQIECAAggQIECAAAUQIECAAAEKIECAAAECFECAAAEKoAACBAhQAAUQIECAAggQIECAAAUQIECAAAEKIECAAAECFECAAAEKoAACBAhQAAUQIECAAiiAAAECFECAAAECBCiAAAECBAhQAAECBAgQoAACBAhQAAUQIECAAiiAAAECFEABBAgQoAACBAgQIEABBAgQIECAAggQIECAAAUQIECAAiiAAAECFEABBAgQoAAKIECAAAUQIECAAAEKIECAAAECFECAAAGaGKAAAgQIUAAFECBAgAIogAABAhRAgAABAgQogAABAgQIUAABAgQIEKAAAgQIUAAFECBAgAIogAABAhRAAQQIEKAAAgQIECBAAQQIECBAgAIIECBAgAAFECBAgAIogAABAhRAAQQIEKAACiBAgAAFEGBWgBU2zrKqzAHXGDnLajMHPGrkLDueOWBxuZWzq+Zp5oCj9wlm5/fbaPaAo8Vjte5kMqhi3fGnM9eI4qgSbjD6jZByfXHPCCl3N24YIeW6osMIKXchzhgh5dqjxQgptz92GCHlGmOVEVKuJqqGrZBuw5UR182Qblcj4ogZ0u1QRNSbId2+iojKITuk2lBVRMQ5Q6TajxERsdcQqdb07EWoJ5ZIs4FFz34KbjdFmrWN/ZZfZ4o0qxsDLOm2RYrdLP3/dZpGY6RYw/P3oQq3rJFedwov3mhrMkd67Rr3SmLhqj1S60ph/Eulq/yolFjDtS+/Fvy9SdLq5CvvdS95YJOU6vvg1TfzN41YJZ1Gvn7924pvzZJOhyb4OGaBV3yTqXPhRJ83Leu1TBr1fjTxB2qf/mmbFPprxWSfGK4ftE7+K34x+Uei2zzP5/8JfttUn/luGbBQzq+/hqk/1F7/yEZ57vHGNx6U4F40x/1e8+bDEj70PJjbLn0yneMuyva5lcllI60Lp3liSX2ftfJXX/30z5xZ3OoizNvld2rpzA596rRZnrq2bqYHPxV23zZbXrq1qzCLs7tK6y+bLg/d2Fk2y+PXSurafDcxzz1pqyuZyxF61c1nfT84bw2dbaqe+zGI5RsOXnZT+u7rObF10Vs7y7KypvFAe0dXT7/TKTOu2N/T1dF+oLGm0gmqkiRJkiRJkiRJkiRJkiRJkiRJkiS9r/0HWyxT9qD0o5gAAAAASUVORK5CYII=';
+  showGrid: boolean;
 
   constructor(
     private router: Router,
@@ -68,42 +70,10 @@ export class ServiceReportListComponent implements OnInit {
     } else {
       this.role = JSON.parse(localStorage.getItem('roles'));
       this.role = this.role[0]?.itemCode;
-
     }
+    
+    if (this.role == environment.distRoleCode) this.isDist = true;
 
-    this.ServiceReportService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.contcactservice.getDistByContact(this.user.contactId)
-            .pipe(first())
-            .subscribe((data1: any) => {
-              switch (this.role) {
-                case environment.custRoleCode:
-                  this.ServiceReportList = data.object.filter(x => x.serviceRequest.createdby == this.user.userId);
-                  break;
-                case environment.distRoleCode:
-                  this.ServiceReportList = data.object.filter(x => x.serviceRequest.distid == data1.object.defdistid);
-                  break;
-                case environment.engRoleCode:
-                  this.ServiceReportList = data.object.filter(x => x.serviceRequest.assignedto == this.user.contactId);
-                  break;
-                default:
-                  this.ServiceReportList = data.object;
-                  break
-              }
-
-              this.ServiceReportList.forEach((x: any) => {
-                x.serviceRequestRaisedOn = this.datepipe.transform(x.serviceRequestRaisedOn, "MM/dd/yyyy")
-              })
-
-            })
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
     this.columnDefs = this.createColumnDefs();
   }
 
@@ -111,6 +81,33 @@ export class ServiceReportListComponent implements OnInit {
     this.router.navigate(['servicereport']);
   }
 
+  DataFilter(data) {
+    this.showGrid = true;
+    this.contcactservice.getDistByContact(this.user.contactId)
+      .pipe(first())
+      .subscribe((data1: any) => {
+        switch (this.role) {
+          case environment.custRoleCode:
+            this.ServiceReportList = data.filter(x => x.serviceRequest.createdby == this.user.userId);
+            break;
+          case environment.distRoleCode:
+            this.isDist = true;
+            this.ServiceReportList = data.filter(x => x.serviceRequest.distid == data1.object.defdistid);
+            break;
+          case environment.engRoleCode:
+            this.ServiceReportList = data.filter(x => x.serviceRequest.assignedto == this.user.contactId);
+            break;
+          default:
+            this.ServiceReportList = data;
+            break
+        }
+
+        this.ServiceReportList.forEach((x: any) => {
+          x.serviceRequestRaisedOn = this.datepipe.transform(x.serviceRequestRaisedOn, "MM/dd/yyyy")
+        })
+
+      })
+  }
 
   private createColumnDefs() {
     return [{
