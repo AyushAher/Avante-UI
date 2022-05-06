@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {ProfileReadOnly, User} from "../_models";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService, AlertService, NotificationService, ProfileService, SrRecomandService} from "../_services";
-import {first} from "rxjs/operators";
-import {DatePipe} from "@angular/common";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { ProfileReadOnly, User } from "../_models";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AccountService, AlertService, NotificationService, ProfileService, SrRecomandService } from "../_services";
+import { first } from "rxjs/operators";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: 'app-sparepartsrecommended',
@@ -27,6 +27,7 @@ export class SparepartsrecommendedComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   user: User;
+  showGrid: any;
 
 
   constructor(
@@ -63,33 +64,33 @@ export class SparepartsrecommendedComponent implements OnInit {
       this.hasReadAccess = true;
     }
 
-    this.Service.getByGrid(this.user.contactId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.List = data.object;
-          const datepipie = new DatePipe("en-US");
-
-          this.List.forEach((value) => {
-            value.assignedTofName = value.assignedTofName + " " + value.assignedTolName
-            value.serviceReportDate = datepipie.transform(
-              value.serviceReportDate,
-              "MM/dd/yyyy"
-            );
-          })
-
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
-      });
-
     this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
     this.router.navigate(["localexpenses"]);
+  }
+
+  DataFilter(event) {
+    this.List = event;
+    const datepipie = new DatePipe("en-US");
+
+    this.List.forEach((value) => {
+      value.assignedTofName = value.assignedTofName + " " + value.assignedTolName
+      value.serviceReportDate = datepipie.transform(
+        value.serviceReportDate,
+        "MM/dd/yyyy"
+      );
+    })
+
+  }
+
+  ShowData(event) {
+    this.showGrid = event
+  }
+
+  toggleFilter() {
+    this.showGrid = !this.showGrid
   }
 
   private createColumnDefs() {

@@ -128,6 +128,14 @@ export class ServiceRequestListComponent implements OnInit {
     this.router.navigate(['servicerequest']);
   }
 
+  ShowData(event) {
+    this.showGrid = event
+  }
+
+  toggleFilter() {
+    this.showGrid = !this.showGrid
+  }
+
 
   private createDisColumnDefs() {
     return [{

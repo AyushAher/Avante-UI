@@ -8,10 +8,19 @@
       </div>
       <hr />
 
-      <app-distributorfilter *ngIf="IsDistributorView" (nData)="getallrecored($event)" controller="ServiceRequest">
-      </app-distributorfilter>
+      <!-- <app-distributorfilter *ngIf="IsDistributorView" (nData)="getallrecored($event)" controller="ServiceRequest">
+      </app-distributorfilter> -->
 
       <div class="clearfix"></div>
+
+      <a *ngIf="showGrid" (click)="toggleFilter() " style="display: inline;margin-right: 1%;" class="nav-link">
+        <i class="fas fa-arrow-left" title="filter"></i>
+      </a>
+
+      <app-distributorfilter (showData)="ShowData($event)" (nData)="getallrecored($event)" controller="ServiceRequest"
+        *ngIf="!showGrid">
+      </app-distributorfilter>
+
       <button class="btn btn-sm btn-success button" *ngIf="hasAddAccess==true && IsEngineerView==false && showGrid"
         style="margin: 10px;" (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
