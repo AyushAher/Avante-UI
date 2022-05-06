@@ -13,7 +13,7 @@
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
-            <div class="col-md-12 col-sm-12 mb-3">
+            <div class="col-md-4 col-sm-4 mb-3">
               <label>Distributor</label>
               <select #distributorid (input)="getengineers($event.target.value)"
                 [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-control" formControlName="distId">
@@ -26,7 +26,7 @@
 
             </div>
 
-            <div class="col-md-12 col-sm-12 mb-3">
+            <div class="col-md-4 col-sm-4 mb-3">
               <label>Engineer Name</label>
 
               <select formControlName="engineerId" (change)="getservicerequest(distId,$event.target.value)"
@@ -42,7 +42,7 @@
             </div>
 
 
-            <div class="col-md-12 col-sm-12 mb-3">
+            <div class="col-md-4 col-sm-4 mb-3">
               <label for="name">Service Request No</label>
               <select name="" placeholder="Service Request Id" formControlName="serviceRequestId" id=""
                 (change)="onServiceRequestChange()" class="form-control"
@@ -68,7 +68,7 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                Was your work request completed in a prompt and timely manner?
+                1. Was your work request completed in a prompt and timely manner?
               </label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="onTime" type="radio" value="1" id="onTime-true">
@@ -87,7 +87,7 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                Was the Avantgarde employee courteous and professional?
+                2. Was the Avantgarde employee courteous and professional?
               </label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="isProfessional" type="radio" value="1"
@@ -109,7 +109,7 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                Were you notified of any changes in the progress of the work (if applicable)?
+                3. Were you notified of any changes in the progress of the work (if applicable)?
               </label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="isNotified" type="radio" value="1"
@@ -130,7 +130,7 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                Were you satisfied with the work done?
+                4. Were you satisfied with the work done?
               </label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="isSatisfied" type="radio" value="1"
@@ -151,7 +151,7 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                Was the work area cleaned up after completion of the job?
+                5. Was the work area cleaned up after completion of the job?
               </label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="isAreaClean" type="radio" value="1"
@@ -173,7 +173,8 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                If you were not present when the work was done, did the engineer leave a note indicating that he/she had
+                6. If you were not present when the work was done, did the engineer leave a note indicating that
+                he/she had
                 been there, describing what was done?
               </label>
               <div class="form-check">
@@ -191,7 +192,7 @@
             </div>
 
             <div class="col-md-12 col-sm-12 mb-3">
-              <label>Is there anything you would change to improve our service? If so, please comment. </label>
+              <label>7. Is there anything you would change to improve our service? If so, please comment. </label>
               <textarea formControlName="comments" class="form-control"></textarea>
             </div>
 
