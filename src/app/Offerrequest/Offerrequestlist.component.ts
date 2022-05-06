@@ -36,6 +36,7 @@ export class OfferrequestlistComponent implements OnInit {
   profilePermission: any;
   zohocode: any;
   role: string;
+  showGrid: any;
 
   constructor(
     private router: Router,
@@ -69,29 +70,19 @@ export class OfferrequestlistComponent implements OnInit {
       this.role = role[0]?.itemCode;
     }
 
-    // this.route.queryParams.subscribe(params => {
-    //   this.zohocode = params['code'];
-    // });
-
-    // if (this.zohocode != null) {
-    //   var ofreqid = localStorage.getItem('offerrequestid')
-    //   localStorage.setItem('zCode', this.zohocode)
-    //   this.router.navigate([`offerrequest/${ofreqid}`], { queryParams: { code: this.zohocode } })
-    // }
-
     this.columnDefs = this.createColumnDefs();
+  }
 
-    this.Service.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.model = data.object;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
-      });
+  ShowData(event) {
+    this.showGrid = event
+  }
+
+  toggleFilter() {
+    this.showGrid = !this.showGrid
+  }
+
+  DataFilter(event) {
+    this.model = event
   }
   Add() {
     this.router.navigate(["offerrequest"]);
