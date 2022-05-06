@@ -35,6 +35,7 @@ export class AmcListComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
+  showGrid: boolean;
 
   constructor(
     private router: Router,
@@ -62,19 +63,6 @@ export class AmcListComponent implements OnInit {
       this.hasDeleteAccess = true;
     }
 
-
-    // this.distributorId = this.route.snapshot.paramMap.get('id');
-    this.AmcService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.AmcList = data.object;
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
     this.columnDefs = this.createColumnDefs();
   }
 
@@ -82,6 +70,18 @@ export class AmcListComponent implements OnInit {
     this.router.navigate(['amc']);
   }
 
+
+  ShowData(event) {
+    this.showGrid = event
+  }
+
+  toggleFilter() {
+    this.showGrid = !this.showGrid
+  }
+
+  DataFilter(event) {
+    this.AmcList = event
+  }
 
   private createColumnDefs() {
     return [{
