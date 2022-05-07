@@ -55,9 +55,13 @@ export class ServiceRequestListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private contcactservice: ContactService,
+    private serviceRequestService: ServiceRequestService,
     private listTypeService: ListTypeService
-  ) {}
-
+  ) {
+    this.notificationService.listen().subscribe((m: any) => {
+      this.getRecords();
+    })
+  }
   ngOnInit() {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
@@ -69,10 +73,10 @@ export class ServiceRequestListComponent implements OnInit {
       }
     }
     if (this.user.username == "admin") {
-      this.hasAddAccess = false;
+      this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.IsAdminView = true;
-      // this.getallrecored();
+      this.getRecords();
       this.columnDefs = this.createCustColumnDefs();
     } else {
       this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
@@ -99,11 +103,11 @@ export class ServiceRequestListComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.distId = data.object.defdistid;
-            // this.getallrecored();
+            this.getRecords();
           },
           error: error => {
             //  this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
+            this.notificationService.showError(error, "Error");
             this.loading = false;
           }
         });
@@ -112,13 +116,13 @@ export class ServiceRequestListComponent implements OnInit {
 
       if (this.IsDistributorView) {
         this.columnDefs = this.createDisColumnDefs();
-      } else if (this.IsEngineerView) {
-        this.columnDefs = this.createDisColumnDefs();
-      } else if (this.IsCustomerView) {
-        this.columnDefs = this.createCustColumnDefs();
-      } else if (this.IsAdminView) {
-        this.columnDefs = this.createDisColumnDefs()
+        this.showGrid = true;
       }
+
+      else if (this.IsEngineerView) this.columnDefs = this.createDisColumnDefs();
+      else if (this.IsCustomerView) this.columnDefs = this.createCustColumnDefs();
+      else if (this.IsAdminView) this.columnDefs = this.createDisColumnDefs()
+
 
     }
 
@@ -335,8 +339,17 @@ export class ServiceRequestListComponent implements OnInit {
     this.columnApi = params.columnApi;
   }
 
+  getRecords() {
+    this.serviceRequestService.getAll(this.user.userId)
+      .pipe(first())
+      .subscribe((data: any) => {
+        data.object = data.object.filter(x => !x.isReportGenerated)
+        this.getallrecored(data.object)
+      })
+  }
+
   getallrecored(data) {
-    this.showGrid = true; 
+    this.showGrid = true;
     data?.forEach(ser => {
       ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
       ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
