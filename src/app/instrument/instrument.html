@@ -214,7 +214,7 @@
               <input formControlName="dateOfPurchase" bsDatepicker class="form-control" />
             </div>
 
-            <div class="col-md-4 col-sm-4">
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
               <label for="dateOfPurchase">Cost</label>
               <input formControlName="cost" type="number" class="form-control" />
             </div>

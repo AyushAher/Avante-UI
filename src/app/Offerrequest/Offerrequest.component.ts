@@ -47,6 +47,7 @@ export class OfferrequestComponent implements OnInit {
   hasReadAccess: boolean = false;
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
+  hasCommercial: boolean = false;
   hasAddAccess: boolean = false;
   hasInternalAccess: boolean = false;
   profilePermission: any;
@@ -193,6 +194,7 @@ export class OfferrequestComponent implements OnInit {
         this.hasAddAccess = profilePermission[0].create;
         this.hasDeleteAccess = profilePermission[0].delete;
         this.hasUpdateAccess = profilePermission[0].update;
+        this.hasCommercial = profilePermission[0].commercial;
       }
     }
 
@@ -366,32 +368,12 @@ export class OfferrequestComponent implements OnInit {
     }
 
 
-    this.currencyService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.currencyList = data.object
-        },
-        error: (error) => {
+    this.currencyService.getAll().pipe(first())
+      .subscribe((data: any) => this.currencyList = data.object)
 
-          this.loading = false;
-        }
-      })
+    this.DistributorService.getAll().pipe(first())
+      .subscribe((data: any) => this.distributorList = data.object)
 
-
-
-    this.DistributorService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.distributorList = data.object
-
-        },
-        error: (error) => {
-
-          this.loading = false;
-        }
-      })
     this.SpareQuoteDetService.getAll(this.id)
       .pipe(first())
       .subscribe({
@@ -638,19 +620,20 @@ export class OfferrequestComponent implements OnInit {
       editable: true,
       sortable: true,
       default: 0,
-      hide: this.role == environment.custRoleCode,
+      hide: this.role == environment.custRoleCode || !this.hasCommercial,
     },
     {
       headerName: 'Amount',
       field: 'amount',
       filter: true,
       sortable: true,
-      hide: this.role == environment.custRoleCode,
+      hide: this.role == environment.custRoleCode || !this.hasCommercial,
     },
     {
       headerName: 'Currency',
       field: 'currency',
-      hide: this.role == environment.custRoleCode,
+      hide: this.role == environment.custRoleCode || !this.hasCommercial,
+      // hide: true,
       filter: true,
       sortable: true
     },
@@ -700,12 +683,8 @@ export class OfferrequestComponent implements OnInit {
   }
 
   getfil(x, isParentAttachment = false) {
-    if (isParentAttachment) {
-      this.file = x;
-    } else {
-      this.processFile = x;
-    }
-
+    if (isParentAttachment) this.file = x;
+    else this.processFile = x;
   }
 
   listfile = (x, lstId = "selectedfiles") => {

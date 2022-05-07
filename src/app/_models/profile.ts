@@ -15,6 +15,7 @@ export class ProfilePermission {
   read: boolean;
   update: boolean;
   delete: boolean;
+  commercial: boolean;
 }
 
 

@@ -96,39 +96,28 @@ export class ProfileComponent implements OnInit {
     if (this.id != null) {
       this.profileService.getById(this.id)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            data.object.permissions.forEach(element => {
-              element.itemCode = element.screenCode
-            });
-            this.addItem(data.object.permissions)
-            this.profileform.patchValue(data.object);
-          },
-          error: error => {
-            
-            this.loading = false;
-          }
+        .subscribe((data: any) => {
+          this.listTypeItems = data.object.permissions
+
+          data.object.permissions.forEach(element => {
+            element.itemCode = element.screenCode
+          });
+
+          this.addItem(data.object.permissions)
+          this.profileform.patchValue(data.object);
         });
-    } else {
+    }
+    else {
       this.profileService.GetAllScreens()
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            //debugger;
-            this.listTypeItems = data.object;
-            data.object.sort((a, b) => {
-              var value = 0
-              a.categoryName < b.categoryName ? value = -1 : a.categoryName > b.categoryName ? value = 1 : value = 0;
-              return value;
-            });
-            console.log(this.listTypeItems);
-
-            this.addItem(this.listTypeItems);
-          },
-          error: error => {
-            
-            this.loading = false;
-          }
+        .subscribe((data: any) => {
+          this.listTypeItems = data.object;
+          data.object.sort((a, b) => {
+            var value = 0
+            a.categoryName < b.categoryName ? value = -1 : a.categoryName > b.categoryName ? value = 1 : value = 0;
+            return value;
+          });
+          this.addItem(this.listTypeItems);
         });
     }
   }
@@ -143,6 +132,7 @@ export class ProfileComponent implements OnInit {
       update: '',
       delete: '',
       categoryName: "",
+      commercial: "",
       screenCode: ""
     });
   }
@@ -163,6 +153,7 @@ export class ProfileComponent implements OnInit {
         categoryName: this.listT.categoryName,
         update: this.listT.update == undefined || this.listT.update == null ? false : this.listT.update,
         delete: this.listT.delete == undefined || this.listT.delete == null ? false : this.listT.delete,
+        commercial: this.listT.commercial == undefined || this.listT.commercial == null ? false : this.listT.commercial,
       }));
     }
   }
@@ -170,8 +161,9 @@ export class ProfileComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.profileform.controls; }
   get c() { return this.profileform.controls.Permissions; }
-
-
+  getScreenCode(i) {
+    return this.getName(i).screenCode
+  }
   getName(i) {
     return this.getControls()[i].value;
   }
@@ -197,9 +189,8 @@ export class ProfileComponent implements OnInit {
     this.alertService.clear();
 
     // stop here if form is invalid
-    if (this.profileform.invalid) {
-      return;
-    }
+    if (this.profileform.invalid) return;
+
     this.isSave = true;
     this.loading = true;
     this.profile = this.profileform.value;
@@ -208,46 +199,25 @@ export class ProfileComponent implements OnInit {
     if (this.id == null) {
       this.profileService.save(this.profile)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            //debugger;
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["profilelist"]);
-            }
-            else {
-              
-            }
-
-            this.loading = false;
-
-          },
-          error: error => {
-            
-            this.loading = false;
+        .subscribe((data: any) => {
+          //debugger;
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(["profilelist"]);
           }
+          this.loading = false;
         });
     }
     else {
       this.profile.id = this.id;
       this.profileService.update(this.id, this.profile)
         .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["profilelist"]);
-            }
-            else {
-              
-            }
-            this.loading = false;
-
-          },
-          error: error => {
-            
-            this.loading = false;
+        .subscribe((data: ResultMsg) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(["profilelist"]);
           }
+          this.loading = false;
         });
     }
   }

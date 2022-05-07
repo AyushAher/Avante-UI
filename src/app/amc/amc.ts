@@ -45,6 +45,7 @@ export class AmcComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   hasInternalAccess: boolean = false;
+  hasCommercial: boolean = false;
   profilePermission: any;
 
   customersList: Customer[];
@@ -139,6 +140,7 @@ export class AmcComponent implements OnInit {
         this.hasAddAccess = profilePermission[0].create;
         this.hasDeleteAccess = profilePermission[0].delete;
         this.hasUpdateAccess = profilePermission[0].update;
+        this.hasCommercial = profilePermission[0].commercial;
       }
     }
 
@@ -182,8 +184,8 @@ export class AmcComponent implements OnInit {
       project: ["", Validators.required],
       servicetype: ["", Validators.required],
       brand: ["", Validators.required],
-      currency: ["", Validators.required],
-      zerorate: [0, Validators.required],
+      currency: [""],
+      zerorate: [0],
       tnc: ["", Validators.required],
       custSite: ["", Validators.required],
 
@@ -623,12 +625,14 @@ export class AmcComponent implements OnInit {
       field: 'rate',
       filter: true,
       editable: true,
+      hide: !this.hasCommercial,
       sortable: true,
       default: 0
     },
     {
       headerName: 'Amount',
       field: 'amount',
+      hide: !this.hasCommercial,
       filter: true,
       editable: false,
       sortable: true
@@ -729,7 +733,7 @@ export class AmcComponent implements OnInit {
 
     this.model.firstVisitDateTo = datepipie.transform(this.model.firstVisitDateTo, "MM/dd/yyyy");
     this.model.secondVisitDateTo = datepipie.transform(this.model.secondVisitDateTo, "MM/dd/yyyy");
-    
+
     if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value)
       this.model.secondVisitDate = this.model.secondVisitDateFrom + "-" + this.model.secondVisitDateTo;
 

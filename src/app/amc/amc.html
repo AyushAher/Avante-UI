@@ -128,7 +128,7 @@
               </div>
             </div>
 
-            <div class="col-md-4 col-sm-4">
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
               <label for="zerorate">Zerorate</label>
               <br>
               <select id="currency" type="text" style="display:inline-block; width:30%;" formControlName="currency"
