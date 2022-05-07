@@ -8,37 +8,42 @@
       </div>
       <hr />
       <div class="clearfix"></div>
-      <!-- <form ngNoForm [formGroup]="form" #sform (ngSubmit)="onSubmit()">
+
+      <form *ngIf="showGrid && !isDist" ngNoForm [formGroup]="form" #sform (ngSubmit)="onSubmit()">
         <div class="row" style="margin-left: 0px;">
           <div class="col-sm-4">
             <label for="search">Serial No.</label>
             <input type="text" formControlName="search" class="form-control"
-                   [ngClass]="{ 'is-invalid': submitted && f.search.errors }" />
+              [ngClass]="{ 'is-invalid': submitted && f.search.errors }" />
             <div *ngIf="f.search.errors" class="invalid-feedback">
               <div *ngIf="f.search.errors.required">Enter keyword is required</div>
             </div>
           </div>
           <div class="col-sm-4">
             <label for="search">Customer Site</label>
-            <select formControlName="custSiteId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
+            <select formControlName="custSiteId" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
               <option value="0">--Select--</option>
               <option *ngFor="let config of customersite" value={{config.id}}>
                 {{config.customerSite}}
               </option>
             </select>
-          </div><div class="col-sm-4" style="margin-top:25px;">
-            <button class="btn btn-sm btn-success button" style="margin: 10px;" type="submit"><i class="fas fa-search"></i></button>
+          </div>
+          <div class="col-sm-4" style="margin-top:25px;">
+            <button class="btn btn-sm btn-success button" style="margin: 10px;" type="submit"><i
+                class="fas fa-search"></i></button>
           </div>
         </div>
-      </form> -->
-      <a *ngIf="showGrid" style="display: inline;margin-right: 1%;" (click)="toggleFilter()" class="nav-link">
+      </form>
+
+      <a *ngIf="showGrid && isDist" style="display: inline;margin-right: 1%;" (click)="toggleFilter()" class="nav-link">
         <i class="fas fa-arrow-left" title="filter"></i>
       </a>
       <app-distributorfilter [hasInstrument]="false" (showData)="ShowData($event)" *ngIf="!showGrid"
         (nData)="DataFilter($event)" controller="Instrument">
       </app-distributorfilter>
 
-      <div class="col-md-12 col-sm-12" *ngIf="showGrid">
+      <div class="col-md-12 col-sm-12" *ngIf="showGrid || visible">
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
           [columnDefs]="columnDefs" [rowData]="instrumentList" rowSelection="single" pagination="true"
           paginationPageSize=10></ag-grid-angular>
