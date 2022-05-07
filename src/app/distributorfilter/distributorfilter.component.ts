@@ -30,6 +30,7 @@ export class DistributorfilterComponent implements OnInit {
 
   @Input() controller: string;
   @Input() hasInstrument: boolean = true;
+  @Input() isUserProfile: boolean = false;
   @Input() hasSite: boolean = true;
 
   form: FormGroup;
@@ -86,14 +87,9 @@ export class DistributorfilterComponent implements OnInit {
     this.countryService.getAll().pipe(first())
       .subscribe((data: any) => this.countryList = data.object)
 
-    if (this.user.username == "admin") {
-      this.customerService.getAll().pipe(first())
-        .subscribe((data: any) => this.customerList = data.object)
-    }
-    else {
-      this.customerService.getAllByConId(this.user.contactId).pipe(first())
-        .subscribe((data: any) => this.customerList = data.object)
-    }
+    this.customerService.getAllByConId(this.user.contactId).pipe(first())
+      .subscribe((data: any) => this.customerList = data.object)
+
     if (this.hasInstrument) {
       this.instrumentService.getAll(this.user.userId).pipe(first())
         .subscribe((data: any) => this.instrumentList = data.object)
@@ -106,6 +102,7 @@ export class DistributorfilterComponent implements OnInit {
     this.hasSite ? this.stage = 4 : this.stage = 6;
     this.siteList = this.customerList.find(x => x.id == this.form.get('customer').value).sites
     this.form.get('site').reset();
+    if (this.isUserProfile) this.stage = 6
   }
 
   SiteChange() {
@@ -129,13 +126,18 @@ export class DistributorfilterComponent implements OnInit {
   onRegionChange() {
     this.stage = 2
 
-    if (this.hasInstrument) {
+    if (this.hasInstrument || this.isUserProfile == false) {
       this.form.get('insSerialNo').setValidators([Validators.required])
       this.form.get('insSerialNo').updateValueAndValidity()
     }
 
     if (this.hasSite) {
       this.form.get('site').setValidators([Validators.required])
+      this.form.get('site').updateValueAndValidity()
+    }
+      
+    if (this.isUserProfile) {
+      this.form.get('site').clearValidators();
       this.form.get('site').updateValueAndValidity()
     }
 

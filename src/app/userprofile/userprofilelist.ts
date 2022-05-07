@@ -4,7 +4,7 @@ import { User, Customer, Country, Instrument, Profile, UserProfile, ProfileReadO
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, CountryService, InstrumentService, NotificationService, ProfileService, UserProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
@@ -26,26 +26,21 @@ export class UserProfileListComponent implements OnInit {
   countries: Country[];
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
-  private api: GridApi;  
+  private api: GridApi;
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
+  showGrid: any;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private instrumentService: InstrumentService,
-    private countryService: CountryService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
     private userprofileService: UserProfileService,
   ) {
-    
+
   }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -63,31 +58,37 @@ export class UserProfileListComponent implements OnInit {
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
-     // this.hasUpdateAccess = true;
-//this.hasReadAccess = true;
+      // this.hasUpdateAccess = true;
+      //this.hasReadAccess = true;
     }
 
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
-    this.userprofileService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          //debugger;
-          this.userprofileList = data.object;
-        },
-        error: error => {
-           
-          this.loading = false;
-        }
+    this.userprofileService.getAll().pipe(first())
+      .subscribe((data: any) => {
+        console.log(data);
+        this.userprofileList = data.object
       });
-    this.columnDefs = this.createColumnDefs(); 
+
+    this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
-    this.router.navigate(['userprofile']);  
+    this.router.navigate(['userprofile']);
   }
- 
+
+  DataFilter(event) {
+    this.userprofileList = event;
+  }
+
+  ShowData(event) {
+    this.showGrid = event
+  }
+
+  toggleFilter() {
+    this.showGrid = !this.showGrid
+  }
+
 
   private createColumnDefs() {
     return [
@@ -107,11 +108,11 @@ export class UserProfileListComponent implements OnInit {
         },
       },
       {
-      headerName: 'Username',
+        headerName: 'Username',
         field: 'username',
-      filter: true,
-      enableSorting: true,
-      editable: false,
+        filter: true,
+        enableSorting: true,
+        editable: false,
         sortable: true,
         tooltipField: 'username',
       },
@@ -125,7 +126,7 @@ export class UserProfileListComponent implements OnInit {
         tooltipField: 'profileName',
       }
     ]
-  }  
+  }
 
   onGridReady(params): void {
     this.api = params.api;
