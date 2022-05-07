@@ -30,6 +30,7 @@ export class DistributorfilterComponent implements OnInit {
 
   @Input() controller: string;
   @Input() hasInstrument: boolean = true;
+  @Input() hasSite: boolean = true;
 
   form: FormGroup;
   modal: any;
@@ -69,15 +70,15 @@ export class DistributorfilterComponent implements OnInit {
       insSerialNo: [""]
     })
 
-    // this.distributorService.getByConId(this.user.contactId).pipe(first())
-    //   .subscribe((data: any) => this.regionsList = data.object[0].regions)
     this.accountService.GetUserRegions().pipe(first())
       .subscribe((data: any) => {
         this.regionService.getAll().pipe(first())
           .subscribe((dataReg: any) => {
             this.allRegionsList = dataReg;
             data.object.forEach(element => {
-              this.regionsList.push(dataReg.find(x => x.id == element))
+              if (element != "" && element != null) {
+                this.regionsList.push(dataReg.find(x => x.id == element))
+              }
             });
           })
       })
@@ -97,7 +98,7 @@ export class DistributorfilterComponent implements OnInit {
   }
 
   onCustomerChange() {
-    this.stage = 4
+    this.hasSite ? this.stage = 4 : this.stage = 6;
     this.siteList = this.customerList.find(x => x.id == this.form.get('customer').value).sites
     this.form.get('site').reset();
   }
@@ -124,6 +125,11 @@ export class DistributorfilterComponent implements OnInit {
     if (this.hasInstrument) {
       this.form.get('insSerialNo').setValidators([Validators.required])
       this.form.get('insSerialNo').updateValueAndValidity()
+    }
+
+    if (this.hasSite) {
+      this.form.get('site').setValidators([Validators.required])
+      this.form.get('site').updateValueAndValidity()
     }
 
     var country = this.regionsList.find(x => x.id == this.form.get('region').value)?.countries
