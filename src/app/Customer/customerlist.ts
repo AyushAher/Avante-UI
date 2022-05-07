@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {Country, Customer, ProfileReadOnly, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { Country, Customer, ProfileReadOnly, User } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -14,7 +14,8 @@ import {
   NotificationService,
   ProfileService
 } from '../_services';
-import {RenderComponent} from '../distributor/rendercomponent';
+import { RenderComponent } from '../distributor/rendercomponent';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class CustomerListComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
-
+  showGrid = false;
+  IsDist: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -53,7 +55,7 @@ export class CustomerListComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -66,37 +68,20 @@ export class CustomerListComponent implements OnInit {
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
+      this.showGrid = true;
+
+      this.customerService.getAll().pipe(first())
+        .subscribe((data: any) => this.customerList = data.object)
+    }
+    else {
+      role = role[0]?.itemCode;
     }
 
-
+    if (role == environment.distRoleCode) {
+      // this.showGrid = true;
+      this.IsDist = true
+    };
     // this.distributorId = this.route.snapshot.paramMap.get('id');
-    if (this.user.username == 'admin') {
-      this.customerService.getAll()
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            console.log(data);
-            this.customerList = data.object;
-          },
-          error: error => {
-            
-            this.loading = false;
-          }
-        });
-    } else {
-      this.customerService.getAllByConId(this.user.contactId)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            console.log(data);
-            this.customerList = data.object;
-          },
-          error: error => {
-            
-            this.loading = false;
-          }
-        });
-    }
     this.columnDefs = this.createColumnDefs();
   }
 
@@ -104,6 +89,18 @@ export class CustomerListComponent implements OnInit {
     this.router.navigate(['customer']);
   }
 
+
+  DataFilter(event) {
+    this.customerList = event
+  }
+
+  ShowData(event) {
+    this.showGrid = event
+  }
+
+  toggleFilter() {
+    this.showGrid = !this.showGrid
+  }
 
   private createColumnDefs() {
     return [{
@@ -121,30 +118,30 @@ export class CustomerListComponent implements OnInit {
         deleteaccess: this.hasDeleteAccess
       },
     },
-      {
-        headerName: 'Customer Name',
-        field: 'custname',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'custname',
-      },
-      {
-        headerName: 'Default Distributor',
-        field: 'defdist',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-      },
-      {
-        headerName: 'Is Active',
-        field: 'isactive',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
+    {
+      headerName: 'Customer Name',
+      field: 'custname',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'custname',
+    },
+    {
+      headerName: 'Default Distributor',
+      field: 'defdist',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+    },
+    {
+      headerName: 'Is Active',
+      field: 'isactive',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
 
     ]
   }

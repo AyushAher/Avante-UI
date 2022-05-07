@@ -66,7 +66,7 @@ export class DistributorfilterComponent implements OnInit {
       region: ["", [Validators.required]],
       country: ["", [Validators.required]],
       customer: ["", [Validators.required]],
-      site: ["", [Validators.required]],
+      site: [""],
       insSerialNo: [""]
     })
 
@@ -86,9 +86,14 @@ export class DistributorfilterComponent implements OnInit {
     this.countryService.getAll().pipe(first())
       .subscribe((data: any) => this.countryList = data.object)
 
-    this.customerService.getAllByConId(this.user.contactId).pipe(first())
-      .subscribe((data: any) => this.customerList = data.object)
-
+    if (this.user.username == "admin") {
+      this.customerService.getAll().pipe(first())
+        .subscribe((data: any) => this.customerList = data.object)
+    }
+    else {
+      this.customerService.getAllByConId(this.user.contactId).pipe(first())
+        .subscribe((data: any) => this.customerList = data.object)
+    }
     if (this.hasInstrument) {
       this.instrumentService.getAll(this.user.userId).pipe(first())
         .subscribe((data: any) => this.instrumentList = data.object)
@@ -116,6 +121,8 @@ export class DistributorfilterComponent implements OnInit {
   countryChange() {
     this.stage = 3;
     this.customerBCountryList = this.customerList.filter(x => x.countryid == this.form.get('country').value)
+    console.log(this.customerList);
+
     setTimeout(() => this.form.get('customer').reset(), 100);
   }
 
