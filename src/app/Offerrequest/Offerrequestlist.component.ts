@@ -37,6 +37,7 @@ export class OfferrequestlistComponent implements OnInit {
   zohocode: any;
   role: string;
   showGrid: any;
+  isDist: boolean;
 
   constructor(
     private router: Router,
@@ -69,7 +70,12 @@ export class OfferrequestlistComponent implements OnInit {
     } else {
       this.role = role[0]?.itemCode;
     }
-
+    if (this.role == environment.distRoleCode) this.isDist = true;
+    else {
+      this.toggleFilter()
+      this.Service.getAll().pipe(first())
+        .subscribe((data: any) => this.model = data.object);
+    }
     this.columnDefs = this.createColumnDefs();
   }
 

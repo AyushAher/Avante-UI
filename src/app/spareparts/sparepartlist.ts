@@ -41,6 +41,7 @@ export class SparePartListComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private profileService: ProfileService,
+    private sparePartService: SparePartService
   ) {
 
   }
@@ -69,6 +70,12 @@ export class SparePartListComponent implements OnInit {
     if (role == environment.distRoleCode) this.isDist = true;
     else if (role == environment.engRoleCode) this.isEng = true;
     else if (role == environment.custRoleCode) this.isCust = true;
+
+    if (!this.isDist) {
+      this.toggleFilter();
+      this.sparePartService.getAll().pipe(first())
+        .subscribe((data: any) => this.sparePartList = data.object);
+    }
 
     this.columnDefs = this.createColumnDefs();
   }

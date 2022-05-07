@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AccountService, AlertService, NotificationService, ProfileService, SrRecomandService } from "../_services";
 import { first } from "rxjs/operators";
 import { DatePipe } from "@angular/common";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-sparepartsrecommended',
@@ -28,6 +29,7 @@ export class SparepartsrecommendedComponent implements OnInit {
   hasAddAccess: boolean = false;
   user: User;
   showGrid: any;
+  isDist: boolean;
 
 
   constructor(
@@ -44,6 +46,7 @@ export class SparepartsrecommendedComponent implements OnInit {
 
   ngOnInit() {
 
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -63,7 +66,13 @@ export class SparepartsrecommendedComponent implements OnInit {
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     }
-
+    else role = role[0]?.itemCode;
+    if (role == environment.distRoleCode) this.isDist = true
+    else {
+      this.toggleFilter()
+      this.Service.getByGrid(this.user.contactId).pipe(first())
+        .subscribe((data: any) => this.List = data.object)
+    }
     this.columnDefs = this.createColumnDefs();
   }
 

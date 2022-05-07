@@ -9,7 +9,7 @@
       <hr />
       <div class="clearfix"></div>
 
-      <a *ngIf="showGrid" (click)="toggleFilter()" class="nav-link">
+      <a *ngIf="showGrid && isDist" (click)="toggleFilter()" class="nav-link">
         <i class="fas fa-arrow-left" title="filter"></i>
       </a>
 

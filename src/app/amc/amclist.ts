@@ -13,6 +13,7 @@ import {
   ProfileService
 } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class AmcListComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
-  showGrid: boolean;
+  showGrid: boolean = false;
+  isDist: boolean;
 
   constructor(
     private router: Router,
@@ -48,7 +50,7 @@ export class AmcListComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -62,7 +64,16 @@ export class AmcListComponent implements OnInit {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
     }
+    else role = role[0]?.itemCode;
 
+
+    if (role == environment.distRoleCode) this.isDist = true;
+    else {
+      this.toggleFilter()
+      this.AmcService.getAll()
+        .pipe(first())
+        .subscribe((data: any) => this.AmcList = data.object);
+    }
     this.columnDefs = this.createColumnDefs();
   }
 

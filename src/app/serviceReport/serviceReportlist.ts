@@ -73,6 +73,10 @@ export class ServiceReportListComponent implements OnInit {
     }
 
     if (this.role == environment.distRoleCode) this.isDist = true;
+    else {
+      this.toggleFilter()
+      this.getAllRecords();
+    }
 
     this.columnDefs = this.createColumnDefs();
   }
@@ -88,7 +92,12 @@ export class ServiceReportListComponent implements OnInit {
   toggleFilter() {
     this.showGrid = !this.showGrid
   }
-
+  
+  getAllRecords() {
+    this.ServiceReportService.getAll()
+      .pipe(first())
+      .subscribe((data: any) => this.DataFilter(data.object))
+  }
 
   DataFilter(data) {
     this.showGrid = true;

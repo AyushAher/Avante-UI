@@ -42,6 +42,7 @@ export class InstrumentListComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private profileService: ProfileService,
+    private instrumentService: InstrumentService
   ) {
 
   }
@@ -71,6 +72,11 @@ export class InstrumentListComponent implements OnInit {
     else if (role == environment.engRoleCode) this.isEng = true;
     else if (role == environment.custRoleCode) this.isCust = true;
 
+    if (!this.isDist) {
+      this.toggleFilter()
+      this.instrumentService.getAll(this.user.userId).pipe(first())
+        .subscribe((data: any) => this.instrumentList = data.object);
+    }
     this.columnDefs = this.createColumnDefs();
   }
 

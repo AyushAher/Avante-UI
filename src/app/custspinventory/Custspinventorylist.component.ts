@@ -8,6 +8,7 @@ import { RenderComponent } from "../distributor/rendercomponent";
 import { Custspinventory } from "../_models/custspinventory";
 import { first } from "rxjs/operators";
 import { User } from "../_models";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-Custspinventorylist",
@@ -33,6 +34,7 @@ export class CustspinventorylistComponent implements OnInit {
   private api: GridApi;
   profilePermission: any;
   showGrid: boolean;
+  isDist: boolean;
 
   constructor(
     private router: Router,
@@ -44,6 +46,8 @@ export class CustspinventorylistComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -56,6 +60,18 @@ export class CustspinventorylistComponent implements OnInit {
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
+    } else {
+      role = role[0]?.itemCode;
+    }
+
+    if (role == environment.distRoleCode) this.isDist = true;
+    else {
+      this.toggleFilter();
+      this.Service.getAll(this.user.contactId, null)
+        .pipe(first())
+        .subscribe((data: any) =>
+          this.model = data.object
+        );
     }
 
     this.columnDefs = this.createColumnDefs();

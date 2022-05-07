@@ -47,7 +47,7 @@ export class ServiceRequestListComponent implements OnInit {
   distId: any;
   datepipe: any = new DatePipe("en-US");
   appendList: any;
-  showGrid: boolean;
+  showGrid: boolean = false;
 
   constructor(
     private router: Router,
@@ -55,8 +55,9 @@ export class ServiceRequestListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private contcactservice: ContactService,
+    private serviceRequestService: ServiceRequestService,
     private listTypeService: ListTypeService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.user = this.accountService.userValue;
@@ -72,7 +73,7 @@ export class ServiceRequestListComponent implements OnInit {
       this.hasAddAccess = false;
       this.hasDeleteAccess = true;
       this.IsAdminView = true;
-      // this.getallrecored();
+      this.GetAllRecord();
       this.columnDefs = this.createCustColumnDefs();
     } else {
       this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
@@ -99,7 +100,7 @@ export class ServiceRequestListComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.distId = data.object.defdistid;
-            // this.getallrecored();
+            this.GetAllRecord();
           },
           error: error => {
             //  this.alertService.error(error);
@@ -119,9 +120,21 @@ export class ServiceRequestListComponent implements OnInit {
       } else if (this.IsAdminView) {
         this.columnDefs = this.createDisColumnDefs()
       }
-
     }
 
+    if (!this.IsDistributorView) {
+      this.toggleFilter()
+    }
+
+  }
+
+  GetAllRecord() {
+    this.serviceRequestService.getAll(this.user.userId)
+      .pipe(first())
+      .subscribe((data: any) => {
+        data.object = data.object.filter(x => !x.isReportGenerated)
+        this.getallrecored(data.object)
+      })
   }
 
   Add() {
@@ -336,7 +349,7 @@ export class ServiceRequestListComponent implements OnInit {
   }
 
   getallrecored(data) {
-    this.showGrid = true; 
+    if (!this.IsDistributorView) this.showGrid = true;
     data?.forEach(ser => {
       ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
       ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
