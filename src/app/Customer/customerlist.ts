@@ -69,9 +69,6 @@ export class CustomerListComponent implements OnInit {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.showGrid = true;
-
-      this.customerService.getAll().pipe(first())
-        .subscribe((data: any) => this.customerList = data.object)
     }
     else {
       role = role[0]?.itemCode;
@@ -80,7 +77,11 @@ export class CustomerListComponent implements OnInit {
     if (role == environment.distRoleCode) {
       // this.showGrid = true;
       this.IsDist = true
-    };
+    } else {
+      this.toggleFilter();
+      this.customerService.getAllByConId(this.user.contactId).pipe(first())
+        .subscribe((data: any) => this.customerList = data.object)
+    }
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     this.columnDefs = this.createColumnDefs();
   }
