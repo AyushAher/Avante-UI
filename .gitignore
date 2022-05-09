@@ -6,6 +6,7 @@
 /out-tsc
 /dist
 /WebAppDist
+/ServiceWebAppDist
 # dependencies
 /node_modules
 

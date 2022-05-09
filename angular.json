@@ -15,7 +15,7 @@
           "options": {
             "progress": false,
             "extractCss": true,
-            "outputPath": "WebAppDist",
+            "outputPath": "ServiceWebAppDist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
