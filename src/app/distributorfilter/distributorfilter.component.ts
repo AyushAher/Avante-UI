@@ -126,7 +126,7 @@ export class DistributorfilterComponent implements OnInit {
   onRegionChange() {
     this.stage = 2
 
-    if (this.hasInstrument || this.isUserProfile == false) {
+    if (this.hasInstrument) {
       this.form.get('insSerialNo').setValidators([Validators.required])
       this.form.get('insSerialNo').updateValueAndValidity()
     }
@@ -135,8 +135,10 @@ export class DistributorfilterComponent implements OnInit {
       this.form.get('site').setValidators([Validators.required])
       this.form.get('site').updateValueAndValidity()
     }
-      
+
     if (this.isUserProfile) {
+      this.form.get('insSerialNo').updateValueAndValidity()
+      this.form.get('insSerialNo').clearValidators();
       this.form.get('site').clearValidators();
       this.form.get('site').updateValueAndValidity()
     }
