@@ -329,6 +329,11 @@
                       </select>
                     </div>
 
+                    <div *ngIf="isPaymentAmt">
+                      <label>Payment Amount</label>
+                      <input class="payAmt form-control" type="number" formControlName="payAmt" id="payAmt" />
+                    </div>
+
                     <label for="stageComments" *ngIf="isPaymentTerms">Comments</label>
                     <textarea formControlName="stageComments" class="form-control"
                       [ngClass]="{'is-invalid':submitted && f.stageComments.errors }"></textarea>

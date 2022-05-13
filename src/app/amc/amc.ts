@@ -71,7 +71,7 @@ export class AmcComponent implements OnInit {
   rowData: any;
   stagesList: any;
   processFile: any;
-  isPaymentTerms: boolean;
+  isPaymentTerms: boolean = false;
   attachments: any;
   file: any;
   fileList: [] = [];
@@ -84,6 +84,7 @@ export class AmcComponent implements OnInit {
   vScroll: boolean = true;
   paymentTypes: any;
   payTypes: any;
+  isPaymentAmt: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -194,7 +195,7 @@ export class AmcComponent implements OnInit {
       stageName: [''],
       stageComments: [''],
       stagePaymentType: [],
-
+      payAmt: [""],
       secondVisitDateFrom: [],
       secondVisitDateTo: [],
       firstVisitDateFrom: [],
@@ -349,7 +350,7 @@ export class AmcComponent implements OnInit {
   submitStageData() {
 
     if (this.isPaymentTerms && !this.f.payterms.value) return this.notificationService.showInfo("Payterms is required", "Info")
-
+    if (this.isPaymentAmt && !this.f.payAmt.value) return this.notificationService.showInfo("Payment Amount cannot be empty", "Info")
     if (!this.f.stageName.value) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
 
     if (!this.f.stageComments.value) return this.notificationService.showInfo("Comments cannot be empty", "Info")
@@ -408,6 +409,7 @@ export class AmcComponent implements OnInit {
   onstageNameChanged(stage) {
     stage = this.stagesList.find(x => x.listTypeItemId == stage)?.itemCode
     this.isPaymentTerms = stage == "PYTMS";
+    this.isPaymentAmt = stage == "PYRCT";
   }
 
   deleteProcess(id) {
