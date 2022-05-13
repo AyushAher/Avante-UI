@@ -1,13 +1,13 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-  <a class="sidebar-brand d-flex align-items-center " routerlink="/">
+  <a class="sidebar-brand d-flex align-items-center" routerlink="/">
     <!--<div class="sidebar-brand-icon rotate-n-15">
       <i class="fas fa-laugh-wink"> </i>
     </div>
     <div class="sidebar-brand-text mx-3"> Supplier</div>-->
-    <img src="../../assets/img/Avanteminilogo.png" style="width: 40px;height:40px;" />
+    <img src="../../assets/img/Avanteminilogo.png" style="width: 40px; height: 40px" />
   </a>
   <!-- Divider -->
-  <hr class="sidebar-divider my-0">
+  <hr class="sidebar-divider my-0" />
   <!-- Nav Item - Dashboard -->
   <li class="nav-item active">
     <a class="nav-link" href="index.html">
@@ -16,7 +16,7 @@
     </a>
   </li>
   <!-- Divider -->
-  <hr class="sidebar-divider">
+  <hr class="sidebar-divider" />
   <!-- Heading -->
   <!--<div class="sidebar-heading">
     Master
@@ -38,7 +38,6 @@
       </div>
     </div>
   </li>
-
 
   <!-- Nav Item - Pages Collapse Menu -->
   <li class="nav-item" *ngIf="hasMasters">
@@ -64,12 +63,9 @@
 
         <a class="collapse-item" routerLink="/sparepartlist" *ngIf="hasSparePart" routerLinkActive="active">Spare
           Part</a>
-
       </div>
     </div>
   </li>
-
-
 
   <!-- Nav Item - Transactions Collapse Menu -->
   <li class="nav-item" *ngIf="hasTransactions">
@@ -83,7 +79,8 @@
         <h6 class="collapse-header">Components:</h6>
 
         <a class="collapse-item" routerLink="/amclist" *ngIf="hasAmc" routerLinkActive="active">AMC</a>
-        <a class="collapse-item" routerLink="/offerrequestlist" *ngIf="hasOfferRequest" routerLinkActive="active">Spare Part Quotation</a>
+        <a class="collapse-item" routerLink="/offerrequestlist" *ngIf="hasOfferRequest" routerLinkActive="active">Spare
+          Part Quotation</a>
 
         <a class="collapse-item" routerLink="/servicerequestlist" *ngIf="hasServiceRequest"
           routerLinkActive="active">Service Request</a>
@@ -92,11 +89,11 @@
           routerLinkActive="active">Service Report</a>
 
         <a class="collapse-item" routerLink="/customerspinventorylist" *ngIf="hasCustomerSparePartsInventory"
-          routerLinkActive="active">Spare <br>
+          routerLinkActive="active">Spare <br />
           Parts Inventory</a>
 
         <a class="collapse-item" routerLink="/sparepartsrecommended" *ngIf="hasSparePartRecommended"
-          routerLinkActive="active">Spare Parts <br>
+          routerLinkActive="active">Spare Parts <br />
           Recommended</a>
 
         <a class="collapse-item" routerLink="/travelexpenselist" *ngIf="hasTravelExpenses"
@@ -112,7 +109,6 @@
           routerLinkActive="active">Travel Invoices</a>
 
         <a class="collapse-item" routerLink="/schedule" *ngIf="hasschedule" routerLinkActive="active">Schedule</a>
-
       </div>
     </div>
   </li>
@@ -155,15 +151,13 @@
         <a class="collapse-item" routerLink="/exportsparepart" *ngIf="hasexport" routerLinkActive="active">Export
           template</a>
         <a class="collapse-item" routerLink="/customersatisfactionsurveylist" *ngIf="hascustomersatisfactionsurveylist"
-          routerLinkActive="active">Customer
-          Satisfaction <br> Survey</a>
+          routerLinkActive="active">Customer Satisfaction <br />
+          Survey</a>
 
         <a class="collapse-item" routerLink="/custdashboardsettings" *ngIf="hasCustomerSettings"
-          routerLinkActive="active">Dashboard
-          Settings</a>
+          routerLinkActive="active">Dashboard Settings</a>
         <a class="collapse-item" routerLink="/distdashboardsettings" *ngIf="hasDistributorSettings"
-          routerLinkActive="active">Dashboard
-          Settings</a>
+          routerLinkActive="active">Dashboard Settings</a>
 
         <a class="collapse-item" routerLink="/audittrail" *ngIf="hasAuditTrail" routerLinkActive="active">Audit
           Trail</a>
@@ -181,7 +175,7 @@
     <div id="collapseReport" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Reports:</h6>
-        <a class="collapse-item" routerLink="/custpayrpt" *ngIf="hasSearch" routerLinkActive="active">Customer
+        <!-- <a class="collapse-item" routerLink="/custpayrpt" *ngIf="hasSearch" routerLinkActive="active">Customer
           Payment</a>
         <a class="collapse-item" routerLink="/srcontrev" *ngIf="hasSearch" routerLinkActive="active">ServiceContract
           Revenue</a>
@@ -190,7 +184,7 @@
         <a class="collapse-item" routerLink="/qtsent" *ngIf="hasSearch" routerLinkActive="active">Quotation Sent</a>
         <a class="collapse-item" routerLink="/sostatus" *ngIf="hasSearch" routerLinkActive="active">SupplierOrder
           Status</a>
-        <a class="collapse-item" routerLink="/srrpt" *ngIf="hasSearch" routerLinkActive="active">Service Report</a>
+        <a class="collapse-item" routerLink="/srrpt" *ngIf="hasSearch" routerLinkActive="active">Service Report</a> -->
       </div>
     </div>
   </li>
@@ -236,6 +230,5 @@
   </li>-->
   <!-- Nav Item - Tables -->
   <!-- Divider -->
-  <hr class="sidebar-divider d-none d-md-block">
-
+  <hr class="sidebar-divider d-none d-md-block" />
 </ul>
