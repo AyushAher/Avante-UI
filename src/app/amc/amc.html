@@ -281,7 +281,10 @@
                   <td>{{item.stageName}}</td>
 
                   <td>
-                    {{item.paymentType}} <br *ngIf="item.paymentType" /><br *ngIf="item.paymentType" />
+                    {{item.paymentType}} <br *ngIf="item.paymentType"><br *ngIf="item.paymentType">
+                    <span *ngIf="item.payAmt">
+                      {{item.payAmtCurrency}} {{item.payAmt}} <br /><br />
+                    </span>
                     {{item.comments}}
                   </td>
 
@@ -334,7 +337,7 @@
                       <input class="payAmt form-control" type="number" formControlName="payAmt" id="payAmt" />
                     </div>
 
-                    <label for="stageComments" *ngIf="isPaymentTerms">Comments</label>
+                    <label for="stageComments" *ngIf="isPaymentTerms || isPaymentAmt">Comments</label>
                     <textarea formControlName="stageComments" class="form-control"
                       [ngClass]="{'is-invalid':submitted && f.stageComments.errors }"></textarea>
 

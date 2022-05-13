@@ -123,6 +123,8 @@ export class AmcComponent implements OnInit {
             this.form.get('stageName').reset()
             this.form.get('stageComments').reset()
             this.form.get('payterms').reset()
+            this.form.get('payAmt').reset()
+            this.isPaymentAmt = false;
             this.stageFiles.nativeElement.value = "";
             var selectedfiles = document.getElementById("stageFilesList");
             selectedfiles.innerHTML = '';
@@ -195,12 +197,11 @@ export class AmcComponent implements OnInit {
       stageName: [''],
       stageComments: [''],
       stagePaymentType: [],
-      payAmt: [""],
+      payAmt: [0],
       secondVisitDateFrom: [],
       secondVisitDateTo: [],
       firstVisitDateFrom: [],
       firstVisitDateTo: [],
-
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
@@ -372,6 +373,7 @@ export class AmcComponent implements OnInit {
     let stage = this.form.get('stageName').value
     let index = 0;
     let paymentTerms = this.form.get('payterms').value
+    let payAmt = this.form.get('payAmt').value
 
     let offerProcess = {
       isactive: false,
@@ -380,6 +382,7 @@ export class AmcComponent implements OnInit {
       parentId: this.id,
       stage,
       index,
+      payAmt,
       paymentTypeId: paymentTerms,
     }
 

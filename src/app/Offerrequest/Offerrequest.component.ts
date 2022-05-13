@@ -102,6 +102,7 @@ export class OfferrequestComponent implements OnInit {
   isPaymentTerms: boolean;
   datepipe = new DatePipe('en-US')
   @ViewChild('stageFiles') stageFiles;
+  isPaymentAmt: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -171,9 +172,11 @@ export class OfferrequestComponent implements OnInit {
             this.form.get('stageName').reset()
             this.form.get('stageComments').reset()
             this.form.get('payterms').reset()
+            this.form.get('payAmt').reset()
             this.stageFiles.nativeElement.value = "";
             var selectedfiles = document.getElementById("stageFilesList");
             selectedfiles.innerHTML = '';
+            this.isPaymentAmt = false;
           })
 
       }
@@ -223,7 +226,8 @@ export class OfferrequestComponent implements OnInit {
       paymentTerms: [""],
       customerId: ["", Validators.required],
       instrumentsList: ['', Validators.required],
-
+      payAmt: [0],
+      payAmtCurrencyId: [0],
       stageName: ['', Validators.required],
       stageComments: ['', Validators.required],
       stagePaymentType: []
@@ -272,9 +276,11 @@ export class OfferrequestComponent implements OnInit {
         this.customerList = custList
       })
 
-    this.listTypeService.getById("ORQST").pipe(first())
+    this.listTypeService.getById("OFRQP").pipe(first())
       .subscribe((data: any) => {
         this.stagesList = data
+        console.log(data);
+
       })
 
     if (this.role == environment.distRoleCode) {
@@ -431,6 +437,13 @@ export class OfferrequestComponent implements OnInit {
       if (this.f.payterms.errors) return this.notificationService.showInfo("Payterms is required", "Info")
     }
 
+    if (this.isPaymentAmt) {
+      this.form.get('payAmt').setValidators([Validators.required])
+      this.form.get('payAmt').updateValueAndValidity();
+
+      if (this.f.payAmt.errors) return this.notificationService.showInfo("Payment Amount is required", "Info")
+    }
+
     if (this.f.stageName.errors) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
 
     if (this.f.stageComments.errors) return this.notificationService.showInfo("Comments cannot be empty", "Info")
@@ -448,7 +461,9 @@ export class OfferrequestComponent implements OnInit {
 
     let stage = this.form.get('stageName').value
     let index = 0;
-    let paymentTerms = this.form.get('payterms').value
+    let paymentTerms = this.form.get('payterms').value;
+    let payAmt = this.form.get('payAmt').value
+    let payAmtCurrencyId = this.form.get('payAmtCurrencyId').value
 
     let offerProcess = {
       isactive: false,
@@ -457,7 +472,9 @@ export class OfferrequestComponent implements OnInit {
       parentId: this.id,
       stage,
       index,
+      payAmt,
       paymentTypeId: paymentTerms,
+      payAmtCurrencyId,
     }
 
     this.offerRequestProcess.save(offerProcess).pipe(first())
@@ -481,6 +498,7 @@ export class OfferrequestComponent implements OnInit {
   onstageNameChanged(stage) {
     stage = this.stagesList.find(x => x.listTypeItemId == stage)?.itemCode
     this.isPaymentTerms = stage == "PYTMS";
+    this.isPaymentAmt = stage == "PYRCT";
   }
 
   deleteProcess(id) {
