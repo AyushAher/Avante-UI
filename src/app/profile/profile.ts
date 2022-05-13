@@ -174,6 +174,16 @@ export class ProfileComponent implements OnInit {
 
   SelectAll(property: string) {
     let permission = this.profileform.get('permissions') as FormArray;
+    
+    if (property == "commercial") {
+      for (let i of permission.controls) {
+        if (i.value.screenCode == "SINST" || i.value.screenCode == "OFREQ" || i.value.screenCode == "AMC")
+          i.get(property).setValue(!i.get(property).value)
+      }
+      return
+    }
+
+
     let inp = document.getElementById('selectall' + property) as HTMLInputElement;
 
     for (var i of permission.controls) {
