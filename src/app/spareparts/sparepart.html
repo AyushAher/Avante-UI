@@ -1,11 +1,35 @@
 <layout>
   <div class="right_col" role="main">
     <div class="container">
+
       <div class="page-title">
-        <div class="title_left">
-          <h3>Spare Part</h3>
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+          <h3>Travel Invoice</h3>
+          <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+          </div>
         </div>
       </div>
+
       <hr />
       <div class="clearfix"></div>
 
@@ -224,19 +248,6 @@
           </div>
 
           <hr />
-          <div class="row">
-            <div class="col-md-6 col-sm-6">
-              <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)"
-                class="btn btn-primary">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
-              </button>
-              <a routerLink="/sparepartlist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
-            </div>
-          </div>
-          <!--<div class="row" *ngIf="isSave">
-            <a routerLink="/contact" class="btn btn-link">Add Contact</a>
-          </div>-->
         </form>
       </div>
     </div>

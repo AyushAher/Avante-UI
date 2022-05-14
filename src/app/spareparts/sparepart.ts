@@ -26,8 +26,7 @@ import {
   ListTypeService,
   NotificationService,
   ProfileService,
-  SparePartService,
-  UploadService
+  SparePartService
 } from '../_services';
 import { DomSanitizer } from "@angular/platform-browser";
 import { HttpEventType } from "@angular/common/http";
@@ -41,9 +40,7 @@ import { AnalyticalTechniqueService } from '../_services/analytical-technique.se
 export class SparePartComponent implements OnInit {
   user: User;
   sparepartform: FormGroup;
-  loading = false;
   submitted = false;
-  isSave = false;
   id: string;
   countries: Country[];
   sparePart: SparePart;
@@ -53,7 +50,7 @@ export class SparePartComponent implements OnInit {
   currency: Currency[];
   configValueList: ConfigTypeValue[];
   code: string = "CONTY";
-  public configType: any[] = [{ key: "1", value: "screw" }, { key: "2", value: "bolt" }];
+  // public configType: any[] = [{ key: "1", value: "screw" }, { key: "2", value: "bolt" }];
   imageUrl: any;
   imagePath: any;
   replacementParts: SparePart[];
@@ -69,15 +66,17 @@ export class SparePartComponent implements OnInit {
   fileList: [] = [];
   transaction: number;
   hastransaction: boolean;
-  public progress: number;
-  public message: string;
 
-  @Output() public onUploadFinished = new EventEmitter();
   img: any;
   businessUnitList: ListTypeItem[];
   instrumentList: any;
   analyticalDataList: any;
   analyticalList: any;
+  isEditMode: boolean;
+  isNewMode: any;
+  IsEngineerView: any;
+  IsDistributorView: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -140,13 +139,8 @@ export class SparePartComponent implements OnInit {
       instrument: [],
     });
 
-    this.countryService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.countries = data.object;
-        }
-      });
+    this.countryService.getAll().pipe(first())
+      .subscribe((data: any) => this.countries = data.object);
 
     this.instrumentService.getAll(this.user.userId).pipe(first())
       .subscribe((data: any) => this.instrumentList = data.object)
@@ -155,128 +149,118 @@ export class SparePartComponent implements OnInit {
       .subscribe((data: any) => this.analyticalDataList = data.object)
 
 
-    this.currencyService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.currency = data.object;
-        }
-      });
+    this.currencyService.getAll().pipe(first())
+      .subscribe((data: any) => this.currency = data.object);
 
-    this.listTypeService.getById("BUSUT")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.businessUnitList = data;
-        }
-      });
+    this.listTypeService.getById("BUSUT").pipe(first())
+      .subscribe((data: ListTypeItem[]) => this.businessUnitList = data);
 
-    this.listTypeService.getById(this.code)
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.listTypeItems = data;
-        }
-      });
+    this.listTypeService.getById(this.code).pipe(first())
+      .subscribe((data: ListTypeItem[]) => this.listTypeItems = data);
 
 
-    this.listTypeService.getById("PART")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.parttypes = data;
-        }
-      });
-
-
+    this.listTypeService.getById("PART").pipe(first())
+      .subscribe((data: ListTypeItem[]) => this.parttypes = data);
 
     this.imageUrl = this.noimageData;
     this.id = this.route.snapshot.paramMap.get('id');
+
     if (this.id != null) {
 
-      this.sparePartService.getAll()
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.replacementParts = data.object;
-          }
-        });
-      this.sparePartService.getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.getfileImage(data.object.id);
+      this.sparePartService.getAll().pipe(first())
+        .subscribe((data: any) => this.replacementParts = data.object);
 
-            this.onConfigChange(data.object.configTypeid);
-            this.onConfigVChange(data.object.configTypeid, data.object.configValueid);
-
-            this.sparepartform.patchValue(data.object);
-            this.onBusinessUnitChange(data.object.businessUnit)
-          }
+      this.sparePartService.getById(this.id).pipe(first())
+        .subscribe((data: any) => {
+          this.getfileImage(data.object.id);
+          this.onConfigChange(data.object.configTypeid);
+          this.onConfigVChange(data.object.configTypeid, data.object.configValueid);
+          this.sparepartform.patchValue(data.object);
+          this.onBusinessUnitChange(data.object.businessUnit);
         });
+
+      this.sparepartform.disable();
+    }
+    else {
+      this.FormControlDisable()
+      this.isNewMode = true
+    }
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.sparepartform.enable();
+      this.FormControlDisable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["sparepartlist"])
     }
 
+    else this.router.navigate(["sparepartlist"])
+
+  }
+
+  CancelEdit() {
+    this.sparepartform.disable()
+    this.isEditMode = false;
+  }
+
+  FormControlDisable() {
+    if (this.IsEngineerView) {
+      this.sparepartform.get('engineerId').disable()
+      this.sparepartform.get('distributorId').disable()
+    }
+
+    else if (this.IsDistributorView) {
+      this.sparepartform.get('distributorId').disable()
+    }
+
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+
+      this.sparePartService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["sparepartlist"])
+        })
+    }
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.sparepartform.controls; }
 
   getSpareByNo(partNo: string, configType: string, configValue: string) {
-    //debugger;
     this.configPartCombo = new ConfigPartCombo;
     this.configPartCombo.configTypeId = configType;
     this.configPartCombo.configValueId = configValue;
     this.configPartCombo.partNo = partNo;
 
-    this.sparePartService.getByPartNo(this.configPartCombo)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.sparepartform.patchValue(data.object);
-        },
-        error: error => {
-
-          this.loading = false;
-        }
-      });
+    this.sparePartService.getByPartNo(this.configPartCombo).pipe(first())
+      .subscribe((data: any) => this.sparepartform.patchValue(data.object));
   }
 
   getfileImage(id) {
-    //debugger;
-    // this.uploadService.getFile(filePath)
-    //   .pipe(first())
-    //   .subscribe({
-    //     next: (data: any) => {
-    //       //debugger;
-    //       this.imageUrl = 'data:image/jpeg;base64,' + data.data;
-    //       // this.alertService.success('File Upload Successfully.');
-    //       // this.imagePath = data.path;
-    //       // console.log(data);
-    //
-    //     },
-    //     error: error => {
-    //       this.imageUrl = this.noimageData;
-    //       
-    //     }
-    //   });
     this.fileshareService.getImg(id, "SPPRT")
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.imageUrl = "data:image/jpeg;base64, " + data.object;
-          this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
-          // this.attachments = data.object;
-        },
+      .subscribe((data: any) => {
+        this.imageUrl = "data:image/jpeg;base64, " + data.object;
+        this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
       });
 
   }
 
   uploadFile(files, id) {
-    //debugger;
     let reader = new FileReader(); // HTML5 FileReader API
     let file = files[0];
     this.img = files;
-    // if (event.target.files && event.target.files[0]) {
     reader.readAsDataURL(file);
 
     reader.onload = () => {
@@ -285,28 +269,6 @@ export class SparePartComponent implements OnInit {
         imageUrl: reader.result as string
       });
     }
-
-    //   this.uploadService.upload(file)
-    //     .pipe(first())
-    //     .subscribe({
-    //       next: (data: any) => {
-    //         //debugger;
-    //        // this.alertService.success('File Upload Successfully.');
-    //         this.notificationService.showSuccess("File Upload Successfully", "Success");
-    //         this.imagePath = data.path;
-    //         // console.log(data);
-    //
-    //       },
-    //       error: error => {
-    //          
-    //       }
-    //     });
-
-    //// When file uploads set it to file formcontrol
-    //  this.editFile = false;
-    //  this.removeUpload = true;
-    // ChangeDetectorRef since file is loading outside the zone
-    //this.cd.markForCheck();
 
     if (files.length === 0 && id == null) {
       return;
@@ -317,14 +279,8 @@ export class SparePartComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
-    this.fileshareService.upload(formData, id, "SPPRTIMG", "SPPRT").subscribe((event) => {
-      if (event.type === HttpEventType.UploadProgress)
-        this.progress = Math.round((100 * event.loaded) / event.total);
-      else if (event.type === HttpEventType.Response) {
-        this.message = "Upload success.";
-        this.onUploadFinished.emit(event.body);
-      }
-    });
+
+    this.fileshareService.upload(formData, id, "SPPRTIMG", "SPPRT").subscribe((event) => { });
 
   }
 
@@ -344,87 +300,49 @@ export class SparePartComponent implements OnInit {
     if (this.sparepartform.invalid) {
       return;
     }
-    this.isSave = true;
-    this.loading = true;
+
     this.sparePart = this.sparepartform.value;
     this.sparePart.image = this.imagePath;
     if (this.id == null) {
 
       this.sparePartService.save(this.sparePart)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              if (this.img != undefined && this.img.length > 0) {
-                this.uploadFile(this.img, data.object.id)
-              }
-              this.router.navigate(["sparepartlist"]);
-            }
-            else {
+        .subscribe((data: any) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
 
-            }
-            this.loading = false;
+            if (this.img != undefined && this.img.length > 0)
+              this.uploadFile(this.img, data.object.id)
 
-          },
-          error: error => {
-
-            this.loading = false;
+            this.router.navigate(["sparepartlist"]);
           }
         });
     }
     else {
-      // this.sparePart = this.sparepartform.value;
       this.sparePart.id = this.id;
       this.sparePartService.update(this.id, this.sparePart)
         .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["sparepartlist"]);
-            }
-            else {
+        .subscribe((data: ResultMsg) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(["sparepartlist"]);
 
-            }
-            this.loading = false;
+            if (this.img != undefined && this.img.length > 0)
+              this.uploadFile(this.img, this.id)
 
-          },
-          error: error => {
-
-            this.loading = false;
           }
         });
     }
   }
 
   onConfigChange(param: string) {
-    this.configService.getById(param)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.configValueList = data.object;
-        },
-        error: error => {
-
-          this.loading = false;
-        }
-      });
+    this.configService.getById(param).pipe(first())
+      .subscribe((data: any) => this.configValueList = data.object);
   }
 
   onConfigVChange(configid: string, configval: string) {
-    //debugger;
-    this.sparePartService.getByConfignValueId(configid, configval)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.replacementParts = data.object;
-        },
-        error: error => {
-
-          this.loading = false;
-        }
-      });
+    this.sparePartService.getByConfignValueId(configid, configval).pipe(first())
+      .subscribe((data: any) => this.replacementParts = data.object);
   }
 
 }
