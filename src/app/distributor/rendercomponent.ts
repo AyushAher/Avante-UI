@@ -32,9 +32,7 @@ import { TravelExpenseService } from '../_services/travel-expense.service';
 
 @Component({
   template: `<a [routerLink]="[params.inRouterLink,params.value]" class="btn btn-link"
-                style="margin-right: 10px; padding: 0;"><i class="fas fa-pen" title="Edit"></i></a>
-  <button class="btn btn-link"  [disabled]="!params.deleteaccess" (click)="delete(params)"><i class="fas fa-trash-alt"
-                                                                                       title="Delete"></i></button>`
+                style="margin-right: 10px; padding: 0;"><i class="fas fa-eye" title="View"></i></a>`
 })
 export class RenderComponent implements AgRendererComponent {
   params: any;

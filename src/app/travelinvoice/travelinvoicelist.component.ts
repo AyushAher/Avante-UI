@@ -80,7 +80,7 @@ export class TravelInvoiceListComponent implements OnInit {
                 cellRendererParams: {
                     inRouterLink: "/travelinvoice",
                     deleteLink: "TRIVC",
-                    deleteaccess: this.hasDeleteAccess,
+                    deleteaccess: false,
                 },
             },
             {

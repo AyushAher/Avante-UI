@@ -50,6 +50,8 @@ export class TravelinvoiceComponent implements OnInit {
   public progress: number;
   currencyList: Currency[];
   distId: string;
+  isEditMode: any;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,11 +82,15 @@ export class TravelinvoiceComponent implements OnInit {
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter((x) => x.screenCode == "TREXP");
       if (profilePermission.length > 0) {
-        this.hasReadAccess = profilePermission[0].read;
-        this.hasAddAccess = profilePermission[0].create;
-        this.hasDeleteAccess = profilePermission[0].delete;
-        this.hasUpdateAccess = profilePermission[0].update;
+        // this.hasReadAccess = profilePermission[0].read;
+        // this.hasAddAccess = profilePermission[0].create;
+        // this.hasDeleteAccess = profilePermission[0].delete;
+        // this.hasUpdateAccess = profilePermission[0].update;
       }
+      this.hasAddAccess = true;
+      this.hasDeleteAccess = true;
+      this.hasUpdateAccess = true;
+      this.hasReadAccess = true;
     }
 
     this.form = this.formBuilder.group({
@@ -145,13 +151,7 @@ export class TravelinvoiceComponent implements OnInit {
 
                 if (this.IsEngineerView) {
                   this.form.get('engineerId').setValue(this.user.contactId)
-                  this.form.get('engineerId').disable()
-                  this.form.get('distributorId').disable()
                   this.getservicerequest(this.distId, this.user.contactId)
-                }
-
-                if (this.IsDistributorView) {
-                  this.form.get('distributorId').disable()
                 }
               });
 
@@ -180,6 +180,55 @@ export class TravelinvoiceComponent implements OnInit {
                   }, 1000);
                 });
             });
+        })
+      this.form.disable();
+    }
+    else {
+      this.FormControlDisable()
+      this.isNewMode = true
+    }
+
+    this.columnDefsAttachments = this.createColumnDefsAttachments()
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+      this.FormControlDisable();
+    }
+  }
+
+  Back() {
+    if ((this.isEditMode || this.isNewMode) && confirm("Are you sure want to go back? All unsaved changes will be lost!")) {
+      this.router.navigate(["travelinvoicelist"])
+    }
+  }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  FormControlDisable() {
+    if (this.IsEngineerView) {
+      this.form.get('engineerId').disable()
+      this.form.get('distributorId').disable()
+    }
+
+    else if (this.IsDistributorView) {
+      this.form.get('distributorId').disable()
+    }
+
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+
+      this.TravelInvoicesService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["travelinvoicelist"])
         })
     }
   }
@@ -245,7 +294,7 @@ export class TravelinvoiceComponent implements OnInit {
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess,
+          deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.id
         },
       },
