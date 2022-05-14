@@ -597,10 +597,10 @@ export class ServiceRequestComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["sparepartlist"])
+        this.router.navigate(["servicerequestlist"])
     }
 
-    else this.router.navigate(["sparepartlist"])
+    else this.router.navigate(["servicerequestlist"])
 
   }
 
@@ -658,12 +658,9 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestService.delete(this.serviceRequestId).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["sparepartlist"])
+            this.router.navigate(["servicerequestlist"])
         })
     }
-  }
-  id(id: any) {
-    throw new Error('Method not implemented.');
   }
 
   onCustomerChanged(value: any) {

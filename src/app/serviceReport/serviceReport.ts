@@ -148,6 +148,8 @@ export class ServiceReportComponent implements OnInit {
   finished: boolean = false;
   @ViewChild('file') fileInput
   isCompleted: boolean = false;
+  isEditMode: boolean;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -396,14 +398,6 @@ export class ServiceReportComponent implements OnInit {
             this.workTime.forEach((value, index) => {
               value.worktimedate = datepipe.transform(value.worktimedate, 'dd/MM/YYYY');
             });
-            if (!this.isEng) {
-              this.ServiceReportform.get('analyticalassit').disable()
-              this.ServiceReportform.get('prevmaintenance').disable()
-              this.ServiceReportform.get('rework').disable()
-              this.ServiceReportform.get('installation').disable()
-              this.ServiceReportform.get('corrmaintenance').disable()
-              this.ServiceReportform.get('problem').disable()
-            }
             this.spconsumedlist = data.object.lstSPConsumed;
             this.sparePartRecomanded = data.object.lstSPRecommend;
             this.custsign = data.object.custsignature;
@@ -460,6 +454,12 @@ export class ServiceReportComponent implements OnInit {
           },
         });
 
+      setTimeout(() => this.ServiceReportform.disable(), 100);
+    }
+
+    else {
+      this.FormControlDisable()
+      this.isNewMode = true
     }
 
     this.columnworkdefs = this.createworkdoneColumnDefs();
@@ -472,6 +472,56 @@ export class ServiceReportComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.ServiceReportform.controls; }
   get a() { return this.ServiceReportform.controls.engineer; }
+
+
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.ServiceReportform.enable();
+      this.FormControlDisable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["servicereportlist"])
+    }
+
+    else this.router.navigate(["servicereportlist"])
+
+  }
+
+  CancelEdit() {
+    this.ServiceReportform.disable()
+    this.isEditMode = false;
+  }
+
+  FormControlDisable() {
+    if (!this.isEng) {
+      this.ServiceReportform.get('analyticalassit').disable()
+      this.ServiceReportform.get('prevmaintenance').disable()
+      this.ServiceReportform.get('rework').disable()
+      this.ServiceReportform.get('installation').disable()
+      this.ServiceReportform.get('corrmaintenance').disable()
+      this.ServiceReportform.get('problem').disable()
+    }
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+
+      this.ServiceReportService.delete(this.ServiceReportId).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["servicereportlist"])
+        })
+    }
+  }
+
+
 
   onSubmit() {
     this.submitted = true;
@@ -602,8 +652,8 @@ export class ServiceReportComponent implements OnInit {
     if (!this.isCompleted) {
       if (interrupted == 0) {
         this.interrupted = true;
-        this.ServiceReportform.get('reason').enable()
         this.ServiceReportform.get('reason').setValidators([Validators.required])
+        if (this.isEditMode) this.ServiceReportform.get('reason').enable()
       } else {
         this.interrupted = false;
         this.ServiceReportform.get('reason').clearValidators()
@@ -624,11 +674,13 @@ export class ServiceReportComponent implements OnInit {
       this.ServiceReportform.get('interruptedstr').setValue("1")
 
       if (finished == 1) {
-        this.ServiceReportform.get('reason').enable()
-        this.ServiceReportform.get('interruptedstr').enable()
-        this.ServiceReportform.get('interruptedstr').setValue("0")
-        this.ServiceReportform.get('reason').setValidators([Validators.required])
+        if (this.isEditMode) {
+          this.ServiceReportform.get('reason').enable()
+          this.ServiceReportform.get('interruptedstr').enable()
+          this.ServiceReportform.get('reason').setValidators([Validators.required])
+        }
 
+        this.ServiceReportform.get('interruptedstr').setValue("0")
       }
       this.onInteruptedChange(this.ServiceReportform.get('interruptedstr').value)
       this.ServiceReportform.get('reason').updateValueAndValidity()

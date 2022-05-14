@@ -1,23 +1,55 @@
 <layout>
   <div class="right_col" role="main">
     <div class="container">
-      <!--      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">-->
-      <!--        <li class="nav-item" role="presentation">-->
-      <!--          <a class="nav-link active"-->
-      <!--             id="ex1-tab-1"-->
-      <!--             data-mdb-toggle="tab"-->
-      <!--             routerLink="/servicereport/{{ ServiceReportId }}" routerLinkActive="active"-->
-      <!--             role="tab"-->
-      <!--             aria-controls="ex1-tabs-1"-->
-      <!--             aria-selected="true">ServiceReport</a>-->
-      <!--        </li>-->
-      <!--      </ul>-->
 
       <div class="page-title">
-        <div class="title_left">
-          <h3>Service Report</h3>
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+
+          <div class="d-flex" style="align-items: center;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <h3>Service Request</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)  && !isCompleted">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+
+            <div class="nav-item dropdown">
+              <a class="nav-link" href="#" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v" style="color: #5ba146;" title="More"></i>
+              </a>
+
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" (click)="GeneratePDF(false)"
+                  *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !this.isCompleted">
+                  Generate Service Report
+                </a>
+                <a class="dropdown-item" (click)="GeneratePDF(true)">
+                  Preview
+                </a>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
+
       <hr />
       <div class="clearfix"></div>
 
@@ -109,16 +141,7 @@
             <div class="col-sm-3">
               <label for="instrument">Instrument</label>
               <input id="typeahead-format" type="text" formControlName="instrument" disabled class="form-control" />
-              <!-- <select formControlName="instrument" disabled class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.instrument.errors }">
-                <option value="">--Select--</option>
-                <option *ngFor="let c of instrumentlist" value={{c.id}}>
-                  {{c.insversion}} - {{c.serialnos}}
-                </option>
-              </select> -->
               <div *ngIf="submitted && f.instrument.errors" class="invalid-feedback">
-
-
                 <div *ngIf="f.instrument.errors.required">instrument is required</div>
               </div>
             </div>
@@ -240,7 +263,7 @@
 
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
-              <button type="button" [disabled]="this.isCompleted" class="btn btn-sm btn-success button"
+              <button type="button" [disabled]="this.isCompleted && !isEditMode" class="btn btn-sm btn-success button"
                 style="margin: 10px;" (click)="open(ServiceReportId)"><i class="fas fa-plus-circle"
                   title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
@@ -251,7 +274,7 @@
               </div>
             </div>
             <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-              <button type="button" [disabled]="this.isCompleted" class="btn btn-sm btn-success button"
+              <button type="button" [disabled]="this.isCompleted && !isEditMode" class="btn btn-sm btn-success button"
                 style="margin: 10px;" (click)="opentime(ServiceReportId)"><i class="fas fa-plus-circle"
                   title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
@@ -265,14 +288,14 @@
               <div class="row my-3">
                 <div class="col-sm-4">
                   <label>Select Sparepart</label>
-                  <input id="typeahead-format" [disabled]="this.isCompleted" type="text" formControlName="consumed"
-                    class="form-control" [ngbTypeahead]="searchpartcon" [resultFormatter]="formatterpartcon"
-                    [inputFormatter]="formatterpartcon" />
+                  <input id="typeahead-format" [disabled]="this.isCompleted && !isEditMode" type="text"
+                    formControlName="consumed" class="form-control" [ngbTypeahead]="searchpartcon"
+                    [resultFormatter]="formatterpartcon" [inputFormatter]="formatterpartcon" />
                 </div>
                 <div class="col-sm-4">
                   <label for=""></label>
-                  <button type="button" [disabled]="this.isCompleted" class="btn btn-primary" style="margin-top: 31px;"
-                    (click)="addPartcons()">Add</button>
+                  <button type="button" [disabled]="this.isCompleted && !isEditMode" class="btn btn-primary"
+                    style="margin-top: 31px;" (click)="addPartcons()">Add</button>
                 </div>
               </div>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
@@ -286,14 +309,14 @@
               <div class="row my-3">
                 <div class="col-sm-4">
                   <label>Select Sparepart</label>
-                  <input id="typeahead-format" [disabled]="this.isCompleted" type="text" formControlName="recondad"
-                    class="form-control" [ngbTypeahead]="searchpart" [resultFormatter]="formatterpart"
-                    [inputFormatter]="formatterpart" />
+                  <input id="typeahead-format" [disabled]="this.isCompleted && !isEditMode" type="text"
+                    formControlName="recondad" class="form-control" [ngbTypeahead]="searchpart"
+                    [resultFormatter]="formatterpart" [inputFormatter]="formatterpart" />
                 </div>
                 <div class="col-sm-4">
                   <label for=""></label>
-                  <button type="button" [disabled]="this.isCompleted" class="btn btn-primary" style="margin-top: 31px;"
-                    (click)="addPartrecmm(autopart)">Add</button>
+                  <button type="button" [disabled]="this.isCompleted && !isEditMode" class="btn btn-primary"
+                    style="margin-top: 31px;" (click)="addPartrecmm(autopart)">Add</button>
                 </div>
               </div>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
@@ -335,7 +358,7 @@
               <label for="interruptedstr">
                 Interrupted
               </label>
-              <select class="form-control" (change)="onInteruptedChange($event.target.value)"
+              <select class="form-control" [disabled]="!isEditMode" (change)="onInteruptedChange($event.target.value)"
                 formControlName="interruptedstr">
                 <option value="0">Yes</option>
                 <option value="1">No</option>
@@ -346,7 +369,7 @@
             </div>
             <div class="col-sm-3" *ngIf="interrupted">
               <label for="reason">Reason</label>
-              <input type="text" formControlName="reason" class="form-control"
+              <input type="text" [disabled]="!isEditMode" formControlName="reason" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.reason.errors }" />
               <div *ngIf="submitted && f.reason.errors" class="invalid-feedback">
                 <div *ngIf="f.reason.errors.required">reason is required</div>
@@ -377,7 +400,7 @@
                 <div *ngIf="f.signcustname.errors.required">Customer Name is required</div>
               </div>
             </div>
-            <div class="col-sm-9" *ngIf="!this.isCompleted">
+            <div class="col-sm-9" *ngIf="!this.isCompleted && isEditMode">
               <label for="customerSing">Customer Signature Pad</label>
               <div style="border:medium">
                 <signature-pad #sigpad1 [options]="signaturePadOptions" style="border-bottom:dashed"
@@ -397,7 +420,7 @@
                 <div *ngIf="f.signengname.errors.required">Engineer Name is required</div>
               </div>
             </div>
-            <div class="col-sm-9" *ngIf="!this.isCompleted">
+            <div class="col-sm-9" *ngIf="!this.isCompleted && isEditMode">
               <label for="engineerSing">Engineer Signature Pad</label>
               <div style="border:medium">
                 <signature-pad #sigpad2 [options]="signaturePadOptions" style="border-bottom:dashed"
@@ -444,25 +467,6 @@
             </div>
           </div>
           <hr>
-          <div class="row">
-            <div class="col-md-6 col-sm-6" style="padding:10px">
-              <button [disabled]="loading" class="btn btn-primary"
-                *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && !this.isCompleted">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Save
-              </button>
-              <a routerLink="/servicereportlist" class="btn btn-secondary" style="margin-left:10px;">Back</a>
-              <button type="button" class="btn btn-secondary" style="margin-left:15px;"
-                (click)="GeneratePDF(true)">Preview</button>
-
-              <button [disabled]="loading" class="btn btn-secondary" type="button"
-                *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !this.isCompleted"
-                (click)="GeneratePDF(false)">
-                Generate Service Report
-              </button>
-
-            </div>
-          </div>
           <p style="color:red;">*Please Save to see Preview or to Generate Service Report</p>
         </form>
       </div>
