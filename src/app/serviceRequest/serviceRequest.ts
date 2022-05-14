@@ -1,4 +1,3 @@
-/* tslint:disable */
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import {
@@ -57,13 +56,11 @@ import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponen
   selector: 'app-customer',
   templateUrl: './serviceRequest.html',
 })
+
 export class ServiceRequestComponent implements OnInit {
   user: User;
   serviceRequestform: FormGroup;
-  loading = false;
   submitted = false;
-  isSave = false;
-  type: string = "SR";
   serviceRequestId: string;
   pdfPath: any;
   countries: Country[];
@@ -76,7 +73,6 @@ export class ServiceRequestComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   appendList: Contact[];
-  //public defaultdistributors: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
   public columnDefs: ColDef[];
   public ticketcolumnDefs: ColDef[];
   public actionDefs: ColDef[];
@@ -113,7 +109,6 @@ export class ServiceRequestComponent implements OnInit {
   engineername: string;
   engineerid: string;
   servicereport: ServiceReport;
-  //dropdownList = [];
   dropdownSettings: IDropdownSettings = {};
   custcityname: string;
   breakdownlist: ListTypeItem[];
@@ -122,12 +117,9 @@ export class ServiceRequestComponent implements OnInit {
   isAmc: boolean = false;
   scheduleLink: string;
 
-  @Output() public onUploadFinished = new EventEmitter();
-
-  private fileUploadProgress: number;
-  private transaction: number;
-  private hastransaction: boolean;
-  private file: any;
+  transaction: number;
+  hastransaction: boolean;
+  file: any;
   role: any;
   instrumentStatus: ListTypeItem[];
   stagelist: ListTypeItem[];
@@ -136,6 +128,8 @@ export class ServiceRequestComponent implements OnInit {
   scheduleDefs: ColDef[];
   hasCallScheduled: boolean;
   isGenerateReport: boolean = false;
+  isNewMode: boolean;
+  isEditMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -178,12 +172,6 @@ export class ServiceRequestComponent implements OnInit {
                 value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
               })
               this.api.refreshCells()
-
-            },
-            error: error => {
-              // this.alertService.error(error);
-              this.notificationService.showSuccess(error, "Error");
-              this.loading = false;
             }
           });
         this.EngschedulerService.getByEngId(this.user.contactId).pipe(first())
@@ -203,13 +191,7 @@ export class ServiceRequestComponent implements OnInit {
                 value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
               })
               this.api.refreshCells()
-
             },
-            error: error => {
-              // this.alertService.error(error);
-              this.notificationService.showSuccess(error, "Error");
-              this.loading = false;
-            }
           });
       }
     })
@@ -321,52 +303,29 @@ export class ServiceRequestComponent implements OnInit {
     if (this.IsEngineerView == true) {
       this.serviceRequestform.get('requesttypeid').setValidators([Validators.required]);
       this.serviceRequestform.get('requesttypeid').updateValueAndValidity();
-      this.serviceRequestform.get('requesttypeid').disable();
       this.serviceRequestform.get('subrequesttypeid').setValidators([Validators.required]);
       this.serviceRequestform.get('subrequesttypeid').updateValueAndValidity();
-      this.serviceRequestform.get('subrequesttypeid').disable();
-      this.serviceRequestform.get('remarks').disable();
-      // this.serviceRequestform.get('statusid').disable();
+
       this.EngschedulerService.getByEngId(this.user.contactId).pipe(first())
         .subscribe((data: any) => {
           data.object.filter(x => x.serReqId == this.serviceRequestId).length > 0 ? this.hasCallScheduled = true : this.hasCallScheduled = false;
         })
     }
-    this.serviceRequestform.get('custid').disable();
-    this.serviceRequestform.get('siteid').disable();
 
-    this.countryService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.countries = data.object;
-        },
-        error: error => {
-          //  this.alertService.error(error);
-          this.notificationService.showSuccess(error, 'Error');
-          this.loading = false;
-        }
-      });
-    //SERTY
+    this.countryService.getAll().pipe(first())
+      .subscribe((data: any) => this.countries = data.object);
 
-
-    this.listTypeService.getById('SERTY')
-      .pipe(first())
+    this.listTypeService.getById('SERTY').pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.serviceTypeList = data;
           if (this.IsCustomerView) {
             this.serviceTypeList = this.serviceTypeList.filter(x => x.itemCode != "PREV" && x.itemCode != "PLAN")
           }
-        },
-        error: error => {
-
-          this.loading = false;
         }
       });
 
-    this.listTypeService.getById('SRSAT')
-      .pipe(first())
+    this.listTypeService.getById('SRSAT').pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.stagelist = data;
@@ -374,10 +333,6 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.get('stageid').setValue(data.find(x => x.itemCode == "NTSTD")?.listTypeItemId);
           }
         },
-        error: error => {
-
-          this.loading = false;
-        }
       });
 
     this.listTypeService.getById('SRQST')
@@ -387,33 +342,22 @@ export class ServiceRequestComponent implements OnInit {
           this.statuslist = data;
           if (this.serviceRequestId == null) {
             this.serviceRequestform.get('statusid').setValue(data.find(x => x.itemCode == "NTACP")?.listTypeItemId);
-            if (this.IsCustomerView) {
+
+            if (this.IsCustomerView)
               this.serviceRequestform.get('statusid').setValue(data.find(x => x.itemCode == "NTASS")?.listTypeItemId);
-            }
+
           }
+
           if (this.IsEngineerView) {
             this.statuslist = this.statuslist.filter(x => x.itemCode != "NTASS" && x.itemCode != "ASSGN")
             this.serviceRequestform.get('statusid').setValue(this.statuslist.find(x => x.itemCode == "NTACP")?.listTypeItemId);
 
           }
-        },
-        error: error => {
-
-          this.loading = false;
         }
       });
 
-    this.listTypeService.getById('CINSS')
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.instrumentStatus = data;
-        },
-        error: error => {
-
-          this.loading = false;
-        }
-      });
+    this.listTypeService.getById('CINSS').pipe(first())
+      .subscribe((data: ListTypeItem[]) => this.instrumentStatus = data);
 
 
     this.serviceRequestService.getSerReqNo()
@@ -423,40 +367,19 @@ export class ServiceRequestComponent implements OnInit {
           let srno = data.object;
           this.serviceRequestform.patchValue({ "serreqno": srno });
         },
-        error: error => {
-
-          this.loading = false;
-        }
       });
 
 
-    this.listTypeService.getById("BDOD")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.breakdownlist = data;
-        },
-        error: error => {
-
-          this.loading = false;
-        }
-      });
+    this.listTypeService.getById("BDOD").pipe(first())
+      .subscribe((data: ListTypeItem[]) => this.breakdownlist = data);
 
 
-    this.listTypeService.getById("TRRQT")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.reqtypelist = data;
+    this.listTypeService.getById("TRRQT").pipe(first())
+      .subscribe((data: ListTypeItem[]) => {
+        this.reqtypelist = data;
 
-          if (this.IsCustomerView) {
-            this.serviceRequestform.get('requesttypeid').setValue(data.find(x => x.itemCode == 'CUSTR')?.listTypeItemId);
-
-          }
-        },
-        error: error => {
-          this.loading = false;
-        }
+        if (this.IsCustomerView)
+          this.serviceRequestform.get('requesttypeid').setValue(data.find(x => x.itemCode == 'CUSTR')?.listTypeItemId);
       });
 
 
@@ -465,86 +388,34 @@ export class ServiceRequestComponent implements OnInit {
       textField: 'itemname',
     };
 
-    this.listTypeService.getById('SRT')
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.subreqtypelist = data;
-        },
-        error: error => {
-
-          this.loading = false;
-        }
-      });
+    this.listTypeService.getById('SRT').pipe(first())
+      .subscribe((data: any) => this.subreqtypelist = data);
 
     this.customerService.getAll().pipe(first())
       .subscribe((data: any) => {
         data.object.forEach(element => {
-          if (this.user.distRegionsId.split(",").find(x => x == element.defdistregionid) != null) {
-            this.customerlist.push(element)
-          }
-          if (this.user.distRegionsId == "") {
-            this.customerlist = data.object
-          }
+          if (this.user.distRegionsId.split(",").find(x => x == element.defdistregionid) != null) this.customerlist.push(element)
+
+          if (this.user.distRegionsId == "") this.customerlist = data.object
+
         });
       })
 
 
-    this.distributorService.getAll()
-      .pipe(first())
+    this.distributorService.getAll().pipe(first())
       .subscribe({
-        next: (data: any) => {
-          this.defaultdistributors = data.object;
-        },
-        error: error => {
-          // this.alertService.error(error);
-          this.notificationService.showSuccess(error, "Error");
-          this.loading = false;
-        }
+        next: (data: any) => this.defaultdistributors = data.object
       });
 
     this.scheduleLink = `/schedule/${this.serviceRequestId}`;
 
-    this.serviceRequestform.get('country').disable();
 
     this.columnDefs = this.createColumnDefs();
     this.ticketcolumnDefs = this.createColumnHistoryDefs();
     this.actionDefs = this.createColumnActionDefs();
     this.scheduleDefs = this.createColumnScheduleDefs();
     this.pdfcolumnDefs = this.pdfcreateColumnDefs();
-    this.serviceRequestform.get('distid').disable();
 
-    if (this.IsEngineerView) {
-      this.serviceRequestform.get('assignedto').disable();
-      this.serviceRequestform.get('country').disable();
-      this.serviceRequestform.get('machinesno').disable();
-      this.serviceRequestform.get('breakdowntype').disable();
-      this.serviceRequestform.get('isrecurring').disable();
-      this.serviceRequestform.get('recurringcomments').disable();
-      this.serviceRequestform.get('breakoccurdetailsid').disable();
-      this.serviceRequestform.get('alarmdetails').disable();
-      this.serviceRequestform.get('resolveaction').disable();
-      this.serviceRequestform.get('visittype').disable();
-      this.serviceRequestform.get('currentinstrustatus').disable();
-      this.serviceRequestform.get("contactperson").disable();
-      this.serviceRequestform.get("email").disable();
-    } else if (this.IsDistributorView) {
-      this.serviceRequestform.get('assignedto').enable();
-      this.serviceRequestform.get('country').disable();
-      this.serviceRequestform.get('statusid').disable();
-      this.serviceRequestform.get('custid').enable();
-      this.serviceRequestform.get('siteid').enable();
-    } else {
-      this.serviceRequestform.get('stageid').disable();
-      this.serviceRequestform.get('siteid').enable();
-      this.serviceRequestform.get("contactperson").disable();
-      this.serviceRequestform.get("email").disable();
-      this.serviceRequestform.get('assignedto').disable();
-      this.serviceRequestform.get('statusid').disable();
-      this.serviceRequestform.get('stageid').disable();
-      this.serviceRequestform.get('serreqdate').enable();
-
-    }
     if (this.serviceRequestId != null) {
       this.serviceRequestService.getById(this.serviceRequestId)
         .pipe(first())
@@ -564,16 +435,9 @@ export class ServiceRequestComponent implements OnInit {
 
               this.serviceRequestform.patchValue({ "subrequesttypeid": items });
 
-              this.fileshareService.list(this.serviceRequestId)
-                .pipe(first())
+              this.fileshareService.list(this.serviceRequestId).pipe(first())
                 .subscribe({
-                  next: (data: any) => {
-                    this.PdffileData = data.object;
-                  },
-                  error: error => {
-
-                    this.loading = false;
-                  }
+                  next: (data: any) => this.PdffileData = data.object
                 });
 
             }
@@ -687,16 +551,17 @@ export class ServiceRequestComponent implements OnInit {
             }, 200);
 
           },
-          error: error => {
-            this.notificationService.showSuccess(error, "Error");
-            this.loading = false;
-          }
         });
+
+      setTimeout(() => {
+        this.serviceRequestform.disable();
+      }, 100);
 
     }
     else {
       this.serviceRequestform.get('requesttime').setValue(this.datepipe.transform(Date.now(), "H:mm"))
       this.serviceRequestform.get('serreqdate').setValue(this.datepipe.transform(Date.now(), "MM/dd/yyyy"))
+
       this.contactService.getCustomerSiteByContact(this.user.contactId)
         .pipe(first())
         .subscribe({
@@ -713,12 +578,92 @@ export class ServiceRequestComponent implements OnInit {
                 })
             }
           },
-          error: error => {
-            this.notificationService.showSuccess(error, "Error");
-            this.loading = false;
-          }
         });
+
+      this.FormControlDisable()
+      this.isNewMode = true
     }
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.serviceRequestform.enable();
+      this.FormControlDisable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["sparepartlist"])
+    }
+
+    else this.router.navigate(["sparepartlist"])
+
+  }
+
+  CancelEdit() {
+    this.serviceRequestform.disable()
+    this.isEditMode = false;
+  }
+
+  FormControlDisable() {
+    this.serviceRequestform.get('requesttypeid').disable();
+    this.serviceRequestform.get('subrequesttypeid').disable();
+    this.serviceRequestform.get('remarks').disable();
+    this.serviceRequestform.get('custid').disable();
+    this.serviceRequestform.get('siteid').disable();
+    this.serviceRequestform.get('country').disable();
+    this.serviceRequestform.get('distid').disable();
+    
+    if (this.IsEngineerView) {
+      this.serviceRequestform.get('assignedto').disable();
+      this.serviceRequestform.get('country').disable();
+      this.serviceRequestform.get('machinesno').disable();
+      this.serviceRequestform.get('breakdowntype').disable();
+      this.serviceRequestform.get('isrecurring').disable();
+      this.serviceRequestform.get('recurringcomments').disable();
+      this.serviceRequestform.get('breakoccurdetailsid').disable();
+      this.serviceRequestform.get('alarmdetails').disable();
+      this.serviceRequestform.get('resolveaction').disable();
+      this.serviceRequestform.get('visittype').disable();
+      this.serviceRequestform.get('currentinstrustatus').disable();
+      this.serviceRequestform.get("contactperson").disable();
+      this.serviceRequestform.get("email").disable();
+    } else if (this.IsDistributorView) {
+      this.serviceRequestform.get('assignedto').enable();
+      this.serviceRequestform.get('country').disable();
+      this.serviceRequestform.get('statusid').disable();
+      this.serviceRequestform.get('custid').enable();
+      this.serviceRequestform.get('siteid').enable();
+    } else {
+      this.serviceRequestform.get('stageid').disable();
+      this.serviceRequestform.get('siteid').enable();
+      this.serviceRequestform.get("contactperson").disable();
+      this.serviceRequestform.get("email").disable();
+      this.serviceRequestform.get('assignedto').disable();
+      this.serviceRequestform.get('statusid').disable();
+      this.serviceRequestform.get('stageid').disable();
+      this.serviceRequestform.get('serreqdate').enable();
+
+    }
+
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+
+      this.serviceRequestService.delete(this.serviceRequestId).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["sparepartlist"])
+        })
+    }
+  }
+  id(id: any) {
+    throw new Error('Method not implemented.');
   }
 
   onCustomerChanged(value: any) {
@@ -747,22 +692,13 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
       this.serviceRequestform.patchValue({ "siteid": this.logindata.sites[0].id });
       this.getInstrumnetsBySiteIds(this.logindata.sites[0].id)
-      //var subreq = this.logindata.sites.id.join(',');
-      // let subreq = this.logindata.sites?.map(x => x.id).join(',');
     }
   }
   getInstrumnetsBySiteIds(id: any) {
     this.instrumentService.getinstubysiteIds(id)
       .pipe(first())
       .subscribe({
-        next: (data: any) => {
-          this.instrumentList = data.object;
-        },
-        error: error => {
-          //  this.alertService.error(error);
-          this.notificationService.showSuccess(error, "Error");
-          this.loading = false;
-        }
+        next: (data: any) => this.instrumentList = data.object
       });
   }
   // convenience getter for easy access to form fields
@@ -775,7 +711,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   onSubmit() {
-    debugger;
+
     if (this.IsEngineerView && this.accepted) {
       if (!this.hasCallScheduled) {
         return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")
@@ -789,14 +725,13 @@ export class ServiceRequestComponent implements OnInit {
 
     if (this.isGenerateReport != false) return
     // stop here if form is invalid
-    this.isSave = true;
-    this.loading = true;
 
     const datepipie = new DatePipe("en-US");
 
     if (this.serviceRequestform.get('sdate').value != "" && this.serviceRequestform.get('edate').value != "") {
       let dateSent = new Date(this.serviceRequestform.get('sdate').value);
       let currentDate = new Date(this.serviceRequestform.get('edate').value);
+
       let calc = Math.floor(
         (Date.UTC(
           currentDate.getFullYear(),
@@ -809,11 +744,10 @@ export class ServiceRequestComponent implements OnInit {
         )) /
         (1000 * 60 * 60 * 24)
       );
-      if (calc <= 0) {
-        this.notificationService.showError("End Date should not be greater than Start Date", "Error");
-        this.loading = false;
-        return;
-      }
+
+      if (calc <= 0)
+        return this.notificationService.showError("End Date should not be greater than Start Date", "Error");
+
       this.serviceRequestform.get('sdate').setValue(datepipie.transform(this.serviceRequestform.get('sdate').value, "MM/dd/yyyy"));
       this.serviceRequestform.get('edate').setValue(datepipie.transform(this.serviceRequestform.get('edate').value, "MM/dd/yyyy"));
     }
@@ -838,19 +772,17 @@ export class ServiceRequestComponent implements OnInit {
         this.serviceRequest.subrequesttypeid = selectarray.map(x => x.itemCode).join(',');
       }
 
-      if (this.IsCustomerView == true) {
-        this.serviceRequest.serresolutiondate = null;
-      }
+      if (this.IsCustomerView == true)
+        this.serviceRequest.serresolutiondate = null
+
 
       this.serviceRequestService.save(this.serviceRequest)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
             if (data.result) {
               this.saveFileShare(data.object.id);
               if (this.file != null) {
-
                 this.uploadPdfFile(this.file, data.object.id)
               }
 
@@ -860,19 +792,11 @@ export class ServiceRequestComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
 
               this.router.navigate(["servicerequestlist"]);
-            } else {
-
             }
-            this.loading = false;
-
           },
-          error: error => {
-            // this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
-            this.loading = false;
-          }
         });
-    } else {
+    }
+    else {
       this.serviceRequest = this.serviceRequestform.getRawValue();
       this.serviceRequest.id = this.serviceRequestId;
       this.serviceRequest.siteid = this.siteId;
@@ -900,16 +824,7 @@ export class ServiceRequestComponent implements OnInit {
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["servicerequestlist"]);
-            } else {
-
             }
-            this.loading = false;
-
-          },
-          error: error => {
-            //  this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
-            this.loading = false;
           }
         });
     }
@@ -971,6 +886,7 @@ export class ServiceRequestComponent implements OnInit {
       let assignedStat = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId
       this.serviceRequestform.get('statusid').setValue(assignedStat);
       serviceRequest.statusid = assignedStat
+
       this.serviceRequestService.updateIsAccepted(this.serviceRequestId, serviceRequest)
         .pipe(first())
         .subscribe({
@@ -978,10 +894,6 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.get('accepted').disable();
             this.serviceRequestform.get('accepted').setValue(true)
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            // alert("As you have accepted the Service request please schedule a call to process further.")
-          }, error: (error) => {
-
-
           }
         })
     }
@@ -997,11 +909,13 @@ export class ServiceRequestComponent implements OnInit {
             let scheduleCalls = data.object.filter(x => x.serReqId == this.serviceRequestId)
             if (scheduleCalls != null && scheduleCalls.length > 0) {
               this.servicereport = new ServiceReport();
+
               this.servicereport.serviceRequestId = this.serviceRequestId;
               this.servicereport.customer = this.serviceRequestform.get('companyname').value;
               this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
               this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
               this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + '||' + this.serviceRequestform.get('alarmdetails')?.value + '||' + this.serviceRequestform.get('remarks')?.value;
+
               this.instrumentService.getAll(this.user.userId)
                 .pipe(first())
                 .subscribe((data: any) => {
@@ -1009,9 +923,7 @@ export class ServiceRequestComponent implements OnInit {
                   this.servicereport.instrument = instrumentList.find(x => x.id == this.serviceRequestform.get('machinesno').value)?.id;
                 });
 
-              if (this.isAmc) {
-                this.servicereport.problem = 'AMC';
-              }
+              if (this.isAmc) this.servicereport.problem = 'AMC';
 
               this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.INS)).length > 0;
               this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.ANAS)).length > 0;
@@ -1025,97 +937,52 @@ export class ServiceRequestComponent implements OnInit {
                     next: (data: any) => {
                       this.custcityname = data.object.address.city;
                       this.servicereport.town = this.custcityname;
-                      //this.getPdffile(data.object.filePath);
 
-                      console.log(this.servicereport)
                       this.servicereportService.save(this.servicereport)
                         .pipe(first())
                         .subscribe({
                           next: (data: any) => {
-                            debugger;
+
                             if (data.result) {
                               this.notificationService.showSuccess(data.resultMessage, "Success");
 
-                              // Add Record with status 'completed' in ticket action
                               this.srAssignedHistory = new tickersAssignedHistory;
                               this.srAssignedHistory.engineerid = this.engineerid;
                               this.srAssignedHistory.servicerequestid = this.serviceRequestId;
                               this.srAssignedHistory.ticketstatus = "INPRG";
                               this.srAssignedHistory.assigneddate = new Date()
 
-                              this.srAssignedHistoryService.save(this.srAssignedHistory)
-                                .pipe(first())
-                                .subscribe({
-                                  next: (data: any) => {
-                                    if (!data.result) {
-
-                                    }
-                                  },
-                                  error: error => {
-                                    // this.alertService.error(error);
-                                    this.notificationService.showSuccess(error, "Error");
-                                    this.loading = false;
-                                  }
-                                });
+                              this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
 
                               this.router.navigate(["servicereport", data.object.id]);
-                            } else {
-
                             }
-                            this.loading = false;
-                          },
-                          error: error => {
-                            // this.alertService.error(error);
-                            this.notificationService.showSuccess(error, "Error");
-                            this.loading = false;
+
                           }
                         });
-                    },
-                    error: error => {
-
-                      this.loading = false;
                     }
                   });
-              } else {
+              }
+              else {
                 this.servicereportService.save(this.servicereport)
                   .pipe(first())
                   .subscribe({
                     next: (data: any) => {
-                      debugger;
+
                       if (data.result) {
                         this.notificationService.showSuccess(data.resultMessage, "Success");
-                        // Add Record with status 'completed' in ticket action
+
                         this.srAssignedHistory = new tickersAssignedHistory;
                         this.srAssignedHistory.engineerid = this.engineerid;
                         this.srAssignedHistory.servicerequestid = this.serviceRequestId;
                         this.srAssignedHistory.ticketstatus = "INPRG";
                         this.srAssignedHistory.assigneddate = new Date()
 
-                        this.srAssignedHistoryService.save(this.srAssignedHistory)
-                          .pipe(first())
-                          .subscribe({
-                            next: (data: any) => {
-                              if (!data.result) {
+                        this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
 
-                              }
-                            },
-                            error: error => {
-                              // this.alertService.error(error);
-                              this.notificationService.showSuccess(error, "Error");
-                              this.loading = false;
-                            }
-                          });
                         this.router.navigate(["servicereport", data.object.id]);
-                      } else {
-
                       }
-                      this.loading = false;
 
-                    },
-                    error: error => {
-                      // this.alertService.error(error);
-                      this.notificationService.showSuccess(error, "Error");
-                      this.loading = false;
+
                     }
                   });
               }
@@ -1123,12 +990,8 @@ export class ServiceRequestComponent implements OnInit {
             } else {
               this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
             }
-          } else {
           }
         },
-        error: (error) => {
-
-        }
       })
     }
 
@@ -1136,7 +999,6 @@ export class ServiceRequestComponent implements OnInit {
 
   addAssignedHistory(sr: ServiceRequest) {
     if (this.engineerid != null && this.engineerid != sr.assignedto && this.isGenerateReport == false) {
-
       this.srAssignedHistory = new tickersAssignedHistory;
       this.srAssignedHistory.engineerid = this.engineerid;
       this.srAssignedHistory.servicerequestid = sr.id;
@@ -1147,18 +1009,7 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            if (data.result) {
-              // this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["servicerequestlist"]);
-            } else {
-
-            }
-            this.loading = false;
-
-          },
-          error: error => {
-            this.notificationService.showSuccess(error, "Error");
-            this.loading = false;
+            if (data.result) this.router.navigate(["servicerequestlist"])
           }
         });
     }
@@ -1170,10 +1021,6 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.appendList = data.object;
-        },
-        error: error => {
-          this.notificationService.showSuccess(error, "Error");
-          this.loading = false;
         }
       });
   }
@@ -1192,14 +1039,7 @@ export class ServiceRequestComponent implements OnInit {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 this.router.navigate(["servicerequestlist"]);
-              } else {
-
               }
-              this.loading = false;
-            },
-            error: error => {
-
-              this.loading = false;
             }
           });
       }
@@ -1214,9 +1054,6 @@ export class ServiceRequestComponent implements OnInit {
           next: (data: any) => {
             this.download(data.data);
           },
-          error: error => {
-
-          }
         });
     }
   }
@@ -1260,24 +1097,17 @@ export class ServiceRequestComponent implements OnInit {
   };
 
   public onRowClicked(e) {
-    //debugger;
     if (e.event.target !== undefined && this.isGenerateReport == false) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
-      //this.serviceRequestId = this.route.snapshot.paramMap.get('id');
       switch (actionType) {
         case "remove":
           if (confirm("Are you sure, you want to remove the engineer comment?") == true) {
-            //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
             this.engcomservice.delete(data.id)
               .pipe(first())
               .subscribe({
                 next: (d: any) => {
                   if (d.result) this.notificationService.showSuccess(d.resultMessage, "Success");
-                },
-                error: error => {
-
-                  this.loading = false;
                 }
               });
           }
@@ -1288,8 +1118,6 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   onCellValueChanged(event) {
-    //debugger;
-    var data = event.data;
     event.data.modified = true;
   }
 
@@ -1338,11 +1166,6 @@ export class ServiceRequestComponent implements OnInit {
         next: (data: any) => {
           this.instrumentList = data.object;
         },
-        error: error => {
-          //  this.alertService.error(error);
-          this.notificationService.showSuccess(error, "Error");
-          this.loading = false;
-        }
       });
   }
 
@@ -1362,10 +1185,6 @@ export class ServiceRequestComponent implements OnInit {
           this.serviceRequestform.patchValue({ "machengineer": instument.machineEng.fname + ' ' + instument.machineEng.lname });
           this.serviceRequestform.patchValue({ "xraygenerator": instument.insversion });
         },
-        error: error => {
-
-          this.loading = false;
-        }
       });
 
   }
@@ -1557,7 +1376,6 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   onGridReady(params): void {
-    //debugger;
     this.api = params.api;
     this.columnApi = params.columnApi;
     this.api.sizeColumnsToFit();
@@ -1575,21 +1393,14 @@ export class ServiceRequestComponent implements OnInit {
       Array.from(filesToUpload).map((file, index) => {
         return formData.append("file" + index, file, file.name);
       });
-      this.fileshareService.upload(formData, serviceRequestId, "SRREQ").subscribe((event) => {
-        if (event.type === HttpEventType.UploadProgress)
-          this.fileUploadProgress = Math.round((100 * event.loaded) / event.total);
-        else if (event.type === HttpEventType.Response) {
-          this.onUploadFinished.emit(event.body);
-        }
-      });
+
+      this.fileshareService.upload(formData, serviceRequestId, "SRREQ").subscribe((event) => { });
     }
   }
 
 
   open(param: string, param1: string, param2: string) {
-    //debugger;v
     if (this.isGenerateReport == false) {
-
       const initialState = {
         itemId: param,
         id: param1,
@@ -1600,7 +1411,6 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   openaction(param: string, param1: string) {
-    //debugger;
     if (this.isGenerateReport == false) {
       const initialState = {
         itemId: param,
@@ -1613,15 +1423,12 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   public onactionRowClicked(e) {
-    //debugger;
     if (e.event.target !== undefined && this.isGenerateReport == false) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
-      //this.serviceRequestId = this.route.snapshot.paramMap.get('id');
       switch (actionType) {
         case "remove":
           if (confirm("Are you sure, you want to remove the engineer action?") == true) {
-            //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
             this.actionservice.delete(data.id)
               .pipe(first())
               .subscribe({
@@ -1631,17 +1438,12 @@ export class ServiceRequestComponent implements OnInit {
                     const selectedData = this.api.getSelectedRows();
                     this.api.applyTransaction({ remove: selectedData });
                   }
-                },
-                error: error => {
-
-                  this.loading = false;
                 }
               });
           }
         case "edit":
           this.openaction(this.serviceRequestId, data.id);
         case "download":
-          debugger
           let params: any = {}
           params.id = e.data.id;
           params.fileUrl = e.data.teamviewerrecroding
@@ -1661,17 +1463,13 @@ export class ServiceRequestComponent implements OnInit {
 
   downloadTeamViewerRecording(params: any) {
     this.fileshareService.download(params.id, "/SRATN").subscribe((event) => {
-      if (event.type === HttpEventType.Response) {
+      if (event.type === HttpEventType.Response)
         this.downloadFile(params, event);
-      }
-    }, error => {
-      this.notificationService.showError("No Recording ", "Error")
-    }
-    );
+
+    });
   }
 
   private downloadFile(params, data: HttpResponse<Blob>) {
-    debugger;
     const downloadedFile = new Blob([data.body], { type: data.body.type });
     const a = document.createElement("a");
     a.setAttribute("style", "display:block;");

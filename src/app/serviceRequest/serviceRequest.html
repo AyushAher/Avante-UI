@@ -2,42 +2,50 @@
   <div class="right_col" role="main">
     <div class="container">
 
-      <!--      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">-->
-      <!--        <li class="nav-item" role="presentation">-->
-      <!--          <a class="nav-link active"-->
-      <!--             id="ex1-tab-1"-->
-      <!--             data-mdb-toggle="tab"-->
-      <!--             routerLink="/servicerequest/{{ serviceRequestId }}" routerLinkActive="active"-->
-      <!--             role="tab"-->
-      <!--             aria-controls="ex1-tabs-1"-->
-      <!--             aria-selected="true">ServiceRequest</a>-->
-      <!--        </li>-->
-      <!--        &lt;!&ndash;<li class="nav-item" role="presentation">-->
-      <!--          <a class="nav-link" [ngClass]="{ 'disabled': customerId==null }"-->
-      <!--             id="ex1-tab-2"-->
-      <!--             data-mdb-toggle="tab"-->
-      <!--             routerLink="/contactlist/C/{{ customerId }}" routerLinkActive="active"-->
-      <!--             role="tab"-->
-      <!--             aria-controls="ex1-tabs-2"-->
-      <!--             aria-selected="false">Contact</a>-->
-      <!--        </li>-->
-      <!--        <li class="nav-item" role="presentation">-->
-      <!--          <a class="nav-link" [ngClass]="{ 'disabled': customerId==null }"-->
-      <!--             id="ex1-tab-3"-->
-      <!--             data-mdb-toggle="tab"-->
-      <!--             routerLink="/customersitelist/{{ customerId }}" routerLinkActive="active"-->
-      <!--             role="tab"-->
-      <!--             aria-controls="ex1-tabs-3"-->
-      <!--             aria-selected="false">Customer Site</a>-->
-      <!--        </li>&ndash;&gt;-->
-      <!--      </ul>-->
-      <!--      <div class="clearfix"></div>-->
-
       <div class="page-title">
-        <div class="title_left">
-          <h3>Service Request</h3>
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+          
+          <div class="d-flex" style="align-items: center;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <h3>Service Request</h3>
+          </div>
+          
+          <div class="controls" style="display: flex;">
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)  && !isGenerateReport">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+
+            <div *ngIf="IsEngineerView==true && accepted && !isGenerateReport" class="nav-item dropdown">
+              <a class="nav-link" href="#" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v" style="color: #5ba146;"></i>
+              </a>
+
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" (click)="generatereport()">
+                  Generate report
+                </a>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
+
       <hr />
       <div class="clearfix"></div>
       <div class="col-md-12 col-sm-12 ">
@@ -458,7 +466,8 @@
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="height: 250px;" (rowClicked)="onhisRowClicked($event)" class="ag-theme-alpine"
                   (gridReady)="historyready($event)" [columnDefs]="ticketcolumnDefs" [rowData]="ticketHistoryList"
-                  pagination="true" paginationPageSize=10 rowSelection="single"></ag-grid-angular>
+                  pagination="true" paginationPageSize=10 rowSelection="single">
+                </ag-grid-angular>
               </div>
             </div>
             <div *ngIf="IsEngineerView" aria-labelledby="contact-tab" class="tab-pane fade" id="contact"
@@ -533,25 +542,9 @@
                   {{i.serialnos}}
                 </option>
               </select>
-              <!--<div *ngIf="submitted && f.machinesNo.errors" class="invalid-feedback">
-                <div *ngIf="f.machinesNo.errors.required">machineSerialNo is required</div>
-              </div>-->
             </div>
           </div>
           <hr />
-          <div class="row">
-            <div class="col-md-6 col-sm-6" style="padding:10px">
-              <button *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isGenerateReport==false"
-                [disabled]="loading" type="submit" class="btn btn-primary">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
-              </button>
-              <a class="btn btn-secondary" routerLink="/servicerequestlist" style="margin-left:10px;">Back</a>
-              <button (click)="generatereport()" *ngIf="IsEngineerView==true && accepted && !isGenerateReport"
-                class="btn btn-secondary" style="margin-left:10px;" type="button">Generate report
-              </button>
-            </div>
-          </div>
         </form>
       </div>
     </div>
