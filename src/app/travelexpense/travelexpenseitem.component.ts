@@ -31,6 +31,7 @@ export class TravelexpenseItemComponent implements OnInit {
     @Input() ParentId: string
     @Input() StartDate: any
     @Input() EndDate: any
+    @Input() isDisabled: boolean = true
 
     @ViewChild('itemFiles') itemFiles
 
@@ -84,9 +85,7 @@ export class TravelexpenseItemComponent implements OnInit {
 
         this.profilePermission = this.profileService.userProfileValue;
         if (this.profilePermission != null) {
-            let profilePermission = this.profilePermission.permissions.filter(
-                (x) => x.screenCode == "TREXP"
-            );
+            let profilePermission = this.profilePermission.permissions.filter((x) => x.screenCode == "TREXP");
             if (profilePermission.length > 0) {
                 this.hasReadAccess = profilePermission[0].read;
                 this.hasAddAccess = profilePermission[0].create;
@@ -135,7 +134,6 @@ export class TravelexpenseItemComponent implements OnInit {
                         element.bcyAmt = this.numberPipe.transform(element.bcyAmt)
                         element.usdAmt = this.numberPipe.transform(element.usdAmt)
                     });
-                    debugger;
                     this.GrandCompanyTotal.emit(CompTotal)
                     this.GrandEngineerTotal.emit(EngTotal)
                 })

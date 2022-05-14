@@ -24,7 +24,7 @@ export class TravelinvoiceService {
   }
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/TravelInvoice`, params)
+    return this.http.put(`${environment.apiUrl}/TravelInvoice/${id}`, params)
       .pipe(map(x => {
         return x;
       }));

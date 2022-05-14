@@ -11,8 +11,7 @@ import { TravelExpenseService } from "../_services/travel-expense.service";
 
 @Component({
     selector: 'app-travelexpense',
-    templateUrl: './travelexpenselist.compoent.html',
-    styleUrls: ['./travelexpense.component.css']
+    templateUrl: './travelexpenselist.compoent.html'
 })
 
 export class TravelexpenseListComponent implements OnInit {
@@ -86,8 +85,6 @@ export class TravelexpenseListComponent implements OnInit {
                 cellRendererFramework: RenderComponent,
                 cellRendererParams: {
                     inRouterLink: "/travelexpense",
-                    deleteLink: "TREXP",
-                    deleteaccess: this.hasDeleteAccess,
                 },
             },
             {

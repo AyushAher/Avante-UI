@@ -1,16 +1,40 @@
 <layout>
     <div class="right_col" role="main">
         <div class="container">
+
             <div class="page-title">
-                <div class="title_left">
+                <div class="title_left" style="display: flex; justify-content: space-between;">
                     <h3>Travel Expense</h3>
+                    <div class="controls" style="display: flex;">
+                        <a (click)="Back()" class="nav-link">
+                            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+                            <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
+                            <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="OnSubmit()"
+                            *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+                            <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+                            <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
+
             <div class="clearfix"></div>
             <hr />
 
             <div class="col-md-12 col-sm-12 ">
-                <form [formGroup]="form" (ngSubmit)="OnSubmit()">
+                <form [formGroup]="form">
                     <div class="row">
 
                         <div class="col-sm-4" hidden>
@@ -149,22 +173,11 @@
 
                         </div>
                     </div>
-                    <app-travelexpenseitem *ngIf="id!=null" [StartDate]="form.get('startDate').value"
-                        [EndDate]="form.get('endDate').value" [ParentId]="id"
+                    <app-travelexpenseitem *ngIf="id!=null" [isDisabled]="!isEditMode"
+                        [StartDate]="form.get('startDate').value" [EndDate]="form.get('endDate').value" [ParentId]="id"
                         (GrandCompanyTotal)="onGrandCompanyTotal($event)"
                         (GrandEngineerTotal)="onGrandEngineerTotal($event)">
                     </app-travelexpenseitem>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6" style="padding:10px;">
-                            <button class="btn btn-primary" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)">
-                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                Submit
-                            </button>
-                            <a routerLink="/travelexpenselist" class="btn btn-secondary"
-                                style="margin-left: 10px;">Back</a>
-                        </div>
-                    </div>
-
                 </form>
             </div>
         </div>

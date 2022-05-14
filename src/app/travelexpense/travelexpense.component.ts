@@ -13,13 +13,11 @@ import { TravelExpenseService } from '../_services/travel-expense.service';
 
 @Component({
   selector: 'app-travelexpense',
-  templateUrl: './travelexpense.component.html',
-  styleUrls: ['./travelexpense.component.css']
+  templateUrl: './travelexpense.component.html'
 })
 
 export class TravelexpenseComponent implements OnInit {
   id: string;
-  loading = false;
   submitted = false;
   form: FormGroup;
   model: any;
@@ -38,7 +36,6 @@ export class TravelexpenseComponent implements OnInit {
   IsDistributorView: boolean = false;
   IsEngineerView: boolean = false;
 
-
   public columnDefs: ColDef[];
   public columnDefsAttachments: ColDef[];
   private columnApi: ColumnApi;
@@ -49,10 +46,8 @@ export class TravelexpenseComponent implements OnInit {
   fileList: [] = [];
   transaction: number;
   hastransaction: boolean;
-  public progress: number;
   currencyList: Currency[];
 
-  @Output() public onUploadFinished = new EventEmitter();
   distId: string;
   natureOfExpense: any;
   customerList: Customer[];
@@ -60,6 +55,8 @@ export class TravelexpenseComponent implements OnInit {
   designationList: any;
   grandCompanyTotalAmt: any;
   grandEngineerTotalAmt: any;
+  isEditMode: boolean;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -109,8 +106,8 @@ export class TravelexpenseComponent implements OnInit {
       endDate: ["", Validators.required],
       totalDays: 0,
       designation: "",
-      grandCompanyTotal: 0,
-      grandEngineerTotal: 0,
+      grandCompanyTotal: 0.0,
+      grandEngineerTotal: 0.0,
     })
 
 
@@ -119,9 +116,8 @@ export class TravelexpenseComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
-    } else {
-      role = role[0]?.itemCode;
-    }
+    } else role = role[0]?.itemCode;
+
 
     if (role == environment.custRoleCode) {
       this.IsCustomerView = true;
@@ -155,27 +151,24 @@ export class TravelexpenseComponent implements OnInit {
 
     this.distributorservice.getByConId(this.user.contactId)
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (this.user.username != "admin") {
-            this.form.get('distributorId').setValue(data.object[0].id);
-            this.distributorservice.getDistributorRegionContacts(data.object[0].id).pipe(first())
-              .subscribe((Engdata: any) => {
-                this.distId = data.object[0].id
-                this.engineer = Engdata.object;
-                this.servicerequestservice.GetServiceRequestByDist(data.object[0].id).pipe(first())
-                  .subscribe((Srqdata: any) =>
-                    this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object[0].id && !x.isReportGenerated)
-                  );
+      .subscribe((data: any) => {
+        if (this.user.username != "admin") {
+          this.form.get('distributorId').setValue(data.object[0].id);
+          this.distributorservice.getDistributorRegionContacts(data.object[0].id).pipe(first())
+            .subscribe((Engdata: any) => {
+              this.distId = data.object[0].id
+              this.engineer = Engdata.object;
+              this.servicerequestservice.GetServiceRequestByDist(data.object[0].id).pipe(first())
+                .subscribe((Srqdata: any) =>
+                  this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object[0].id && !x.isReportGenerated)
+                );
 
-                if (this.IsEngineerView) {
-                  this.form.get('engineerId').setValue(this.user.contactId)
-                  this.form.get('engineerId').disable()
-                  this.getservicerequest(this.distId, this.user.contactId)
-                }
-              });
+              if (this.IsEngineerView) {
+                this.form.get('engineerId').setValue(this.user.contactId)
+                this.getservicerequest(this.distId, this.user.contactId)
+              }
+            });
 
-          }
         }
       })
 
@@ -203,6 +196,52 @@ export class TravelexpenseComponent implements OnInit {
                 });
             });
         })
+      this.form.disable()
+    }
+    else {
+      this.FormControlDisable()
+      this.isNewMode = true
+    }
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+      this.FormControlDisable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["travelexpenselist"])
+    }
+
+    else this.router.navigate(["travelexpenselist"])
+
+  }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  FormControlDisable() {
+    if (this.IsEngineerView) {
+      this.form.get('engineerId').disable()
+    }
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+
+      this.profileService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["travelexpenselist"])
+        })
     }
   }
 
@@ -212,12 +251,10 @@ export class TravelexpenseComponent implements OnInit {
 
   onGrandEngineerTotal = (e) => {
     this.grandEngineerTotalAmt = e
-    // setTimeout(() => this.form.get('grandEngineerTotal').setValue(e), 1000);
   }
 
   onGrandCompanyTotal = (e) => {
     this.grandCompanyTotalAmt = e
-    // setTimeout(() => this.form.get('grandCompanyTotal').setValue(e), 1000);
   }
 
 
@@ -292,7 +329,6 @@ export class TravelexpenseComponent implements OnInit {
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess,
           id: this.id
         },
       },
@@ -318,23 +354,12 @@ export class TravelexpenseComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
-    this.FileShareService.upload(formData, id, "TREXP", null).subscribe((event) => {
-      if (event.type === HttpEventType.UploadProgress)
-        this.progress = Math.round((100 * event.loaded) / event.total);
-      else if (event.type === HttpEventType.Response) {
-        this.onUploadFinished.emit(event.body);
-      }
-    });
+    this.FileShareService.upload(formData, id, "TREXP", null).subscribe((event) => { });
   };
 
   GetFileList(id: string) {
-    this.FileShareService.list(id)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.attachments = data.object;
-        },
-      });
+    this.FileShareService.list(id).pipe(first())
+      .subscribe((data: any) => this.attachments = data.object);
   }
 
   onGridReadyAttachments(params): void {
@@ -380,9 +405,6 @@ export class TravelexpenseComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
-
-
     if (this.form.get('totalDays').value != null && this.form.get('totalDays').value < 1)
       return this.notificationService.showError("The difference between Start Date and End Date should be more than 1 day !", "Error");
 
@@ -391,7 +413,10 @@ export class TravelexpenseComponent implements OnInit {
 
     this.model = this.form.value;
     this.model.distId = this.distId
-
+    
+    this.model.grandCompanyTotal = parseInt(this.model.grandCompanyTotal)
+    this.model.grandEngineerTotal = parseInt(this.model.grandEngineerTotal)
+    
     if (this.IsEngineerView) this.model.engineerId = this.user.contactId;
 
     if (this.id == null) {
@@ -404,7 +429,6 @@ export class TravelexpenseComponent implements OnInit {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["travelexpenselist"]);
           }
-          this.loading = false;
         });
     }
 
@@ -425,7 +449,6 @@ export class TravelexpenseComponent implements OnInit {
             );
             this.router.navigate(["travelexpenselist"]);
           }
-          this.loading = false;
         });
     }
 

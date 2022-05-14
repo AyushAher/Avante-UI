@@ -10,10 +10,10 @@
             <div class="clearfix"></div>
             <div style="display: flex; justify-content: space-between;">
 
-                <button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="!hasAddAccess"
+                <button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="hasAddAccess"
                     (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>
 
-                <button class="btn btn-sm btn-success button" style="margin: 10px 15px 10px 10px;" *ngIf="!hasAddAccess"
+                <button class="btn btn-sm btn-success button" style="margin: 10px 15px 10px 10px;" *ngIf="hasAddAccess"
                     (click)="ImportData()"><i class="fas fa-file-import" title="Add"></i></button>
             </div>
             <div class="col-md-12 col-sm-12">
