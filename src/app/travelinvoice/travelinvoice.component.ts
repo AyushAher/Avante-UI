@@ -82,15 +82,11 @@ export class TravelinvoiceComponent implements OnInit {
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter((x) => x.screenCode == "TREXP");
       if (profilePermission.length > 0) {
-        // this.hasReadAccess = profilePermission[0].read;
-        // this.hasAddAccess = profilePermission[0].create;
-        // this.hasDeleteAccess = profilePermission[0].delete;
-        // this.hasUpdateAccess = profilePermission[0].update;
+        this.hasReadAccess = profilePermission[0].read;
+        this.hasAddAccess = profilePermission[0].create;
+        this.hasDeleteAccess = profilePermission[0].delete;
+        this.hasUpdateAccess = profilePermission[0].update;
       }
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
     }
 
     this.form = this.formBuilder.group({
