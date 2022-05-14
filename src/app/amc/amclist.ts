@@ -72,7 +72,11 @@ export class AmcListComponent implements OnInit {
       this.toggleFilter()
       this.AmcService.getAll()
         .pipe(first())
-        .subscribe((data: any) => this.AmcList = data.object?.filter(x => !x.isCompleted));
+        .subscribe((data: any) => {
+
+          this.AmcList = data.object?.filter(x => !x.isCompleted)
+          console.log(data, this.AmcList);
+        });
     }
     this.columnDefs = this.createColumnDefs();
   }
@@ -83,7 +87,7 @@ export class AmcListComponent implements OnInit {
 
 
   ShowData(event) {
-    this.showGrid = event?.filter(x => !x.isCompleted)
+    this.showGrid = event
   }
 
   toggleFilter() {
@@ -91,7 +95,7 @@ export class AmcListComponent implements OnInit {
   }
 
   DataFilter(event) {
-    this.AmcList = event
+    this.AmcList = event?.filter(x => !x.isCompleted)
   }
 
   private createColumnDefs() {

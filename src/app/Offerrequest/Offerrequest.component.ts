@@ -435,7 +435,7 @@ export class OfferrequestComponent implements OnInit {
       this.form.get('payAmt').setValidators([Validators.required])
       this.form.get('payAmt').updateValueAndValidity();
 
-      if (this.f.payAmt.errors) return this.notificationService.showInfo("Payment Amount is required", "Info")
+      if (this.f.payAmt.errors || !this.f.payAmtCurrencyId.value) return this.notificationService.showInfo("Payment Amount is required", "Info")
     }
 
     if (this.f.stageName.errors) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")

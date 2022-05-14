@@ -244,7 +244,8 @@
                   </td>
                 </tr>
               </tbody>
-              <tfoot *ngIf="hasAddAccess && !isCompleted" style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
+              <tfoot *ngIf="hasAddAccess && !isCompleted"
+                style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
                 <tr>
                   <td>
                     <button type="button" *ngIf="hasAddAccess" (click)="submitStageData()"
@@ -277,8 +278,16 @@
                     </div>
 
                     <div *ngIf="isPaymentAmt">
-                      <label>Payment Amount</label>
-                      <input class="payAmt form-control" type="number" formControlName="payAmt" id="payAmt" />
+                      <label>Payment Amount</label><br>
+                      <select id="currency" type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+                        formControlName="payAmtCurrencyId" class="form-control"
+                        [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
+                        <option *ngFor="let i of currencyList" value="{{i.id}}">
+                          {{i.code}}
+                        </option>
+                      </select>
+                      <input class="payAmt form-control" style="width:67%;display: inline-block;" type="number"
+                        formControlName="payAmt" id="payAmt" />
                     </div>
 
                     <label for="stageComments" *ngIf="isPaymentTerms || isPaymentAmt">Comments</label>

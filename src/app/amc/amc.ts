@@ -199,6 +199,7 @@ export class AmcComponent implements OnInit {
       stageComments: [''],
       stagePaymentType: [],
       payAmt: [0],
+      payAmtCurrencyId: [''],
       secondVisitDateFrom: [],
       secondVisitDateTo: [],
       firstVisitDateFrom: [],
@@ -357,7 +358,7 @@ export class AmcComponent implements OnInit {
   submitStageData() {
 
     if (this.isPaymentTerms && !this.f.payterms.value) return this.notificationService.showInfo("Payterms is required", "Info")
-    if (this.isPaymentAmt && !this.f.payAmt.value) return this.notificationService.showInfo("Payment Amount cannot be empty", "Info")
+    if (this.isPaymentAmt && !this.f.payAmt.value && !this.f.payAmtCurrencyId.value) return this.notificationService.showInfo("Payment Amount cannot be empty", "Info")
     if (!this.f.stageName.value) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
 
     if (!this.f.stageComments.value) return this.notificationService.showInfo("Comments cannot be empty", "Info")
@@ -380,6 +381,7 @@ export class AmcComponent implements OnInit {
     let index = 0;
     let paymentTerms = this.form.get('payterms').value
     let payAmt = this.form.get('payAmt').value
+    let payAmtCurrencyId = this.form.get('payAmtCurrencyId').value
 
     let offerProcess = {
       isactive: false,
@@ -390,6 +392,7 @@ export class AmcComponent implements OnInit {
       index,
       payAmt,
       paymentTypeId: paymentTerms,
+      payAmtCurrencyId,
     }
 
     this.amcStagesService.save(offerProcess).pipe(first())
