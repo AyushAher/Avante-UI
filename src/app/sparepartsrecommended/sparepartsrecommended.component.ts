@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import { ProfileReadOnly, User } from "../_models";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
-import { ActivatedRoute, Router } from "@angular/router";
-import { AccountService, AlertService, NotificationService, ProfileService, SrRecomandService } from "../_services";
+import { Router } from "@angular/router";
+import { AccountService, ProfileService, SrRecomandService } from "../_services";
 import { first } from "rxjs/operators";
 import { DatePipe } from "@angular/common";
 import { environment } from 'src/environments/environment';
@@ -33,13 +33,9 @@ export class SparepartsrecommendedComponent implements OnInit {
 
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
     private Service: SrRecomandService,
-    private notificationService: NotificationService,
     private profileService: ProfileService
   ) {
   }
@@ -104,20 +100,6 @@ export class SparepartsrecommendedComponent implements OnInit {
 
   private createColumnDefs() {
     return [
-      // {
-      //   headerName: "Action",
-      //   field: "id",
-      //   filter: false,
-      //   enableSorting: false,
-      //   editable: false,
-      //   sortable: false,
-      //   cellRendererFramework: RenderComponent,
-      //   cellRendererParams: {
-      //     inRouterLink: "/localexpenses",
-      //     deleteLink: "LCEXP",
-      //     deleteaccess: this.hasDeleteAccess,
-      //   },
-      // },
       {
         headerName: "Service Request No.",
         field: "serreqno",
@@ -170,6 +152,5 @@ export class SparepartsrecommendedComponent implements OnInit {
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
-    // this.api.sizeColumnsToFit();
   }
 }
