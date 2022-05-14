@@ -35,7 +35,7 @@ export class ServicereqestreportComponent implements OnInit {
       obj["Date of Service Request"] = x.serreqdate
       obj["Engineer Assigned"] = x.assignedtoName
       obj["Current Status"] = x.statusName
-      obj["Reason for delay"] = x.statusName
+      obj["Reason for delay"] = x.delayedReasons
       eData.push(obj)
     })
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -89,7 +89,7 @@ export class ServicereqestreportComponent implements OnInit {
       },
       {
         headerName: 'Reason for delay',
-        field: 'assignedtoName',
+        field: 'delayedReasons',
         filter: true,
         editable: false,
         sortable: true

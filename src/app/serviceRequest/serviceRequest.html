@@ -404,6 +404,12 @@
               </div>
             </div>
 
+            <div class="col-sm-3">
+              <label for="currentinstrustatus">Delayed Reason</label>
+              <textarea class="form-control" formControlName="delayedReasons"></textarea>
+            </div>
+
+
           </div>
           <br />
 
@@ -416,12 +422,14 @@
                   id="home-tab" role="tab">Engineer</a>
               </li>
               <li class="nav-item" *ngIf="IsDistributorView">
-                <a aria-controls="profile" [ngClass]="{ 'active': !IsEngineerView && IsDistributorView }" aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab"
-                  href="#profile" id="profile-tab" role="tab">Ticket Assigned History</a>
+                <a aria-controls="profile" [ngClass]="{ 'active': !IsEngineerView && IsDistributorView }"
+                  aria-selected="{{IsDistributorView}}" class="nav-link" data-toggle="tab" href="#profile"
+                  id="profile-tab" role="tab">Ticket Assigned History</a>
               </li>
               <li class="nav-item">
-                <a aria-controls="contact" [ngClass]="{ 'active': !IsEngineerView && !IsDistributorView }" aria-selected="false" class="nav-link" data-toggle="tab" href="#contact"
-                  id="contact-tab" role="tab">Action</a>
+                <a aria-controls="contact" [ngClass]="{ 'active': !IsEngineerView && !IsDistributorView }"
+                  aria-selected="false" class="nav-link" data-toggle="tab" href="#contact" id="contact-tab"
+                  role="tab">Action</a>
               </li>
               <li class="nav-item">
                 <a aria-controls="contact" aria-selected="false" class="nav-link" data-toggle="tab" href="#schedule"

@@ -296,6 +296,7 @@ export class ServiceRequestComponent implements OnInit {
       requesttypeid: [''],
       subrequesttypeid: [],
       remarks: [''],
+      delayedReasons: [''],
       isactive: [true],
       isdeleted: [false],
       engComments: this.formBuilder.group({
@@ -617,6 +618,7 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({ "remarks": data.object.remarks });
             this.serviceRequestform.patchValue({ "machmodelname": (data.object.machmodelname) });
             this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
+            this.serviceRequestform.patchValue({ "delayedReasons": data.object.delayedReasons });
             setTimeout(() => {
               if (data.object.isReportGenerated) {
                 this.serviceRequestform.disable()
