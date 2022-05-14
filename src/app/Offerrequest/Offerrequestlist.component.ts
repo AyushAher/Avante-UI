@@ -74,7 +74,7 @@ export class OfferrequestlistComponent implements OnInit {
     else {
       this.toggleFilter()
       this.Service.getAll().pipe(first())
-        .subscribe((data: any) => this.model = data.object);
+        .subscribe((data: any) => this.model = data.object?.filter(x => !x.isCompleted));
     }
     this.columnDefs = this.createColumnDefs();
   }
@@ -88,7 +88,7 @@ export class OfferrequestlistComponent implements OnInit {
   }
 
   DataFilter(event) {
-    this.model = event
+    this.model = event?.filter(x => !x.isCompleted)
   }
   Add() {
     this.router.navigate(["offerrequest"]);

@@ -103,6 +103,7 @@ export class OfferrequestComponent implements OnInit {
   datepipe = new DatePipe('en-US')
   @ViewChild('stageFiles') stageFiles;
   isPaymentAmt: any;
+  isCompleted: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -227,7 +228,7 @@ export class OfferrequestComponent implements OnInit {
       customerId: ["", Validators.required],
       instrumentsList: ['', Validators.required],
       payAmt: [0],
-      payAmtCurrencyId: [0],
+      payAmtCurrencyId: [""],
       stageName: ['', Validators.required],
       stageComments: ['', Validators.required],
       stagePaymentType: []
@@ -277,11 +278,7 @@ export class OfferrequestComponent implements OnInit {
       })
 
     this.listTypeService.getById("OFRQP").pipe(first())
-      .subscribe((data: any) => {
-        this.stagesList = data
-        console.log(data);
-
-      })
+      .subscribe((data: any) => this.stagesList = data)
 
     if (this.role == environment.distRoleCode) {
       this.DistributorService.getByConId(this.user.contactId).pipe(first())
@@ -303,40 +300,37 @@ export class OfferrequestComponent implements OnInit {
       localStorage.setItem('offerrequestid', this.id)
       this.Service.getById(this.id)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.listTypeService.getById("ORQPT")
-              .pipe(first())
-              .subscribe((mstData: any) => {
+        .subscribe((data: any) => {
+          this.listTypeService.getById("ORQPT")
+            .pipe(first())
+            .subscribe((mstData: any) => {
+              console.log(data.object);
 
-                data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
-                data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
-                this.paymentTypes = []
-                this.payTypes = mstData;
+              this.isCompleted = data.object.isCompleted
+              data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
+              data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
+              this.paymentTypes = []
+              this.payTypes = mstData;
 
-                data.object.paymentTerms?.forEach(y => {
-                  mstData.forEach(x => {
-                    if (y == x.listTypeItemId) {
-                      this.paymentTypes.push(x)
-                    }
-                  });
+              data.object.paymentTerms?.forEach(y => {
+                mstData.forEach(x => {
+                  if (y == x.listTypeItemId) {
+                    this.paymentTypes.push(x)
+                  }
                 });
+              });
 
-                this.offerRequestProcess.getAll(this.id).pipe(first())
-                  .subscribe((stageData: any) => {
-                    stageData.object.forEach(element => {
-                      element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
-                    });
+              this.offerRequestProcess.getAll(this.id).pipe(first())
+                .subscribe((stageData: any) => {
+                  stageData.object.forEach(element => {
+                    element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+                  });
 
-                    this.rowData = stageData.object
-                    this.form.patchValue(data.object);
-                    this.form.get('stageName').reset()
-                  })
-              })
-          },
-          error: (error) => {
-            this.loading = false;
-          },
+                  this.rowData = stageData.object
+                  this.form.patchValue(data.object);
+                  this.form.get('stageName').reset()
+                })
+            })
         });
 
       this.Service.GetSpareQuoteDetailsByParentId(this.id)
@@ -348,15 +342,9 @@ export class OfferrequestComponent implements OnInit {
 
       this.SparePartsService.getSparePartsByOfferRequestId(this.id)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.sparePartsList = data.object;
-            this.api.setRowData(this.sparePartsList);
-          },
-          error: (error) => {
-
-            this.loading = false;
-          },
+        .subscribe((data: any) => {
+          this.sparePartsList = data.object;
+          this.api.setRowData(this.sparePartsList);
         });
 
       this.hasId = true;
@@ -417,6 +405,11 @@ export class OfferrequestComponent implements OnInit {
         })
     }
     this.GetFileList(this.id);
+
+
+    setInterval(() => {
+      if (this.isCompleted) this.form.disable()
+    }, 1);
   }
 
   refreshStages() {
