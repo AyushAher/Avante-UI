@@ -72,7 +72,7 @@ export class AmcListComponent implements OnInit {
       this.toggleFilter()
       this.AmcService.getAll()
         .pipe(first())
-        .subscribe((data: any) => this.AmcList = data.object);
+        .subscribe((data: any) => this.AmcList = data.object?.filter(x => !x.isCompleted));
     }
     this.columnDefs = this.createColumnDefs();
   }
@@ -83,7 +83,7 @@ export class AmcListComponent implements OnInit {
 
 
   ShowData(event) {
-    this.showGrid = event
+    this.showGrid = event?.filter(x => !x.isCompleted)
   }
 
   toggleFilter() {

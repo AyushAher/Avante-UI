@@ -216,7 +216,7 @@
           </div>
           <div class="clearfix"></div>
           <hr />
-          <div class="row">
+          <div class="row" *ngIf="!isCompleted">
             <div class="col-md-9">
               <label>Search Instruments By Serial No. </label>
 
@@ -259,7 +259,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th *ngIf="hasDeleteAccess || hasAddAccess">Action</th>
+                  <th *ngIf="(hasDeleteAccess || hasAddAccess)&& !isCompleted">Action</th>
                   <th>Stage</th>
                   <th>Comments</th>
                   <th>Date</th>
@@ -268,7 +268,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of rowData">
-                  <td *ngIf="hasDeleteAccess || hasAddAccess">
+                  <td *ngIf="(hasDeleteAccess || hasAddAccess)&& !isCompleted">
                     <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)" style="
                         background-color: transparent;
                         color: #5ba146;
@@ -294,7 +294,7 @@
                   </td>
                 </tr>
               </tbody>
-              <tfoot *ngIf="hasAddAccess" style="
+              <tfoot *ngIf="hasAddAccess && !isCompleted" style="
                   background: whitesmoke;
                   border: 0.5px solid rgb(202 170 170);
                 ">
@@ -371,8 +371,8 @@
 
           <div class="row">
             <div class="col-md-6 col-sm-6" style="padding: 10px">
-              <button *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)" class="btn btn-primary" type="submit"
-                class="btn btn-primary">
+              <button *ngIf="((hasUpdateAccess) || (hasAddAccess && id==null)) && !isCompleted" class="btn btn-primary"
+                type="submit" class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>

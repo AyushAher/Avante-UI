@@ -407,9 +407,10 @@ export class OfferrequestComponent implements OnInit {
     this.GetFileList(this.id);
 
 
-    setInterval(() => {
-      if (this.isCompleted) this.form.disable()
-    }, 1);
+    if (this.isCompleted) {
+      setInterval(() => this.form.disable(), 10);
+    }
+
   }
 
   refreshStages() {

@@ -85,6 +85,7 @@ export class AmcComponent implements OnInit {
   paymentTypes: any;
   payTypes: any;
   isPaymentAmt: boolean = false;
+  isCompleted: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -220,6 +221,11 @@ export class AmcComponent implements OnInit {
           this.listTypeService.getById("ORQPT")
             .pipe(first())
             .subscribe((mstData: any) => {
+              this.isCompleted = data.object?.isCompleted
+
+              if (this.isCompleted) {
+                setInterval(() => this.form.disable(), 10);
+              }
 
               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
               this.paymentTypes = []
@@ -586,6 +592,7 @@ export class AmcComponent implements OnInit {
       field: 'id',
       filter: false,
       enableSorting: false,
+      hide: this.isCompleted,
       width: 100,
       editable: false,
       sortable: false,
