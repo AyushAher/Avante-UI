@@ -75,6 +75,7 @@ import { ImportdataService } from './_services/importdata.service';
 import { ImportDataComponent } from './importdata/import.component';
 import { AdvancerequestformComponent } from './advancerequestform/advancerequestform.component';
 import { AdvancerequestlistformComponent } from './advancerequestform/advancerequestformlist.component';
+import { ServicereqestreportComponent } from './servicereqestreport/servicereqestreport.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
@@ -392,6 +393,11 @@ const routes: Routes = [
   {
     path: "advancerequestformlist",
     component: AdvancerequestlistformComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "servicerequestreport",
+    component: ServicereqestreportComponent,
     canActivate: [AuthGuard],
   },
   { path: 'account', loadChildren: accountModule },

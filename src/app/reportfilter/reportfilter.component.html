@@ -1,0 +1,107 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div style="display: flex;justify-content: center;">
+        <div>
+            <div class="mx-2" [@enterAnimation] style="margin: 2% 0;">
+                <div class="col">
+                    <label>Region</label>
+                    <select formControlName="region" (change)="onRegionChange()" class="form-control">
+                        <option *ngFor="let item of regionsList" [value]="item.id">{{item.region}}</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="mx-2" *ngIf="stage>=2">
+                <div class="vline"></div>
+                <div class="vline"></div>
+                <div class="vline"></div>
+
+                <div class="col" [@enterAnimation]>
+                    <label>Country</label>
+                    <select formControlName="country" (change)="countryChange()" class="form-control">
+                        <option *ngFor="let item of regionCountryList" [value]="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mx-2" [@enterAnimation] *ngIf="stage>=3">
+                <div class="vline"></div>
+                <div class="vline"></div>
+                <div class="vline"></div>
+
+                <div class="col">
+                    <label>Customer</label>
+                    <select formControlName="customer" (change)="onCustomerChange()" class="form-control">
+                        <option *ngFor="let item of customerBCountryList" [value]="item.id">{{item.custname}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mx-2" [@enterAnimation] *ngIf="hasSite && stage>=4">
+                <div class="vline"></div>
+                <div class="vline"></div>
+                <div class="vline"></div>
+
+                <div class="col">
+                    <label>Site</label>
+                    <select formControlName="site" (change)="SiteChange()" class="form-control">
+                        <option *ngFor="let item of siteList" [value]="item.id">{{item.custregname}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mx-2 " [@enterAnimation] *ngIf="hasInstrument && stage>=5">
+                <div class="vline"></div>
+                <div class="vline"></div>
+                <div class="vline"></div>
+
+                <div class="col">
+                    <label>Instrument Serial No.</label>
+                    <select formControlName="insSerialNo" (change)="InstrumentChange()" class="form-control">
+                        <option *ngFor="let item of siteBInstrumentList" [value]="item.id">{{item.instypeName +' - ' +
+                            item.serialnos}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="btngrp my-2" [@enterAnimation] *ngIf="stage == 6">
+                <a class="nav-link">
+                    <i class="fas fa-search" (click)="onSubmit()" title="Filter"></i>
+                </a>
+                <a (click)="clear()" class="nav-link ">
+                    <i class="fas fa-times" title="Clear"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<style>
+    .btngrp {
+        float: right;
+        position: relative;
+        top: -9%;
+        left: 18%;
+    }
+
+    .btngrp>* {
+        display: inline;
+    }
+
+    select {
+        width: 350px;
+        margin-left: 50px;
+    }
+
+    .col {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .vline {
+        height: 15px;
+        margin: 1% 0;
+        left: 55%;
+        position: relative;
+        border-left: 2px solid grey;
+    }
+</style>

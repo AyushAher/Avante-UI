@@ -350,6 +350,7 @@ export class ServiceRequestListComponent implements OnInit {
 
   getallrecored(data) {
     if (!this.IsDistributorView) this.showGrid = true;
+    data = data.filter(x => !x.isReportGenerated);
     data?.forEach(ser => {
       ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
       ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
