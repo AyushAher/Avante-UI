@@ -28,9 +28,18 @@ export class ServicereqestreportComponent implements OnInit {
   }
 
   ExportData() {
+    let eData = []
 
+    this.data.forEach(x => {
+      let obj = {}
+      obj["Date of Service Request"] = x.serreqdate
+      obj["Engineer Assigned"] = x.assignedtoName
+      obj["Current Status"] = x.statusName
+      obj["Reason for delay"] = x.statusName
+      eData.push(obj)
+    })
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.data);
+    const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(eData);
     XLSX.utils.book_append_sheet(wb, ws1, "Sheet1");
     XLSX.writeFile(wb, "Service Request Report.xlsx");
 
@@ -50,6 +59,7 @@ export class ServicereqestreportComponent implements OnInit {
   onGridReady(params): void {
     this.api = params.api;
     this.columnApi = params.columnApi;
+    this.api.sizeColumnsToFit()
   }
 
   private createDisColumnDefs() {
@@ -69,12 +79,6 @@ export class ServicereqestreportComponent implements OnInit {
         enableSorting: true,
         editable: false,
         sortable: true,
-      }, {
-        headerName: 'Site Name',
-        field: 'sitename',
-        filter: true,
-        editable: false,
-        sortable: true
       },
       {
         headerName: 'Current Status',
@@ -89,7 +93,8 @@ export class ServicereqestreportComponent implements OnInit {
         filter: true,
         editable: false,
         sortable: true
-      }]
+      }
+    ]
   }
 
 }

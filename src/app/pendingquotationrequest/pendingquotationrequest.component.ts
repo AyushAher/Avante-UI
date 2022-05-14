@@ -17,13 +17,7 @@ export class PendingquotationrequestComponent implements OnInit {
     this.columnDefs = this.createDisColumnDefs();
   }
 
-  ExportData() {
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.data);
-    XLSX.utils.book_append_sheet(wb, ws1, "Sheet1");
-    XLSX.writeFile(wb, "Pending Quotation Request Report.xlsx");
 
-  }
 
   GetData(data) {
     this.data = data?.filter(x => x.isCompleted)
@@ -41,6 +35,24 @@ export class PendingquotationrequestComponent implements OnInit {
     this.api = params.api;
     this.columnApi = params.columnApi;
     this.api.sizeColumnsToFit()
+  }
+
+  ExportData() {
+    let eData = []
+
+    this.data.forEach(x => {
+      let obj = {}
+      obj["Date of Quote"] = x.podate
+      obj["Date of Completion"] = x.completedDate
+      obj["Reason for delay"] = x.completedComments
+      eData.push(obj)
+    })
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(eData);
+    XLSX.utils.book_append_sheet(wb, ws1, "Sheet1");
+    XLSX.writeFile(wb, "Pending Quotation Request Report.xlsx");
+
   }
 
   private createDisColumnDefs() {

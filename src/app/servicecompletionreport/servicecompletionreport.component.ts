@@ -19,13 +19,6 @@ export class ServicecompletionreportComponent implements OnInit {
     this.columnDefs = this.createDisColumnDefs();
   }
 
-  ExportData() {
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.data);
-    XLSX.utils.book_append_sheet(wb, ws1, "Sheet1");
-    XLSX.writeFile(wb, "Service Completion Report.xlsx");
-
-  }
 
   GetData(data) {
     this.data = data?.filter(x => x.isCompleted)
@@ -43,6 +36,24 @@ export class ServicecompletionreportComponent implements OnInit {
     this.api = params.api;
     this.columnApi = params.columnApi;
     this.api.sizeColumnsToFit()
+  }
+
+  ExportData() {
+    let eData = []
+
+    this.data.forEach(x => {
+      let obj = {}
+      obj["Date of Service Request"] = x.serreqdate
+      obj["Engineer Assigned"] = x.engAssigned
+      obj["No. Of Days Spent"] = x.totalDays
+      eData.push(obj)
+    })
+    
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(eData);
+    XLSX.utils.book_append_sheet(wb, ws1, "Sheet1");
+    XLSX.writeFile(wb, "Service Completion Report.xlsx");
+
   }
 
   private createDisColumnDefs() {
