@@ -183,7 +183,8 @@ export class UserProfileComponent implements OnInit {
           this.onprofileClick(data.object.profileForId);
 
         });
-      this.userprofileform.disable()
+        
+      setTimeout(() => this.userprofileform.disable(), 100);
     }
     else {
       this.isNewMode = true

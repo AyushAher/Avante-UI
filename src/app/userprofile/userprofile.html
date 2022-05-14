@@ -105,8 +105,8 @@
             </div>
             <div class="col-md-6 col-sm-6" *ngIf="isEng || isDist">
               <label for="regions">Distributor Regions</label>
-              <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="regionList" id="regions"
-                formControlName="distRegions">
+              <ng-multiselect-dropdown [settings]="dropdownSettings" [disabled]="!isEditMode && !isNewMode"
+                [data]="regionList" id="regions" formControlName="distRegions">
               </ng-multiselect-dropdown>
               <div *ngIf="submitted && f.distRegions.errors" class="invalid-feedback">
                 <div *ngIf="f.distRegions.errors.required">Distributor Region is required</div>
