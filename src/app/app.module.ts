@@ -129,6 +129,7 @@ import { AdvancerequestlistformComponent } from './advancerequestform/advancereq
 import { DistributorfilterComponent } from './distributorfilter/distributorfilter.component';
 import { ServicereqestreportComponent } from './servicereqestreport/servicereqestreport.component';
 import { ReportfilterComponent } from './reportfilter/reportfilter.component';
+import { ServicecompletionreportComponent } from './servicecompletionreport/servicecompletionreport.component';
 
 
 @NgModule({
@@ -234,7 +235,8 @@ import { ReportfilterComponent } from './reportfilter/reportfilter.component';
     AdvancerequestlistformComponent,
     DistributorfilterComponent,
     ServicereqestreportComponent,
-    ReportfilterComponent
+    ReportfilterComponent,
+    ServicecompletionreportComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
