@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {ProfileReadOnly, User} from "../_models";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService, ProfileService} from "../_services";
-import {AudittrailService} from "../_services/audittrail.service";
-import {first} from "rxjs/operators";
-import {RenderComponent} from "../distributor/rendercomponent";
-import {DatePipe} from "@angular/common";
+import { Component, OnInit } from '@angular/core';
+import { ProfileReadOnly, User } from "../_models";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AccountService, ProfileService } from "../_services";
+import { AudittrailService } from "../_services/audittrail.service";
+import { first } from "rxjs/operators";
+import { RenderComponent } from "../distributor/rendercomponent";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: 'app-audittrail',
@@ -66,22 +66,14 @@ export class AudittrailComponent implements OnInit {
     this.columnDefs = this.createColumnDefs();
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`audittrail/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
       {
-        headerName: " ",
-        field: "id",
-        width: 55,
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: "/audittrail",
-          deleteLink: "VSDET",
-        }
-      }, {
         headerName: "Action",
         field: "action",
         filter: true,

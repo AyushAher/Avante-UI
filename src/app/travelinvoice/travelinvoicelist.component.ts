@@ -67,22 +67,13 @@ export class TravelInvoiceListComponent implements OnInit {
         this.router.navigate(["travelinvoice"]);
     }
 
+    EditRecord() {
+        var data = this.api.getSelectedRows()[0]
+        this.router.navigate([`travelinvoice/${data.id}`])
+    }
+
     private createColumnDefs() {
         return [
-            {
-                headerName: "Action",
-                field: "id",
-                filter: false,
-                enableSorting: false,
-                editable: false,
-                sortable: false,
-                cellRendererFramework: RenderComponent,
-                cellRendererParams: {
-                    inRouterLink: "/travelinvoice",
-                    deleteLink: "TRIVC",
-                    deleteaccess: false,
-                },
-            },
             {
                 headerName: "Engineer ",
                 field: "engineerName",

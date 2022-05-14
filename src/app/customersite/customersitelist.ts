@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {CustomerSite, ProfileReadOnly, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { CustomerSite, ProfileReadOnly, User } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -14,7 +14,7 @@ import {
   NotificationService,
   ProfileService
 } from '../_services';
-import {RenderComponent} from '../distributor/rendercomponent';
+import { RenderComponent } from '../distributor/rendercomponent';
 
 
 @Component({
@@ -80,8 +80,8 @@ export class CustomerSiteListComponent implements OnInit {
           this.customerSite = data.object.sites;
         },
         error: error => {
-         // this.alertService.error(error);
-          
+          // this.alertService.error(error);
+
           this.loading = false;
         }
       });
@@ -93,33 +93,25 @@ export class CustomerSiteListComponent implements OnInit {
   }
 
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate(['/customersite/' + this.customerId + `/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
       {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
+        headerName: 'Customer Region',
+        field: 'custregname',
+        filter: true,
+        enableSorting: true,
         editable: false,
-        sortable: false,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/customersite/' + this.customerId,
-          deleteLink: 'CS',
-          deleteaccess: this.hasDeleteAccess
-        },
-      },{
-      headerName: 'Customer Region',
-      field: 'custregname',
-      filter: true,
-      enableSorting: true,
-      editable: false,
         sortable: true,
         tooltipField: 'custregname',
-     }, {
-      headerName: 'Region',
+      }, {
+        headerName: 'Region',
         field: 'regname',
-      filter: true,
+        filter: true,
         editable: false,
         sortable: true,
         tooltipField: 'regname',

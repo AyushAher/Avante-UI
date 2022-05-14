@@ -84,6 +84,11 @@ export class InstrumentListComponent implements OnInit {
     this.router.navigate(['instrument']);
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`instrument/${data.id}`])
+  }
+
   DataFilter(event) {
     this.instrumentList = event
   }
@@ -98,20 +103,6 @@ export class InstrumentListComponent implements OnInit {
 
   private createColumnDefs() {
     return [
-      {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/instrument',
-          deleteLink: 'I',
-          deleteaccess: this.hasDeleteAccess
-        },
-      },
       {
         headerName: 'Site Name',
         field: 'custSiteName',

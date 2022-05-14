@@ -100,22 +100,13 @@ export class SparePartListComponent implements OnInit {
     this.router.navigate(['exportsparepart']);
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`sparepart/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
-      {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/sparepart',
-          deleteLink: 'S',
-          deleteaccess: this.hasDeleteAccess
-        },
-      },
       {
         headerName: 'Config Type',
         field: 'configTypeName',

@@ -40,7 +40,7 @@ export class CountryListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
-   
+
   }
 
   ngOnInit() {
@@ -70,7 +70,7 @@ export class CountryListComponent implements OnInit {
           this.countryList = data.object;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -82,23 +82,13 @@ export class CountryListComponent implements OnInit {
   }
 
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`country/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
-      {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        width: 100,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/country',
-          deleteLink: 'COU',
-          deleteaccess: this.hasDeleteAccess
-        },
-      },
       {
         headerName: 'Country Name',
         field: 'name',

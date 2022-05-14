@@ -20,9 +20,9 @@
         (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>
       <!--<button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="hasAddAccess==true" (click)="export()"><i class="fas fa-download" title="export"></i></button>-->
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
-        <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-          [columnDefs]="columnDefs" [rowData]="sparePartList" rowSelection="single" pagination="true"
-          paginationPageSize=10></ag-grid-angular>
+        <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="EditRecord()"
+          class="ag-theme-alpine" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="sparePartList"
+          rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
       </div>
     </div>
   </div>

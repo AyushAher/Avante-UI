@@ -4,7 +4,7 @@ import { User, Distributor, Country, ProfileReadOnly } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community';
+import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, DistributorService, CountryService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from './rendercomponent';
@@ -55,7 +55,7 @@ export class DistributorListComponent implements OnInit {
         this.hasDeleteAccess = profilePermission[0].delete;
       }
     }
-   // this.hasAddAccess = this.profilePermission.permissions.filter(x => x.screenName == "Distributor")[0].create;
+    // this.hasAddAccess = this.profilePermission.permissions.filter(x => x.screenName == "Distributor")[0].create;
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
@@ -71,7 +71,7 @@ export class DistributorListComponent implements OnInit {
 
         },
         error: error => {
-          
+
           //this.alertService.error(error);
           this.loading = false;
         }
@@ -93,52 +93,33 @@ export class DistributorListComponent implements OnInit {
           alert('deleted');
         },
         error: error => {
-         // this.alertService.error(error);
-          
+          // this.alertService.error(error);
+
           this.loading = false;
         }
       });
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`distributor/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
       {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
+        headerName: 'Distributor Name',
+        field: 'distname',
+        filter: true,
+        tooltipField: 'distname',
+        enableSorting: true,
         editable: false,
-        sortable: false,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/distributor',
-          deleteLink: 'D',
-          deleteaccess: this.hasDeleteAccess
-        },
+        sortable: true
       },
       {
-      headerName: 'Distributor Name',
-      field: 'distname',
-      filter: true,
-      tooltipField: 'distname',
-      enableSorting: true,
-      editable: false,
-        sortable: true
-      //cellRenderer: function (params) {
-      //  let keyData = params.data.id;
-      //  let columnName = params.data.distname
-      //  let newLink = `<a  routerLink="/distributor/${keyData}" routerLinkActive="active">${columnName}</a>`;
-      //  return newLink;
-      //}
-      //cellRendererFramework: RenderComponent,
-      //cellRendererParams: {
-      //  inRouterLink: '/distributor'
-      //},
-    },
-      {
-      headerName: 'Pay Term',
+        headerName: 'Pay Term',
         field: 'payterms',
-      filter: true,
+        filter: true,
         editable: false,
         sortable: true,
         tooltipField: 'payterms',

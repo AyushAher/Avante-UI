@@ -103,46 +103,37 @@ export class CustomerListComponent implements OnInit {
     this.showGrid = !this.showGrid
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`customer/${data.id}`])
+  }
+
   private createColumnDefs() {
-    return [{
-      headerName: 'Action',
-      field: 'id',
-      filter: false,
-      enableSorting: false,
-      width: 100,
-      editable: false,
-      sortable: false,
-      cellRendererFramework: RenderComponent,
-      cellRendererParams: {
-        inRouterLink: '/customer',
-        deleteLink: 'CU',
-        deleteaccess: this.hasDeleteAccess
+    return [
+      {
+        headerName: 'Customer Name',
+        field: 'custname',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'custname',
       },
-    },
-    {
-      headerName: 'Customer Name',
-      field: 'custname',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'custname',
-    },
-    {
-      headerName: 'Default Distributor',
-      field: 'defdist',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-    },
-    {
-      headerName: 'Is Active',
-      field: 'isactive',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
+      {
+        headerName: 'Default Distributor',
+        field: 'defdist',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: 'Is Active',
+        field: 'isactive',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
 
     ]
   }

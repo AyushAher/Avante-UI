@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {Contact, Country, ProfileReadOnly, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { Contact, Country, ProfileReadOnly, User } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -18,7 +18,7 @@ import {
   NotificationService,
   ProfileService
 } from '../_services';
-import {RenderComponent} from '../distributor/rendercomponent';
+import { RenderComponent } from '../distributor/rendercomponent';
 
 
 @Component({
@@ -132,7 +132,7 @@ export class ContactListComponent implements OnInit {
             this.loading = false;
           }
         });
-     // this.contact.contactMapping.mappedFor = "REG";
+      // this.contact.contactMapping.mappedFor = "REG";
     }
     else if (this.type == "C") {
       this.customerService.getById(this.masterId)
@@ -169,51 +169,43 @@ export class ContactListComponent implements OnInit {
     if (this.type == "DR" || this.type == "CS") {
       this.router.navigate(['contact', this.type, this.masterId, this.detailId]);
     }
-    else{
+    else {
       this.router.navigate(['contact', this.type, this.masterId]);
     }
   }
 
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate(['/contact/' + this.type + '/' + this.masterId + '/', `${data.id}`])
+  }
+
   private createColumnDefs() {
-    return [{
-      headerName: 'Action',
-      field: 'id',
-      filter: false,
-      enableSorting: false,
-      width: 100,
-      editable: false,
-      sortable: false,
-      cellRendererFramework: RenderComponent,
-      cellRendererParams: {
-        inRouterLink: '/contact/' + this.type + '/' + this.masterId + '/',
-        deleteLink: 'C',
-        deleteaccess: this.hasDeleteAccess
+    return [
+      {
+        headerName: 'First Name',
+        field: 'fname',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'fname',
+      }, {
+        headerName: 'Last Name',
+        field: 'lname',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'lname',
+      }, {
+        headerName: 'Email',
+        field: 'pemail',
+        filter: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'pemail',
       },
-    }, {
-      headerName: 'First Name',
-      field: 'fname',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'fname',
-    }, {
-      headerName: 'Last Name',
-      field: 'lname',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'lname',
-    }, {
-      headerName: 'Email',
-      field: 'pemail',
-      filter: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'pemail',
-    },
 
     ]
   }

@@ -4,7 +4,7 @@ import { User, Distributor, Country, DistributorRegion, ProfileReadOnly } from '
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community';
+import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, DistributorRegionService, CountryService, DistributorService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
@@ -71,7 +71,7 @@ export class DistributorRegionListComponent implements OnInit {
         },
         error: error => {
           //this.alertService.error(error);
-          
+
           this.loading = false;
         }
       });
@@ -82,35 +82,25 @@ export class DistributorRegionListComponent implements OnInit {
     this.router.navigate(['distributorregion', this.distributorId]);
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`distributorregion/${this.distributorId}/${data.id}`])
+  }
 
   private createColumnDefs() {
     return [
       {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
+        headerName: 'Distributor Region',
+        field: 'region',
+        filter: true,
+        enableSorting: true,
         editable: false,
-        sortable: false,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/distributorregion/' + this.distributorId,
-          deleteLink: 'DR',
-          deleteaccess: this.hasDeleteAccess
-        },
-      },
-      {
-      headerName: 'Distributor Region',
-      field: 'region',
-      filter: true,
-      enableSorting: true,
-      editable: false,
         sortable: true,
         tooltipField: 'region',
-    }, {
-      headerName: 'Pay Term',
+      }, {
+        headerName: 'Pay Term',
         field: 'payterms',
-      filter: true,
+        filter: true,
         editable: false,
         sortable: true,
         tooltipField: 'payterms',

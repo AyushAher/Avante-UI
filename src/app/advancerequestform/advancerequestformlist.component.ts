@@ -68,22 +68,13 @@ export class AdvancerequestlistformComponent implements OnInit {
         this.router.navigate(["advancerequestform"]);
     }
 
+    EditRecord() {
+        var data = this.api.getSelectedRows()[0]
+        this.router.navigate([`advancerequestform/${data.id}`])
+    }
+
     private createColumnDefs() {
         return [
-            {
-                headerName: "Action",
-                field: "id",
-                filter: false,
-                enableSorting: false,
-                editable: false,
-                sortable: false,
-                cellRendererFramework: RenderComponent,
-                cellRendererParams: {
-                    inRouterLink: "/advancerequestform",
-                    deleteLink: "TREXP",
-                    deleteaccess: this.hasDeleteAccess,
-                },
-            },
             {
                 headerName: "Engineer ",
                 field: "engineerName",

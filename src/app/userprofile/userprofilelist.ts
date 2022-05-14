@@ -110,21 +110,13 @@ export class UserProfileListComponent implements OnInit {
   }
 
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`userprofile/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
-      {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        width: 100,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/userprofile',
-        },
-      },
       {
         headerName: 'Username',
         field: 'username',

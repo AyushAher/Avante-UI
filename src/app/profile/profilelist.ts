@@ -4,7 +4,7 @@ import { User, Customer, Country, Instrument, Profile, ProfileReadOnly } from '.
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, CountryService, InstrumentService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
@@ -42,9 +42,9 @@ export class ProfileListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
-    
+
   }
-  
+
   ngOnInit() {
     //debugger;
     this.user = this.accountService.userValue;
@@ -70,46 +70,34 @@ export class ProfileListComponent implements OnInit {
           this.profileList = data;
         },
         error: error => {
-           
+
           this.loading = false;
         }
       });
-    this.columnDefs = this.createColumnDefs(); 
+    this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
-    this.router.navigate(['profile']);  
+    this.router.navigate(['profile']);
   }
- 
+
+
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`profile/${data.id}`])
+  }
 
   private createColumnDefs() {
-    return [
-      {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        width: 100,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/profile',
-          deleteLink: 'P',
-          deleteaccess: this.hasDeleteAccess
-        },
-      },
-      {
+    return [{
       headerName: 'Profile Name',
-        field: 'profilename',
+      field: 'profilename',
       filter: true,
       enableSorting: true,
       editable: false,
-        sortable: true,
-        tooltipField: 'profilename',
-    }
-    ]
-  }  
+      sortable: true,
+      tooltipField: 'profilename',
+    }]
+  }
 
   onGridReady(params): void {
     this.api = params.api;

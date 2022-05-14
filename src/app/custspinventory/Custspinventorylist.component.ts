@@ -77,8 +77,14 @@ export class CustspinventorylistComponent implements OnInit {
     this.columnDefs = this.createColumnDefs();
   }
 
+  
   Add() {
     this.router.navigate(["customerspinventory"]);
+  }
+
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`customerspinventory/${data.id}`])
   }
 
   ShowData(event) {
@@ -95,19 +101,6 @@ export class CustspinventorylistComponent implements OnInit {
 
   private createColumnDefs() {
     return [
-      {
-        headerName: "Action",
-        field: "id",
-        filter: false, enableSorting: false,
-        editable: false,
-        sortable: false,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: "/customerspinventory",
-          deleteLink: "CUSTS",
-          deleteaccess: this.hasDeleteAccess,
-        },
-      },
       {
         headerName: "Part No",
         field: "partNo",

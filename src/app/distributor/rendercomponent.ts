@@ -3,43 +3,12 @@ import { AgRendererComponent } from 'ag-grid-angular';
 
 
 @Component({
-  template: `<a [routerLink]="[params.inRouterLink,params.value]" class="btn btn-link"
-                style="margin-right: 10px; padding: 0;"><i class="fas fa-eye" title="View"></i></a>`
+  template: `<a [routerLink]="[params.inRouterLink,params.data.id]" class="nav-link"> {{params.value}}  </a>`
 })
 export class RenderComponent implements AgRendererComponent {
   params: any;
-  constructor(
-    // private distributorService: DistributorService,
-    // private distributorRegionService: DistributorRegionService,
-    // private alertService: AlertService,
-    // private contactService: ContactService,
-    // private custsiteService: CustomerSiteService,
-    // private sparepartService: SparePartService,
-    // private instrumnetservice: InstrumentService,
-    // private customerservice: CustomerService,
-    // private notificationService: NotificationService,
-    // private profileService: ProfileService,
-    // private userprofileService: UserProfileService,
-    // private currencyService: CurrencyService,
-    // private countryService: CountryService,
-    // private listTypeService: ListTypeService,
-    // private servicerequestService: ServiceRequestService,
-    // private servicereportservice: ServiceReportService,
-    // private TravelDetailService: TravelDetailService,
-    // private VisaDetailsService: VisadetailsService,
-    // private StayDetailsService: StaydetailsService,
-    // private LocalExpensesService: LocalExpensesService,
-    // private CustomerSatisfactionSurveyService: CustomersatisfactionsurveyService,
-    // private CustomerSPInventoory: CustspinventoryService,
-    // private AMCService: AmcService,
-    // private TravelExpensesService: TravelExpenseService
-  ) {
-
-  }
   agInit(params: any): void {
-    // //debugger;
     this.params = params;
-
   }
 
   refresh(params: any): boolean {

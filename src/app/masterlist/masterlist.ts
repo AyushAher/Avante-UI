@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {ListType, ProfileReadOnly, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { ListType, ProfileReadOnly, User } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -14,7 +14,7 @@ import {
   NotificationService,
   ProfileService
 } from '../_services';
-import {RenderComponent} from '../distributor/rendercomponent';
+import { RenderComponent } from '../distributor/rendercomponent';
 
 
 @Component({
@@ -92,7 +92,7 @@ export class MasterListComponent implements OnInit {
           })
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -100,21 +100,13 @@ export class MasterListComponent implements OnInit {
   }
 
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`masterlistitem/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
-      {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        width: 100,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/masterlistitem'
-        },
-      },
       {
         headerName: 'List Name',
         field: 'listname',

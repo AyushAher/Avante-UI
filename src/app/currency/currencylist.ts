@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Currency, ProfileReadOnly, User} from '../_models';
+import { Currency, ProfileReadOnly, User } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -40,7 +40,7 @@ export class CurrencyListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
-   
+
   }
 
   ngOnInit() {
@@ -70,7 +70,7 @@ export class CurrencyListComponent implements OnInit {
           this.currencyList = data.object;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -82,23 +82,13 @@ export class CurrencyListComponent implements OnInit {
   }
 
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`currency/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
-      {
-        headerName: 'Action',
-        field: 'id',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        width: 100,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: '/currency',
-          deleteLink: 'CUR',
-          deleteaccess: this.hasDeleteAccess
-        },
-      },
       {
         headerName: 'Currency Name',
         field: 'name',

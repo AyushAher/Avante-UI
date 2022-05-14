@@ -128,6 +128,11 @@ export class ServiceRequestListComponent implements OnInit {
 
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`servicerequest/${data.id}`])
+  }
+
   GetAllRecord() {
     this.serviceRequestService.getAll(this.user.userId)
       .pipe(first())
@@ -151,194 +156,174 @@ export class ServiceRequestListComponent implements OnInit {
 
 
   private createDisColumnDefs() {
-    return [{
-      headerName: 'Action',
-      field: 'id',
-      filter: false,
-      enableSorting: false,
-      width: 200,
-      editable: false,
-      sortable: false,
-      cellRendererFramework: RenderComponent,
-      cellRendererParams: {
-        inRouterLink: '/servicerequest',
-        deleteLink: 'SR',
-        deleteaccess: this.hasDeleteAccess
+    return [
+      {
+        headerName: 'Service Request No.',
+        field: 'serreqno',
+        filter: true,
+        cellRendererFramework: RenderComponent,
+        cellRendererParams: {
+          inRouterLink: '/servicerequest',
+        },
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'Service Request No.',
       },
-    },
-    {
-      headerName: 'Service Request No.',
-      field: 'serreqno',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'Service Request No.',
-    },
-    {
-      headerName: 'Customer Name',
-      field: 'companyname',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'companyname',
-    }, {
-      headerName: 'Site Name',
-      field: 'sitename',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Machine Serial No.',
-      field: 'machineModelName',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Machine Model Name',
-      field: 'machmodelname',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Contact Person',
-      field: 'contactperson',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Service Type',
-      field: 'visittypeName',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Status',
-      field: 'statusName',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Stage',
-      field: 'stageName',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Raised On',
-      field: 'createdon',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Eng. Comments',
-      field: 'engComments',
-      filter: true,
-      hide: !this.IsDistributorView,
-      editable: false,
-      sortable: true,
-      tooltipField: 'engComments',
-    },
-    {
-      headerName: 'Assigned To',
-      field: 'assignedto',
-      width: 400,
-      cellRendererFramework: ServiceRComponent,
-      hide: !this.IsDistributorView,
-      cellRendererParams: {
-        isDist: this.IsDistributorView
+      {
+        headerName: 'Customer Name',
+        field: 'companyname',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'companyname',
+      }, {
+        headerName: 'Site Name',
+        field: 'sitename',
+        filter: true,
+        editable: false,
+        sortable: true
       },
-      filter: true,
-      editable: false,
-      sortable: true
-    }]
+      {
+        headerName: 'Machine Serial No.',
+        field: 'machineModelName',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Machine Model Name',
+        field: 'machmodelname',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Contact Person',
+        field: 'contactperson',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Service Type',
+        field: 'visittypeName',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Status',
+        field: 'statusName',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Stage',
+        field: 'stageName',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Raised On',
+        field: 'createdon',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Eng. Comments',
+        field: 'engComments',
+        filter: true,
+        hide: !this.IsDistributorView,
+        editable: false,
+        sortable: true,
+        tooltipField: 'engComments',
+      },
+      {
+        headerName: 'Assigned To',
+        field: 'assignedto',
+        width: 400,
+        cellRendererFramework: ServiceRComponent,
+        hide: !this.IsDistributorView,
+        cellRendererParams: {
+          isDist: this.IsDistributorView
+        },
+        filter: true,
+        editable: false,
+        sortable: true
+      }]
   }
 
   private createCustColumnDefs() {
-    return [{
-      headerName: 'Action',
-      field: 'id',
-      filter: false,
-      enableSorting: false,
-      width: 200,
-      editable: false,
-      sortable: false,
-      cellRendererFramework: RenderComponent,
-      cellRendererParams: {
-        inRouterLink: '/servicerequest',
-        deleteLink: 'SR',
-        deleteaccess: this.hasDeleteAccess
+    return [
+      {
+        headerName: 'Service Request No.',
+        field: 'serreqno',
+        filter: true,
+        enableSorting: true,
+        cellRendererFramework: RenderComponent,
+        cellRendererParams: {
+          inRouterLink: '/servicerequest',
+        },
+        editable: false,
+        sortable: true,
       },
-    },
-    {
-      headerName: 'Service Request No.',
-      field: 'serreqno',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-    },
-    {
-      headerName: 'Distributor Name',
-      field: 'distributor',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-    },
-    {
-      headerName: 'Site Name',
-      field: 'sitename',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
+      {
+        headerName: 'Distributor Name',
+        field: 'distributor',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
+        headerName: 'Site Name',
+        field: 'sitename',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
 
-    {
-      headerName: 'Machine Serial No.',
-      field: 'machineModelName',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Machine Model Name',
-      field: 'machmodelname',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Contact Person',
-      field: 'contactperson',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Service Type',
-      field: 'visittypeName',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Schedule Details',
-      field: 'scheduledCalls.Time',
-      filter: true,
-      width: 350,
-      editable: false,
-      sortable: true
-    }
+      {
+        headerName: 'Machine Serial No.',
+        field: 'machineModelName',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Machine Model Name',
+        field: 'machmodelname',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Contact Person',
+        field: 'contactperson',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Service Type',
+        field: 'visittypeName',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Schedule Details',
+        field: 'scheduledCalls.Time',
+        filter: true,
+        width: 350,
+        editable: false,
+        sortable: true
+      }
     ]
   }
 

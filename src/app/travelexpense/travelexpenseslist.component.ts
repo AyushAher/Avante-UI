@@ -73,20 +73,13 @@ export class TravelexpenseListComponent implements OnInit {
         this.router.navigate(["travelexpense"]);
     }
 
+    EditRecord() {
+        var data = this.api.getSelectedRows()[0]
+        this.router.navigate([`sparepart/${data.id}`])
+    }
+    
     private createColumnDefs() {
         return [
-            {
-                headerName: "Action",
-                field: "id",
-                filter: false,
-                enableSorting: false,
-                editable: false,
-                sortable: false,
-                cellRendererFramework: RenderComponent,
-                cellRendererParams: {
-                    inRouterLink: "/travelexpense",
-                },
-            },
             {
                 headerName: "Engineer ",
                 field: "engineerName",

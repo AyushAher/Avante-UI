@@ -98,21 +98,13 @@ export class AmcListComponent implements OnInit {
     this.AmcList = event?.filter(x => !x.isCompleted)
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`amc/${data.id}`])
+  }
+
   private createColumnDefs() {
-    return [{
-      headerName: 'Action',
-      field: 'id',
-      filter: false,
-      enableSorting: false,
-      editable: false,
-      sortable: false,
-      cellRendererFramework: RenderComponent,
-      cellRendererParams: {
-        inRouterLink: '/amc',
-        deleteLink: 'AMC',
-        deleteaccess: this.hasDeleteAccess
-      },
-    },
+    return [
     {
       headerName: 'Bill To',
       field: 'billto',

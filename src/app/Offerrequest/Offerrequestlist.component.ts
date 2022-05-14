@@ -90,24 +90,18 @@ export class OfferrequestlistComponent implements OnInit {
   DataFilter(event) {
     this.model = event?.filter(x => !x.isCompleted)
   }
+
   Add() {
     this.router.navigate(["offerrequest"]);
   }
+
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`offerrequest/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
-      {
-        headerName: "Action",
-        field: "id",
-        filter: false, enableSorting: false,
-        editable: false,
-        sortable: false,
-        cellRendererFramework: OfferRequestListRenderer,
-        cellRendererParams: {
-          inRouterLink: "/offerrequest",
-          deleteLink: "OFFER",
-          deleteaccess: this.hasDeleteAccess,
-        },
-      },
       {
         headerName: "Distributor",
         field: "distributor",

@@ -109,22 +109,13 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
     this.router.navigate(["/customersatisfactionsurvey"]);
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`customersatisfactionsurvey/${data.id}`])
+  }
+
   private createColumnDefs() {
     return [
-      {
-        headerName: "Action",
-        field: "id",
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        cellRendererFramework: RenderComponent,
-        cellRendererParams: {
-          inRouterLink: "/customersatisfactionsurvey",
-          deleteLink: "CSS",
-          deleteaccess: this.hasDeleteAccess,
-        },
-      },
       {
         headerName: "Engineer Name",
         field: "engineerName",

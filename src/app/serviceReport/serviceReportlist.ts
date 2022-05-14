@@ -92,7 +92,7 @@ export class ServiceReportListComponent implements OnInit {
   toggleFilter() {
     this.showGrid = !this.showGrid
   }
-  
+
   getAllRecords() {
     this.ServiceReportService.getAll()
       .pipe(first())
@@ -127,84 +127,74 @@ export class ServiceReportListComponent implements OnInit {
       })
   }
 
+  EditRecord() {
+    var data = this.api.getSelectedRows()[0]
+    this.router.navigate([`servicereport/${data.id}`])
+  }
+
   private createColumnDefs() {
-    return [{
-      headerName: 'Action',
-      field: 'id',
-      filter: false,
-      enableSorting: false,
-      width: 150,
-      editable: false,
-      sortable: false,
-      hide: this.role == environment.custRoleCode,
-      cellRendererFramework: RenderComponent,
-      cellRendererParams: {
-        inRouterLink: '/servicereport',
-        deleteLink: 'SRE',
-        deleteaccess: this.hasDeleteAccess
+    return [
+      {
+        headerName: 'Service Req. No.',
+        field: 'serviceRequest.serreqno',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'customer',
       },
-    },
-    {
-      headerName: 'Service Req. No.',
-      field: 'serviceRequest.serreqno',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'customer',
-    },
-    {
-      headerName: 'Customer Name',
-      field: 'customer',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'customer',
-    },
-    {
-      headerName: 'Department',
-      field: 'departmentName',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'SR Raised On',
-      field: 'serviceRequestRaisedOn',
-      filter: true,
-      editable: false,
-      sortable: true,
-      hide: this.role != environment.custRoleCode
-    },
-    {
-      headerName: 'Of',
-      field: 'srOf',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Lab Chief',
-      field: 'labChief',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Instrument',
-      field: 'instrumentName',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Download',
-      hide: this.role != environment.custRoleCode,
-      cellRenderer: (params) => {
-        return `<button class="btn btn-link" type="button" data-action-type="download"><i class="fas fa-download" data-action-type="download" title="download"></i></button>`;
+      {
+        headerName: 'Customer Name',
+        field: 'customer',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'customer',
+      },
+      {
+        headerName: 'Department',
+        field: 'departmentName',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'SR Raised On',
+        field: 'serviceRequestRaisedOn',
+        filter: true,
+        editable: false,
+        sortable: true,
+        hide: this.role != environment.custRoleCode
+      },
+      {
+        headerName: 'Of',
+        field: 'srOf',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Lab Chief',
+        field: 'labChief',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Instrument',
+        field: 'instrumentName',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Download',
+        hide: this.role != environment.custRoleCode,
+        cellRenderer: (params) => {
+          return `<button class="btn btn-link" type="button" data-action-type="download"><i class="fas fa-download" data-action-type="download" title="download"></i></button>`;
+        }
       }
-    }
     ]
   }
 
