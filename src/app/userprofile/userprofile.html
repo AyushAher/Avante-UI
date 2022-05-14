@@ -1,20 +1,47 @@
 <layout>
   <div class="right_col" role="main">
     <div class="container">
+
       <div class="page-title">
-        <div class="title_left">
+        <div class="title_left" style="display: flex; justify-content: space-between;">
           <h3>User Profile</h3>
+          <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+          </div>
+
+
         </div>
+
       </div>
-      <hr/>
+      <hr />
       <div class="clearfix"></div>
 
       <div class="col-md-12 col-sm-12 ">
-        <form [formGroup]="userprofileform" (ngSubmit)="onSubmit()">
+        <form [formGroup]="userprofileform">
           <div class="row">
             <div class="col-sm-6">
               <label for="userId">User Name</label>
-              <select formControlName="userId" class="form-control" #myuser (change)="onUserChange(myuser.value)" [ngClass]="{ 'is-invalid': submitted && f.userId.errors }">
+              <select formControlName="userId" class="form-control" #myuser (change)="onUserChange(myuser.value)"
+                [ngClass]="{ 'is-invalid': submitted && f.userId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of userlist" value={{congfig.userid}}>
                   {{congfig.username}}
@@ -37,7 +64,8 @@
             </div>
             <div class="col-md-6 col-sm-6">
               <label for="price">Profile</label>
-              <select formControlName="profileId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.profileId.errors }">
+              <select formControlName="profileId" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.profileId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let profile of profilelist" value={{profile.id}}>
                   {{profile.profilename}}
@@ -49,7 +77,8 @@
             </div>
             <div class="col-md-4 col-sm-4" *ngIf="hidetable==true">
               <label for="price">Profile for</label>
-              <select formControlName="profileForId" #profileId (change)="onprofileClick(profileId.value)" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.profileForId.errors }">
+              <select formControlName="profileForId" #profileId (change)="onprofileClick(profileId.value)"
+                class="form-control" [ngClass]="{ 'is-invalid': submitted && f.profileForId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let l of listTypeItems" value={{l.listTypeItemId}}>
                   {{l.itemname}}
@@ -64,7 +93,7 @@
             <div class="col-md-6 col-sm-6">
               <label for="roleId">Role</label>
               <select formControlName="roleId" class="form-control" (change)="onRoleChange($event.target.value)"
-                      [ngClass]="{ 'is-invalid': submitted && f.roleId.errors }">
+                [ngClass]="{ 'is-invalid': submitted && f.roleId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let r of roleList" value={{r.listTypeItemId}}>
                   {{r.itemname}}
@@ -76,8 +105,8 @@
             </div>
             <div class="col-md-6 col-sm-6" *ngIf="isEng || isDist">
               <label for="regions">Distributor Regions</label>
-              <ng-multiselect-dropdown [settings]="dropdownSettings"
-                                       [data]="regionList" id="regions" formControlName="distRegions">
+              <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="regionList" id="regions"
+                formControlName="distRegions">
               </ng-multiselect-dropdown>
               <div *ngIf="submitted && f.distRegions.errors" class="invalid-feedback">
                 <div *ngIf="f.distRegions.errors.required">Distributor Region is required</div>
@@ -98,7 +127,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr formArrayName="profileRegions" *ngFor="let item of userprofileform.get('profileRegions')['controls'];let i=index">
+                  <tr formArrayName="profileRegions"
+                    *ngFor="let item of userprofileform.get('profileRegions')['controls'];let i=index">
                     <td [formGroupName]="i">
                       <input type="hidden" formControlName="level1id" />
                       <input type="hidden" formControlName="level2id" />
@@ -114,15 +144,6 @@
             </div>
           </div>
           <hr />
-          <div class="row">
-            <div class="col-md-6 col-sm-6">
-              <button [disabled]="loading" *ngIf="hasAddAccess==true || hasUpdateAccess==true" class="btn btn-primary">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
-              </button>
-              <a routerLink="/userprofilelist" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
-            </div>
-          </div>
         </form>
       </div>
     </div>

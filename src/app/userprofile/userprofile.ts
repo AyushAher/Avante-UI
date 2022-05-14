@@ -38,21 +38,12 @@ export class UserProfileComponent implements OnInit {
   profilelist: Profile[];
   customersite: CustomerSite[];
   userprofile: UserProfile;
-  loading = false;
   submitted = false;
-  isSave = false;
   id: string;
   hidetable: boolean = false;
-  code: string = "CONTY";
   listTypeItems: ListTypeItem[];
-  config: instrumentConfig;
-  sparePartDetails: SparePart[];
-  selectedConfigType: string[] = [];
-  imagePath: string;
-  instuType: ListTypeItem[];
   roleList: ListTypeItem[];
   profileRegions: FormArray;
-  listT: ListTypeItem;
   contactId: string;
   profileregion: ProfileRegions;
   profilewithregdata: ProfileRegions[];
@@ -67,6 +58,8 @@ export class UserProfileComponent implements OnInit {
   isDist: boolean = false;
   regionList: any;
   dropdownSettings: IDropdownSettings = {};
+  isEditMode: boolean;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,12 +75,11 @@ export class UserProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loading = true;
     this.dropdownSettings = {
       idField: 'id',
       textField: 'region',
     };
-    //debugger;
+
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -119,153 +111,140 @@ export class UserProfileComponent implements OnInit {
       profileRegions: this.formBuilder.array([]),
     });
 
-    this.listTypeService.getById("RF")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          //debugger;
-          this.listTypeItems = data;
-          this.listTypeItems = this.listTypeItems.filter(item => item.itemname !== "Contact");
-          //this.addItem(this.listTypeItems);
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
+    this.listTypeService.getById("RF").pipe(first())
+      .subscribe((data: ListTypeItem[]) => {
+        this.listTypeItems = data;
+        this.listTypeItems = this.listTypeItems.filter(item => item.itemname !== "Contact");
       });
 
-    this.listTypeService.getById("ROLES")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          //debugger;
-          this.roleList = data;
-          // this.listTypeItems = this.listTypeItems.filter(item => item.itemname !== "Contact");
-          //this.addItem(this.listTypeItems);
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
+    this.listTypeService.getById("ROLES").pipe(first())
+      .subscribe((data: ListTypeItem[]) => this.roleList = data);
 
-    this.profileService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          //debugger;
-          this.profilelist = data;
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
+    this.profileService.getAll().pipe(first())
+      .subscribe((data: any) => this.profilelist = data);
 
-    this.userprofileService.getUserAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          //debugger;
-          this.userlist = data.object;
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
+    this.userprofileService.getUserAll().pipe(first())
+      .subscribe((data: any) => this.userlist = data.object);
 
 
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id != null) {
       this.userprofileService.getById(this.id)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.contactId = data.object.contactid;
-            let role = data.object.roleId;
+        .subscribe((data: any) => {
+          this.contactId = data.object.contactid;
+          let role = data.object.roleId;
 
-            this.listTypeService.getById("ROLES")
-              .pipe(first())
-              .subscribe({
-                next: (data: ListTypeItem[]) => {
-                  switch (data?.find(x => x.listTypeItemId == role)?.itemCode) {
-                    case environment.engRoleCode:
-                      this.isEng = true;
-                      this.GetDistributorByContactId();
-                      break;
+          this.listTypeService.getById("ROLES")
+            .pipe(first())
+            .subscribe({
+              next: (data: ListTypeItem[]) => {
+                switch (data?.find(x => x.listTypeItemId == role)?.itemCode) {
+                  case environment.engRoleCode:
+                    this.isEng = true;
+                    this.GetDistributorByContactId();
+                    break;
 
-                    case environment.distRoleCode:
-                      this.isDist = true;
-                      this.GetDistributorByContactId();
-                      break;
+                  case environment.distRoleCode:
+                    this.isDist = true;
+                    this.GetDistributorByContactId();
+                    break;
 
-                    case environment.custRoleCode:
-                      this.isDist = false;
-                      this.isEng = false;
-                      this.userprofileform.get('distRegions').clearValidators()
-                      this.userprofileform.get('distRegions').updateValueAndValidity()
-                      break;
-                  }
+                  case environment.custRoleCode:
+                    this.isDist = false;
+                    this.isEng = false;
+                    this.userprofileform.get('distRegions').clearValidators()
+                    this.userprofileform.get('distRegions').updateValueAndValidity()
+                    break;
                 }
-              })
-
-            var subreq = data.object.distRegions?.split(',');
-            let items: any = [];
-            if (subreq != null && subreq.length > 0) {
-              for (var i = 0; i < subreq.length; i++) {
-                let t = { id: subreq[i] }
-                items.push(t);
               }
-              this.userprofileform.patchValue({ "distRegions": items });
+            })
 
+          var subreq = data.object.distRegions?.split(',');
+          let items: any = [];
+          if (subreq != null && subreq.length > 0) {
+            for (var i = 0; i < subreq.length; i++) {
+              let t = { id: subreq[i] }
+              items.push(t);
             }
-
-            this.userprofileform.patchValue({ "userId": data.object.userId });
-            this.userprofileform.patchValue({ "designation": data.object.designation });
-            this.userprofileform.patchValue({ "profileId": data.object.profileId });
-            this.userprofileform.patchValue({ "profileForId": data.object.profileForId });
-            this.userprofileform.patchValue({ "distributorName": data.object.distributorName });
-            this.userprofileform.patchValue({ "roleId": data.object.roleId });
-            this.userprofileform.patchValue({ "isdeleted": data.object.isdeleted });
-            this.userprofileform.patchValue({ "profileRegions": data.object.profileRegions });
-
-            this.profilewithregdata = data.object.profileRegions;
-            // this.userprofileform.patchValue(data.object);
-            this.onprofileClick(data.object.profileForId);
-          },
-          error: error => {
-            
-            this.loading = false;
+            this.userprofileform.patchValue({ "distRegions": items });
           }
+
+          this.userprofileform.patchValue({ "userId": data.object.userId });
+          this.userprofileform.patchValue({ "designation": data.object.designation });
+          this.userprofileform.patchValue({ "profileId": data.object.profileId });
+          this.userprofileform.patchValue({ "profileForId": data.object.profileForId });
+          this.userprofileform.patchValue({ "distributorName": data.object.distributorName });
+          this.userprofileform.patchValue({ "roleId": data.object.roleId });
+          this.userprofileform.patchValue({ "isdeleted": data.object.isdeleted });
+          this.userprofileform.patchValue({ "profileRegions": data.object.profileRegions });
+
+          this.profilewithregdata = data.object.profileRegions;
+          this.onprofileClick(data.object.profileForId);
+
         });
+      this.userprofileform.disable()
     }
-    setTimeout(() => this.loading = false, 1000)
+    else {
+      this.isNewMode = true
+    }
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.userprofileform.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["userprofilelist"])
+    }
+
+    else this.router.navigate(["userprofilelist"])
+
+  }
+
+  CancelEdit() {
+    this.userprofileform.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+
+      this.userprofileService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["userprofilelist"])
+        })
+    }
   }
 
   onRoleChange(role: string) {
     this.listTypeService.getById("ROLES")
       .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          switch (data?.find(x => x.listTypeItemId == role)?.itemCode) {
-            case environment.engRoleCode:
-              this.isEng = true;
-              this.GetDistributorByContactId();
-              break;
+      .subscribe((data: ListTypeItem[]) => {
+        switch (data?.find(x => x.listTypeItemId == role)?.itemCode) {
+          case environment.engRoleCode:
+            this.isEng = true;
+            this.GetDistributorByContactId();
+            break;
 
-            case environment.distRoleCode:
-              this.isDist = true;
-              this.GetDistributorByContactId();
-              break;
+          case environment.distRoleCode:
+            this.isDist = true;
+            this.GetDistributorByContactId();
+            break;
 
-            case environment.custRoleCode:
-              this.isDist = false;
-              this.isEng = false;
-              this.userprofileform.get('distRegions').clearValidators()
-              this.userprofileform.get('distRegions').updateValueAndValidity()
-              break;
-          }
+          case environment.custRoleCode:
+            this.isDist = false;
+            this.isEng = false;
+            this.userprofileform.get('distRegions').clearValidators()
+            this.userprofileform.get('distRegions').updateValueAndValidity()
+            break;
         }
       })
   }
@@ -273,16 +252,10 @@ export class UserProfileComponent implements OnInit {
   GetDistributorByContactId() {
     this.DistributorService.getByConId(this.contactId)
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (data.result) {
-            console.log(data);
-
-            this.regionList = data.object[0]?.regions;
-          }
-        }
-      }
-      )
+      .subscribe((data: any) => {
+        if (data.result)
+          this.regionList = data.object[0]?.regions;
+      })
   }
 
   CreateItem(): FormGroup {
@@ -300,7 +273,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   addItem(value: any): void {
-    //debugger;
     for (let i = 0; i < value.length; i++) {
       this.profileregion = value[i];
       this.profileRegions = this.userprofileform.get('profileRegions') as FormArray;
@@ -340,43 +312,17 @@ export class UserProfileComponent implements OnInit {
   onprofileClick(value: any) {
     let frmArray = this.userprofileform.get('profileRegions') as FormArray;
     frmArray.clear();
-    this.userprofileService.getByProfileRegion(value, this.contactId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          //debugger;
-          //this.addItem(data.object);
-          //frmArray.patchValue(this.profilewithregdata);
-          //this.profilewithregdata = [];
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
   }
 
   onUserChange(value: any) {
-    //debugger;
     this.contactId = this.userlist.filter(x => x.userid === value)[0].contactid;
     this.GetDistributorByContactId();
     this.userprofileService.getByUserId(this.contactId)
       .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          //debugger;
-          this.userprofileform.controls['designation'].setValue(data.object.designation);
-          this.userprofileform.controls['distributorName'].setValue(data.object.distCustName);
-          //this.userprofileform.setValue({
-          //  designation: data.object.designation,
-          //  distributorName: data.object.Profilefor,
-          //});
-          this.contactId = data.object.contactid;
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
+      .subscribe((data: any) => {
+        this.userprofileform.controls['designation'].setValue(data.object.designation);
+        this.userprofileform.controls['distributorName'].setValue(data.object.distCustName);
+        this.contactId = data.object.contactid;
       });
   }
 
@@ -391,8 +337,7 @@ export class UserProfileComponent implements OnInit {
     if (this.userprofileform.invalid) {
       return;
     }
-    this.isSave = true;
-    this.loading = true;
+
     this.userprofile = this.userprofileform.value;
 
     if (this.userprofileform.get('distRegions').value.length > 0) {
@@ -403,20 +348,10 @@ export class UserProfileComponent implements OnInit {
     if (this.id == null) {
       this.userprofileService.save(this.userprofile)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["userprofilelist"]);
-            } else {
-              
-            }
-            this.loading = false;
-
-          },
-          error: error => {
-            
-            this.loading = false;
+        .subscribe((data: any) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(["userprofilelist"]);
           }
         });
     }
@@ -424,21 +359,10 @@ export class UserProfileComponent implements OnInit {
       this.userprofile.id = this.id;
       this.userprofileService.update(this.id, this.userprofile)
         .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["userprofilelist"]);
-            }
-            else {
-              
-            }
-            this.loading = false;
-
-          },
-          error: error => {
-            
-            this.loading = false;
+        .subscribe((data: any) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(["userprofilelist"]);
           }
         });
     }

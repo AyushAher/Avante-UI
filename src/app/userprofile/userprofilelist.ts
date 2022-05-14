@@ -103,8 +103,6 @@ export class UserProfileListComponent implements OnInit {
         cellRendererFramework: RenderComponent,
         cellRendererParams: {
           inRouterLink: '/userprofile',
-          deleteLink: 'UP',
-          deleteaccess: this.hasDeleteAccess
         },
       },
       {

@@ -196,9 +196,14 @@ export class TravelinvoiceComponent implements OnInit {
   }
 
   Back() {
-    if ((this.isEditMode || this.isNewMode) && confirm("Are you sure want to go back? All unsaved changes will be lost!")) {
-      this.router.navigate(["travelinvoicelist"])
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["travelinvoicelist"])
     }
+
+    else this.router.navigate(["travelinvoicelist"])
+
   }
 
   CancelEdit() {
