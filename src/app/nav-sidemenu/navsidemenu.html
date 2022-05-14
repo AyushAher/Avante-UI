@@ -186,13 +186,15 @@
           Status</a>
         <a class="collapse-item" routerLink="/srrpt" *ngIf="hasSearch" routerLinkActive="active">Service Report</a> -->
 
-        <a class="collapse-item" routerLink="/servicerequestreport" *ngIf="hasSearch" routerLinkActive="active">Service
+        <a class="collapse-item" routerLink="/servicerequestreport" *ngIf="serviceRequestReport"
+          routerLinkActive="active">Service
           Request Report</a>
 
-        <a class="collapse-item" routerLink="/servicecompletionreport" *ngIf="hasSearch" routerLinkActive="active">
+        <a class="collapse-item" routerLink="/servicecompletionreport" *ngIf="hasServiceCompletionReport"
+          routerLinkActive="active">
           Service Completion <br> Report</a>
 
-        <a class="collapse-item" routerLink="/pendingquotationrequest" *ngIf="hasSearch"
+        <a class="collapse-item" routerLink="/pendingquotationrequest" *ngIf="pendingQuoteRequestReport"
           routerLinkActive="active">Pending Quotation <br> Request</a>
 
       </div>

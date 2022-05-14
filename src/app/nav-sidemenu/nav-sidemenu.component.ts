@@ -58,6 +58,9 @@ export class NavSideMenuComponent {
   hasTransactions: boolean = false;
   hasTravelInvoice: boolean = false;
   hasAdvanceRequest: boolean = false;
+  serviceRequestReport: boolean;
+  hasServiceCompletionReport: boolean;
+  pendingQuoteRequestReport: boolean;
 
   constructor(
     private accountService: AccountService,
@@ -267,6 +270,28 @@ export class NavSideMenuComponent {
       }
 
 
+      if (this.profile.permissions.filter(x => x.screenCode == 'SRQRP').length > 0) {
+        this.serviceRequestReport = this.profile.permissions.filter(x => x.screenCode == 'SRQRP')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRQRP')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRQRP')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRQRP')[0].delete == true
+      }
+
+      if (this.profile.permissions.filter(x => x.screenCode == 'SRCMR').length > 0) {
+        this.hasServiceCompletionReport = this.profile.permissions.filter(x => x.screenCode == 'SRCMR')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRCMR')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRCMR')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRCMR')[0].delete == true
+      }
+
+      if (this.profile.permissions.filter(x => x.screenCode == 'PDQRQ').length > 0) {
+        this.pendingQuoteRequestReport = this.profile.permissions.filter(x => x.screenCode == 'PDQRQ')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'PDQRQ')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'PDQRQ')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'PDQRQ')[0].delete == true
+      }
+
+
       //
       // hasTravelDetails: boolean = false;
       // hasStayDetails: boolean = false;
@@ -307,6 +332,9 @@ export class NavSideMenuComponent {
       this.hasTravelInvoice = true;
       this.hasAuditTrail = true;
       this.hasAdvanceRequest = true;
+      this.pendingQuoteRequestReport = true;
+      this.hasServiceCompletionReport = true;
+      this.serviceRequestReport = true;
     }
 
     this.listTypeService
@@ -342,14 +370,14 @@ export class NavSideMenuComponent {
     ) {
       this.hasMasters = true;
     }
-    
+
     if (
       this.hasSearch || this.hasexport || this.hasdashboardsettings || this.hasAuditTrail || this.hasCustomerSettings || this.hasDistributorSettings
       || this.hascustomersatisfactionsurveylist
     ) {
       this.hasUtilities = true;
     }
-    
+
     if (this.hasTravelDetails || this.hasStayDetails || this.hasVisaDetails || this.hasLocalExpenses) {
       this.hasTravel = true;
     }
@@ -361,7 +389,7 @@ export class NavSideMenuComponent {
       this.hasTransactions = true;
     }
 
-    if (this.hasSearch) {
+    if (this.serviceRequestReport || this.hasServiceCompletionReport || this.pendingQuoteRequestReport) {
       this.hasReports = true;
     }
 
