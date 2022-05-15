@@ -210,7 +210,6 @@ export class AmcComponent implements OnInit {
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
-    this.columnDefs = this.createColumnDefs();
 
     this.listTypeService.getById("AMCSG").pipe(first())
       .subscribe((data: any) => {
@@ -278,10 +277,12 @@ export class AmcComponent implements OnInit {
 
       this.hasId = true;
       this.form.disable()
+      this.columnDefs = this.createColumnDefsRO();
     }
     else {
       this.isNewMode = true;
       this.FormControlDisable();
+      this.columnDefs = this.createColumnDefs();
       this.hasId = false;
       this.id = Guid.create();
       this.id = this.id.value;
@@ -339,6 +340,8 @@ export class AmcComponent implements OnInit {
       this.isEditMode = true;
       this.form.enable();
       this.FormControlDisable()
+      this.columnDefs = this.createColumnDefs();
+
     }
   }
 
@@ -364,6 +367,7 @@ export class AmcComponent implements OnInit {
 
   CancelEdit() {
     this.form.disable()
+    this.columnDefs = this.createColumnDefsRO();
     this.isEditMode = false;
   }
 
@@ -625,12 +629,8 @@ export class AmcComponent implements OnInit {
     return [{
       headerName: 'Action',
       field: 'id',
-      filter: false,
-      enableSorting: false,
+      lockPosition: "left",
       hide: this.isCompleted,
-      width: 100,
-      editable: false,
-      sortable: false,
       cellRendererFramework: AmcInstrumentRendererComponent,
       cellRendererParams: {
         deleteaccess: this.hasDeleteAccess,
@@ -638,6 +638,57 @@ export class AmcComponent implements OnInit {
       },
 
     }, {
+      headerName: 'Instrument',
+      field: 'insType',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'instrument',
+    }, {
+      headerName: 'Serial No.',
+      field: 'serialnos',
+      filter: true,
+      editable: true,
+      sortable: true
+    },
+    {
+      headerName: 'Version',
+      field: 'insversion',
+      filter: true,
+      editable: false,
+      sortable: true
+    },
+    {
+      headerName: 'Qty',
+      field: 'qty',
+      filter: true,
+      editable: true,
+      sortable: true,
+      defaultValue: 0
+    },
+    {
+      headerName: 'Rate',
+      field: 'rate',
+      filter: true,
+      editable: true,
+      hide: !this.hasCommercial,
+      sortable: true,
+      default: 0
+    },
+    {
+      headerName: 'Amount',
+      field: 'amount',
+      hide: !this.hasCommercial,
+      filter: true,
+      editable: false,
+      sortable: true
+    }
+    ]
+  }
+
+  private createColumnDefsRO() {
+    return [{
       headerName: 'Instrument',
       field: 'insType',
       filter: true,
