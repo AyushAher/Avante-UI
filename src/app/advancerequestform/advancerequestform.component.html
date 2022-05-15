@@ -175,9 +175,9 @@
                                 <div class="col-md-12">
                                     <label>Budgeted expenses in excel (as per company format)</label>
                                     <br>
-                                    <input type="file" id="myFile" #file placeholder="Choose file"
-                                        (change)="getfil(file.files); listfile(file.files) ;" multiple
-                                        accept="text/plain, application/pdf, image/*">
+                                    <input type="file" id="myFile" [disabled]="!isEditMode" #file
+                                        placeholder="Choose file" (change)="getfil(file.files); listfile(file.files) ;"
+                                        multiple accept="text/plain, application/pdf, image/*">
                                 </div>
                                 <div id="selectedfiles" class="hidden col-md-4"
                                     style="max-height:200px; overflow-y:auto;display: none;">
