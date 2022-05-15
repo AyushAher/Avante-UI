@@ -177,7 +177,12 @@ export class ContactListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate(['/contact/' + this.type + '/' + this.masterId + '/', `${data.id}`])
+    if (this.type == "DR" || this.type == "CS") {
+      this.router.navigate(['contact', this.type, this.masterId, this.detailId, data.id]);
+    }
+    else {
+      this.router.navigate(['contact', this.type, this.masterId, data.id]);
+    }
   }
 
   private createColumnDefs() {
