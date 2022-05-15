@@ -59,6 +59,9 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   distId: string;
 
   engId: string;
+  isNewMode: boolean;
+  isEditMode: boolean;
+  role: string;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -99,6 +102,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       this.hasReadAccess = true;
     } else {
       role = role[0]?.itemCode;
+      this.role = role
     }
     if (role == environment.engRoleCode) {
       this.isEng = true;
@@ -126,6 +130,12 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       .pipe(first())
       .subscribe((data: any) => this.DistributorList = data.object)
 
+    if (this.role == environment.engRoleCode) {
+      this.eng = true
+      this.form.get('engineerId').setValue(this.user.contactId)
+      this.engId = this.user.contactId;
+    }
+
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe((data: any) => {
         if (this.user.username != "admin") {
@@ -146,15 +156,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
         }
       })
 
-    if (role == environment.engRoleCode) {
-      this.eng = true
-      this.form.get('engineerId').setValue(this.user.contactId)
-      this.engId = this.user.contactId;
-      this.form.get('engineerId').disable()
-      this.form.get('distId').disable()
-    } else if (role == environment.distRoleCode) {
-      this.form.get('distId').disable()
-    }
+
 
     this.id = this.route.snapshot.paramMap.get("id");
     if (this.id != null) {
@@ -177,9 +179,60 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
             });
 
         });
+
+      this.form.disable()
+    }
+    else {
+      this.isNewMode = true
+      this.FormControlsDisable()
+    }
+  }
+
+  FormControlsDisable() {
+    if (this.role == environment.engRoleCode) {
+      this.form.get('engineerId').disable()
+      this.form.get('distId').disable()
+    }
+    else if (this.role == environment.distRoleCode) {
+      this.form.get('distId').disable()
+    }
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+      this.FormControlsDisable()
+    }
+  }
+
+  Back() {
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["customersatisfactionsurveylist"]);
     }
 
+    else this.router.navigate(["customersatisfactionsurveylist"]);
+
   }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.CustomersatisfactionsurveyService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["customersatisfactionsurveylist"]);
+        })
+    }
+  }
+
+
+
 
   get f() {
     return this.form.controls;
