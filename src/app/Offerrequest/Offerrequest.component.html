@@ -1,15 +1,44 @@
 <layout>
   <div class="right_col" role="main">
     <div class="container">
+
+
       <div class="page-title">
-        <div class="title_left">
-          <h3 style="padding: 15px 0 5px 0">Spare Parts Quote</h3>
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+          <div class="d-flex" style="align-items: center;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <h3>Spare Quote Details</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a class="nav-link" (click)="EditMode()"
+              *ngIf="hasUpdateAccess && !isEditMode && !isNewMode &&  !isCompleted">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode) && !isCompleted">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode) && !isCompleted">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+          </div>
         </div>
       </div>
+
+
       <div class="clearfix"></div>
       <hr />
       <div class="col-md-12 col-sm-12">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <form [formGroup]="form">
           <div class="row">
             <div class="col-md-4 col-sm-4" [style.display]="hasId ? 'block' : 'none'">
               <label for="offReqNo">Spare Parts Quote No.</label>
@@ -122,7 +151,7 @@
           <div class="row" style="margin-top: 50px">
             <div class="col-md-9">
               <label for="browser">Search SpareParts By Part No. </label>
-              <input [disabled]="isCompleted" (input)="
+              <input [disabled]="isCompleted || !isEditMode" (input)="
                   SparePartsSearch($event.target.value?.split('==>')[0]?.trim())
                 " #sparePartsSearch list="browsers" name="browser" id="browser" class="form-control" />
               <datalist id="browsers">
@@ -136,7 +165,7 @@
             </div>
 
             <div class="col-md-3" style="margin-top: 30px">
-              <button class="btn btn-primary" [disabled]="isCompleted" (click)="
+              <button class="btn btn-primary" [disabled]="isCompleted || !isEditMode" (click)="
                   AddSpareParts(sparePartsSearch.value?.split('==>')[0]?.trim())
                 " type="button" class="btn btn-primary">
                 Add SpareParts
@@ -172,7 +201,7 @@
 
             <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin: 15px">
               <div class="col-md-3">
-                <input type="file" id="myFile" [disabled]="isCompleted" #file placeholder="Choose file"
+                <input type="file" id="myFile" [disabled]="isCompleted || !isEditMode" #file placeholder="Choose file"
                   (change)="getfil(file.files, true); listfile(file.files)" multiple
                   accept="text/plain, application/pdf, image/*" />
               </div>
@@ -212,7 +241,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th *ngIf="(hasDeleteAccess || hasAddAccess )&& !isCompleted">Action</th>
+                  <th *ngIf="(hasDeleteAccess || hasAddAccess )&& !isCompleted && isEditMode">Action</th>
                   <th>Stage</th>
                   <th>Comments</th>
                   <th>Date</th>
@@ -221,7 +250,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of rowData">
-                  <td *ngIf="(hasDeleteAccess || hasAddAccess )&& !isCompleted">
+                  <td *ngIf="(hasDeleteAccess || hasAddAccess )&& !isCompleted && isEditMode">
                     <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
                       style="background-color: transparent;color: #5ba146;border: none;">
                       <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
@@ -244,7 +273,7 @@
                   </td>
                 </tr>
               </tbody>
-              <tfoot *ngIf="hasAddAccess && !isCompleted"
+              <tfoot *ngIf="hasAddAccess && !isCompleted && isEditMode"
                 style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
                 <tr>
                   <td>
@@ -320,17 +349,6 @@
 
             </table>
 
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 col-sm-6" style="padding: 10px">
-              <button *ngIf="(hasUpdateAccess || (hasAddAccess && !hasId)) && !isCompleted" class="btn btn-primary"
-                type="submit" class="btn btn-primary">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
-              </button>
-              <a routerLink="/offerrequestlist" class="btn btn-secondary" style="margin-left: 10px">Back</a>
-            </div>
           </div>
         </form>
       </div>

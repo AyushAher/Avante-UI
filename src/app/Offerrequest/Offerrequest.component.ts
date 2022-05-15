@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { HttpEventType } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
@@ -28,8 +27,6 @@ import { SparequotedetComponent } from './sparequotedet.component';
 import { SparequotedetService } from '../_services/sparequotedet.service';
 import { environment } from '../../environments/environment';
 import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { OfferRequeestProcessFileRenderer } from './OfferRequeestProcessFileRenderer';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -38,10 +35,7 @@ import { OfferRequeestProcessFileRenderer } from './OfferRequeestProcessFileRend
 export class OfferrequestComponent implements OnInit {
   form: FormGroup;
   model: Offerrequest;
-  loading = false;
   submitted = false;
-  isSave = false;
-  type: string;
   id: any;
   user: User;
   hasReadAccess: boolean = false;
@@ -68,10 +62,6 @@ export class OfferrequestComponent implements OnInit {
   fileList: [] = [];
   transaction: number;
   hastransaction: boolean;
-  public progress: number;
-  public message: string;
-
-  @Output() public onUploadFinished = new EventEmitter();
   bsModalRef: BsModalRef;
   SpareQuotationDetailsList = [];
   SpareQuotationDetails: any[] = [];
@@ -104,6 +94,8 @@ export class OfferrequestComponent implements OnInit {
   @ViewChild('stageFiles') stageFiles;
   isPaymentAmt: any;
   isCompleted: any;
+  isEditMode: any;
+  isNewMode: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -138,11 +130,6 @@ export class OfferrequestComponent implements OnInit {
                 value.raisedDate = this.datepipie.transform(value.raisedDate, "MM/dd/yyyy");
               })
             },
-            error: error => {
-              // this.alertService.error(error);
-              this.notificationService.showSuccess(error, "Error");
-              this.loading = false;
-            }
           });
         this.SpareQuoteDetService.getPrev(this.id)
           .pipe(first())
@@ -269,7 +256,6 @@ export class OfferrequestComponent implements OnInit {
               });
 
               this.form.get('customerId').setValue(custData.object[0]?.id)
-              this.form.get('customerId').disable()
               this.form.get('customerId').updateValueAndValidity()
             })
         }
@@ -284,17 +270,12 @@ export class OfferrequestComponent implements OnInit {
       this.DistributorService.getByConId(this.user.contactId).pipe(first())
         .subscribe((data: any) => {
           this.form.get('distributorid').setValue(data.object[0]?.id)
-          this.form.get('distributorid').disable()
           this.form.get('distributorid').clearValidators()
           this.form.get('distributorid').updateValueAndValidity()
         })
     }
 
-    if (this.role == environment.distRoleCode) {
-      this.isDist = true;
-      this.form.get('podate').enable();
-    }
-    else this.form.get('podate').disable();
+    if (this.role == environment.distRoleCode) this.isDist = true
 
     if (this.id != null) {
       localStorage.setItem('offerrequestid', this.id)
@@ -348,9 +329,12 @@ export class OfferrequestComponent implements OnInit {
         });
 
       this.hasId = true;
+      this.form.disable();
     }
 
     else {
+      this.FormControlDisable()
+      this.isNewMode = true
       this.hasId = false;
       this.id = Guid.create();
       this.id = this.id.value;
@@ -411,6 +395,56 @@ export class OfferrequestComponent implements OnInit {
       setInterval(() => this.form.disable(), 10);
     }
 
+  }
+
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+      this.FormControlDisable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["offerrequestlist"])
+    }
+
+    else this.router.navigate(["offerrequestlist"])
+
+  }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  FormControlDisable() {
+    this.form.get('podate').disable();
+
+    if (this.role == environment.distRoleCode) {
+      this.form.get('distributorid').disable()
+      this.form.get('podate').enable();
+    }
+
+    else if (this.role == environment.custRoleCode)
+      this.form.get('customerId').disable()
+
+
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+
+      this.Service.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["offerrequestlist"])
+        })
+    }
   }
 
   refreshStages() {
@@ -534,10 +568,6 @@ export class OfferrequestComponent implements OnInit {
 
               }
             },
-            error: (error) => {
-              // this.alertService.error(error);
-
-            },
           });
       }
     }
@@ -551,13 +581,7 @@ export class OfferrequestComponent implements OnInit {
       .searchByKeyword(this.sparePartPartNo)
       .pipe(first())
       .subscribe({
-        next: (data: any) => {
-          this.sparePartsAutoComplete = data.object;
-        },
-        error: (error) => {
-
-          this.loading = false;
-        },
+        next: (data: any) => this.sparePartsAutoComplete = data.object
       });
   }
 
@@ -584,10 +608,6 @@ export class OfferrequestComponent implements OnInit {
           }
           this.sparePartsSearch.nativeElement.value = ""
 
-        },
-        error: (error) => {
-
-          this.loading = false;
         },
       });
 
@@ -737,7 +757,7 @@ export class OfferrequestComponent implements OnInit {
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess,
+          deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.id
         },
       },
@@ -764,18 +784,7 @@ export class OfferrequestComponent implements OnInit {
       return formData.append("file" + index, file, file.name);
     });
 
-    this.FileShareService.upload(formData, id, code).subscribe((event) => {
-      if (event.type === HttpEventType.UploadProgress) {
-        this.progress = Math.round((100 * event.loaded) / event.total);
-        if (this.progress == 100)
-          this.notificationService.filter("itemadded");
-      }
-      else if (event.type === HttpEventType.Response) {
-        this.message = "Upload success.";
-        this.notificationService.filter("itemadded");
-        this.onUploadFinished.emit(event.body);
-      }
-    });
+    this.FileShareService.upload(formData, id, code).subscribe((event) => { });
   };
 
   GetFileList(id: string) {
@@ -819,12 +828,7 @@ export class OfferrequestComponent implements OnInit {
                   next: (d: any) => {
                     if (d.result) {
                       this.notificationService.filter("itemadded");
-                    } else {
                     }
-                  },
-                  error: error => {
-
-                    this.loading = false;
                   }
                 });
             }
@@ -943,21 +947,12 @@ export class OfferrequestComponent implements OnInit {
             this.router.navigate(["offerrequestlist"]);
 
           },
-          error: (error) => {
-
-            this.loading = false;
-          },
         });
       if (!(this.sparePartsList == null)) {
 
         this.SparePartsService.SaveSpareParts(this.sparePartsList)
           .pipe(first())
-          .subscribe({
-            error: (error) => {
-
-              this.loading = false;
-            },
-          });
+          .subscribe();
 
       }
     } else if (this.hasUpdateAccess) {
@@ -978,21 +973,12 @@ export class OfferrequestComponent implements OnInit {
             this.router.navigate(["offerrequestlist"]);
 
           },
-          error: (error) => {
-
-            this.loading = false;
-          },
         });
 
       if (!(this.sparePartsList == null)) {
         this.SparePartsService.SaveSpareParts(this.sparePartsList)
           .pipe(first())
-          .subscribe({
-            error: (error) => {
-
-              this.loading = false;
-            },
-          });
+          .subscribe();
       }
     }
   }
