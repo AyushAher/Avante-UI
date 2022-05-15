@@ -52,6 +52,8 @@ export class CustSPInventoryComponent implements OnInit {
   sparepartlist: any[] = []
   instruments: any[] = []
   lstSpareParts: any[] = []
+  isEditMode: boolean;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -136,6 +138,10 @@ export class CustSPInventoryComponent implements OnInit {
               })
           },
         });
+      this.form.disable()
+    }
+    else {
+      this.isNewMode = true
     }
 
     this.instrumentService.getAll(this.user.userId).pipe(first())
@@ -153,6 +159,43 @@ export class CustSPInventoryComponent implements OnInit {
 
     this.columnDefs = this.createColumnDefs();
   }
+
+
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["customerspinventorylist"]);
+    }
+
+    else this.router.navigate(["customerspinventorylist"]);
+
+  }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.Service.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["customerspinventorylist"]);
+        })
+    }
+  }
+
+
 
   onInstrumentChange() {
     var insId = this.form.get('instrument').value;
