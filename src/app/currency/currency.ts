@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Currency, ResultMsg, ProfileReadOnly,User } from '../_models';
+import { Currency, ResultMsg, ProfileReadOnly, User } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -29,6 +29,8 @@ export class CurrencyComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   user: User;
+  isEditMode: boolean;
+  isNewMode: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -63,14 +65,13 @@ export class CurrencyComponent implements OnInit {
     this.currencyform = this.formBuilder.group({
       code: ['', [Validators.required, Validators.maxLength(10)]],
       name: ['', [Validators.required, Validators.maxLength(256)]],
-      minor_Unit: ['', [Validators.required, Validators.maxLength(5)]]   ,
+      minor_Unit: ['', [Validators.required, Validators.maxLength(5)]],
       n_Code: [''],
       symbol: [''],
       isdeleted: [false],
     });
 
     this.id = this.route.snapshot.paramMap.get('id');
-    console.log(this.id);
 
     if (this.id != null) {
       this.hasAddAccess = false;
@@ -83,11 +84,43 @@ export class CurrencyComponent implements OnInit {
           next: (data: any) => {
             this.currencyform.patchValue(data.object);
           },
-          error: error => {
-            
-            this.loading = false;
-          }
         });
+      this.currencyform.disable()
+    } else {
+      this.isNewMode = true;
+    }
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.currencyform.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["currencylist"]);
+    }
+
+    else this.router.navigate(["currencylist"]);
+
+  }
+
+  CancelEdit() {
+    this.currencyform.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.currencyService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["currencylist"]);
+        })
     }
   }
 
@@ -120,13 +153,13 @@ export class CurrencyComponent implements OnInit {
               this.router.navigate(['currencylist']);
             }
             else {
-              
+
             }
             this.loading = false;
           },
           error: error => {
             // this.alertService.error(error);
-            
+
             this.loading = false;
           }
         });
@@ -144,13 +177,13 @@ export class CurrencyComponent implements OnInit {
 
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
