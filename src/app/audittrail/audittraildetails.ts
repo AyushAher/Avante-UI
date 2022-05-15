@@ -1,11 +1,11 @@
-import {Component, OnInit} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService, ProfileService} from "../_services";
-import {AudittrailService} from "../_services/audittrail.service";
-import {ProfileReadOnly, User} from "../_models";
-import {DatePipe} from "@angular/common";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {first} from "rxjs/operators";
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AccountService, ProfileService } from "../_services";
+import { AudittrailService } from "../_services/audittrail.service";
+import { ProfileReadOnly, User } from "../_models";
+import { DatePipe } from "@angular/common";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: 'app-audittraildetails',
@@ -50,31 +50,33 @@ export class AudittrailDetailsComponent implements OnInit {
     }
 
     this.form = this.formBuilder.group({
-      action: [{value: '', disabled: true}],
-      createdon: [{value: '', disabled: true}],
-      user: [{value: '', disabled: true}],
-      screen: [{value: '', disabled: true}],
+      action: [{ value: '', disabled: true }],
+      createdon: [{ value: '', disabled: true }],
+      user: [{ value: '', disabled: true }],
+      screen: [{ value: '', disabled: true }],
     })
 
-    if (this.user.username == "admin" || this.hasReadAccess ) {
+    if (this.user.username == "admin" || this.hasReadAccess) {
       this.id = this.route.snapshot.paramMap.get("id");
       this.Service.getById(this.id)
         .pipe(first()).subscribe({
-        next: (data: any) => {
-          let nString = String(data.object.nValue).replace('`', "")
-          nString = nString.replace('`', "")
-          this.nValue = JSON.parse(String(nString))
+          next: (data: any) => {
+            let nString = String(data.object.nValue).replace('`', "")
+            nString = nString.replace('`', "")
+            this.nValue = JSON.parse(String(nString))
 
-          let oString = String(data.object.oValue).replace('`', "")
-          oString = oString.replace('`', "")
-          this.oValue = JSON.parse(String(oString))
+            let oString = String(data.object.oValue).replace('`', "")
+            oString = oString.replace('`', "")
+            this.oValue = JSON.parse(String(oString))
 
-          data.object.createdon = this.datepipie.transform(data.object.createdon, "MM-dd-yyyy HH:mm:ss")
-          this.form.patchValue(data.object);
-        }
-      })
+            data.object.createdon = this.datepipie.transform(data.object.createdon, "MM-dd-yyyy HH:mm:ss")
+            this.form.patchValue(data.object);
+          }
+        })
     }
 
   }
-
+  Back() {
+    this.router.navigate(["audittrail"])
+  }
 }
