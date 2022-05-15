@@ -37,6 +37,16 @@
             </select>
         </div>
 
+        <div class="col-md-3 ">
+            <label>Start Date</label>
+            <input bsDatepicker formControlName="sDate" class="form-control" />
+        </div>
+
+        <div class="col-md-3 ">
+            <label>End Date</label>
+            <input bsDatepicker formControlName="eDate" class="form-control">
+        </div>
+
         <div class="btngrp my-2 col-md-3">
             <a class="nav-link">
                 <i class="fas fa-search" (click)="onSubmit()" title="Filter"></i>

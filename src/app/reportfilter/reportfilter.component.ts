@@ -93,7 +93,9 @@ export class ReportfilterComponent implements OnInit {
       country: ["", [Validators.required]],
       customer: ["", [Validators.required]],
       site: [""],
-      insSerialNo: [""]
+      insSerialNo: [""],
+      sDate: ["", [Validators.required]],
+      eDate: ["", [Validators.required]],
     })
 
     this.accountService.GetUserRegions().pipe(first())
@@ -213,7 +215,20 @@ export class ReportfilterComponent implements OnInit {
 
       this.instrumentService.getFilteredAll(this.modal, this.controller).pipe(first())
         .subscribe((data: any) => {
-          this.nData.emit(data.object)
+          var nData = []
+
+          data.object.forEach(x => {
+            var co = new Date(x.createdon)?.getTime()
+            var sDate = this.form.get("sDate").value?.getTime()
+            var eDate = this.form.get("eDate").value?.getTime()
+            if (sDate <= co && co <= eDate) {
+              nData.push(x)
+              console.log(x );
+            }
+          });
+          console.log(nData);
+
+          this.nData.emit(nData)
           this.showData.emit(true)
         })
     } else {
