@@ -48,6 +48,8 @@ export class ContactComponent implements OnInit {
   @ViewChild('phoneInput')
   phoneInput: ElementRef;
   public designations: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
+  isEditMode: any;
+  isNewMode: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -150,11 +152,6 @@ export class ContactComponent implements OnInit {
         next: (data: any) => {
           this.countries = data.object;
         },
-        error: error => {
-          // this.alertService.error(error);
-          
-          this.loading = false;
-        }
       });
 
     this.listTypeService.getById(this.code)
@@ -163,11 +160,6 @@ export class ContactComponent implements OnInit {
         next: (data: ListTypeItem[]) => {
           this.listTypeItems = data;
         },
-        error: error => {
-          // this.alertService.error(error);
-          
-          this.loading = false;
-        }
       });
 
     if (this.type == "CS") {
@@ -178,11 +170,6 @@ export class ContactComponent implements OnInit {
           next: (data: any) => {
             this.contactform.patchValue({ address: data.object.address });
           },
-          error: error => {
-            // this.alertService.error(error);
-            
-            this.loading = false;
-          }
         });
     } else if (this.type === "D") {
       this.distributorService.getById(this.masterId).pipe(first())
@@ -225,12 +212,40 @@ export class ContactComponent implements OnInit {
             }
 
           },
-          error: error => {
-            //this.alertService.error(error);
-            
-            this.loading = false;
-          }
         });
+      this.contactform.disable()
+    } else this.isNewMode = true
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.contactform.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.back()
+    }
+
+    else this.back()
+  }
+
+  CancelEdit() {
+    this.contactform.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.contactService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["distributorlist"]);
+        })
     }
   }
 
@@ -255,13 +270,13 @@ export class ContactComponent implements OnInit {
             this.notificationService.showSuccess(data.resultMessage, "Success");
           }
           else {
-            
+
           }
           // this.notificationService.showSuccess("User Added successful", "Success");
         },
         error: error => {
           //  this.alertService.error(error);
-          
+
           this.loading = false;
         }
       });
@@ -373,7 +388,7 @@ export class ContactComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
             }
             else {
-              
+
             }
             // this.alertService.success('Data save successfull');
             //  this.notificationService.showSuccess("Data Save Successful", "Success");
@@ -397,7 +412,7 @@ export class ContactComponent implements OnInit {
           },
           error: error => {
             // this.alertService.error(error);
-            
+
             this.loading = false;
           }
         });
@@ -414,7 +429,7 @@ export class ContactComponent implements OnInit {
               this.back();
             }
             else {
-              
+
             }
 
             this.contact.id = data.id;
@@ -422,7 +437,7 @@ export class ContactComponent implements OnInit {
           },
           error: error => {
             // this.alertService.error(error);
-            
+
             this.loading = false;
           }
         });

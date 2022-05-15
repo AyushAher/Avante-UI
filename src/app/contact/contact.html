@@ -2,87 +2,60 @@
   <div class="right_col" role="main">
     <div class="container">
       <div class="row" style="float:right" *ngIf="id!=null">
-        <button type="button" *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true" class="btn btn-primary" (click)="addUser()">Create User</button>
+        <button type="button"
+          *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true"
+          class="btn btn-primary" (click)="addUser()">Create User</button>
       </div>
 
       <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
         <li class="nav-item" role="presentation">
-          <a class="nav-link active"
-             id="ex1-tab-1"
-             data-mdb-toggle="tab"
-             routerLink="/contact/{{ id }}" routerLinkActive="active"
-             role="tab"
-             aria-controls="ex1-tabs-1"
-             aria-selected="false">Contact</a>
+          <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" routerLink="/contact/{{ id }}"
+            routerLinkActive="active" role="tab" aria-controls="ex1-tabs-1" aria-selected="false">Contact</a>
         </li>
-        <!--<li class="nav-item" *ngIf="type=='D'" role="presentation">
-          <a class="nav-link"
-             id="ex1-tab-1"
-             data-mdb-toggle="tab"
-             routerLink="/distributor/{{ id }}" routerLinkActive="active"
-             role="tab"
-             aria-controls="ex1-tabs-1"
-             aria-selected="false">Distributor</a>
-        </li>
-        <li class="nav-item" *ngIf="type=='C'" role="presentation">
-          <a class="nav-link"
-             id="ex1-tab-1"
-             data-mdb-toggle="tab"
-             routerLink="/customer/{{ id }}" routerLinkActive="active"
-             role="tab"
-             aria-controls="ex1-tabs-1"
-             aria-selected="false">Customer</a>
-        </li>
-        <li class="nav-item" *ngIf="type=='CS'" role="presentation">
-          <a class="nav-link"
-             id="ex1-tab-1"
-             data-mdb-toggle="tab"
-             routerLink="/customersite/{{ id }}" routerLinkActive="active"
-             role="tab"
-             aria-controls="ex1-tabs-1"
-             aria-selected="false">Customer Site</a>
-        </li>
-        <li class="nav-item" role="presentation">
-          <a class="nav-link active"
-             id="ex1-tab-2"
-             data-mdb-toggle="tab"
-             routerLink="/contactlist/{{ type }}/{{ id }}" routerLinkActive="active"
-             role="tab"
-             aria-controls="ex1-tabs-2"
-             aria-selected="true">Contact List</a>
-        </li>
-        <li class="nav-item" *ngIf="type=='D'" role="presentation">
-          <a class="nav-link"
-             id="ex1-tab-3"
-             data-mdb-toggle="tab"
-             routerLink="/distregionlist/{{id}}" routerLinkActive="active"
-             role="tab"
-             aria-controls="ex1-tabs-3"
-             aria-selected="true">Distributor Region</a>
-        </li>-->
       </ul>
-      <!--<div class="page-title">
-        <div class="title_left">
-          <h3>Add/Edit Contact</h3>
-        </div>
-      </div>-->
+
       <div class="clearfix"></div>
 
       <div class="col-md-12 col-sm-12 ">
 
-      <div class="page-title">
-        <div class="title_left">
-          <h3 style="padding:15px 0 5px 0">Contact Details</h3>
+        <div class="page-title">
+          <div class="title_left" style="display: flex; justify-content: space-between;">
+            <div class="d-flex" style="align-items: center;">
+              <a (click)="Back()" class="nav-link">
+                <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              </a>
+              <h3>Contact Details </h3>
+            </div>
+
+            <div class="controls" style="display: flex;">
+              <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+                <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+              </a>
+
+              <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+                <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+              </a>
+
+              <a class="nav-link" (click)="onSubmit()"
+                *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+                <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+              </a>
+
+              <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+                <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="clearfix"></div>
-      <hr />
+
+        <div class="clearfix"></div>
+        <hr />
         <form [formGroup]="contactform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-4">
               <label for="fname">First Name</label>
               <input type="text" formControlName="fname" class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f.fname.errors }" />
+                [ngClass]="{ 'is-invalid': submitted && f.fname.errors }" />
               <div *ngIf="submitted && f.fname.errors" class="invalid-feedback">
                 <div *ngIf="f.fname.errors.required">First Name is required</div>
               </div>
@@ -96,7 +69,8 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="lname">Last Name</label>
-              <input type="text" formControlName="lname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lname.errors }" />
+              <input type="text" formControlName="lname" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.lname.errors }" />
               <div *ngIf="submitted && f.lname.errors" class="invalid-feedback">
                 <div *ngIf="f.lname.errors.required">Last Name is required</div>
               </div>
@@ -106,10 +80,9 @@
             <div class="col-md-4 col-sm-4">
               <label for="pcontactno">Primary Contact No</label><br />
               <input type="tel" ng2TelInput phoneInput formControlName="pcontactno" class="form-control" maxlength="15"
-                     (ng2TelOutput)="getNumber($event)"
-                     (intlTelInputObject)="telInputObject($event)"
-                     (countryChange)="countryChange($event)"
-                     [ngClass]="{ 'is-invalid': submitted && f.pcontactno.errors }" />
+                (ng2TelOutput)="getNumber($event)" (intlTelInputObject)="telInputObject($event)"
+                (countryChange)="countryChange($event)"
+                [ngClass]="{ 'is-invalid': submitted && f.pcontactno.errors }" />
               <!--<input type="tel" formControlName="pcontactno" class="form-control"
                      maxlength="10" [ngClass]="{ 'is-invalid': submitted && f.pcontactno.errors }" />-->
               <div *ngIf="submitted && f.pcontactno.errors" class="invalid-feedback">
@@ -120,7 +93,8 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="pemail">Primary Email</label>
-              <input type="email" formControlName="pemail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.pemail.errors }" />
+              <input type="email" formControlName="pemail" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.pemail.errors }" />
               <div *ngIf="submitted && f.pemail.errors" class="invalid-feedback">
                 <div *ngIf="f.pemail.errors?.required">Primary Email is required</div>
                 <div *ngIf="f.pemail.errors?.pattern">Please provide valid email</div>
@@ -128,12 +102,9 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="scontactno">Secondory Contact No</label><br />
-              <input type="tel" ng2TelInput formControlName="scontactno"
-                     (ng2TelOutput)="getNumber($event)"
-                     (intlTelInputObject)="telInputObjectCo($event)"
-                     (countryChange)="countryChange2($event)"
-                     class="form-control" maxlength="15"
-                     [ngClass]="{ 'is-invalid': submitted && f.scontactno.errors }" />
+              <input type="tel" ng2TelInput formControlName="scontactno" (ng2TelOutput)="getNumber($event)"
+                (intlTelInputObject)="telInputObjectCo($event)" (countryChange)="countryChange2($event)"
+                class="form-control" maxlength="15" [ngClass]="{ 'is-invalid': submitted && f.scontactno.errors }" />
               <div *ngIf="submitted && f.scontactno.errors" class="invalid-feedback">
                 <div *ngIf="f.scontactno.errors.required">Secondory Contact No is required</div>
                 <div *ngIf="f.scontactno.errors?.maxlength">Max length is 13</div>
@@ -144,12 +115,9 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="whatsappNo">WhatsApp No</label><br />
-              <input type="tel" ng2TelInput formControlName="whatsappNo"
-                     (ng2TelOutput)="getNumber($event)"
-                     (intlTelInputObject)="telInputObjectCow($event)"
-                     (countryChange)="countryChange2w($event)"
-                     class="form-control" maxlength="15"
-                     [ngClass]="{ 'is-invalid': submitted && f.scontactno.errors }" />
+              <input type="tel" ng2TelInput formControlName="whatsappNo" (ng2TelOutput)="getNumber($event)"
+                (intlTelInputObject)="telInputObjectCow($event)" (countryChange)="countryChange2w($event)"
+                class="form-control" maxlength="15" [ngClass]="{ 'is-invalid': submitted && f.scontactno.errors }" />
               <div *ngIf="submitted && f.whatsappNo.errors" class="invalid-feedback">
                 <div *ngIf="f.whatsappNo.errors.required">WhatsApp No is required</div>
                 <div *ngIf="f.whatsappNo.errors?.maxlength">Max length is 13</div>
@@ -158,7 +126,8 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="semail">Secondory Email</label>
-              <input type="email" formControlName="semail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.semail.errors }" />
+              <input type="email" formControlName="semail" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.semail.errors }" />
               <div *ngIf="submitted && f.semail.errors" class="invalid-feedback">
                 <div *ngIf="f.semail.errors?.required">Secondory Email is required</div>
                 <div *ngIf="f.pemail.errors?.pattern">Please provide valid email</div>
@@ -166,7 +135,8 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="designationid">Designation</label>
-              <select formControlName="designationid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.designationid.errors }">
+              <select formControlName="designationid" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.designationid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let designation of listTypeItems" value={{designation.listTypeItemId}}>
                   {{designation.itemname}}
@@ -185,28 +155,30 @@
             </div>
           </div>
           <div class="clearfix"></div>
-          <hr/>
+          <hr />
 
           <div formGroupName="address">
             <div class="row">
               <div class="col-sm-4">
                 <label for="street">Street</label>
                 <input type="text" formControlName="street" class="form-control"
-                       [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }"/>
+                  [ngClass]="{ 'is-invalid': submitted && a.get('street').errors }" />
                 <div *ngIf="submitted && a.get('street').errors" class="invalid-feedback">
                   <div *ngIf="a.get('street').errors.required">Street is required</div>
                 </div>
               </div>
               <div class="col-sm-4">
                 <label for="area">Area</label>
-                <input type="text" formControlName="area" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('area').errors }" />
+                <input type="text" formControlName="area" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && a.get('area').errors }" />
                 <div *ngIf="submitted && a.get('area').errors" class="invalid-feedback">
                   <div *ngIf="a.get('area').errors.required">Area is required</div>
                 </div>
               </div>
               <div class="col-sm-4">
                 <label for="place">Place</label>
-                <input type="text" formControlName="place" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('place').errors }" />
+                <input type="text" formControlName="place" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && a.get('place').errors }" />
                 <div *ngIf="submitted && a.get('place').errors" class="invalid-feedback">
                   <div *ngIf="a.get('place').errors.required">Place is required</div>
                 </div>
@@ -215,14 +187,16 @@
             <div class="row">
               <div class="col-sm-4">
                 <label for="city">City</label>
-                <input type="text" formControlName="city" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('city').errors }" />
+                <input type="text" formControlName="city" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && a.get('city').errors }" />
                 <div *ngIf="submitted && a.get('city').errors" class="invalid-feedback">
                   <div *ngIf="a.get('city').errors.required">City is required</div>
                 </div>
               </div>
               <div class="col-sm-4">
                 <label for="countryid">Country</label>
-                <select formControlName="countryid" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
+                <select formControlName="countryid" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
                   <!--<option value="0">--All--</option>-->
                   <option *ngFor="let coutry of countries" value={{coutry.id}}>
                     {{coutry.name}}
@@ -234,7 +208,8 @@
               </div>
               <div class="col-sm-4">
                 <label for="zip">Zip</label>
-                <input type="tel" formControlName="zip" maxlength="10" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('zip').errors }" />
+                <input type="tel" formControlName="zip" maxlength="10" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && a.get('zip').errors }" />
                 <div *ngIf="submitted && a.get('zip').errors" class="invalid-feedback">
                   <div *ngIf="a.get('zip').errors.required">Zip is required</div>
                   <div *ngIf="a.get('zip').errors?.minlength">Min length is 4</div>
@@ -245,29 +220,20 @@
             <div class="row">
               <div class="col-sm-4">
                 <label for="geolat">Latitude</label>
-                <input type="number" formControlName="geolat" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('geolat').errors }" />
+                <input type="number" formControlName="geolat" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && a.get('geolat').errors }" />
                 <div *ngIf="submitted && a.get('geolat').errors" class="invalid-feedback">
                   <div *ngIf="a.get('geolat').errors.required">Latitude is required</div>
                 </div>
               </div>
               <div class="col-sm-4">
                 <label for="geolong">Longitude</label>
-                <input type="number" formControlName="geolong" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('geolong').errors }" />
+                <input type="number" formControlName="geolong" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && a.get('geolong').errors }" />
                 <div *ngIf="submitted && a.get('geolong').errors" class="invalid-feedback">
                   <div *ngIf="a.get('geolong').errors.required">Longitude is required</div>
                 </div>
               </div>
-            </div>
-          </div>
-          <hr />
-          <div class="row">
-            <div class="col-md-6 col-sm-6" style="padding:10px;">
-              <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)"  class="btn btn-primary">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
-              </button>
-              <button class="btn btn-secondary" style="margin-left:10px" (click)="back()">Back</button>
-              <!--<a routerLink="/distributor" class="btn btn-secondary" style="margin-left:10px">Back</a>-->
             </div>
           </div>
         </form>
