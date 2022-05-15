@@ -86,6 +86,9 @@ export class AmcComponent implements OnInit {
   payTypes: any;
   isPaymentAmt: boolean = false;
   isCompleted: boolean = false;
+  isNewMode: any;
+  isEditMode: any;
+  isDisableSite: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -274,8 +277,11 @@ export class AmcComponent implements OnInit {
         });
 
       this.hasId = true;
+      this.form.disable()
     }
     else {
+      this.isNewMode = true;
+      this.FormControlDisable();
       this.hasId = false;
       this.id = Guid.create();
       this.id = this.id.value;
@@ -286,22 +292,17 @@ export class AmcComponent implements OnInit {
         next: (data: any) => {
           if (this.IsCustomerView) {
             this.form.get('billtoid').setValue(data.object?.id)
-            this.form.get('billtoid').disable()
             this.custSiteList = data.object?.sites;
             this.custSiteList.forEach(element => {
               element?.contacts.forEach(con => {
                 if (con?.id == this.user.contactId) {
+                  this.isDisableSite = true
                   this.form.get('custSite').setValue(element?.id)
-                  this.form.get('custSite').disable()
                 }
               });
             });
           }
         },
-        error: error => {
-          this.notificationService.showSuccess(error, "Error");
-          this.loading = false;
-        }
       });
 
     this.customerService.getAll()
@@ -310,10 +311,6 @@ export class AmcComponent implements OnInit {
         next: (data: any) => {
           this.customersList = data.object
         },
-        error: (error) => {
-
-          this.loading = false;
-        }
       })
 
     this.currencyService.getAll()
@@ -322,27 +319,62 @@ export class AmcComponent implements OnInit {
         next: (data: any) => {
           this.currencyList = data.object
         },
-        error: (error) => {
-
-          this.loading = false;
-        }
       })
 
 
-    this.listTypeService
-      .getById("SERTY")
-      .pipe(first())
-      .subscribe((data: ListTypeItem[]) => {
+    this.listTypeService.getById("SERTY")
+      .pipe(first()).subscribe((data: ListTypeItem[]) => {
         this.serviceType = data;
       });
 
-    this.listTypeService
-      .getById("SUPPL")
-      .pipe(first())
-      .subscribe((data: any) => {
+    this.listTypeService.getById("SUPPL")
+      .pipe(first()).subscribe((data: any) => {
         this.supplierList = data;
       });
 
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+      this.FormControlDisable()
+    }
+  }
+
+  FormControlDisable() {
+    if (this.isDisableSite) {
+      this.form.get('custSite').disable()
+    }
+    if (this.IsCustomerView) {
+      this.form.get('billtoid').disable()
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["amclist"]);
+    }
+
+    else this.router.navigate(["amclist"]);
+
+  }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.Service.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["distributorlist"]);
+        })
+    }
   }
 
   get f() {

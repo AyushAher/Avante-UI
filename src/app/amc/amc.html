@@ -1,11 +1,37 @@
 <layout>
   <div class="right_col" role="main">
     <div class="container">
+
       <div class="page-title">
-        <div class="title_left">
-          <h3 style="padding: 15px 0 5px 0">AMC Details</h3>
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+          <div class="d-flex" style="align-items: center;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <h3>AMC Details</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+          </div>
         </div>
       </div>
+
       <div class="clearfix"></div>
       <hr />
       <div class="col-md-12 col-sm-12">
@@ -216,7 +242,7 @@
           </div>
           <div class="clearfix"></div>
           <hr />
-          <div class="row" *ngIf="!isCompleted">
+          <div class="row" *ngIf="!isCompleted && isEditMode">
             <div class="col-md-9">
               <label>Search Instruments By Serial No. </label>
 
@@ -259,7 +285,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th *ngIf="(hasDeleteAccess || hasAddAccess)&& !isCompleted">Action</th>
+                  <th *ngIf="(hasDeleteAccess || hasAddAccess)&& !isCompleted && isEditMode">Action</th>
                   <th>Stage</th>
                   <th>Comments</th>
                   <th>Date</th>
@@ -268,7 +294,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of rowData">
-                  <td *ngIf="(hasDeleteAccess || hasAddAccess)&& !isCompleted">
+                  <td *ngIf="(hasDeleteAccess || hasAddAccess)&& !isCompleted && isEditMode">
                     <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)" style="
                         background-color: transparent;
                         color: #5ba146;
@@ -294,7 +320,7 @@
                   </td>
                 </tr>
               </tbody>
-              <tfoot *ngIf="hasAddAccess && !isCompleted" style="
+              <tfoot *ngIf="hasAddAccess && !isCompleted && isEditMode" style="
                   background: whitesmoke;
                   border: 0.5px solid rgb(202 170 170);
                 ">
@@ -375,17 +401,6 @@
                 </tr>
               </tfoot>
             </table>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 col-sm-6" style="padding: 10px">
-              <button *ngIf="((hasUpdateAccess) || (hasAddAccess && id==null)) && !isCompleted" class="btn btn-primary"
-                type="submit" class="btn btn-primary">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
-              </button>
-              <a routerLink="/amclist" class="btn btn-secondary" style="margin-left: 10px">Back</a>
-            </div>
           </div>
         </form>
       </div>
