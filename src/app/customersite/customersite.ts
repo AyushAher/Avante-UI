@@ -30,6 +30,8 @@ export class CustomerSiteComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
+  isNewMode: boolean;
+  isEditMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -85,7 +87,7 @@ export class CustomerSiteComponent implements OnInit {
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
-        zip: ['', Validators.compose([ Validators.minLength(4), Validators.maxLength(15)])],
+        zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
         isActive: true,
@@ -110,7 +112,7 @@ export class CustomerSiteComponent implements OnInit {
         },
         error: error => {
           //  this.alertService.error(error);
-          
+
           this.loading = false;
         }
       });
@@ -122,8 +124,8 @@ export class CustomerSiteComponent implements OnInit {
           this.customers = data.object;
         },
         error: error => {
-         // this.alertService.error(error);
-          
+          // this.alertService.error(error);
+
           this.loading = false;
         }
       });
@@ -140,14 +142,52 @@ export class CustomerSiteComponent implements OnInit {
             this.customersiteform.patchValue(data.object);
           },
           error: error => {
-           // this.alertService.error(error);
-            
+            // this.alertService.error(error);
+
             this.loading = false;
           }
         });
+      this.customersiteform.disable()
+    } else {
+      this.isNewMode = true
     }
 
   }
+
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.customersiteform.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["customersitelist", this.customerid]);
+    }
+
+    else this.router.navigate(["customersitelist", this.customerid]);
+
+  }
+
+  CancelEdit() {
+    this.customersiteform.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.customersiteService.delete(this.csiteid).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["customersitelist", this.customerid]);
+        })
+    }
+  }
+
 
   showallDdl(value: boolean) {
     //debugger;
@@ -159,8 +199,8 @@ export class CustomerSiteComponent implements OnInit {
             this.distRegions = data;
           },
           error: error => {
-           // this.alertService.error(error);
-            
+            // this.alertService.error(error);
+
             this.loading = false;
           }
         });
@@ -173,8 +213,8 @@ export class CustomerSiteComponent implements OnInit {
             this.distRegions = data.object;
           },
           error: error => {
-           // this.alertService.error(error);
-            
+            // this.alertService.error(error);
+
             this.loading = false;
           }
         });
@@ -209,14 +249,14 @@ export class CustomerSiteComponent implements OnInit {
               this.router.navigate(["customersitelist", this.customerid]);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-           // this.alertService.error(error);
-            
+            // this.alertService.error(error);
+
             this.loading = false;
           }
         });
@@ -224,7 +264,7 @@ export class CustomerSiteComponent implements OnInit {
     else {
       this.custSite = this.customersiteform.value;
       this.custSite.id = this.csiteid;
-      this.customersiteService.update(this.csiteid,this.custSite)
+      this.customersiteService.update(this.csiteid, this.custSite)
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
@@ -234,14 +274,14 @@ export class CustomerSiteComponent implements OnInit {
               this.router.navigate(["customersitelist", this.customerid]);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-          //  this.alertService.error(error);
-            
+            //  this.alertService.error(error);
+
             this.loading = false;
           }
         });
