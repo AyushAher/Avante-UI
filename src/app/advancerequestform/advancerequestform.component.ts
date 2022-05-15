@@ -1,9 +1,8 @@
-import { DecimalPipe } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponent.component';
@@ -38,8 +37,8 @@ export class AdvancerequestformComponent implements OnInit {
   IsDistributorView: boolean = false;
   IsEngineerView: boolean = false;
 
-  public columnDefs: ColDef[];
-  public columnDefsAttachments: ColDef[];
+  public columnDefs: any[];
+  public columnDefsAttachments: any[];
   private columnApi: ColumnApi;
   private api: GridApi;
 
