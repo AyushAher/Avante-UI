@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {ListTypeItem, ProfileReadOnly, User} from "../_models";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { ListTypeItem, ProfileReadOnly, User } from "../_models";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
   AccountService,
   AlertService,
@@ -10,7 +10,7 @@ import {
   NotificationService,
   ProfileService
 } from "../_services";
-import {first} from "rxjs/operators";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: 'app-distributordashboardsettings',
@@ -38,6 +38,8 @@ export class DistributordashboardsettingsComponent implements OnInit {
 
   Data = []
   localData: any[] = [];
+  isEditMode: boolean;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,30 +84,14 @@ export class DistributordashboardsettingsComponent implements OnInit {
       graphName: ""
     });
 
-    this.listTypeService
-      .getById("DDRW1")
-      .pipe(first())
+    this.listTypeService.getById("DDRW1").pipe(first())
       .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.rowdata1 = data;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
+        next: (data: ListTypeItem[]) => this.rowdata1 = data
       });
 
-    this.listTypeService
-      .getById("DDRW2")
-      .pipe(first())
+    this.listTypeService.getById("DDRW2").pipe(first())
       .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.rowdata2 = data;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
+        next: (data: ListTypeItem[]) => this.rowdata2 = data
       });
 
     this.id = this.user.userId;
@@ -118,17 +104,13 @@ export class DistributordashboardsettingsComponent implements OnInit {
         next: (data: any) => {
           this.Data = data.object;
           this.Data.forEach(value => {
-              this.localData.push(value);
-              let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement;
-              valu.checked = true;
-            }
-          )
-        },
-        error: error => {
-          
-          this.loading = false;
+            this.localData.push(value);
+            let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement;
+            valu.checked = true;
+          })
         }
       });
+    this.isEditMode = false
   }
 
   toggle(e, formcontroller) {
@@ -157,7 +139,7 @@ export class DistributordashboardsettingsComponent implements OnInit {
   resetOptions() {
     if (confirm("Reset all options to default settings?")) {
 
-      this.Service.reset(this.id,"DHDT")
+      this.Service.reset(this.id, "DHDT")
         .pipe(first())
         .subscribe({
           next: (data: any) => {
@@ -166,17 +148,53 @@ export class DistributordashboardsettingsComponent implements OnInit {
               this.router.navigate(['']);
 
             } else {
-              
+
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
     }
   }
+
+
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["/"]);
+    }
+
+    else this.router.navigate(["/"]);
+
+  }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.Service.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["/"]);
+        })
+    }
+  }
+
 
   // convenience getter for easy access to form fields
   get f() {
@@ -219,13 +237,13 @@ export class DistributordashboardsettingsComponent implements OnInit {
               this.router.navigate(['']);
 
             } else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
