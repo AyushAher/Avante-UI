@@ -30,6 +30,8 @@ export class CountryComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
+  isNewMode: boolean;
+  isEditMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -83,10 +85,6 @@ export class CountryComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.currency = data.object;
-        },
-        error: error => {
-          
-          this.loading = false;
         }
       });
 
@@ -96,10 +94,6 @@ export class CountryComponent implements OnInit {
         next: (data: ListTypeItem[]) => {
           this.continents = data;
         },
-        error: error => {
-          
-          this.loading = false;
-        }
       });
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -114,13 +108,45 @@ export class CountryComponent implements OnInit {
           next: (data: any) => {
             this.countryform.patchValue(data.object);
           },
-          error: error => {
-            
-            this.loading = false;
-          }
         });
+      this.countryform.disable()
+    } else {
+      this.isNewMode = true;
     }
 
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.countryform.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["countrylist"]);
+    }
+
+    else this.router.navigate(["countrylist"]);
+
+  }
+
+  CancelEdit() {
+    this.countryform.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.countryService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["countrylist"]);
+        })
+    }
   }
 
   // convenience getter for easy access to form fields
@@ -150,13 +176,13 @@ export class CountryComponent implements OnInit {
               this.router.navigate(['countrylist']);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -173,13 +199,13 @@ export class CountryComponent implements OnInit {
               this.router.navigate(['countrylist']);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
