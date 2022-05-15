@@ -1,12 +1,12 @@
 // noinspection DuplicatedCode
 
-import {Component, OnInit} from "@angular/core";
-import {ListTypeItem, ProfileReadOnly, User} from "../_models";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService, AlertService, ListTypeService, NotificationService, ProfileService} from "../_services";
-import {first} from "rxjs/operators";
-import {CustdashboardsettingsService} from "../_services/custdashboardsettings.service";
+import { Component, OnInit } from "@angular/core";
+import { ListTypeItem, ProfileReadOnly, User } from "../_models";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AccountService, AlertService, ListTypeService, NotificationService, ProfileService } from "../_services";
+import { first } from "rxjs/operators";
+import { CustdashboardsettingsService } from "../_services/custdashboardsettings.service";
 
 @Component({
   selector: 'app-customer',
@@ -35,10 +35,11 @@ export class CustdashboardsettingsComponent implements OnInit {
   row1Error: boolean = false;
   row2Error: boolean = false;
   row3Error: boolean = false;
+  isEditMode: boolean;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
     private Service: CustdashboardsettingsService,
@@ -75,7 +76,7 @@ export class CustdashboardsettingsComponent implements OnInit {
       isDefault: false,
       dashboardFor: "DHCT",
       graphName: "",
-      isactive : true,
+      isactive: true,
       isdeleted: [false],
 
     });
@@ -84,26 +85,12 @@ export class CustdashboardsettingsComponent implements OnInit {
       .getById("CDRW1")
       .pipe(first())
       .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.rowdata1 = data;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
+        next: (data: ListTypeItem[]) => this.rowdata1 = data
       });
 
-    this.listTypeService
-      .getById("CDRW2")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.rowdata2 = data;
-        },
-        error: (error) => {
-          
-          this.loading = false;
-        },
+    this.listTypeService.getById("CDRW2")
+      .pipe(first()).subscribe({
+        next: (data: ListTypeItem[]) => this.rowdata2 = data
       });
 
     this.listTypeService
@@ -112,10 +99,6 @@ export class CustdashboardsettingsComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.rowdata3 = data;
-        },
-        error: (error) => {
-          
-          this.loading = false;
         },
       });
 
@@ -133,11 +116,6 @@ export class CustdashboardsettingsComponent implements OnInit {
             valu.checked = true
             this.localData.push(value)
           })
-          console.log(this.localData)
-        },
-        error: error => {
-          
-          this.loading = false;
         }
       });
   }
@@ -166,7 +144,7 @@ export class CustdashboardsettingsComponent implements OnInit {
 
   resetOptions() {
     if (confirm("Reset all options to default settings?")) {
-      this.Service.reset(this.id,"DHCT")
+      this.Service.reset(this.id, "DHCT")
         .pipe(first())
         .subscribe({
           next: (data: any) => {
@@ -175,17 +153,53 @@ export class CustdashboardsettingsComponent implements OnInit {
               this.router.navigate(['']);
 
             } else {
-              
+
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
     }
   }
+
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["/"]);
+    }
+
+    else this.router.navigate(["/"]);
+
+  }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.Service.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["/"]);
+        })
+    }
+  }
+
+
 
   // convenience getter for easy access to form fields
   get f() {
@@ -236,13 +250,13 @@ export class CustdashboardsettingsComponent implements OnInit {
               this.router.navigate(['']);
 
             } else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
