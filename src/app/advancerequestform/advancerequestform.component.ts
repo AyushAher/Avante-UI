@@ -57,6 +57,8 @@ export class AdvancerequestformComponent implements OnInit {
   customerList: any;
   country: any;
   bid: any;
+  isEditMode: boolean;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -97,7 +99,7 @@ export class AdvancerequestformComponent implements OnInit {
 
       }
     }
-    
+
     this.form = this.formBuilder.group({
       engineerId: ["", [Validators.required]],
       serviceRequestId: ["", [Validators.required]],
@@ -179,7 +181,6 @@ export class AdvancerequestformComponent implements OnInit {
 
                 if (this.IsEngineerView) {
                   this.form.get('engineerId').setValue(this.user.contactId)
-                  this.form.get('engineerId').disable()
 
                   this.servicerequestservice
                     .GetServiceRequestByDist(this.distId)
@@ -212,8 +213,53 @@ export class AdvancerequestformComponent implements OnInit {
               });
           }
         });
+      this.form.disable()
+    } else {
+      this.isNewMode = true;
+      this.FormcontrolDisable()
     }
 
+  }
+
+
+  FormcontrolDisable() {
+    if (this.IsEngineerView) {
+      this.form.get('engineerId').disable()
+    }
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+      this.FormcontrolDisable()
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["distributorlist"]);
+    }
+
+    else this.router.navigate(["distributorlist"]);
+
+  }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.service.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["distributorlist"]);
+        })
+    }
   }
 
 
