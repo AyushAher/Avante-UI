@@ -22,11 +22,37 @@
 
       <div class="col-md-12 col-sm-12 ">
 
+
         <div class="page-title">
-          <div class="title_left">
-            <h3 style="padding:15px 0 5px 0">Customer Details</h3>
+          <div class="title_left" style="display: flex; justify-content: space-between;">
+            <div class="d-flex" style="align-items: center;">
+              <a (click)="Back()" class="nav-link">
+                <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              </a>
+              <h3>Customer Details</h3>
+            </div>
+
+            <div class="controls" style="display: flex;">
+              <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+                <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+              </a>
+
+              <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+                <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+              </a>
+
+              <a class="nav-link" (click)="onSubmit()"
+                *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+                <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+              </a>
+
+              <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+                <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+              </a>
+            </div>
           </div>
         </div>
+
         <div class="clearfix"></div>
         <hr />
         <form [formGroup]="customerform" (ngSubmit)="onSubmit()">
@@ -182,45 +208,6 @@
             </div>
           </div>
           <hr />
-          <div class="row">
-            <div class="col-md-6 col-sm-6" style="padding:10px">
-              <button [disabled]="loading" class="btn btn-primary"
-                *ngIf="(hasUpdateAccess) || (hasAddAccess && customerId==null)">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Submit
-              </button>
-              <a routerLink="/customerlist" class="btn btn-secondary" style="margin-left:10px;">Back</a>
-            </div>
-          </div>
-          <!--<div class="row" *ngIf="isSave">
-    <a routerLink="/contact/{{ type }}/{{ customerId }}" class="btn btn-link">Add Contact</a>
-  </div>-->
-          <!--<div class="row">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Regional Customer Name</th>
-            <th>Region Name</th>
-            <th>Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              Test
-            </td>
-            <td>
-              Test
-            </td>
-            <td>
-              Test
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>-->
         </form>
       </div>
     </div>

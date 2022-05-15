@@ -39,6 +39,8 @@ export class CustomerComponent implements OnInit {
   hasAddAccess: boolean = false;
   distRegionsList: any;
   industrySegmentList: any;
+  isEditMode: any;
+  isNewMode: any;
   //public defaultdistributors: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
 
   constructor(
@@ -99,57 +101,66 @@ export class CustomerComponent implements OnInit {
     });
 
     this.countryService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.countries = data.object;
-        },
-        error: error => {
-          //  this.alertService.error(error);
-          this.notificationService.showSuccess(error, "Error");
-          this.loading = false;
-        }
+      .pipe(first()).subscribe({
+        next: (data: any) => this.countries = data.object
       });
 
     this.listtypeService.getById("INSEG")
-      .pipe(first())
-      .subscribe((data: any) => {
-        this.industrySegmentList = data;
-        console.log(data);
-
-
-      });
+      .pipe(first()).subscribe((data: any) => this.industrySegmentList = data);
 
     this.distributorService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.defaultdistributors = data.object;
-        },
-        error: error => {
-          // this.alertService.error(error);
-          this.notificationService.showSuccess(error, "Error");
-          this.loading = false;
-        }
+      .pipe(first()).subscribe((data: any) => {
+        this.defaultdistributors = data.object
       });
 
     this.customerId = this.route.snapshot.paramMap.get('id');
     if (this.customerId != null) {
       this.customerService.getById(this.customerId)
-        .pipe(first())
-        .subscribe({
+        .pipe(first()).subscribe({
           next: (data: any) => {
             this.customerform.patchValue(data.object);
             this.onDefDistchanged(data.object.defdistid);
           },
-          error: error => {
-            // this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
-            this.loading = false;
-          }
         });
+      this.customerform.disable()
+    }
+    else {
+      this.isNewMode = true;
     }
 
+  }
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.customerform.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["customerlist"]);
+    }
+
+    else this.router.navigate(["customerlist"]);
+
+  }
+
+  CancelEdit() {
+    this.customerform.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.customerService.delete(this.customerId).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["customerlist"]);
+        })
+    }
   }
 
   // convenience getter for easy access to form fields
@@ -184,7 +195,7 @@ export class CustomerComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.customerform.invalid) {
-      return console.log(this.customerform);
+      return
     }
     this.isSave = true;
     this.loading = true;
