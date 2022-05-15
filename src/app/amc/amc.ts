@@ -57,7 +57,7 @@ export class AmcComponent implements OnInit {
   supplierList: ListTypeItem[];
   custSiteList: any;
 
-  public columnDefs: ColDef[];
+  public columnDefs: any;
   private columnApi: ColumnApi;
   private api: GridApi;
   hasId: boolean = false;
