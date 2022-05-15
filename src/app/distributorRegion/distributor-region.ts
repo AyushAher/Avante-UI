@@ -29,6 +29,8 @@ export class DistributorRegionComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
+  isEditMode: boolean;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -88,13 +90,7 @@ export class DistributorRegionComponent implements OnInit {
     this.countryService.getAll()
       .pipe(first())
       .subscribe({
-        next: (data: any) => {
-          this.countries = data.object;
-        },
-        error: error => {
-
-          this.loading = false;
-        }
+        next: (data: any) => this.countries = data.object
       });
 
     this.distributorService.getAll()
@@ -126,13 +122,48 @@ export class DistributorRegionComponent implements OnInit {
                 if (y == x.id) countLst.push(x.id)
               });
             });
-
             this.destributorRegionform.patchValue({ 'countries': countLst })
-
           },
         });
+      this.destributorRegionform.disable();
+    }
+    else this.isNewMode = true;
+  }
+
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.destributorRegionform.enable();
     }
   }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["distregionlist", this.distributorId]);
+    }
+
+    else this.router.navigate(["distregionlist", this.distributorId]);
+
+  }
+
+  CancelEdit() {
+    this.destributorRegionform.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.distributorRegionService.delete(this.distributorRegionId).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["distregionlist", this.distributorId]);
+        })
+    }
+  }
+
 
   // convenience getter for easy access to form fields
   get f() { return this.destributorRegionform.controls; }
@@ -166,21 +197,10 @@ export class DistributorRegionComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
-            //debugger;
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["distregionlist", this.distributorId]);
             }
-            else {
-
-            }
-            //this.alertService.success('Data save successfull');
-            this.loading = false;
-
-          },
-          error: error => {
-
-            this.loading = false;
           }
         });
     }
@@ -195,16 +215,8 @@ export class DistributorRegionComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["distregionlist", this.distributorId]);
             }
-            else {
-
-            }
             this.loading = false;
-
           },
-          error: error => {
-
-            this.loading = false;
-          }
         });
     }
   }
