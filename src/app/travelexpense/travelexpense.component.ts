@@ -37,7 +37,7 @@ export class TravelexpenseComponent implements OnInit {
   IsEngineerView: boolean = false;
 
   public columnDefs: ColDef[];
-  public columnDefsAttachments: ColDef[];
+  public columnDefsAttachments: any[];
   private columnApi: ColumnApi;
   private api: GridApi;
 
@@ -197,9 +197,11 @@ export class TravelexpenseComponent implements OnInit {
             });
         })
       this.form.disable()
+      this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     }
     else {
       this.FormControlDisable()
+      this.columnDefsAttachments = this.createColumnDefsAttachments()
       this.isNewMode = true
     }
   }
@@ -208,6 +210,7 @@ export class TravelexpenseComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.form.enable();
+      this.columnDefsAttachments = this.createColumnDefsAttachments()
       this.FormControlDisable();
     }
   }
@@ -225,6 +228,7 @@ export class TravelexpenseComponent implements OnInit {
 
   CancelEdit() {
     this.form.disable()
+    this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     this.isEditMode = false;
   }
 
@@ -318,6 +322,20 @@ export class TravelexpenseComponent implements OnInit {
     }
   };
 
+  createColumnDefsAttachmentsRO() {
+    return [
+      {
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ]
+  }
+
   createColumnDefsAttachments() {
     return [
       {
@@ -325,7 +343,7 @@ export class TravelexpenseComponent implements OnInit {
         field: "id",
         filter: false,
         editable: false,
-        width: 100,
+        lockPosition: "left",
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
@@ -413,10 +431,10 @@ export class TravelexpenseComponent implements OnInit {
 
     this.model = this.form.value;
     this.model.distId = this.distId
-    
+
     this.model.grandCompanyTotal = parseInt(this.model.grandCompanyTotal)
     this.model.grandEngineerTotal = parseInt(this.model.grandEngineerTotal)
-    
+
     if (this.IsEngineerView) this.model.engineerId = this.user.contactId;
 
     if (this.id == null) {

@@ -39,7 +39,7 @@ export class TravelinvoiceComponent implements OnInit {
 
 
   public columnDefs: ColDef[];
-  public columnDefsAttachments: ColDef[];
+  public columnDefsAttachments: any[];
   private columnApi: ColumnApi;
   private api: GridApi;
 
@@ -178,19 +178,22 @@ export class TravelinvoiceComponent implements OnInit {
             });
         })
       this.form.disable();
+      this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
+
     }
     else {
       this.FormControlDisable()
       this.isNewMode = true
+      this.columnDefsAttachments = this.createColumnDefsAttachments()
     }
 
-    this.columnDefsAttachments = this.createColumnDefsAttachments()
   }
 
   EditMode() {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.form.enable();
+      this.columnDefsAttachments = this.createColumnDefsAttachments()
       this.FormControlDisable();
     }
   }
@@ -208,6 +211,7 @@ export class TravelinvoiceComponent implements OnInit {
 
   CancelEdit() {
     this.form.disable()
+    this.columnDefsAttachments = this.createColumnDefsAttachments()
     this.isEditMode = false;
   }
 
@@ -291,7 +295,7 @@ export class TravelinvoiceComponent implements OnInit {
         field: "id",
         filter: false,
         editable: false,
-        width: 100,
+        lockPosition: "left",
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
@@ -299,6 +303,20 @@ export class TravelinvoiceComponent implements OnInit {
           id: this.id
         },
       },
+      {
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ]
+  }
+
+  createColumnDefsAttachmentsRO() {
+    return [
       {
         headerName: "File Name",
         field: "displayName",

@@ -148,7 +148,7 @@
                         <br />
                         <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
                             <div class="col-md-3">
-                                <input type="file" id="myFile" #file placeholder="Choose file"
+                                <input type="file" id="myFile" [disabled]="!isEditMode" #file placeholder="Choose file"
                                     (change)="getfil(file.files); listfile(file.files) ;" multiple
                                     accept="text/plain, application/pdf, image/*">
                             </div>
