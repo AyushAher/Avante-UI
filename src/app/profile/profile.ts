@@ -50,6 +50,8 @@ export class ProfileComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
+  isEditMode: boolean;
+  isNewMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -106,8 +108,11 @@ export class ProfileComponent implements OnInit {
           this.addItem(data.object.permissions)
           this.profileform.patchValue(data.object);
         });
+
+      setTimeout(() => this.profileform.disable(), 500);
     }
     else {
+      this.isNewMode = true
       this.profileService.GetAllScreens()
         .pipe(first())
         .subscribe((data: any) => {
@@ -119,6 +124,41 @@ export class ProfileComponent implements OnInit {
           });
           this.addItem(this.listTypeItems);
         });
+    }
+  }
+
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.profileform.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["profilelist"])
+    }
+
+    else this.router.navigate(["profilelist"])
+
+  }
+
+  CancelEdit() {
+    this.profileform.disable();
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+
+      this.profileService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["profilelist"])
+        })
     }
   }
 
@@ -174,7 +214,7 @@ export class ProfileComponent implements OnInit {
 
   SelectAll(property: string) {
     let permission = this.profileform.get('permissions') as FormArray;
-    
+
     if (property == "commercial") {
       for (let i of permission.controls) {
         if (i.value.screenCode == "SINST" || i.value.screenCode == "OFREQ" || i.value.screenCode == "AMC")
