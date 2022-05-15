@@ -214,10 +214,12 @@ export class AdvancerequestformComponent implements OnInit {
           }
         });
       this.form.disable()
+      this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     } else {
       this.isNewMode = true;
       this.FormcontrolDisable()
     }
+
 
   }
 
@@ -233,6 +235,7 @@ export class AdvancerequestformComponent implements OnInit {
       this.isEditMode = true;
       this.form.enable();
       this.FormcontrolDisable()
+      this.columnDefsAttachments = this.createColumnDefsAttachments()
     }
   }
 
@@ -249,6 +252,7 @@ export class AdvancerequestformComponent implements OnInit {
 
   CancelEdit() {
     this.form.disable()
+    this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     this.isEditMode = false;
   }
 
@@ -351,7 +355,7 @@ export class AdvancerequestformComponent implements OnInit {
         field: "id",
         filter: false,
         editable: false,
-        width: 100,
+        lockPosition: "left",
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
@@ -359,6 +363,20 @@ export class AdvancerequestformComponent implements OnInit {
           id: this.id
         },
       },
+      {
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ]
+  }
+
+  createColumnDefsAttachmentsRO() {
+    return [
       {
         headerName: "File Name",
         field: "displayName",
@@ -395,6 +413,8 @@ export class AdvancerequestformComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          console.log(data.object);
+
           this.attachments = data.object;
         },
       });
