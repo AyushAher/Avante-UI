@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColumnApi, GridApi } from 'ag-grid-community';
 import { Guid } from 'guid-typescript';
 import { first } from 'rxjs/operators';
 import { Currency, Distributor, ResultMsg, User } from '../_models';
@@ -47,8 +47,8 @@ export class OfferrequestComponent implements OnInit {
   profilePermission: any;
 
   currencyList: Currency[];
-  public columnDefs: ColDef[];
-  public columnDefsAttachments: ColDef[];
+  public columnDefs: any[];
+  public columnDefsAttachments: any[];
   private columnApi: ColumnApi;
   private api: GridApi;
   hasId: boolean;
@@ -66,7 +66,7 @@ export class OfferrequestComponent implements OnInit {
   SpareQuotationDetailsList = [];
   SpareQuotationDetails: any[] = [];
   datepipie = new DatePipe('en-US');
-  ColumnDefsSPDet: ColDef[];
+  ColumnDefsSPDet: any[];
   prevNotCompleted: boolean = false;
 
   CompletedId = 'COMP';
@@ -87,7 +87,7 @@ export class OfferrequestComponent implements OnInit {
   instruments = []
   vScroll: boolean = true;
   isLocked: boolean;
-  processGridDefs: ColDef[];
+  processGridDefs: any[];
   stagesList: any;
   isPaymentTerms: boolean;
   datepipe = new DatePipe('en-US')
@@ -222,9 +222,6 @@ export class OfferrequestComponent implements OnInit {
     })
 
     this.id = this.route.snapshot.paramMap.get('id');
-    this.columnDefs = this.createColumnDefs();
-    this.columnDefsAttachments = this.createColumnDefsAttachments();
-    this.ColumnDefsSPDet = this.createColumnDefsSPDet()
     this.form.get('podate').setValue(this.datepipie.transform(new Date, "MM/dd/yyyy"))
 
     this.instrumentService.getAll(this.user.userId)
@@ -285,8 +282,6 @@ export class OfferrequestComponent implements OnInit {
           this.listTypeService.getById("ORQPT")
             .pipe(first())
             .subscribe((mstData: any) => {
-              console.log(data.object);
-
               this.isCompleted = data.object.isCompleted
               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
               data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
@@ -330,16 +325,20 @@ export class OfferrequestComponent implements OnInit {
 
       this.hasId = true;
       this.form.disable();
+
+      this.columnDefs = this.createColumnDefsRO();
+      this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();
     }
 
     else {
       this.FormControlDisable()
       this.isNewMode = true
+      this.columnDefs = this.createColumnDefs();
+      this.columnDefsAttachments = this.createColumnDefsAttachments();
       this.hasId = false;
       this.id = Guid.create();
       this.id = this.id.value;
-      this.listTypeService.getById("ORQPT")
-        .pipe(first())
+      this.listTypeService.getById("ORQPT").pipe(first())
         .subscribe((mstData: any) => {
           this.payTypes = mstData;
         })
@@ -352,8 +351,7 @@ export class OfferrequestComponent implements OnInit {
     this.DistributorService.getAll().pipe(first())
       .subscribe((data: any) => this.distributorList = data.object)
 
-    this.SpareQuoteDetService.getAll(this.id)
-      .pipe(first())
+    this.SpareQuoteDetService.getAll(this.id).pipe(first())
       .subscribe({
         next: (data: any) => {
           this.SpareQuotationDetailsList = data.object;
@@ -402,6 +400,8 @@ export class OfferrequestComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.form.enable();
+      this.columnDefs = this.createColumnDefs();
+      this.columnDefsAttachments = this.createColumnDefsAttachments();
       this.FormControlDisable();
     }
   }
@@ -418,7 +418,9 @@ export class OfferrequestComponent implements OnInit {
   }
 
   CancelEdit() {
-    this.form.disable()
+    this.form.disable();
+    this.columnDefs = this.createColumnDefsRO();
+    this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();
     this.isEditMode = false;
   }
 
@@ -617,6 +619,7 @@ export class OfferrequestComponent implements OnInit {
     return [{
       headerName: 'Action',
       field: 'id',
+      lockPosition: "left",
       cellRenderer: (params) => {
         return `
         <button class="btn btn-link" [disabled]="!params.deleteaccess" type="button">
@@ -676,6 +679,62 @@ export class OfferrequestComponent implements OnInit {
       sortable: true,
       tooltipField: 'itemDescription'
     }
+    ]
+  }
+
+  private createColumnDefsRO() {
+    return [
+      {
+        headerName: 'Part No',
+        field: 'partno',
+        filter: true,
+        enableSorting: true,
+        sortable: true,
+        tooltipField: 'instrument',
+      }, {
+        headerName: 'HSC Code',
+        field: 'hscode',
+        filter: true,
+      },
+      {
+        headerName: 'Qty',
+        field: 'qty',
+        filter: true,
+        editable: true,
+        sortable: true,
+        defaultValue: 0
+      },
+      {
+        headerName: 'Price',
+        field: 'price',
+        filter: true,
+        editable: true,
+        sortable: true,
+        default: 0,
+        hide: this.role == environment.custRoleCode || !this.hasCommercial,
+      },
+      {
+        headerName: 'Amount',
+        field: 'amount',
+        filter: true,
+        sortable: true,
+        hide: this.role == environment.custRoleCode || !this.hasCommercial,
+      },
+      {
+        headerName: 'Currency',
+        field: 'currency',
+        hide: this.role == environment.custRoleCode || !this.hasCommercial,
+        // hide: true,
+        filter: true,
+        sortable: true
+      },
+      {
+        headerName: 'Description',
+        field: 'itemDescription',
+        filter: true,
+        sortable: true,
+        tooltipField: 'itemDescription'
+      }
     ]
   }
 
@@ -755,12 +814,27 @@ export class OfferrequestComponent implements OnInit {
         filter: false,
         editable: false,
         sortable: false,
+        lockPosition: "left",
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
           deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.id
         },
       },
+      {
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ]
+  }
+
+  createColumnDefsAttachmentsRO() {
+    return [
       {
         headerName: "File Name",
         field: "displayName",
