@@ -212,20 +212,6 @@ export class ContactListComponent implements OnInit {
 
   private createColumnDefsForDetail() {
     return [{
-      headerName: 'Action',
-      field: 'id',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      cellRendererFramework: RenderComponent,
-      cellRendererParams: {
-        inRouterLink: '/contact/' + this.type + '/' + this.masterId + '/' + this.detailId + '/',
-        deleteaccess: this.hasDeleteAccess,
-        deleteLink: 'C',
-
-      },
-    }, {
       headerName: 'first Name',
       field: 'fname',
       filter: true,
