@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import {
   actionList,
@@ -21,7 +21,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColumnApi, GridApi } from 'ag-grid-community';
 import { environment } from '../../environments/environment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ModelEngContentComponent } from './modelengcontent';
@@ -73,14 +73,14 @@ export class ServiceRequestComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   appendList: Contact[];
-  public columnDefs: ColDef[];
-  public ticketcolumnDefs: ColDef[];
-  public actionDefs: ColDef[];
+  public columnDefs: any[];
+  public ticketcolumnDefs: any[];
+  public actionDefs: any[];
   private columnApi: ColumnApi;
   private api: GridApi;
   PdffileData: FileShare[];
   pdfBase64: string;
-  public pdfcolumnDefs: ColDef[];
+  public pdfcolumnDefs: any[];
   private pdfcolumnApi: ColumnApi;
   private pdfapi: GridApi;
   private historycolumnApi: ColumnApi;
@@ -125,7 +125,7 @@ export class ServiceRequestComponent implements OnInit {
   stagelist: ListTypeItem[];
   statuslist: ListTypeItem[];
   scheduleData: any;
-  scheduleDefs: ColDef[];
+  scheduleDefs: any[];
   hasCallScheduled: boolean;
   isGenerateReport: boolean = false;
   isNewMode: boolean;
@@ -410,11 +410,8 @@ export class ServiceRequestComponent implements OnInit {
     this.scheduleLink = `/schedule/${this.serviceRequestId}`;
 
 
-    this.columnDefs = this.createColumnDefs();
     this.ticketcolumnDefs = this.createColumnHistoryDefs();
-    this.actionDefs = this.createColumnActionDefs();
     this.scheduleDefs = this.createColumnScheduleDefs();
-    this.pdfcolumnDefs = this.pdfcreateColumnDefs();
 
     if (this.serviceRequestId != null) {
       this.serviceRequestService.getById(this.serviceRequestId)
@@ -552,6 +549,10 @@ export class ServiceRequestComponent implements OnInit {
 
       setTimeout(() => {
         this.serviceRequestform.disable();
+        this.columnDefs = this.createColumnDefsRO();
+        this.actionDefs = this.createColumnActionDefsRO();
+        this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
+
       }, 100);
 
     }
@@ -579,6 +580,10 @@ export class ServiceRequestComponent implements OnInit {
 
       this.FormControlDisable()
       this.isNewMode = true
+      this.columnDefs = this.createColumnDefs();
+      this.actionDefs = this.createColumnActionDefs();
+      this.pdfcolumnDefs = this.pdfcreateColumnDefs();
+
     }
   }
 
@@ -586,6 +591,10 @@ export class ServiceRequestComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.serviceRequestform.enable();
+      this.columnDefs = this.createColumnDefs();
+      this.actionDefs = this.createColumnActionDefs();
+      this.pdfcolumnDefs = this.pdfcreateColumnDefs();
+
       this.FormControlDisable();
     }
   }
@@ -603,6 +612,10 @@ export class ServiceRequestComponent implements OnInit {
 
   CancelEdit() {
     this.serviceRequestform.disable()
+    this.columnDefs = this.createColumnDefsRO();
+    this.actionDefs = this.createColumnActionDefsRO();
+    this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
+
     this.isEditMode = false;
   }
 
@@ -695,8 +708,7 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
   getInstrumnetsBySiteIds(id: any) {
-    this.instrumentService.getinstubysiteIds(id)
-      .pipe(first())
+    this.instrumentService.getinstubysiteIds(id).pipe(first())
       .subscribe({
         next: (data: any) => this.instrumentList = data.object
       });
@@ -1128,14 +1140,28 @@ export class ServiceRequestComponent implements OnInit {
         field: "id",
         filter: false,
         editable: false,
-        width: 100,
+        lockPosition: "left",
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess && this.isGenerateReport == false && this.isEditMode,
+          deleteaccess: this.hasDeleteAccess && this.isGenerateReport == false,
           id: this.serviceRequestId
         },
       },
+      {
+        headerName: "File Name",
+        field: "displayName",
+        filter: true,
+        tooltipField: "File Name",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ]
+  }
+
+  private pdfcreateColumnDefsRO() {
+    return [
       {
         headerName: "File Name",
         field: "displayName",
@@ -1189,6 +1215,28 @@ export class ServiceRequestComponent implements OnInit {
 
   }
 
+  private createColumnDefsRO() {
+    return [
+      {
+        headerName: 'Next Date',
+        field: 'nextdate',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        tooltipField: 'nextDate',
+      },
+      {
+        headerName: 'Comments',
+        field: 'comments',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      }
+    ]
+  }
+
   private createColumnDefs() {
     return [
       {
@@ -1197,15 +1245,16 @@ export class ServiceRequestComponent implements OnInit {
         filter: false,
         enableSorting: false,
         editable: false,
+        lockPosition: "left",
         sortable: false,
         hide: this.isGenerateReport,
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
           }
         }
@@ -1272,17 +1321,71 @@ export class ServiceRequestComponent implements OnInit {
         editable: false,
         hide: !this.IsEngineerView && this.isGenerateReport == false,
         sortable: false,
+        lockPosition: "left",
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
           }
         }
       },
+      {
+        headerName: 'Engineer Name',
+        field: 'engineername',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        tooltipField: 'engineername',
+      },
+      {
+        headerName: 'Action Taken',
+        field: 'actiontakenId',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Comments',
+        field: 'comments',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Team Viewer Recording',
+        field: 'teamviewrecording',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        cellRenderer: (params) => {
+          if (params.value != null) {
+            return `<button type="button" class="btn btn-link" data-action-type="download" ><i class="fas fas fa-download" title="Edit Value" data-action-type="download"></i></button>`
+          } else {
+            return ``
+          }
+        }
+      },
+      {
+        headerName: 'Date',
+        field: 'actiondate',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      }
+    ]
+  }
+
+  private createColumnActionDefsRO() {
+    return [
       {
         headerName: 'Engineer Name',
         field: 'engineername',

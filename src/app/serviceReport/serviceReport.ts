@@ -25,7 +25,7 @@ import { SignaturePad } from 'angular2-signaturepad';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, first, map } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColumnApi, GridApi } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { WorkdoneContentComponent } from './workdonecontent';
 import { WorkTimeContentComponent } from './workTime';
@@ -95,10 +95,10 @@ export class ServiceReportComponent implements OnInit {
   hasAddAccess = false;
   pdfPath: any;
   // public defaultdistributors: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
-  public columnDefs: ColDef[];
-  public columnworkdefs: ColDef[];
-  public spcolumnDefs: ColDef[];
-  public spRecomandDefs: ColDef[];
+  public columnDefs: any[];
+  public columnworkdefs: any[];
+  public spcolumnDefs: any[];
+  public spRecomandDefs: any[];
   private columnApi: ColumnApi;
   private api: GridApi;
   workTime: workTime[] = [];
@@ -120,7 +120,7 @@ export class ServiceReportComponent implements OnInit {
   invlist: custSPInventory;
   PdffileData: FileShare[];
   pdfBase64: string;
-  public pdfcolumnDefs: ColDef[];
+  public pdfcolumnDefs: any[];
   private pdfcolumnApi: ColumnApi;
   private pdfapi: GridApi;
   signaturePadOptions: Object = {
@@ -454,7 +454,15 @@ export class ServiceReportComponent implements OnInit {
           },
         });
 
-      setTimeout(() => this.ServiceReportform.disable(), 100);
+      setTimeout(() => {
+        this.ServiceReportform.disable()
+
+        this.columnworkdefs = this.createworkdoneColumnDefsRO();
+        this.columnDefs = this.createColumnDefsRO();
+        this.spcolumnDefs = this.createColumnspDefsRO();
+        this.spRecomandDefs = this.createColumnspreDefsRO();
+        this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
+      }, 100);
     }
 
     else {
@@ -462,11 +470,6 @@ export class ServiceReportComponent implements OnInit {
       this.isNewMode = true
     }
 
-    this.columnworkdefs = this.createworkdoneColumnDefs();
-    this.columnDefs = this.createColumnDefs();
-    this.spcolumnDefs = this.createColumnspDefs();
-    this.spRecomandDefs = this.createColumnspreDefs();
-    this.pdfcolumnDefs = this.pdfcreateColumnDefs();
   }
 
   // convenience getter for easy access to form fields
@@ -480,6 +483,12 @@ export class ServiceReportComponent implements OnInit {
       this.isEditMode = true;
       this.ServiceReportform.enable();
       this.FormControlDisable();
+
+      this.columnworkdefs = this.createworkdoneColumnDefs();
+      this.columnDefs = this.createColumnDefs();
+      this.spcolumnDefs = this.createColumnspDefs();
+      this.spRecomandDefs = this.createColumnspreDefs();
+      this.pdfcolumnDefs = this.pdfcreateColumnDefs();
     }
   }
 
@@ -497,6 +506,12 @@ export class ServiceReportComponent implements OnInit {
   CancelEdit() {
     this.ServiceReportform.disable()
     this.isEditMode = false;
+
+    this.columnworkdefs = this.createworkdoneColumnDefsRO();
+    this.columnDefs = this.createColumnDefsRO();
+    this.spcolumnDefs = this.createColumnspDefsRO();
+    this.spRecomandDefs = this.createColumnspreDefsRO();
+    this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
   }
 
   FormControlDisable() {
@@ -981,21 +996,37 @@ export class ServiceReportComponent implements OnInit {
         headerName: 'Action',
         field: 'id',
         filter: false,
+        lockPosition: "left",
         enableSorting: false,
         editable: false,
         sortable: false,
         width: 150,
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`;
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`;
           }
         }
       },
+      {
+        headerName: 'Work Done',
+        field: 'workdone',
+        filter: false,
+        width: 900,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        tooltipField: 'Work Done',
+      }
+    ];
+  }
+
+  private createworkdoneColumnDefsRO() {
+    return [
       {
         headerName: 'Work Done',
         field: 'workdone',
@@ -1018,18 +1049,57 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
+        lockPosition: "left",
 
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`;
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`;
           }
         }
       },
+      {
+        headerName: 'Work Time Date',
+        field: 'worktimedate',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        tooltipField: 'Work Time Date',
+      },
+      {
+        headerName: 'Start Time',
+        field: 'starttime',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'End Time',
+        field: 'endtime',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Per Day Hrs',
+        field: 'perdayhrs',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      }
+    ];
+  }
+
+  private createColumnDefsRO() {
+    return [
       {
         headerName: 'Work Time Date',
         field: 'worktimedate',
@@ -1159,18 +1229,64 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
+        lockPosition: "left",
 
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`;
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`;
           }
         }
       },
+      {
+        headerName: 'Part No',
+        field: 'partno',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        tooltipField: 'partno',
+      },
+      {
+        headerName: 'HSC Code',
+        field: 'hsccode',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Qty Available',
+        field: 'qtyAvailable',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Qty Consumed',
+        field: 'qtyconsumed',
+        filter: false,
+        enableSorting: false,
+        editable: true,
+        sortable: false
+      },
+      {
+        headerName: 'Description',
+        field: 'itemDesc',
+        filter: false,
+        enableSorting: false,
+        editable: true,
+        sortable: false
+      },
+    ];
+  }
+  private createColumnspDefsRO() {
+    return [
       {
         headerName: 'Part No',
         field: 'partno',
@@ -1224,17 +1340,57 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
+        lockPosition: "left",
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`;
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`;
           }
         }
       },
+      {
+        headerName: 'PartNo',
+        field: 'partno',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false,
+        tooltipField: 'partno',
+      },
+      {
+        headerName: 'Qty',
+        field: 'qtyrecommended',
+        filter: false,
+        enableSorting: false,
+        editable: true,
+        sortable: false
+      },
+      {
+        headerName: 'HS Code',
+        field: 'hsccode',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      },
+      {
+        headerName: 'Description',
+        field: 'itemDesc',
+        filter: false,
+        width: 350,
+        enableSorting: false,
+        editable: false,
+        sortable: false
+      }
+    ];
+  }
+
+  private createColumnspreDefsRO() {
+    return [
       {
         headerName: 'PartNo',
         field: 'partno',
@@ -1350,14 +1506,28 @@ export class ServiceReportComponent implements OnInit {
         field: 'id',
         filter: false,
         editable: false,
-        width: 100,
         sortable: false,
+        lockPosition: "left",
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
           deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.ServiceReportId
         },
       },
+      {
+        headerName: 'File Name',
+        field: 'displayName',
+        filter: true,
+        tooltipField: 'File Name',
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+    ];
+  }
+
+  private pdfcreateColumnDefsRO() {
+    return [
       {
         headerName: 'File Name',
         field: 'displayName',

@@ -263,9 +263,9 @@
 
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
-              <button type="button" [disabled]="this.isCompleted && !isEditMode" class="btn btn-sm btn-success button"
-                style="margin: 10px;" (click)="open(ServiceReportId)"><i class="fas fa-plus-circle"
-                  title="Add"></i></button>
+              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode"
+                class="btn btn-sm btn-success button" style="margin: 10px;" (click)="open(ServiceReportId)"><i
+                  class="fas fa-plus-circle" title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
                   (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
@@ -274,9 +274,9 @@
               </div>
             </div>
             <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-              <button type="button" [disabled]="this.isCompleted && !isEditMode" class="btn btn-sm btn-success button"
-                style="margin: 10px;" (click)="opentime(ServiceReportId)"><i class="fas fa-plus-circle"
-                  title="Add"></i></button>
+              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode"
+                class="btn btn-sm btn-success button" style="margin: 10px;" (click)="opentime(ServiceReportId)"><i
+                  class="fas fa-plus-circle" title="Add"></i></button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onworktimeRowClicked($event)"
                   (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
@@ -446,7 +446,7 @@
           <div class="row" style="margin:15px;">
 
             <div class="col-md-3">
-              <input type="file" id="myFile" #file placeholder="Choose file"
+              <input type="file" id="myFile" *ngIf="isEditMode" #file placeholder="Choose file"
                 (change)="getfil(file.files); listfile(file.files) ;" accept=".pdf" id="pdfUpload" multiple
                 type='file' />
             </div>
