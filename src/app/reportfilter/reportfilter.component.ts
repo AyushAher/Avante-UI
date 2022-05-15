@@ -223,11 +223,8 @@ export class ReportfilterComponent implements OnInit {
             var eDate = this.form.get("eDate").value?.getTime()
             if (sDate <= co && co <= eDate) {
               nData.push(x)
-              console.log(x );
             }
           });
-          console.log(nData);
-
           this.nData.emit(nData)
           this.showData.emit(true)
         })
