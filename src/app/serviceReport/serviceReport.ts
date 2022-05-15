@@ -986,12 +986,12 @@ export class ServiceReportComponent implements OnInit {
         sortable: false,
         width: 150,
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`;
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`;
           }
         }
@@ -1020,12 +1020,12 @@ export class ServiceReportComponent implements OnInit {
         sortable: false,
 
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`;
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`;
           }
         }
@@ -1141,11 +1141,6 @@ export class ServiceReportComponent implements OnInit {
                 this.notificationService.filter('itemadded');
               }
               this.loading = false;
-            },
-            error: error => {
-
-
-              this.loading = false;
             }
           });
       } else {
@@ -1166,12 +1161,12 @@ export class ServiceReportComponent implements OnInit {
         sortable: false,
 
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`;
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`;
           }
         }
@@ -1230,12 +1225,12 @@ export class ServiceReportComponent implements OnInit {
         editable: false,
         sortable: false,
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`;
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-save" title="Edit Value" data-action-type="edit"></i></button>`;
           }
         }
@@ -1328,17 +1323,7 @@ export class ServiceReportComponent implements OnInit {
       this.uploadService.getFile(filePath)
         .pipe(first())
         .subscribe({
-          next: (data: any) => {
-            this.download(data.data);
-            // this.alertService.success('File Upload Successfully.');
-            // this.imagePath = data.path;
-
-          },
-          error: error => {
-
-
-            // this.imageUrl = this.noimageData;
-          }
+          next: (data: any) => this.download(data.data)
         });
     }
   }
@@ -1369,7 +1354,7 @@ export class ServiceReportComponent implements OnInit {
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess,
+          deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.ServiceReportId
         },
       },

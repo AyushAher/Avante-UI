@@ -521,9 +521,6 @@ export class ServiceRequestComponent implements OnInit {
             }, 2000);
             this.accepted = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId == data.object.statusid
 
-            if (this.accepted && this.IsEngineerView) {
-              this.serviceRequestform.get('statusid').disable();
-            }
             this.customerId = data.object.custid;
             this.siteId = data.object.siteid;
             this.engineerCommentList = data.object.engComments
@@ -610,6 +607,11 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   FormControlDisable() {
+
+    if (this.accepted && this.IsEngineerView) {
+      this.serviceRequestform.get('statusid').disable();
+    }
+
     this.serviceRequestform.get('requesttypeid').disable();
     this.serviceRequestform.get('subrequesttypeid').disable();
     this.serviceRequestform.get('remarks').disable();
@@ -617,7 +619,7 @@ export class ServiceRequestComponent implements OnInit {
     this.serviceRequestform.get('siteid').disable();
     this.serviceRequestform.get('country').disable();
     this.serviceRequestform.get('distid').disable();
-    
+
     if (this.IsEngineerView) {
       this.serviceRequestform.get('assignedto').disable();
       this.serviceRequestform.get('country').disable();
@@ -649,6 +651,7 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('serreqdate').enable();
 
     }
+
 
   }
 
@@ -1129,7 +1132,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false,
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess && this.isGenerateReport == false,
+          deleteaccess: this.hasDeleteAccess && this.isGenerateReport == false && this.isEditMode,
           id: this.serviceRequestId
         },
       },
@@ -1197,12 +1200,12 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false,
         hide: this.isGenerateReport,
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
           }
         }
@@ -1270,12 +1273,12 @@ export class ServiceRequestComponent implements OnInit {
         hide: !this.IsEngineerView && this.isGenerateReport == false,
         sortable: false,
         cellRenderer: (params) => {
-          if (this.hasDeleteAccess && !this.hasUpdateAccess) {
+          if (this.hasDeleteAccess && !this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
-          } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
           <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
-          } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
+          } else if (!this.hasDeleteAccess && this.hasUpdateAccess && this.isEditMode) {
             return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fas fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
           }
         }
