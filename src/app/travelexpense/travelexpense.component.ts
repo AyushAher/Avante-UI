@@ -413,7 +413,7 @@ export class TravelexpenseComponent implements OnInit {
 
   }
 
-  OnSubmit() {
+  onSubmit() {
     this.submitted = true;
     // reset alerts on submit
     this.alertService.clear();

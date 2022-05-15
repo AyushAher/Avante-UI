@@ -361,7 +361,7 @@ export class TravelinvoiceComponent implements OnInit {
     this.api.sizeColumnsToFit();
   }
 
-  OnSubmit() {
+  onSubmit() {
     debugger;
     this.submitted = true;
     // reset alerts on submit

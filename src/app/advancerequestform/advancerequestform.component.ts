@@ -427,7 +427,7 @@ export class AdvancerequestformComponent implements OnInit {
   }
 
 
-  OnSubmit() {
+  onSubmit() {
     this.submitted = true;
     if (this.form.get('underTaking').value == "0") {
       return this.notificationService.showInfo("Please sign the undertaking to procced", "Info")
