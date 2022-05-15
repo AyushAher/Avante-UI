@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {ListTypeItem, ProfileReadOnly, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
-import {AccountService, AlertService, ListTypeService, NotificationService, ProfileService} from '../_services';
-import {MRenderComponent} from './rendercomponent';
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
-import {ModelContentComponent} from './modelcontent';
-import {environment} from "../../environments/environment";
-import {PrevchklocpartelementvalueComponent} from "./prevchklocpartelementvalue.component";
+import { ListTypeItem, ProfileReadOnly, User } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { AccountService, AlertService, ListTypeService, NotificationService, ProfileService } from '../_services';
+import { MRenderComponent } from './rendercomponent';
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ModelContentComponent } from './modelcontent';
+import { environment } from "../../environments/environment";
+import { PrevchklocpartelementvalueComponent } from "./prevchklocpartelementvalue.component";
 
 @Component({
   selector: 'app-masterlistitem',
@@ -33,11 +33,14 @@ export class MasterListItemComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   public columnDefs: ColDef[];
+  public colReadOnlyDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
   bsModalRef: BsModalRef;
   addAccess: boolean = false;
   list2
+  isNewMode: any;
+  isEditMode: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,7 +79,7 @@ export class MasterListItemComponent implements OnInit {
       code: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(5)])],
       listName: [''],
       listTypeId: [''],
-      id:['']
+      id: ['']
     });
 
     this.listid = this.route.snapshot.paramMap.get('id');
@@ -91,12 +94,6 @@ export class MasterListItemComponent implements OnInit {
           this.itemList = data.object
           this.masterlistitemform.get("listName").setValue(this.itemList[0].listName);
           this.masterlistitemform.get("listTypeId").setValue(this.itemList[0].listTypeId);
-
-          //  this.masterlistitemform.patchValue(this.itemList[0]);
-        },
-        error: error => {
-          
-          this.loading = false;
         }
       });
     this.list2 = JSON.parse(localStorage.getItem(this.listid))
@@ -106,21 +103,49 @@ export class MasterListItemComponent implements OnInit {
       }
     }
     this.columnDefs = this.createColumnDefs();
+    this.colReadOnlyDefs = this.columnReadOnlyDefs();
+    if (!this.id) {
+      this.masterlistitemform.disable()
+    }
+  }
 
-    //if (this.id != null) {
-    //  this.listTypeService.getById(this.id)
-    //    .pipe(first())
-    //    .subscribe({
-    //      next: (data: any) => {
-    //        this.masterlistitemform.patchValue(data.object);
-    //      },
-    //      error: error => {
-    //        
-    //        this.loading = false;
-    //      }
-    //    });
-    //}
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.masterlistitemform.enable();
+      this.FormControlDisable();
+    }
+  }
 
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["sparepartlist"])
+    }
+
+    else this.router.navigate(["sparepartlist"])
+
+  }
+
+  CancelEdit() {
+    this.masterlistitemform.disable()
+    this.isEditMode = false;
+  }
+
+  FormControlDisable() {
+
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+
+      this.listTypeService.delete(this.id).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["sparepartlist"])
+        })
+    }
   }
 
   open(param: string, code: string) {
@@ -129,10 +154,10 @@ export class MasterListItemComponent implements OnInit {
     };
     switch (code) {
       case "CONTY":
-        this.bsModalRef = this.modalService.show(ModelContentComponent, {initialState});
+        this.bsModalRef = this.modalService.show(ModelContentComponent, { initialState });
         break;
       case "PMCL":
-        this.bsModalRef = this.modalService.show(PrevchklocpartelementvalueComponent, {initialState});
+        this.bsModalRef = this.modalService.show(PrevchklocpartelementvalueComponent, { initialState });
         break;
     }
   }
@@ -157,8 +182,23 @@ export class MasterListItemComponent implements OnInit {
           deleteaccess: this.hasDeleteAccess,
           addAccess: this.addAccess,
           hasUpdateAccess: this.hasUpdateAccess,
+          disabled: !this.isEditMode
         },
       },
+      {
+        headerName: 'Item Name',
+        field: 'itemname',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'itemname',
+      }
+    ]
+  }
+
+  private columnReadOnlyDefs() {
+    return [
       {
         headerName: 'Item Name',
         field: 'itemname',
@@ -216,53 +256,53 @@ export class MasterListItemComponent implements OnInit {
     this.loading = true;
 
     if (this.id == null) {
-    this.listTypeService.save(this.masterlistitemform.value)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.itemList = data.object;
+      this.listTypeService.save(this.masterlistitemform.value)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            if (data.result) {
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.itemList = data.object;
 
-            this.masterlistitemform.get("itemname").setValue('');
-            this.masterlistitemform.get("code").setValue('');
+              this.masterlistitemform.get("itemname").setValue('');
+              this.masterlistitemform.get("code").setValue('');
+            }
+            else {
+
+            }
+            this.loading = false;
+          },
+          error: error => {
+
+            this.loading = false;
           }
-          else {
-            
-          }
-          this.loading = false;
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
+        });
 
     }
     else {
       this.ItemData = this.masterlistitemform.value;
       this.listTypeService.update(this.id, this.ItemData)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.masterlistitemform.get("itemname").setValue('');
-            this.masterlistitemform.get("code").setValue('');
-            this.id = null;
-            this.itemList = data.object;
-          }
-          else {
-            
-          }
-          this.loading = false;
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            if (data.result) {
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.masterlistitemform.get("itemname").setValue('');
+              this.masterlistitemform.get("code").setValue('');
+              this.id = null;
+              this.itemList = data.object;
+            }
+            else {
 
-        },
-        error: error => {
-          
-          this.loading = false;
-        }
-      });
+            }
+            this.loading = false;
+
+          },
+          error: error => {
+
+            this.loading = false;
+          }
+        });
 
     }
 
