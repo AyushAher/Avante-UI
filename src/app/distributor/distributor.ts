@@ -27,6 +27,8 @@ export class DistributorComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
+  isEditMode: boolean;
+  isNewMode: boolean;
 
 
   constructor(
@@ -73,22 +75,16 @@ export class DistributorComponent implements OnInit {
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
-        zip: ['', Validators.compose([ Validators.minLength(4), Validators.maxLength(15)])],
+        zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
         isActive: false,
       }),
     });
     this.countryService.getAll()
-      .pipe(first())
-      .subscribe({
+      .pipe(first()).subscribe({
         next: (data: any) => {
-          this.countries = data.object;
-        },
-        error: error => {
-          //   this.alertService.error(error);
-          
-          this.loading = false;
+          this.countries = data.object
         }
       });
 
@@ -103,30 +99,60 @@ export class DistributorComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.form.patchValue(data.object);
-          },
-          error: error => {
-          //  this.alertService.error(error);
-            
-            this.loading = false;
           }
         });
+      this.form.disable()
+    }
+    else {
+      this.isEditMode = true;
     }
 
   }
 
-  // convenience getter for easy access to form fields
   get f() {
     return this.form.controls;
   }
 
+
+  EditMode() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.isEditMode = true;
+      this.form.enable();
+    }
+  }
+
+  Back() {
+
+    if ((this.isEditMode || this.isNewMode)) {
+      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.router.navigate(["distributorlist"]);
+    }
+
+    else this.router.navigate(["distributorlist"]);
+
+  }
+
+  CancelEdit() {
+    this.form.disable()
+    this.isEditMode = false;
+  }
+
+  DeleteRecord() {
+    if (confirm("Are you sure you want to edit the record?")) {
+      this.distributorService.delete(this.distributorId).pipe(first())
+        .subscribe((data: any) => {
+          if (data.result)
+            this.router.navigate(["distributorlist"]);
+        })
+    }
+  }
+
+
   get a() {
-    ////debugger;
     return this.form.controls.address;
   }
 
   onSubmit() {
-
-    //debugger;
     this.submitted = true;
 
     // reset alerts on submit
@@ -149,16 +175,16 @@ export class DistributorComponent implements OnInit {
               this.router.navigate(["distributorlist"]);
             }
             else {
-              
+
             }
-             //console.log(data);
+            //console.log(data);
 
             this.loading = false;
 
           },
           error: error => {
             //this.alertService.error(error);
-            
+
             this.loading = false;
           }
         });
@@ -176,15 +202,15 @@ export class DistributorComponent implements OnInit {
               this.router.navigate(["distributorlist"]);
             }
             else {
-              
+
             }
-             //console.log(data);
+            //console.log(data);
 
             this.loading = false;
 
           },
           error: error => {
-            
+
             //this.alertService.error(error);
             this.loading = false;
           }
