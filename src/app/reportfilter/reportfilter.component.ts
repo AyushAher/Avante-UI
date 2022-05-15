@@ -10,20 +10,6 @@ import { AccountService, CountryService, CustomerService, InstrumentService, Not
 @Component({
   selector: 'app-reportfilter',
   templateUrl: './reportfilter.component.html',
-  animations: [
-    trigger(
-      'enterAnimation', [
-      transition(':enter', [
-        style({ transform: 'translateY(100%)', opacity: 0 }),
-        animate('500ms', style({ transform: 'translateY(0)', opacity: 1 }))
-      ]),
-      transition(':leave', [
-        style({ transform: 'translateY(0)', opacity: 1 }),
-        animate('500ms', style({ transform: 'translateY(100%)', opacity: 0 }))
-      ])
-    ]
-    )
-  ],
 })
 export class ReportfilterComponent implements OnInit {
 
@@ -39,7 +25,6 @@ export class ReportfilterComponent implements OnInit {
   modal: any;
   user: User
   nlist: any[] = []
-  stage = 1;
 
   countryList: any;
 
@@ -176,32 +161,22 @@ export class ReportfilterComponent implements OnInit {
   }
 
   onCustomerChange() {
-    this.hasSite ? this.stage = 4 : this.stage = 6;
     this.siteList = this.customerList.find(x => x.id == this.form.get('customer').value).sites
     this.form.get('site').reset();
-    if (this.isUserProfile) this.stage = 6
   }
 
   SiteChange() {
-    this.hasInstrument ? this.stage = 5 : this.stage = 6;
     this.siteBInstrumentList = this.instrumentList.filter(x => x.custSiteId == this.form.get('site').value)
     setTimeout(() => this.form.get('insSerialNo').reset(), 200);
   }
 
-  InstrumentChange() {
-    this.stage = 6
-  }
-
   countryChange() {
-    this.stage = 3;
     this.customerBCountryList = this.customerList.filter(x => x.countryid == this.form.get('country').value)
 
     setTimeout(() => this.form.get('customer').reset(), 100);
   }
 
   onRegionChange() {
-    this.stage = 2
-
     if (this.hasInstrument) {
       this.form.get('insSerialNo').setValidators([Validators.required])
       this.form.get('insSerialNo').updateValueAndValidity()
@@ -230,8 +205,6 @@ export class ReportfilterComponent implements OnInit {
   clear() {
     this.showData.emit(false)
     this.form.reset();
-    this.stage = 1
-
   }
 
   onSubmit() {
