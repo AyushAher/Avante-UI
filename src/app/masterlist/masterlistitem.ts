@@ -131,6 +131,7 @@ export class MasterListItemComponent implements OnInit {
   CancelEdit() {
     this.masterlistitemform.disable()
     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   FormControlDisable() {

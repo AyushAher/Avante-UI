@@ -182,7 +182,8 @@ export class CustSPInventoryComponent implements OnInit {
 
   CancelEdit() {
     this.form.disable()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   DeleteRecord() {

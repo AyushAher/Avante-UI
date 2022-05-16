@@ -211,7 +211,8 @@ export class UserProfileComponent implements OnInit {
 
   CancelEdit() {
     this.userprofileform.disable()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   DeleteRecord() {

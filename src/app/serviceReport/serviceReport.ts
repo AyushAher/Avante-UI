@@ -505,7 +505,8 @@ export class ServiceReportComponent implements OnInit {
 
   CancelEdit() {
     this.ServiceReportform.disable()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
 
     this.columnworkdefs = this.createworkdoneColumnDefsRO();
     this.columnDefs = this.createColumnDefsRO();

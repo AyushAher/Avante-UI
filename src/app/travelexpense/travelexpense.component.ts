@@ -229,7 +229,8 @@ export class TravelexpenseComponent implements OnInit {
   CancelEdit() {
     this.form.disable()
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   FormControlDisable() {

@@ -111,7 +111,8 @@ export class CurrencyComponent implements OnInit {
 
   CancelEdit() {
     this.currencyform.disable()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   DeleteRecord() {

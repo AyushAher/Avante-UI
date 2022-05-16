@@ -136,7 +136,8 @@ export class CountryComponent implements OnInit {
 
   CancelEdit() {
     this.countryform.disable()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   DeleteRecord() {

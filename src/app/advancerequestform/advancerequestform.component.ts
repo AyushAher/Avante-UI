@@ -253,6 +253,7 @@ export class AdvancerequestformComponent implements OnInit {
     this.form.disable()
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   DeleteRecord() {

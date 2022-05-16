@@ -152,6 +152,7 @@ export class DistributorRegionComponent implements OnInit {
   CancelEdit() {
     this.destributorRegionform.disable()
     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   DeleteRecord() {

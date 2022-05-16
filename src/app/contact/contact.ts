@@ -236,7 +236,8 @@ export class ContactComponent implements OnInit {
 
   CancelEdit() {
     this.contactform.disable()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   DeleteRecord() {

@@ -327,7 +327,8 @@ export class InstrumentComponent implements OnInit {
 
   CancelEdit() {
     this.instrumentform.disable()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
     this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
     this.columnDefs = this.createColumnDefsRO();
 

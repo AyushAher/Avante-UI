@@ -187,6 +187,7 @@ export class CustdashboardsettingsComponent implements OnInit {
   CancelEdit() {
     this.form.disable()
     this.isEditMode = false;
+    this.isNewMode = false;;
   }
 
   DeleteRecord() {

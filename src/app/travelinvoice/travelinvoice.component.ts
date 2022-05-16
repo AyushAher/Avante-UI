@@ -212,7 +212,8 @@ export class TravelinvoiceComponent implements OnInit {
   CancelEdit() {
     this.form.disable()
     this.columnDefsAttachments = this.createColumnDefsAttachments()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   FormControlDisable() {

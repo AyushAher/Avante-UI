@@ -208,7 +208,8 @@ export class SparePartComponent implements OnInit {
 
   CancelEdit() {
     this.sparepartform.disable()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   FormControlDisable() {

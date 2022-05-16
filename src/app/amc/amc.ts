@@ -368,7 +368,8 @@ export class AmcComponent implements OnInit {
   CancelEdit() {
     this.form.disable()
     this.columnDefs = this.createColumnDefsRO();
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   DeleteRecord() {

@@ -421,7 +421,8 @@ export class OfferrequestComponent implements OnInit {
     this.form.disable();
     this.columnDefs = this.createColumnDefsRO();
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   FormControlDisable() {

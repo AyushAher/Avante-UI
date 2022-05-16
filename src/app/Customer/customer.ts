@@ -150,7 +150,8 @@ export class CustomerComponent implements OnInit {
 
   CancelEdit() {
     this.customerform.disable()
-    this.isEditMode = false;
+     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   DeleteRecord() {
