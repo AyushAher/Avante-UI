@@ -361,8 +361,8 @@
                 [disabled]="IsEngineerView || isGenerateReport || (!isEditMode && !isNewMode)" [data]="subreqtypelist"
                 formControlName="subrequesttypeid">
               </ng-multiselect-dropdown>
-              <div *ngIf="submitted && f.subrequesttypeid.errors" class="invalid-feedback">
-                <div *ngIf="f.subrequesttypeid.errors.required">subreqtype is required</div>
+              <div *ngIf="submitted && f.subrequesttypeid.errors" style="display: block;" class="invalid-feedback">
+                <div *ngIf="f.subrequesttypeid.errors.required">Sub Request Type is required</div>
               </div>
             </div>
 

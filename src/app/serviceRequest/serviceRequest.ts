@@ -276,7 +276,7 @@ export class ServiceRequestComponent implements OnInit {
       serresolutiondate: [''],
       escalation: [''],
       requesttypeid: [''],
-      subrequesttypeid: [],
+      subrequesttypeid: ["", Validators.required],
       remarks: [''],
       delayedReasons: [''],
       isactive: [true],
@@ -725,6 +725,8 @@ export class ServiceRequestComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true
+    this.serviceRequestform.get('subrequesttypeid').enable();
+
     if (this.IsEngineerView && this.accepted) {
       if (!this.hasCallScheduled) {
         return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")
@@ -732,7 +734,9 @@ export class ServiceRequestComponent implements OnInit {
     }
     // reset alerts on submit
     this.alertService.clear();
-    if (this.serviceRequestform.invalid || this.serviceRequestform.get('subrequesttypeid').value == null) {
+    console.log(this.serviceRequestform);
+
+    if (this.serviceRequestform.invalid || !this.serviceRequestform.get('subrequesttypeid').value) {
       return this.notificationService.showError("Please Check Form again", "Error");
     }
 
