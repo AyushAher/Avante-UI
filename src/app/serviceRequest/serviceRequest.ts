@@ -281,6 +281,7 @@ export class ServiceRequestComponent implements OnInit {
       delayedReasons: [''],
       isactive: [true],
       isdeleted: [false],
+      isCritical: [false],
       engComments: this.formBuilder.group({
         nextdate: [''],
         comments: ['']
