@@ -617,6 +617,7 @@ export class ServiceRequestComponent implements OnInit {
     this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
 
     this.isEditMode = false;
+    this.isNewMode = false;
   }
 
   FormControlDisable() {
@@ -723,7 +724,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.submitted = true
     if (this.IsEngineerView && this.accepted) {
       if (!this.hasCallScheduled) {
         return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")

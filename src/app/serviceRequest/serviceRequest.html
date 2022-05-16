@@ -358,7 +358,7 @@
             <div class="col-md-6 col-sm-6">
               <label for="subrequesttypeid">SubRequest Type</label>
               <ng-multiselect-dropdown [settings]="dropdownSettings"
-                [disabled]="IsEngineerView || isGenerateReport || !isEditMode" [data]="subreqtypelist"
+                [disabled]="IsEngineerView || isGenerateReport || (!isEditMode && !isNewMode)" [data]="subreqtypelist"
                 formControlName="subrequesttypeid">
               </ng-multiselect-dropdown>
               <div *ngIf="submitted && f.subrequesttypeid.errors" class="invalid-feedback">
@@ -513,7 +513,7 @@
 
           <div class="row" style="margin:15px;">
             <div class="col-md-3">
-              <input type="file" id="myFile" [disabled]="!isEditMode" #file placeholder="Choose file"
+              <input type="file" id="myFile" [disabled]="!isEditMode && !isNewMode" #file placeholder="Choose file"
                 (change)="getfil(file.files); listfile(file.files) ;" accept=".pdf" id="pdfUpload" multiple
                 type='file' />
             </div>
