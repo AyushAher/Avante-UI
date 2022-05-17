@@ -242,7 +242,7 @@
           </div>
           <div class="clearfix"></div>
           <hr />
-          <div class="row" *ngIf="!isCompleted && isEditMode">
+          <div class="row" *ngIf="!isCompleted && (isEditMode || isNewMode)">
             <div class="col-md-9">
               <label>Search Instruments By Serial No. </label>
 
