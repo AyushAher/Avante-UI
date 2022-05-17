@@ -31,7 +31,7 @@ export class ServiceRequest {
   registrarphone: string;
   accepted: boolean;
   engComments: EngineerCommentList[];
-  assignedHistory : tickersAssignedHistory[];
+  assignedHistory: tickersAssignedHistory[];
   customerName: string;
   engAction: actionList[];
   siteid: string;
@@ -42,6 +42,7 @@ export class ServiceRequest {
   requesttypeid: string;
   subrequesttypeid: string;
   machinemodelname: string;
+  isCritical: boolean;
   statusid: string;
 }
 

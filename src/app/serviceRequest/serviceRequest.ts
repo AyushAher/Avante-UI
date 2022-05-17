@@ -822,6 +822,8 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequest.assignedHistory = [];
       this.serviceRequest.engAction = [];
 
+      if (this.IsEngineerView && this.serviceRequest.isCritical) this.serviceRequest.isCritical = false;
+
       if (this.serviceRequestform.get('subrequesttypeid').value.length > 0) {
         var selectarray = this.serviceRequestform.get('subrequesttypeid').value;
         this.serviceRequest.subrequesttypeid = selectarray.map(x => x.itemCode).join(',');
