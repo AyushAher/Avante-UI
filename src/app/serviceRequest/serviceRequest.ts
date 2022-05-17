@@ -735,7 +735,6 @@ export class ServiceRequestComponent implements OnInit {
     }
     // reset alerts on submit
     this.alertService.clear();
-    console.log(this.serviceRequestform);
 
     if (this.serviceRequestform.invalid || !this.serviceRequestform.get('subrequesttypeid').value) {
       return this.notificationService.showError("Please Check Form again", "Error");
