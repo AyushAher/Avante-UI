@@ -32,7 +32,7 @@ import { AmcInstrumentRendererComponent } from "./amc-instrument-renderer.compon
 })
 export class AmcComponent implements OnInit {
   form: FormGroup;
-  model: Amc;
+  model: any;
   loading = false;
   submitted = false;
   isSave = false;
@@ -89,6 +89,8 @@ export class AmcComponent implements OnInit {
   isNewMode: any;
   isEditMode: any;
   isDisableSite: any;
+  defaultSiteId: any;
+  defaultCustomerId: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -215,90 +217,20 @@ export class AmcComponent implements OnInit {
       .subscribe((data: any) => {
         this.stagesList = data
       })
-
-    if (this.id != null) {
-      this.Service.getById(this.id)
-        .pipe(first())
-        .subscribe((data: any) => {
-
-          this.listTypeService.getById("ORQPT")
-            .pipe(first())
-            .subscribe((mstData: any) => {
-              this.isCompleted = data.object?.isCompleted
-
-              if (this.isCompleted) {
-                setInterval(() => this.form.disable(), 10);
-              }
-
-              data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
-              this.paymentTypes = []
-              this.payTypes = mstData;
-
-              if (data.object.firstVisitDate) {
-                var dateRange = data.object.firstVisitDate.split("-")
-                this.form.get('firstVisitDateFrom').setValue(dateRange[0])
-                this.form.get('firstVisitDateTo').setValue(dateRange[1])
-              }
-
-              if (data.object.secondVisitDate) {
-                debugger;
-                var dateRange = data.object.secondVisitDate.split("-")
-                this.form.get('secondVisitDateFrom').setValue(dateRange[0])
-                this.form.get('secondVisitDateTo').setValue(dateRange[1])
-              }
-
-              data.object.paymentTerms?.forEach(y => {
-                mstData.forEach(x => {
-                  if (y == x.listTypeItemId) {
-                    this.paymentTypes.push(x)
-                  }
-                });
-              });
-
-              this.amcStagesService.getAll(this.id).pipe(first())
-                .subscribe((stageData: any) => {
-                  stageData.object?.forEach(element => {
-                    element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
-                  });
-
-                  this.rowData = stageData.object;
-                  this.GetSites(data.object.billtoid);
-                  this.form.patchValue(data.object);
-                  this.form.get('stageName').reset()
-                })
-            })
-        });
-
-      this.AmcInstrumentService.getAmcInstrumentsByAmcId(this.id)
-        .pipe(first())
-        .subscribe((data: any) => {
-          this.instrumentList = data.object;
-        });
-
-      this.hasId = true;
-      this.form.disable()
-      this.columnDefs = this.createColumnDefsRO();
-    }
-    else {
-      this.isNewMode = true;
-      this.FormControlDisable();
-      this.columnDefs = this.createColumnDefs();
-      this.hasId = false;
-      this.id = Guid.create();
-      this.id = this.id.value;
-    }
     this.contactService.getCustomerSiteByContact(this.user.contactId)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           if (this.IsCustomerView) {
             this.form.get('billtoid').setValue(data.object?.id)
+            this.defaultCustomerId = data.object.id
             this.custSiteList = data.object?.sites;
             this.custSiteList.forEach(element => {
               element?.contacts.forEach(con => {
                 if (con?.id == this.user.contactId) {
                   this.isDisableSite = true
                   this.form.get('custSite').setValue(element?.id)
+                  this.defaultSiteId = element.id
                 }
               });
             });
@@ -333,6 +265,79 @@ export class AmcComponent implements OnInit {
         this.supplierList = data;
       });
 
+
+    if (this.id != null) {
+      this.Service.getById(this.id)
+        .pipe(first())
+        .subscribe((data: any) => {
+
+          this.listTypeService.getById("ORQPT")
+            .pipe(first())
+            .subscribe((mstData: any) => {
+              this.isCompleted = data.object?.isCompleted
+
+              if (this.isCompleted) {
+                setInterval(() => this.form.disable(), 10);
+              }
+
+              data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
+              this.paymentTypes = []
+              this.payTypes = mstData;
+
+              if (data.object.firstVisitDate) {
+                var dateRange = data.object.firstVisitDate.split("-")
+                this.form.get('firstVisitDateFrom').setValue(dateRange[0])
+                this.form.get('firstVisitDateTo').setValue(dateRange[1])
+              }
+
+              if (data.object.secondVisitDate) {
+                var dateRange = data.object.secondVisitDate.split("-")
+                this.form.get('secondVisitDateFrom').setValue(dateRange[0])
+                this.form.get('secondVisitDateTo').setValue(dateRange[1])
+              }
+
+              data.object.paymentTerms?.forEach(y => {
+                mstData.forEach(x => {
+                  if (y == x.listTypeItemId) {
+                    this.paymentTypes.push(x)
+                  }
+                });
+              });
+
+              this.amcStagesService.getAll(this.id).pipe(first())
+                .subscribe((stageData: any) => {
+                  stageData.object?.forEach(element => {
+                    element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+                  });
+
+                  this.rowData = stageData.object;
+                  this.GetSites(data.object.billtoid);
+                  this.form.get('stageName').reset()
+                  setTimeout(() => {
+                    this.form.patchValue(data.object);
+                  }, 500);
+                })
+            })
+        });
+
+      this.AmcInstrumentService.getAmcInstrumentsByAmcId(this.id)
+        .pipe(first())
+        .subscribe((data: any) => {
+          this.instrumentList = data.object;
+        });
+
+      this.hasId = true;
+      this.form.disable()
+      this.columnDefs = this.createColumnDefsRO();
+    }
+    else {
+      this.isNewMode = true;
+      this.columnDefs = this.createColumnDefs();
+      this.hasId = false;
+      this.id = Guid.create();
+      this.id = this.id.value;
+      setTimeout(() => this.FormControlDisable(), 500);
+    }
   }
 
   EditMode() {
@@ -368,7 +373,7 @@ export class AmcComponent implements OnInit {
   CancelEdit() {
     this.form.disable()
     this.columnDefs = this.createColumnDefsRO();
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
@@ -791,7 +796,12 @@ export class AmcComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.model = this.form.value;
-
+    if (this.IsCustomerView) {
+      this.model.billtoid == this.defaultCustomerId
+      if (!this.model.custSite) {
+        this.model.custSite = this.defaultSiteId
+      }
+    }
     if (this.form.get('paymentTerms').value.length > 0) {
       var selectarray = this.form.get('paymentTerms').value;
       this.model.paymentTerms = selectarray.toString();
@@ -845,7 +855,6 @@ export class AmcComponent implements OnInit {
     this.model.edate = datepipie.transform(this.model.edate, "MM/dd/yyyy");
 
     if (!this.hasId && this.hasAddAccess) {
-      this.model = this.form.value;
       this.model.id = this.id;
 
       this.Service.save(this.model)
