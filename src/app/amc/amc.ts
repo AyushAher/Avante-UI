@@ -224,6 +224,8 @@ export class AmcComponent implements OnInit {
           if (this.IsCustomerView) {
             this.form.get('billtoid').setValue(data.object?.id)
             this.defaultCustomerId = data.object.id
+            console.log(this.defaultCustomerId);
+
             this.custSiteList = data.object?.sites;
             this.custSiteList.forEach(element => {
               element?.contacts.forEach(con => {
@@ -784,9 +786,8 @@ export class AmcComponent implements OnInit {
   onSubmit() {
 
     this.submitted = true;
-
     this.alertService.clear();
-
+    
     if (this.instrumentList != null && this.instrumentList.length > 0) {
       this.instrumentList.forEach(instrument => {
         instrument.amcId = this.id;
@@ -794,8 +795,10 @@ export class AmcComponent implements OnInit {
     }
 
     if (this.form.invalid) return;
-
+    
+    this.form.get('billtoid').enable()
     this.model = this.form.value;
+    this.form.get('billtoid').disable()
     if (this.IsCustomerView) {
       this.model.billtoid == this.defaultCustomerId
       if (!this.model.custSite) {
