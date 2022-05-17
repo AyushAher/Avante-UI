@@ -316,13 +316,15 @@ export class DashboardComponent implements OnInit {
       this.serviceRequest.engAction = [];
       this.serviceRequest.serresolutiondate = null;
 
-      this.serviceRequestService.save(this.serviceRequest).pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result)
-              this.notificationService.showSuccess(data.resultMessage, "Success")
-          }
-        })
+      if (confirm("Are you sure you want to create a critical request")) {
+        this.serviceRequestService.save(this.serviceRequest).pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.result)
+                this.notificationService.showSuccess(data.resultMessage, "Success")
+            }
+          })
+      }
     }, 1000);
 
   }
