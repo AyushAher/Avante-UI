@@ -1,7 +1,8 @@
 // customer dashboard
+
 function CustomerDashboardCharts() {
-  let spInventory = JSON.parse(localStorage.getItem("spInventoryChart"));
   let sReqType = JSON.parse(localStorage.getItem("servicerequesttype"));
+  let pendingServiceRequest = JSON.parse(localStorage.getItem("pendingservicerequest"));
 
   new Chart("chart-bars", {
     type: "bar",
@@ -95,7 +96,7 @@ function CustomerDashboardCharts() {
           pointRadius: 5,
           // pointBackgroundColor: "rgba(255, 255, 255, .8)",
           pointBorderColor: "transparent",
-          backgroundColor: sReqType?.bgColor,
+          backgroundColor: ["#084831", "#cc0000", "#a99116", "#0e0449", "#618a61"],
           borderColor: "rgba(255, 255, 255, .8)",
           fill: true,
           data: sReqType?.chartData,
@@ -119,21 +120,21 @@ function CustomerDashboardCharts() {
   });
 
   new Chart("chart-line-tasks", {
-    type: "line",
+    type: "pie",
     data: {
-      labels: spInventory?.label,
+      labels: pendingServiceRequest?.label,
       datasets: [
         {
-          label: "Qty. Available",
+          label: "Pending Service Request",
           tension: 0,
+          borderWidth: 0,
           pointRadius: 5,
-          pointBackgroundColor: "rgba(255, 255, 255, .8)",
+          // pointBackgroundColor: "rgba(255, 255, 255, .8)",
           pointBorderColor: "transparent",
+          backgroundColor: ["#d98f42", "#38761d", "#27cfc9", "#ca4850", "#5d62cc"],
           borderColor: "rgba(255, 255, 255, .8)",
-          borderWidth: 4,
-          backgroundColor: "transparent",
           fill: true,
-          data: spInventory?.data,
+          data: pendingServiceRequest?.chartData,
           maxBarThickness: 6,
         },
       ],
@@ -150,53 +151,11 @@ function CustomerDashboardCharts() {
         intersect: false,
         mode: "index",
       },
-      scales: {
-        y: {
-          grid: {
-            drawBorder: false,
-            display: true,
-            drawOnChartArea: true,
-            drawTicks: false,
-            borderDash: [5, 5],
-            color: "rgba(255, 255, 255, .2)",
-          },
-          ticks: {
-            display: true,
-            padding: 10,
-            color: "#f8f9fa",
-            font: {
-              size: 14,
-              weight: 300,
-              family: "Roboto",
-              style: "normal",
-              lineHeight: 2,
-            },
-          },
-        },
-        x: {
-          grid: {
-            drawBorder: false,
-            display: false,
-            drawOnChartArea: false,
-            drawTicks: false,
-            borderDash: [5, 5],
-          },
-          ticks: {
-            display: false,
-            color: "#f8f9fa",
-            padding: 10,
-            font: {
-              size: 14,
-              weight: 300,
-              family: "Roboto",
-              style: "normal",
-              lineHeight: 2,
-            },
-          },
-        },
-      },
     },
   });
+
+
+
 }
 // distdashboard
 function DistributorDashboardCharts() {

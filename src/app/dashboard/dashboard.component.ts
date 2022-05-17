@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ListTypeItem, ProfileReadOnly, User } from "../_models";
 import {
   AccountService,
+  AmcService,
   ContactService,
   CustdashboardsettingsService,
   CustomerService,
@@ -59,6 +60,7 @@ export class DashboardComponent implements OnInit {
   serviceTypeList: ListTypeItem[];
   serviceRequest: any;
   srList: any;
+  amcData: any;
 
   constructor(
     private accountService: AccountService,
@@ -73,7 +75,8 @@ export class DashboardComponent implements OnInit {
     private formbuilder: FormBuilder,
     private custSPInventoryService: CustspinventoryService,
     private contactService: ContactService,
-    private listTypeItemService: ListTypeService
+    private listTypeItemService: ListTypeService,
+    private amcService: AmcService
   ) {
   }
 
@@ -96,31 +99,44 @@ export class DashboardComponent implements OnInit {
           localStorage.setItem('spInventoryChart', JSON.stringify({ label: label.reverse(), data: chartData.reverse() }))
         }
       });
-
+    this.GetAllAMC()
     this.serviceRequestService.getAll(this.user.userId)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
 
           let label = []
+          var pendingRequestLabels = []
+          var pendingRequestValue = []
           let chartData = []
           let bgColor = []
-
+          let pendingrequestBgColor = []
+          // data.object = data.object.filter(x => !x.isReportGenerated)
           data.object.forEach(x => {
-            label.push(x.visittypeName)
-            bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
+            if (x.isReportGenerated == false)
+              pendingRequestLabels.push(x.visittypeName)
+            else
+              label.push(x.visittypeName)
           })
 
           label = [... new Set(label)]
+          pendingRequestLabels = [... new Set(pendingRequestLabels)]
 
           for (let i = 0; i < label.length; i++) {
             const element = label[i];
-            chartData.push(data.object.filter(x => x.visittypeName == element).length)
+            chartData.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == true).length)
+            bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
           }
 
+          for (let i = 0; i < pendingRequestLabels.length; i++) {
+            const element = pendingRequestLabels[i];
+            pendingRequestValue.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == false).length)
+            pendingrequestBgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
+          }
 
-          let srqType = { label, chartData, bgColor }
-          localStorage.setItem('servicerequesttype', JSON.stringify(srqType))
+          localStorage.setItem('servicerequesttype', JSON.stringify({ label, chartData }))
+          localStorage.setItem('pendingservicerequest', JSON.stringify({ chartData: pendingRequestValue, label: pendingRequestLabels }))
+
           this.srList = data.object.filter(x => x.createdby == this.user.userId);
         }
       });
@@ -205,6 +221,15 @@ export class DashboardComponent implements OnInit {
     this.currentSiteId = this.custSite[this.currentIndex].id;
     this.GetInstrumentsByCurrentSiteId();
   }
+
+  GetAllAMC() {
+    this.amcService.getAll().pipe(first())
+      .subscribe((data: any) => {
+        this.amcData = data.object
+      })
+  }
+
+
 
 
   GetInstrumentsByCurrentSiteId() {

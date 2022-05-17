@@ -146,7 +146,7 @@
               </div>
             </div>
             <div class="card-body">
-              <h6 class="mb-0 "> Service Request Types </h6>
+              <h6 class="mb-0 "> Completed Service Request</h6>
             </div>
           </div>
         </div>
@@ -160,7 +160,7 @@
               </div>
             </div>
             <div class="card-body">
-              <h6 class="mb-0 ">Spare Inventory</h6>
+              <h6 class="mb-0 ">Pending Service Request</h6>
             </div>
           </div>
         </div>
@@ -215,15 +215,15 @@
               </div>
             </div>
             <div class="card-body px-2 pb-2">
-              <div class="table-responsive">
-                <table class="table align-items-center mb-0">
+              <div class="table-responsive" style="height: 27.5rem;">
+                <table class="table align-items-center mb-0" style="overflow: auto;">
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Date
+                        SQ Date
                       </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        PO Number
+                        Service Quote
                       </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Amount
@@ -234,84 +234,16 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>
-                        <h6 class="mb-0 text-sm">10/11/20</h6>
-                      </td>
-                      <td>PO#655</td>
-                      <td class="align-middle">6415</td>
-                      <td>Inprogress</td>
-                    </tr>
 
-                    <tr>
+                    <tr *ngFor="let item of amcData">
                       <td>
-                        <h6 class="mb-0 text-sm">10/12/20</h6>
+                        <a [routerLink]="'/amc/'+item.id" style="text-decoration: underline ;">
+                          <h6 class="mb-0">{{item.sqdate}}</h6>
+                        </a>
                       </td>
-                      <td>PO#652</td>
-                      <td class="align-middle">4612</td>
-                      <td>Shipped</td>
-                    </tr>
-
-                    <tr>
-                      <td>
-                        <h6 class="mb-0 text-sm">10/1/21</h6>
-                      </td>
-                      <td>PO#6532</td>
-                      <td class="align-middle">946</td>
-                      <td>Inprogress</td>
-                    </tr>
-
-                    <tr>
-                      <td>
-                        <h6 class="mb-0 text-sm">10/2/21</h6>
-                      </td>
-                      <td>PO#65532</td>
-                      <td class="align-middle">9865</td>
-                      <td>Shipped</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <h6 class="mb-0 text-sm">10/11/20</h6>
-                      </td>
-                      <td>PO#655</td>
-                      <td class="align-middle">6415</td>
-                      <td>Inprogress</td>
-                    </tr>
-
-                    <tr>
-                      <td>
-                        <h6 class="mb-0 text-sm">10/12/20</h6>
-                      </td>
-                      <td>PO#652</td>
-                      <td class="align-middle">4612</td>
-                      <td>Shipped</td>
-                    </tr>
-
-                    <tr>
-                      <td>
-                        <h6 class="mb-0 text-sm">10/1/21</h6>
-                      </td>
-                      <td>PO#6532</td>
-                      <td class="align-middle">946</td>
-                      <td>Inprogress</td>
-                    </tr>
-
-                    <tr>
-                      <td>
-                        <h6 class="mb-0 text-sm">10/2/21</h6>
-                      </td>
-                      <td>PO#65532</td>
-                      <td class="align-middle">9865</td>
-                      <td>Shipped</td>
-                    </tr>
-
-                    <tr>
-                      <td>
-                        <h6 class="mb-0 text-sm">10/3/21</h6>
-                      </td>
-                      <td>PO#6554f</td>
-                      <td class="align-middle">10453</td>
-                      <td>Shipped</td>
+                      <td>{{item.servicequote}}</td>
+                      <td class="align-middle">{{item.zerorate}}</td>
+                      <td>{{item.stageName }}</td>
                     </tr>
 
                   </tbody>
