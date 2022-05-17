@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
   customerId: any;
   serviceTypeList: ListTypeItem[];
   serviceRequest: any;
+  srList: any;
 
   constructor(
     private accountService: AccountService,
@@ -120,7 +121,7 @@ export class DashboardComponent implements OnInit {
 
           let srqType = { label, chartData, bgColor }
           localStorage.setItem('servicerequesttype', JSON.stringify(srqType))
-
+          this.srList = data.object.filter(x => x.createdby == this.user.userId);
         }
       });
 
