@@ -66,10 +66,10 @@
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Instruments</p>
-                <h6 class="mb-0">{{totalCustContacts}}</h6>
+                <h6 class="mb-0">{{lstInstrument.length}}</h6>
                 <hr class="dark horizontal my-0">
 
-                <div class="mr-1 mt-1" style="overflow-y: auto;
+                <div class="mt-1" style="overflow-y: auto;
                 height: 62px;
                 font-size: 12px;">
                   <ul style="margin: 0;">
@@ -337,7 +337,7 @@
 
 <style>
   .cards:hover {
-    border: 3px solid #dc2265;
+    border: 3px solid #76727336;
   }
 
   .cards {
@@ -350,5 +350,10 @@
 
   .link:hover {
     cursor: pointer;
+  }
+
+  .link {
+    text-align: left;
+    list-style-type: none;
   }
 </style>

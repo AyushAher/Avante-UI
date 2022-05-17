@@ -316,7 +316,7 @@ export class DashboardComponent implements OnInit {
       this.serviceRequest.engAction = [];
       this.serviceRequest.serresolutiondate = null;
 
-      if (confirm("Are you sure you want to create a critical request")) {
+      if (confirm("Are you sure you want to raise a critical request?")) {
         this.serviceRequestService.save(this.serviceRequest).pipe(first())
           .subscribe({
             next: (data: any) => {
