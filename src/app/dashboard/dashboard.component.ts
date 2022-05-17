@@ -42,7 +42,6 @@ export class DashboardComponent implements OnInit {
   custDefDistId: any
   defDistCountryName: any
   spRecomList: any
-  srList: any;
 
   currentIndex = 0;
   custSite = []
@@ -57,7 +56,6 @@ export class DashboardComponent implements OnInit {
   distId: any;
   siteId: string;
   customerId: any;
-  appendList: any;
   serviceTypeList: ListTypeItem[];
   serviceRequest: any;
 
@@ -109,14 +107,20 @@ export class DashboardComponent implements OnInit {
 
           data.object.forEach(x => {
             label.push(x.visittypeName)
-            chartData.push(data.object.filter(x => x.visittype == x.visittype).length)
             bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
           })
 
-          let srqType = { label: label, chartData: chartData, bgColor: bgColor }
+          label = [... new Set(label)]
+
+          for (let i = 0; i < label.length; i++) {
+            const element = label[i];
+            chartData.push(data.object.filter(x => x.visittypeName == element).length)
+          }
+
+
+          let srqType = { label, chartData, bgColor }
           localStorage.setItem('servicerequesttype', JSON.stringify(srqType))
 
-          this.srList = data.object.filter(x => x.createdby == this.user.userId);
         }
       });
 
@@ -351,7 +355,6 @@ export class DashboardComponent implements OnInit {
     this.logindata = data;
     this.serviceRequestform.patchValue({ "distid": this.logindata.defdistid });
     this.distId = this.logindata.defdistid;
-    this.getDistRegnContacts(this.distId)
     this.customerId = this.logindata.id;
     this.serviceRequestform.patchValue({ "country": this.logindata.address?.countryid });
     this.serviceRequestform.patchValue({ "custid": this.logindata?.id });
@@ -365,16 +368,6 @@ export class DashboardComponent implements OnInit {
       this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
       this.serviceRequestform.patchValue({ "siteid": this.logindata.sites[0].id });
     }
-  }
-
-  getDistRegnContacts(distid: string) {
-    this.distributorService.getDistributorRegionContacts(distid)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.appendList = data.object;
-        }
-      });
   }
 
 }
