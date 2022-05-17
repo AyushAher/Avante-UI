@@ -121,7 +121,19 @@ export class ServiceRequestListComponent implements OnInit {
         this.columnDefs = this.createDisColumnDefs()
       }
     }
+    setTimeout(() => {
+      setInterval(() => {
+        var nodes = []
+        for (let i = 0; i < this.api.getDisplayedRowCount(); i++) {
+          var col = this.api.getDisplayedRowAtIndex(i)
+          if (col.data.isCritical) {
+            nodes.push(col)
+          }
+        }
 
+        this.api.flashCells({ rowNodes: nodes, columns: ["serreqno"] })
+      }, 2000)
+    }, 100);
     if (!this.IsDistributorView) {
       this.toggleFilter()
     }
