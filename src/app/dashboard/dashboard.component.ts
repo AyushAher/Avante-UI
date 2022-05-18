@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit {
   serviceRequest: any;
   srList: any;
   amcData: any;
-
+  calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
   constructor(
     private accountService: AccountService,
     private instrumentService: InstrumentService,
@@ -73,7 +73,6 @@ export class DashboardComponent implements OnInit {
     private serviceRequestService: ServiceRequestService,
     private notificationService: NotificationService,
     private formbuilder: FormBuilder,
-    private custSPInventoryService: CustspinventoryService,
     private contactService: ContactService,
     private listTypeItemService: ListTypeService,
     private amcService: AmcService
@@ -85,61 +84,8 @@ export class DashboardComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
 
-    this.custSPInventoryService.getAll(this.user.contactId, null)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          let label = []
-          let chartData = []
-          data.object = data.object.splice(0, 5)
-          data.object.forEach(x => {
-            label.push(x.partNo)
-            chartData.push(x.qtyAvailable)
-          })
-          localStorage.setItem('spInventoryChart', JSON.stringify({ label: label.reverse(), data: chartData.reverse() }))
-        }
-      });
     this.GetAllAMC()
-    this.serviceRequestService.getAll(this.user.userId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-
-          let label = []
-          var pendingRequestLabels = []
-          var pendingRequestValue = []
-          let chartData = []
-          let bgColor = []
-          let pendingrequestBgColor = []
-          // data.object = data.object.filter(x => !x.isReportGenerated)
-          data.object.forEach(x => {
-            if (x.isReportGenerated == false)
-              pendingRequestLabels.push(x.visittypeName)
-            else
-              label.push(x.visittypeName)
-          })
-
-          label = [... new Set(label)]
-          pendingRequestLabels = [... new Set(pendingRequestLabels)]
-
-          for (let i = 0; i < label.length; i++) {
-            const element = label[i];
-            chartData.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == true).length)
-            bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
-          }
-
-          for (let i = 0; i < pendingRequestLabels.length; i++) {
-            const element = pendingRequestLabels[i];
-            pendingRequestValue.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == false).length)
-            pendingrequestBgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
-          }
-
-          localStorage.setItem('servicerequesttype', JSON.stringify({ label, chartData }))
-          localStorage.setItem('pendingservicerequest', JSON.stringify({ chartData: pendingRequestValue, label: pendingRequestLabels }))
-
-          this.srList = data.object.filter(x => x.createdby == this.user.userId);
-        }
-      });
+    this.getServiceRequestData()
 
     setTimeout(() => {
       CustomerDashboardCharts()
@@ -156,6 +102,7 @@ export class DashboardComponent implements OnInit {
     }
 
     if (this.hasReadAccess) {
+      // row 1 data 
       this.SettingsService.getById(this.user.userId)
         .pipe(first())
         .subscribe({
@@ -163,6 +110,7 @@ export class DashboardComponent implements OnInit {
             let data = data0.object
             if (data != null && data.length > 0 && data0.result) {
               data.forEach(x => {
+                // display only the ones selected in settings
                 document.getElementById(x.graphNameCode).style.display = "block";
               })
 
@@ -200,17 +148,109 @@ export class DashboardComponent implements OnInit {
           }
         })
 
-      this.spareRecomService.getByGrid(this.user.contactId)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.spRecomList = data.object;
-            this.spRecomList.forEach((value) => value.assignedTofName = value.assignedTofName + " " + value.assignedTolName)
-          },
-        });
+      this.GetSparePartsRecommended()
 
     }
   }
+
+  onCalenderFilter(date) {
+    this.getServiceRequestData(date);
+    this.GetAllAMC(date);
+    this.GetSparePartsRecommended(date);
+
+    setTimeout(() => CustomerDashboardCharts(), 1000)
+  }
+
+
+  GetSparePartsRecommended(date = this.calenderLst[0]) {
+    this.spareRecomService.getByGrid(this.user.contactId)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.spRecomList = [];
+
+          data.object.forEach((value) => {
+            if (this.GetDiffDate(new Date(value.createdOn), new Date(), date)) {
+              value.assignedTofName = value.assignedTofName + " " + value.assignedTolName
+              this.spRecomList.push(value)
+            }
+          })
+        },
+      });
+
+  }
+
+  getServiceRequestData(date = this.calenderLst[0]) {
+    this.serviceRequestService.getAll(this.user.userId)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          console.log(data.object);
+
+          let label = []
+          var pendingRequestLabels = []
+          var pendingRequestValue = []
+          let chartData = []
+          let bgColor = []
+          let pendingrequestBgColor = []
+          // data.object = data.object.filter(x => !x.isReportGenerated)
+          data.object.forEach(x => {
+            if (this.GetDiffDate(new Date(x.createdon), new Date(), date)) {
+
+              if (x.isReportGenerated == false)
+                pendingRequestLabels.push(x.visittypeName)
+              else
+                label.push(x.visittypeName)
+            }
+          })
+
+          label = [... new Set(label)]
+          pendingRequestLabels = [... new Set(pendingRequestLabels)]
+
+          for (let i = 0; i < label.length; i++) {
+            const element = label[i];
+            chartData.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == true && this.GetDiffDate(new Date(x.createdon), new Date(), date)).length)
+            bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
+          }
+
+          for (let i = 0; i < pendingRequestLabels.length; i++) {
+            const element = pendingRequestLabels[i];
+            pendingRequestValue.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == false && this.GetDiffDate(new Date(x.createdon), new Date(), date)).length)
+            pendingrequestBgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
+          }
+
+          localStorage.setItem('servicerequesttype', JSON.stringify({ label, chartData }))
+          localStorage.setItem('pendingservicerequest', JSON.stringify({ chartData: pendingRequestValue, label: pendingRequestLabels }))
+
+          this.srList = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), new Date(), date));
+        }
+      });
+
+  }
+
+  GetAllAMC(date = this.calenderLst[0]) {
+    this.amcService.getAll().pipe(first())
+      .subscribe((data: any) => {
+        console.log(data.object);
+
+        this.amcData = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), new Date(), date));
+      })
+  }
+
+  GetDiffDate(sdate: Date, edate: Date, type: string) {
+    var isDateValid = edate.getTime() > sdate.getTime()
+    var diff = edate.getTime() - sdate.getTime()
+    diff = diff / (1000 * 60 * 60 * 24)
+
+    if (isDateValid) {
+      if (type == this.calenderLst[0] && diff <= 90 && diff >= 0) return true
+      else if (type == this.calenderLst[1] && diff <= 180 && diff >= 0) return true
+      else if (type == this.calenderLst[2] && diff <= 360 && diff >= 0) return true
+
+    }
+    return false
+  }
+
 
   next() {
     let max = this.custSite.length - 1;
@@ -221,15 +261,6 @@ export class DashboardComponent implements OnInit {
     this.currentSiteId = this.custSite[this.currentIndex].id;
     this.GetInstrumentsByCurrentSiteId();
   }
-
-  GetAllAMC() {
-    this.amcService.getAll().pipe(first())
-      .subscribe((data: any) => {
-        this.amcData = data.object
-      })
-  }
-
-
 
 
   GetInstrumentsByCurrentSiteId() {

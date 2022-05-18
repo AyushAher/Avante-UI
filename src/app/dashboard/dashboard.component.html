@@ -1,9 +1,9 @@
 <layout>
   <div class="grd" style="display:flex;justify-content: flex-end;">
     <div class="btn-group ml-auto">
-      <button style="padding:10px;" class="btn active">3 Months</button>
-      <button style="padding:10px;" class="btn">6 Months</button>
-      <button style="padding:10px;" class="btn">12 Months</button>
+      <button style="padding:10px;" (click)="onCalenderFilter(calenderLst[0])" class="btn active">3 Months</button>
+      <button style="padding:10px;" (click)="onCalenderFilter(calenderLst[1])" class="btn">6 Months</button>
+      <button style="padding:10px;" (click)="onCalenderFilter(calenderLst[2])" class="btn">12 Months</button>
     </div>
   </div>
   <main class="main-content position-relative border-radius-lg ">
