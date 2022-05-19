@@ -13,8 +13,8 @@
       <a *ngIf="showGrid && IsDist" style="display: inline;margin-right: 1%;" (click)="toggleFilter()" class="nav-link">
         <i class="fas fa-arrow-left" title="filter"></i>
       </a>
-      <app-distributorfilter [hasInstrument]="false" [hasSite]="false" (showData)="ShowData($event)" *ngIf="!showGrid"
-        (nData)="DataFilter($event)" controller="Customer">
+      <app-distributorfilter [hasInstrument]="false" [hasSite]="false" (showData)="ShowData($event)"
+        *ngIf="!showGrid && IsDist" (nData)="DataFilter($event)" controller="Customer">
       </app-distributorfilter>
 
       <button class="btn btn-sm btn-success button" *ngIf="hasAddAccess && showGrid" style="margin: 10px;"
