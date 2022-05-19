@@ -282,8 +282,8 @@
             </div>
             <div class="col-sm-4">
               <label for=""></label>
-              <button type="button" class="btn btn-primary" [disabled]="!isEditMode" style="margin-top: 31px;"
-                (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Add</button>
+              <button type="button" class="btn btn-primary" [disabled]="!isEditMode && !isNewMode"
+                style="margin-top: 31px;" (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Add</button>
             </div>
           </div>
           <!--<div class="row">

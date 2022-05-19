@@ -293,7 +293,9 @@ export class InstrumentComponent implements OnInit {
       this.columnDefs = this.createColumnDefsRO();
     }
     else {
-      this.FormControlDisable()
+      setTimeout(() => {
+        this.FormControlDisable()
+      }, 300);
       this.isNewMode = true
       this.pdfcolumnDefs = this.pdfcreateColumnDefs();
       this.columnDefs = this.createColumnDefs();
@@ -327,7 +329,7 @@ export class InstrumentComponent implements OnInit {
 
   CancelEdit() {
     this.instrumentform.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
     this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
     this.columnDefs = this.createColumnDefsRO();
