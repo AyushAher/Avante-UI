@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AccountService,
   CustdashboardsettingsService,
@@ -8,8 +8,9 @@ import {
   ProfileService,
   ServiceRequestService
 } from "../_services";
-import {ProfileReadOnly, User} from "../_models";
-import {first} from "rxjs/operators";
+import { ProfileReadOnly, User } from "../_models";
+import { first } from "rxjs/operators";
+import { DistributordashboardService } from '../_services/distributordashboard.service';
 
 declare function DistributorDashboardCharts(): any;
 
@@ -27,9 +28,10 @@ export class DistributordashboardComponent implements OnInit {
   hasAddAccess: boolean = false;
 
   sRRaised: number = 0;
-  insInstalled: number = 0;
   insHighestSReq: number = 0;
   engHandlingReq: any = []
+  instrumnetInstalled: any;
+  instrumnetUnderService: any;
 
   constructor(
     private accountService: AccountService,
@@ -38,7 +40,8 @@ export class DistributordashboardComponent implements OnInit {
     private profileService: ProfileService,
     private serviceRequestService: ServiceRequestService,
     private distributorService: DistributorService,
-    private instrumnetService: InstrumentService
+    private instrumnetService: InstrumentService,
+    private distributorDashboardService: DistributordashboardService,
   ) {
   }
 
@@ -64,24 +67,27 @@ export class DistributordashboardComponent implements OnInit {
           }
         })
 
+      this.distributorDashboardService.GetInstrumentInstalled()
+        .pipe(first()).subscribe((data: any) => {
+          this.instrumnetInstalled = data.object.instrumentInstalled
+          this.instrumnetUnderService = data.object.instrumentUnderService
+        })
+
       this.distributorService.getByConId(this.user.contactId)
         .pipe(first())
         .subscribe((data: any) => {
-          let distId = data.object[0].id
-          this.instrumnetService.getAll(this.user.userId).pipe(first())
-            .subscribe((ins: any) => this.insInstalled = ins.object.filter(x => x.installby == distId).length)
-
+          let distId = data.object[0].distId
           this.serviceRequestService.getDistDashboardData(distId).pipe(first()).subscribe((sreq: any) => {
             sreq = sreq.object
             let label = []
             let chartData = []
             sreq.instrumentWithHighestServiceRequest.forEach(x => {
-                label.push(x.key);
-                chartData.push(x.count);
-              }
+              label.push(x.key);
+              chartData.push(x.count);
+            }
             )
 
-            localStorage.setItem('instrumentWithHighestServiceRequest', JSON.stringify({label: label, data: chartData}))
+            localStorage.setItem('instrumentWithHighestServiceRequest', JSON.stringify({ label: label, data: chartData }))
             this.sRRaised = sreq.serviceRequestRaised
             this.insHighestSReq = sreq.instrumentWithHighestServiceRequest.length
             this.engHandlingReq = sreq.engHandlingReq
