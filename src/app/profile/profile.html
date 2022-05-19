@@ -56,15 +56,15 @@
                   <tr>
                     <th>Category</th>
                     <th>Screen Name</th>
-                    <th>Create <br> <input type="checkbox" id="selectallcreate" [disabled]="!isEditMode"
+                    <th>Create <br> <input type="checkbox" id="selectallcreate" [disabled]="!isEditMode && !isNewMode"
                         (change)="SelectAll('create')"></th>
-                    <th>Read<br> <input type="checkbox" id="selectallread" [disabled]="!isEditMode"
+                    <th>Read<br> <input type="checkbox" id="selectallread" [disabled]="!isEditMode && !isNewMode"
                         (change)="SelectAll('read')"></th>
-                    <th>Update<br> <input type="checkbox" id="selectallupdate" [disabled]="!isEditMode"
+                    <th>Update<br> <input type="checkbox" id="selectallupdate" [disabled]="!isEditMode && !isNewMode"
                         (change)="SelectAll('update')"></th>
-                    <th>Delete<br> <input type="checkbox" id="selectalldelete" [disabled]="!isEditMode"
+                    <th>Delete<br> <input type="checkbox" id="selectalldelete" [disabled]="!isEditMode && !isNewMode"
                         (change)="SelectAll('delete')"></th>
-                    <th>commercial<br> <input type="checkbox" id="selectallcommercial" [disabled]="!isEditMode"
+                    <th>commercial<br> <input type="checkbox" id="selectallcommercial" [disabled]="!isEditMode && !isNewMode"
                         (change)="SelectAll('commercial')"></th>
                   </tr>
                 </thead>
