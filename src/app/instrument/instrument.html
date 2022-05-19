@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-1 col-sm-1">
               <label for=""></label>
-              <button type="button" class="btn btn-primary" style="margin-top: 31px;" *ngIf="isEditMode==false"
+              <button type="button" class="btn btn-primary" style="margin-top: 31px;" *ngIf="isEditMode || isNewMode"
                 (click)="getInstrBySerialNo(serialnos.value)">Get</button>
             </div>
 

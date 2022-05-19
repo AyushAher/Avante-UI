@@ -293,10 +293,10 @@ export class InstrumentComponent implements OnInit {
       this.columnDefs = this.createColumnDefsRO();
     }
     else {
+      this.isNewMode = true
       setTimeout(() => {
         this.FormControlDisable()
-      }, 300);
-      this.isNewMode = true
+      }, 1000);
       this.pdfcolumnDefs = this.pdfcreateColumnDefs();
       this.columnDefs = this.createColumnDefs();
     }
