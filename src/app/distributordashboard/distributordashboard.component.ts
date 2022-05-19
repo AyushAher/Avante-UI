@@ -76,16 +76,16 @@ export class DistributordashboardComponent implements OnInit {
       this.distributorService.getByConId(this.user.contactId)
         .pipe(first())
         .subscribe((data: any) => {
-          let distId = data.object[0].distId
-          this.serviceRequestService.getDistDashboardData(distId).pipe(first()).subscribe((sreq: any) => {
+          this.serviceRequestService.getDistDashboardData(data.object[0].id)
+          .pipe(first()).subscribe((sreq: any) => {
+
             sreq = sreq.object
             let label = []
             let chartData = []
             sreq.instrumentWithHighestServiceRequest.forEach(x => {
               label.push(x.key);
               chartData.push(x.count);
-            }
-            )
+            })
 
             localStorage.setItem('instrumentWithHighestServiceRequest', JSON.stringify({ label: label, data: chartData }))
             this.sRRaised = sreq.serviceRequestRaised
