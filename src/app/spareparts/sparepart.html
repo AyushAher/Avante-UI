@@ -76,6 +76,7 @@
             <div class="col-md-1 col-sm-1">
               <label for=""></label>
               <button type="button" class="btn btn-primary" style="margin-top: 31px;"
+                [disabled]="!isEditMode && !isNewMode"
                 (click)="getSpareByNo(partNo.value,configType.value,configvalue.value)">Get</button>
             </div>
           </div>
