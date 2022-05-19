@@ -5,7 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models';
-import { AccountService, CountryService, CustomerService, InstrumentService, NotificationService, DistributorRegionService } from '../_services';
+import { AccountService, CountryService, CustomerService, InstrumentService, NotificationService, DistributorRegionService, ListTypeService } from '../_services';
 
 @Component({
   selector: 'app-reportfilter',
@@ -21,6 +21,7 @@ export class ReportfilterComponent implements OnInit {
   @Input() isUserProfile: boolean = false;
   @Input() hasSite: boolean = true;
 
+  isAmc = false;
   form: FormGroup;
   modal: any;
   user: User
@@ -41,6 +42,7 @@ export class ReportfilterComponent implements OnInit {
   IsDist = false;
   IsCust = false;
   IsEng = false;
+  serviceTypeList: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,10 +51,21 @@ export class ReportfilterComponent implements OnInit {
     private customerService: CustomerService,
     private instrumentService: InstrumentService,
     private notificationService: NotificationService,
-    private regionService: DistributorRegionService
+    private regionService: DistributorRegionService,
+    private listtypeService: ListTypeService
   ) { }
 
   ngOnInit(): void {
+    this.isAmc = this.controller == "AMC";
+    if (this.isAmc) {
+      this.listtypeService.getById("SERTY")
+        .pipe(first()).subscribe((data: any) => {
+          this.serviceTypeList = data
+          console.log(this.serviceTypeList);
+        })
+    }
+
+
     this.user = this.accountService.userValue;
     var role = JSON.parse(localStorage.getItem('roles'));
 
@@ -96,6 +109,7 @@ export class ReportfilterComponent implements OnInit {
       insSerialNo: [""],
       sDate: ["", [Validators.required]],
       eDate: ["", [Validators.required]],
+      serviceType: ["", [Validators.required]],
     })
 
     this.accountService.GetUserRegions().pipe(first())
@@ -225,6 +239,9 @@ export class ReportfilterComponent implements OnInit {
               nData.push(x)
             }
           });
+
+          if (this.isAmc) nData = nData.filter(x => x.servicetype == this.form.get('serviceType').value)
+
           this.nData.emit(nData)
           this.showData.emit(true)
         })

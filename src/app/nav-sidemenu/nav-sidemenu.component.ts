@@ -28,6 +28,7 @@ export class NavSideMenuComponent {
   hasVisaDetails: boolean = false;
   hasLocalExpenses: boolean = false;
   hascustomersatisfactionsurveylist: boolean = false
+  serviceContractRevenueReport: boolean = false
 
 
   hasAmc: boolean = false;
@@ -292,6 +293,14 @@ export class NavSideMenuComponent {
       }
 
 
+      if (this.profile.permissions.filter(x => x.screenCode == 'SRCRR').length > 0) {
+        this.serviceContractRevenueReport = this.profile.permissions.filter(x => x.screenCode == 'SRCRR')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRCRR')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRCRR')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SRCRR')[0].delete == true
+      }
+
+
       //
       // hasTravelDetails: boolean = false;
       // hasStayDetails: boolean = false;
@@ -335,6 +344,7 @@ export class NavSideMenuComponent {
       this.pendingQuoteRequestReport = true;
       this.hasServiceCompletionReport = true;
       this.serviceRequestReport = true;
+      this.serviceContractRevenueReport = true;
     }
 
     this.listTypeService
@@ -389,7 +399,7 @@ export class NavSideMenuComponent {
       this.hasTransactions = true;
     }
 
-    if (this.serviceRequestReport || this.hasServiceCompletionReport || this.pendingQuoteRequestReport) {
+    if (this.serviceRequestReport || this.hasServiceCompletionReport || this.pendingQuoteRequestReport || this.serviceContractRevenueReport) {
       this.hasReports = true;
     }
 

@@ -78,6 +78,7 @@ import { AdvancerequestlistformComponent } from './advancerequestform/advancereq
 import { ServicereqestreportComponent } from './servicereqestreport/servicereqestreport.component';
 import { ServicecompletionreportComponent } from './servicecompletionreport/servicecompletionreport.component';
 import { PendingquotationrequestComponent } from './pendingquotationrequest/pendingquotationrequest.component';
+import { ServicecontractrevenuereportComponent } from './servicecontractrevenuereport/servicecontractrevenuereport.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
@@ -405,6 +406,11 @@ const routes: Routes = [
   {
     path: "servicecompletionreport",
     component: ServicecompletionreportComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "servicecontractrevenuereport",
+    component: ServicecontractrevenuereportComponent,
     canActivate: [AuthGuard],
   },
   {

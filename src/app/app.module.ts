@@ -131,6 +131,7 @@ import { ServicereqestreportComponent } from './servicereqestreport/servicereqes
 import { ReportfilterComponent } from './reportfilter/reportfilter.component';
 import { ServicecompletionreportComponent } from './servicecompletionreport/servicecompletionreport.component';
 import { PendingquotationrequestComponent } from './pendingquotationrequest/pendingquotationrequest.component';
+import { ServicecontractrevenuereportComponent } from './servicecontractrevenuereport/servicecontractrevenuereport.component';
 
 
 @NgModule({
@@ -238,7 +239,8 @@ import { PendingquotationrequestComponent } from './pendingquotationrequest/pend
     ServicereqestreportComponent,
     ReportfilterComponent,
     ServicecompletionreportComponent,
-    PendingquotationrequestComponent
+    PendingquotationrequestComponent,
+    ServicecontractrevenuereportComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
