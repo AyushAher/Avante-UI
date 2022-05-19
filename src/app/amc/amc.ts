@@ -231,6 +231,7 @@ export class AmcComponent implements OnInit {
               element?.contacts.forEach(con => {
                 if (con?.id == this.user.contactId) {
                   this.isDisableSite = true
+                  if (this.id == null) this.form.get('custSite').disable()
                   this.form.get('custSite').setValue(element?.id)
                   this.defaultSiteId = element.id
                 }
@@ -338,7 +339,7 @@ export class AmcComponent implements OnInit {
       this.hasId = false;
       this.id = Guid.create();
       this.id = this.id.value;
-      setTimeout(() => this.FormControlDisable(), 500);
+      setTimeout(() => this.FormControlDisable(), 1000);
     }
   }
 
@@ -787,7 +788,7 @@ export class AmcComponent implements OnInit {
 
     this.submitted = true;
     this.alertService.clear();
-    
+
     if (this.instrumentList != null && this.instrumentList.length > 0) {
       this.instrumentList.forEach(instrument => {
         instrument.amcId = this.id;
@@ -795,7 +796,7 @@ export class AmcComponent implements OnInit {
     }
 
     if (this.form.invalid) return;
-    
+
     this.form.get('billtoid').enable()
     this.model = this.form.value;
     this.form.get('billtoid').disable()
