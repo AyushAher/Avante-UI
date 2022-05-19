@@ -10,35 +10,35 @@
                   <h6 class="card-title"> Service Contract Revenue</h6>
                 </div>
                 <div class="btn-group">
-                  <button class="btn active">Day</button>
+                  <!-- <button class="btn active">Day</button>
                   <button class="btn">Week</button>
-                  <button class="btn">Month</button>
+                  <button class="btn">Month</button> -->
                 </div>
               </div><!-- card-header -->
               <div class="card-body">
                 <div class="card-body-top">
                   <div>
                     <label class="mg-b-0">AMC</label>
-                    <h2>$10,359</h2>
+                    <h2>${{amcRevenue}}</h2>
                   </div>
                   <div>
                     <label class="mg-b-0">Preventive</label>
-                    <h2>$10,895</h2>
+                    <h2>${{preventiveRevenue}}</h2>
                   </div>
                   <div>
                     <label class="mg-b-0">BreakDown</label>
-                    <h2>$11,359</h2>
+                    <h2>${{breakdownRevenue}}</h2>
                   </div>
                   <div>
                     <label class="mg-b-0">On Call</label>
-                    <h2>$13,359</h2>
+                    <h2>${{oncallRevenue}}</h2>
                   </div>
                   <div>
                     <label class="mg-b-0">Planned</label>
-                    <h2>$10,396</h2>
+                    <h2>${{plannedRevenue}}</h2>
                   </div>
                 </div><!-- card-body-top -->
-                <div class="flot-chart-wrapper">
+                <div class="flot-chart-wrapper" style="margin-top: 6%;">
                   <div id="flotChart" style="height:300px;" class="flot-chart"></div>
                 </div><!-- flot-chart-wrapper -->
               </div><!-- card-body -->
@@ -48,7 +48,7 @@
             <div class="row row-sm">
               <div class="col-sm-6">
                 <div class="card card-dashboard-two">
-                  <div class="card-header">
+                  <div class="card-header" style='margin-bottom: 11%;'>
                     <h6>{{sRRaised}}</h6>
                     <p><a routerLink="/servicerequestlist"> Service Request Raised</a> </p>
                   </div><!-- card-header -->
@@ -65,11 +65,11 @@
                     <h5>Instruments</h5>
                     <div class="row">
                       <div class="col-md-6" style="padding-right: 0;">
-                        <h6>{{instrumnetInstalled}}</h6>
+                        <h6 style="font-size: 18px;">{{instrumnetInstalled}}</h6>
                         <p>Installed</p>
                       </div>
                       <div class="col-md-6" style="padding: 0;">
-                        <h6>{{instrumnetUnderService}}</h6>
+                        <h6 style="font-size: 18px;">{{instrumnetUnderService}}</h6>
                         <p>Under Service</p>
                       </div>
                     </div>

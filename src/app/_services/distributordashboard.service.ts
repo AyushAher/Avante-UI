@@ -14,5 +14,9 @@ export class DistributordashboardService {
     return this.http.get(`${environment.apiUrl}/DistributorDashboard/GetInstrumentInstalled`)
   }
 
+  ServiceContractRevenue() {
+    return this.http.get(`${environment.apiUrl}/DistributorDashboard/ServiceContractRevenue`)
+  }
+
 
 }

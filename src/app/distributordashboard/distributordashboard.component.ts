@@ -32,6 +32,11 @@ export class DistributordashboardComponent implements OnInit {
   engHandlingReq: any = []
   instrumnetInstalled: any;
   instrumnetUnderService: any;
+  plannedRevenue: any;
+  oncallRevenue: any;
+  breakdownRevenue: any;
+  preventiveRevenue: any;
+  amcRevenue: any;
 
   constructor(
     private accountService: AccountService,
@@ -73,25 +78,35 @@ export class DistributordashboardComponent implements OnInit {
           this.instrumnetUnderService = data.object.instrumentUnderService
         })
 
+      this.distributorDashboardService.ServiceContractRevenue()
+        .pipe(first()).subscribe((data: any) => {
+          console.log(data.object);
+          this.plannedRevenue = data.object.plannedRevenue
+          this.oncallRevenue = data.object.oncallRevenue
+          this.breakdownRevenue = data.object.breakdownRevenue
+          this.preventiveRevenue = data.object.preventiveRevenue
+          this.amcRevenue = data.object.amcRevenue
+        })
+
       this.distributorService.getByConId(this.user.contactId)
         .pipe(first())
         .subscribe((data: any) => {
           this.serviceRequestService.getDistDashboardData(data.object[0].id)
-          .pipe(first()).subscribe((sreq: any) => {
+            .pipe(first()).subscribe((sreq: any) => {
 
-            sreq = sreq.object
-            let label = []
-            let chartData = []
-            sreq.instrumentWithHighestServiceRequest.forEach(x => {
-              label.push(x.key);
-              chartData.push(x.count);
+              sreq = sreq.object
+              let label = []
+              let chartData = []
+              sreq.instrumentWithHighestServiceRequest.forEach(x => {
+                label.push(x.key);
+                chartData.push(x.count);
+              })
+
+              localStorage.setItem('instrumentWithHighestServiceRequest', JSON.stringify({ label: label, data: chartData }))
+              this.sRRaised = sreq.serviceRequestRaised
+              this.insHighestSReq = sreq.instrumentWithHighestServiceRequest.length
+              this.engHandlingReq = sreq.engHandlingReq
             })
-
-            localStorage.setItem('instrumentWithHighestServiceRequest', JSON.stringify({ label: label, data: chartData }))
-            this.sRRaised = sreq.serviceRequestRaised
-            this.insHighestSReq = sreq.instrumentWithHighestServiceRequest.length
-            this.engHandlingReq = sreq.engHandlingReq
-          })
         })
 
     }
