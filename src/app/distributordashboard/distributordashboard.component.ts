@@ -37,7 +37,15 @@ export class DistributordashboardComponent implements OnInit {
   breakdownRevenue: any;
   preventiveRevenue: any;
   amcRevenue: any;
-
+  customerRevenueList: any;
+  totalRevenue: any;
+  customerRevenueBgColors: any = [
+    "#6f42c1",
+    "#007bff",
+    "#17a2b8",
+    "#00cccc",
+    "#adb2bd",
+  ]
   constructor(
     private accountService: AccountService,
     private listTypeService: ListTypeService,
@@ -78,9 +86,15 @@ export class DistributordashboardComponent implements OnInit {
           this.instrumnetUnderService = data.object.instrumentUnderService
         })
 
+      this.distributorDashboardService.RevenueFromCustomer()
+        .pipe(first()).subscribe((data: any) => {
+          this.customerRevenueList = data.object
+          this.totalRevenue = data.object.map(x => x.total).reduce((a, b) => a + b, 0);
+          localStorage.setItem('customerrevenue', JSON.stringify(data.object))
+        })
+
       this.distributorDashboardService.ServiceContractRevenue()
         .pipe(first()).subscribe((data: any) => {
-          console.log(data.object);
           this.plannedRevenue = data.object.plannedRevenue
           this.oncallRevenue = data.object.oncallRevenue
           this.breakdownRevenue = data.object.breakdownRevenue
@@ -110,6 +124,8 @@ export class DistributordashboardComponent implements OnInit {
         })
 
     }
-    DistributorDashboardCharts()
+
+    setTimeout(() => { DistributorDashboardCharts() }, 1000);
+
   }
 }

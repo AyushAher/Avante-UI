@@ -423,13 +423,13 @@ function DistributorDashboardCharts() {
         },
       },
     });
-
+    var customerData = JSON.parse(localStorage.getItem('customerrevenue'))
     // Donut Chart
     var datapie = {
-      labels: ["Forbes", "Lafarage", "OBA Cement", "Dangote", "Customer"],
+      labels: [...customerData?.map(x => x.customer.custname)],
       datasets: [
         {
-          data: [50, 40, 60, 30, 20],
+          data: [...customerData?.map(x => x.total)],
           backgroundColor: [
             "#6f42c1",
             "#007bff",
