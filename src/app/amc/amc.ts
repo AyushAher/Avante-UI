@@ -224,8 +224,6 @@ export class AmcComponent implements OnInit {
           if (this.IsCustomerView) {
             this.form.get('billtoid').setValue(data.object?.id)
             this.defaultCustomerId = data.object.id
-            console.log(this.defaultCustomerId);
-
             this.custSiteList = data.object?.sites;
             this.custSiteList.forEach(element => {
               element?.contacts.forEach(con => {

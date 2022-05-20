@@ -93,7 +93,6 @@ export class PreventivemaintenancetableComponent implements OnInit {
       .subscribe({
           next: (data: any) => {
             this.listTypeItems = data.object;
-            console.log(data)
             let data2 = []
             this.listTypeItems.forEach(value => {
               let data1 = this.savedData.find(x => x.elementId == value.id)
@@ -213,7 +212,6 @@ export class PreventivemaintenancetableComponent implements OnInit {
       }))
       }
     )
-    console.log(this.maintenance)
   }
 
 

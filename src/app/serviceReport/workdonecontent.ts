@@ -52,7 +52,6 @@ export class WorkdoneContentComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log(this.itemId);
     this.user = this.accountService.userValue;
 
     this.workdoneForm = this.formBuilder.group({

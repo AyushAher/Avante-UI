@@ -71,7 +71,6 @@ export class TraveldetailslistComponent implements OnInit {
       role = JSON.parse(localStorage.getItem('roles'));
       role = role[0].itemCode;
     }
-    // console.log(this.user.id);
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     this.Service

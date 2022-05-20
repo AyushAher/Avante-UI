@@ -178,7 +178,6 @@ export class DistributorComponent implements OnInit {
             else {
 
             }
-            //console.log(data);
 
             this.loading = false;
 
@@ -205,7 +204,6 @@ export class DistributorComponent implements OnInit {
             else {
 
             }
-            //console.log(data);
 
             this.loading = false;
 

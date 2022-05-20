@@ -502,10 +502,7 @@ export class LocalexpensesComponent implements OnInit {
                 data.resultMessage,
                 "Success"
               );
-              this.router.navigate(["/localexpenseslist"]);
-            } else {
-
-              console.log(data.resultMessage);
+              this.router.navigate(["/localexpenseslist"]);''''
             }
             this.loading = false;
           },
@@ -533,15 +530,11 @@ export class LocalexpensesComponent implements OnInit {
                 "Success"
               );
               this.router.navigate(["/localexpenseslist"]);
-            } else {
-
-              console.log(data.resultMessage);
             }
             this.loading = false;
           },
           error: (error) => {
 
-            console.log(error);
             this.loading = false;
           },
         });

@@ -47,7 +47,6 @@ export class ModelContentComponent implements OnInit {
  
 
   ngOnInit() {
-    console.log(this.itemId);
     this.user = this.accountService.userValue;
     
     this.listvalue = this.formBuilder.group({

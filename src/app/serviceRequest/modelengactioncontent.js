@@ -34,7 +34,6 @@ var ModelContentComponent = /** @class */ (function () {
     }
     ModelContentComponent.prototype.ngOnInit = function () {
         var _this = this;
-        console.log(this.itemId);
         this.user = this.accountService.userValue;
         this.listvalue = this.formBuilder.group({
             configValue: ['', forms_1.Validators.required],

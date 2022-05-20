@@ -118,8 +118,7 @@ export class DistributorfilterComponent implements OnInit {
   countryChange() {
     this.stage = 3;
     this.customerBCountryList = this.customerList.filter(x => x.countryid == this.form.get('country').value)
-    console.log(this.customerList);
-
+  
     setTimeout(() => this.form.get('customer').reset(), 100);
   }
 

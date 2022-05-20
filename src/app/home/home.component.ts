@@ -26,7 +26,6 @@ export class HomeComponent {
     if (this.user.userProfileId != null) {
       (async () => {
         // Do something before delay
-        // console.log('before delay')
         if (this.user.username != "admin") {
           this.profileServicce.getUserProfile(this.user.userProfileId);
           await delay(1000);
@@ -37,7 +36,6 @@ export class HomeComponent {
               next: (data: ListTypeItem[]) => {
                 this.roles = data;
                 this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
-                console.log(this.userrole)
                 localStorage.setItem('roles', JSON.stringify(this.userrole))
                 if (this.userrole != [] && this.userrole != null) {
                   switch (this.userrole[0].itemname) {
@@ -58,7 +56,6 @@ export class HomeComponent {
         }
 
         // Do something after
-        // console.log('after delay')
       })();
     }
   }

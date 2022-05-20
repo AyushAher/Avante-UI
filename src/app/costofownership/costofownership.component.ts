@@ -33,7 +33,6 @@ export class CostofownershipComponent implements OnInit {
     // this.instrumentId = this.route.snapshot.paramMap.get('id');
     this.customerDashboard.GetCostOfOwnerShip(this.instrumentId)
       .pipe(first()).subscribe((data: any) => {
-        console.log(data.object);
         this.insSerialNo = data.object.insSerialNo;
         this.costOfInstrument = data.object.insCost;
         this.dateOfPurchased = data.object.dateOfPurchase;

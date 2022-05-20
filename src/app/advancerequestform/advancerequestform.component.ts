@@ -413,8 +413,6 @@ export class AdvancerequestformComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data.object);
-
           this.attachments = data.object;
         },
       });

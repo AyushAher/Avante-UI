@@ -84,7 +84,6 @@ export class UserProfileListComponent implements OnInit {
 
     this.userprofileService.getAll().pipe(first())
       .subscribe((data: any) => {
-        console.log(data);
         this.userprofileList = data.object
       });
 

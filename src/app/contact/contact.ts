@@ -142,9 +142,6 @@ export class ContactComponent implements OnInit {
       this.hasReadAccess = true;
     }
 
-    console.log(this.id);
-    console.log(this.type);
-
 
     this.countryService.getAll()
       .pipe(first())
@@ -333,8 +330,6 @@ export class ContactComponent implements OnInit {
     this.submitted = true;
     //this.id = this.route.snapshot.paramMap.get('cid');
     //this.type = this.route.snapshot.paramMap.get('type');
-    console.log(this.id);
-    console.log(this.type);
     // reset alerts on submit
     this.alertService.clear();
 
@@ -393,7 +388,7 @@ export class ContactComponent implements OnInit {
             }
             // this.alertService.success('Data save successfull');
             //  this.notificationService.showSuccess("Data Save Successful", "Success");
-            // console.log(data);
+    
             this.contact.id = data.id;
             this.loading = false;
             this.back();

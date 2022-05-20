@@ -62,7 +62,6 @@ export class MRenderComponent implements AgRendererComponent  {
 
 
   delete(params: any) {
-      console.log(params);
     //debugger;
     if (confirm("Are you sure, you want to delete the record?") == true) {
       if (params.deleteLink == "D") {

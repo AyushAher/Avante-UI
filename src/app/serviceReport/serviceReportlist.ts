@@ -203,7 +203,6 @@ export class ServiceReportListComponent implements OnInit {
     if (e.event.target !== undefined) {
       let data = e.data;
       let actionType = e.event.target.getAttribute('data-action-type');
-      console.log(actionType);
       //this.serviceRequestId = this.route.snapshot.paramMap.get('id');
       switch (actionType) {
         case 'download':

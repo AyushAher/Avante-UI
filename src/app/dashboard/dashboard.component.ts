@@ -192,7 +192,6 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data.object);
 
           let label = []
           var pendingRequestLabels = []
@@ -238,7 +237,6 @@ export class DashboardComponent implements OnInit {
   GetAllAMC(date = this.calenderLst[0]) {
     this.amcService.getAll().pipe(first())
       .subscribe((data: any) => {
-        console.log(data.object);
 
         this.amcData = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), new Date(), date));
       })

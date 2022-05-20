@@ -265,7 +265,6 @@ export class InstrumentRonlyComponent implements OnInit {
             this.imageUrl = 'data:image/jpeg;base64,' + data.data;
             // this.alertService.success('File Upload Successfully.');
             // this.imagePath = data.path;
-            // console.log(data);
 
           },
           error: error => {
@@ -329,7 +328,6 @@ export class InstrumentRonlyComponent implements OnInit {
             this.download(data.data);
             // this.alertService.success('File Upload Successfully.');
             // this.imagePath = data.path;
-            // console.log(data);
 
           },
           error: error => {
@@ -364,7 +362,6 @@ export class InstrumentRonlyComponent implements OnInit {
             //debugger;
             this.alertService.success('File Upload Successfully.');
             this.imagePath = data.path;
-            // console.log(data);
 
           },
           error: error => {

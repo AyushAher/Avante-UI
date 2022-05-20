@@ -57,7 +57,6 @@ export class PrevchklocpartelementvalueComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data.object)
           this.configList = data.object;
         },
         error: error => {

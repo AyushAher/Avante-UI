@@ -240,7 +240,6 @@ export class CustdashboardsettingsComponent implements OnInit {
           break;
       }
     })
-    console.log(this.localData)
     if (row1 === 4 && row2 === 3 && row3 === 3) {
       this.Service.update(this.id, this.localData)
         .pipe(first())

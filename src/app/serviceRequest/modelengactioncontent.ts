@@ -54,7 +54,6 @@ export class ModelEngActionContentComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log(this.itemId);
     this.user = this.accountService.userValue;
 
     this.actionForm = this.formBuilder.group({
@@ -109,7 +108,6 @@ export class ModelEngActionContentComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
-          console.log(data)
           data = data.filter(x => x.itemCode == "RMD")
           e.value == data[0].listTypeItemId ? this.hasRemote = true : this.hasRemote = false;
         }

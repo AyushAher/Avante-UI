@@ -47,7 +47,6 @@ export class ChangepasswoardComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.Form.invalid) {
-      console.log(this.Form)
       return;
     }
     // this.isSave = true;
@@ -57,7 +56,6 @@ export class ChangepasswoardComponent implements OnInit {
     this.NewPasswoard.userId = this.user.userId;
 
     if (this.Form.get('nPass').value == this.Form.get('cPass').value) {
-      console.log('data');
       this.accountService.ChangePassword(this.NewPasswoard)
         .pipe(first())
         .subscribe({
@@ -79,7 +77,6 @@ export class ChangepasswoardComponent implements OnInit {
   close() {
     //alert('test cholde');
     this.activeModal.hide();
-    console.log('hide')
     this.notificationService.filter("itemadded");
   }
 }

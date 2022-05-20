@@ -412,7 +412,6 @@ export class InstrumentComponent implements OnInit {
             this.download(data.data);
             // this.alertService.success('File Upload Successfully.');
             // this.imagePath = data.path;
-            // console.log(data);
 
           },
           error: error => {
@@ -908,7 +907,6 @@ export class InstrumentComponent implements OnInit {
 
   onCellValueChanged(event) {
     //debugger;
-    //console.log(event) to test it
     var data = event.data;
     event.data.modified = true;
     if (this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid
@@ -1025,7 +1023,6 @@ export class InstrumentComponent implements OnInit {
     this.customerSiteService.getById(custSite)
       .pipe(first())
       .subscribe((dataa: any) => {
-        console.log(dataa);
         this.contactList = dataa.object.contacts;
 
       });

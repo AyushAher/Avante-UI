@@ -33,7 +33,6 @@ var ModelContentComponent = /** @class */ (function () {
     }
     ModelContentComponent.prototype.ngOnInit = function () {
         var _this = this;
-        console.log(this.itemId);
         this.user = this.accountService.userValue;
         this.listvalue = this.formBuilder.group({
             configValue: ['', forms_1.Validators.required],
@@ -43,18 +42,18 @@ var ModelContentComponent = /** @class */ (function () {
         this.configTypeService.getById(this.itemId)
             .pipe(operators_1.first())
             .subscribe({
-            next: function (data) {
-                //debugger;
-                _this.configList = data.object;
-                //this.listvalue.get("configValue").setValue(data.object[0].configValue);
-                //this.id = data.object[0].id;
-                //  this.masterlistitemform.patchValue(this.itemList[0]);
-            },
-            error: function (error) {
-                _this.notificationService.showError(error, "Error");
-                _this.loading = false;
-            }
-        });
+                next: function (data) {
+                    //debugger;
+                    _this.configList = data.object;
+                    //this.listvalue.get("configValue").setValue(data.object[0].configValue);
+                    //this.id = data.object[0].id;
+                    //  this.masterlistitemform.patchValue(this.itemList[0]);
+                },
+                error: function (error) {
+                    _this.notificationService.showError(error, "Error");
+                    _this.loading = false;
+                }
+            });
         this.columnDefs = this.createColumnDefs();
     };
     ModelContentComponent.prototype.onRowClicked = function (e) {
@@ -107,44 +106,44 @@ var ModelContentComponent = /** @class */ (function () {
             this.configTypeService.save(this.configVal)
                 .pipe(operators_1.first())
                 .subscribe({
-                next: function (data) {
-                    if (data.result) {
-                        _this.notificationService.showSuccess(data.resultMessage, "Success");
-                        _this.configList = data.object;
-                        _this.listvalue.get("configValue").setValue("");
+                    next: function (data) {
+                        if (data.result) {
+                            _this.notificationService.showSuccess(data.resultMessage, "Success");
+                            _this.configList = data.object;
+                            _this.listvalue.get("configValue").setValue("");
+                        }
+                        else {
+                            _this.notificationService.showError(data.resultMessage, "Error");
+                        }
+                        _this.loading = false;
+                    },
+                    error: function (error) {
+                        _this.notificationService.showError(error, "Error");
+                        _this.loading = false;
                     }
-                    else {
-                        _this.notificationService.showError(data.resultMessage, "Error");
-                    }
-                    _this.loading = false;
-                },
-                error: function (error) {
-                    _this.notificationService.showError(error, "Error");
-                    _this.loading = false;
-                }
-            });
+                });
         }
         else {
             this.configTypeService.update(this.id, this.configVal)
                 .pipe(operators_1.first())
                 .subscribe({
-                next: function (data) {
-                    if (data.result) {
-                        _this.notificationService.showSuccess(data.resultMessage, "Success");
-                        _this.configList = data.object;
-                        _this.listvalue.get("configValue").setValue("");
-                        _this.id = null;
+                    next: function (data) {
+                        if (data.result) {
+                            _this.notificationService.showSuccess(data.resultMessage, "Success");
+                            _this.configList = data.object;
+                            _this.listvalue.get("configValue").setValue("");
+                            _this.id = null;
+                        }
+                        else {
+                            _this.notificationService.showError(data.resultMessage, "Error");
+                        }
+                        _this.loading = false;
+                    },
+                    error: function (error) {
+                        _this.notificationService.showError(error, "Error");
+                        _this.loading = false;
                     }
-                    else {
-                        _this.notificationService.showError(data.resultMessage, "Error");
-                    }
-                    _this.loading = false;
-                },
-                error: function (error) {
-                    _this.notificationService.showError(error, "Error");
-                    _this.loading = false;
-                }
-            });
+                });
         }
     };
     ModelContentComponent.prototype.createColumnDefs = function () {
@@ -191,14 +190,14 @@ var ModelContentComponent = /** @class */ (function () {
             templateUrl: './modelcontent.html',
         }),
         __metadata("design:paramtypes", [forms_1.FormBuilder,
-            router_1.ActivatedRoute,
-            router_1.Router,
-            _services_1.AccountService,
-            _services_1.ConfigTypeValueService,
-            _services_1.ListTypeService,
-            _services_1.NotificationService,
-            _services_1.ProfileService,
-            modal_1.BsModalService])
+        router_1.ActivatedRoute,
+        router_1.Router,
+        _services_1.AccountService,
+        _services_1.ConfigTypeValueService,
+        _services_1.ListTypeService,
+        _services_1.NotificationService,
+        _services_1.ProfileService,
+        modal_1.BsModalService])
     ], ModelContentComponent);
     return ModelContentComponent;
 }());

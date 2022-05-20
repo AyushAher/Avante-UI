@@ -24,7 +24,6 @@ export class OfferRequestListRenderer implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        console.log(this.params)
         this.offerRequestProcess.getAll(this.params.value).pipe(first())
             .subscribe((data: any) => {
                 this.isLocked = data.object.filter(x => !x.isCompleted).length == 0

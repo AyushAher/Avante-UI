@@ -25,7 +25,6 @@ export class LayoutComponent implements OnInit {
   }
 
   popUpClosed(event) {
-    console.log(event);
     this.isClosed = event
   }
 }

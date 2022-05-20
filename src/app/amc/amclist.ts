@@ -75,7 +75,6 @@ export class AmcListComponent implements OnInit {
         .subscribe((data: any) => {
 
           this.AmcList = data.object?.filter(x => !x.isCompleted)
-          console.log(data, this.AmcList);
         });
     }
     this.columnDefs = this.createColumnDefs();
@@ -105,45 +104,45 @@ export class AmcListComponent implements OnInit {
 
   private createColumnDefs() {
     return [
-    {
-      headerName: 'Bill To',
-      field: 'billto',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'Bill To',
-    },
-    {
-      headerName: 'Customer Site',
-      field: 'custSiteName',
-      filter: true,
-      enableSorting: true,
-      editable: false,
-      sortable: true,
-      tooltipField: 'Bill To',
-    },
-    {
-      headerName: 'Service Quote',
-      field: 'servicequote',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'SQ Date',
-      field: 'sqdate',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
-    {
-      headerName: 'Project',
-      field: 'project',
-      filter: true,
-      editable: false,
-      sortable: true
-    },
+      {
+        headerName: 'Bill To',
+        field: 'billto',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'Bill To',
+      },
+      {
+        headerName: 'Customer Site',
+        field: 'custSiteName',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'Bill To',
+      },
+      {
+        headerName: 'Service Quote',
+        field: 'servicequote',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'SQ Date',
+        field: 'sqdate',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
+      {
+        headerName: 'Project',
+        field: 'project',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
 
     ]
   }

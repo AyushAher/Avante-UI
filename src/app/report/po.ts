@@ -275,7 +275,6 @@ export class poComponent implements OnInit {
 
   onCellValueChanged(event) {
     //debugger;
-    //console.log(event) to test it
     var data = event.data;
     event.data.modified = true;
     //if (this.selectedConfigType.filter(x => x.id == data.configValueid && x.listTypeItemId == data.configTypeid

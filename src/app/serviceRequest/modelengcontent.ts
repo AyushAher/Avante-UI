@@ -53,7 +53,6 @@ export class ModelEngContentComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log(this.itemId);
     this.user = this.accountService.userValue;
 
     this.engineerCommentForm = this.formBuilder.group({
@@ -107,7 +106,6 @@ export class ModelEngContentComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (data.result) {
-              console.log(this.engcomment);
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
               //this.configList = data.object;
@@ -130,7 +128,6 @@ export class ModelEngContentComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (data.result) {
-              console.log(this.engcomment);
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
               //this.configList = data.object;

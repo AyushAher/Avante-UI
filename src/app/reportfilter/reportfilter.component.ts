@@ -59,10 +59,9 @@ export class ReportfilterComponent implements OnInit {
     this.isAmc = this.controller == "AMC";
     if (this.isAmc) {
       this.listtypeService.getById("SERTY")
-        .pipe(first()).subscribe((data: any) => {
+        .pipe(first()).subscribe((data: any) =>
           this.serviceTypeList = data
-          console.log(this.serviceTypeList);
-        })
+        )
     }
 
 
@@ -109,7 +108,7 @@ export class ReportfilterComponent implements OnInit {
       insSerialNo: [""],
       sDate: ["", [Validators.required]],
       eDate: ["", [Validators.required]],
-      serviceType: ["", [Validators.required]],
+      serviceType: [""],
     })
 
     this.accountService.GetUserRegions().pipe(first())
@@ -124,6 +123,8 @@ export class ReportfilterComponent implements OnInit {
             });
           })
       })
+
+    if (this.isAmc) this.form.get('serviceType').setValidators([Validators.required])
 
     this.countryService.getAll().pipe(first())
       .subscribe((coun: any) => {
@@ -224,6 +225,7 @@ export class ReportfilterComponent implements OnInit {
   }
 
   onSubmit() {
+
     if (this.form.valid) {
       this.modal = this.form.value
 

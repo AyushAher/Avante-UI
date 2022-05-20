@@ -70,7 +70,6 @@ export class ForgotpasswoardComponent implements OnInit {
   close() {
     //alert('test cholde');
     this.activeModal.hide();
-    console.log('hide')
     this.notificationService.filter("itemadded");
   }
 }

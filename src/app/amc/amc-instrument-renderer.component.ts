@@ -26,9 +26,7 @@ export class AmcInstrumentRendererComponent implements AgRendererComponent {
     this.params = params;
   }
 
-  delete(id) {
-    console.log(this.params.deleteaccess);
-    
+  delete(id) {    
     if (this.params.deleteaccess) {
       this.AmcInstrumentService.delete(id)
         .pipe(first())

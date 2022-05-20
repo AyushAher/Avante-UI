@@ -590,8 +590,6 @@ export class ServiceReportComponent implements OnInit {
                 this.uploadPdfFile(this.file, data.object.id);
                 this.notificationService.filter("itemadded");
                 document.getElementById('selectedfiles').style.display = 'none';
-                console.log(document.getElementById('myFile'));
-
 
                 this.fileshareService.list(this.ServiceReportId)
                   .pipe(first())

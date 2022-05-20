@@ -182,7 +182,6 @@ var ExportSparePartComponent = /** @class */ (function () {
                         _this.notificationService.showError(data.resultMessage, "Error");
                     }
                     // this.imagePath = data.path;
-                    // console.log(data);
                 },
                 error: function (error) {
                     _this.notificationService.showError(error, "Error");

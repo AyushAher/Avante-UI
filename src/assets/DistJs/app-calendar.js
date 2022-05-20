@@ -39,7 +39,6 @@ $(function(){
       return time.replace(periods[0], periods[1])
     }));
 
-    //console.log(times);
     $.each(times, function(index, val){
       $(element).append('<option value="'+val+'">'+val+'</option>');
     });
@@ -94,8 +93,6 @@ $(function(){
           if(now === text[1]) { $(this).addClass('now'); }
         });
       }
-
-      console.log(view.el);
     },
     eventRender: function(event, element) {
 
