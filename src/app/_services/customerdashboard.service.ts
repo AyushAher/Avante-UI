@@ -24,4 +24,12 @@ export class CustomerdashboardService {
     return this.http.get<VW_Contacts>(`${environment.apiUrl}/CustomerDashboard/GetCustomerByContactId/${id}`);
   }
 
+  GetCostData() {
+    return this.http.get(`${environment.apiUrl}/CustomerDashboard/GetCostData`);
+  }
+
+  GetCostOfOwnerShip() {
+    return this.http.get(`${environment.apiUrl}/CustomerDashboard/GetCostOfOwnerShip`);
+  }
+
 }

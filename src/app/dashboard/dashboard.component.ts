@@ -18,6 +18,7 @@ import { first } from "rxjs/operators";
 import { CustspinventoryService } from "../_services/custspinventory.service";
 import { FormBuilder, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { CustomerdashboardService } from '../_services/customerdashboard.service';
 
 declare function CustomerDashboardCharts(): any;
 
@@ -75,7 +76,8 @@ export class DashboardComponent implements OnInit {
     private formbuilder: FormBuilder,
     private contactService: ContactService,
     private listTypeItemService: ListTypeService,
-    private amcService: AmcService
+    private amcService: AmcService,
+    private customerDashboardService: CustomerdashboardService
   ) {
   }
 
@@ -86,7 +88,7 @@ export class DashboardComponent implements OnInit {
 
     this.GetAllAMC()
     this.getServiceRequestData()
-
+    this.GetPoCost()
     setTimeout(() => {
       CustomerDashboardCharts()
     }, 1000)
@@ -156,8 +158,8 @@ export class DashboardComponent implements OnInit {
   onCalenderFilter(date) {
     this.getServiceRequestData(date);
     this.GetAllAMC(date);
+    this.GetPoCost();
     this.GetSparePartsRecommended(date);
-
     setTimeout(() => CustomerDashboardCharts(), 1000)
   }
 
@@ -260,6 +262,18 @@ export class DashboardComponent implements OnInit {
     this.siteRegion = this.custSite[this.currentIndex].regname;
     this.currentSiteId = this.custSite[this.currentIndex].id;
     this.GetInstrumentsByCurrentSiteId();
+  }
+
+  GetPoCost() {
+    this.customerDashboardService.GetCostData()
+      .pipe(first()).subscribe((data: any) =>
+        localStorage.setItem("costData", JSON.stringify(data.object))
+      )
+  }
+
+  OnPopUpOpen() {
+    console.log("open popup");
+
   }
 
 

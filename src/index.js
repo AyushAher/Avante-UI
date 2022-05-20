@@ -3,11 +3,11 @@
 function CustomerDashboardCharts() {
   let sReqType = JSON.parse(localStorage.getItem("servicerequesttype"));
   let pendingServiceRequest = JSON.parse(localStorage.getItem("pendingservicerequest"));
-
+  let poCost = JSON.parse(localStorage.getItem("costData"))
   new Chart("chart-bars", {
     type: "bar",
     data: {
-      labels: ["PO", "Service", "AMC"],
+      labels: ["AMC", "Service", "PO"],
       datasets: [
         {
           label: "Cost",
@@ -17,7 +17,7 @@ function CustomerDashboardCharts() {
           borderSkipped: false,
           // backgroundColor: "rgba(255, 255, 255, .8)",
           backgroundColor: "#9e4541",
-          data: [50, 20, 10],
+          data: [poCost?.amcCost, poCost?.othrCost, poCost?.poCost],
           maxBarThickness: 6,
         },
       ],
