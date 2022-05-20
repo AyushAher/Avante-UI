@@ -1,37 +1,52 @@
 <style>
-    .underline {
-        text-decoration: underline;
-    }
-
     td {
         font-size: 10px;
         padding: 8px 5px;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .modal-header {
+        background-color: #589b44;
+        color: #fff;
+        height: 40px;
+        padding: 6px 16px;
+    }
+
+    .no-border >* {
+        border: none;
     }
 </style>
 <div class="modal" style="display: block" id="modal" id="model" role="dialog">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #589b44; color: #fff">
-                <h4 class="modal-title" id="modal-basic-title">Cost Of Instrument Ownership</h4>
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-basic-title">Cost Of Instrument Ownership</h6>
                 <button type="button" class="close" aria-label="Close" data-dismiss="modal" (click)="close()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" style="overflow-x: auto;">
-                <table class="table table-striped">
+                <table class="table">
                     <tbody>
-                        <tr>
-                            <td class="underline">Date Of Purchase</td>
+                        <tr class="no-border">
+                            <td>Date Of Purchase
+
+                            </td>
                             <td>{{dateOfPurchased}}</td>
-                            <td class="underline">Instrument</td>
+                            <td>Instrument
+
+                            </td>
                             <td>{{insSerialNo}}</td>
                         </tr>
                         <tr>
-                            <td class="underline">Cost Of Instrument</td>
+                            <td>Cost Of Instrument</td>
                             <td>{{insCostCurrency}} {{costOfInstrument}}</td>
                         </tr>
-                        <tr>
-                            <td class="underline">
+                        <tr class="bold">
+                            <td>
                                 Service Contract Value Year
                             </td>
                             <td *ngFor="let item of ownerShip">
@@ -39,31 +54,34 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="underline">
+                            <td>
                                 Service Contract Value Cost
+
                             </td>
                             <td *ngFor="let item of ownerShip">
                                 {{item.serviceContractCostCurrencyId}} {{item.serviceContractCost}}
                             </td>
                         </tr>
                         <tr>
-                            <td class="underline">
+                            <td>
                                 Breakdown Visit Cost
+
                             </td>
                             <td *ngFor="let item of ownerShip">
                                 {{item.breakdownVisitCostCurrencyId}} {{item.breakdownVisitCost}}
                             </td>
                         </tr>
                         <tr>
-                            <td class="underline">
+                            <td>
                                 SparePart Cost
+
                             </td>
                             <td *ngFor="let item of ownerShip">
                                 {{item.sparePartsCostCurrencyId}} {{item.sparePartsCost}}
                             </td>
                         </tr>
-                        <tr>
-                            <td style="font-weight: bold;">
+                        <tr class="bold">
+                            <td>
                                 Total Annual Cost
                             </td>
                             <td *ngFor="let item of ownerShip">
@@ -71,24 +89,27 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="underline">
+                            <td>
                                 Total Cumulative Cost
+
                             </td>
                             <td *ngFor="let item of ownerShip">
                                 {{insCostCurrency}} {{item.totalCummulativeCost}}
                             </td>
                         </tr>
                         <tr>
-                            <td class="underline">
+                            <td>
                                 Cost Of Ownership Annualy %
+
                             </td>
                             <td *ngFor="let item of ownerShip">
                                 {{item.costOfOwnershipAnnualy | number:'1.0-2'}} %
                             </td>
                         </tr>
                         <tr>
-                            <td class="underline">
+                            <td>
                                 Average Annual Cost Of Ownership %
+
                             </td>
                             <td *ngFor="let item of ownerShip">
                                 {{item.averageCostOfOwnershipAnnualy | number:'1.0-2'}} %
