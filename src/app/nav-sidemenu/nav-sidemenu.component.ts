@@ -153,11 +153,11 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'MAST')[0].delete == true
       }
 
-      if (this.profile.permissions.filter(x => x.screenCode == 'AMC').length > 0) {
-        this.hasAmc = this.profile.permissions.filter(x => x.screenCode == 'AMC')[0].create == true
-          || this.profile.permissions.filter(x => x.screenCode == 'AMC')[0].update == true
-          || this.profile.permissions.filter(x => x.screenCode == 'AMC')[0].read == true
-          || this.profile.permissions.filter(x => x.screenCode == 'AMC')[0].delete == true
+      if (this.profile.permissions.filter(x => x.screenCode == 'SAMC').length > 0) {
+        this.hasAmc = this.profile.permissions.filter(x => x.screenCode == 'SAMC')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SAMC')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SAMC')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'SAMC')[0].delete == true
       }
       if (this.profile.permissions.filter(x => x.screenCode == 'OFREQ').length > 0) {
         this.hasOfferRequest = this.profile.permissions.filter(x => x.screenCode == 'OFREQ')[0].create == true

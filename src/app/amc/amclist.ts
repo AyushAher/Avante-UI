@@ -54,7 +54,7 @@ export class AmcListComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "AMC");
+      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SAMC");
       if (profilePermission.length > 0) {
         this.hasAddAccess = profilePermission[0].create;
         this.hasDeleteAccess = profilePermission[0].delete;
