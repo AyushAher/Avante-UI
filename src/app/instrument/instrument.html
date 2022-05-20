@@ -241,8 +241,12 @@
             </div>
 
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
-              <label for="dateOfPurchase">Cost</label>
-              <input formControlName="cost" type="number" class="form-control" />
+              <label for="dateOfPurchase">Cost</label><br>
+              <select formControlName="currencyId" style="width: 30%;display: inline-block;" class="form-control">
+                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+              </select>
+              <input formControlName="cost" type="number" style="width: 68%;display: inline-block;margin-left: 5px;"
+                class="form-control" />
             </div>
           </div>
 

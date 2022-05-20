@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import {
   ConfigTypeValue,
   Contact,
+  Currency,
   CustomerSite,
   Distributor,
   FileShare,
@@ -23,6 +24,7 @@ import {
   AccountService,
   AlertService,
   ConfigTypeValueService,
+  CurrencyService,
   CustomerSiteService,
   DistributorService,
   FileshareService,
@@ -84,7 +86,7 @@ export class InstrumentComponent implements OnInit {
   private pdfcolumnApi: ColumnApi;
   private pdfapi: GridApi;
 
-
+  lstCurrency: any[]
   file: any;
   img: any
   attachments: any;
@@ -112,6 +114,7 @@ export class InstrumentComponent implements OnInit {
     private configService: ConfigTypeValueService,
     private distributorService: DistributorService,
     private fileshareService: FileshareService,
+    private currencyService: CurrencyService,
     private _sanitizer: DomSanitizer,
   ) { }
 
@@ -164,6 +167,7 @@ export class InstrumentComponent implements OnInit {
       operatorId: ['', Validators.required],
       dateOfPurchase: [],
       cost: [0],
+      currencyId: ["", Validators.required],
       instruEngineerId: ['', Validators.required]
     });
     this.imageUrl = this.noimageData;
@@ -199,6 +203,9 @@ export class InstrumentComponent implements OnInit {
 
     this.customerSiteService.getAllCustomerSites().pipe(first())
       .subscribe((data: any) => this.customersite = data.object);
+
+    this.currencyService.getAll()
+      .pipe(first()).subscribe((data: any) => this.lstCurrency = data.object)
 
     this.customerSiteService.GetCustomerSiteContacts().pipe(first())
       .subscribe((data: any) => {
