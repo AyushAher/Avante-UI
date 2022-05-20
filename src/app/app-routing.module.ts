@@ -79,6 +79,7 @@ import { ServicereqestreportComponent } from './servicereqestreport/servicereqes
 import { ServicecompletionreportComponent } from './servicecompletionreport/servicecompletionreport.component';
 import { PendingquotationrequestComponent } from './pendingquotationrequest/pendingquotationrequest.component';
 import { ServicecontractrevenuereportComponent } from './servicecontractrevenuereport/servicecontractrevenuereport.component';
+import { CostofownershipComponent } from './costofownership/costofownership.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 

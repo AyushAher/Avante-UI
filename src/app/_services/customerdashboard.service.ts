@@ -28,8 +28,8 @@ export class CustomerdashboardService {
     return this.http.get(`${environment.apiUrl}/CustomerDashboard/GetCostData`);
   }
 
-  GetCostOfOwnerShip() {
-    return this.http.get(`${environment.apiUrl}/CustomerDashboard/GetCostOfOwnerShip`);
+  GetCostOfOwnerShip(insId: string) {
+    return this.http.get(`${environment.apiUrl}/CustomerDashboard/GetCostOfOwnerShip/${insId}`);
   }
 
 }

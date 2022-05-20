@@ -132,6 +132,7 @@ import { ReportfilterComponent } from './reportfilter/reportfilter.component';
 import { ServicecompletionreportComponent } from './servicecompletionreport/servicecompletionreport.component';
 import { PendingquotationrequestComponent } from './pendingquotationrequest/pendingquotationrequest.component';
 import { ServicecontractrevenuereportComponent } from './servicecontractrevenuereport/servicecontractrevenuereport.component';
+import { CostofownershipComponent } from './costofownership/costofownership.component';
 
 
 @NgModule({
@@ -240,7 +241,8 @@ import { ServicecontractrevenuereportComponent } from './servicecontractrevenuer
     ReportfilterComponent,
     ServicecompletionreportComponent,
     PendingquotationrequestComponent,
-    ServicecontractrevenuereportComponent
+    ServicecontractrevenuereportComponent,
+    CostofownershipComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

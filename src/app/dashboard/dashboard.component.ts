@@ -19,6 +19,8 @@ import { CustspinventoryService } from "../_services/custspinventory.service";
 import { FormBuilder, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { CustomerdashboardService } from '../_services/customerdashboard.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { CostofownershipComponent } from '../costofownership/costofownership.component';
 
 declare function CustomerDashboardCharts(): any;
 
@@ -62,7 +64,9 @@ export class DashboardComponent implements OnInit {
   serviceRequest: any;
   srList: any;
   amcData: any;
+  bsModalRef: BsModalRef;
   calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
+
   constructor(
     private accountService: AccountService,
     private instrumentService: InstrumentService,
@@ -76,6 +80,7 @@ export class DashboardComponent implements OnInit {
     private formbuilder: FormBuilder,
     private contactService: ContactService,
     private listTypeItemService: ListTypeService,
+    private modalService: BsModalService,
     private amcService: AmcService,
     private customerDashboardService: CustomerdashboardService
   ) {
@@ -271,8 +276,9 @@ export class DashboardComponent implements OnInit {
       )
   }
 
-  OnPopUpOpen() {
-    console.log("open popup");
+  OnPopUpOpen(instrumentId) {
+    const initialState = { instrumentId }
+    this.bsModalRef = this.modalService.show(CostofownershipComponent, { initialState });
 
   }
 

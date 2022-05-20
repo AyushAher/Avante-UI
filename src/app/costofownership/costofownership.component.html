@@ -1,0 +1,102 @@
+<style>
+    .underline {
+        text-decoration: underline;
+    }
+
+    td {
+        font-size: 10px;
+        padding: 8px 5px;
+    }
+</style>
+<div class="modal" style="display: block" id="modal" id="model" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #589b44; color: #fff">
+                <h4 class="modal-title" id="modal-basic-title">Cost Of Instrument Ownership</h4>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal" (click)="close()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow-x: auto;">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td class="underline">Date Of Purchase</td>
+                            <td>{{dateOfPurchased}}</td>
+                            <td class="underline">Instrument</td>
+                            <td>{{insSerialNo}}</td>
+                        </tr>
+                        <tr>
+                            <td class="underline">Cost Of Instrument</td>
+                            <td>{{insCostCurrency}} {{costOfInstrument}}</td>
+                        </tr>
+                        <tr>
+                            <td class="underline">
+                                Service Contract Value Year
+                            </td>
+                            <td *ngFor="let item of ownerShip">
+                                {{item.serviceContractYrs}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="underline">
+                                Service Contract Value Cost
+                            </td>
+                            <td *ngFor="let item of ownerShip">
+                                {{item.serviceContractCostCurrencyId}} {{item.serviceContractCost}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="underline">
+                                Breakdown Visit Cost
+                            </td>
+                            <td *ngFor="let item of ownerShip">
+                                {{item.breakdownVisitCostCurrencyId}} {{item.breakdownVisitCost}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="underline">
+                                SparePart Cost
+                            </td>
+                            <td *ngFor="let item of ownerShip">
+                                {{item.sparePartsCostCurrencyId}} {{item.sparePartsCost}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">
+                                Total Annual Cost
+                            </td>
+                            <td *ngFor="let item of ownerShip">
+                                {{insCostCurrency}} {{item.totalAnnualCost}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="underline">
+                                Total Cumulative Cost
+                            </td>
+                            <td *ngFor="let item of ownerShip">
+                                {{insCostCurrency}} {{item.totalCummulativeCost}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="underline">
+                                Cost Of Ownership Annualy %
+                            </td>
+                            <td *ngFor="let item of ownerShip">
+                                {{item.costOfOwnershipAnnualy | number:'1.0-2'}} %
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="underline">
+                                Average Annual Cost Of Ownership %
+                            </td>
+                            <td *ngFor="let item of ownerShip">
+                                {{item.averageCostOfOwnershipAnnualy | number:'1.0-2'}} %
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
