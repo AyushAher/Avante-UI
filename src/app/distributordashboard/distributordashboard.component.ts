@@ -46,6 +46,8 @@ export class DistributordashboardComponent implements OnInit {
     "#00cccc",
     "#adb2bd",
   ]
+  calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
+
   constructor(
     private accountService: AccountService,
     private listTypeService: ListTypeService,
@@ -80,52 +82,72 @@ export class DistributordashboardComponent implements OnInit {
           }
         })
 
-      this.distributorDashboardService.GetInstrumentInstalled()
-        .pipe(first()).subscribe((data: any) => {
-          this.instrumnetInstalled = data.object.instrumentInstalled
-          this.instrumnetUnderService = data.object.instrumentUnderService
-        })
-
-      this.distributorDashboardService.RevenueFromCustomer()
-        .pipe(first()).subscribe((data: any) => {
-          this.customerRevenueList = data.object
-          this.totalRevenue = data.object.map(x => x.total).reduce((a, b) => a + b, 0);
-          localStorage.setItem('customerrevenue', JSON.stringify(data.object))
-        })
-
-      this.distributorDashboardService.ServiceContractRevenue()
-        .pipe(first()).subscribe((data: any) => {
-          this.plannedRevenue = data.object.plannedRevenue
-          this.oncallRevenue = data.object.oncallRevenue
-          this.breakdownRevenue = data.object.breakdownRevenue
-          this.preventiveRevenue = data.object.preventiveRevenue
-          this.amcRevenue = data.object.amcRevenue
-        })
-
-      this.distributorService.getByConId(this.user.contactId)
-        .pipe(first())
-        .subscribe((data: any) => {
-          this.serviceRequestService.getDistDashboardData(data.object[0].id)
-            .pipe(first()).subscribe((sreq: any) => {
-
-              sreq = sreq.object
-              let label = []
-              let chartData = []
-              sreq.instrumentWithHighestServiceRequest.forEach(x => {
-                label.push(x.key);
-                chartData.push(x.count);
-              })
-
-              localStorage.setItem('instrumentWithHighestServiceRequest', JSON.stringify({ label: label, data: chartData }))
-              this.sRRaised = sreq.serviceRequestRaised
-              this.insHighestSReq = sreq.instrumentWithHighestServiceRequest.length
-              this.engHandlingReq = sreq.engHandlingReq
-            })
-        })
-
+      this.GetInstrumentsInstalled()
+      this.GetRevenuefromCustomer()
+      this.GetServiceContractRevenue()
+      this.GetDistDashboardData()
     }
+
 
     setTimeout(() => { DistributorDashboardCharts() }, 1000);
 
+  }
+
+  onCalenderFilter(date) {
+    this.GetInstrumentsInstalled(date)
+    this.GetRevenuefromCustomer(date)
+    this.GetServiceContractRevenue(date)
+    this.GetDistDashboardData(date)
+    setTimeout(() => DistributorDashboardCharts(), 1000)
+  }
+
+  GetInstrumentsInstalled(date = this.calenderLst[0]) {
+    this.distributorDashboardService.GetInstrumentInstalled(date)
+      .pipe(first()).subscribe((data: any) => {
+        this.instrumnetInstalled = data.object.instrumentInstalled
+        this.instrumnetUnderService = data.object.instrumentUnderService
+      })
+  }
+
+  GetRevenuefromCustomer(date = this.calenderLst[0]) {
+    this.distributorDashboardService.RevenueFromCustomer(date)
+      .pipe(first()).subscribe((data: any) => {
+        this.customerRevenueList = data.object
+        this.totalRevenue = data.object.map(x => x.total).reduce((a, b) => a + b, 0);
+        localStorage.setItem('customerrevenue', JSON.stringify(data.object))
+      })
+  }
+
+  GetServiceContractRevenue(date = this.calenderLst[0]) {
+    this.distributorDashboardService.ServiceContractRevenue(date)
+      .pipe(first()).subscribe((data: any) => {
+        this.plannedRevenue = data.object.plannedRevenue
+        this.oncallRevenue = data.object.oncallRevenue
+        this.breakdownRevenue = data.object.breakdownRevenue
+        this.preventiveRevenue = data.object.preventiveRevenue
+        this.amcRevenue = data.object.amcRevenue
+      })
+  }
+
+  GetDistDashboardData(date = this.calenderLst[0]) {
+    this.distributorService.getByConId(this.user.contactId)
+      .pipe(first())
+      .subscribe((data: any) => {
+        this.serviceRequestService.getDistDashboardData(data.object[0].id, date)
+          .pipe(first()).subscribe((sreq: any) => {
+            sreq = sreq.object
+            let label = []
+            let chartData = []
+            sreq.instrumentWithHighestServiceRequest.forEach(x => {
+              label.push(x.key);
+              chartData.push(x.count);
+            })
+
+            localStorage.setItem('instrumentWithHighestServiceRequest', JSON.stringify({ label: label, data: chartData }))
+            this.sRRaised = sreq.serviceRequestRaised
+            this.insHighestSReq = sreq.instrumentWithHighestServiceRequest.length
+            this.engHandlingReq = sreq.engHandlingReq
+          })
+      })
   }
 }

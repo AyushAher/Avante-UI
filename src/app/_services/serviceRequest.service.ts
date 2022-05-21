@@ -33,8 +33,8 @@ export class ServiceRequestService {
     return this.http.get<ServiceRequest[]>(`${this.environment.apiUrl}/serviceRequest/GetByAssignedRegions/${userId}`);
   }
 
-  getDistDashboardData(distId: string) {
-    return this.http.get(`${this.environment.apiUrl}/serviceRequest/distdashboard/${distId}`);
+  getDistDashboardData(distId: string, date: string) {
+    return this.http.get(`${this.environment.apiUrl}/serviceRequest/distdashboard/${distId}/${date}`);
   }
 
   getById(id: string) {
