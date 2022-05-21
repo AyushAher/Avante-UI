@@ -15,7 +15,7 @@ import {
   ProfileService
 } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -41,16 +41,13 @@ export class CustomerListComponent implements OnInit {
   showGrid = false;
   IsDist: boolean;
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
     private customerService: CustomerService,
-    private countryService: CountryService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
-  ) {
+    private environment: EnvService
+
+    ) {
 
   }
 
@@ -76,7 +73,7 @@ export class CustomerListComponent implements OnInit {
       role = role[0]?.itemCode;
     }
 
-    if (role == environment.distRoleCode) {
+    if (role == this.environment.distRoleCode) {
       // this.showGrid = true;
       this.IsDist = true
     } else {

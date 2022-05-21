@@ -29,6 +29,7 @@ import { FilerendercomponentComponent } from "../../Offerrequest/filerendercompo
 import { HttpEventType } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { LocalExpReceiptsService } from "src/app/_services/local-exp-receipts.service";
+import { EnvService } from "src/app/_services/env/env.service";
 
 @Component({
   selector: "app-localexpenses",
@@ -99,7 +100,8 @@ export class LocalexpensesComponent implements OnInit {
     private servicerequestservice: ServiceRequestService,
     private currencyService: CurrencyService,
     private listTypeService: ListTypeService,
-    private localExpReService: LocalExpReceiptsService
+    private localExpReService: LocalExpReceiptsService,
+    private environment: EnvService
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       this.localExpReService.getAll(this.id).pipe(first())
@@ -147,9 +149,9 @@ export class LocalexpensesComponent implements OnInit {
     } else {
       role = role[0]?.itemCode;
     }
-    if (role == environment.engRoleCode) {
+    if (role == this.environment.engRoleCode) {
       this.isEng = true;
-    } else if (role == environment.distRoleCode) {
+    } else if (role == this.environment.distRoleCode) {
       this.isDist = true;
     }
 
@@ -193,7 +195,7 @@ export class LocalexpensesComponent implements OnInit {
         }
       })
 
-    if (role == environment.engRoleCode) {
+    if (role == this.environment.engRoleCode) {
       this.form.get('engineerid').setValue(this.user.contactId)
     }
 
@@ -502,7 +504,7 @@ export class LocalexpensesComponent implements OnInit {
                 data.resultMessage,
                 "Success"
               );
-              this.router.navigate(["/localexpenseslist"]);''''
+              this.router.navigate(["/localexpenseslist"]);
             }
             this.loading = false;
           },

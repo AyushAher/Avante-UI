@@ -1,32 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { EnvService } from './env/env.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AmcstagesService {
 
-  constructor(private http: HttpClient) { }
-  
+  constructor(private http: HttpClient, private environment: EnvService,) { }
+
   save(AMCStages) {
-    return this.http.post(`${environment.apiUrl}/AMCStages`, AMCStages);
+    return this.http.post(`${this.environment.apiUrl}/AMCStages`, AMCStages);
   }
 
   getAll(id) {
-    return this.http.get(`${environment.apiUrl}/AMCStages/${id}`);
+    return this.http.get(`${this.environment.apiUrl}/AMCStages/${id}`);
   }
 
   getById(id: string) {
     return this.http.get(
-      `${environment.apiUrl}/AMCStages/getprocess/${id}`
+      `${this.environment.apiUrl}/AMCStages/getprocess/${id}`
     );
   }
 
   update(params) {
     return this.http
-      .put(`${environment.apiUrl}/AMCStages`, params)
+      .put(`${this.environment.apiUrl}/AMCStages`, params)
       .pipe(
         map((x) => {
           return x;
@@ -35,7 +35,7 @@ export class AmcstagesService {
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/AMCStages/${id}`).pipe(
+    return this.http.delete(`${this.environment.apiUrl}/AMCStages/${id}`).pipe(
       map((x) => {
         return x;
       })

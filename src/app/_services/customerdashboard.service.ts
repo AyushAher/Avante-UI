@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { Amc } from '../_models';
 import { VW_Contacts } from '../_models/customerdashboard';
+import { EnvService } from './env/env.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,19 +17,21 @@ export class CustomerdashboardService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private environment: EnvService,
+
   ) { }
 
   getCustomerByContactId(id: string) {
-    return this.http.get<VW_Contacts>(`${environment.apiUrl}/CustomerDashboard/GetCustomerByContactId/${id}`);
+    return this.http.get<VW_Contacts>(`${this.environment.apiUrl}/CustomerDashboard/GetCustomerByContactId/${id}`);
   }
 
   GetCostData() {
-    return this.http.get(`${environment.apiUrl}/CustomerDashboard/GetCostData`);
+    return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetCostData`);
   }
 
   GetCostOfOwnerShip(insId: string) {
-    return this.http.get(`${environment.apiUrl}/CustomerDashboard/GetCostOfOwnerShip/${insId}`);
+    return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetCostOfOwnerShip/${insId}`);
   }
 
 }

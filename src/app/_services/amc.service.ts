@@ -1,42 +1,43 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 import { Amc } from '../_models';
+import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class AmcService {
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private environment: EnvService,
   ) { }
 
   save(params) {
-    return this.http.post(`${environment.apiUrl}/amc`, params);
+    return this.http.post(`${this.environment.apiUrl}/amc`, params);
   }
 
 
   getAll() {
-    return this.http.get<Amc[]>(`${environment.apiUrl}/Amc`);
+    return this.http.get<Amc[]>(`${this.environment.apiUrl}/Amc`);
   }
 
   getById(id: string) {
-    return this.http.get<Amc>(`${environment.apiUrl}/amc/${id}`);
+    return this.http.get<Amc>(`${this.environment.apiUrl}/amc/${id}`);
   }
 
 
   searchByKeyword(SerialNo: string) {
-    return this.http.get(`${environment.apiUrl}/amc/SerialNo/${SerialNo}`);
+    return this.http.get(`${this.environment.apiUrl}/amc/SerialNo/${SerialNo}`);
   }
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/amc/${id}`, params)
+    return this.http.put(`${this.environment.apiUrl}/amc/${id}`, params)
       .pipe(map(x => {
         return x;
       }));
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/Amc/${id}`)
+    return this.http.delete(`${this.environment.apiUrl}/Amc/${id}`)
       .pipe(map(x => {
         return x;
       }));

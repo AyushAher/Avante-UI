@@ -14,6 +14,7 @@ import {
   VisadetailsService
 } from '../../_services';
 import { environment } from "../../../environments/environment";
+import { EnvService } from 'src/app/_services/env/env.service';
 
 @Component({
   selector: 'app-visadetailslist',
@@ -40,7 +41,7 @@ export class VisadetailsListComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private Service: VisadetailsService,
-    private notificationService: NotificationService,
+    private environment: EnvService,
     private profileService: ProfileService,
     private distributorService: DistributorService,
     private listTypeService: ListTypeService,
@@ -84,9 +85,9 @@ export class VisadetailsListComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data1: any) => {
-                  if (role == environment.distRoleCode) {
+                  if (role == this.environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
-                  } else if (role == environment.engRoleCode) {
+                  } else if (role == this.environment.engRoleCode) {
                     data.object = data.object.filter(x => x.createdby == this.user.userId || x.engineerid == this.user.contactId)
                     this.List = data.object;
                   } else if (this.user.username == 'admin') {
@@ -101,7 +102,7 @@ export class VisadetailsListComponent implements OnInit {
 
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });

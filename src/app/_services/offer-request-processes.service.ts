@@ -1,32 +1,36 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { Offerrequest } from '../_models/Offerrequest.model';
+import { EnvService } from './env/env.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfferRequestProcessesService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private environment: EnvService,
+  ) { }
+  
   save(OfferRequestProcesses) {
-    return this.http.post(`${environment.apiUrl}/OfferRequestProcesses`, OfferRequestProcesses);
+    return this.http.post(`${this.environment.apiUrl}/OfferRequestProcesses`, OfferRequestProcesses);
   }
 
   getAll(id) {
-    return this.http.get(`${environment.apiUrl}/OfferRequestProcesses/${id}`);
+    return this.http.get(`${this.environment.apiUrl}/OfferRequestProcesses/${id}`);
   }
 
   getById(id: string) {
     return this.http.get(
-      `${environment.apiUrl}/OfferRequestProcesses/getprocess/${id}`
+      `${this.environment.apiUrl}/OfferRequestProcesses/getprocess/${id}`
     );
   }
 
   update(params) {
     return this.http
-      .put(`${environment.apiUrl}/OfferRequestProcesses`, params)
+      .put(`${this.environment.apiUrl}/OfferRequestProcesses`, params)
       .pipe(
         map((x) => {
           return x;
@@ -35,7 +39,7 @@ export class OfferRequestProcessesService {
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/OfferRequestProcesses/${id}`).pipe(
+    return this.http.delete(`${this.environment.apiUrl}/OfferRequestProcesses/${id}`).pipe(
       map((x) => {
         return x;
       })

@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponent.component';
 import { Currency, ProfileReadOnly, ServiceRequest, User } from '../_models';
 import { FileshareService, AccountService, ProfileService, DistributorService, ListTypeService, ServiceRequestService, CurrencyService, CustomerService, NotificationService, CountryService } from '../_services';
 import { AdvancerequestformService } from '../_services/advancerequestform.service';
 import { BankdetailsService } from '../_services/bankdetails.service';
+import { EnvService } from '../_services/env/env.service';
 
 @Component({
   selector: 'app-advancerequestform',
@@ -74,6 +74,7 @@ export class AdvancerequestformComponent implements OnInit {
     private notificationService: NotificationService,
     private router: Router,
     private service: AdvancerequestformService,
+    private environment: EnvService,
     private bankDetails: BankdetailsService,
   ) { }
 
@@ -136,19 +137,19 @@ export class AdvancerequestformComponent implements OnInit {
     else role = role[0]?.itemCode;
 
 
-    if (role == environment.custRoleCode) {
+    if (role == this.environment.custRoleCode) {
       this.IsCustomerView = true;
       this.IsDistributorView = false;
       this.IsEngineerView = false;
     }
 
-    else if (role == environment.distRoleCode) {
+    else if (role == this.environment.distRoleCode) {
       this.IsCustomerView = false;
       this.IsDistributorView = true;
       this.IsEngineerView = false;
     }
 
-    else if (role == environment.engRoleCode) {
+    else if (role == this.environment.engRoleCode) {
       this.IsCustomerView = false;
       this.IsDistributorView = false;
       this.IsEngineerView = true;

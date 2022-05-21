@@ -8,7 +8,7 @@ import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, CustomerSiteService, InstrumentService, NotificationService } from '../_services';
 import { lnkRenderComponent } from './lnkrendercomponent';
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -40,13 +40,11 @@ export class SearchComponent implements OnInit {
   isDist: boolean;
   constructor(
     private fb: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
     private instrumentService: InstrumentService,
     private customerSiteService: CustomerSiteService,
-    private notificationService: NotificationService,
+    private environment: EnvService,
   ) {
 
   }
@@ -61,7 +59,7 @@ export class SearchComponent implements OnInit {
           //debugger;
           this.customersite = data.object;
         },
-        error: error => {
+        error: () => {
 
           this.loading = false;
         }
@@ -69,7 +67,7 @@ export class SearchComponent implements OnInit {
 
     if (this.user.username != "admin") {
       role = role[0]?.itemCode;
-      if (role == environment.distRoleCode) this.isDist = true;
+      if (role == this.environment.distRoleCode) this.isDist = true;
       else {
         this.toggleFilter();
       }
@@ -106,7 +104,7 @@ export class SearchComponent implements OnInit {
             this.instrumentList = data.object;
             // localStorage.setItem('search', JSON.stringify(this.searchKeyword));
           },
-          error: error => {
+          error: () => {
             //this.alertService.error(error);
 
             this.loading = false;
@@ -197,7 +195,7 @@ export class SearchComponent implements OnInit {
           this.instrumentList = data.object;
           localStorage.setItem('search', JSON.stringify(this.searchKeyword));
         },
-        error: error => {
+        error: () => {
           //this.alertService.error(error);
 
           this.loading = false;

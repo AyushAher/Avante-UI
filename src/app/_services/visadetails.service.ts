@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { Visadetails } from '../_models/visadetails';
+import { EnvService } from './env/env.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,28 +12,32 @@ import { Visadetails } from '../_models/visadetails';
 export class VisadetailsService {
 
   public travelDetails: Observable<Visadetails>;
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private environment: EnvService,
+  ) { }
 
   save(traveldetail: Visadetails) {
-    return this.http.post(`${environment.apiUrl}/VisaDetails`, traveldetail);
+    return this.http.post(`${this.environment.apiUrl}/VisaDetails`, traveldetail);
   }
 
   getAll() {
     return this.http.get<Visadetails[]>(
-      `${environment.apiUrl}/VisaDetails`
+      `${this.environment.apiUrl}/VisaDetails`
     );
   }
 
   getById(id: string) {
     return this.http.get<Visadetails>(
-      `${environment.apiUrl}/VisaDetails/${id}`
+      `${this.environment.apiUrl}/VisaDetails/${id}`
     );
   }
 
 
   update(id, params) {
     return this.http
-      .put(`${environment.apiUrl}/VisaDetails/${id}`, params)
+      .put(`${this.environment.apiUrl}/VisaDetails/${id}`, params)
       .pipe(
         map((x) => {
           return x;
@@ -42,7 +46,7 @@ export class VisadetailsService {
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/VisaDetails/${id}`).pipe(
+    return this.http.delete(`${this.environment.apiUrl}/VisaDetails/${id}`).pipe(
       map((x) => {
         return x;
       })

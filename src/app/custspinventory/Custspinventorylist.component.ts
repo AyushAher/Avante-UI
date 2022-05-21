@@ -8,7 +8,8 @@ import { RenderComponent } from "../distributor/rendercomponent";
 import { Custspinventory } from "../_models/custspinventory";
 import { first } from "rxjs/operators";
 import { User } from "../_models";
-import { environment } from "src/environments/environment";
+import { EnvService } from "../_services/env/env.service";
+
 
 @Component({
   selector: "app-Custspinventorylist",
@@ -39,9 +40,9 @@ export class CustspinventorylistComponent implements OnInit {
   constructor(
     private router: Router,
     private accountService: AccountService,
-    private notificationService: NotificationService,
     private Service: CustspinventoryService,
     private profileService: ProfileService,
+    private environment: EnvService
   ) {
   }
 
@@ -64,7 +65,7 @@ export class CustspinventorylistComponent implements OnInit {
       role = role[0]?.itemCode;
     }
 
-    if (role == environment.distRoleCode) this.isDist = true;
+    if (role == this.environment.distRoleCode) this.isDist = true;
     else {
       this.toggleFilter();
       this.Service.getAll(this.user.contactId, null)
@@ -77,7 +78,7 @@ export class CustspinventorylistComponent implements OnInit {
     this.columnDefs = this.createColumnDefs();
   }
 
-  
+
   Add() {
     this.router.navigate(["customerspinventory"]);
   }

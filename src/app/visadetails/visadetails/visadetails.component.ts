@@ -32,6 +32,7 @@ import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { FilerendercomponentComponent } from "../../Offerrequest/filerendercomponent.component";
 import { HttpEventType } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
+import { EnvService } from "src/app/_services/env/env.service";
 
 
 @Component({
@@ -97,6 +98,7 @@ export class VisadetailsComponent implements OnInit {
     private servicerequestservice: ServiceRequestService,
     private listTypeService: ListTypeService,
     private countryservice: CountryService,
+    private environment: EnvService,
     private currencyService: CurrencyService,
   ) {
   }
@@ -127,9 +129,9 @@ export class VisadetailsComponent implements OnInit {
     } else {
       role = role[0]?.itemCode;
     }
-    if (role == environment.engRoleCode) {
+    if (role == this.environment.engRoleCode) {
       this.isEng = true;
-    } else if (role == environment.distRoleCode) {
+    } else if (role == this.environment.distRoleCode) {
       this.isDist = true;
     }
 
@@ -185,11 +187,11 @@ export class VisadetailsComponent implements OnInit {
           }
         }
       })
-    if (role == environment.engRoleCode) {
+    if (role == this.environment.engRoleCode) {
       this.form.get('engineerid').setValue(this.user.contactId)
       this.form.get('engineerid').disable()
       this.form.get('distId').disable()
-    } else if (role == environment.distRoleCode) {
+    } else if (role == this.environment.distRoleCode) {
       this.form.get('distId').disable()
     }
 

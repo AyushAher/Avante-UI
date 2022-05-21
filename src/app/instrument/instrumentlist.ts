@@ -8,7 +8,7 @@ import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, CountryService, InstrumentService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -42,7 +42,8 @@ export class InstrumentListComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private profileService: ProfileService,
-    private instrumentService: InstrumentService
+    private instrumentService: InstrumentService,
+    private environment: EnvService
   ) {
 
   }
@@ -68,9 +69,9 @@ export class InstrumentListComponent implements OnInit {
       role = role[0]?.itemCode;
     }
 
-    if (role == environment.distRoleCode) this.isDist = true;
-    else if (role == environment.engRoleCode) this.isEng = true;
-    else if (role == environment.custRoleCode) this.isCust = true;
+    if (role == this.environment.distRoleCode) this.isDist = true;
+    else if (role == this.environment.engRoleCode) this.isEng = true;
+    else if (role == this.environment.custRoleCode) this.isCust = true;
 
     if (!this.isDist) {
       this.toggleFilter()

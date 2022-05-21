@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
 import { ChangePasswordModel, User } from '../_models';
+import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -16,7 +16,8 @@ export class AccountService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private environment: EnvService,
   ) {
     this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
     this.zohoSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('zohotoken')));
@@ -32,7 +33,7 @@ export class AccountService {
   }
 
   public GetUserRegions() {
-    return this.http.get(`${environment.apiUrl}/user/GetUserRegions`)
+    return this.http.get(`${this.environment.apiUrl}/user/GetUserRegions`)
   }
 
   zohoauthSet(v: string) {
@@ -49,7 +50,7 @@ export class AccountService {
   login(username, password) {
 
     password = window.btoa(password);
-    return this.http.post<User>(`${environment.apiUrl}/user/authenticate`, { username, password })
+    return this.http.post<User>(`${this.environment.apiUrl}/user/authenticate`, { username, password })
       .pipe(map(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('user', JSON.stringify(user));
@@ -70,27 +71,27 @@ export class AccountService {
   }
 
   register(user: User) {
-    return this.http.post(`${environment.apiUrl}/user`, user);
+    return this.http.post(`${this.environment.apiUrl}/user`, user);
   }
 
   ChangePassword(changePassword: ChangePasswordModel) {
-    return this.http.post(`${environment.apiUrl}/user/changepassword`, changePassword);
+    return this.http.post(`${this.environment.apiUrl}/user/changepassword`, changePassword);
   }
 
   ForgotPassword(email: string) {
-    return this.http.post(`${environment.apiUrl}/user/forgotpassword/` + email, null);
+    return this.http.post(`${this.environment.apiUrl}/user/forgotpassword/` + email, null);
   }
 
   getAll() {
-    return this.http.get<User[]>(`${environment.apiUrl}/users`);
+    return this.http.get<User[]>(`${this.environment.apiUrl}/users`);
   }
 
   getById(id: string) {
-    return this.http.get<User>(`${environment.apiUrl}/user/GetUserByContactId/${id}`);
+    return this.http.get<User>(`${this.environment.apiUrl}/user/GetUserByContactId/${id}`);
   }
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/users/${id}`, params)
+    return this.http.put(`${this.environment.apiUrl}/users/${id}`, params)
       .pipe(map(x => {
         // update stored user if the logged in user updated their own record
         if (id == this.userValue.id) {
@@ -106,7 +107,7 @@ export class AccountService {
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/users/${id}`)
+    return this.http.delete(`${this.environment.apiUrl}/users/${id}`)
       .pipe(map(x => {
         // auto logout if the logged in user deleted their own record
         if (id == this.userValue.id) {

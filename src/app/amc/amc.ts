@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { Guid } from "guid-typescript";
 import { first } from "rxjs/operators";
-import { environment } from "src/environments/environment";
+
 import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
 import { Amc, Currency, Customer, ListTypeItem, ResultMsg, User } from "../_models";
 import { AmcInstrument } from "../_models/Amcinstrument";
@@ -24,6 +24,7 @@ import {
 } from "../_services";
 import { AmcinstrumentService } from "../_services/amcinstrument.service";
 import { AmcstagesService } from "../_services/amcstages.service";
+import { EnvService } from "../_services/env/env.service";
 import { AmcInstrumentRendererComponent } from "./amc-instrument-renderer.component";
 
 @Component({
@@ -107,7 +108,9 @@ export class AmcComponent implements OnInit {
     private AmcInstrumentService: AmcinstrumentService,
     private contactService: ContactService,
     private amcStagesService: AmcstagesService,
-    private FileShareService: FileshareService
+    private FileShareService: FileshareService,
+    private environment: EnvService
+
   ) {
 
     this.notificationService.listen().subscribe((m: any) => {
@@ -168,11 +171,11 @@ export class AmcComponent implements OnInit {
     let role = this.role;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
 
-    if (role == environment.custRoleCode) {
+    if (role == this.environment.custRoleCode) {
       this.IsCustomerView = true;
       this.IsDistributorView = false;
       this.IsEngineerView = false;
-    } else if (role == environment.distRoleCode) {
+    } else if (role == this.environment.distRoleCode) {
       this.IsCustomerView = false;
       this.IsDistributorView = true;
       this.IsEngineerView = false;

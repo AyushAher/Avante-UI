@@ -11,7 +11,7 @@ import {
   NotificationService, ProfileService, ServiceReportService, AmcService, zohoapiService
 } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -36,16 +36,11 @@ export class ReportListComponent implements OnInit {
   private api: GridApi;  
   private zohocode: string;
   constructor(
-    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private customerService: CustomerService,
-    private countryService: CountryService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
-    private AmcService: AmcService,
+    private environment: EnvService,
     private zohoservice: zohoapiService,
   ) {
     
@@ -73,7 +68,7 @@ export class ReportListComponent implements OnInit {
     //this.accountService.clear();
     if (this.accountService.zohoauthValue == null) {
       if (this.zohocode == null) {
-        window.location.href = environment.commonzohocodeapi + 'reportlist' + '&access_type=offline';
+        window.location.href = this.environment.commonzohocodeapi + 'reportlist' + '&access_type=offline';
       }
       else {
         this.zohoservice.authwithcode(this.zohocode,"reportlist").subscribe({
@@ -84,7 +79,7 @@ export class ReportListComponent implements OnInit {
             this.accountService.zohoauthSet(data.object);
             this.getinvoice();
           },
-          error: error => {
+          error: () => {
             
             this.loading = false;
           }
@@ -106,7 +101,7 @@ export class ReportListComponent implements OnInit {
         next: (data: any) => {
           this.AmcList = data.object;
         },
-        error: error => {
+        error: () => {
           
           this.loading = false;
         }

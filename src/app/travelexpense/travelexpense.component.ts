@@ -5,10 +5,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponent.component';
 import { travelDetails, ProfileReadOnly, DistributorRegionContacts, ServiceRequest, ListTypeItem, Currency, User, Customer } from '../_models';
 import { AccountService, AlertService, CurrencyService, CustomerService, DistributorService, FileshareService, ListTypeService, NotificationService, ProfileService, ServiceRequestService, TravelDetailService } from '../_services';
+import { EnvService } from '../_services/env/env.service';
 import { TravelExpenseService } from '../_services/travel-expense.service';
 
 @Component({
@@ -74,6 +74,7 @@ export class TravelexpenseComponent implements OnInit {
     private notificationService: NotificationService,
     private router: Router,
     private numberPipe: DecimalPipe,
+    private environment: EnvService,
   ) { }
 
   ngOnInit(): void {
@@ -119,18 +120,18 @@ export class TravelexpenseComponent implements OnInit {
     } else role = role[0]?.itemCode;
 
 
-    if (role == environment.custRoleCode) {
+    if (role == this.environment.custRoleCode) {
       this.IsCustomerView = true;
       this.IsDistributorView = false;
       this.IsEngineerView = false;
     }
-    else if (role == environment.distRoleCode) {
+    else if (role == this.environment.distRoleCode) {
       this.IsCustomerView = false;
       this.IsDistributorView = true;
       this.IsEngineerView = false;
     }
 
-    else if (role == environment.engRoleCode) {
+    else if (role == this.environment.engRoleCode) {
       this.IsCustomerView = false;
       this.IsDistributorView = false;
       this.IsEngineerView = true;
@@ -229,7 +230,7 @@ export class TravelexpenseComponent implements OnInit {
   CancelEdit() {
     this.form.disable()
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 

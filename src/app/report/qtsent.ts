@@ -4,14 +4,14 @@ import { User, Customer, Country, DistributorRegion, ProfileReadOnly, Amc } from
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef,GridApi,ColumnApi} from 'ag-grid-community'; 
+import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import {
   AccountService, AlertService, CustomerService, CountryService,
   NotificationService, ProfileService, ServiceReportService, AmcService, zohoapiService
 } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 
 
@@ -43,19 +43,14 @@ export class qtsentComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private customerService: CustomerService,
-    private countryService: CountryService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
-    private AmcService: AmcService,
+    private environment: EnvService,
     private zohoservice: zohoapiService,
   ) {
-    
+
   }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -83,19 +78,19 @@ export class qtsentComponent implements OnInit {
     //this.accountService.clear();
     if (this.accountService.zohoauthValue == null) {
       if (this.zohocode == null) {
-        window.location.href = environment.commonzohocodeapi + 'qtsent' + '&access_type=offline';
+        window.location.href = this.environment.commonzohocodeapi + 'qtsent' + '&access_type=offline';
       }
       else {
-        this.zohoservice.authwithcode(this.zohocode,"qtsent").subscribe({
+        this.zohoservice.authwithcode(this.zohocode, "qtsent").subscribe({
           next: (data: any) => {
             debugger;
             //alert(data.access_token);
             localStorage.setItem('zohotoken', JSON.stringify(data.object));
             this.accountService.zohoauthSet(data.object);
-            this.getquotation("",1);
+            this.getquotation("", 1);
           },
-          error: error => {
-            
+          error: () => {
+
             this.loading = false;
           }
         });
@@ -104,7 +99,7 @@ export class qtsentComponent implements OnInit {
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     if (this.accountService.zohoauthValue != null) {
-      this.getquotation("",1);
+      this.getquotation("", 1);
     }
     this.columnDefs = this.createColumnDefs();
   }
@@ -112,7 +107,7 @@ export class qtsentComponent implements OnInit {
 
 
   getquotation(custname: string, page: number) {
-    this.zohoservice.getquotation(custname,page)
+    this.zohoservice.getquotation(custname, page)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
@@ -121,8 +116,8 @@ export class qtsentComponent implements OnInit {
           this.currentpage = this.pageData.page;
           this.has_more_data = this.pageData.has_more_page;
         },
-        error: error => {
-          
+        error: () => {
+
           this.loading = false;
         }
       });
@@ -134,8 +129,8 @@ export class qtsentComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    
-    this.getquotation(this.form.value.search,1);
+
+    this.getquotation(this.form.value.search, 1);
   }
 
   onNext() {
@@ -155,65 +150,65 @@ export class qtsentComponent implements OnInit {
       headerName: 'Customer Name',
       field: 'customer_name',
       filter: true,
-        editable: false,
+      editable: false,
       sortable: true,
       tooltipField: 'customer_name',
-      },
-      {
-        headerName: 'SalesOrder Number',
-        field: 'salesorder_number',
-        filter: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'salesorder_number',
-      },
-      {
-        headerName: 'Payment',
-        field: 'total',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'total',
-      },
-      {
-        headerName: 'Type',
-        field: 'cf_service_type',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'cf_service_type',
-      },
-      {
-        headerName: 'Quotation Reference',
-        field: 'reference_number',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'reference_number',
-      },
-      {
-        headerName: 'ProjectNo',
-        field: 'cf_project_no',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'cf_project_no',
-      },
-      {
-        headerName: 'Date',
-        field: 'date',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'date',
-      }
+    },
+    {
+      headerName: 'SalesOrder Number',
+      field: 'salesorder_number',
+      filter: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'salesorder_number',
+    },
+    {
+      headerName: 'Payment',
+      field: 'total',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'total',
+    },
+    {
+      headerName: 'Type',
+      field: 'cf_service_type',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'cf_service_type',
+    },
+    {
+      headerName: 'Quotation Reference',
+      field: 'reference_number',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'reference_number',
+    },
+    {
+      headerName: 'ProjectNo',
+      field: 'cf_project_no',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'cf_project_no',
+    },
+    {
+      headerName: 'Date',
+      field: 'date',
+      filter: true,
+      enableSorting: true,
+      editable: false,
+      sortable: true,
+      tooltipField: 'date',
+    }
     ]
-  }  
+  }
 
   onGridReady(params): void {
     this.api = params.api;

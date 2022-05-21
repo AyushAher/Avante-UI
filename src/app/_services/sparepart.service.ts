@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { environment } from '../../environments/environment';
 import { SparePart, ConfigPartCombo } from '../_models';
+import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class SparePartService {
@@ -14,7 +13,8 @@ export class SparePartService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private environment: EnvService,
   ) {
     //this.distrubutorSubject = new BehaviorSubject<Distributor>();
     //this.user = this.distrubutorSubject.asObservable();
@@ -27,48 +27,48 @@ export class SparePartService {
 
 
   save(sparepart: SparePart) {
-    return this.http.post(`${environment.apiUrl}/SpareParts`, sparepart);
+    return this.http.post(`${this.environment.apiUrl}/SpareParts`, sparepart);
   }
 
   getAll() {
-    return this.http.get<SparePart[]>(`${environment.apiUrl}/SpareParts`);
+    return this.http.get<SparePart[]>(`${this.environment.apiUrl}/SpareParts`);
   }
 
   getById(id: string) {
-    return this.http.get<SparePart>(`${environment.apiUrl}/SpareParts/${id}`);
+    return this.http.get<SparePart>(`${this.environment.apiUrl}/SpareParts/${id}`);
   }
 
   getByPartNo(configPartCombo: ConfigPartCombo) {
-    return this.http.post<SparePart>(`${environment.apiUrl}/SpareParts/GetByPartNo`, configPartCombo);
+    return this.http.post<SparePart>(`${this.environment.apiUrl}/SpareParts/GetByPartNo`, configPartCombo);
   }
 
   getByConfignValueId(configid: string, configval: string) {
-    return this.http.get<SparePart>(`${environment.apiUrl}/SpareParts/GetConfigSparepart/${configid}/${configval}`);
+    return this.http.get<SparePart>(`${this.environment.apiUrl}/SpareParts/GetConfigSparepart/${configid}/${configval}`);
   }
 
   getByConfigId(id: string) {
-    return this.http.get<SparePart[]>(`${environment.apiUrl}/SpareParts/GetConfigSparepart/${id}`);
+    return this.http.get<SparePart[]>(`${this.environment.apiUrl}/SpareParts/GetConfigSparepart/${id}`);
   }
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/SpareParts/`, params)
+    return this.http.put(`${this.environment.apiUrl}/SpareParts/`, params)
       .pipe(map(x => {
         return x;
       }));
   }
 
-    delete(id: string) {
-      return this.http.delete(`${environment.apiUrl}/SpareParts/${id}`)
-            .pipe(map(x => {
-                return x;
-            }));
+  delete(id: string) {
+    return this.http.delete(`${this.environment.apiUrl}/SpareParts/${id}`)
+      .pipe(map(x => {
+        return x;
+      }));
   }
 
   uploadSparePart(file: File) {
     const formData: FormData = new FormData();
 
     formData.append('file', file);
-    return this.http.post(`${environment.apiUrl}/SpareParts/UploadFile`, formData);
+    return this.http.post(`${this.environment.apiUrl}/SpareParts/UploadFile`, formData);
   }
 
 

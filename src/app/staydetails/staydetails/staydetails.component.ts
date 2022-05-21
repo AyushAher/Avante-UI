@@ -27,6 +27,7 @@ import {
   StaydetailsService
 } from "../../_services";
 import { environment } from "../../../environments/environment";
+import { EnvService } from "src/app/_services/env/env.service";
 
 @Component({
   selector: "app-staydetails",
@@ -74,7 +75,8 @@ export class StaydetailsComponent implements OnInit {
     private servicerequestservice: ServiceRequestService,
     private listTypeService: ListTypeService,
     private currencyService: CurrencyService,
-  ) {
+    private environment: EnvService,
+    ) {
   }
 
   get f() {
@@ -128,12 +130,12 @@ export class StaydetailsComponent implements OnInit {
       combined: [false]
     });
 
-    if (role == environment.engRoleCode) {
+    if (role == this.environment.engRoleCode) {
       this.isEng = true;
       this.form.get('engineerid').disable()
       this.form.get('distId').disable()
     }
-    else if (role == environment.distRoleCode) {
+    else if (role == this.environment.distRoleCode) {
       this.isDist = true;
       this.form.get('distId').disable()
     }
@@ -189,7 +191,7 @@ export class StaydetailsComponent implements OnInit {
           }
         }
       })
-    if (role == environment.engRoleCode) {
+    if (role == this.environment.engRoleCode) {
       this.form.get('engineerid').setValue(this.user.contactId)
     }
     this.distributorservice.getAll()

@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import {User, workTime} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { User, workTime } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -13,7 +13,7 @@ import {
   NotificationService,
   worktimeService
 } from '../_services';
-import {BsModalService} from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -31,8 +31,6 @@ export class WorkTimeContentComponent implements OnInit {
   //id: string;
   listid: string;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
-  private api: GridApi;
   closeResult: string;
   @Input() public itemId;
   @Input() public id;
@@ -40,11 +38,7 @@ export class WorkTimeContentComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
-    private configTypeService: ConfigTypeValueService,
-    private listTypeService: ListTypeService,
     private notificationService: NotificationService,
     private worktimeservice: worktimeService,
     public activeModal: BsModalService
@@ -69,7 +63,7 @@ export class WorkTimeContentComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.workTimeForm.patchValue(data.object);
-            this.workTimeForm.patchValue({"worktimedate": new Date(data.object.worktimedate)});
+            this.workTimeForm.patchValue({ "worktimedate": new Date(data.object.worktimedate) });
             this.PerDayHrs()
           },
           error: error => {
@@ -123,7 +117,7 @@ export class WorkTimeContentComponent implements OnInit {
     if (this.workTimeForm.invalid) {
       return;
     }
-    this.workTime= this.workTimeForm.value;
+    this.workTime = this.workTimeForm.value;
     this.workTime.servicereportid = this.itemId;
 
     if (this.id == null) {
@@ -135,16 +129,16 @@ export class WorkTimeContentComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
               //this.configList = data.object;
-             // this.listvalue.get("configValue").setValue("");
+              // this.listvalue.get("configValue").setValue("");
             }
             else {
-              
+
               this.close();
             }
             this.loading = false;
           },
-          error: error => {
-            
+          error: () => {
+
             this.loading = false;
           }
         });
@@ -163,13 +157,13 @@ export class WorkTimeContentComponent implements OnInit {
               //this.id = null;
             }
             else {
-              
+
               this.close();
             }
             this.loading = false;
           },
-          error: error => {
-            
+          error: () => {
+
             this.loading = false;
           }
         });

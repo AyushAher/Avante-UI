@@ -3,9 +3,9 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { User } from '../_models';
 import { AccountService, CountryService, CustomerService, InstrumentService, NotificationService, DistributorRegionService, ListTypeService } from '../_services';
+import { EnvService } from '../_services/env/env.service';
 
 @Component({
   selector: 'app-reportfilter',
@@ -52,7 +52,8 @@ export class ReportfilterComponent implements OnInit {
     private instrumentService: InstrumentService,
     private notificationService: NotificationService,
     private regionService: DistributorRegionService,
-    private listtypeService: ListTypeService
+    private listtypeService: ListTypeService,
+    private environment: EnvService,
   ) { }
 
   ngOnInit(): void {
@@ -72,19 +73,19 @@ export class ReportfilterComponent implements OnInit {
       role = role[0]?.itemCode;
 
       switch (role) {
-        case environment.distRoleCode:
+        case this.environment.distRoleCode:
           this.IsDist = true
           this.IsCust = false
           this.IsEng = false
           break;
 
-        case environment.custRoleCode:
+        case this.environment.custRoleCode:
           this.IsDist = false
           this.IsCust = true
           this.IsEng = false
           break;
 
-        case environment.engRoleCode:
+        case this.environment.engRoleCode:
           this.IsDist = false
           this.IsCust = false
           this.IsEng = true

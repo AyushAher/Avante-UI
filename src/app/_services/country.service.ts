@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
 import { Country } from '../_models';
+import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class CountryService {
@@ -14,31 +14,33 @@ export class CountryService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private environment: EnvService,
+
     ) {
     }
 
   save(contact: Country) {
-    return this.http.post(`${environment.apiUrl}/Country`, contact);
+    return this.http.post(`${this.environment.apiUrl}/Country`, contact);
     }
 
     getAll() {
-      return this.http.get<Country[]>(`${environment.apiUrl}/Country`);
+      return this.http.get<Country[]>(`${this.environment.apiUrl}/Country`);
     }
 
     getById(id: string) {
-      return this.http.get<Country>(`${environment.apiUrl}/Country/${id}`);
+      return this.http.get<Country>(`${this.environment.apiUrl}/Country/${id}`);
     }
 
     update(id, params) {
-      return this.http.put(`${environment.apiUrl}/Country/${id}`, params)
+      return this.http.put(`${this.environment.apiUrl}/Country/${id}`, params)
             .pipe(map(x => {
                 return x;
             }));
     }
 
     delete(id: string) {
-      return this.http.delete(`${environment.apiUrl}/Country/${id}`)
+      return this.http.delete(`${this.environment.apiUrl}/Country/${id}`)
             .pipe(map(x => {
                 return x;
             }));

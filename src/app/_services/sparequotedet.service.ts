@@ -1,48 +1,49 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
 import {map} from "rxjs/operators";
 import {Sparequotedet} from "../_models/sparequotedet";
+import { EnvService } from './env/env.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SparequotedetService {
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private environment: EnvService,
   ) {
   }
 
   save(params) {
-    return this.http.post(`${environment.apiUrl}/SpareQuoteDetails`, params);
+    return this.http.post(`${this.environment.apiUrl}/SpareQuoteDetails`, params);
   }
 
 
   getAll(parentid) {
-    return this.http.get<Sparequotedet[]>(`${environment.apiUrl}/SpareQuoteDetails/all/${parentid}`);
+    return this.http.get<Sparequotedet[]>(`${this.environment.apiUrl}/SpareQuoteDetails/all/${parentid}`);
   }
 
   getPrev(parentid) {
-    return this.http.get(`${environment.apiUrl}/SpareQuoteDetails/prev/${parentid}`);
+    return this.http.get(`${this.environment.apiUrl}/SpareQuoteDetails/prev/${parentid}`);
   }
 
   getById(id: string) {
-    return this.http.get<Sparequotedet>(`${environment.apiUrl}/SpareQuoteDetails/${id}`);
+    return this.http.get<Sparequotedet>(`${this.environment.apiUrl}/SpareQuoteDetails/${id}`);
   }
 
   GetDistContacts(id: string) {
-    return this.http.get(`${environment.apiUrl}/SpareQuoteDetails/distcontacts/${id}`);
+    return this.http.get(`${this.environment.apiUrl}/SpareQuoteDetails/distcontacts/${id}`);
   }
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/SpareQuoteDetails/${id}`, params)
+    return this.http.put(`${this.environment.apiUrl}/SpareQuoteDetails/${id}`, params)
       .pipe(map(x => {
         return x;
       }));
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/SpareQuoteDetails/${id}`)
+    return this.http.delete(`${this.environment.apiUrl}/SpareQuoteDetails/${id}`)
       .pipe(map(x => {
         return x;
       }));

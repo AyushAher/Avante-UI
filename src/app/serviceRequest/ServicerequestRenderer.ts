@@ -123,7 +123,7 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
                     this.statuslist = data;
                 },
                 error: error => {
-                    
+
                 }
             });
 
@@ -162,7 +162,7 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
                             // this.notificationService.showSuccess(data.resultMessage, "Success");
                             this.notificationService.filter("itemadded");
                         } else {
-                            
+
                         }
                     },
                     error: error => {
@@ -194,7 +194,7 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
                         this.notificationService.showSuccess(data.resultMessage, "Success")
                         this.notificationService.filter("itemadded");
                     } else {
-     
+
                     }
                 })
         }

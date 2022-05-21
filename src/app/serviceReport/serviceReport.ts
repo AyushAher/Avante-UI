@@ -62,6 +62,7 @@ import { CustspinventoryService } from '../_services/custspinventory.service';
 import { PreventivemaintenancetableComponent } from '../preventivemaintenancetable/preventivemaintenancetable.component';
 import { environment } from '../../environments/environment';
 import { PreventivemaintenancesService } from '../_services/preventivemaintenances.service';
+import { EnvService } from '../_services/env/env.service';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -171,15 +172,14 @@ export class ServiceReportComponent implements OnInit {
     private modalService: BsModalService,
     private workdoneservice: workdoneService,
     private worktimeservice: worktimeService,
-    private instrumentservice: InstrumentService,
     private serviceRequestService: ServiceRequestService,
     private srrecomndservice: SrRecomandService,
     private srConsumedservice: SrConsumedService,
-    private srInventoryservice: InventoryService,
+    private environment: EnvService,
     private preventivemaintenancesService: PreventivemaintenancesService,
     private CustSPInventoryService: CustspinventoryService
   ) {
-    this.notificationService.listen().subscribe((m: any) => {
+    this.notificationService.listen().subscribe(() => {
       if (this.ServiceReportId != null) {
         this.ServiceReportService.getById(this.ServiceReportId).pipe(first())
           .subscribe({
@@ -187,7 +187,7 @@ export class ServiceReportComponent implements OnInit {
               this.workdonelist = data.object.lstWorkdone;
               this.workTime = data.object.lstWorktime;
 
-              this.workTime.forEach((value, index) => {
+              this.workTime.forEach((value) => {
                 value.worktimedate = this.datepipe.transform(value.worktimedate, 'dd/MM/YYYY');
               });
 
@@ -262,7 +262,7 @@ export class ServiceReportComponent implements OnInit {
     const role = JSON.parse(localStorage.getItem('roles'));
     this.role = role[0]?.itemCode;
 
-    this.role == environment.engRoleCode ? this.isEng = true : this.isEng = false;
+    this.role == this.environment.engRoleCode ? this.isEng = true : this.isEng = false;
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -395,7 +395,7 @@ export class ServiceReportComponent implements OnInit {
             this.workTime = data.object.lstWorktime;
 
             const datepipe = new DatePipe('en-US');
-            this.workTime.forEach((value, index) => {
+            this.workTime.forEach((value) => {
               value.worktimedate = datepipe.transform(value.worktimedate, 'dd/MM/YYYY');
             });
             this.spconsumedlist = data.object.lstSPConsumed;
@@ -450,7 +450,7 @@ export class ServiceReportComponent implements OnInit {
           next: (data: any) => {
             this.PdffileData = data.object;
           },
-          error: (err: any) => {
+          error: () => {
           },
         });
 
@@ -505,7 +505,7 @@ export class ServiceReportComponent implements OnInit {
 
   CancelEdit() {
     this.ServiceReportform.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
 
     this.columnworkdefs = this.createworkdoneColumnDefsRO();
@@ -604,7 +604,7 @@ export class ServiceReportComponent implements OnInit {
             this.loading = false;
 
           },
-          error: error => {
+          error: () => {
             // this.alertService.error(error);
 
 
@@ -643,7 +643,7 @@ export class ServiceReportComponent implements OnInit {
             this.loading = false;
 
           },
-          error: error => {
+          error: () => {
             //  this.alertService.error(error);
 
             this.loading = false;
@@ -766,7 +766,7 @@ export class ServiceReportComponent implements OnInit {
                   next: (d: any) => {
                     if (d.result) this.notificationService.showSuccess(d.resultMessage, 'Success');
                   },
-                  error: error => {
+                  error: () => {
 
 
                     this.loading = false;
@@ -799,7 +799,7 @@ export class ServiceReportComponent implements OnInit {
                       this.notificationService.filter('itemadded');
                     }
                   },
-                  error: error => {
+                  error: () => {
 
 
                     this.loading = false;
@@ -821,7 +821,7 @@ export class ServiceReportComponent implements OnInit {
                   }
                   this.loading = false;
                 },
-                error: error => {
+                error: () => {
 
 
                   this.loading = false;
@@ -871,7 +871,7 @@ export class ServiceReportComponent implements OnInit {
                     }
                     this.loading = false;
                   },
-                  error: error => {
+                  error: () => {
 
 
                     this.loading = false;
@@ -907,7 +907,7 @@ export class ServiceReportComponent implements OnInit {
                       this.notificationService.filter('itemadded');
                     }
                   },
-                  error: error => {
+                  error: () => {
 
 
                     this.loading = false;
@@ -923,19 +923,17 @@ export class ServiceReportComponent implements OnInit {
 
   onCellValueChanged(event) {
     if (!this.isCompleted) {
-      const data = event.data;
       event.data.modified = true;
     }
   }
 
   onCellValueChangedPre(event) {
     if (!this.isCompleted) {
-      const data = event.data;
       event.data.modified = true;
     }
   }
 
-  updateSpareParts(params) {
+  updateSpareParts() {
   }
 
   addPartrecmm() {
@@ -957,7 +955,7 @@ export class ServiceReportComponent implements OnInit {
             }
             this.loading = false;
           },
-          error: error => {
+          error: () => {
 
 
             this.loading = false;
@@ -1000,7 +998,7 @@ export class ServiceReportComponent implements OnInit {
         editable: false,
         sortable: false,
         width: 150,
-        cellRenderer: (params) => {
+        cellRenderer: () => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
           } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
@@ -1050,7 +1048,7 @@ export class ServiceReportComponent implements OnInit {
         sortable: false,
         lockPosition: "left",
 
-        cellRenderer: (params) => {
+        cellRenderer: () => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
           } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
@@ -1149,7 +1147,7 @@ export class ServiceReportComponent implements OnInit {
           next: (data: any) => {
             this.configValueList = data.object;
           },
-          error: error => {
+          error: () => {
 
 
             this.loading = false;
@@ -1230,7 +1228,7 @@ export class ServiceReportComponent implements OnInit {
         sortable: false,
         lockPosition: "left",
 
-        cellRenderer: (params) => {
+        cellRenderer: () => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
           } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
@@ -1340,7 +1338,7 @@ export class ServiceReportComponent implements OnInit {
         editable: false,
         sortable: false,
         lockPosition: "left",
-        cellRenderer: (params) => {
+        cellRenderer: () => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`;
           } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
@@ -1450,7 +1448,7 @@ export class ServiceReportComponent implements OnInit {
                             this.PdffileData = data.object;
                             // this.getPdffile(data.object.filePath);
                           },
-                          error: error => {
+                          error: () => {
 
 
                             this.loading = false;
@@ -1458,7 +1456,7 @@ export class ServiceReportComponent implements OnInit {
                         });
                     }
                   },
-                  error: error => {
+                  error: () => {
 
 
                     this.loading = false;
@@ -1558,7 +1556,7 @@ export class ServiceReportComponent implements OnInit {
                 }
                 this.loading = false;
               },
-              error: error => {
+              error: () => {
 
 
                 this.loading = false;
@@ -1592,7 +1590,7 @@ export class ServiceReportComponent implements OnInit {
           this.preventivemaintenancesService.getById(this.ServiceReportId)
             .pipe(first())
             .subscribe({
-              next: (prev: any) => {
+              next: () => {
                 this.serviceRequestService.getById(data.serviceRequestId)
                   .pipe(first())
                   .subscribe((serReq: any) => {

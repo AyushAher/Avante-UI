@@ -133,6 +133,7 @@ import { ServicecompletionreportComponent } from './servicecompletionreport/serv
 import { PendingquotationrequestComponent } from './pendingquotationrequest/pendingquotationrequest.component';
 import { ServicecontractrevenuereportComponent } from './servicecontractrevenuereport/servicecontractrevenuereport.component';
 import { CostofownershipComponent } from './costofownership/costofownership.component';
+import { EnvServiceProvider } from './_services/env/env.service.provider';
 
 
 @NgModule({
@@ -263,7 +264,7 @@ import { CostofownershipComponent } from './costofownership/costofownership.comp
     AgGridModule.withComponents([]),
     ScheduleModule, RecurrenceEditorModule
   ],
-  providers: [DecimalPipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  providers: [EnvServiceProvider, DecimalPipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     fakeBackendProvider, DatePipe, DayService, WeekService, MonthService, WorkWeekService, MonthAgendaService, TimelineMonthService,
   ],

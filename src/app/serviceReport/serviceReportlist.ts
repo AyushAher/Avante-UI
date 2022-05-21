@@ -8,11 +8,11 @@ import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import { AccountService, ContactService, NotificationService, ProfileService, ServiceReportService, ServiceRequestService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
-import { environment } from 'src/environments/environment';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { DatePipe } from '@angular/common';
 import { PreventivemaintenancesService } from '../_services/preventivemaintenances.service';
+import { EnvService } from '../_services/env/env.service';
 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -44,7 +44,7 @@ export class ServiceReportListComponent implements OnInit {
   constructor(
     private router: Router,
     private accountService: AccountService,
-    private notificationService: NotificationService,
+    private environment: EnvService,
     private contcactservice: ContactService,
     private profileService: ProfileService,
     private preventivemaintenancesService: PreventivemaintenancesService,
@@ -72,7 +72,7 @@ export class ServiceReportListComponent implements OnInit {
       this.role = this.role[0]?.itemCode;
     }
 
-    if (this.role == environment.distRoleCode) this.isDist = true;
+    if (this.role == this.environment.distRoleCode) this.isDist = true;
     else {
       this.toggleFilter()
       this.getAllRecords();
@@ -105,14 +105,14 @@ export class ServiceReportListComponent implements OnInit {
       .pipe(first())
       .subscribe((data1: any) => {
         switch (this.role) {
-          case environment.custRoleCode:
+          case this.environment.custRoleCode:
             this.ServiceReportList = data.filter(x => x.serviceRequest.createdby == this.user.userId);
             break;
-          case environment.distRoleCode:
+          case this.environment.distRoleCode:
             this.isDist = true;
             this.ServiceReportList = data.filter(x => x.serviceRequest.distid == data1.object.defdistid);
             break;
-          case environment.engRoleCode:
+          case this.environment.engRoleCode:
             this.ServiceReportList = data.filter(x => x.serviceRequest.assignedto == this.user.contactId);
             break;
           default:
@@ -165,7 +165,7 @@ export class ServiceReportListComponent implements OnInit {
         filter: true,
         editable: false,
         sortable: true,
-        hide: this.role != environment.custRoleCode
+        hide: this.role != this.environment.custRoleCode
       },
       {
         headerName: 'Of',
@@ -190,7 +190,7 @@ export class ServiceReportListComponent implements OnInit {
       },
       {
         headerName: 'Download',
-        hide: this.role != environment.custRoleCode,
+        hide: this.role != this.environment.custRoleCode,
         cellRenderer: (params) => {
           return `<button class="btn btn-link" type="button" data-action-type="download"><i class="fas fa-download" data-action-type="download" title="download"></i></button>`;
         }

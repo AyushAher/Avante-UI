@@ -13,7 +13,7 @@ import {
   ProfileService
 } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -44,7 +44,8 @@ export class AmcListComponent implements OnInit {
     private accountService: AccountService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
-    private AmcService: AmcService
+    private AmcService: AmcService,
+    private environment: EnvService
   ) {
 
   }
@@ -67,7 +68,7 @@ export class AmcListComponent implements OnInit {
     else role = role[0]?.itemCode;
 
 
-    if (role == environment.distRoleCode) this.isDist = true;
+    if (role == this.environment.distRoleCode) this.isDist = true;
     else {
       this.toggleFilter()
       this.AmcService.getAll()

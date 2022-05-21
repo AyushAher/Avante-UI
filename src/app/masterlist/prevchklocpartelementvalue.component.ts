@@ -1,13 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ConfigTypeValue, User} from "../_models";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService, ListTypeService, NotificationService} from "../_services";
-import {BsModalService} from "ngx-bootstrap/modal";
-import {first} from "rxjs/operators";
-import {MRenderComponent} from "./rendercomponent";
-import {PrevchklocpartelementService} from "../_services/prevchklocpartelement.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { ConfigTypeValue, User } from "../_models";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AccountService, ListTypeService, NotificationService } from "../_services";
+import { BsModalService } from "ngx-bootstrap/modal";
+import { first } from "rxjs/operators";
+import { MRenderComponent } from "./rendercomponent";
+import { PrevchklocpartelementService } from "../_services/prevchklocpartelement.service";
 
 @Component({
   selector: 'app-prevchklocpartelementvalue',
@@ -31,10 +31,7 @@ export class PrevchklocpartelementvalueComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
-    private listTypeService: ListTypeService,
     private notificationService: NotificationService,
     public activeModal: BsModalService,
     private prevchklocpartelementService: PrevchklocpartelementService,
@@ -59,8 +56,8 @@ export class PrevchklocpartelementvalueComponent implements OnInit {
         next: (data: any) => {
           this.configList = data.object;
         },
-        error: error => {
-          
+        error: () => {
+
           this.loading = false;
         }
       });
@@ -112,12 +109,12 @@ export class PrevchklocpartelementvalueComponent implements OnInit {
               this.configList = data.object;
               this.listvalue.get("element").setValue("");
             } else {
-              
+
             }
             this.loading = false;
           },
-          error: error => {
-            
+          error: () => {
+
             this.loading = false;
           }
         });
@@ -133,12 +130,12 @@ export class PrevchklocpartelementvalueComponent implements OnInit {
               this.listvalue.get("element").setValue("");
               this.id = null;
             } else {
-              
+
             }
             this.loading = false;
           },
-          error: error => {
-            
+          error: () => {
+
             this.loading = false;
           }
         });

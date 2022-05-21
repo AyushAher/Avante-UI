@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
-
-import { environment } from '../../environments/environment';
 import { Profile, ProfileReadOnly } from '../_models';
+import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
@@ -14,6 +13,7 @@ export class ProfileService {
 
     constructor(
         private router: Router,
+        private environment: EnvService,
         private http: HttpClient
     ) {
       this.profileSubject = new BehaviorSubject<ProfileReadOnly>(JSON.parse(localStorage.getItem('userprofile')));
@@ -32,23 +32,23 @@ export class ProfileService {
 
 
   save(profile: Profile) {
-    return this.http.post(`${environment.apiUrl}/Profiles`, profile);
+    return this.http.post(`${this.environment.apiUrl}/Profiles`, profile);
     }
 
     getAll() {
-      return this.http.get<Profile[]>(`${environment.apiUrl}/Profiles`);
+      return this.http.get<Profile[]>(`${this.environment.apiUrl}/Profiles`);
     }
 
     getById(id: string) {
-      return this.http.get<Profile>(`${environment.apiUrl}/Profiles/${id}`);
+      return this.http.get<Profile>(`${this.environment.apiUrl}/Profiles/${id}`);
     }
     GetAllScreens() {
-      return this.http.get(`${environment.apiUrl}/Profiles/GetAllScreens`);
+      return this.http.get(`${this.environment.apiUrl}/Profiles/GetAllScreens`);
     }
 
     getUserProfile(value: string) {
       //debugger;
-      this.http.get<Profile>(`${environment.apiUrl}/UserProfiles/${value}`).
+      this.http.get<Profile>(`${this.environment.apiUrl}/UserProfiles/${value}`).
         pipe(first())
          .subscribe({
            next: (data: any) => {
@@ -66,7 +66,7 @@ export class ProfileService {
   }
 
     update(id, params) {
-      return this.http.put(`${environment.apiUrl}/Profiles`, params)
+      return this.http.put(`${this.environment.apiUrl}/Profiles`, params)
             .pipe(map(x => {
               // update stored user if the logged in user updated their own record
               //if (id == this.distributor.id) {
@@ -82,7 +82,7 @@ export class ProfileService {
     }
 
     delete(id: string) {
-      return this.http.delete(`${environment.apiUrl}/Profiles/${id}`)
+      return this.http.delete(`${this.environment.apiUrl}/Profiles/${id}`)
             .pipe(map(x => {
                 //// auto logout if the logged in user deleted their own record
                 //if (id == this.userValue.id) {

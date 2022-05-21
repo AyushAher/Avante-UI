@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
 import { DistributorRegion } from '../_models';
+import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class DistributorRegionService {
@@ -14,7 +14,8 @@ export class DistributorRegionService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private environment: EnvService,
     ) {
       //this.distrubutorSubject = new BehaviorSubject<Distributor>();
       //this.user = this.distrubutorSubject.asObservable();
@@ -27,23 +28,23 @@ export class DistributorRegionService {
   
 
   save(distributor: DistributorRegion) {
-    return this.http.post(`${environment.apiUrl}/DistRegions`, distributor);
+    return this.http.post(`${this.environment.apiUrl}/DistRegions`, distributor);
     }
 
     getAll() {
-      return this.http.get<DistributorRegion[]>(`${environment.apiUrl}/DistRegions`);
+      return this.http.get<DistributorRegion[]>(`${this.environment.apiUrl}/DistRegions`);
     }
 
     getById(id: string) {
-      return this.http.get<DistributorRegion>(`${environment.apiUrl}/DistRegions/${id}`);
+      return this.http.get<DistributorRegion>(`${this.environment.apiUrl}/DistRegions/${id}`);
     }
 
   getDistByCustomerId(id: string) {
-    return this.http.get<DistributorRegion[]>(`${environment.apiUrl}/Site/GetDistRegionsByCustomer/${id}`);
+    return this.http.get<DistributorRegion[]>(`${this.environment.apiUrl}/Site/GetDistRegionsByCustomer/${id}`);
   }
 
     update(id, params) {
-      return this.http.put(`${environment.apiUrl}/DistRegions/${id}`, params)
+      return this.http.put(`${this.environment.apiUrl}/DistRegions/${id}`, params)
             .pipe(map(x => {
               // update stored user if the logged in user updated their own record
               //if (id == this.distributor.id) {
@@ -59,7 +60,7 @@ export class DistributorRegionService {
     }
 
     delete(id: string) {
-      return this.http.delete(`${environment.apiUrl}/DistRegions/${id}`)
+      return this.http.delete(`${this.environment.apiUrl}/DistRegions/${id}`)
             .pipe(map(x => {
                 //// auto logout if the logged in user deleted their own record
                 //if (id == this.userValue.id) {

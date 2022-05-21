@@ -33,15 +33,10 @@ export class DistributorRegionListComponent implements OnInit {
   private api: GridApi;
 
   constructor(
-    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private distributorRgService: DistributorRegionService,
-    private countryService: CountryService,
     private distributorService: DistributorService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
   }
@@ -69,7 +64,7 @@ export class DistributorRegionListComponent implements OnInit {
         next: (data: any) => {
           this.distributorModel = data.object.regions;
         },
-        error: error => {
+        error: () => {
           //this.alertService.error(error);
 
           this.loading = false;

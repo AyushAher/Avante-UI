@@ -18,6 +18,7 @@ import {
 import { RenderComponent } from '../distributor/rendercomponent';
 import { DatePipe } from '@angular/common';
 import { ServiceRComponent } from './ServicerequestRenderer';
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -56,7 +57,9 @@ export class ServiceRequestListComponent implements OnInit {
     private profileService: ProfileService,
     private contcactservice: ContactService,
     private serviceRequestService: ServiceRequestService,
-    private listTypeService: ListTypeService
+    private listTypeService: ListTypeService,
+    private environment: EnvService,
+
   ) { }
 
   ngOnInit() {
@@ -81,11 +84,11 @@ export class ServiceRequestListComponent implements OnInit {
       let role = JSON.parse(localStorage.getItem('roles'));
       role = role[0]?.itemCode;
 
-      if (role == environment.custRoleCode) {
+      if (role == this.environment.custRoleCode) {
         this.IsCustomerView = true;
         this.IsDistributorView = false;
         this.IsEngineerView = false;
-      } else if (role == environment.distRoleCode) {
+      } else if (role == this.environment.distRoleCode) {
         this.IsCustomerView = false;
         this.IsDistributorView = true;
         this.IsEngineerView = false;

@@ -3,8 +3,9 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { environment } from "src/environments/environment";
+
 import { Staydetails } from "../_models/staydetails";
+import { EnvService } from "./env/env.service";
 
 @Injectable({
   providedIn: "root",
@@ -13,25 +14,29 @@ export class StaydetailsService {
   public Staydetails: Observable<Staydetails>;
   private corsheaders: HttpHeaders;
   private root: string;
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private environment: EnvService,
+  ) { }
 
   save(traveldetail: Staydetails) {
-    return this.http.post(`${environment.apiUrl}/StayDetails`, traveldetail);
+    return this.http.post(`${this.environment.apiUrl}/StayDetails`, traveldetail);
   }
 
   getAll() {
-    return this.http.get<Staydetails[]>(`${environment.apiUrl}/StayDetails`);
+    return this.http.get<Staydetails[]>(`${this.environment.apiUrl}/StayDetails`);
   }
 
   getById(id: string) {
     return this.http.get<Staydetails>(
-      `${environment.apiUrl}/StayDetails/${id}`
+      `${this.environment.apiUrl}/StayDetails/${id}`
     );
   }
 
   update(id, params) {
     return this.http
-      .put(`${environment.apiUrl}/StayDetails/${id}`, params)
+      .put(`${this.environment.apiUrl}/StayDetails/${id}`, params)
       .pipe(
         map((x) => {
           return x;
@@ -40,7 +45,7 @@ export class StaydetailsService {
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/StayDetails/${id}`).pipe(
+    return this.http.delete(`${this.environment.apiUrl}/StayDetails/${id}`).pipe(
       map((x) => {
         return x;
       })

@@ -31,8 +31,6 @@ export class WorkdoneContentComponent implements OnInit {
   //id: string;
   listid: string;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
-  private api: GridApi;
   closeResult: string;
   @Input() public itemId;
   @Input() public id;
@@ -40,11 +38,7 @@ export class WorkdoneContentComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
-    private configTypeService: ConfigTypeValueService,
-    private listTypeService: ListTypeService,
     private notificationService: NotificationService,
     private workdoneservice: workdoneService,
     public activeModal: BsModalService
@@ -114,7 +108,7 @@ export class WorkdoneContentComponent implements OnInit {
             }
             this.loading = false;
           },
-          error: error => {
+          error: () => {
             
             this.loading = false;
           }
@@ -139,7 +133,7 @@ export class WorkdoneContentComponent implements OnInit {
             }
             this.loading = false;
           },
-          error: error => {
+          error: () => {
             
             this.loading = false;
           }

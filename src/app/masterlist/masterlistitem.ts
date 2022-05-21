@@ -9,8 +9,8 @@ import { AccountService, AlertService, ListTypeService, NotificationService, Pro
 import { MRenderComponent } from './rendercomponent';
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { ModelContentComponent } from './modelcontent';
-import { environment } from "../../environments/environment";
 import { PrevchklocpartelementvalueComponent } from "./prevchklocpartelementvalue.component";
+import { EnvService } from '../_services/env/env.service';
 
 @Component({
   selector: 'app-masterlistitem',
@@ -52,6 +52,7 @@ export class MasterListItemComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private modalService: BsModalService,
+    private environment: EnvService,
   ) { }
 
   ngOnInit() {
@@ -98,7 +99,7 @@ export class MasterListItemComponent implements OnInit {
       });
     this.list2 = JSON.parse(localStorage.getItem(this.listid))
     if (this.list2 != null) {
-      if (this.list2[0].listCode == environment.configTypeCode || this.list2[0].listCode == environment.location) {
+      if (this.list2[0].listCode == this.environment.configTypeCode || this.list2[0].listCode == this.environment.location) {
         this.addAccess = true;
       }
     }

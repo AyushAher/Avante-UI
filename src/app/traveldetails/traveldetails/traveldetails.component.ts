@@ -30,6 +30,7 @@ import { FilerendercomponentComponent } from "../../Offerrequest/filerendercompo
 import { HttpEventType } from "@angular/common/http";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { environment } from "../../../environments/environment";
+import { EnvService } from "src/app/_services/env/env.service";
 
 @Component({
   selector: "app-traveldetails",
@@ -94,6 +95,7 @@ export class TraveldetailsComponent implements OnInit {
     private listTypeService: ListTypeService,
     private servicerequestservice: ServiceRequestService,
     private currencyService: CurrencyService,
+    private environment: EnvService,
   ) { }
 
   ngOnInit() {
@@ -148,12 +150,12 @@ export class TraveldetailsComponent implements OnInit {
     } else {
       role = role[0]?.itemCode;
     }
-    if (role == environment.engRoleCode) {
+    if (role == this.environment.engRoleCode) {
       this.isEng = true;
       this.Form.get('flightdetails').get('currencyId').disable();
       this.Form.get('engineerid').disable();
       this.Form.get('distId').disable();
-    } else if (role == environment.distRoleCode) {
+    } else if (role == this.environment.distRoleCode) {
       this.isDist = true;
       this.Form.get('distId').disable();
       if (this.id != null) {
@@ -209,7 +211,7 @@ export class TraveldetailsComponent implements OnInit {
           }
         }
       })
-    if (role == environment.engRoleCode) {
+    if (role == this.environment.engRoleCode) {
       this.Form.get('engineerid').setValue(this.user.contactId)
     }
     this.listTypeService

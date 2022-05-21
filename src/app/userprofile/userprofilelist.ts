@@ -8,7 +8,7 @@ import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, CountryService, InstrumentService, NotificationService, ProfileService, UserProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -40,6 +40,7 @@ export class UserProfileListComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private profileService: ProfileService,
+    private environment: EnvService,
     private userprofileService: UserProfileService,
   ) {
 
@@ -65,11 +66,11 @@ export class UserProfileListComponent implements OnInit {
       let role = JSON.parse(localStorage.getItem('roles'));
       role = role[0]?.itemCode;
 
-      if (role == environment.custRoleCode) {
+      if (role == this.environment.custRoleCode) {
         this.IsCustomerView = true;
         this.IsDistributorView = false;
         this.IsEngineerView = false;
-      } else if (role == environment.distRoleCode) {
+      } else if (role == this.environment.distRoleCode) {
         this.IsCustomerView = false;
         this.IsDistributorView = true;
         this.IsEngineerView = false;

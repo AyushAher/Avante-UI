@@ -15,6 +15,7 @@ import {
   StaydetailsService
 } from "../../_services";
 import { environment } from "../../../environments/environment";
+import { EnvService } from "src/app/_services/env/env.service";
 
 @Component({
   selector: "app-staydetailslist",
@@ -38,17 +39,13 @@ export class StaydetailsListComponent implements OnInit {
   user: User;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
     private StayDetailsService: StaydetailsService,
-    private notificationService: NotificationService,
     private distributorService: DistributorService,
     private profileService: ProfileService,
     private listTypeService: ListTypeService,
-
+    private environment: EnvService,
   ) { }
 
   ngOnInit() {
@@ -87,9 +84,9 @@ export class StaydetailsListComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data1: any) => {
-                  if (role == environment.distRoleCode) {
+                  if (role == this.environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
-                  } else if (role == environment.engRoleCode) {
+                  } else if (role == this.environment.engRoleCode) {
                     data.object = data.object.filter(x => x.engineerid == this.user.contactId)
                     this.List = data.object;
                   } else {
@@ -101,8 +98,8 @@ export class StaydetailsListComponent implements OnInit {
             this.List = data.object;
           }
         },
-        error: (error) => {
-          
+        error: () => {
+
           this.loading = false;
         },
       });

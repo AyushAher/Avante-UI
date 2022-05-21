@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { environment } from '../../environments/environment';
 import { ServiceReport } from '../_models';
+import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class ServiceReportService {
@@ -14,7 +13,8 @@ export class ServiceReportService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private environment: EnvService,
   ) {
     //this.distrubutorSubject = new BehaviorSubject<Distributor>();
     //this.user = this.distrubutorSubject.asObservable();
@@ -26,44 +26,44 @@ export class ServiceReportService {
 
 
   save(ServiceReport: ServiceReport) {
-    return this.http.post(`${environment.apiUrl}/ServiceReports`, ServiceReport);
+    return this.http.post(`${this.environment.apiUrl}/ServiceReports`, ServiceReport);
   }
 
   GenerateServciesReport(ServiceReport) {
-    return this.http.post(`${environment.apiUrl}/ServiceReports/GenerateServiceReport`, ServiceReport);
+    return this.http.post(`${this.environment.apiUrl}/ServiceReports/GenerateServiceReport`, ServiceReport);
   }
 
   getAll() {
-    return this.http.get<ServiceReport[]>(`${environment.apiUrl}/ServiceReports`);
+    return this.http.get<ServiceReport[]>(`${this.environment.apiUrl}/ServiceReports`);
   }
 
   getSparePartRecomm(serReqId: string) {
-    return this.http.get(`${environment.apiUrl}/ServiceReports/getSparePartRecomm/${serReqId}`);
+    return this.http.get(`${this.environment.apiUrl}/ServiceReports/getSparePartRecomm/${serReqId}`);
   }
 
   GetServiceReportByContId(id: string) {
-    return this.http.get(`${environment.apiUrl}/ServiceReports/GetServiceReportByContId/${id}`);
+    return this.http.get(`${this.environment.apiUrl}/ServiceReports/GetServiceReportByContId/${id}`);
   }
 
   getbycust(cust: string) {
-    return this.http.get<ServiceReport[]>(`${environment.apiUrl}/ServiceReports/GetServiceReportByCustomer/${cust}`);
+    return this.http.get<ServiceReport[]>(`${this.environment.apiUrl}/ServiceReports/GetServiceReportByCustomer/${cust}`);
   }
 
   getById(id: string) {
-    return this.http.get<ServiceReport>(`${environment.apiUrl}/ServiceReports/${id}`);
+    return this.http.get<ServiceReport>(`${this.environment.apiUrl}/ServiceReports/${id}`);
   }
 
   getView(id: string) {
-    return this.http.get<ServiceReport>(`${environment.apiUrl}/VW_ServiceReport/${id}`);
+    return this.http.get<ServiceReport>(`${this.environment.apiUrl}/VW_ServiceReport/${id}`);
   }
 
   searchByKeyword(param: string, custSiteId: string) {
     param = param == "" ? "undefined" : param;
-    return this.http.get<ServiceReport[]>(`${environment.apiUrl}/ServiceReports/GetInstrumentBySerialNo/${param}/${custSiteId}`);
+    return this.http.get<ServiceReport[]>(`${this.environment.apiUrl}/ServiceReports/GetInstrumentBySerialNo/${param}/${custSiteId}`);
   }
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/ServiceReports/${id}`, params)
+    return this.http.put(`${this.environment.apiUrl}/ServiceReports/${id}`, params)
       .pipe(map(x => {
         // update stored user if the logged in user updated their own record
         //if (id == this.distributor.id) {
@@ -79,7 +79,7 @@ export class ServiceReportService {
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/ServiceReports/${id}`)
+    return this.http.delete(`${this.environment.apiUrl}/ServiceReports/${id}`)
       .pipe(map(x => {
         //// auto logout if the logged in user deleted their own record
         //if (id == this.userValue.id) {
@@ -90,7 +90,7 @@ export class ServiceReportService {
   }
 
   deleteConfig(deleteConfig: ServiceReport) {
-    return this.http.post(`${environment.apiUrl}/Instrumentconfig/RemoveInsConfigType`, deleteConfig)
+    return this.http.post(`${this.environment.apiUrl}/Instrumentconfig/RemoveInsConfigType`, deleteConfig)
     //.pipe(map(x => {
     //  //// auto logout if the logged in user deleted their own record
     //  //if (id == this.userValue.id) {

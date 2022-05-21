@@ -14,6 +14,7 @@ import {
   TravelDetailService
 } from "../../_services";
 import { environment } from "../../../environments/environment";
+import { EnvService } from "src/app/_services/env/env.service";
 
 @Component({
   selector: "app-traveldetailslist",
@@ -41,10 +42,9 @@ export class TraveldetailslistComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private Service: TravelDetailService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
     private distributorService: DistributorService,
-    private listTypeService: ListTypeService,
+    private environment: EnvService,
   ) { }
 
   ngOnInit() {
@@ -78,11 +78,11 @@ export class TraveldetailslistComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          
-          data.object.forEach(element =>  element.servicerequestno = element.servicerequestno.slice(0, -1));
+
+          data.object.forEach(element => element.servicerequestno = element.servicerequestno.slice(0, -1));
 
           if (this.user.username != "admin") {
-            if (role == environment.engRoleCode) {
+            if (role == this.environment.engRoleCode) {
               data.object = data.object.filter(x => x.createdby == this.user.userId || x.engineerid == this.user.contactId)
               this.List = data.object;
             }
@@ -90,7 +90,7 @@ export class TraveldetailslistComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data1: any) => {
-                  if (role == environment.distRoleCode) {
+                  if (role == this.environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
                   }
                 }
@@ -99,7 +99,7 @@ export class TraveldetailslistComponent implements OnInit {
             this.List = data.object;
           }
         },
-        error: (error) => {
+        error: () => {
 
           this.loading = false;
         },

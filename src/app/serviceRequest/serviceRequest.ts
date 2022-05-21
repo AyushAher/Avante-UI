@@ -50,6 +50,7 @@ import {
 } from '../_services';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponent.component';
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -154,6 +155,7 @@ export class ServiceRequestComponent implements OnInit {
     private srAssignedHistoryService: SRAssignedHistoryService,
     private servicereportService: ServiceReportService,
     public datepipe: DatePipe,
+    private environment: EnvService,
     private EngschedulerService: EngschedulerService,
   ) {
     this.notificationService.listen().subscribe((m: any) => {
@@ -226,11 +228,11 @@ export class ServiceRequestComponent implements OnInit {
     let role = this.role;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
 
-    if (role == environment.custRoleCode) {
+    if (role == this.environment.custRoleCode) {
       this.IsCustomerView = true;
       this.IsDistributorView = false;
       this.IsEngineerView = false;
-    } else if (role == environment.distRoleCode) {
+    } else if (role == this.environment.distRoleCode) {
       this.IsCustomerView = false;
       this.IsDistributorView = true;
       this.IsEngineerView = false;
@@ -944,11 +946,11 @@ export class ServiceRequestComponent implements OnInit {
 
               if (this.isAmc) this.servicereport.problem = 'AMC';
 
-              this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.INS)).length > 0;
-              this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.ANAS)).length > 0;
-              this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.PRMN1)).length > 0;
-              this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.REWK)).length > 0;
-              this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == environment.CRMA)).length > 0;
+              this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.INS)).length > 0;
+              this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.ANAS)).length > 0;
+              this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.PRMN1)).length > 0;
+              this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.REWK)).length > 0;
+              this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.CRMA)).length > 0;
               if (this.customerId != null) {
                 this.customerService.getById(this.customerId)
                   .pipe(first())

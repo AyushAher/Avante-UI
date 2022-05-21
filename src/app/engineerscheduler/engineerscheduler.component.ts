@@ -15,9 +15,9 @@ import {
 import { ProfileReadOnly, ServiceRequest, User } from "../_models";
 import { EngschedulerService } from "../_services/engscheduler.service";
 import { DatePipe } from "@angular/common";
-import { environment } from "../../environments/environment";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TextBox, Input } from '@syncfusion/ej2-inputs';
+import { EnvService } from '../_services/env/env.service';
 
 L10n.load({
   'en-US': {
@@ -74,6 +74,7 @@ export class EngineerschedulerComponent implements OnInit {
     private profileService: ProfileService,
     private route: ActivatedRoute,
     private router: Router,
+    private environment: EnvService,
 
   ) {
   }
@@ -109,9 +110,9 @@ export class EngineerschedulerComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           data = data.filter(x => x.listTypeItemId == this.user.roleId)[0]
-          if (data?.itemCode == environment.engRoleCode) {
+          if (data?.itemCode == this.environment.engRoleCode) {
             this.isEng = true
-          } else if (data?.itemCode == environment.distRoleCode) {
+          } else if (data?.itemCode == this.environment.distRoleCode) {
             this.isDistSupp = true
           }
           if (this.isEng) {
@@ -219,7 +220,7 @@ export class EngineerschedulerComponent implements OnInit {
 
         },
         error: error => {
-          
+
         }
       });
   }
@@ -259,14 +260,14 @@ export class EngineerschedulerComponent implements OnInit {
                       if (!data.result) {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
-                        
+
                       }
                     },
                     error: (error) => {
                       this.loading = false;
                       this.scheduleObj.deleteEvent(x)
                       this.scheduleObj.refreshEvents();
-                      
+
                     }
                   })
 
@@ -282,7 +283,7 @@ export class EngineerschedulerComponent implements OnInit {
                 this.loading = false;
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                
+
               }
             });
 
@@ -316,14 +317,14 @@ export class EngineerschedulerComponent implements OnInit {
                       if (!data.result) {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
-                        
+
                       }
                     },
                     error: (error) => {
                       this.loading = false;
                       this.scheduleObj.deleteEvent(x)
                       this.scheduleObj.refreshEvents();
-                      
+
                     }
                   })
 
@@ -339,7 +340,7 @@ export class EngineerschedulerComponent implements OnInit {
                 this.loading = false;
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                
+
               }
             });
         } else {
@@ -355,7 +356,7 @@ export class EngineerschedulerComponent implements OnInit {
           if (!data.result) {
             this.scheduleObj.deleteEvent(e.data)
             this.scheduleObj.refreshEvents();
-            
+
           }
         },
         error: (error) => {
@@ -363,7 +364,7 @@ export class EngineerschedulerComponent implements OnInit {
           this.scheduleObj.deleteEvent(e.data)
           this.scheduleObj.saveEvent(e.data)
           this.scheduleObj.refreshEvents();
-          
+
         }
       })
     } else if (e.requestType == "eventRemove") {
@@ -379,14 +380,14 @@ export class EngineerschedulerComponent implements OnInit {
                 if (!data.result) {
                   this.scheduleObj.deleteEvent(x)
                   this.scheduleObj.refreshEvents();
-                  
+
                 }
               },
               error: (error: any) => {
                 this.loading = false;
                 this.scheduleObj.saveEvent(x)
                 this.scheduleObj.refreshEvents();
-                
+
               }
             })
         })
@@ -402,14 +403,14 @@ export class EngineerschedulerComponent implements OnInit {
               if (!data.result) {
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                
+
               }
             },
             error: (error: any) => {
               this.loading = false;
               this.scheduleObj.saveEvent(x)
               this.scheduleObj.refreshEvents();
-              
+
             }
           })
       }
@@ -511,13 +512,13 @@ export class EngineerschedulerComponent implements OnInit {
                         if (!data.result) {
                           this.scheduleObj.deleteEvent(x)
                           this.scheduleObj.refreshEvents();
-                          
+
                         }
                       },
                       error: (error) => {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
-                        
+
                       }
                     })
 
@@ -531,7 +532,7 @@ export class EngineerschedulerComponent implements OnInit {
                 error: (error: any) => {
                   this.scheduleObj.deleteEvent(x)
                   this.scheduleObj.refreshEvents();
-                  
+
                 }
               });
           } else {
@@ -564,13 +565,13 @@ export class EngineerschedulerComponent implements OnInit {
                       if (!data.result) {
                         this.scheduleObj.deleteEvent(x)
                         this.scheduleObj.refreshEvents();
-                        
+
                       }
                     },
                     error: (error) => {
                       this.scheduleObj.deleteEvent(x)
                       this.scheduleObj.refreshEvents();
-                      
+
                     }
                   })
 
@@ -584,7 +585,7 @@ export class EngineerschedulerComponent implements OnInit {
               error: (error: any) => {
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                
+
               }
             });
         } else {
@@ -601,14 +602,14 @@ export class EngineerschedulerComponent implements OnInit {
             if (!data.result) {
               this.scheduleObj.deleteEvent(e.data)
               this.scheduleObj.refreshEvents();
-              
+
             }
           },
           error: (error) => {
             this.scheduleObj.deleteEvent(e.data)
             this.scheduleObj.saveEvent(e.data)
             this.scheduleObj.refreshEvents();
-            
+
           }
         })
     } else if (e.requestType == "eventRemove") {
@@ -622,13 +623,13 @@ export class EngineerschedulerComponent implements OnInit {
                 if (!data.result) {
                   this.scheduleObj.deleteEvent(x)
                   this.scheduleObj.refreshEvents();
-                  
+
                 }
               },
               error: (error: any) => {
                 this.scheduleObj.saveEvent(x)
                 this.scheduleObj.refreshEvents();
-                
+
               }
             })
         })
@@ -642,13 +643,13 @@ export class EngineerschedulerComponent implements OnInit {
               if (!data.result) {
                 this.scheduleObj.deleteEvent(x)
                 this.scheduleObj.refreshEvents();
-                
+
               }
             },
             error: (error: any) => {
               this.scheduleObj.saveEvent(x)
               this.scheduleObj.refreshEvents();
-              
+
             }
           })
       }

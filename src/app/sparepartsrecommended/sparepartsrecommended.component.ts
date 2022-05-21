@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 import { AccountService, ProfileService, SrRecomandService } from "../_services";
 import { first } from "rxjs/operators";
 import { DatePipe } from "@angular/common";
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 @Component({
   selector: 'app-sparepartsrecommended',
@@ -36,7 +36,8 @@ export class SparepartsrecommendedComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private Service: SrRecomandService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private environment: EnvService,
   ) {
   }
 
@@ -63,7 +64,7 @@ export class SparepartsrecommendedComponent implements OnInit {
       this.hasReadAccess = true;
     }
     else role = role[0]?.itemCode;
-    if (role == environment.distRoleCode) this.isDist = true
+    if (role == this.environment.distRoleCode) this.isDist = true
     else {
       this.toggleFilter()
       this.Service.getByGrid(this.user.contactId).pipe(first())

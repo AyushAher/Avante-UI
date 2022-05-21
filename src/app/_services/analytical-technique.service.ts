@@ -1,21 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { EnvService } from './env/env.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnalyticalTechniqueService {
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private http: HttpClient, private environment: EnvService) {
   }
 
   getAll() {
-    return this.http.get(`${environment.apiUrl}/AnalyticalTechniques`);
+    return this.http.get(`${this.environment.apiUrl}/AnalyticalTechniques`);
   }
 
   getById(id: string) {
-    return this.http.get(`${environment.apiUrl}/AnalyticalTechniques/${id}`);
+    return this.http.get(`${this.environment.apiUrl}/AnalyticalTechniques/${id}`);
   }
 
 }

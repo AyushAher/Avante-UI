@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
+import { EnvService } from 'src/app/_services/env/env.service';
 import { RenderComponent } from '../../distributor/rendercomponent';
 import { Customersatisfactionsurvey, ProfileReadOnly, User } from '../../_models';
 import {
@@ -13,7 +14,6 @@ import {
   NotificationService,
   ProfileService
 } from '../../_services';
-import { environment } from "../../../environments/environment";
 
 @Component({
   selector: 'app-customersatisfactionsurveylist',
@@ -44,6 +44,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
     private profileService: ProfileService,
     private distributorService: DistributorService,
     private listTypeService: ListTypeService,
+    private environment: EnvService
   ) { }
 
   ngOnInit() {
@@ -81,9 +82,9 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data1: any) => {
-                  if (role == environment.distRoleCode) {
+                  if (role == this.environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
-                  } else if (role == environment.engRoleCode) {
+                  } else if (role == this.environment.engRoleCode) {
                     data.object = data.object.filter(x => x.engineerId == this.user.contactId)
                     this.List = data.object;
                   } else {

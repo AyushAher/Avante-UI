@@ -3,11 +3,11 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { RenderComponent } from '../distributor/rendercomponent';
 import { User } from '../_models';
 import { Offerrequest } from '../_models/Offerrequest.model';
 import { AccountService, NotificationService, ProfileService } from '../_services';
+import { EnvService } from '../_services/env/env.service';
 import { OfferrequestService } from '../_services/Offerrequest.service';
 import { OfferRequestListRenderer } from './offerrequestlistrenderer';
 
@@ -42,7 +42,7 @@ export class OfferrequestlistComponent implements OnInit {
   constructor(
     private router: Router,
     private accountService: AccountService,
-    private notificationService: NotificationService,
+    private environment: EnvService,
     private Service: OfferrequestService,
     private profileService: ProfileService,
   ) {
@@ -70,7 +70,7 @@ export class OfferrequestlistComponent implements OnInit {
     } else {
       this.role = role[0]?.itemCode;
     }
-    if (this.role == environment.distRoleCode) this.isDist = true;
+    if (this.role == this.environment.distRoleCode) this.isDist = true;
     else {
       this.toggleFilter()
       this.Service.getAll().pipe(first())
@@ -115,7 +115,7 @@ export class OfferrequestlistComponent implements OnInit {
         headerName: "Customer",
         field: "customerName",
         filter: true,
-        hide: this.role != environment.distRoleCode,
+        hide: this.role != this.environment.distRoleCode,
         tooltipField: "customerName",
         enableSorting: true,
         editable: false,

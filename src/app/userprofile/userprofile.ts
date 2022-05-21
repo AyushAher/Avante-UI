@@ -24,8 +24,8 @@ import {
   ProfileService,
   UserProfileService
 } from '../_services';
-import { environment } from "../../environments/environment";
 import { IDropdownSettings } from "ng-multiselect-dropdown";
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -72,6 +72,7 @@ export class UserProfileComponent implements OnInit {
     private profileService: ProfileService,
     private userprofileService: UserProfileService,
     private DistributorService: DistributorService,
+    private environment: EnvService,
   ) { }
 
   ngOnInit() {
@@ -140,17 +141,17 @@ export class UserProfileComponent implements OnInit {
             .subscribe({
               next: (data: ListTypeItem[]) => {
                 switch (data?.find(x => x.listTypeItemId == role)?.itemCode) {
-                  case environment.engRoleCode:
+                  case this.environment.engRoleCode:
                     this.isEng = true;
                     this.GetDistributorByContactId();
                     break;
 
-                  case environment.distRoleCode:
+                  case this.environment.distRoleCode:
                     this.isDist = true;
                     this.GetDistributorByContactId();
                     break;
 
-                  case environment.custRoleCode:
+                  case this.environment.custRoleCode:
                     this.isDist = false;
                     this.isEng = false;
                     this.userprofileform.get('distRegions').clearValidators()
@@ -183,7 +184,7 @@ export class UserProfileComponent implements OnInit {
           this.onprofileClick(data.object.profileForId);
 
         });
-        
+
       setTimeout(() => this.userprofileform.disable(), 100);
     }
     else {
@@ -211,7 +212,7 @@ export class UserProfileComponent implements OnInit {
 
   CancelEdit() {
     this.userprofileform.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
@@ -231,17 +232,17 @@ export class UserProfileComponent implements OnInit {
       .pipe(first())
       .subscribe((data: ListTypeItem[]) => {
         switch (data?.find(x => x.listTypeItemId == role)?.itemCode) {
-          case environment.engRoleCode:
+          case this.environment.engRoleCode:
             this.isEng = true;
             this.GetDistributorByContactId();
             break;
 
-          case environment.distRoleCode:
+          case this.environment.distRoleCode:
             this.isDist = true;
             this.GetDistributorByContactId();
             break;
 
-          case environment.custRoleCode:
+          case this.environment.custRoleCode:
             this.isDist = false;
             this.isEng = false;
             this.userprofileform.get('distRegions').clearValidators()

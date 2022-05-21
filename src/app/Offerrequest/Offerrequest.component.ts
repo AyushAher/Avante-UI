@@ -25,8 +25,8 @@ import { FilerendercomponentComponent } from './filerendercomponent.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SparequotedetComponent } from './sparequotedet.component';
 import { SparequotedetService } from '../_services/sparequotedet.service';
-import { environment } from '../../environments/environment';
 import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
+import { EnvService } from '../_services/env/env.service';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -115,7 +115,8 @@ export class OfferrequestComponent implements OnInit {
     private listTypeService: ListTypeService,
     private offerRequestProcess: OfferRequestProcessesService,
     private custService: CustomerService,
-    private instrumentService: InstrumentService
+    private instrumentService: InstrumentService,
+    private environment: EnvService,
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       if (this.id != null) {
@@ -233,7 +234,7 @@ export class OfferrequestComponent implements OnInit {
     this.custService.getAll().pipe(first())
       .subscribe((data: any) => {
         let custList = []
-        if (this.role == environment.distRoleCode) {
+        if (this.role == this.environment.distRoleCode) {
           let regions = this.user.distRegionsId.split(',')
 
           data.object.forEach(element => {
@@ -244,7 +245,7 @@ export class OfferrequestComponent implements OnInit {
 
         }
 
-        else if (this.role == environment.custRoleCode) {
+        else if (this.role == this.environment.custRoleCode) {
           this.custService.getAllByConId(this.user.contactId)
             .pipe(first())
             .subscribe((custData: any) => {
@@ -263,7 +264,7 @@ export class OfferrequestComponent implements OnInit {
     this.listTypeService.getById("OFRQP").pipe(first())
       .subscribe((data: any) => this.stagesList = data)
 
-    if (this.role == environment.distRoleCode) {
+    if (this.role == this.environment.distRoleCode) {
       this.DistributorService.getByConId(this.user.contactId).pipe(first())
         .subscribe((data: any) => {
           this.form.get('distributorid').setValue(data.object[0]?.id)
@@ -272,7 +273,7 @@ export class OfferrequestComponent implements OnInit {
         })
     }
 
-    if (this.role == environment.distRoleCode) this.isDist = true
+    if (this.role == this.environment.distRoleCode) this.isDist = true
 
     if (this.id != null) {
       localStorage.setItem('offerrequestid', this.id)
@@ -428,12 +429,12 @@ export class OfferrequestComponent implements OnInit {
   FormControlDisable() {
     this.form.get('podate').disable();
 
-    if (this.role == environment.distRoleCode) {
+    if (this.role == this.environment.distRoleCode) {
       this.form.get('distributorid').disable()
       this.form.get('podate').enable();
     }
 
-    else if (this.role == environment.custRoleCode)
+    else if (this.role == this.environment.custRoleCode)
       this.form.get('customerId').disable()
 
 
@@ -656,19 +657,19 @@ export class OfferrequestComponent implements OnInit {
       editable: true,
       sortable: true,
       default: 0,
-      hide: this.role == environment.custRoleCode || !this.hasCommercial,
+      hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
     },
     {
       headerName: 'Amount',
       field: 'amount',
       filter: true,
       sortable: true,
-      hide: this.role == environment.custRoleCode || !this.hasCommercial,
+      hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
     },
     {
       headerName: 'Currency',
       field: 'currency',
-      hide: this.role == environment.custRoleCode || !this.hasCommercial,
+      hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
       // hide: true,
       filter: true,
       sortable: true
@@ -712,19 +713,19 @@ export class OfferrequestComponent implements OnInit {
         editable: true,
         sortable: true,
         default: 0,
-        hide: this.role == environment.custRoleCode || !this.hasCommercial,
+        hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
       },
       {
         headerName: 'Amount',
         field: 'amount',
         filter: true,
         sortable: true,
-        hide: this.role == environment.custRoleCode || !this.hasCommercial,
+        hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
       },
       {
         headerName: 'Currency',
         field: 'currency',
-        hide: this.role == environment.custRoleCode || !this.hasCommercial,
+        hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
         // hide: true,
         filter: true,
         sortable: true

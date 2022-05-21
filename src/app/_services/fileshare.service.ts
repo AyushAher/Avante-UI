@@ -1,40 +1,40 @@
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { FileShare } from '../_models';
+import { EnvService } from './env/env.service';
 
-import {environment} from '../../environments/environment';
-import {FileShare} from '../_models';
-
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class FileshareService {
 
 
   constructor(
     private router: Router,
+    private environment: EnvService,
     private http: HttpClient
   ) {
   }
 
 
   save(fileshare: FileShare) {
-    return this.http.post(`${environment.apiUrl}/FileShares`, fileshare);
+    return this.http.post(`${this.environment.apiUrl}/FileShares`, fileshare);
   }
 
   getAll() {
-    return this.http.get<FileShare[]>(`${environment.apiUrl}/FileShares`);
+    return this.http.get<FileShare[]>(`${this.environment.apiUrl}/FileShares`);
   }
 
   getById(id: string) {
-    return this.http.get<FileShare>(`${environment.apiUrl}/FileShares/${id}`);
+    return this.http.get<FileShare>(`${this.environment.apiUrl}/FileShares/${id}`);
   }
 
   getImg(id: string, code: string) {
-    return this.http.get<FileShare>(`${environment.apiUrl}/FileShares/getImg/${code}/${id}`);
+    return this.http.get<FileShare>(`${this.environment.apiUrl}/FileShares/getImg/${code}/${id}`);
   }
 
   upload(fileshare: FormData, id: string, code: string, IMG?) {
-    return this.http.post(`${environment.apiUrl}/FileShares/upload/${code}/${id}/${IMG}`, fileshare, {
+    return this.http.post(`${this.environment.apiUrl}/FileShares/upload/${code}/${id}/${IMG}`, fileshare, {
       reportProgress: true,
       observe: "events",
     });
@@ -42,13 +42,13 @@ export class FileshareService {
 
   list(id: string) {
     return this.http.get<FileShare[]>(
-      `${environment.apiUrl}/FileShares/getfile/${id}`
+      `${this.environment.apiUrl}/FileShares/getfile/${id}`
     );
   }
 
-  public download(fileUrl: string,code:string="") {
+  public download(fileUrl: string, code: string = "") {
     return this.http.get(
-      `${environment.apiUrl}/FileShares/download${code}?fileUrl=${fileUrl}`,
+      `${this.environment.apiUrl}/FileShares/download${code}?fileUrl=${fileUrl}`,
       {
         reportProgress: true,
         observe: "events",
@@ -59,7 +59,7 @@ export class FileshareService {
 
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/FileShares`, params)
+    return this.http.put(`${this.environment.apiUrl}/FileShares`, params)
       .pipe(map(x => {
         // update stored user if the logged in user updated their own record
         //if (id == this.distributor.id) {
@@ -69,13 +69,13 @@ export class FileshareService {
 
         //      // publish updated user to subscribers
         //      this.userSubject.next(user);
-              //  }
-                return x;
-            }));
+        //  }
+        return x;
+      }));
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/FileShares/file/${id}`)
+    return this.http.delete(`${this.environment.apiUrl}/FileShares/file/${id}`)
       .pipe(map(x => {
 
         return x;

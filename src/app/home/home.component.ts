@@ -49,9 +49,6 @@ export class HomeComponent {
                   }
                 }
               },
-              error: (error) => {
-                
-              },
             });
         }
 

@@ -5,18 +5,23 @@ import { catchError, tap } from 'rxjs/operators';
 
 import { AccountService, NotificationService } from '../_services';
 import { LoaderService } from '../_services/loader.service';
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private accountService: AccountService, private loaderService: LoaderService, private notificationService: NotificationService) { }
+    constructor(
+        private accountService: AccountService,
+        private loaderService: LoaderService,
+        private notificationService: NotificationService,
+        private environment: EnvService
+    ) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         //start spinner
 
         this.loaderService.requestStarted()
-        if (request.url.startsWith(environment.currencyConvert)) {
+        if (request.url.startsWith(this.environment.currencyConvert)) {
             request = request.clone({
                 setHeaders: {
                     Authorization: `Basic ${btoa("ayushaher494865898:kd0t5dra52rsc50jp4d13642g6")}`

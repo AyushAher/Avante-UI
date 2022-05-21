@@ -11,7 +11,7 @@ import {
   NotificationService, ProfileService, ServiceReportService, AmcService, zohoapiService
 } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
-import { environment } from 'src/environments/environment';
+import { EnvService } from '../_services/env/env.service';
 
 
 
@@ -42,14 +42,9 @@ export class sostatusComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
-    private customerService: CustomerService,
-    private countryService: CountryService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
-    private AmcService: AmcService,
+    private environment: EnvService,
     private zohoservice: zohoapiService,
   ) {
 
@@ -82,7 +77,7 @@ export class sostatusComponent implements OnInit {
     //this.accountService.clear();
     if (this.accountService.zohoauthValue == null) {
       if (this.zohocode == null) {
-        window.location.href = environment.commonzohocodeapi + 'sostatus' + '&access_type=offline';
+        window.location.href = this.environment.commonzohocodeapi + 'sostatus' + '&access_type=offline';
       }
       else {
         this.zohoservice.authwithcode(this.zohocode, "sostatus").subscribe({
@@ -91,8 +86,8 @@ export class sostatusComponent implements OnInit {
             this.accountService.zohoauthSet(data.object);
             this.getquotation("", 1);
           },
-          error: error => {
-            
+          error: () => {
+
             this.loading = false;
           }
         });
@@ -118,8 +113,8 @@ export class sostatusComponent implements OnInit {
           this.currentpage = this.pageData.page;
           this.has_more_data = this.pageData.has_more_page;
         },
-        error: error => {
-          
+        error: () => {
+
           this.loading = false;
         }
       });

@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
+import { EnvService } from "src/app/_services/env/env.service";
 import {
   Customersatisfactionsurvey,
   DistributorRegionContacts,
@@ -21,7 +22,6 @@ import {
   ProfileService,
   ServiceRequestService,
 } from "../../_services";
-import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-customersatisfactionsurvey",
@@ -73,7 +73,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     private profileService: ProfileService,
     private distributorservice: DistributorService,
     private servicerequestservice: ServiceRequestService,
-    private listTypeService: ListTypeService
+    private listTypeService: ListTypeService,
+    private environment: EnvService
   ) {
   }
 
@@ -104,9 +105,9 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       role = role[0]?.itemCode;
       this.role = role
     }
-    if (role == environment.engRoleCode) {
+    if (role == this.environment.engRoleCode) {
       this.isEng = true;
-    } else if (role == environment.distRoleCode) {
+    } else if (role == this.environment.distRoleCode) {
       this.isDist = true;
     }
 
@@ -130,7 +131,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       .pipe(first())
       .subscribe((data: any) => this.DistributorList = data.object)
 
-    if (this.role == environment.engRoleCode) {
+    if (this.role == this.environment.engRoleCode) {
       this.eng = true
       this.form.get('engineerId').setValue(this.user.contactId)
       this.engId = this.user.contactId;
@@ -189,11 +190,11 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   }
 
   FormControlsDisable() {
-    if (this.role == environment.engRoleCode) {
+    if (this.role == this.environment.engRoleCode) {
       this.form.get('engineerId').disable()
       this.form.get('distId').disable()
     }
-    else if (this.role == environment.distRoleCode) {
+    else if (this.role == this.environment.distRoleCode) {
       this.form.get('distId').disable()
     }
   }

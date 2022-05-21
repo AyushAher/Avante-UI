@@ -15,6 +15,7 @@ import {
   ProfileService
 } from '../../_services';
 import { environment } from "../../../environments/environment";
+import { EnvService } from 'src/app/_services/env/env.service';
 
 @Component({
   selector: 'app-localexpenseslist',
@@ -48,6 +49,7 @@ export class LocalexpenseslistComponent implements OnInit {
     private profileService: ProfileService,
     private distributorService: DistributorService,
     private listTypeService: ListTypeService,
+    private environment: EnvService,
   ) { }
 
   ngOnInit() {
@@ -86,9 +88,9 @@ export class LocalexpenseslistComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (data1: any) => {
-                  if (role == environment.distRoleCode) {
+                  if (role == this.environment.distRoleCode) {
                     this.List = data.object.filter(x => x.distId == data1.object[0].id)
-                  } else if (role == environment.engRoleCode) {
+                  } else if (role == this.environment.engRoleCode) {
                     data.object = data.object.filter(x => x.engineerid == this.user.contactId)
                     this.List = data.object;
                   } else {

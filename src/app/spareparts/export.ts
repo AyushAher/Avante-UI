@@ -8,7 +8,7 @@ import {
   , NotificationService, ProfileService, ConfigTypeValueService
 } from '../_services';
 import { ConfigTypeValue, ListTypeItem, User, ExportSparePart, Country, SparePart, Currency } from '../_models';
-import * as XLSX from 'xlsx'; 
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -27,23 +27,19 @@ export class ExportSparePartComponent implements OnInit {
   exportSparePart: ExportSparePart[];
   countries: Country[];
   sparePart: SparePart;
-  
+
   parttypes: ListTypeItem[];
   currency: Currency[];
   //configValueAllList: ConfigTypeValue[];
   fileName = 'ExcelSheet.xlsx';
-  constructor(private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
+
+  constructor(
     private accountService: AccountService,
-    private alertService: AlertService,
     private countryService: CountryService,
     private sparePartService: SparePartService,
     private currencyService: CurrencyService,
     private listTypeService: ListTypeService,
-    private uploadService: UploadService,
     private notificationService: NotificationService,
-    private profileService: ProfileService,
     private configService: ConfigTypeValueService
   ) { }
 
@@ -55,8 +51,8 @@ export class ExportSparePartComponent implements OnInit {
         next: (data: ListTypeItem[]) => {
           this.listTypeItems = data;
         },
-        error: error => {
-          
+        error: () => {
+
           this.loading = false;
         }
       });
@@ -67,8 +63,8 @@ export class ExportSparePartComponent implements OnInit {
         next: (data: any) => {
           this.countries = data.object;
         },
-        error: error => {
-          
+        error: () => {
+
           this.loading = false;
         }
       });
@@ -79,20 +75,20 @@ export class ExportSparePartComponent implements OnInit {
         next: (data: any) => {
           this.currency = data.object;
         },
-        error: error => {
-          
+        error: () => {
+
           this.loading = false;
         }
       });
-     
+
     this.listTypeService.getById("PART")
       .pipe(first())
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.parttypes = data;
         },
-        error: error => {
-          
+        error: () => {
+
           this.loading = false;
         }
       });
@@ -103,8 +99,8 @@ export class ExportSparePartComponent implements OnInit {
         next: (data: any) => {
           this.configValueAllList = data.object;
         },
-        error: error => {
-          
+        error: () => {
+
           this.loading = false;
         }
       });
@@ -117,8 +113,8 @@ export class ExportSparePartComponent implements OnInit {
         next: (data: any) => {
           this.configValueList = data.object;
         },
-        error: error => {
-          
+        error: () => {
+
           this.loading = false;
         }
       });
@@ -129,29 +125,29 @@ export class ExportSparePartComponent implements OnInit {
     if (configvalue == "0") {
       configvalue = "";
     }
-    
-      // for (let i = 0; i < this.selectedConfigType.length; i++) {
-      this.sparePartService.getByConfignValueId(value, configvalue)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.object.length > 0) {
-              this.exportSparePart= data.object;
-              this.exportexcel(data.object);
-            }
-          },
-          error: error => {
-            
-            this.loading = false;
+
+    // for (let i = 0; i < this.selectedConfigType.length; i++) {
+    this.sparePartService.getByConfignValueId(value, configvalue)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          if (data.object.length > 0) {
+            this.exportSparePart = data.object;
+            this.exportexcel(data.object);
           }
-        });
-      // }
+        },
+        error: () => {
+
+          this.loading = false;
+        }
+      });
+    // }
   }
-  exportexcel(data:any): void {
+  exportexcel(data: any): void {
     /* table id is passed over here */
     //   let element = document.getElementById('excel-table');
     data = data.filter(function (props) {
-     // delete props.id;
+      // delete props.id;
       delete props.configTypeid;
       delete props.configValueid;
       delete props.partType;
@@ -179,10 +175,10 @@ export class ExportSparePartComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws3, 'Currency');
     XLSX.utils.book_append_sheet(wb, ws4, 'ConfigType');
     XLSX.utils.book_append_sheet(wb, ws5, 'ConfigValue');
-  /* save to file */
-    
+    /* save to file */
+
     XLSX.writeFile(wb, this.fileName);
-    
+
   }
 
   uploadFile(event) {
@@ -199,14 +195,14 @@ export class ExportSparePartComponent implements OnInit {
               this.notificationService.showSuccess("File Upload Successfully", "Success");
             }
             else {
-              
+
             }
             // this.imagePath = data.path;
             // console.log(data);
 
           },
-          error: error => {
-            
+          error: () => {
+
           }
         });
     }

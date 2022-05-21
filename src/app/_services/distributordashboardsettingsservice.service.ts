@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Router} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
-import {map} from "rxjs/operators";
+import { Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs/operators";
+import { EnvService } from './env/env.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,32 +11,33 @@ export class DistributordashboardsettingsService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private environment: EnvService,
   ) {
   }
 
 
   save(settings) {
-    return this.http.post(`${environment.apiUrl}/DistributorDashboardSettings`, settings);
+    return this.http.post(`${this.environment.apiUrl}/DistributorDashboardSettings`, settings);
   }
 
   getAll() {
-    return this.http.get(`${environment.apiUrl}/DistributorDashboardSettings`);
+    return this.http.get(`${this.environment.apiUrl}/DistributorDashboardSettings`);
   }
 
   getById(id: string) {
-    return this.http.get(`${environment.apiUrl}/DistributorDashboardSettings/${id}`);
+    return this.http.get(`${this.environment.apiUrl}/DistributorDashboardSettings/${id}`);
   }
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/DistributorDashboardSettings/${id}`, params)
+    return this.http.put(`${this.environment.apiUrl}/DistributorDashboardSettings/${id}`, params)
       .pipe(map(x => {
         return x;
       }));
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/DistributorDashboardSettings/${id}`)
+    return this.http.delete(`${this.environment.apiUrl}/DistributorDashboardSettings/${id}`)
       .pipe(map(x => {
         return x;
       }));

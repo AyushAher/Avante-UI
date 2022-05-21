@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { environment } from '../../environments/environment';
 import { CustomerSite } from '../_models';
+import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerSiteService {
@@ -14,33 +13,34 @@ export class CustomerSiteService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private environment: EnvService,
   ) {
   }
 
 
 
   save(customerSite: CustomerSite) {
-    return this.http.post(`${environment.apiUrl}/Site`, customerSite);
+    return this.http.post(`${this.environment.apiUrl}/Site`, customerSite);
   }
 
   getAll() {
-    return this.http.get<CustomerSite[]>(`${environment.apiUrl}/Site`);
+    return this.http.get<CustomerSite[]>(`${this.environment.apiUrl}/Site`);
   }
   getAllCustomerSites() {
-    return this.http.get<CustomerSite[]>(`${environment.apiUrl}/Site/GetAllCustomerSites`);
+    return this.http.get<CustomerSite[]>(`${this.environment.apiUrl}/Site/GetAllCustomerSites`);
   }
   
   GetCustomerSiteContacts() {
-    return this.http.get(`${environment.apiUrl}/Customer/GetCustomerSiteContacts/`);
+    return this.http.get(`${this.environment.apiUrl}/Customer/GetCustomerSiteContacts/`);
   }
   getById(id: string) {
-    return this.http.get<CustomerSite>(`${environment.apiUrl}/Site/${id}`);
+    return this.http.get<CustomerSite>(`${this.environment.apiUrl}/Site/${id}`);
   }
 
 
   update(id, params) {
-    return this.http.put(`${environment.apiUrl}/Site/`, params)
+    return this.http.put(`${this.environment.apiUrl}/Site/`, params)
       .pipe(map(x => {
         // update stored user if the logged in user updated their own record
         //if (id == this.distributor.id) {
@@ -56,7 +56,7 @@ export class CustomerSiteService {
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/Site/${id}`)
+    return this.http.delete(`${this.environment.apiUrl}/Site/${id}`)
       .pipe(map(x => {
         //// auto logout if the logged in user deleted their own record
         //if (id == this.userValue.id) {

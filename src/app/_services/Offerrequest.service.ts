@@ -1,10 +1,10 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {map} from 'rxjs/operators';
-import {environment} from 'src/environments/environment';
-import {Offerrequest} from '../_models/Offerrequest.model';
-import {AccountService} from './account.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { Offerrequest } from '../_models/Offerrequest.model';
+import { AccountService } from './account.service';
+import { EnvService } from './env/env.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,30 +13,36 @@ export class OfferrequestService {
   private corsheaders: HttpHeaders;
   private root: string;
 
-  constructor(private router: Router, private http: HttpClient, private accountService: AccountService) {
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private environment: EnvService,
+    private accountService: AccountService
+
+  ) {
   }
 
   save(offerrequest: Offerrequest) {
-    return this.http.post(`${environment.apiUrl}/offerrequest`, offerrequest);
+    return this.http.post(`${this.environment.apiUrl}/offerrequest`, offerrequest);
   }
 
   getAll() {
-    return this.http.get<Offerrequest[]>(`${environment.apiUrl}/offerrequest`);
+    return this.http.get<Offerrequest[]>(`${this.environment.apiUrl}/offerrequest`);
   }
 
   searchByKeyword(partno: string) {
-    return this.http.get(`${environment.apiUrl}/Offerrequest/partno/${partno}`);
+    return this.http.get(`${this.environment.apiUrl}/Offerrequest/partno/${partno}`);
   }
 
   getById(id: string) {
     return this.http.get<Offerrequest>(
-      `${environment.apiUrl}/offerrequest/${id}`
+      `${this.environment.apiUrl}/offerrequest/${id}`
     );
   }
 
   GetSpareQuoteDetailsByParentId(id: string) {
     return this.http.get(
-      `${environment.apiUrl}/offerrequest/GetSpareQuoteDetailsByParentId/${id}`
+      `${this.environment.apiUrl}/offerrequest/GetSpareQuoteDetailsByParentId/${id}`
     );
   }
 
@@ -44,7 +50,7 @@ export class OfferrequestService {
     let tokn = JSON.parse(localStorage.getItem('zohotoken'));
 
     return this.http
-      .put(`${environment.apiUrl}/offerrequest/${id}/${tokn}`, params)
+      .put(`${this.environment.apiUrl}/offerrequest/${id}/${tokn}`, params)
       .pipe(
         map((x) => {
           return x;
@@ -53,7 +59,7 @@ export class OfferrequestService {
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/offerrequest/${id}`).pipe(
+    return this.http.delete(`${this.environment.apiUrl}/offerrequest/${id}`).pipe(
       map((x) => {
         return x;
       })

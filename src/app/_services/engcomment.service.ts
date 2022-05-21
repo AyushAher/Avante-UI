@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { environment } from '../../environments/environment';
 import { EngineerCommentList } from '../_models';
+import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class EngCommentService {
@@ -14,38 +13,39 @@ export class EngCommentService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private environment: EnvService,
     ) {
     }
 
   
 
   save(engcomment: EngineerCommentList) {
-    return this.http.post(`${environment.apiUrl}/SREngComments`, engcomment);
+    return this.http.post(`${this.environment.apiUrl}/SREngComments`, engcomment);
     }
 
   getAll() {
-    return this.http.get<EngineerCommentList[]>(`${environment.apiUrl}/SREngComments`);
+    return this.http.get<EngineerCommentList[]>(`${this.environment.apiUrl}/SREngComments`);
     }
 
   getById(id: string) {
-    return this.http.get<EngineerCommentList>(`${environment.apiUrl}/SREngComments/${id}`);
+    return this.http.get<EngineerCommentList>(`${this.environment.apiUrl}/SREngComments/${id}`);
     }
 
   searchByKeyword(param: string, custSiteId: string) {
     param = param == "" ? "undefined" : param;
-    return this.http.get<EngineerCommentList[]>(`${environment.apiUrl}/SREngComments/GetInstrumentBySerialNo/${param}/${custSiteId}`);
+    return this.http.get<EngineerCommentList[]>(`${this.environment.apiUrl}/SREngComments/GetInstrumentBySerialNo/${param}/${custSiteId}`);
   }
 
     update(id, params) {
-      return this.http.put(`${environment.apiUrl}/SREngComments/${id}`, params)
+      return this.http.put(`${this.environment.apiUrl}/SREngComments/${id}`, params)
             .pipe(map(x => {
                 return x;
             }));
     }
 
     delete(id: string) {
-      return this.http.delete(`${environment.apiUrl}/SREngComments/${id}`)
+      return this.http.delete(`${this.environment.apiUrl}/SREngComments/${id}`)
             .pipe(map(x => {
                 return x;
             }));
