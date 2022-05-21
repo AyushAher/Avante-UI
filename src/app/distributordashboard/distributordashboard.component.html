@@ -148,9 +148,9 @@
                     </div>
 
                     <div class="progress">
-                      <div class="progress-bar bg-info wd-30p"
-                        style="background: {{customerRevenueBgColors[index]}} !important;" role="progressbar"
-                        aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar" [style.width]="((i.total/totalRevenue)*100)+'%'"
+                        [style.background]="customerRevenueBgColors[index] + '!important'" role="progressbar"
+                        aria-valuemin="0" aria-valuemax="100"></div>
                     </div><!-- progress -->
                   </div>
 
