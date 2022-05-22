@@ -4,11 +4,14 @@
       <div class="az-content-body">
 
         <div class="grp-btns" style="display: flex;justify-content: flex-end;">
-          <button class="btn" (click)="onCalenderFilter(calenderLst[0])">3 Months</button>
-          <button class="btn" (click)="onCalenderFilter(calenderLst[1])">6 Months</button>
-          <button class="btn" (click)="onCalenderFilter(calenderLst[2])">12 Months</button>
+          <button class="btn" style="background: lightgray;border: solid 0.2px;"
+            (click)="onCalenderFilter(calenderLst[0])">3 Months</button>
+          <button class="btn" style="background: lightgray;border-top: solid 0.2px;border-bottom: solid 0.2px;"
+            (click)="onCalenderFilter(calenderLst[1])">6 Months</button>
+          <button class="btn" style="background: lightgray;border: solid 0.2px;"
+            (click)="onCalenderFilter(calenderLst[2])">12 Months</button>
         </div>
-
+        <hr>
         <div class="row row-sm mg-b-20">
           <div style="visibility: hidden" id="SERCR" class="col-lg-7 ht-lg-100p">
             <div class="card card-dashboard-one">
@@ -75,7 +78,7 @@
                       </div>
                       <div class="col-md-6" style="padding: 0;">
                         <h6 style="font-size: 18px;">{{instrumnetUnderService}}</h6>
-                        <p>Under Service</p>
+                        <p>Under Contract</p>
                       </div>
                     </div>
                   </div><!-- card-header -->
