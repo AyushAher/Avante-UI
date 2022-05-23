@@ -64,9 +64,9 @@ export class DistributorfilterComponent implements OnInit {
     this.user = this.accountService.userValue;
 
     this.form = this.formBuilder.group({
-      region: ["", [Validators.required]],
-      country: ["", [Validators.required]],
-      customer: ["", [Validators.required]],
+      region: [""],
+      country: [""],
+      customer: [""],
       site: [""],
       insSerialNo: [""]
     })
@@ -118,30 +118,12 @@ export class DistributorfilterComponent implements OnInit {
   countryChange() {
     this.stage = 3;
     this.customerBCountryList = this.customerList.filter(x => x.countryid == this.form.get('country').value)
-  
+
     setTimeout(() => this.form.get('customer').reset(), 100);
   }
 
   onRegionChange() {
     this.stage = 2
-
-    if (this.hasInstrument) {
-      this.form.get('insSerialNo').setValidators([Validators.required])
-      this.form.get('insSerialNo').updateValueAndValidity()
-    }
-
-    if (this.hasSite) {
-      this.form.get('site').setValidators([Validators.required])
-      this.form.get('site').updateValueAndValidity()
-    }
-
-    if (this.isUserProfile) {
-      this.form.get('insSerialNo').updateValueAndValidity()
-      this.form.get('insSerialNo').clearValidators();
-      this.form.get('site').clearValidators();
-      this.form.get('site').updateValueAndValidity()
-    }
-
     var country = this.regionsList.find(x => x.id == this.form.get('region').value)?.countries
     this.regionCountryList = []
 
