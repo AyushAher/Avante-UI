@@ -3,7 +3,14 @@
     <div class="container">
       <div class="page-title">
         <div class="title_left">
-          <h3>Spare part List</h3>
+          
+          <div class="d-flex" style="align-items: center; justify-content: space-between;">
+            <h3>Spare part List</h3>
+            <a (click)="Add()" class="nav-link" style="font-size: 1.25rem;" *ngIf="hasAddAccess==true">
+              <i class="fas fa-plus" style="color: #5ba146;" title="Add"></i>
+            </a>
+          </div>
+
         </div>
       </div>
       <hr />
@@ -15,10 +22,7 @@
       <app-distributorfilter (showData)="ShowData($event)" *ngIf="!showGrid" (nData)="DataFilter($event)"
         controller="SpareParts">
       </app-distributorfilter>
-
-      <button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="hasAddAccess && showGrid"
-        (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>
-      <!--<button class="btn btn-sm btn-success button" style="margin: 10px;" *ngIf="hasAddAccess==true" (click)="export()"><i class="fas fa-download" title="export"></i></button>-->
+ 
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
         <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="EditRecord()"
           class="ag-theme-alpine" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="sparePartList"

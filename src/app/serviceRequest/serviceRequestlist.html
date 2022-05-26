@@ -3,7 +3,16 @@
     <div class="container">
       <div class="page-title">
         <div class="title_left">
-          <h3>Service Request List</h3>
+
+          <div class="d-flex" style="align-items: center; justify-content: space-between;">
+            <h3>Service Request List</h3>
+
+            <a (click)="Add()" class="nav-link" style="font-size: 1.25rem;"
+              *ngIf="hasAddAccess==true && IsEngineerView == false">
+              <i class="fas fa-plus" style="color: #5ba146;" title="Add"></i>
+            </a>
+          </div>
+
         </div>
       </div>
       <hr />
@@ -22,8 +31,6 @@
         *ngIf="!showGrid">
       </app-distributorfilter>
 
-      <button class="btn btn-sm btn-success button" *ngIf="hasAddAccess==true && IsEngineerView==false && showGrid"
-        style="margin: 10px;" (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
         <ag-grid-angular style="width: 100%; height: 500px;" *ngIf="IsDistributorView==true && IsAdminView==false"
           class="ag-theme-alpine" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="srDistList"

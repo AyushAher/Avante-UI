@@ -3,7 +3,11 @@
     <div class="container">
       <div class="page-title">
         <div class="title_left">
-          <h3>Service Report List</h3>
+
+          <div class="d-flex" style="align-items: center; justify-content: space-between;">
+            <h3>Service Report List</h3>
+          </div>
+
         </div>
       </div>
       <hr />
@@ -17,7 +21,6 @@
         controller="ServiceReports">
       </app-distributorfilter>
 
-      <!--<button class="btn btn-sm btn-success button" *ngIf="hasAddAccess==true" style="margin: 10px;" (click)="Add()"><i class="fas fa-plus-circle" title="Add"></i></button>-->
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (rowClicked)="EditRecord()"
           (gridReady)="onGridReady($event)" (rowClicked)="onRowClicked($event)" [columnDefs]="columnDefs"
