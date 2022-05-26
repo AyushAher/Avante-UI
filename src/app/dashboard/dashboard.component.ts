@@ -72,6 +72,8 @@ export class DashboardComponent implements OnInit {
   @ViewChild('MNTHS6') Mnths6;
   @ViewChild('MNTHS12') Mnths12;
 
+  instruemntLength = 0;
+
   constructor(
     private accountService: AccountService,
     private instrumentService: InstrumentService,
@@ -301,6 +303,7 @@ export class DashboardComponent implements OnInit {
     this.instrumentService.getinstubysiteIds(this.currentSiteId)
       .pipe(first()).subscribe((data: any) => {
         this.lstInstrument = data.object;
+        this.instruemntLength = this.lstInstrument.length;
       })
 
   }
