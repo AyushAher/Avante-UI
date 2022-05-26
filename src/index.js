@@ -1,9 +1,20 @@
 // customer dashboard
 
 function CustomerDashboardCharts() {
+  $('#chart-line-tasks').remove(); // this is my <canvas> element
+  $('#pendingServiceRequest').append('<canvas id="chart-line-tasks" class="chart-canvas" height="170"><canvas>');
+
+  $('#chart-line').remove(); // this is my <canvas> element
+  $('#completedServiceRequest').append('<canvas id="chart-line" class="chart-canvas" height="170"><canvas>');
+
+  $('#chart-bars').remove(); // this is my <canvas> element
+  $('#pOCost').append('<canvas id="chart-bars" class="chart-canvas" height="170"><canvas>');
+
+
   let sReqType = JSON.parse(localStorage.getItem("servicerequesttype"));
   let pendingServiceRequest = JSON.parse(localStorage.getItem("pendingservicerequest"));
   let poCost = JSON.parse(localStorage.getItem("costData"))
+
   new Chart("chart-bars", {
     type: "bar",
     data: {

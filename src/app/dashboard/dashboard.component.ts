@@ -66,6 +66,7 @@ export class DashboardComponent implements OnInit {
   amcData: any;
   bsModalRef: BsModalRef;
   calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
+  costData: any[];
 
   constructor(
     private accountService: AccountService,
@@ -161,11 +162,12 @@ export class DashboardComponent implements OnInit {
   }
 
   onCalenderFilter(date) {
+    alert("alert")
     this.getServiceRequestData(date);
     this.GetAllAMC(date);
     this.GetPoCost();
     this.GetSparePartsRecommended(date);
-    setTimeout(() => CustomerDashboardCharts(), 1000)
+    setTimeout(() => CustomerDashboardCharts(), 2000)
   }
 
 
@@ -269,9 +271,9 @@ export class DashboardComponent implements OnInit {
 
   GetPoCost() {
     this.customerDashboardService.GetCostData()
-      .pipe(first()).subscribe((data: any) =>
+      .pipe(first()).subscribe((data: any) => {
         localStorage.setItem("costData", JSON.stringify(data.object))
-      )
+      })
   }
 
   OnPopUpOpen(instrumentId) {
