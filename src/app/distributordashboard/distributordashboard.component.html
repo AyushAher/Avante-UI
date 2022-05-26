@@ -1,17 +1,18 @@
 <layout>
-  <div class="az-content az-content-dashboard">
+  <div class="az-content az-content-dashboard" style="padding-top: 5px;">
     <div class="container">
       <div class="az-content-body">
 
         <div class="grp-btns" style="display: flex;justify-content: flex-end;">
-          <button class="btn" style="background: lightgray;border: solid 0.2px;"
-            (click)="onCalenderFilter(calenderLst[0])">3 Months</button>
-          <button class="btn" style="background: lightgray;border-top: solid 0.2px;border-bottom: solid 0.2px;"
-            (click)="onCalenderFilter(calenderLst[1])">6 Months</button>
-          <button class="btn" style="background: lightgray;border: solid 0.2px;"
-            (click)="onCalenderFilter(calenderLst[2])">12 Months</button>
+          <a class="btn" style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border: solid 0.2px;"
+            (click)="onCalenderFilter(calenderLst[0])">3 Months</a>
+          <a class="btn"
+            style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border-top: solid 0.2px;border-bottom: solid 0.2px;"
+            (click)="onCalenderFilter(calenderLst[1])">6 Months</a>
+          <a class="btn" style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border: solid 0.2px;"
+            (click)="onCalenderFilter(calenderLst[2])">12 Months</a>
         </div>
-        <hr>
+        <hr style="margin-top: 0.5rem;">
         <div class="row row-sm mg-b-20">
           <div style="visibility: hidden" id="SERCR" class="col-lg-7 ht-lg-100p">
             <div class="card card-dashboard-one">
@@ -91,7 +92,8 @@
               </div><!-- col Instruments Installed -->
               <div class="col-sm-12 mg-t-15">
                 <div class="card card-dashboard-three">
-                  <div class="card-header" style="max-width: 100%;">
+                  <div class="card-header"
+                    style="max-width: 100%;text-transform: none !important; font-size: 16px;">
                     <p>Instruments With Highest Service Request</p>
                     <h6>{{insHighestSReq}}</h6>
 
