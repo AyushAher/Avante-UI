@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   AccountService,
   CustdashboardsettingsService,
@@ -47,6 +47,11 @@ export class DistributordashboardComponent implements OnInit {
     "#adb2bd",
   ]
   calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
+  currentFilter = this.calenderLst[0];
+
+  @ViewChild('MNTHS3') Mnths3;
+  @ViewChild('MNTHS6') Mnths6;
+  @ViewChild('MNTHS12') Mnths12;
 
   constructor(
     private accountService: AccountService,
@@ -82,18 +87,28 @@ export class DistributordashboardComponent implements OnInit {
           }
         })
 
-      this.GetInstrumentsInstalled()
-      this.GetRevenuefromCustomer()
-      this.GetServiceContractRevenue()
-      this.GetDistDashboardData()
+      setTimeout(() => this.onCalenderFilter(this.calenderLst[0]), 500);
     }
-
-
-    setTimeout(() => { DistributorDashboardCharts() }, 1000);
 
   }
 
   onCalenderFilter(date) {
+    if (date == this.calenderLst[0]) {
+      this.Mnths3.nativeElement.style.background = "white"
+      this.Mnths6.nativeElement.style.background = "lightgrey"
+      this.Mnths12.nativeElement.style.background = "lightgrey"
+    }
+    else if (date == this.calenderLst[1]) {
+      this.Mnths6.nativeElement.style.background = "white"
+      this.Mnths3.nativeElement.style.background = "lightgrey"
+      this.Mnths12.nativeElement.style.background = "lightgrey"
+    }
+    else if (date == this.calenderLst[2]) {
+      this.Mnths12.nativeElement.style.background = "white"
+      this.Mnths6.nativeElement.style.background = "lightgrey"
+      this.Mnths3.nativeElement.style.background = "lightgrey"
+    }
+
     this.GetInstrumentsInstalled(date)
     this.GetRevenuefromCustomer(date)
     this.GetServiceContractRevenue(date)
