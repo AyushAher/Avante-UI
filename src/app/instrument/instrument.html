@@ -45,7 +45,7 @@
                 (change)="onSiteChange(ddlcust.value)">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of customersite" value={{config.id}}>
-                  {{config.customerSite}}
+                  {{config.custregname}}
                 </option>
               </select>
               <div *ngIf="submitted && f.custSiteId.errors" class="invalid-feedback">

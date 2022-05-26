@@ -25,6 +25,7 @@ import {
   AlertService,
   ConfigTypeValueService,
   CurrencyService,
+  CustomerService,
   CustomerSiteService,
   DistributorService,
   FileshareService,
@@ -49,7 +50,7 @@ export class InstrumentComponent implements OnInit {
   user: User;
   instrumentform: FormGroup;
   instrument: Instrument;
-  customersite: CustomerSite[];
+  customersite: CustomerSite[] = [];
   loading = false;
   submitted = false;
   isSave = false;
@@ -116,6 +117,7 @@ export class InstrumentComponent implements OnInit {
     private fileshareService: FileshareService,
     private currencyService: CurrencyService,
     private _sanitizer: DomSanitizer,
+    private customerService: CustomerService
   ) { }
 
   ngOnInit() {
@@ -201,25 +203,27 @@ export class InstrumentComponent implements OnInit {
       }
       );
 
-    this.customerSiteService.getAllCustomerSites().pipe(first())
-      .subscribe((data: any) => this.customersite = data.object);
+    this.customerService.getAllByConId(this.user.contactId)
+      .pipe(first()).subscribe((data: any) => {
+        data.object.forEach(element => this.customersite.push(...element.sites));
+
+        this.customerSiteService.GetCustomerSiteContacts().pipe(first())
+          .subscribe((data1: any) => {
+            this.siteId = data1.object.find(x => x.id == this.user.contactId)?.parentId
+            this.instrumentform.get('custSiteId').setValue(this.siteId);
+
+            if (this.siteId) {
+              this.customerSiteService.getById(this.siteId)
+                .pipe(first())
+                .subscribe((dataa: any) => {
+                  this.contactList = dataa.object.contacts;
+                });
+            }
+          });
+      })
 
     this.currencyService.getAll()
       .pipe(first()).subscribe((data: any) => this.lstCurrency = data.object)
-
-    this.customerSiteService.GetCustomerSiteContacts().pipe(first())
-      .subscribe((data: any) => {
-        this.siteId = data.object.find(x => x.id == this.user.contactId)?.parentId
-        this.instrumentform.get('custSiteId').setValue(this.siteId);
-
-        if (this.siteId) {
-          this.customerSiteService.getById(this.siteId)
-            .pipe(first())
-            .subscribe((dataa: any) => {
-              this.contactList = dataa.object.contacts;
-            });
-        }
-      });
 
 
     this.distributorService.getAll().pipe(first())
