@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ListTypeItem, ProfileReadOnly, User } from "../_models";
 import {
   AccountService,
@@ -68,6 +68,10 @@ export class DashboardComponent implements OnInit {
   calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
   costData: any[];
 
+  @ViewChild('MNTHS3') Mnths3;
+  @ViewChild('MNTHS6') Mnths6;
+  @ViewChild('MNTHS12') Mnths12;
+
   constructor(
     private accountService: AccountService,
     private instrumentService: InstrumentService,
@@ -92,12 +96,7 @@ export class DashboardComponent implements OnInit {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
 
-    this.GetAllAMC()
-    this.getServiceRequestData()
-    this.GetPoCost()
-    setTimeout(() => {
-      CustomerDashboardCharts()
-    }, 1000)
+    setTimeout(() => this.onCalenderFilter(this.calenderLst[0]), 1000)
 
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "CUSDH");
@@ -162,12 +161,27 @@ export class DashboardComponent implements OnInit {
   }
 
   onCalenderFilter(date) {
-    alert("alert")
+    if (date == this.calenderLst[0]) {
+      this.Mnths3.nativeElement.style.background = "white"
+      this.Mnths6.nativeElement.style.background = "lightgrey"
+      this.Mnths12.nativeElement.style.background = "lightgrey"
+    }
+    else if (date == this.calenderLst[1]) {
+      this.Mnths6.nativeElement.style.background = "white"
+      this.Mnths3.nativeElement.style.background = "lightgrey"
+      this.Mnths12.nativeElement.style.background = "lightgrey"
+    }
+    else if (date == this.calenderLst[2]) {
+      this.Mnths12.nativeElement.style.background = "white"
+      this.Mnths6.nativeElement.style.background = "lightgrey"
+      this.Mnths3.nativeElement.style.background = "lightgrey"
+    }
+
     this.getServiceRequestData(date);
     this.GetAllAMC(date);
     this.GetPoCost();
     this.GetSparePartsRecommended(date);
-    setTimeout(() => CustomerDashboardCharts(), 2000)
+    setTimeout(() => CustomerDashboardCharts(), 1000)
   }
 
 
