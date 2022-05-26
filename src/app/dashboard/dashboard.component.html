@@ -1,15 +1,17 @@
 <layout>
-  <div class="grd" style="display:flex;justify-content: flex-end;">
-    <div class="btn-group ml-auto">
-      <button style="padding:10px;border-radius: 0; background: lightgray;border: solid 0.2px;"
+  <div class="grd" style="display:flex;justify-content: flex-end;height: 35px;margin-top: 15px;">
+    <div class="btn-group ml-auto" style="height: fit-content;">
+      <button
+        style="height: -webkit-fill-available;padding: 1px 10px;border-radius: 0; background: lightgray;border: solid 0.2px;"
         (click)="onCalenderFilter(calenderLst[0])" class="btn active">3 Months</button>
-      <button style="padding:10px; background: lightgray;border: solid 0.2px;"
+      <button style="height: -webkit-fill-available;padding: 1px 10px; background: lightgray;border: solid 0.2px;"
         (click)="onCalenderFilter(calenderLst[1])" class="btn">6 Months</button>
-      <button style="padding:10px; border-radius: 0;background: lightgray;border: solid 0.2px;"
+      <button
+        style="height: -webkit-fill-available;padding: 1px 10px; border-radius: 0;background: lightgray;border: solid 0.2px;"
         (click)="onCalenderFilter(calenderLst[2])" class="btn">12 Months</button>
     </div>
   </div>
-  <hr style="margin: 0.5rem 0  ;">
+  <hr style="margin: 0 0 0.5rem 0;">
   <main class="main-content position-relative border-radius-lg ">
     <div class="container-fluid py-4">
       <div class="row">
@@ -139,7 +141,7 @@
               </div>
             </div>
             <div class="card-body">
-              <h5 class="mb-0 " style="font-size: 14px;">Cost</h5>
+              <h5 style="font-size: 15px;font-weight: 500;">Cost</h5>
             </div>
           </div>
         </div>
@@ -153,7 +155,7 @@
               </div>
             </div>
             <div class="card-body">
-              <h5 class="mb-0 " style="font-size: 14px;"> Completed Service Request</h5>
+              <h5 style="font-size: 15px;font-weight: 500;"> Completed Service Request</h5>
             </div>
           </div>
         </div>
@@ -167,7 +169,7 @@
               </div>
             </div>
             <div class="card-body">
-              <h5 class="mb-0 " style="font-size: 14px;">Pending Service Request</h5>
+              <h5 style="font-size: 15px;font-weight: 500;">Pending Service Request</h5>
             </div>
           </div>
         </div>
@@ -189,20 +191,28 @@
                   <thead>
 
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">SR#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Instrument</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Engineer</th>
+                      <th>
+                        <h6> SR#</h6>
+                      </th>
+
+                      <th>
+                        <h6> Instrument</h6>
+                      </th>
+
+                      <th>
+                        <h6> Engineer</h6>
+                      </th>
+
                     </tr>
 
                   </thead>
                   <tbody>
 
                     <tr *ngFor="let x of srList">
-                      <td>
-                        <h6 class="mb-0 text-sm" style="font-size: 11px !important;">{{x.serreqno}}</h6>
+                      <td style="font-size: 11px !important; color:black;">{{x.serreqno}}</td>
+                      <td style="font-size: 11px !important; color:black;">{{x.machineModelName}}</td>
+                      <td class="align-middle" style="font-size: 11px !important; color:black;"> {{x.assignedtoName}}
                       </td>
-                      <td style="font-size: 11px !important;">{{x.machineModelName}}</td>
-                      <td class="align-middle" style="font-size: 11px !important;"> {{x.assignedtoName}}</td>
                     </tr>
 
                   </tbody>
@@ -226,27 +236,25 @@
                 <table class="table align-items-center mb-0" style="overflow: auto;">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        SQ Date
+                      <th>
+                        <h6>SQ Date</h6>
                       </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Service Quote
+                      <th>
+                        <h6> Service Quote</h6>
                       </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Amount
+                      <th>
+                        <h6> Amount</h6>
                       </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Status
+                      <th>
+                        <h6> Status</h6>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
 
-                    <tr style="font-size: 12px;" *ngFor="let item of amcData">
+                    <tr style="font-size: 12px; color:black;" *ngFor="let item of amcData">
                       <td>
-                        <a [routerLink]="'/amc/'+item.id" style="text-decoration: underline ;">
-                          <h6 class="mb-0">{{item.sqdate}}</h6>
-                        </a>
+                        <a [routerLink]="'/amc/'+item.id" style="text-decoration: underline ;">{{item.sqdate}}</a>
                       </td>
                       <td>{{item.servicequote}}</td>
                       <td class="align-middle">{{item.zerorate}}</td>
