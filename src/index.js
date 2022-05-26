@@ -356,7 +356,14 @@ function DistributorDashboardCharts() {
       },
     }
   );
+
   setTimeout(() => {
+    $('#chartBar5').remove(); // this is my <canvas> element
+    $('#insHighestSerReq').append('<canvas id="chartBar5"><canvas>');
+
+    $('#chartDonut').remove(); // this is my <canvas> element
+    $('#revenueByCustomer').append('<canvas id="chartDonut"><canvas>');
+
     let instrumentWithHighestServiceRequest = JSON.parse(
       localStorage.getItem("instrumentWithHighestServiceRequest")
     );

@@ -92,14 +92,13 @@
               </div><!-- col Instruments Installed -->
               <div class="col-sm-12 mg-t-15">
                 <div class="card card-dashboard-three">
-                  <div class="card-header"
-                    style="max-width: 100%;text-transform: none !important; font-size: 16px;">
+                  <div class="card-header" style="max-width: 100%;text-transform: none !important; font-size: 16px;">
                     <p>Instruments With Highest Service Request</p>
                     <h6>{{insHighestSReq}}</h6>
 
                   </div><!-- card-header -->
                   <div class="card-body pt-4">
-                    <div class="chart">
+                    <div class="chart" id="insHighestSerReq">
                       <canvas id="chartBar5"></canvas>
                     </div>
                   </div>
@@ -140,7 +139,7 @@
               </div><!-- card-header -->
               <div class="card-body row">
                 <div class="col-md-6 d-flex align-items-center">
-                  <div class="chart">
+                  <div class="chart" id="revenueByCustomer">
                     <canvas id="chartDonut"></canvas>
                   </div>
                 </div><!-- col -->
