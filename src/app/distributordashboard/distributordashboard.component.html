@@ -4,6 +4,27 @@
       <div class="az-content-body">
 
         <div class="grp-btns" style="display: flex;justify-content: flex-end;">
+
+          <div style="height: 25px;">
+            <button type="button" (click)="CriticalSerReq()"
+              style="background-color: transparent;padding: 0;margin: -15px 25px 0 0; border: none; color: #5ba146;">
+              <p *ngIf="criticalSerReq != 0" style="color: white; background-color: #e24520;
+                    border-radius: 6px;
+                    height: 19px;
+                    width: 18px;
+                    font-size: 13px;
+                    position: relative;
+                    z-index: 1;
+                    display: inline-block;
+                    top: -18px;
+                    left: 25px;
+                  ">{{criticalSerReq}}</p>
+              <i style="font-size: 20px; margin-top: 18px; 
+                  z-index: 999;
+                  transform: rotate(23deg);" class="fas fa-bolt" title="Critical Service Requests"></i>
+            </button>
+          </div>
+
           <a class="btn" style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border: solid 0.2px;"
             (click)="onCalenderFilter(calenderLst[0])" #MNTHS3>3 Months</a>
           <a class=" btn"

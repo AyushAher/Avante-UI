@@ -11,6 +11,7 @@ import {
 import { ProfileReadOnly, User } from "../_models";
 import { first } from "rxjs/operators";
 import { DistributordashboardService } from '../_services/distributordashboard.service';
+import { Router } from '@angular/router';
 
 declare function DistributorDashboardCharts(): any;
 
@@ -52,6 +53,7 @@ export class DistributordashboardComponent implements OnInit {
   @ViewChild('MNTHS3') Mnths3;
   @ViewChild('MNTHS6') Mnths6;
   @ViewChild('MNTHS12') Mnths12;
+  criticalSerReq: any;
 
   constructor(
     private accountService: AccountService,
@@ -60,7 +62,7 @@ export class DistributordashboardComponent implements OnInit {
     private profileService: ProfileService,
     private serviceRequestService: ServiceRequestService,
     private distributorService: DistributorService,
-    private instrumnetService: InstrumentService,
+    private router: Router,
     private distributorDashboardService: DistributordashboardService,
   ) {
   }
@@ -88,8 +90,17 @@ export class DistributordashboardComponent implements OnInit {
         })
 
       setTimeout(() => this.onCalenderFilter(this.calenderLst[0]), 500);
+
+      this.serviceRequestService.getAll(this.user.userId)
+        .pipe(first()).subscribe((data: any) => {
+          this.criticalSerReq = data.object.filter(x => x.isCritical).length
+        })
     }
 
+  }
+
+  CriticalSerReq() {
+    this.router.navigate(["/servicerequestlist"])
   }
 
   onCalenderFilter(date) {
