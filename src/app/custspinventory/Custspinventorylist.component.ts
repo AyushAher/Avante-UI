@@ -94,6 +94,8 @@ export class CustspinventorylistComponent implements OnInit {
 
   DataFilter(event) {
     this.model = event
+    console.log(event);
+    
   }
 
   toggleFilter() {
@@ -121,6 +123,15 @@ export class CustspinventorylistComponent implements OnInit {
         sortable: true,
       },
       {
+        headerName: "Instrument",
+        field: "instrumentName",
+        filter: true,
+        tooltipField: "instrumentName",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
+      {
         headerName: "Qty. Available",
         field: "qtyAvailable",
         filter: true,
@@ -130,7 +141,7 @@ export class CustspinventorylistComponent implements OnInit {
         sortable: true,
       },
       {
-        headerName: "Qty. Available",
+        headerName: "Item Description",
         field: "sparePart.itemDesc",
         filter: true,
         tooltipField: "qtyavailable",
