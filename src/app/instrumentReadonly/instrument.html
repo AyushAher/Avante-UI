@@ -2,7 +2,10 @@
   <div class="right_col" role="main">
     <div class="container">
       <div class="page-title">
-        <div class="title_left">
+        <div class="d-flex" style="align-items: center;">
+          <a (click)="Back()" class="nav-link">
+            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+          </a>
           <h3>Instrument</h3>
         </div>
       </div>
@@ -14,7 +17,8 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="custSiteId">Customer Site</label>
-              <select formControlName="custSiteId" class="form-control" readonly disabled [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
+              <select formControlName="custSiteId" class="form-control" readonly disabled
+                [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of customersite" value={{congfig.id}}>
                   {{congfig.customerSite}}
@@ -26,14 +30,16 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="serialnos">Instrumnent Serial No</label>
-              <input type="text" formControlName="serialnos" class="form-control" readonly [ngClass]="{ 'is-invalid': submitted && f.serialnos.errors }" />
+              <input type="text" formControlName="serialnos" class="form-control" readonly
+                [ngClass]="{ 'is-invalid': submitted && f.serialnos.errors }" />
               <div *ngIf="submitted && f.serialnos.errors" class="invalid-feedback">
                 <div *ngIf="f.serialnos.errors.required">Instrument Serial No is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="insmfgdt">Instrument Manufacturing Date</label>
-              <input formControlName="insmfgdt" class="form-control" disabled readonly bsDatepicker [ngClass]="{ 'is-invalid': submitted && f.insmfgdt.errors }" />
+              <input formControlName="insmfgdt" class="form-control" disabled readonly bsDatepicker
+                [ngClass]="{ 'is-invalid': submitted && f.insmfgdt.errors }" />
               <div *ngIf="submitted && f.insmfgdt.errors" class="invalid-feedback">
                 <div *ngIf="f.insmfgdt.errors.required">Instrument Manufacturing Date is required</div>
               </div>
@@ -43,7 +49,8 @@
             <div class="col-sm-4">
               <label for="instype">Instrument Type</label>
               <!--<input type="text" formControlName="instype" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.instype.errors }" />-->
-              <select formControlName="instype" class="form-control" disabled readonly [ngClass]="{ 'is-invalid': submitted && f.instype.errors }">
+              <select formControlName="instype" class="form-control" disabled readonly
+                [ngClass]="{ 'is-invalid': submitted && f.instype.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of instuType" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
@@ -55,7 +62,8 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="insversion">Instrument Version</label>
-              <input type="text" formControlName="insversion" class="form-control" readonly [ngClass]="{ 'is-invalid': submitted && f.insversion.errors }" />
+              <input type="text" formControlName="insversion" class="form-control" readonly
+                [ngClass]="{ 'is-invalid': submitted && f.insversion.errors }" />
               <div *ngIf="submitted && f.insversion.errors" class="invalid-feedback">
                 <div *ngIf="f.insversion.errors.required">Instrument Version is required</div>
               </div>
@@ -63,7 +71,8 @@
             <div class="col-md-4 col-sm-4">
               <label for="shipdt">Shipment Date</label>
               <!--<input type="text" formControlName="shipdt" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.shipdt.errors shipdt}" />-->
-              <input formControlName="shipdt" class="form-control" disabled readonly bsDatepicker [ngClass]="{ 'is-invalid': submitted && f.shipdt.errors }">
+              <input formControlName="shipdt" class="form-control" disabled readonly bsDatepicker
+                [ngClass]="{ 'is-invalid': submitted && f.shipdt.errors }">
               <div *ngIf="submitted && f.shipdt.errors" class="invalid-feedback">
                 <div *ngIf="f.shipdt.errors.required">Shipment Date is required</div>
               </div>
@@ -75,7 +84,8 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="installby">Installed By Distributor</label>
-              <select formControlName="installby" #installedBy class="form-control" readonly disabled [ngClass]="{ 'is-invalid': submitted && f.installby.errors }">
+              <select formControlName="installby" #installedBy class="form-control" readonly disabled
+                [ngClass]="{ 'is-invalid': submitted && f.installby.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of distibutorList" value={{config.id}}>
                   {{config.distname}}
@@ -88,18 +98,21 @@
             </div>
             <div class="col-md-4 col-sm-4" *ngIf="installedBy.value==0">
               <label for="installbyOther">Other</label>
-              <input type="text" formControlName="installbyOther" class="form-control" readonly [ngClass]="{ 'is-invalid': submitted && f.installbyOther.errors }" />
+              <input type="text" formControlName="installbyOther" class="form-control" readonly
+                [ngClass]="{ 'is-invalid': submitted && f.installbyOther.errors }" />
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="engname">Engineer Name</label>
-              <input type="text" formControlName="engname" readonly class="form-control" [ngClass]="{ 'is-invalid': submitted && f.engname.errors }" />
+              <input type="text" formControlName="engname" readonly class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.engname.errors }" />
               <div *ngIf="submitted && f.engname.errors" class="invalid-feedback">
                 <div *ngIf="f.engname.errors.required">Engineer Name is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="engcontact">Engineer Contact No</label>
-              <input type="tel" formControlName="engcontact" readonly maxlength="10" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.engcontact.errors }" />
+              <input type="tel" formControlName="engcontact" readonly maxlength="10" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.engcontact.errors }" />
               <div *ngIf="submitted && f.engcontact.errors" class="invalid-feedback">
                 <div *ngIf="f.engcontact.errors.required">Engineer Contact No is required</div>
                 <div *ngIf="f.engcontact.errors?.maxlength">Max length is 10</div>
@@ -110,7 +123,8 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="engemail">Engineer Email</label>
-              <input type="text" formControlName="engemail" readonly class="form-control" [ngClass]="{ 'is-invalid': submitted && f.engemail.errors }" />
+              <input type="text" formControlName="engemail" readonly class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.engemail.errors }" />
               <div *ngIf="submitted && f.engemail.errors" class="invalid-feedback">
                 <div *ngIf="f.engemail.errors.required">Engineer Email is required</div>
               </div>
@@ -147,7 +161,8 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="installdt">Instrument Installation</label>
-              <input placeholder="date" formControlName="installdt" readonly bsDatepicker class="form-control" [ngClass]="{ 'is-invalid': submitted && f.installdt.errors }" />
+              <input placeholder="date" formControlName="installdt" readonly bsDatepicker class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.installdt.errors }" />
               <div *ngIf="submitted && f.installdt.errors" class="invalid-feedback">
                 <div *ngIf="f.installdt.errors.required">Instrument Installation is required</div>
               </div>
@@ -200,58 +215,62 @@
           <br />
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Recommended</a>
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                aria-selected="true">Recommended</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Consumables</a>
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                aria-selected="false">Consumables</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Full Spare</a>
+              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                aria-selected="false">Full Spare</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="otherspare-tab" data-toggle="tab" href="#otherspare" role="tab" aria-controls="otherspare" aria-selected="false">Other Spare</a>
+              <a class="nav-link" id="otherspare-tab" data-toggle="tab" href="#otherspare" role="tab"
+                aria-controls="otherspare" aria-selected="false">Other Spare</a>
             </li>
           </ul>
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnDefs" [rowData]="recomandedFilter" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="recomandedFilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnDefs" [rowData]="consumfilter" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="consumfilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnDefs" [rowData]="fullsparefilter" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="fullsparefilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
 
             <div class="tab-pane fade" id="otherspare" role="tabpanel" aria-labelledby="otherspare-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-                <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
-                                 [columnDefs]="columnDefs" [rowData]="othersparefilter" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+                <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="othersparefilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
           </div>
           <div class="row" *ngIf="PdffileData">
             <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine" (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)"
-                               [columnDefs]="pdfcolumnDefs" [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
+              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
+                (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)" [columnDefs]="pdfcolumnDefs"
+                [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
             </div>
           </div>
-            <hr />
-            <div class="row">
-              <div class="col-md-6 col-sm-6">
-                <a routerLink="/search" class="btn btn-secondary" style="margin-left: 10px;">Back</a>
-              </div>
-            </div>
-            <!--<div class="row" *ngIf="isSave">
+          <hr />
+          <!--<div class="row" *ngIf="isSave">
       <a routerLink="/sparepart/{{id}}" class="btn btn-link">Add SparePart</a>
     </div>-->
         </form>

@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import {
   CustomerSite,
@@ -12,10 +12,10 @@ import {
   SparePart,
   User
 } from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -157,7 +157,7 @@ export class InstrumentRonlyComponent implements OnInit {
           this.customersite = data.object;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -170,7 +170,7 @@ export class InstrumentRonlyComponent implements OnInit {
           this.instuType = data;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -183,7 +183,7 @@ export class InstrumentRonlyComponent implements OnInit {
         },
         error: error => {
           //  this.alertService.error(error);
-          
+
           this.loading = false;
         }
       });
@@ -195,7 +195,7 @@ export class InstrumentRonlyComponent implements OnInit {
           this.listTypeItems = data;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -223,7 +223,7 @@ export class InstrumentRonlyComponent implements OnInit {
 
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -233,10 +233,10 @@ export class InstrumentRonlyComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.PdffileData = data.object;
-           // this.getPdffile(data.object.filePath);
+            // this.getPdffile(data.object.filePath);
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -254,6 +254,10 @@ export class InstrumentRonlyComponent implements OnInit {
   get f() { return this.instrumentform.controls; }
   get c() { return this.instrumentform.controls.configuration; }
 
+  Back() {
+    this.router.navigate(["/search"])
+  }
+
   getfileImage(filePath: string) {
     //debugger;
     if (filePath != null && filePath != "") {
@@ -268,7 +272,7 @@ export class InstrumentRonlyComponent implements OnInit {
 
           },
           error: error => {
-            
+
             this.imageUrl = this.noimageData;
           }
         });
@@ -291,7 +295,7 @@ export class InstrumentRonlyComponent implements OnInit {
               this.recomandFilter(this.sparePartDetails);
             },
             error: error => {
-              
+
               this.loading = false;
             }
           });
@@ -309,7 +313,7 @@ export class InstrumentRonlyComponent implements OnInit {
               this.selectedConfigType.push(value);
             },
             error: error => {
-              
+
               this.loading = false;
             }
           });
@@ -331,7 +335,7 @@ export class InstrumentRonlyComponent implements OnInit {
 
           },
           error: error => {
-            
+
             // this.imageUrl = this.noimageData;
           }
         });
@@ -365,7 +369,7 @@ export class InstrumentRonlyComponent implements OnInit {
 
           },
           error: error => {
-            
+
           }
         });
       //// When file uploads set it to file formcontrol
@@ -417,12 +421,12 @@ export class InstrumentRonlyComponent implements OnInit {
               this.router.navigate(["instrumentlist"]);
             }
             else {
-              
+
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -438,13 +442,13 @@ export class InstrumentRonlyComponent implements OnInit {
               this.router.navigate(["instrumentlist"]);
             }
             else {
-              
+
             }
             this.loading = false;
 
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
