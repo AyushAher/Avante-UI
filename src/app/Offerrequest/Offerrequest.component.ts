@@ -217,8 +217,8 @@ export class OfferrequestComponent implements OnInit {
       instrumentsList: ['', Validators.required],
       payAmt: [0],
       payAmtCurrencyId: [""],
-      stageName: ['', Validators.required],
-      stageComments: ['', Validators.required],
+      stageName: [''],
+      stageComments: [''],
       stagePaymentType: []
     })
 
@@ -231,7 +231,7 @@ export class OfferrequestComponent implements OnInit {
         this.instruments = data.object
       })
 
-    this.custService.getAll().pipe(first())
+    this.custService.getAllByConId(this.user.contactId).pipe(first())
       .subscribe((data: any) => {
         let custList = []
         if (this.role == this.environment.distRoleCode) {
@@ -422,7 +422,7 @@ export class OfferrequestComponent implements OnInit {
     this.form.disable();
     this.columnDefs = this.createColumnDefsRO();
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
