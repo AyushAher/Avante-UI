@@ -2,9 +2,12 @@
 
 <div class="sidenav">
     <div class="header">
-        <h5 style="display: inline-block;margin: 4%;width: 80%;">Notifications</h5>
+        <h5 style="display: inline-block;margin: 4%;width: 65%;">Notifications</h5>
 
-        <button role="button" aria-label="close modal"
+        <i (click)="ClearNotifications()" class="fas fa-trash" style="color: white;margin-right: 25px;"
+            title="Clear All"></i>
+        
+            <button role="button" aria-label="close modal"
             style="background: transparent;border: none;padding: 0; font-size: 30px;" (click)="close()">
             &times;</button>
     </div>
@@ -24,3 +27,12 @@
         <p>No Notifications!</p>
     </div>
 </div>
+
+<style>
+    .header {
+        z-index: 3;
+        position: fixed;
+        width: 20.6%;
+        top: 0px;
+    }
+</style>

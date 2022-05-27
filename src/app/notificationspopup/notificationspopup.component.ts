@@ -32,6 +32,11 @@ export class NotificationspopupComponent implements OnInit {
     this.popUpClosed.emit(true)
   }
 
+  ClearNotifications() {
+    this.userNotification.clearAll().pipe(first())
+      .subscribe((data: any) => this.notificationList = [])
+  }
+
   deleteNotification(id) {
     this.userNotification.delete(id).pipe(first())
       .subscribe((data: any) => {

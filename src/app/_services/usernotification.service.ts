@@ -21,4 +21,8 @@ export class UsernotificationService {
     return this.http.delete(`${this.environment.apiUrl}/Notifications/${id}`);
   }
 
+  clearAll() {
+    return this.http.delete(`${this.environment.apiUrl}/Notifications`);
+  }
+
 }
