@@ -95,7 +95,7 @@ export class CustspinventorylistComponent implements OnInit {
   DataFilter(event) {
     this.model = event
     console.log(event);
-    
+
   }
 
   toggleFilter() {
@@ -104,6 +104,15 @@ export class CustspinventorylistComponent implements OnInit {
 
   private createColumnDefs() {
     return [
+      {
+        headerName: "Instrument",
+        field: "instrumentName",
+        filter: true,
+        tooltipField: "instrumentName",
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+      },
       {
         headerName: "Part No",
         field: "partNo",
@@ -118,15 +127,6 @@ export class CustspinventorylistComponent implements OnInit {
         field: "hscCode",
         filter: true,
         tooltipField: "hsccode",
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-      },
-      {
-        headerName: "Instrument",
-        field: "instrumentName",
-        filter: true,
-        tooltipField: "instrumentName",
         enableSorting: true,
         editable: false,
         sortable: true,
