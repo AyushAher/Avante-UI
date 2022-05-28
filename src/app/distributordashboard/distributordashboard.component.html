@@ -1,3 +1,77 @@
+<style>
+  @-webkit-keyframes argh-my-eyes {
+    0% {
+      background-color: #fff;
+    }
+
+    49% {
+      background-color: #fff;
+    }
+
+    50% {
+      background-color: #000;
+    }
+
+    99% {
+      background-color: #000;
+    }
+
+    100% {
+      background-color: #fff;
+    }
+  }
+
+  @-moz-keyframes argh-my-eyes {
+    0% {
+      background-color: #fff;
+    }
+
+    49% {
+      background-color: #fff;
+    }
+
+    50% {
+      background-color: #000;
+    }
+
+    99% {
+      background-color: #000;
+    }
+
+    100% {
+      background-color: #fff;
+    }
+  }
+
+  @keyframes argh-my-eyes {
+    0% {
+      background-color: #fff;
+    }
+
+    49% {
+      background-color: #fff;
+    }
+
+    50% {
+      background-color: #000;
+    }
+
+    99% {
+      background-color: #000;
+    }
+
+    100% {
+      background-color: #fff;
+    }
+  }
+
+  .flash {
+    -webkit-animation: argh-my-eyes 1s infinite;
+    -moz-animation: argh-my-eyes 1s infinite;
+    animation: argh-my-eyes 1s infinite;
+  }
+</style>
+
 <layout>
   <div class="az-content az-content-dashboard" style="padding-top: 5px;">
     <div class="container">
@@ -5,10 +79,11 @@
 
         <div class="grp-btns" style="display: flex;justify-content: flex-end;">
 
-          <div style="height: 25px;">
+          <div [ngClass]="{ 'flash': criticalSerReq != 0 }"
+            style="height: 25px;margin-right: 15px; border-radius: 15px;">
             <button type="button" (click)="CriticalSerReq()"
-              style="background-color: transparent;padding: 0;margin: -15px 25px 0 0; border: none; color: #5ba146;">
-              <p *ngIf="criticalSerReq != 0" style="color: white; background-color: #e24520;
+              style="background-color: transparent;padding: 0;margin: -15px 25px 0 0; border: none; color: #e24520;">
+              <p *ngIf="criticalSerReq != 0" style="color: black; background-color: lavender;
                     border-radius: 6px;
                     height: 19px;
                     width: 18px;
