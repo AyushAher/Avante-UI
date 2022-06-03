@@ -95,36 +95,42 @@ export class ProfileComponent implements OnInit {
 
 
     this.id = this.route.snapshot.paramMap.get('id');
-    if (this.id != null) {
-      this.profileService.getById(this.id)
-        .pipe(first())
-        .subscribe((data: any) => {
-          this.listTypeItems = data.object.permissions
 
-          data.object.permissions.forEach(element => {
-            element.itemCode = element.screenCode
-          });
-
-          this.addItem(data.object.permissions)
-          this.profileform.patchValue(data.object);
+    this.profileService.GetAllScreens()
+      .pipe(first())
+      .subscribe((data: any) => {
+        data.object.sort((a, b) => {
+          var value = 0
+          a.categoryName < b.categoryName ? value = -1 : a.categoryName > b.categoryName ? value = 1 : value = 0;
+          return value;
         });
 
-      setTimeout(() => this.profileform.disable(), 500);
-    }
-    else {
-      this.isNewMode = true
-      this.profileService.GetAllScreens()
-        .pipe(first())
-        .subscribe((data: any) => {
-          this.listTypeItems = data.object;
-          data.object.sort((a, b) => {
-            var value = 0
-            a.categoryName < b.categoryName ? value = -1 : a.categoryName > b.categoryName ? value = 1 : value = 0;
-            return value;
-          });
-          this.addItem(this.listTypeItems);
-        });
-    }
+        this.listTypeItems = data.object;
+        if (this.id != null) {
+          this.profileService.getById(this.id)
+            .pipe(first())
+            .subscribe((profileData: any) => {
+              this.profileform.get("profilename").setValue(profileData.object.profilename)
+              this.listTypeItems.forEach(x => {
+                var profile = profileData.object.permissions.find(y => y.screenId == x.screenId || y.screenId == x.listTypeItemId)
+                x["id"] = profile?.id
+
+                x["read"] = profile?.read
+                x["create"] = profile?.create
+                x["update"] = profile?.update
+                x["delete"] = profile?.delete
+                x["commercial"] = profile?.commercial
+              });
+              this.addItem();
+              this.profileform.get("permissions").setValue(this.listTypeItems)
+            });
+          setTimeout(() => this.profileform.disable(), 500);
+        }
+        else {
+          this.isNewMode = true
+          this.addItem();
+        }
+      });
   }
 
 
@@ -154,7 +160,6 @@ export class ProfileComponent implements OnInit {
 
   DeleteRecord() {
     if (confirm("Are you sure you want to edit the record?")) {
-
       this.profileService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
@@ -163,22 +168,8 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  CreateItem(): FormGroup {
-    return this.formBuilder.group({
-      id: '',
-      screenId: '',
-      screenName: '',
-      create: '',
-      read: '',
-      update: '',
-      delete: '',
-      categoryName: "",
-      commercial: "",
-      screenCode: ""
-    });
-  }
-
-  addItem(value: any): void {
+  addItem(): void {
+    let value = this.listTypeItems
     //debugger;
     for (let i = 0; i < value.length; i++) {
       this.listT = value[i];
@@ -202,6 +193,7 @@ export class ProfileComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.profileform.controls; }
   get c() { return this.profileform.controls.Permissions; }
+
   getScreenCode(i) {
     return this.getName(i).screenCode
   }
@@ -218,7 +210,7 @@ export class ProfileComponent implements OnInit {
 
     if (property == "commercial") {
       for (let i of permission.controls) {
-        if (i.value.screenCode == "SINST" || i.value.screenCode == "OFREQ" || i.value.screenCode == "AMC")
+        if (i.value.screenCode == "SINST" || i.value.screenCode == "OFREQ" || i.value.screenCode == "SAMC")
           i.get(property).setValue(!i.get(property).value)
       }
       return
