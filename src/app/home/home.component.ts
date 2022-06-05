@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {ListTypeItem, Profile, User} from '../_models';
-import {AccountService, ListTypeService, NotificationService, ProfileService} from '../_services';
-import {first} from 'rxjs/operators';
-import {Router} from '@angular/router';
+import { ListTypeItem, Profile, User } from '../_models';
+import { AccountService, ListTypeService, NotificationService, ProfileService } from '../_services';
+import { first } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -45,6 +45,10 @@ export class HomeComponent {
 
                     case "Customer":
                       this.router.navigate(["custdashboard"]);
+                      break;
+
+                    case "Engineer":
+                      this.router.navigate(["engdashboard"]);
                       break;
                   }
                 }

@@ -1,0 +1,224 @@
+<style>
+    .chart-label {
+        text-align: center;
+    }
+
+    .card {
+        max-width: 32rem;
+        max-height: 35rem;
+        overflow: auto;
+    }
+
+    .calender-btn {
+        padding: 1px 10px;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .calender-btn:first-child {
+        border: 1px solid gray;
+    }
+
+    .calender-btn:last-child {
+        border: 1px solid gray;
+    }
+
+    .calender-btn {
+        border-top: 1px solid gray;
+        border-bottom: 1px solid gray;
+    }
+
+    .active {
+        background-color: gray;
+        color: white;
+    }
+
+    .calender {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1.5rem;
+    }
+
+    hr {
+        margin-top: 0.5rem;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 5px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    td{
+        font-size: 13px;
+    }
+</style>
+<layout>
+    <div class="calender">
+        <div class="btn-grp">
+            <button class="btn calender-btn" (click)="CalenderChange(calenderLst[0])"
+                [ngClass]="{'active': currentCalender == calenderLst[0]}">
+                3 Months</button>
+            <button class="btn calender-btn" (click)="CalenderChange(calenderLst[1])"
+                [ngClass]="{'active': currentCalender == calenderLst[1]}">
+                6 Months</button>
+            <button class="btn calender-btn" (click)="CalenderChange(calenderLst[2])"
+                [ngClass]="{'active': currentCalender == calenderLst[2]}">
+                12 Months</button>
+        </div>
+    </div>
+    <hr>
+    <div class="dashboard">
+        <div class="row my-3">
+            <div class="col-md-6 card mx-3">
+                <div class="chart py-3">
+                    <div id="compSerReqContainer">
+                        <canvas id="compSerReq" class="chart-canvas" height="170"></canvas>
+                    </div>
+                </div>
+                <div class="chart-label py-3 px-3">
+                    <h6>Completed Service Request</h6>
+                </div>
+            </div>
+            <div class="col-md-6 card mx-3">
+                <div class="chart py-3">
+                    <div id="pendingSerReqContainer">
+                        <canvas id="pendingSerReq" class="chart-canvas" height="170"></canvas>
+                    </div>
+                </div>
+                <div class="chart-label py-3 px-3">
+                    <h6>Pending Service Request</h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-3">
+            <div class="col-md-6 card mx-3">
+                <div class="card-heading pt-4 px-3">
+                    <h6>Spare Parts Recommended</h6>
+                </div>
+                <div class="card-body">
+                    <div class="sp-table">
+                        <table class="table table-striped">
+                            <thead>
+                                <th>Sr.</th>
+                                <th>Ser. Req.</th>
+                                <th>SP No.</th>
+                                <th>Qty</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of spRecom;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyRecommended}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spRecom;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyRecommended}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spRecom;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyRecommended}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spRecom;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyRecommended}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spRecom;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyRecommended}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spRecom;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyRecommended}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 card mx-3">
+                <div class="card-heading pt-4 px-3">
+                    <h6>Spare Parts Consumed</h6>
+                </div>
+                <div class="card-body">
+                    <div class="sp-table">
+                        <table class="table table-striped">
+                            <thead>
+                                <th>Sr.</th>
+                                <th>Ser. Req.</th>
+                                <th>SP No.</th>
+                                <th>Qty</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of spCon;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyConsumed}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spCon;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyConsumed}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spCon;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyConsumed}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spCon;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyConsumed}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spCon;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyConsumed}}</td>
+                                </tr>
+                                <tr *ngFor="let item of spCon;let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.serReqNo}}</td>
+                                    <td>{{item.partNo}}</td>
+                                    <td>{{item.qtyConsumed}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</layout>

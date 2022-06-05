@@ -483,3 +483,88 @@ function DistributorDashboardCharts() {
     });
   }, 2000);
 }
+
+function EngDashboardCharts() {
+  setTimeout(() => {
+    $('#compSerReq').remove(); // this is my <canvas> element
+    $('#compSerReqContainer').append('<canvas id="compSerReq" class="chart-canvas" height="170"><canvas>');
+
+    $('#pendingSerReq').remove(); // this is my <canvas> element
+    $('#pendingSerReqContainer').append('<canvas id="pendingSerReq" class="chart-canvas" height="170"><canvas>');
+
+    var pendingSerReq = JSON.parse(localStorage.getItem("pendingSerReq"))
+    var compSerReq = JSON.parse(localStorage.getItem("compSerReq"))
+
+    new Chart("compSerReq", {
+      type: "doughnut",
+      data: {
+        labels: compSerReq?.compReqLabels,
+        datasets: [
+          {
+            label: "Service Request Types",
+            tension: 0,
+            borderWidth: 0,
+            pointRadius: 5,
+            // pointBackgroundColor: "rgba(255, 255, 255, .8)",
+            pointBorderColor: "transparent",
+            backgroundColor: ["#8400ff", "#a442ff", "#c484ff", "#e1c1ff", "#f9f1ff"],
+            borderColor: "rgba(255, 255, 255, .8)",
+            fill: true,
+            data: compSerReq?.compReqValues,
+            maxBarThickness: 6,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
+      },
+    });
+
+    new Chart("pendingSerReq", {
+      type: "doughnut",
+      data: {
+        labels: pendingSerReq?.pendingReqLabels,
+        datasets: [
+          {
+            label: "Service Request Types",
+            tension: 0,
+            borderWidth: 0,
+            pointRadius: 5,
+            // pointBackgroundColor: "rgba(255, 255, 255, .8)",
+            pointBorderColor: "transparent",
+            backgroundColor: ["#2aa7ff", "#5abbff", "#89ceff", "#bce3ff", "#eff8ff"],
+            borderColor: "rgba(255, 255, 255, .8)",
+            fill: true,
+            data: pendingSerReq?.pendingReqValues,
+            maxBarThickness: 6,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
+      },
+    });
+
+  }, 1000);
+
+}

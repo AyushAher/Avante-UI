@@ -80,6 +80,7 @@ import { ServicecompletionreportComponent } from './servicecompletionreport/serv
 import { PendingquotationrequestComponent } from './pendingquotationrequest/pendingquotationrequest.component';
 import { ServicecontractrevenuereportComponent } from './servicecontractrevenuereport/servicecontractrevenuereport.component';
 import { CostofownershipComponent } from './costofownership/costofownership.component';
+import { EngdashboardComponent } from './engdashboard/engdashboard.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
@@ -417,6 +418,11 @@ const routes: Routes = [
   {
     path: "pendingquotationrequest",
     component: PendingquotationrequestComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "engdashboard",
+    component: EngdashboardComponent,
     canActivate: [AuthGuard],
   },
   { path: 'account', loadChildren: accountModule },
