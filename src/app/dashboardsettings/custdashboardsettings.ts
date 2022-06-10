@@ -1,24 +1,15 @@
-// noinspection DuplicatedCode
-
 import { Component, OnInit } from "@angular/core";
 import { ListTypeItem, ProfileReadOnly, User } from "../_models";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { AccountService, AlertService, ListTypeService, NotificationService, ProfileService } from "../_services";
+import { Router } from "@angular/router";
+import { AccountService, ListTypeService, NotificationService, ProfileService } from "../_services";
 import { first } from "rxjs/operators";
 import { CustdashboardsettingsService } from "../_services/custdashboardsettings.service";
 
 @Component({
-  selector: 'app-customer',
+  selector: 'app-customerdashboardsettings',
   templateUrl: './custdashboardsettings.html',
 })
 export class CustdashboardsettingsComponent implements OnInit {
-  form: FormGroup;
-  model: any
-  loading = false;
-  submitted = false;
-  isSave = false;
-  type: string;
   id: string;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
@@ -32,18 +23,16 @@ export class CustdashboardsettingsComponent implements OnInit {
   rowdata1: ListTypeItem[];
   rowdata2: ListTypeItem[];
   rowdata3: ListTypeItem[];
+
   row1Error: boolean = false;
   row2Error: boolean = false;
   row3Error: boolean = false;
-  isEditMode: boolean;
-  isNewMode: boolean;
+  model: any;
 
   constructor(
-    private formBuilder: FormBuilder,
     private router: Router,
     private accountService: AccountService,
     private Service: CustdashboardsettingsService,
-    private alertService: AlertService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private listTypeService: ListTypeService,
@@ -68,18 +57,6 @@ export class CustdashboardsettingsComponent implements OnInit {
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     }
-
-
-    this.form = this.formBuilder.group({
-      displayIn: "",
-      position: 0,
-      isDefault: false,
-      dashboardFor: "DHCT",
-      graphName: "",
-      isactive: true,
-      isdeleted: [false],
-
-    });
 
     this.listTypeService
       .getById("CDRW1")
@@ -120,21 +97,19 @@ export class CustdashboardsettingsComponent implements OnInit {
       });
   }
 
-  toggle(e, formcontroller) {
-    let prev = this.localData.filter(row => row.graphName == e && row.displayIn == formcontroller)
-    debugger;
+  toggle(graphName, displayIn) {
+    let prev = this.localData.filter(row => row.graphName == graphName && row.displayIn == displayIn)
     if (prev.length == 0 || prev == null) {
-      this.model = this.form.value
-      this.model.displayIn = formcontroller
-      this.model.position = 0
-      this.model.graphName = e
-      this.model.dashboardFor = "DHCT"
-      this.model.isDefault = false
+      this.model = {
+        displayIn,
+        position: 0,
+        isDefault: false,
+        dashboardFor: "DHCT",
+        graphName
+      }
       this.localData.push(this.model)
-      this.model = null
-      this.form.reset()
     } else {
-      let indexOfElement = this.localData.findIndex((x) => x.graphName == e && x.displayIn == formcontroller)
+      let indexOfElement = this.localData.findIndex((x) => x.graphName == graphName && x.displayIn == displayIn)
       if (indexOfElement >= 0) {
         this.localData.splice(indexOfElement, 1);
       }
@@ -147,80 +122,12 @@ export class CustdashboardsettingsComponent implements OnInit {
       this.Service.reset(this.id, "DHCT")
         .pipe(first())
         .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess("Settings Restored to default", "Success");
-              this.router.navigate(['']);
-
-            } else {
-
-            }
-            this.loading = false;
-          },
-          error: error => {
-
-            this.loading = false;
-          }
+          next: (data: any) => { },
         });
     }
   }
 
-
-  EditMode() {
-    if (confirm("Are you sure you want to edit the record?")) {
-      this.isEditMode = true;
-      this.form.enable();
-    }
-  }
-
-  Back() {
-
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["/"]);
-    }
-
-    else this.router.navigate(["/"]);
-
-  }
-
-  CancelEdit() {
-    this.form.disable()
-    this.isEditMode = false;
-    this.isNewMode = false;;
-  }
-
-  DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
-      this.Service.delete(this.id).pipe(first())
-        .subscribe((data: any) => {
-          if (data.result)
-            this.router.navigate(["/"]);
-        })
-    }
-  }
-
-
-
-  // convenience getter for easy access to form fields
-  get f() {
-    return this.form.controls;
-  }
-
   onSubmit() {
-    debugger;
-    this.submitted = true;
-    // reset alerts on submit
-    this.alertService.clear();
-
-    // stop here if form is invalid
-    if (this.form.invalid) {
-      return;
-    }
-    // this.isSave = true;
-    this.loading = true;
-
-
     let row1 = 0
     let row2 = 0
     let row3 = 0
@@ -245,26 +152,13 @@ export class CustdashboardsettingsComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(['']);
-
-            } else {
-
-            }
-            this.loading = false;
-
-          },
-          error: error => {
-
-            this.loading = false;
+            if (data.result) this.router.navigate(['']);
           }
         });
     } else {
-      this.loading = false;
-      this.row1Error = row1 != 4
-      this.row2Error = row2 != 3
-      this.row3Error = row3 != 3
+      if (row1 != 4) this.notificationService.showError("Only 4 options can be selected for Row 1", "Error")
+      if (row2 != 3) this.notificationService.showError("Only 3 options can be selected for Row 2", "Error")
+      if (row3 != 3) this.notificationService.showError("Only 3 options can be selected for Row 3", "Error")
     }
   }
 }

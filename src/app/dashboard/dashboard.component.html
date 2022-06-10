@@ -1,16 +1,41 @@
 <layout>
-  <div class="grd" style="display:flex;justify-content: flex-end;height: 35px;margin-top: 15px;">
-    <div class="btn-group ml-auto" style="height: fit-content;">
-      <button
-        style="height: -webkit-fill-available;padding: 1px 10px;border-radius: 0; background: lightgray;border: solid 0.2px;"
-        (click)="onCalenderFilter(calenderLst[0])" #MNTHS3 class="btn active">3 Months</button>
-      <button style="height: -webkit-fill-available;padding: 1px 10px; background: lightgray;border: solid 0.2px;"
-        (click)="onCalenderFilter(calenderLst[1])" #MNTHS6 class="btn">6 Months</button>
-      <button
-        style="height: -webkit-fill-available;padding: 1px 10px; border-radius: 0;background: lightgray;border: solid 0.2px;"
-        (click)="onCalenderFilter(calenderLst[2])" #MNTHS12 class="btn">12 Months</button>
+  <div class="d-flex justify-content-between">
+    <style>
+      .ddl {
+        max-height: 300px;
+        width: 250px;
+        position: absolute;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 999;
+        background: white;
+      }
+    </style>
+
+    <div class="dropdown">
+      <a class="btn btn-outline-secondary" style="margin: 6px;padding: 6px;" (click)="toggle()">Customise
+      </a>
+      <div class="ddl" [style.display]="isHidden ? 'none': 'block' " [style.border]="isHidden ? 'none': '0.2px solid' "
+        [style.padding]="isHidden ? '0': '10px 15px' ">
+        <app-customerdashboardsettings></app-customerdashboardsettings>
+      </div>
+    </div>
+
+    <div class="grd" style="display:flex;justify-content: flex-end;height: 35px;margin-top: 15px;">
+      <div class="btn-group ml-auto" style="height: fit-content;">
+        <button
+          style="height: -webkit-fill-available;padding: 1px 10px;border-radius: 0; background: lightgray;border: solid 0.2px;"
+          (click)="onCalenderFilter(calenderLst[0])" #MNTHS3 class="btn active">3 Months</button>
+        <button style="height: -webkit-fill-available;padding: 1px 10px; background: lightgray;border: solid 0.2px;"
+          (click)="onCalenderFilter(calenderLst[1])" #MNTHS6 class="btn">6 Months</button>
+        <button
+          style="height: -webkit-fill-available;padding: 1px 10px; border-radius: 0;background: lightgray;border: solid 0.2px;"
+          (click)="onCalenderFilter(calenderLst[2])" #MNTHS12 class="btn">12 Months</button>
+      </div>
     </div>
   </div>
+
+
   <hr style="margin: 0 0 0.5rem 0;">
   <main class="main-content position-relative border-radius-lg ">
     <div class="container-fluid py-4">

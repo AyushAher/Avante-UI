@@ -1,136 +1,48 @@
-<layout>
-  <div class="right_col" role="main">
-    <div class="container">
+<style>
+  hr {
+    margin: 0;
+  }
 
-      <div class="page-title">
-        <div class="title_left" style="display: flex; justify-content: space-between;">
-          <div class="d-flex" style="align-items: center;">
-            <a (click)="Back()" class="nav-link">
-              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
-            </a>
-            <h3>Dashboard Settings</h3>
-          </div>
+  p {
+    font-weight: 400;
+    text-decoration: underline;
+  }
+</style>
+<div class="d-flex justify-content-between">
 
-          <div class="controls" style="display: flex;">
-            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
-              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
-            </a>
+  <p>Row 1</p>
+  <button class="btn" (click)="onSubmit()">
+    <i class="fas fa-check"></i>
+  </button>
+</div>
+<hr>
+<div class="row">
+  <div class="input  col-md-12" *ngFor="let i of rowdata1">
+    <input type="checkbox" id="chk_{{i.listTypeItemId}}" (change)="toggle($event.target.value,'row1')"
+      value="{{i.listTypeItemId}}" style="margin-right: 5px">
 
-            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
-              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
-            </a>
-
-            <a class="nav-link" (click)="onSubmit()"
-              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
-              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
-            </a>
-
-            <div class="nav-item dropdown">
-              <a class="nav-link" href="#" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-ellipsis-v" style="color: #5ba146;" title="More"></i>
-              </a>
-
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" (click)="resetOptions()">Reset</a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-      <div class="clearfix"></div>
-      <hr />
-      <div class="col-md-12 col-sm-12 ">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
-          <div class="row">
-            <div class="accordion" id="accordionExample">
-
-              <div class="card" style="width: 100vw;">
-
-                <div class="card-header" id="headingOne" style="height: 50px">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-                      data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Dashboard Row 1
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                  data-parent="#accordionExample">
-                  <div class="card-body row">
-                    <div class="input py-2 col-md-2" *ngFor="let i of rowdata1">
-                      <input type="checkbox" id="chk_{{i.listTypeItemId}}" [disabled]="!isEditMode"
-                        (change)="toggle($event.target.value,'row1')" value="{{i.listTypeItemId}}"
-                        style="margin-right: 5px">
-
-                      <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
-                    </div>
-                  </div>
-                  <div *ngIf="row1Error" class="danger px-4">
-                    <p style="color:red">Minimum 4 options to be selected.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="card" style="width: 100vw;">
-
-                <div class="card-header" id="headingTwo" style="height: 50px">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
-                      data-target="#collapseTwo2" aria-expanded="true" aria-controls="collapseTwo">
-                      Dashboard Row 2
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseTwo2" class="collapse show" aria-labelledby="headingTwo"
-                  data-parent="#accordionExample">
-                  <div class="card-body row">
-                    <div class="input py-2 col-md-2" *ngFor="let i of rowdata2">
-                      <input type="checkbox" id="chk_{{i.listTypeItemId}}" [disabled]="!isEditMode"
-                        (change)="toggle($event.target.value, 'row2')" value="{{i.listTypeItemId}}"
-                        style="margin-right: 5px">
-
-                      <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
-                    </div>
-                  </div>
-                  <div *ngIf="row2Error" class="danger px-4">
-                    <p style="color:red">Minimum 3 options to be selected.</p>
-                  </div>
-
-                </div>
-
-              </div>
-              <div class="card" style="width: 100vw;">
-
-                <div class="card-header" id="headingThree" style="height: 50px">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
-                      data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                      Dashboard Row 3
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseThree" class="collapse show" aria-labelledby="headingThree"
-                  data-parent="#accordionExample">
-                  <div class="card-body row">
-                    <div class="input py-2 col-md-2" *ngFor="let i of rowdata3">
-                      <input type="checkbox" id="chk_{{i.listTypeItemId}}" [disabled]="!isEditMode"
-                        (change)="toggle($event.target.value,'row3')" value="{{i.listTypeItemId}}"
-                        style="margin-right: 5px ">
-
-                      <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
-                    </div>
-                  </div>
-                  <div *ngIf="row3Error" class="danger px-4">
-                    <p style="color:red">Minimum 3 options to be selected.</p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+    <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
   </div>
-</layout>
+</div>
+
+<p>Row 2</p>
+<hr>
+<div class="row">
+  <div class="input  col-md-12" *ngFor="let i of rowdata2">
+    <input type="checkbox" id="chk_{{i.listTypeItemId}}" (change)="toggle($event.target.value, 'row2')"
+      value="{{i.listTypeItemId}}" style="margin-right: 5px">
+
+    <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
+  </div>
+</div>
+
+<p>Row 3</p>
+<hr>
+<div class="row">
+  <div class="input  col-md-12" *ngFor="let i of rowdata3">
+    <input type="checkbox" id="chk_{{i.listTypeItemId}}" (change)="toggle(i,'row3')" value="{{i.listTypeItemId}}"
+      style="margin-right: 5px ">
+
+    <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
+  </div>
+</div>

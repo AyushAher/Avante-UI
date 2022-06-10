@@ -15,8 +15,7 @@ import {
   SrRecomandService
 } from "../_services";
 import { first } from "rxjs/operators";
-import { CustspinventoryService } from "../_services/custspinventory.service";
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { CustomerdashboardService } from '../_services/customerdashboard.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -74,6 +73,7 @@ export class DashboardComponent implements OnInit {
 
   instruemntLength = 0;
 
+  isHidden: boolean = true;
   constructor(
     private accountService: AccountService,
     private instrumentService: InstrumentService,
@@ -118,11 +118,16 @@ export class DashboardComponent implements OnInit {
           next: (data0: any) => {
             let data = data0.object
             if (data != null && data.length > 0 && data0.result) {
-              data.forEach(x => {
-                // display only the ones selected in settings
-                document.getElementById(x.graphNameCode).style.display = "block";
-              })
-
+              setTimeout(() => {
+                data.forEach(x => {
+                  debugger
+                  // display only the ones selected in settings
+                  let ele = document.getElementById(x.graphNameCode)
+                  if (ele) {
+                    ele.style.display = "block";
+                  }
+                })
+              }, 1000);
               this.customerService.getAllByConId(this.user.contactId)
                 .pipe(first())
                 .subscribe({
@@ -161,6 +166,7 @@ export class DashboardComponent implements OnInit {
 
     }
   }
+  toggle = () => this.isHidden = !this.isHidden
 
   onCalenderFilter(date) {
     if (date == this.calenderLst[0]) {
