@@ -40,8 +40,8 @@
 <hr>
 <div class="row">
   <div class="input  col-md-12" *ngFor="let i of rowdata3">
-    <input type="checkbox" id="chk_{{i.listTypeItemId}}" (change)="toggle(i,'row3')" value="{{i.listTypeItemId}}"
-      style="margin-right: 5px ">
+    <input type="checkbox" id="chk_{{i.listTypeItemId}}" (change)="toggle($event.target.value,'row3')"
+      value="{{i.listTypeItemId}}" style="margin-right: 5px ">
 
     <label for="chk_{{i.listTypeItemId}}">{{i.itemname}}</label>
   </div>
