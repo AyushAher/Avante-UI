@@ -54,7 +54,7 @@ export class DistributordashboardComponent implements OnInit {
   @ViewChild('MNTHS6') Mnths6;
   @ViewChild('MNTHS12') Mnths12;
   criticalSerReq: any;
-
+  isHidden: boolean = true;
   constructor(
     private accountService: AccountService,
     private listTypeService: ListTypeService,
@@ -85,7 +85,12 @@ export class DistributordashboardComponent implements OnInit {
         .subscribe((data0: any) => {
           let data = data0.object;
           if (data != null && data.length > 0 && data0.result) {
-            data.forEach(x => document.getElementById(x.graphNameCode).style.visibility = "visible")
+            data.forEach(x => {
+              let ele = document.getElementById(x.graphNameCode)
+              if (ele)
+                ele.style.visibility = "visible";
+
+            })
           }
         })
 
@@ -102,6 +107,8 @@ export class DistributordashboardComponent implements OnInit {
   CriticalSerReq() {
     this.router.navigate(["/servicerequestlist"])
   }
+
+  toggle = () => this.isHidden = !this.isHidden
 
   onCalenderFilter(date) {
     if (date == this.calenderLst[0]) {
