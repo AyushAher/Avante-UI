@@ -88,11 +88,13 @@ export class CustdashboardsettingsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.Data = data.object;
-          this.Data.forEach(value => {
-            let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement
-            valu.checked = true
-            this.localData.push(value)
-          })
+          setTimeout(() => {
+            this.Data.forEach(value => {
+              let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement
+              valu.checked = true
+              this.localData.push(value)
+            })
+          }, 1500);
         }
       });
   }
@@ -108,13 +110,15 @@ export class CustdashboardsettingsComponent implements OnInit {
         graphName
       }
       this.localData.push(this.model)
-    } else {
+    }
+    else {
       let indexOfElement = this.localData.findIndex((x) => x.graphName == graphName && x.displayIn == displayIn)
       if (indexOfElement >= 0) {
         this.localData.splice(indexOfElement, 1);
       }
-
     }
+
+    this.onSubmit()
   }
 
   resetOptions() {

@@ -77,11 +77,13 @@ export class DistributordashboardsettingsComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.Data = data.object;
-          this.Data.forEach(value => {
-            this.localData.push(value);
-            let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement;
-            valu.checked = true;
-          })
+          setTimeout(() => {
+            this.Data.forEach(value => {
+              this.localData.push(value);
+              let valu = document.getElementById(`chk_${value.graphName}`) as HTMLInputElement;
+              valu.checked = true;
+            })
+          }, 1500);
         }
       });
   }
@@ -105,6 +107,7 @@ export class DistributordashboardsettingsComponent implements OnInit {
       }
 
     }
+    this.onSubmit()
   }
 
   resetOptions() {
