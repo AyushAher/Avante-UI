@@ -21,6 +21,7 @@ import { CustomerdashboardService } from '../_services/customerdashboard.service
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CostofownershipComponent } from '../costofownership/costofownership.component';
 import { OfferrequestService } from '../_services/Offerrequest.service';
+import { CustspinventoryService } from '../_services/custspinventory.service';
 
 declare function CustomerDashboardCharts(): any;
 
@@ -75,6 +76,7 @@ export class DashboardComponent implements OnInit {
   instruemntLength = 0;
   shipmentInProcess: number = 0;
   isHidden: boolean = true;
+  spInventory: any;
   constructor(
     private accountService: AccountService,
     private instrumentService: InstrumentService,
@@ -91,7 +93,8 @@ export class DashboardComponent implements OnInit {
     private modalService: BsModalService,
     private amcService: AmcService,
     private customerDashboardService: CustomerdashboardService,
-    private offerRequestService: OfferrequestService
+    private offerRequestService: OfferrequestService,
+    private custSpInventoryService: CustspinventoryService
   ) {
   }
 
@@ -123,6 +126,7 @@ export class DashboardComponent implements OnInit {
               setTimeout(() => {
                 data.forEach(x => {
                   // display only the ones selected in settings
+
                   let ele = document.getElementById(x.graphNameCode)
                   if (ele) {
                     ele.style.display = "block";
@@ -162,6 +166,10 @@ export class DashboardComponent implements OnInit {
 
               this.offerRequestService.getAll().pipe(first())
                 .subscribe((OfReqData: any) => this.shipmentInProcess = OfReqData.object?.filter(x => !x.isCompleted && x.isShipment)?.length)
+
+              this.custSpInventoryService.getAll(this.user.contactId).pipe(first())
+                .subscribe((spInv: any) => this.spInventory = spInv.object)
+
             }
           }
         })

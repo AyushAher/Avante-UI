@@ -170,6 +170,7 @@
                 <h6 class="mb-0">{{shipmentInProcess}}</h6>
               </div>
             </div>
+            <hr class="dark horizontal my-0">
             <div class="card-footer p-3"></div>
           </div>
         </div>
@@ -205,7 +206,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-4 mt-4 mb-3" style="display: none" id="SINVT">
+        <div class="col-lg-4 mt-4 mb-3" style="display: none" id="PSREQ">
           <div class="card cards z-index-2 ">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               <div class="shadow-dark border-radius-lg py-3 pe-1">
@@ -267,6 +268,7 @@
             </div>
           </div>
         </div>
+
         <div class="col-lg-4 col-md-3 mb-md-0 mb-2" style="display: none" id="PO">
           <div class="card cards">
             <div class="card-header pb-0">
@@ -313,12 +315,13 @@
             </div>
           </div>
         </div>
+
         <div class="col-lg-4 col-md-6" style="display: none" id="SPREC">
           <div class="card h-100 cards">
             <div class="card-header pb-0">
               <h5 style="font-size: 15px;">Spare Recommended</h5>
             </div>
-            <div class="card-body p-3" style="height: 342.6px; overflow-y: auto;">
+            <div class="card-body p-3" style="height: 525px; overflow-y: auto;">
               <div style="margin-bottom: 10px;background-color: lightgray;padding: 7px 15px;"
                 class="alert alert-dismissible fade show" role="alert" *ngFor="let x of spRecomList">
                 <h5 style="font-size: 12px;">{{x.partno}}<span>({{x.qtyRecommended}})</span></h5>
@@ -331,6 +334,27 @@
             </div>
           </div>
         </div>
+
+        <div class="col-lg-4 col-md-6" style="display: none;max-height: 525px;" id="SINVT">
+          <div class="card h-100 cards">
+            <div class="card-header pb-0">
+              <h5 style="font-size: 15px;">Spare Inventory</h5>
+            </div>
+            <div class="card-body p-3" style="height: 525px; overflow-y: auto;">
+              <div style="margin-bottom: 10px;background-color: lightgray;padding: 7px 15px;"
+                class="alert alert-dismissible fade show" role="alert" *ngFor="let x of spInventory">
+                <h5 style="font-size: 12px;">{{x.partNo}}<span>({{x.qtyAvailable}})</span></h5>
+                <div class="sub-heading" style="font-size: 11px;">
+                  <span class="dist">{{x.sparePart?.configTypeName }}: </span> <span
+                    class="eng">{{x.sparePart?.configValueName}}</span>
+                </div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
