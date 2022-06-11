@@ -981,7 +981,7 @@ export class OfferrequestComponent implements OnInit {
     this.model.distributorid = this.form.get('distributorid').value
     const datepipie = new DatePipe("en-US");
     this.model.podate = datepipie.transform(
-      this.model.podate,
+      new Date,
       "MM/dd/yyyy"
     );
 

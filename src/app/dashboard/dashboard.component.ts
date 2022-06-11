@@ -20,6 +20,7 @@ import { DatePipe } from '@angular/common';
 import { CustomerdashboardService } from '../_services/customerdashboard.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CostofownershipComponent } from '../costofownership/costofownership.component';
+import { OfferrequestService } from '../_services/Offerrequest.service';
 
 declare function CustomerDashboardCharts(): any;
 
@@ -72,7 +73,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('MNTHS12') Mnths12;
 
   instruemntLength = 0;
-
+  shipmentInProcess: number = 0;
   isHidden: boolean = true;
   constructor(
     private accountService: AccountService,
@@ -89,7 +90,8 @@ export class DashboardComponent implements OnInit {
     private listTypeItemService: ListTypeService,
     private modalService: BsModalService,
     private amcService: AmcService,
-    private customerDashboardService: CustomerdashboardService
+    private customerDashboardService: CustomerdashboardService,
+    private offerRequestService: OfferrequestService
   ) {
   }
 
@@ -120,7 +122,6 @@ export class DashboardComponent implements OnInit {
             if (data != null && data.length > 0 && data0.result) {
               setTimeout(() => {
                 data.forEach(x => {
-                  debugger
                   // display only the ones selected in settings
                   let ele = document.getElementById(x.graphNameCode)
                   if (ele) {
@@ -158,6 +159,9 @@ export class DashboardComponent implements OnInit {
 
                   }
                 })
+
+              this.offerRequestService.getAll().pipe(first())
+                .subscribe((OfReqData: any) => this.shipmentInProcess = OfReqData.object?.filter(x => !x.isCompleted && x.isShipment)?.length)
             }
           }
         })
