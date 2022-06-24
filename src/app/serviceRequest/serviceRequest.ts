@@ -510,11 +510,9 @@ export class ServiceRequestComponent implements OnInit {
                     if (this.scheduleData.length > 0)
                       this.hasCallScheduled = true;
                     this.scheduleData.forEach(element => {
-                      let date = new Date(element.endTime)
-                      let datestr = this.datepipe.transform(date, "MM/dd/yyyy")
-                      element.endTime = this.datepipe.transform(element.endTime, "shortTime")
-                      element.startTime = this.datepipe.transform(element.startTime, "shortTime")
-                      element.Time = element.location + " : " + datestr + " At " + element.startTime + " - " + element.endTime
+                      element.endTime = this.datepipe.transform(element.endTime, "short")
+                      element.startTime = this.datepipe.transform(element.startTime, "short")
+                      element.Time = element.location + " : " + element.startTime + " - " + element.endTime
                     });
                   })
               }
