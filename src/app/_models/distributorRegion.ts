@@ -5,6 +5,7 @@ export class DistributorRegion {
   distid: string;
   region: string;
   distregname: string;
+  countries: string | string[];
   payterms: string;
   isblocked: boolean;
   isActive: boolean;

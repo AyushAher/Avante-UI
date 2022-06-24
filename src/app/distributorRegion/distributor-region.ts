@@ -115,14 +115,8 @@ export class DistributorRegionComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.destributorRegionform.patchValue(data.object);
-            var countLst = []
             data.object.countries = data.object.countries?.split(',').filter(x => x != "");
-            data.object.countries?.forEach(y => {
-              this.countries.forEach(x => {
-                if (y == x.id) countLst.push(x.id)
-              });
-            });
-            this.destributorRegionform.patchValue({ 'countries': countLst })
+            this.destributorRegionform.patchValue({ 'countries': data.object.countries })
           },
         });
       this.destributorRegionform.disable();
@@ -182,19 +176,16 @@ export class DistributorRegionComponent implements OnInit {
       return;
     }
 
-    if (this.destributorRegionform.get('countries').value.length > 0) {
-      var selectarray = this.destributorRegionform.get('countries').value;
-      this.destributorRegionform.get('countries').setValue(selectarray.toString())
-    }
-
-    else if (this.destributorRegionform.get('countries').value.length == 0) {
-      this.destributorRegionform.get('countries').setValue("");
-    }
+    this.distRegion = this.destributorRegionform.value;
+    if (this.distRegion.countries.length > 0)
+      this.distRegion.countries = this.distRegion.countries.toString();
+    else if (this.distRegion.countries.length == 0)
+      this.distRegion.countries = "";
 
     this.isSave = true;
     this.loading = true;
     if (this.distributorRegionId == null) {
-      this.distributorRegionService.save(this.destributorRegionform.value)
+      this.distributorRegionService.save(this.distRegion)
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
@@ -206,7 +197,6 @@ export class DistributorRegionComponent implements OnInit {
         });
     }
     else {
-      this.distRegion = this.destributorRegionform.value;
       this.distRegion.id = this.distributorRegionId;
       this.distributorRegionService.update(this.distributorRegionId, this.distRegion)
         .pipe(first())
