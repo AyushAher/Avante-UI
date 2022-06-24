@@ -516,6 +516,7 @@ export class ServiceReportComponent implements OnInit {
   }
 
   FormControlDisable() {
+    this.ServiceReportform.get('instrument').disable()
     if (!this.isEng) {
       this.ServiceReportform.get('analyticalassit').disable()
       this.ServiceReportform.get('prevmaintenance').disable()

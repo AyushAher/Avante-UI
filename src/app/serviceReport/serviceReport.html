@@ -97,9 +97,6 @@
                 <div *ngIf="f.country.errors.required">Country is required</div>
               </div>
             </div>
-          </div>
-
-          <div class="row">
             <div class="col-md-3 col-sm-3">
               <label for="town">Town</label>
               <input type="text" formControlName="town" readonly class="form-control"
@@ -316,7 +313,7 @@
                 <div class="col-sm-4">
                   <label for=""></label>
                   <button type="button" [disabled]="this.isCompleted && !isEditMode" class="btn btn-primary"
-                    style="margin-top: 31px;" (click)="addPartrecmm(autopart)">Add</button>
+                    style="margin-top: 31px;" (click)="addPartrecmm()">Add</button>
                 </div>
               </div>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
