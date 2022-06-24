@@ -3,17 +3,18 @@
     <div class="container">
       <div class="page-title">
         <div class="title_left">
-          <h3>Scheduler</h3>
+          <div class="d-flex" style="align-items: center;">
+            <a (click)="onBackclick()" class="nav-link" [disabled]="loading" *ngIf="hasAddAccess==true && id!=null">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <h3>Scheduler</h3>
+          </div>
         </div>
       </div>
       <div class="clearfix"></div>
       <hr />
 
       <div class="col-md-12 col-sm-12 ">
-        <button *ngIf="id!=null" [disabled]="loading" class="btn btn-secondary" (click)="onBackclick()"
-          style="margin-left:10px;">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-          Back</button>
         <ejs-schedule *ngIf="isEng==true" width='100%' height='100%' #scheduleObj [currentView]="setView"
           (actionBegin)="onActionBegin($event)" (popupOpen)='onPopupOpen($event)' [eventSettings]="eventSettings">
         </ejs-schedule>
