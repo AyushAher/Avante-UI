@@ -95,6 +95,7 @@
             <div class="col-sm-4">
               <label for="defdistid">Distributor Regions</label>
               <select formControlName="defdistregionid" class="form-control"
+                (change)="onDistributorRegion($event.target.value)"
                 [ngClass]="{ 'is-invalid': submitted && f.defdistregionid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of distRegionsList" value="{{distributor.id}}">
@@ -110,7 +111,7 @@
               <label for="countryid">Country</label>
               <select formControlName="countryid" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.countryid.errors }">
-                <option *ngFor="let country of countries" value={{country.id}}>
+                <option *ngFor="let country of regionCountry" value={{country.id}}>
                   {{country.name}}
                 </option>
               </select>

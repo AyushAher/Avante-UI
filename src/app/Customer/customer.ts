@@ -41,6 +41,7 @@ export class CustomerComponent implements OnInit {
   industrySegmentList: any;
   isEditMode: any;
   isNewMode: any;
+  regionCountry: any[] = [];
   //public defaultdistributors: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
 
   constructor(
@@ -120,6 +121,7 @@ export class CustomerComponent implements OnInit {
           next: (data: any) => {
             this.customerform.patchValue(data.object);
             this.onDefDistchanged(data.object.defdistid);
+            this.onDistributorRegion(data.object.defdistregionid)
           },
         });
       this.customerform.disable()
@@ -150,7 +152,7 @@ export class CustomerComponent implements OnInit {
 
   CancelEdit() {
     this.customerform.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
@@ -178,13 +180,23 @@ export class CustomerComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.distRegionsList = data.object.filter(x => x.id === distId)[0].regions;
+          this.distRegionsList = data.object.find(x => x.id === distId)?.regions;
         },
         error: error => {
           this.notificationService.showSuccess(error, "Error");
           this.loading = false;
         }
       });
+  }
+
+  onDistributorRegion(e) {
+    setTimeout(() => {
+      var country = this.distRegionsList.find(x => x.id == e)?.countries.split(",")
+      country.forEach(element => {
+        this.regionCountry.push(this.countries.find(x => x.id == element))
+      });
+
+    }, 500);
   }
 
   onSubmit() {
