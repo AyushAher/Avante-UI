@@ -1522,13 +1522,18 @@ export class ServiceRequestComponent implements OnInit {
 
   openaction(param: string, param1: string) {
     if (this.isGenerateReport == false) {
-      const initialState = {
-        itemId: param,
-        id: param1,
-        engineerid: this.engineerid,
-        engineerlist: this.appendList
-      };
-      this.bsActionModalRef = this.modalService.show(ModelEngActionContentComponent, { initialState });
+      const modalOptions: any = {
+        backdrop: 'static',
+        ignoreBackdropClick: true,
+        keyboard: false,
+        initialState: {
+          itemId: param,
+          id: param1,
+          engineerid: this.engineerid,
+          engineerlist: this.appendList
+        },
+      }
+      this.bsActionModalRef = this.modalService.show(ModelEngActionContentComponent, modalOptions);
     }
   }
 
