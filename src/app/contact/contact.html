@@ -1,19 +1,6 @@
 <layout>
   <div class="right_col" role="main">
     <div class="container">
-      <div class="row" style="float:right" *ngIf="id!=null">
-        <button type="button"
-          *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true"
-          class="btn btn-primary" (click)="addUser()">Create User</button>
-      </div>
-
-      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
-        <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" routerLink="/contact/{{ id }}"
-            routerLinkActive="active" role="tab" aria-controls="ex1-tabs-1" aria-selected="false">Contact</a>
-        </li>
-      </ul>
-
       <div class="clearfix"></div>
 
       <div class="col-md-12 col-sm-12 ">
@@ -44,6 +31,17 @@
               <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
                 <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
               </a>
+
+              <div class="nav-item dropdown" *ngIf="(hasUpdateAccess || hasAddAccess) && (!isEditMode && !isNewMode)">
+                <a class="nav-link" href="#" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v" style="color: #5ba146;"></i>
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" (click)="addUser()"> Add User</a>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
