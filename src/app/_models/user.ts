@@ -13,6 +13,7 @@ export class User {
   userProfileId: string;
   roleId: string;
   distRegionsId: string
+  userType: string
 }
 
 export class AuthenticateModel {
