@@ -423,6 +423,7 @@ export class ServiceRequestComponent implements OnInit {
           next: (data: any) => {
             this.onServiceTypeChange(data.object.visittype);
             this.getAllInstrument(data.object.siteid);
+            this.getInstrumnetsBySiteIds(data.object.siteid)
             var subreq = data.object.subrequesttypeid.split(',');
             let items: ListTypeItem[] = [];
 
@@ -455,7 +456,6 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
             this.serviceRequestform.patchValue({ "distid": data.object.distid });
             this.serviceRequestform.patchValue({ "custid": data.object.custid });
-            this.serviceRequestform.patchValue({ "siteid": data.object.siteid });
             this.serviceRequestform.patchValue({ "visittype": data.object.visittype });
             this.serviceRequestform.patchValue({ "companyname": data.object.companyname });
             this.serviceRequestform.patchValue({ "requesttime": data.object.requesttime });
@@ -466,7 +466,10 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({ "operatorname": data.object.operatorname });
             this.serviceRequestform.patchValue({ "operatornumber": data.object.operatornumber });
             this.serviceRequestform.patchValue({ "operatoremail": data.object.operatoremail });
-            this.serviceRequestform.patchValue({ "machinesno": data.object.machinesno });
+            setTimeout(() => {
+              this.serviceRequestform.patchValue({ "siteid": data.object.siteid });
+              this.serviceRequestform.patchValue({ "machinesno": data.object.machinesno })
+            }, 1000);
             this.serviceRequestform.patchValue({ "machengineer": data.object.machengineer });
             this.serviceRequestform.patchValue({ "xraygenerator": data.object.xraygenerator });
             this.serviceRequestform.patchValue({ "breakdowntype": data.object.breakdowntype });
@@ -585,6 +588,10 @@ export class ServiceRequestComponent implements OnInit {
       this.actionDefs = this.createColumnActionDefs();
       this.pdfcolumnDefs = this.pdfcreateColumnDefs();
 
+    }
+
+    if (this.user.userType == "site") {
+      this.serviceRequestform.get('siteid').disable();
     }
   }
 
