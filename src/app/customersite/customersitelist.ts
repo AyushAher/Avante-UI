@@ -2,19 +2,15 @@ import { Component, OnInit } from '@angular/core';
 
 import { CustomerSite, ProfileReadOnly, User } from '../_models';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
-  AlertService,
-  CountryService,
   CustomerService,
-  NotificationService,
   ProfileService
 } from '../_services';
-import { RenderComponent } from '../distributor/rendercomponent';
 
 
 @Component({
@@ -24,7 +20,7 @@ import { RenderComponent } from '../distributor/rendercomponent';
 export class CustomerSiteListComponent implements OnInit {
   user: User;
   form: FormGroup;
-  customerSite: CustomerSite[];
+  customerSite: any[] = [];
   loading = false;
   submitted = false;
   isSave = false;
@@ -40,14 +36,10 @@ export class CustomerSiteListComponent implements OnInit {
   private api: GridApi;
 
   constructor(
-    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
     private customerService: CustomerService,
-    private countryService: CountryService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
   ) {
 
@@ -76,14 +68,18 @@ export class CustomerSiteListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          //debugger;
           this.customerSite = data.object.sites;
+          if (this.user.userType == "site") {
+            data.object.sites.forEach(x => {
+              x.contacts.forEach(y => {
+                if (y.id == this.user.contactId) {
+                  this.customerSite = []
+                  this.customerSite.push(x)
+                }
+              });
+            })
+          }
         },
-        error: error => {
-          // this.alertService.error(error);
-
-          this.loading = false;
-        }
       });
     this.columnDefs = this.createColumnDefs();
   }
