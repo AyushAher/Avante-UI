@@ -99,10 +99,6 @@ export class CustomerSiteComponent implements OnInit {
         next: (data: any) => {
           this.countries = data.object;
         },
-        error: error => {
-          this.alertService.error(error);
-          this.loading = false;
-        }
       });
     this.distributorRegionservice.getDistByCustomerId(this.customerid)
       .pipe(first())
@@ -110,11 +106,6 @@ export class CustomerSiteComponent implements OnInit {
         next: (data: any) => {
           this.distRegions = data.object;
         },
-        error: error => {
-          //  this.alertService.error(error);
-
-          this.loading = false;
-        }
       });
 
     this.customerService.getAll()
@@ -122,11 +113,7 @@ export class CustomerSiteComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.customers = data.object;
-        },
-        error: error => {
-          // this.alertService.error(error);
-
-          this.loading = false;
+          this.customersiteform.get("custid").setValue(this.customerid)
         }
       });
 
@@ -141,11 +128,6 @@ export class CustomerSiteComponent implements OnInit {
           next: (data: any) => {
             this.customersiteform.patchValue(data.object);
           },
-          error: error => {
-            // this.alertService.error(error);
-
-            this.loading = false;
-          }
         });
       this.customersiteform.disable()
     } else {
@@ -175,7 +157,7 @@ export class CustomerSiteComponent implements OnInit {
 
   CancelEdit() {
     this.customersiteform.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
@@ -199,11 +181,6 @@ export class CustomerSiteComponent implements OnInit {
           next: (data: any) => {
             this.distRegions = data;
           },
-          error: error => {
-            // this.alertService.error(error);
-
-            this.loading = false;
-          }
         });
     }
     else {
@@ -213,11 +190,6 @@ export class CustomerSiteComponent implements OnInit {
           next: (data: any) => {
             this.distRegions = data.object;
           },
-          error: error => {
-            // this.alertService.error(error);
-
-            this.loading = false;
-          }
         });
     }
   }
@@ -239,27 +211,19 @@ export class CustomerSiteComponent implements OnInit {
     }
     this.isSave = true;
     this.loading = true;
+
     if (this.csiteid == null) {
       this.customersiteService.save(this.customersiteform.value)
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
-            //debugger;
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["customersitelist", this.customerid]);
             }
-            else {
-
-            }
             this.loading = false;
 
           },
-          error: error => {
-            // this.alertService.error(error);
-
-            this.loading = false;
-          }
         });
     }
     else {
@@ -269,22 +233,13 @@ export class CustomerSiteComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
-            //debugger;
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["customersitelist", this.customerid]);
             }
-            else {
-
-            }
             this.loading = false;
 
           },
-          error: error => {
-            //  this.alertService.error(error);
-
-            this.loading = false;
-          }
         });
     }
   }
