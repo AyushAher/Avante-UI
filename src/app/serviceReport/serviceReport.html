@@ -381,8 +381,8 @@
 
             <div class="col-sm-3">
               <label for="nextVisitScheduled">Engineer Comment</label>
-              <input type="text" formControlName="engineercomments" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.engineercomments.errors }" />
+              <textarea type="text" formControlName="engineercomments" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.engineercomments.errors }"></textarea>
               <div *ngIf="submitted && f.engineercomments.errors" class="invalid-feedback">
                 <div *ngIf="f.engineercomments.errors.required">engineerComment is required</div>
               </div>
