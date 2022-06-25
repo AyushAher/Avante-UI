@@ -192,6 +192,7 @@ export class CustomerComponent implements OnInit {
   onDistributorRegion(e) {
     setTimeout(() => {
       var country = this.distRegionsList.find(x => x.id == e)?.countries.split(",")
+      this.regionCountry = []
       country.forEach(element => {
         this.regionCountry.push(this.countries.find(x => x.id == element))
       });
