@@ -262,7 +262,7 @@
             <div class="col-sm-4">
               <label for="configtypeid">Config Type</label>
               <select [disabled]="!isEditMode && !isNewMode" class="form-control" #mySelect
-                (change)="onConfigChange(mySelect.value)"
+                formControlName="configtypeid" (change)="onConfigChange(mySelect.value)"
                 [ngClass]="{ 'is-invalid': submitted && f.configtypeid.errors }">
                 <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
@@ -274,7 +274,8 @@
             </div>
             <div class="col-sm-4">
               <label for="configvalueid">Config Value</label>
-              <select class="form-control" [disabled]="!isEditMode && !isNewMode" #myConfigVal>
+              <select class="form-control" formControlName="configvalueid" [disabled]="!isEditMode && !isNewMode"
+                #myConfigVal>
                 <option value="0"></option>
                 <option *ngFor="let congfig of configValueList" value={{congfig.id}}>
                   {{congfig.configValue}}
