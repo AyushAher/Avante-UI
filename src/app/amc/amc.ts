@@ -592,28 +592,17 @@ export class AmcComponent implements OnInit {
   }
 
   InstrumentSearch = (searchtext) => {
-    debugger;
     this.instrumentserialno = searchtext;
 
-    this.Service
-      .searchByKeyword(this.instrumentserialno)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.instrumentAutoComplete = data.object;
-        },
-        error: (error) => {
-
-          this.loading = false;
-        },
+    this.Service.searchByKeyword(this.instrumentserialno, this.form.get("custSite").value)
+      .pipe(first()).subscribe({
+        next: (data: any) => this.instrumentAutoComplete = data.object
       });
   }
 
   AddInstrument(instrument: any) {
-    this.Service
-      .searchByKeyword(instrument)
-      .pipe(first())
-      .subscribe({
+    this.Service.searchByKeyword(instrument, this.form.get("custSite").value)
+      .pipe(first()).subscribe({
         next: (data: any) => {
           this.instrumentList = this.instrumentList || [];
           var data = data.object[0];

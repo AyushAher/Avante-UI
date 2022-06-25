@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Amc } from '../_models';
 import { EnvService } from './env/env.service';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 @Injectable({ providedIn: 'root' })
 export class AmcService {
@@ -25,8 +26,8 @@ export class AmcService {
   }
 
 
-  searchByKeyword(SerialNo: string) {
-    return this.http.get(`${this.environment.apiUrl}/amc/SerialNo/${SerialNo}`);
+  searchByKeyword(SerialNo: StringMap, siteId: string) {
+    return this.http.get(`${this.environment.apiUrl}/amc/SerialNo/${SerialNo}/${siteId}`);
   }
 
   update(id, params) {
