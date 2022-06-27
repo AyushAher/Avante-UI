@@ -445,47 +445,47 @@ export class ServiceRequestComponent implements OnInit {
 
             this.onCustomerChanged(data.object.custid)
             this.getDistRegnContacts(data.object.distid);
-            this.serviceRequestform.patchValue({ "sdate": data.object.sdate });
-            this.serviceRequestform.patchValue({ "edate": data.object.edate });
-            this.serviceRequestform.patchValue({ "serreqno": data.object.serreqno });
-            this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy") });
-            this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
-            this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
-            this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy") });
-            this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
-            this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
-            this.serviceRequestform.patchValue({ "distid": data.object.distid });
-            this.serviceRequestform.patchValue({ "custid": data.object.custid });
-            this.serviceRequestform.patchValue({ "visittype": data.object.visittype });
-            this.serviceRequestform.patchValue({ "companyname": data.object.companyname });
-            this.serviceRequestform.patchValue({ "requesttime": data.object.requesttime });
-            this.serviceRequestform.patchValue({ "sitename": data.object.sitename });
-            this.serviceRequestform.patchValue({ "country": data.object.country });
-            this.serviceRequestform.patchValue({ "contactperson": data.object.contactperson });
-            this.serviceRequestform.patchValue({ "email": data.object.email });
-            this.serviceRequestform.patchValue({ "operatorname": data.object.operatorname });
-            this.serviceRequestform.patchValue({ "operatornumber": data.object.operatornumber });
-            this.serviceRequestform.patchValue({ "operatoremail": data.object.operatoremail });
             setTimeout(() => {
+              this.serviceRequestform.patchValue({ "sdate": data.object.sdate });
+              this.serviceRequestform.patchValue({ "edate": data.object.edate });
+              this.serviceRequestform.patchValue({ "serreqno": data.object.serreqno });
+              this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy") });
+              this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
+              this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
+              this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy") });
+              this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
+              this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
+              this.serviceRequestform.patchValue({ "distid": data.object.distid });
+              this.serviceRequestform.patchValue({ "custid": data.object.custid });
+              this.serviceRequestform.patchValue({ "visittype": data.object.visittype });
+              this.serviceRequestform.patchValue({ "companyname": data.object.companyname });
+              this.serviceRequestform.patchValue({ "requesttime": data.object.requesttime });
+              this.serviceRequestform.patchValue({ "sitename": data.object.sitename });
+              this.serviceRequestform.patchValue({ "country": data.object.country });
+              this.serviceRequestform.patchValue({ "contactperson": data.object.contactperson });
+              this.serviceRequestform.patchValue({ "email": data.object.email });
+              this.serviceRequestform.patchValue({ "operatorname": data.object.operatorname });
+              this.serviceRequestform.patchValue({ "operatornumber": data.object.operatornumber });
+              this.serviceRequestform.patchValue({ "operatoremail": data.object.operatoremail });
               this.serviceRequestform.patchValue({ "siteid": data.object.siteid });
               this.serviceRequestform.patchValue({ "machinesno": data.object.machinesno })
+              this.serviceRequestform.patchValue({ "machengineer": data.object.machengineer });
+              this.serviceRequestform.patchValue({ "xraygenerator": data.object.xraygenerator });
+              this.serviceRequestform.patchValue({ "breakdowntype": data.object.breakdowntype });
+              this.serviceRequestform.patchValue({ "isrecurring": data.object.isrecurring });
+              this.serviceRequestform.patchValue({ "recurringcomments": data.object.recurringcomments });
+              this.serviceRequestform.patchValue({ "breakoccurdetailsid": data.object.breakoccurdetailsid });
+              this.serviceRequestform.patchValue({ "alarmdetails": data.object.alarmdetails });
+              this.serviceRequestform.patchValue({ "resolveaction": data.object.resolveaction });
+              this.serviceRequestform.patchValue({ "currentinstrustatus": data.object.currentinstrustatus });
+              this.serviceRequestform.patchValue({ "stageid": data.object.stageid });
+              this.serviceRequestform.patchValue({ "escalation": data.object.escalation });
+              this.serviceRequestform.patchValue({ "requesttypeid": data.object.requesttypeid });
+              this.serviceRequestform.patchValue({ "remarks": data.object.remarks });
+              this.serviceRequestform.patchValue({ "machmodelname": (data.object.machmodelname) });
+              this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
+              this.serviceRequestform.patchValue({ "delayedReasons": data.object.delayedReasons });
             }, 1000);
-            this.serviceRequestform.patchValue({ "machengineer": data.object.machengineer });
-            this.serviceRequestform.patchValue({ "xraygenerator": data.object.xraygenerator });
-            this.serviceRequestform.patchValue({ "breakdowntype": data.object.breakdowntype });
-            this.serviceRequestform.patchValue({ "isrecurring": data.object.isrecurring });
-            this.serviceRequestform.patchValue({ "recurringcomments": data.object.recurringcomments });
-            this.serviceRequestform.patchValue({ "breakoccurdetailsid": data.object.breakoccurdetailsid });
-            this.serviceRequestform.patchValue({ "alarmdetails": data.object.alarmdetails });
-            this.serviceRequestform.patchValue({ "resolveaction": data.object.resolveaction });
-            this.serviceRequestform.patchValue({ "currentinstrustatus": data.object.currentinstrustatus });
-            this.serviceRequestform.patchValue({ "stageid": data.object.stageid });
-            this.serviceRequestform.patchValue({ "escalation": data.object.escalation });
-            this.serviceRequestform.patchValue({ "requesttypeid": data.object.requesttypeid });
-            this.serviceRequestform.patchValue({ "remarks": data.object.remarks });
-            this.serviceRequestform.patchValue({ "machmodelname": (data.object.machmodelname) });
-            this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
-            this.serviceRequestform.patchValue({ "delayedReasons": data.object.delayedReasons });
             setTimeout(() => {
               if (data.object.isReportGenerated) {
                 this.serviceRequestform.disable()
