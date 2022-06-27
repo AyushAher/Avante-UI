@@ -169,7 +169,7 @@ export class InstrumentComponent implements OnInit {
       operatorId: ['', Validators.required],
       dateOfPurchase: [],
       cost: [0],
-      currencyId: ["", Validators.required],
+      currencyId: [""],
       instruEngineerId: ['', Validators.required]
     });
     this.imageUrl = this.noimageData;
@@ -202,6 +202,10 @@ export class InstrumentComponent implements OnInit {
         }
       }
       );
+
+    if (this.hasCommercial)
+      this.instrumentform.get("currencyId").setValidators([Validators.required])
+    else this.instrumentform.get("currencyId").clearValidators()
 
     this.customerService.getAllByConId(this.user.contactId)
       .pipe(first()).subscribe((data: any) => {
@@ -241,6 +245,7 @@ export class InstrumentComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            console.log(data.object);
             this.customerSiteService.getById(data.object.custSiteId)
               .pipe(first())
               .subscribe((dataa: any) => {
@@ -269,8 +274,8 @@ export class InstrumentComponent implements OnInit {
                 },
               });
 
-            this.instrumentform.patchValue(data.object);
-
+            setTimeout(() => this.instrumentform.patchValue(data.object), 500);
+            
             this.sparePartDetails = data.object.spartParts;
             this.recomandFilter(this.sparePartDetails);
             for (let i = 0; i < data.object.spartParts.length; i++) {
@@ -598,7 +603,7 @@ export class InstrumentComponent implements OnInit {
   }
 
   onSubmit() {
-    //debugger;
+    debugger;
     this.submitted = true;
 
     this.alertService.clear();
