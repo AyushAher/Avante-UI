@@ -243,10 +243,10 @@ export class AdvancerequestformComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["distributorlist"]);
+        this.router.navigate(["advancerequestformlist"]);
     }
 
-    else this.router.navigate(["distributorlist"]);
+    else this.router.navigate(["advancerequestformlist"]);
 
   }
 
@@ -262,7 +262,7 @@ export class AdvancerequestformComponent implements OnInit {
       this.service.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["distributorlist"]);
+            this.router.navigate(["advancerequestformlist"]);
         })
     }
   }
