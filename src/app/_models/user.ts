@@ -13,6 +13,7 @@ export class User {
   userProfileId: string;
   roleId: string;
   distRegionsId: string
+  custSites: string
   userType: string
 }
 
