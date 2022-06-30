@@ -1,9 +1,8 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import {
   ConfigTypeValue,
   Contact,
-  Currency,
   CustomerSite,
   Distributor,
   FileShare,
@@ -18,7 +17,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -37,7 +36,6 @@ import {
   UploadService
 } from '../_services';
 import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
-import { HttpEventType } from "@angular/common/http";
 import { DomSanitizer } from "@angular/platform-browser";
 import { DatePipe } from "@angular/common";
 
@@ -209,7 +207,15 @@ export class InstrumentComponent implements OnInit {
 
     this.customerService.getAllByConId(this.user.contactId)
       .pipe(first()).subscribe((data: any) => {
-        data.object.forEach(element => this.customersite.push(...element.sites));
+        if (this.user.userType?.toLocaleLowerCase() == "customer") {
+          this.customersite = [];
+          let siteLst = this.user.custSites?.split(",")
+          data.object[0].sites.forEach(element => {
+            if (siteLst?.length > 0 && siteLst?.find(x => x == element.id) == null) return;
+            this.customersite.push(element);
+          })
+        }
+        else data.object.forEach(element => this.customersite.push(...element.sites));
 
         this.customerSiteService.GetCustomerSiteContacts().pipe(first())
           .subscribe((data1: any) => {
@@ -245,7 +251,6 @@ export class InstrumentComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            console.log(data.object);
             this.customerSiteService.getById(data.object.custSiteId)
               .pipe(first())
               .subscribe((dataa: any) => {
@@ -275,7 +280,7 @@ export class InstrumentComponent implements OnInit {
               });
 
             setTimeout(() => this.instrumentform.patchValue(data.object), 500);
-            
+
             this.sparePartDetails = data.object.spartParts;
             this.recomandFilter(this.sparePartDetails);
             for (let i = 0; i < data.object.spartParts.length; i++) {

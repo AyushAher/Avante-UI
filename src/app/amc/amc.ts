@@ -227,8 +227,11 @@ export class AmcComponent implements OnInit {
           if (this.IsCustomerView) {
             this.form.get('billtoid').setValue(data.object?.id)
             this.defaultCustomerId = data.object.id
-            this.custSiteList = data.object?.sites;
-            this.custSiteList.forEach(element => {
+            this.custSiteList = [];
+            let siteLst = this.user.custSites?.split(",")
+            data.object?.sites.forEach(element => {
+              if (siteLst?.length > 0 && this.user.userType?.toLocaleLowerCase() == "customer" && siteLst?.find(x => x == element.id) == null) return;
+              this.custSiteList.push(element);
               element?.contacts.forEach(con => {
                 if (con?.id == this.user.contactId) {
                   this.isDisableSite = true
@@ -485,7 +488,12 @@ export class AmcComponent implements OnInit {
     this.customerService.getById(customerId)
       .pipe(first())
       .subscribe((data: any) => {
-        this.custSiteList = data.object.sites;
+        this.custSiteList = [];
+        let siteLst = this.user.custSites?.split(",")
+        data.object?.sites.forEach(element => {
+          if (siteLst?.length > 0 && this.user.userType?.toLocaleLowerCase() == "customer" && siteLst?.find(x => x == element.id) == null) return;
+          this.custSiteList.push(element);
+        })
       });
   }
 

@@ -664,8 +664,13 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('custid').enable();
       this.serviceRequestform.get('siteid').enable();
     } else {
+      if (this.user.userType?.toLocaleLowerCase() == "site") {
+        this.serviceRequestform.get('siteid').disable();
+      }
+      else {
+        this.serviceRequestform.get('siteid').enable();
+      }
       this.serviceRequestform.get('stageid').disable();
-      this.serviceRequestform.get('siteid').enable();
       this.serviceRequestform.get("contactperson").disable();
       this.serviceRequestform.get("email").disable();
       this.serviceRequestform.get('assignedto').disable();
@@ -711,6 +716,13 @@ export class ServiceRequestComponent implements OnInit {
     if (this.logindata.sites != null) {
       this.siteId = this.logindata.sites[0].id
       this.customerSitelist = this.logindata.sites;
+      this.customerSitelist = [];
+      let siteLst = this.user.custSites?.split(",")
+      this.logindata.sites.forEach(element => {
+        if (siteLst?.length > 0 && this.user.userType?.toLocaleLowerCase() == "customer" && siteLst?.find(x => x == element.id) == null) return;
+        this.customerSitelist.push(element);
+      })
+
       this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
       this.serviceRequestform.patchValue({ "siteid": this.logindata.sites[0].id });
       this.getInstrumnetsBySiteIds(this.logindata.sites[0].id)
