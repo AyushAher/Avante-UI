@@ -116,6 +116,16 @@
               </div>
             </div>
 
+            <div class="col-md-6 col-sm-6" *ngIf="isCustomer">
+              <label for="site">Customer Sites</label>
+              <ng-multiselect-dropdown [settings]="siteDropdownSettings" [disabled]="!isEditMode && !isNewMode"
+                [data]="siteList" id="site" formControlName="custSites">
+              </ng-multiselect-dropdown>
+              <div *ngIf="submitted && f.custSites.errors" class="invalid-feedback">
+                <div *ngIf="f.custSites.errors.required">Customer Site is required</div>
+              </div>
+            </div>
+
 
           </div>
           <div class="row" *ngIf="hidetable==true">

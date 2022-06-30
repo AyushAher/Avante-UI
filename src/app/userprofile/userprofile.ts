@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 import {
   CustomerSite,
-  instrumentConfig,
   ListTypeItem,
   Profile,
   ProfileReadOnly,
   ProfileRegions,
-  SparePart,
   User,
   UserProfile
 } from '../_models';
@@ -18,6 +16,8 @@ import { first } from 'rxjs/operators';
 import {
   AccountService,
   AlertService,
+  CustomerService,
+  CustomerSiteService,
   DistributorService,
   ListTypeService,
   NotificationService,
@@ -58,8 +58,11 @@ export class UserProfileComponent implements OnInit {
   isDist: boolean = false;
   regionList: any;
   dropdownSettings: IDropdownSettings = {};
+  siteDropdownSettings: IDropdownSettings = {};
   isEditMode: boolean;
   isNewMode: boolean;
+  siteList: any;
+  isCustomer: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -73,12 +76,18 @@ export class UserProfileComponent implements OnInit {
     private userprofileService: UserProfileService,
     private DistributorService: DistributorService,
     private environment: EnvService,
+    private customerService: CustomerService
   ) { }
 
   ngOnInit() {
     this.dropdownSettings = {
       idField: 'id',
       textField: 'region',
+    };
+
+    this.siteDropdownSettings = {
+      idField: 'id',
+      textField: 'custregname',
     };
 
     this.user = this.accountService.userValue;
@@ -108,6 +117,7 @@ export class UserProfileComponent implements OnInit {
       distributorName: [''],
       roleId: ['', Validators.required],
       distRegions: ['', Validators.required],
+      custSites: [],
       isdeleted: [false],
       profileRegions: this.formBuilder.array([]),
     });
@@ -135,10 +145,19 @@ export class UserProfileComponent implements OnInit {
         .subscribe((data: any) => {
           this.contactId = data.object.contactid;
           let role = data.object.roleId;
+          this.isCustomer = data.object.userType.toLowerCase() == "customer";
+          if (this.isCustomer) {
+            this.userprofileform.get("custSites").setValidators([Validators.required])
+            this.userprofileform.get("custSites").updateValueAndValidity();
+          }
+
+          this.customerService.getAllByConId(data.object.contactid)
+            .pipe(first()).subscribe((data: any) => {
+              this.siteList = data.object[0].sites
+            })
 
           this.listTypeService.getById("ROLES")
-            .pipe(first())
-            .subscribe({
+            .pipe(first()).subscribe({
               next: (data: ListTypeItem[]) => {
                 switch (data?.find(x => x.listTypeItemId == role)?.itemCode) {
                   case this.environment.engRoleCode:
@@ -169,6 +188,16 @@ export class UserProfileComponent implements OnInit {
               items.push(t);
             }
             this.userprofileform.patchValue({ "distRegions": items });
+          }
+
+          subreq = data.object.custSites?.split(',');
+          items = [];
+          if (subreq != null && subreq.length > 0) {
+            for (var i = 0; i < subreq.length; i++) {
+              let t = { id: subreq[i] }
+              items.push(t);
+            }
+            this.userprofileform.patchValue({ "custSites": items });
           }
 
           this.userprofileform.patchValue({ "userId": data.object.userId });
@@ -319,13 +348,22 @@ export class UserProfileComponent implements OnInit {
 
   onUserChange(value: any) {
     this.contactId = this.userlist.filter(x => x.userid === value)[0].contactid;
-    this.GetDistributorByContactId();
-    this.userprofileService.getByUserId(this.contactId)
-      .pipe(first())
-      .subscribe((data: any) => {
-        this.userprofileform.controls['designation'].setValue(data.object.designation);
-        this.userprofileform.controls['distributorName'].setValue(data.object.distCustName);
-        this.contactId = data.object.contactid;
+    this.customerService.getAllByConId(this.contactId)
+      .pipe(first()).subscribe((data: any) => {
+        this.siteList = data.object[0].sites
+
+        this.GetDistributorByContactId();
+        this.userprofileService.getByUserId(this.contactId)
+          .pipe(first()).subscribe((data: any) => {
+            this.isCustomer = data.object.userType.toLowerCase() == "customer";
+            if (this.isCustomer) {
+              this.userprofileform.get("custSites").setValidators([Validators.required])
+              this.userprofileform.get("custSites").updateValueAndValidity();
+            }
+            this.userprofileform.controls['designation'].setValue(data.object.designation);
+            this.userprofileform.controls['distributorName'].setValue(data.object.distCustName);
+            this.contactId = data.object.contactid;
+          })
       });
   }
 
@@ -346,6 +384,11 @@ export class UserProfileComponent implements OnInit {
     if (this.userprofileform.get('distRegions').value.length > 0) {
       var selectarray = this.userprofileform.get('distRegions').value;
       this.userprofile.distRegions = selectarray.map(x => x.id).join(',');
+    }
+
+    if (this.userprofileform.get('custSites').value.length > 0) {
+      var selectarray = this.userprofileform.get('custSites').value;
+      this.userprofile.custSites = selectarray.map(x => x.id).join(',');
     }
 
     if (this.id == null) {
