@@ -255,6 +255,9 @@ export class OfferrequestComponent implements OnInit {
 
               this.form.get('customerId').setValue(custData.object[0]?.id)
               this.form.get('customerId').updateValueAndValidity()
+
+              this.form.get('distributorid').setValue(custData.object[0]?.defdistid)
+              this.form.get('distributorid').updateValueAndValidity()
             })
         }
 
@@ -634,6 +637,7 @@ export class OfferrequestComponent implements OnInit {
       headerName: 'Part No',
       field: 'partno',
       filter: true,
+      editable: true,
       enableSorting: true,
       sortable: true,
       tooltipField: 'instrument',
@@ -702,7 +706,6 @@ export class OfferrequestComponent implements OnInit {
         headerName: 'Qty',
         field: 'qty',
         filter: true,
-        editable: true,
         sortable: true,
         defaultValue: 0
       },
@@ -710,7 +713,6 @@ export class OfferrequestComponent implements OnInit {
         headerName: 'Price',
         field: 'price',
         filter: true,
-        editable: true,
         sortable: true,
         default: 0,
         hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
@@ -970,7 +972,9 @@ export class OfferrequestComponent implements OnInit {
 
     if (this.sparePartsList != [] && this.sparePartsList != null) {
 
+      console.log(this.sparePartsList);
       this.sparePartsList.forEach(instrument => {
+        
         instrument.offerRequest = this.id;
         instrument.offerRequestId = this.id;
       })

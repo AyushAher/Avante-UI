@@ -10,15 +10,10 @@ import { EnvService } from './env/env.service';
   providedIn: 'root',
 })
 export class OfferrequestService {
-  private corsheaders: HttpHeaders;
-  private root: string;
 
   constructor(
-    private router: Router,
     private http: HttpClient,
-    private environment: EnvService,
-    private accountService: AccountService
-
+    private environment: EnvService
   ) {
   }
 

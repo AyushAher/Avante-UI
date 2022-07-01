@@ -62,7 +62,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="distributor">Distributor</label>
-              <select id="distributor" type="text" formControlName="distributorid" class="form-control" [ngClass]="{
+              <select id="distributor" type="text" disabled formControlName="distributorid" class="form-control" [ngClass]="{
                   ' is -invalid': submitted && f.distributorid.errors
                 }">
                 <option *ngFor="let i of distributorList" value="{{ i.id }}">
