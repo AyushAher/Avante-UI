@@ -68,8 +68,16 @@ export class CustomerSiteListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.customerSite = data.object.sites;
-          if (this.user.userType == "site") {
+          if (this.user.userType?.toLocaleLowerCase() == "customer") {
+            this.customerSite = [];
+            let siteLst = this.user.custSites?.split(",")
+            data.object?.sites.forEach(element => {
+              if (siteLst?.length > 0 && siteLst?.find(x => x == element.id) == null) return;
+              this.customerSite.push(element);
+            })
+          }
+          else if (this.user.userType == "site") {
+            this.customerSite = data.object.sites;
             data.object.sites.forEach(x => {
               x.contacts.forEach(y => {
                 if (y.id == this.user.contactId) {
