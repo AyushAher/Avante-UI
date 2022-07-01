@@ -405,10 +405,7 @@ export class ServiceReportComponent implements OnInit {
             this.ServiceRequestId = data.object.serviceRequestId;
 
             this.ServiceReportService.getSparePartRecomm(this.ServiceRequestId)
-              .pipe(first())
-              .subscribe((data: any) =>
-                this.sparepartrecmmlist = data.object
-              );
+              .pipe(first()).subscribe((data: any) => setTimeout(() => this.sparepartrecmmlist = data.object, 500));
 
             this.serviceRequestService.getById(data.object.serviceRequestId)
               .pipe(first())

@@ -25,8 +25,8 @@ export class OfferrequestService {
     return this.http.get<Offerrequest[]>(`${this.environment.apiUrl}/offerrequest`);
   }
 
-  searchByKeyword(partno: string) {
-    return this.http.get(`${this.environment.apiUrl}/Offerrequest/partno/${partno}`);
+  searchByKeyword(partno: string, instrument: string) {
+    return this.http.get(`${this.environment.apiUrl}/Offerrequest/partno/${instrument}/${partno}`);
   }
 
   getById(id: string) {

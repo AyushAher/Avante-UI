@@ -584,20 +584,15 @@ export class OfferrequestComponent implements OnInit {
   SparePartsSearch = (searchtext) => {
     this.sparePartPartNo = searchtext;
 
-    this.Service
-      .searchByKeyword(this.sparePartPartNo)
-      .pipe(first())
-      .subscribe({
+    this.Service.searchByKeyword(this.sparePartPartNo, this.form.get("instrumentsList").value.toString())
+      .pipe(first()).subscribe({
         next: (data: any) => this.sparePartsAutoComplete = data.object
       });
   }
 
   AddSpareParts(instrument: any) {
-
-    this.Service
-      .searchByKeyword(instrument)
-      .pipe(first())
-      .subscribe({
+    this.Service.searchByKeyword(instrument, this.form.get("instrumentsList").value.toString())
+      .pipe(first()).subscribe({
         next: (data: any) => {
           this.sparePartsList = this.sparePartsList || [];
           var data = data.object[0];
@@ -974,7 +969,7 @@ export class OfferrequestComponent implements OnInit {
 
       console.log(this.sparePartsList);
       this.sparePartsList.forEach(instrument => {
-        
+
         instrument.offerRequest = this.id;
         instrument.offerRequestId = this.id;
       })
