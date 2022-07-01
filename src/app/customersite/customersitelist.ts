@@ -87,6 +87,9 @@ export class CustomerSiteListComponent implements OnInit {
               });
             })
           }
+          else {
+            this.customerSite = data.object.sites;
+          }
         },
       });
     this.columnDefs = this.createColumnDefs();
