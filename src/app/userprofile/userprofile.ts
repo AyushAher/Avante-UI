@@ -381,12 +381,12 @@ export class UserProfileComponent implements OnInit {
 
     this.userprofile = this.userprofileform.value;
 
-    if (this.userprofileform.get('distRegions').value.length > 0) {
+    if (this.userprofileform.get('distRegions').value?.length > 0) {
       var selectarray = this.userprofileform.get('distRegions').value;
       this.userprofile.distRegions = selectarray.map(x => x.id).join(',');
     }
 
-    if (this.userprofileform.get('custSites').value.length > 0) {
+    if (this.userprofileform.get('custSites').value?.length > 0) {
       var selectarray = this.userprofileform.get('custSites').value;
       this.userprofile.custSites = selectarray.map(x => x.id).join(',');
     }

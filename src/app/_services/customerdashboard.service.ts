@@ -22,10 +22,6 @@ export class CustomerdashboardService {
 
   ) { }
 
-  getCustomerByContactId(id: string) {
-    return this.http.get<VW_Contacts>(`${this.environment.apiUrl}/CustomerDashboard/GetCustomerByContactId/${id}`);
-  }
-
   GetCostData() {
     return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetCostData`);
   }
