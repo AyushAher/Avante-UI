@@ -230,12 +230,16 @@ export class ProfileComponent implements OnInit {
   }
 
   AddScreen(id: string = "") {
+    let screnId = this.profileform.get("screenId")
+    
+    let array = (<FormArray>this.profileform.get("permissions")).value.findIndex(x => x.screenId == screnId.value)
+    if (array != -1) return this.notificationService.showInfo("This Screen Already Exists!", "Info");
+
     let fcreate = this.profileform.get("create")
     let fread = this.profileform.get("read")
     let fdelete = this.profileform.get("delete")
     let fupdate = this.profileform.get("update")
     let fcommercial = this.profileform.get("commercial")
-    let screnId = this.profileform.get("screenId")
     let screen = this.lstScreens.find(x => x.listTypeItemId == screnId.value);
     let privilages = this.profileform.get("privilages");
 
@@ -264,7 +268,6 @@ export class ProfileComponent implements OnInit {
 
     this.listTypeItems = obj
     this.addItem()
-    console.log(this.profileform);
 
   }
 
