@@ -52,6 +52,10 @@ export class ProfileComponent implements OnInit {
   hasAddAccess: boolean = false;
   isEditMode: boolean;
   isNewMode: boolean;
+  privilagesList: any[];
+  screensList: any[];
+  lstScreens: any[] = [];
+  lstCategory: any[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -91,44 +95,60 @@ export class ProfileComponent implements OnInit {
       permissions: this.formBuilder.array([]),
       isactive: [true],
       isdeleted: [false],
+      screenId: [],
+      categoryId: [],
+      create: false,
+      read: false,
+      update: false,
+      delete: false,
+      commercial: false,
+      privilages: [""],
     });
 
 
     this.id = this.route.snapshot.paramMap.get('id');
 
+    this.listTypeService.getById("PVGLS")
+      .pipe(first()).subscribe((data: any) => this.privilagesList = data)
+
+    this.listTypeService.getById("PRGRP")
+      .pipe(first()).subscribe((data: any) => this.lstCategory = data)
+
+
     this.profileService.GetAllScreens()
       .pipe(first())
       .subscribe((data: any) => {
+
         data.object.sort((a, b) => {
           var value = 0
           a.categoryName < b.categoryName ? value = -1 : a.categoryName > b.categoryName ? value = 1 : value = 0;
           return value;
         });
 
-        this.listTypeItems = data.object;
+        this.screensList = data.object;
+
         if (this.id != null) {
           this.profileService.getById(this.id)
             .pipe(first())
             .subscribe((profileData: any) => {
               this.profileform.get("profilename").setValue(profileData.object.profilename)
-              this.listTypeItems.forEach(x => {
-                var profile = profileData.object.permissions.find(y => y.screenId == x.screenId || y.screenId == x.listTypeItemId)
-                x["id"] = profile?.id
-
-                x["read"] = profile?.read
-                x["create"] = profile?.create
-                x["update"] = profile?.update
-                x["delete"] = profile?.delete
-                x["commercial"] = profile?.commercial
+              profileData.object.permissions.forEach(x => {
+                this.profileform.get("categoryId").setValue(x.category)
+                this.onCategoryChange()
+                this.profileform.get("screenId").setValue(x.screenId)
+                this.profileform.get("create").setValue(x.create)
+                this.profileform.get("read").setValue(x.read)
+                this.profileform.get("update").setValue(x.update)
+                this.profileform.get("delete").setValue(x.delete)
+                this.profileform.get("commercial").setValue(x.commercial)
+                this.profileform.get("privilages").setValue(x.privilages)
+                this.AddScreen(x.id)
               });
-              this.addItem();
-              this.profileform.get("permissions").setValue(this.listTypeItems)
             });
           setTimeout(() => this.profileform.disable(), 500);
         }
         else {
           this.isNewMode = true
-          this.addItem();
         }
       });
   }
@@ -162,45 +182,95 @@ export class ProfileComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.profileService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
-          if (data.result)
-            this.router.navigate(["profilelist"])
+          if (data.result) this.router.navigate(["profilelist"])
         })
     }
   }
+  onCategoryChange() {
+    let categoryId = this.profileform.get("categoryId").value;
+    this.lstScreens = this.screensList.filter(x => x.category == categoryId)
+    setTimeout(() => this.profileform.get("screenId").reset(), 500);
+  }
 
   addItem(): void {
-    let value = this.listTypeItems
-    //debugger;
-    for (let i = 0; i < value.length; i++) {
-      this.listT = value[i];
+    this.listT = this.listTypeItems;
 
-      this.permissions = this.profileform.get('permissions') as FormArray;
-      this.permissions.push(this.formBuilder.group({
-        id: this.listT.id == undefined || this.listT.id == null ? '' : this.listT.id,
-        screenId: this.listT.listTypeItemId,
-        screenName: this.listT.itemname,
-        create: this.listT.create == undefined || this.listT.create == null ? false : this.listT.create,
-        screenCode: this.listT.itemCode,
-        read: this.listT.read == undefined || this.listT.read == null ? false : this.listT.read,
-        categoryName: this.listT.categoryName,
-        update: this.listT.update == undefined || this.listT.update == null ? false : this.listT.update,
-        delete: this.listT.delete == undefined || this.listT.delete == null ? false : this.listT.delete,
-        commercial: this.listT.commercial == undefined || this.listT.commercial == null ? false : this.listT.commercial,
-      }));
-    }
+    this.permissions = this.profileform.get('permissions') as FormArray;
+    this.permissions.push(this.formBuilder.group({
+      id: this.listT.id == undefined || this.listT.id == null ? '' : this.listT.id,
+      screenId: this.listT.listTypeItemId,
+      screenName: this.listT.itemname,
+      create: this.listT.create == undefined || this.listT.create == null ? false : this.listT.create,
+      screenCode: this.listT.itemCode,
+      read: this.listT.read == undefined || this.listT.read == null ? false : this.listT.read,
+      categoryName: this.listT.categoryName,
+      update: this.listT.update == undefined || this.listT.update == null ? false : this.listT.update,
+      privilages: this.listT.privilages,
+      delete: this.listT.delete == undefined || this.listT.delete == null ? false : this.listT.delete,
+      commercial: this.listT.commercial == undefined || this.listT.commercial == null ? false : this.listT.commercial,
+    }));
+
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.profileform.controls; }
   get c() { return this.profileform.controls.Permissions; }
 
-  getScreenCode(i) {
-    return this.getName(i).screenCode
+  getScreenCode() {
+    let code = "";
+    if (this.lstScreens.length > 0) code = this.lstScreens.find(x => x.listTypeItemId == this.profileform.get("screenId").value)?.itemCode;
+    return code
   }
   getName(i) {
     return this.getControls()[i].value;
   }
 
+  screenCode(i) {
+    return this.getName(i).screenCode
+  }
+
+  AddScreen(id: string = "") {
+    let fcreate = this.profileform.get("create")
+    let fread = this.profileform.get("read")
+    let fdelete = this.profileform.get("delete")
+    let fupdate = this.profileform.get("update")
+    let fcommercial = this.profileform.get("commercial")
+    let screnId = this.profileform.get("screenId")
+    let screen = this.lstScreens.find(x => x.listTypeItemId == screnId.value);
+    let privilages = this.profileform.get("privilages");
+
+    let obj = {
+      id,
+      listTypeItemId: screen?.listTypeItemId,
+      itemname: screen?.itemname,
+      itemCode: screen?.itemCode,
+      categoryName: screen?.categoryName,
+      privilages: privilages.value,
+      create: fcreate.value,
+      read: fread.value,
+      delete: fdelete.value,
+      update: fupdate.value,
+      commercial: fcommercial.value,
+    }
+
+    this.profileform.get("categoryId").reset();
+    screnId.reset();
+    privilages.reset();
+    fcreate.reset();
+    fread.reset();
+    fdelete.reset();
+    fupdate.reset();
+    fcommercial.reset();
+
+    this.listTypeItems = obj
+    this.addItem()
+    console.log(this.profileform);
+
+  }
+
+  DeleteScreen(index) {
+    (<FormArray>this.profileform.get("permissions")).removeAt(index);
+  }
   getControls() {
     return (<FormArray>this.profileform.get('permissions')).controls;
   }

@@ -16,6 +16,7 @@ export class ProfilePermission {
   update: boolean;
   delete: boolean;
   commercial: boolean;
+  privilages: string;
 }
 
 
