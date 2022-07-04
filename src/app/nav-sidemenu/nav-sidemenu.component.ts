@@ -381,10 +381,7 @@ export class NavSideMenuComponent {
       this.hasMasters = true;
     }
 
-    if (
-      this.hasSearch || this.hasexport || this.hasdashboardsettings || this.hasAuditTrail || this.hasCustomerSettings || this.hasDistributorSettings
-      || this.hascustomersatisfactionsurveylist
-    ) {
+    if (this.hasSearch || this.hasexport || this.hasAuditTrail || this.hascustomersatisfactionsurveylist) {
       this.hasUtilities = true;
     }
 
