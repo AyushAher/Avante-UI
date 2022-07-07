@@ -28,7 +28,6 @@ declare function CustomerDashboardCharts(): any;
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./css/material-dashboard.min.css', './css/nucleo-icons.css', './css/nucleo-svg.css']
 })
 export class DashboardComponent implements OnInit {
   user: User;
@@ -182,19 +181,19 @@ export class DashboardComponent implements OnInit {
 
   onCalenderFilter(date) {
     if (date == this.calenderLst[0]) {
-      this.Mnths3.nativeElement.style.background = "white"
-      this.Mnths6.nativeElement.style.background = "lightgrey"
-      this.Mnths12.nativeElement.style.background = "lightgrey"
+      this.Mnths3.nativeElement.classList.add('active')
+      this.Mnths6.nativeElement.classList.remove('active')
+      this.Mnths12.nativeElement.classList.remove('active')
     }
     else if (date == this.calenderLst[1]) {
-      this.Mnths6.nativeElement.style.background = "white"
-      this.Mnths3.nativeElement.style.background = "lightgrey"
-      this.Mnths12.nativeElement.style.background = "lightgrey"
+      this.Mnths6.nativeElement.classList.add('active')
+      this.Mnths3.nativeElement.classList.remove('active')
+      this.Mnths12.nativeElement.classList.remove('active')
     }
     else if (date == this.calenderLst[2]) {
-      this.Mnths12.nativeElement.style.background = "white"
-      this.Mnths6.nativeElement.style.background = "lightgrey"
-      this.Mnths3.nativeElement.style.background = "lightgrey"
+      this.Mnths12.nativeElement.classList.add('active')
+      this.Mnths6.nativeElement.classList.remove('active')
+      this.Mnths3.nativeElement.classList.remove('active')
     }
 
     this.getServiceRequestData(date);

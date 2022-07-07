@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {User} from "../_models";
-import {FormBuilder, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService, NotificationService} from "../_services";
-import {BsModalService} from "ngx-bootstrap/modal";
-import {first} from "rxjs/operators";
+import { Component, OnInit } from '@angular/core';
+import { User } from "../_models";
+import { FormBuilder, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AccountService, NotificationService } from "../_services";
+import { BsModalService } from "ngx-bootstrap/modal";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: 'app-forgotpasswoard',
   templateUrl: './forgotpasswoard.component.html',
+  styleUrls: ["./style.css"]
 })
 export class ForgotpasswoardComponent implements OnInit {
 
@@ -48,21 +49,21 @@ export class ForgotpasswoardComponent implements OnInit {
     this.loading = true;
     this.NewPasswoard = this.Form.value.email
 
-      this.accountService.ForgotPassword(this.NewPasswoard)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.close();
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-            } else {
-              
-            }
-          },
-          error: (error: any) => {
-            
+    this.accountService.ForgotPassword(this.NewPasswoard)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          if (data.result) {
+            this.close();
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+          } else {
+
           }
-        })
+        },
+        error: (error: any) => {
+
+        }
+      })
 
     this.loading = false;
   }

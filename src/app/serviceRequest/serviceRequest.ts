@@ -397,9 +397,9 @@ export class ServiceRequestComponent implements OnInit {
     this.customerService.getAll().pipe(first())
       .subscribe((data: any) => {
         data.object.forEach(element => {
-          if (this.user.distRegionsId.split(",").find(x => x == element.defdistregionid) != null) this.customerlist.push(element)
+          if (this.user.distRegionsId?.split(",").find(x => x == element.defdistregionid) != null) this.customerlist.push(element)
 
-          if (this.user.distRegionsId == "") this.customerlist = data.object
+          if (this.user.distRegionsId == "" || this.user.distRegionsId == null) this.customerlist = data.object
 
         });
       })
@@ -489,7 +489,7 @@ export class ServiceRequestComponent implements OnInit {
                     this.serviceRequestform.patchValue({ "machmodelname": (data.object.machmodelname) });
                     this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
                     this.serviceRequestform.patchValue({ "delayedReasons": data.object.delayedReasons });
-                    this.serviceRequestform.patchValue({ "assignedto": data.object.assignedto });
+                    this.serviceRequestform.get("assignedto").setValue(data.object.assignedto);
 
                     if (data.object.isReportGenerated) {
                       this.serviceRequestform.disable()
@@ -630,57 +630,61 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   FormControlDisable() {
+    if (this.user.username != "admin") {
 
-    if (this.accepted && this.IsEngineerView) {
-      this.serviceRequestform.get('statusid').disable();
-    }
-
-    this.serviceRequestform.get('requesttypeid').disable();
-    this.serviceRequestform.get('subrequesttypeid').disable();
-    this.serviceRequestform.get('remarks').disable();
-    this.serviceRequestform.get('custid').disable();
-    this.serviceRequestform.get('siteid').disable();
-    this.serviceRequestform.get('country').disable();
-    this.serviceRequestform.get('distid').disable();
-
-    if (this.IsEngineerView) {
-      this.serviceRequestform.get('assignedto').disable();
-      this.serviceRequestform.get('country').disable();
-      this.serviceRequestform.get('machinesno').disable();
-      this.serviceRequestform.get('breakdowntype').disable();
-      this.serviceRequestform.get('isrecurring').disable();
-      this.serviceRequestform.get('recurringcomments').disable();
-      this.serviceRequestform.get('breakoccurdetailsid').disable();
-      this.serviceRequestform.get('alarmdetails').disable();
-      this.serviceRequestform.get('resolveaction').disable();
-      this.serviceRequestform.get('visittype').disable();
-      this.serviceRequestform.get('currentinstrustatus').disable();
-      this.serviceRequestform.get("contactperson").disable();
-      this.serviceRequestform.get("email").disable();
-    } else if (this.IsDistributorView) {
-      this.serviceRequestform.get('assignedto').enable();
-      this.serviceRequestform.get('country').disable();
-      this.serviceRequestform.get('statusid').disable();
-      this.serviceRequestform.get('custid').enable();
-      this.serviceRequestform.get('siteid').enable();
-    } else {
-      if (this.user.userType?.toLocaleLowerCase() == "site") {
-        this.serviceRequestform.get('siteid').disable();
+      if (this.accepted && this.IsEngineerView) {
+        this.serviceRequestform.get('statusid').disable();
       }
-      else {
+
+      this.serviceRequestform.get('requesttypeid').disable();
+      this.serviceRequestform.get('subrequesttypeid').disable();
+      this.serviceRequestform.get('remarks').disable();
+      this.serviceRequestform.get('custid').disable();
+      this.serviceRequestform.get('siteid').disable();
+      this.serviceRequestform.get('country').disable();
+      this.serviceRequestform.get('distid').disable();
+
+      if (this.IsEngineerView) {
+        this.serviceRequestform.get('assignedto').disable();
+        this.serviceRequestform.get('country').disable();
+        this.serviceRequestform.get('machinesno').disable();
+        this.serviceRequestform.get('breakdowntype').disable();
+        this.serviceRequestform.get('isrecurring').disable();
+        this.serviceRequestform.get('recurringcomments').disable();
+        this.serviceRequestform.get('breakoccurdetailsid').disable();
+        this.serviceRequestform.get('alarmdetails').disable();
+        this.serviceRequestform.get('resolveaction').disable();
+        this.serviceRequestform.get('visittype').disable();
+        this.serviceRequestform.get('currentinstrustatus').disable();
+        this.serviceRequestform.get("contactperson").disable();
+        this.serviceRequestform.get("email").disable();
+      } else if (this.IsDistributorView) {
+        this.serviceRequestform.get('assignedto').enable();
+        this.serviceRequestform.get('country').disable();
+        this.serviceRequestform.get('statusid').disable();
+        this.serviceRequestform.get('custid').enable();
         this.serviceRequestform.get('siteid').enable();
+      } else {
+        if (this.user.userType?.toLocaleLowerCase() == "site") {
+          this.serviceRequestform.get('siteid').disable();
+        }
+        else {
+          this.serviceRequestform.get('siteid').enable();
+        }
+        this.serviceRequestform.get('stageid').disable();
+        this.serviceRequestform.get("contactperson").disable();
+        this.serviceRequestform.get("email").disable();
+        this.serviceRequestform.get('assignedto').disable();
+        this.serviceRequestform.get('statusid').disable();
+        this.serviceRequestform.get('stageid').disable();
+        this.serviceRequestform.get('serreqdate').enable();
+
       }
-      this.serviceRequestform.get('stageid').disable();
-      this.serviceRequestform.get("contactperson").disable();
-      this.serviceRequestform.get("email").disable();
-      this.serviceRequestform.get('assignedto').disable();
-      this.serviceRequestform.get('statusid').disable();
-      this.serviceRequestform.get('stageid').disable();
-      this.serviceRequestform.get('serreqdate').enable();
-
     }
+  }
 
-
+  ToggleDropdown(id: string) {
+    document.getElementById(id).classList.toggle("show")
   }
 
   DeleteRecord() {

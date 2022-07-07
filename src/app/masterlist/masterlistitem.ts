@@ -122,10 +122,10 @@ export class MasterListItemComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["sparepartlist"])
+        this.router.navigate(["masterlist"])
     }
 
-    else this.router.navigate(["sparepartlist"])
+    else this.router.navigate(["masterlist"])
 
   }
 
@@ -233,6 +233,7 @@ export class MasterListItemComponent implements OnInit {
           this.masterlistitemform.get("id").setValue(data.listTypeItemId);
           this.masterlistitemform.get("itemname").setValue(data.itemname);//itemCode
           this.masterlistitemform.get("code").setValue(data.itemCode);
+          this.masterlistitemform.get("code").disable();
           //this.masterlistitemform.get("listName").setValue(data.listName);
           this.masterlistitemform.get("listTypeId").setValue(data.listTypeId);
           this.id = data.listTypeItemId;

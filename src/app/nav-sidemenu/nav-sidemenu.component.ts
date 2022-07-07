@@ -4,6 +4,7 @@ import { AccountService, ListTypeService, NotificationService, ProfileService } 
 import { first } from "rxjs/operators";
 import { Router } from "@angular/router";
 
+declare function CustomMenu(): any;
 @Component({
   selector: 'app-nav-sidemenu',
   templateUrl: './navsidemenu.html',
@@ -66,7 +67,7 @@ export class NavSideMenuComponent {
   constructor(
     private accountService: AccountService,
     private profileService: ProfileService,
-    private notificationService: NotificationService,
+    private router: Router,
     private listTypeService: ListTypeService,
   ) {
     this.user = this.accountService.userValue;
@@ -399,6 +400,10 @@ export class NavSideMenuComponent {
     if (this.serviceRequestReport || this.hasServiceCompletionReport || this.pendingQuoteRequestReport || this.serviceContractRevenueReport) {
       this.hasReports = true;
     }
+    CustomMenu()
+  }
 
+  navigate(url) {
+    this.router.navigate([url])
   }
 }

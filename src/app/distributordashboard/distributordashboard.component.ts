@@ -18,7 +18,7 @@ declare function DistributorDashboardCharts(): any;
 @Component({
   selector: 'app-distributordashboard',
   templateUrl: './distributordashboard.component.html',
-  styleUrls: ['./distributordashboard.component.css']
+  // styleUrls: ['./distributordashboard.component.css']
 })
 export class DistributordashboardComponent implements OnInit {
   user: User;
@@ -112,19 +112,19 @@ export class DistributordashboardComponent implements OnInit {
 
   onCalenderFilter(date) {
     if (date == this.calenderLst[0]) {
-      this.Mnths3.nativeElement.style.background = "white"
-      this.Mnths6.nativeElement.style.background = "lightgrey"
-      this.Mnths12.nativeElement.style.background = "lightgrey"
+      this.Mnths3.nativeElement.classList.add("active")
+      this.Mnths6.nativeElement.classList.remove("active")
+      this.Mnths12.nativeElement.classList.remove("active")
     }
     else if (date == this.calenderLst[1]) {
-      this.Mnths6.nativeElement.style.background = "white"
-      this.Mnths3.nativeElement.style.background = "lightgrey"
-      this.Mnths12.nativeElement.style.background = "lightgrey"
+      this.Mnths6.nativeElement.classList.add("active")
+      this.Mnths3.nativeElement.classList.remove("active")
+      this.Mnths12.nativeElement.classList.remove("active")
     }
     else if (date == this.calenderLst[2]) {
-      this.Mnths12.nativeElement.style.background = "white"
-      this.Mnths6.nativeElement.style.background = "lightgrey"
-      this.Mnths3.nativeElement.style.background = "lightgrey"
+      this.Mnths12.nativeElement.classList.add("active")
+      this.Mnths6.nativeElement.classList.remove("active")
+      this.Mnths3.nativeElement.classList.remove("active")
     }
 
     this.GetInstrumentsInstalled(date)
@@ -139,6 +139,11 @@ export class DistributordashboardComponent implements OnInit {
       .pipe(first()).subscribe((data: any) => {
         this.instrumnetInstalled = data.object.instrumentInstalled
         this.instrumnetUnderService = data.object.instrumentUnderService
+        let obj = {
+          instrumnetInstalled: data.object.instrumentInstalled,
+          instrumnetUnderService: data.object.instrumentUnderService
+        }
+        localStorage.setItem('instrumentData',JSON.stringify(obj))
       })
   }
 

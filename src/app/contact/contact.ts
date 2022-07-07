@@ -247,6 +247,10 @@ export class ContactComponent implements OnInit {
     }
   }
 
+  ToggleDropdown(id: string) {
+    document.getElementById(id).classList.toggle("show")
+  }
+
   // convenience getter for easy access to form fields
   get f() { return this.contactform.controls; }
   get a() { return this.contactform.controls.address }

@@ -1,73 +1,68 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="row" style="align-items: end;">
-        <div class="col-md-3">
-            <label>Region</label>
-            <select formControlName="region" (change)="onRegionChange()" class="form-control">
-                <option *ngFor="let item of regionsList" [value]="item.id">{{item.region}}</option>
-            </select>
+<div class="page-content">
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="mb-4">
+                    <label for="region" class="form-label">Region</label>
+                    <select formControlName="region" (change)="onRegionChange()"
+                        class="form-select form-select-lg mb-3 text-uppercase"
+                        aria-label=".form-select-lg example form-control">
+                        <option *ngFor="let item of regionsList" [value]="item.id">{{item.region}}</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="country" class="form-label">Country</label>
+                    <select formControlName="country" (change)="countryChange()"
+                        class="form-select form-select-lg mb-3 text-uppercase" aria-label=".form-select-lg example">
+                        <option *ngFor="let item of regionCountryList" [value]="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="customer" class="form-label">Customer</label>
+                    <select formControlName="customer" (change)="onCustomerChange()"
+                        class="form-select form-select-lg mb-3 text-uppercase" aria-label=".form-select-lg example">
+                        <option *ngFor="let item of customerBCountryList" [value]="item.id">{{item.custname}}</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="site" class="form-label">Site</label>
+                    <select formControlName="site" (change)="SiteChange()"
+                        class="form-select form-select-lg mb-3 text-uppercase" aria-label=".form-select-lg example">
+                        <option *ngFor="let item of siteList" [value]="item.id">{{item.custregname}}</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="ins" class="form-label">Instrument Serial No.</label>
+                    <select formControlName="insSerialNo" class="form-select form-select-lg mb-3 text-uppercase"
+                        aria-label=".form-select-lg example">
+                        <option *ngFor="let item of siteBInstrumentList" [value]="item.id">{{item.instypeName +' - ' +
+                            item.serialnos}}
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="serType" class="form-label">Service Type</label>
+                    <select formControlName="serviceType" class="form-select form-select-lg mb-3 text-uppercase"
+                        aria-label=".form-select-lg example">
+                        <option *ngFor="let i of serviceTypeList" value="{{i.listTypeItemId}}">{{i.itemname}}</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="serType" class="form-label">Start Date</label>
+                    <input bsDatepicker formControlName="sDate" class="form-select form-select-lg mb-3 text-uppercase"
+                        aria-label=".form-select-lg example" />
+                </div>
+                <div class="mb-4">
+                    <label for="serType" class="form-label">End Date</label>
+                    <input bsDatepicker formControlName="eDate" class="form-select form-select-lg mb-3 text-uppercase"
+                        aria-label=".form-select-lg example">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary text-uppercase btn-lg btn-cim ">
+                        Search
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <div class="col-md-3">
-            <label>Country</label>
-            <select formControlName="country" (change)="countryChange()" class="form-control">
-                <option *ngFor="let item of regionCountryList" [value]="item.id">{{item.name}}</option>
-            </select>
-        </div>
-
-        <div class="col-md-3">
-            <label>Customer</label>
-            <select formControlName="customer" (change)="onCustomerChange()" class="form-control">
-                <option *ngFor="let item of customerBCountryList" [value]="item.id">{{item.custname}}</option>
-            </select>
-        </div>
-
-        <div class="col-md-3">
-            <label>Site</label>
-            <select formControlName="site" (change)="SiteChange()" class="form-control">
-                <option *ngFor="let item of siteList" [value]="item.id">{{item.custregname}}</option>
-            </select>
-        </div>
-
-        <div class="col-md-3 ">
-            <label>Instrument Serial No.</label>
-            <select formControlName="insSerialNo" class="form-control">
-                <option *ngFor="let item of siteBInstrumentList" [value]="item.id">{{item.instypeName +' - ' +
-                    item.serialnos}}
-                </option>
-            </select>
-        </div>
-
-        <div class="col-md-3 " *ngIf="isAmc">
-            <label>Service Type</label>
-            <select formControlName="serviceType" class="form-control">
-                <option *ngFor="let i of serviceTypeList" value="{{i.listTypeItemId}}">{{i.itemname}}</option>
-            </select>
-        </div>
-
-        <div class="col-md-3 ">
-            <label>Start Date</label>
-            <input bsDatepicker formControlName="sDate" class="form-control" />
-        </div>
-
-        <div class="col-md-3 ">
-            <label>End Date</label>
-            <input bsDatepicker formControlName="eDate" class="form-control">
-        </div>
-
-        <div class="btngrp my-2 col-md-3">
-            <a class="nav-link">
-                <i class="fas fa-search" (click)="onSubmit()" title="Filter"></i>
-            </a>
-            <a (click)="clear()" class="nav-link ">
-                <i class="fas fa-times" title="Clear"></i>
-            </a>
-        </div>
-
     </div>
-</form>
-
-<style>
-    .btngrp>* {
-        display: inline-block;
-    }
-</style>
+</div>

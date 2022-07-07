@@ -14,27 +14,34 @@ import { first } from 'rxjs/operators';
 export class NavMenuComponent {
   user: User;
   bsModalRef: BsModalRef;
-  notifications = 0;
+  notifications: any = 0;
   @Output() showNotifications = new EventEmitter<boolean>()
   @Input() isClosed = false;
+  notificationList: any[];
 
   constructor(
     private accountService: AccountService,
     private modalService: BsModalService,
+    private userNotification: UsernotificationService,
     private userNotificationService: UsernotificationService
   ) {
     this.user = this.accountService.userValue;
     setTimeout(() => {
       this.userNotificationService.getAll().pipe(first())
         .subscribe((data: any) => {
-          this.notifications = data.object.length
+          data.object.length >= 100 ? this.notifications = "99+" : this.notifications = data.object.length
         })
     }, 100);
 
     setInterval(() => {
       if (this.isClosed) this.closed()
     }, 1000)
-
+    this.userNotification.getAll().pipe(first())
+      .subscribe((data: any) => {
+        if (data.result) {
+          this.notificationList = data.object;
+        }
+      })
 
   }
 
@@ -52,6 +59,28 @@ export class NavMenuComponent {
 
   ChangePassword() {
     this.bsModalRef = this.modalService.show(ChangepasswoardComponent);
+  }
+
+  ToggleDropdown(id: string) {
+    document.getElementById(id).classList.toggle("show")
+  }
+
+  ClearNotifications() {
+    this.userNotification.clearAll().pipe(first())
+      .subscribe((data: any) => {
+        this.notificationList = []
+        this.closed()
+      })
+  }
+
+  deleteNotification(id) {
+    this.userNotification.delete(id).pipe(first())
+      .subscribe((data: any) => {
+        if (data.result) {
+          this.notificationList = data.object;
+          this.closed()
+        }
+      })
   }
 
   logout() {

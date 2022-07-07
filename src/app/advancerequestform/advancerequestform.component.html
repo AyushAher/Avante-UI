@@ -5,13 +5,13 @@
             <div class="page-title">
                 <div class="title_left" style="display: flex; justify-content: space-between;">
                     <div class="d-flex" style="align-items: center;">
-                        <a (click)="Back()" class="nav-link">
-                            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
-                        </a>
                         <h3>Advance Request Form</h3>
                     </div>
 
                     <div class="controls" style="display: flex;">
+                        <a (click)="Back()" class="nav-link">
+                            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+                        </a>
                         <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
                             <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
                         </a>

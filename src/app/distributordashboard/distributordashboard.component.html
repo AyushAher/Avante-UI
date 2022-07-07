@@ -1,105 +1,8 @@
-<style>
-  @-webkit-keyframes argh-my-eyes {
-    0% {
-      background-color: #fff;
-    }
-
-    49% {
-      background-color: #fff;
-    }
-
-    50% {
-      background-color: #000;
-    }
-
-    99% {
-      background-color: #000;
-    }
-
-    100% {
-      background-color: #fff;
-    }
-  }
-
-  @-moz-keyframes argh-my-eyes {
-    0% {
-      background-color: #fff;
-    }
-
-    49% {
-      background-color: #fff;
-    }
-
-    50% {
-      background-color: #000;
-    }
-
-    99% {
-      background-color: #000;
-    }
-
-    100% {
-      background-color: #fff;
-    }
-  }
-
-  @keyframes argh-my-eyes {
-    0% {
-      background-color: #fff;
-    }
-
-    49% {
-      background-color: #fff;
-    }
-
-    50% {
-      background-color: #000;
-    }
-
-    99% {
-      background-color: #000;
-    }
-
-    100% {
-      background-color: #fff;
-    }
-  }
-
-  .flash {
-    -webkit-animation: argh-my-eyes 1s infinite;
-    -moz-animation: argh-my-eyes 1s infinite;
-    animation: argh-my-eyes 1s infinite;
-  }
-
-  ::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #5ba246;
-    border-radius: 10px;
-  }
-</style>
-
 <layout>
-  <div class="az-content az-content-dashboard" style="padding-top: 5px;">
+  <!--<div class="az-content az-content-dashboard" style="display: none; padding-top: 5px;">
     <div class="container">
       <div class="az-content-body">
         <div class="d-flex justify-content-between" style="max-height: 25px;">
-          <style>
-            .ddl {
-              max-height: 300px;
-              width: 250px;
-              position: absolute;
-              overflow-y: auto;
-              overflow-x: hidden;
-              z-index: 999;
-              margin-top: 10px;
-              background: white;
-            }
-          </style>
-
           <div class="dropdown">
             <a class="btn"
               style="min-height: 25px;width: 90px; padding: 0; background: white;border: solid 0.2px; border-radius: 8px;"
@@ -134,13 +37,13 @@
               </a>
             </div>
 
-            <a class="btn" style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border: solid 0.2px;"
-              (click)="onCalenderFilter(calenderLst[0])" #MNTHS3>3 Months</a>
+            <a class="btn"
+              style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border: solid 0.2px;">3 Months</a>
             <a class=" btn"
-              style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border-top: solid 0.2px;border-bottom: solid 0.2px;"
-              (click)="onCalenderFilter(calenderLst[1])" #MNTHS6>6 Months</a>
-            <a class=" btn" style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border: solid 0.2px;"
-              (click)="onCalenderFilter(calenderLst[2])" #MNTHS12>12 Months</a>
+              style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border-top: solid 0.2px;border-bottom: solid 0.2px;">6
+              Months</a>
+            <a class=" btn"
+              style="min-height: 25px;width: 90px; padding: 0; background: lightgray;border: solid 0.2px;">12 Months</a>
           </div>
         </div>
         <hr style=" margin-top: 0.5rem;">
@@ -154,7 +57,8 @@
                 </div>
                 <div class="btn-group">
                 </div>
-              </div><!-- card-header -->
+              </div>
+              
               <div class="card-body">
                 <div class="card-body-top">
                   <div>
@@ -177,12 +81,13 @@
                     <label class="mg-b-0">Planned</label>
                     <h2>${{plannedRevenue}}</h2>
                   </div>
-                </div><!-- card-body-top -->
+                </div>
                 <div class="flot-chart-wrapper" style="margin-top: 6%;">
                   <div id="flotChart" style="height:300px;" class="flot-chart"></div>
-                </div><!-- flot-chart-wrapper -->
-              </div><!-- card-body -->
-            </div><!-- card -->
+                </div>
+                
+              </div>
+            </div>
           </div>
           <div style="visibility: hidden" id="SERII" class="col-lg-5 mg-t-20 mg-lg-t-0">
             <div class="row row-sm">
@@ -191,14 +96,14 @@
                   <div class="card-header" style='margin-bottom: 11%;'>
                     <h6>{{sRRaised}}</h6>
                     <p><a routerLink="/servicerequestlist"> Service Request Raised</a> </p>
-                  </div><!-- card-header -->
+                  </div>
                   <div class="card-body">
                     <div class="chart-wrapper">
                       <div id="flotChart1" class="flot-chart"></div>
-                    </div><!-- chart-wrapper -->
-                  </div><!-- card-body -->
-                </div><!-- card -->
-              </div><!-- col Service Request Raised -->
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="col-sm-6 mg-t-20 mg-sm-t-0">
                 <div class="card card-dashboard-two">
                   <div class="card-header">
@@ -213,32 +118,32 @@
                         <p>Under Contract</p>
                       </div>
                     </div>
-                  </div><!-- card-header -->
+                  </div>
                   <div class="card-body">
                     <div class="chart-wrapper">
                       <div id="flotChart2" class="flot-chart "></div>
-                    </div><!-- chart-wrapper -->
-                  </div><!-- card-body -->
-                </div><!-- card -->
-              </div><!-- col Instruments Installed -->
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="col-sm-12 mg-t-15">
                 <div class="card card-dashboard-three">
                   <div class="card-header" style="max-width: 100%;text-transform: none !important; font-size: 16px;">
                     <p>Instruments With Highest Service Request</p>
                     <h6>{{insHighestSReq}}</h6>
 
-                  </div><!-- card-header -->
+                  </div>
                   <div class="card-body pt-4">
                     <div class="chart" id="insHighestSerReq">
                       <canvas id="chartBar5"></canvas>
                     </div>
                   </div>
                 </div>
-              </div> <!-- col Instruments With Highest Service Request -->
-            </div><!-- row -->
+              </div> 
+            </div>
           </div>
 
-        </div><!-- row -->
+        </div>
 
         <div class="row row-sm mg-b-20">
 
@@ -246,7 +151,7 @@
             <div class="card card-dashboard-pageviews" style="height: 500px;overflow: auto;">
               <div class="card-header">
                 <h6 class="card-title"> Service Request Inprogress</h6>
-              </div><!-- card-header -->
+              </div>
               <div class="card-body">
                 <div *ngFor="let x of engHandlingReq" class="az-list-item">
 
@@ -258,44 +163,200 @@
                     <h6 class="tx-primary">{{x.engAssignedToCust}}</h6><span>{{x.engCustPercent}}%</span>
                   </div>
 
-                </div><!-- list-group-item -->
-              </div><!-- card-body -->
-            </div><!-- card -->
+                </div>
+              </div>
+            </div>
 
-          </div><!-- col -->
+          </div>
           <div style="visibility: hidden" id="RCUST" class="col-lg-8 mg-t-20 mg-lg-t-0">
             <div class="card card-dashboard-four">
               <div class="card-header">
                 <h6 class="card-title">Revenue by Customer</h6>
-              </div><!-- card-header -->
+              </div>
               <div class="card-body row">
                 <div class="col-md-6 d-flex align-items-center">
                   <div class="chart" id="revenueByCustomer">
                     <canvas id="chartDonut"></canvas>
                   </div>
-                </div><!-- col -->
+                </div>
                 <div class="col-md-6 col-lg-5 mg-lg-l-auto mg-t-20 mg-md-t-0">
                   <div class="az-traffic-detail-item" *ngFor="let i of customerRevenueList;let index = index">
                     <div>
                       <span> {{i.customer.custname}}</span>
-                      <span>{{i.total | currency}}<span> ({{((i.total/totalRevenue)*100) | number:'1.0-2'
-                          }}%)</span></span>
+                      <span>{{i.total | currency}}<span> ({{((i.total/totalRevenue)*100) | number:'1.0-2'}}%)</span></span>
                     </div>
 
                     <div class="progress">
                       <div class="progress-bar" [style.width]="((i.total/totalRevenue)*100)+'%'"
                         [style.background]="customerRevenueBgColors[index] + '!important'" role="progressbar"
                         aria-valuemin="0" aria-valuemax="100"></div>
-                    </div><!-- progress -->
+                    </div>
                   </div>
 
-                </div><!-- col -->
-              </div><!-- card-body -->
-            </div><!-- card-dashboard-four -->
-          </div><!-- col -->
+                </div>
+              </div>
+            </div>
+          </div>
 
-        </div><!-- row -->
-      </div><!-- az-content-body -->
+        </div>
+      </div>
     </div>
-  </div><!-- az-content -->
+  </div>
+-->
+  <div class="wrapper">
+    <div class="page-content">
+      <div class="d-flex justify-content-end mb-3">
+        <div class="btn-group btn-group-sm customBtnGroup">
+          <a (click)="onCalenderFilter(calenderLst[0])" #MNTHS3 class="btn btn-secondary btn-cim-secondary">3
+            Months</a>
+          <a (click)="onCalenderFilter(calenderLst[1])" #MNTHS6 class="btn btn-secondary btn-cim-secondary ms-2">6
+            Months</a>
+          <a (click)="onCalenderFilter(calenderLst[2])" #MNTHS12 class="btn btn-secondary btn-cim-secondary ms-2">12
+            Months</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="d-grid gap-3 d-sm-flex">
+            <div class="card shadow border-0 flex-item dashboard-card amcBox col">
+              <div class="card-body">
+                <div class="d-flex justify-content-start  mb-2">
+                  <p class="mb-0">AMC</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
+                  <p class="mb-0 bigNumber">$<span>{{amcRevenue}}</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="card shadow border-0 flex-item dashboard-card preventiveBox col">
+              <div class="card-body">
+                <div class="d-flex justify-content-start  mb-2">
+                  <p class="mb-0 fw-bold">Preventive</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
+                  <p class="mb-0 bigNumber">$<span>{{preventiveRevenue}}</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="card shadow border-0 flex-item dashboard-card breakDownBox col">
+              <div class="card-body">
+                <div class="d-flex justify-content-start  mb-2">
+                  <p class="mb-0 fw-bold">BreakDown</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
+                  <p class="mb-0 bigNumber">$<span>{{breakdownRevenue}}</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="card shadow border-0 flex-item dashboard-card onCallBox col">
+              <div class="card-body">
+                <div class="d-flex justify-content-start mb-2">
+                  <p class="mb-0 fw-bold">On Call</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
+                  <p class="mb-0 bigNumber">$<span>{{oncallRevenue}}</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="card shadow border-0 flex-item dashboard-card plannedBox col">
+              <div class="card-body">
+                <div class="d-flex justify-content-start mb-2">
+                  <p class="mb-0 fw-bold">Planned</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
+                  <p class="mb-0 bigNumber">$<span>{{plannedRevenue}}</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-grid d-sm-flex mt-4 ">
+            <div class="card shadow border-0 dashboard-card col-12">
+              <div class="card-body">
+                <canvas id="chartLine" class="chart-container-1" class="engineerChart serviceContractRevenue"></canvas>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-sm-4">
+          <div class="card shadow border-0 col-12 dashboard-card">
+            <div class="card-body" id="serviceRequestRaisedContainer">
+              <canvas id="serviceRequestRaised" class="engineerChart"></canvas>
+            </div>
+          </div>
+          <div class="card shadow border-0  col-12 dashboard-card mt-4">
+            <div class="card-body" id="instrumentsChartContainer">
+              <canvas id="instrumentsChart" class="engineerChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-sm-4">
+          <div class="card shadow border-0 dashboard-card pb-4">
+            <div class="card-body p-0">
+              <h5 class="text-center py-3">Service Request Inprogress</h5>
+              <div class="px-3">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item" [ngClass]="{' showHideRows-serviceRequest d-none':index>=2}"
+                    *ngFor="let x of engHandlingReq">
+                    <p>
+                      <span class="fw-bold float-start">{{x.engName}}</span><span class="float-end"><a
+                          >3</a></span>
+                    </p>
+                    <div class="clearfix"></div>
+                    <p class="graycolorbox">
+                      <span class="float-start">{{x.custName}}</span><span class="float-end"><a
+                          >{{x.engCustPercent}}%</a></span>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              <div class="text-center">
+                <i class="bi bi-arrow-down-circle-fill downArrow" id="showHideRows-serviceRequest"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card shadow border-0 dashboard-card">
+            <div class="card-body p-0">
+              <h5 class="text-center py-3">Revenue by Customer</h5>
+              <div class="px-3">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item border-0 mb-2" [ngClass]="{'showHideRows-revenueCustomer d-none':index>=2}"
+                    *ngFor="let i of customerRevenueList;let index = index">
+                    <p class="pb-3">
+                      <span class="float-start">{{i.customer.custname}}</span> <span class="float-end">{{i.total |
+                        currency}} ({{((i.total/totalRevenue)*100) | number:'1.0-2'}}%)</span>
+                    </p>
+                    <div class="range" id="range">
+                      <div class="slider" [style.width]="((i.total/totalRevenue)*100)+'%'"
+                        [style.background]="customerRevenueBgColors[index] + '!important'" id="slider">
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="text-center">
+                <i class="bi bi-arrow-down-circle-fill downArrow" id="showHideRows-revenueCustomer"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card shadow border-0  col-12 dashboard-card">
+            <div class="card-body" id="revenueByCustomer">
+              <canvas id="highestServiceRequest" style="width: 100%; max-width: 700px"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </layout>

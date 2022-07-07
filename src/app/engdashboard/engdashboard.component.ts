@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { delay, first } from 'rxjs/operators';
 import { ProfileReadOnly, User } from '../_models';
 import { AccountService, ProfileService } from '../_services';
 import { EngdashboardService } from '../_services/engdashboard.service';
@@ -19,11 +19,14 @@ export class EngdashboardComponent implements OnInit {
   pendingSerReq: any;
   compSerReq: any;
 
+  @ViewChild('MNTHS3') Mnths3;
+  @ViewChild('MNTHS6') Mnths6;
+  @ViewChild('MNTHS12') Mnths12;
+
   constructor(private EngDashboardService: EngdashboardService) { }
 
   ngOnInit() {
-    this.currentCalender = this.calenderLst[0];
-    this.GetData()
+    this.CalenderChange(this.calenderLst[0])
   }
 
   GetData() {
@@ -61,11 +64,29 @@ export class EngdashboardComponent implements OnInit {
 
     this.EngDashboardService.GetSPRecomm(this.currentCalender).pipe(first())
       .subscribe((data: any) => this.spRecom = data.object)
-    EngDashboardCharts()
+
+    setTimeout(() => EngDashboardCharts(), 1500);
   }
 
-  CalenderChange(date) {
+  async CalenderChange(date) {
     this.currentCalender = date
     this.GetData();
+    await delay(1000)
+    if (date == this.calenderLst[0]) {
+      this.Mnths3.nativeElement.classList.add('active')
+      this.Mnths6.nativeElement.classList.remove('active')
+      this.Mnths12.nativeElement.classList.remove('active')
+    }
+    else if (date == this.calenderLst[1]) {
+      this.Mnths6.nativeElement.classList.add('active')
+      this.Mnths3.nativeElement.classList.remove('active')
+      this.Mnths12.nativeElement.classList.remove('active')
+    }
+    else if (date == this.calenderLst[2]) {
+      this.Mnths12.nativeElement.classList.add('active')
+      this.Mnths6.nativeElement.classList.remove('active')
+      this.Mnths3.nativeElement.classList.remove('active')
+    }
+
   }
 }

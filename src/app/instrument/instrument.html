@@ -5,13 +5,13 @@
       <div class="page-title">
         <div class="title_left" style="display: flex; justify-content: space-between;">
           <div class="d-flex" style="align-items: center;">
-            <a (click)="Back()" class="nav-link">
-              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
-            </a>
             <h3>Instrument</h3>
           </div>
 
           <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
             <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
               <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
             </a>
@@ -117,13 +117,11 @@
               <label for="installby">Installed By Distributor</label>
               <select formControlName="installby" #installedBy class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.installby.errors }">
-                <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of distibutorList" value={{config.id}}>
                   {{config.distname}}
                 </option>
                 <option value="0">Others</option>
               </select>
-              <!--<input type="text" formControlName="installby" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.installby.errors }" />-->
               <div *ngIf="submitted && f.installby.errors" class="invalid-feedback">
                 <div *ngIf="f.installby.errors.required">Installed By Distributor is required</div>
               </div>
@@ -155,7 +153,6 @@
               <label for="operatorId">Operator Name</label>
               <select formControlName="operatorId" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.operatorId.errors }">
-                <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of contactList" value={{config.id}}>
                   {{config.fname}} {{config.lname}}
                 </option>
@@ -168,7 +165,6 @@
               <label for="instruEngineerId">Instrumentation Engineer</label>
               <select formControlName="instruEngineerId" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
-                <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of contactList" value={{config.id}}>
                   {{config.fname}} {{config.lname}}
                 </option>
@@ -229,7 +225,6 @@
               <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
               <input type='file' [disabled]="!isEditMode && !isNewMode" id="imageUpload" accept=".png, .jpg, .jpeg"
                 #fileInput (change)="uploadFile(fileInput.files,id)" />
-              <!--<label for="imageUpload" *ngIf="editFile" [ngClass]="['custom-label', 'upload-image']"></label>-->
               <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
                 (click)="removeUploadedFile()"></label>
             </div>
@@ -281,9 +276,6 @@
                   {{congfig.configValue}}
                 </option>
               </select>
-              <!--<div *ngIf="submitted && f.configvalueid.errors" class="invalid-feedback">
-        <div *ngIf="f.configvalueid.errors.required">Config Value is required</div>
-      </div>-->
             </div>
             <div class="col-sm-4">
               <label for=""></label>
@@ -291,47 +283,23 @@
                 style="margin-top: 31px;" (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Add</button>
             </div>
           </div>
-          <!--<div class="row">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Part Number</th>
-            <th>Description</th>
-            <th>Qty</th>
-            <th>Desc As Per Catlog</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let s of sparePartDetails">
-            <td>{{ s.configTypeName }}</td>
-            <td>{{ s.partNo }}</td>
-            <td>{{ s.itemDesc }}</td>
-            <td>{{ s.qty }}</td>
-            <td>{{ s.descCatalogue}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>-->
           <br />
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+              <a class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="home"
                 aria-selected="true">Recommended</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+              <a class="nav-link" id="profile-tab" data-toggle="tab" role="tab" aria-controls="profile"
                 aria-selected="false">Consumables</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+              <a class="nav-link" id="contact-tab" data-toggle="tab" role="tab" aria-controls="contact"
                 aria-selected="false">Full Spare</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="otherspare-tab" data-toggle="tab" href="#otherspare" role="tab"
-                aria-controls="otherspare" aria-selected="false">Other Spare</a>
+              <a class="nav-link" id="otherspare-tab" data-toggle="tab" role="tab" aria-controls="otherspare"
+                aria-selected="false">Other Spare</a>
             </li>
           </ul>
           <div class="tab-content" id="myTabContent">

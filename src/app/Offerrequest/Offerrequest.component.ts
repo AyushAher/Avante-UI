@@ -261,7 +261,7 @@ export class OfferrequestComponent implements OnInit {
             })
         }
 
-        this.customerList = custList
+        this.customerList = data.object
       })
 
     this.listTypeService.getById("OFRQP").pipe(first())

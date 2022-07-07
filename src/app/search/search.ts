@@ -68,9 +68,9 @@ export class SearchComponent implements OnInit {
     if (this.user.username != "admin") {
       role = role[0]?.itemCode;
       if (role == this.environment.distRoleCode) this.isDist = true;
-      else {
-        this.toggleFilter();
-      }
+    }
+    else {
+      this.toggleFilter();
     }
 
     //debugger;

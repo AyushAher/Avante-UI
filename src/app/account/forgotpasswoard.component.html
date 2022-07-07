@@ -1,10 +1,10 @@
 <div class="modal" style="display: block" id="modal" role="dialog">
   <div class="modal-dialog" style="width: 95vw">
     <div class="modal-content">
-      <div class="modal-header" style="background-color: #589b44; color: #fff">
+      <div class="modal-header" style="background-color: #53a446; color: #fff">
         <h4 class="modal-title" id="modal-basic-title">Forgot Password</h4>
-        <button type="button" class="close" aria-label="Close" data-dismiss="modal" (click)="close()">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+          <i class="fas fa-fw fa fa-times"> </i>
         </button>
       </div>
 
@@ -19,7 +19,7 @@
                   <div class="col-sm-12">
                     <label for="email">Your Email</label>
                     <input type="email" id="email" formControlName="email" class="form-control"
-                           [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                      [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
 
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                       <div *ngIf="f.email.errors.required">Email is required</div>
@@ -31,7 +31,8 @@
 
               <div class="row">
                 <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
-                  <button [disabled]="loading" class="btn btn-primary">
+                  <button [disabled]="loading" class="btn btn-primary"
+                    style="background-color: #53a446;border: #53a446;">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     Submit
                   </button>

@@ -6,13 +6,13 @@
         <div class="title_left" style="display: flex; justify-content: space-between;">
 
           <div class="d-flex" style="align-items: center;">
-            <a (click)="Back()" class="nav-link">
-              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
-            </a>
             <h3>Service Report</h3>
           </div>
 
           <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
             <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
               <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
             </a>
@@ -30,21 +30,19 @@
               <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
             </a>
 
-            <div class="nav-item dropdown">
-              <a class="nav-link" href="#" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-ellipsis-v" style="color: #5ba146;" title="More"></i>
-              </a>
+            <div class="dropdown">
+              <button class="btn btn-nav-link" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fas fa-ellipsis-v" style="color: #5ba146;"></i>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" (click)="GeneratePDF(false)"
-                  *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !this.isCompleted">
-                  Generate Service Report
-                </a>
-                <a class="dropdown-item" (click)="GeneratePDF(true)">
-                  Preview
-                </a>
-              </div>
+                <li><a class="dropdown-item" (click)="GeneratePDF(false)"
+                    *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !this.isCompleted">
+                    Generate Service Report</a></li>
 
+                <li><a class="dropdown-item" (click)="GeneratePDF(true)">Preview</a></li>
+              </ul>
             </div>
           </div>
         </div>
@@ -235,19 +233,19 @@
           <div class="" style="display: flex;justify-content: space-between">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
               <li class="nav-item">
-                <a class="nav-link active" id="workdone-tab" data-toggle="tab" href="#workdone" role="tab"
+                <a class="nav-link active" id="workdone-tab" data-bs-target="#workdone" data-bs-toggle="tab" role="tab"
                   aria-controls="workdone" aria-selected="true">Work Done</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                  aria-selected="false">Work Time</a>
+                <a class="nav-link" id="worktime-tab" data-bs-toggle="tab" role="tab" aria-controls="home"
+                  data-bs-target="#worktime" aria-selected="false">Work Time</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                <a class="nav-link" id="profile-tab" data-bs-target="#spCon" data-bs-toggle="tab" role="tab"
                   aria-controls="profile" aria-selected="false">Spare Part Consumed</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                <a class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" role="tab"
                   aria-controls="contact" aria-selected="false">Spare Part Recommanded</a>
               </li>
             </ul>
@@ -270,7 +268,7 @@
                   rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
-            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="tab-pane fade" id="worktime" role="tabpanel" aria-labelledby="worktime-tab">
               <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode"
                 class="btn btn-sm btn-success button" style="margin: 10px;" (click)="opentime(ServiceReportId)"><i
                   class="fas fa-plus-circle" title="Add"></i></button>
@@ -281,7 +279,7 @@
                   pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="tab-pane fade" id="spCon" role="tabpanel" aria-labelledby="profile-tab">
               <div class="row my-3">
                 <div class="col-sm-4">
                   <label>Select Sparepart</label>

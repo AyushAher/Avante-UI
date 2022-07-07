@@ -1,107 +1,51 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div style="display: flex;justify-content: center;">
-        <div>
-            <div class="mx-2" [@enterAnimation] style="margin: 2% 0;">
-                <div class="col">
-                    <label>Region</label>
-                    <select formControlName="region" (change)="onRegionChange()" class="form-control">
+<div class="page-content">
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="mb-4" [@enterAnimation]>
+                    <label for="region" class="form-label">Region</label>
+                    <select id="region" formControlName="region" (change)="onRegionChange()"
+                        class="form-select form-select-lg mb-3 text-uppercase">
                         <option *ngFor="let item of regionsList" [value]="item.id">{{item.region}}</option>
                     </select>
                 </div>
-
-            </div>
-
-            <div class="mx-2" *ngIf="stage>=2">
-                <div class="vline"></div>
-                <div class="vline"></div>
-                <div class="vline"></div>
-
-                <div class="col" [@enterAnimation]>
-                    <label>Country</label>
-                    <select formControlName="country" (change)="countryChange()" class="form-control">
+                <div class="mb-4" [@enterAnimation] *ngIf="stage>=2">
+                    <label for="country" class="form-label">Country</label>
+                    <select formControlName="country" (change)="countryChange()" id="country"
+                        class="form-select form-select-lg mb-3 text-uppercase">
                         <option *ngFor="let item of regionCountryList" [value]="item.id">{{item.name}}</option>
                     </select>
                 </div>
-            </div>
-
-            <div class="mx-2" [@enterAnimation] *ngIf="stage>=3">
-                <div class="vline"></div>
-                <div class="vline"></div>
-                <div class="vline"></div>
-
-                <div class="col">
-                    <label>Customer</label>
-                    <select formControlName="customer" (change)="onCustomerChange()" class="form-control">
-                        <option *ngFor="let item of customerBCountryList" [value]="item.id">{{item.custname}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mx-2" [@enterAnimation] *ngIf="hasSite && stage>=4">
-                <div class="vline"></div>
-                <div class="vline"></div>
-                <div class="vline"></div>
-
-                <div class="col">
-                    <label>Site</label>
-                    <select formControlName="site" (change)="SiteChange()" class="form-control">
-                        <option *ngFor="let item of siteList" [value]="item.id">{{item.custregname}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mx-2 " [@enterAnimation] *ngIf="hasInstrument && stage>=5">
-                <div class="vline"></div>
-                <div class="vline"></div>
-                <div class="vline"></div>
-
-                <div class="col">
-                    <label>Instrument Serial No.</label>
-                    <select formControlName="insSerialNo" (change)="InstrumentChange()" class="form-control">
-                        <option *ngFor="let item of siteBInstrumentList" [value]="item.id">{{item.instypeName +' - ' +
-                            item.serialnos}}
+                <div class="mb-4" [@enterAnimation] *ngIf="stage>=3">
+                    <label for="customer" class="form-label">Customer</label>
+                    <select id="customer" formControlName="customer" (change)="onCustomerChange()"
+                        class="form-select form-select-lg mb-3 text-uppercase">
+                        <option *ngFor="let item of customerBCountryList" [value]="item.id">{{item.custname}}
                         </option>
                     </select>
                 </div>
-            </div>
-            <div class="btngrp my-2" [@enterAnimation]>
-                <a class="nav-link">
-                    <i class="fas fa-search" (click)="onSubmit()" title="Filter"></i>
-                </a>
-                <a (click)="clear()" class="nav-link ">
-                    <i class="fas fa-times" title="Clear"></i>
-                </a>
-            </div>
+                <div class="mb-4" [@enterAnimation] *ngIf="hasSite && stage>=4">
+                    <label for="site" class="form-label">Site</label>
+                    <select id="site" formControlName="site" (change)="SiteChange()"
+                        class="form-select form-select-lg mb-3 text-uppercase">
+                        <option *ngFor="let item of siteList" [value]="item.id">{{item.custregname}}</option>
+                    </select>
+                </div>
+                <div class="mb-5" [@enterAnimation] *ngIf="hasInstrument && stage>=5">
+                    <label for="instrument" class="form-label">Instrument</label>
+                    <select id="instrument" formControlName="insSerialNo" (change)="InstrumentChange()"
+                        class="form-select form-select-lg mb-3 text-uppercase">
+                        <option *ngFor="let item of siteBInstrumentList" [value]="item.id">
+                            {{item.instypeName + ' - ' + item.serialnos}}
+                        </option>
+                    </select>
+                </div>
+                <div class="d-grid gap-2" [@enterAnimation]>
+                    <button type="submit" class="text-uppercase btn-cim btn-lg">
+                        Search
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</form>
-
-
-<style>
-    .btngrp {
-        float: right;
-        position: absolute;
-        top: 25vh;
-        left: 90%;
-    }
-
-    .btngrp>* {
-        display: inline;
-    }
-
-    select {
-        width: 350px;
-        margin-left: 50px;
-    }
-
-    .col {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .vline {
-        height: 15px;
-        margin: 1% 0;
-        left: 55%;
-        position: relative;
-        border-left: 2px solid grey;
-    }
-</style>
+</div>

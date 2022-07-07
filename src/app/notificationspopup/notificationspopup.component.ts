@@ -16,7 +16,7 @@ export class NotificationspopupComponent implements OnInit {
   @Output() closePopup = new EventEmitter<boolean>()
   @Output() popUpClosed = new EventEmitter<boolean>()
 
-  constructor(private userNotification: UsernotificationService, private _location: Location) { }
+  constructor(private userNotification: UsernotificationService) { }
 
   ngOnInit(): void {
     this.userNotification.getAll().pipe(first())

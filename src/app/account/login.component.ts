@@ -8,7 +8,10 @@ import { ChangepasswoardComponent } from "./changepasswoard.component";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { ForgotpasswoardComponent } from "./forgotpasswoard.component";
 
-@Component({ templateUrl: 'login.component.html' })
+@Component({
+  templateUrl: 'login.component.html',
+  styleUrls: ["style.css"]
+})
 export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;
@@ -50,7 +53,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+    this.loading = true;
     // reset alerts on submit
     this.alertService.clear();
 
@@ -67,6 +70,7 @@ export class LoginComponent implements OnInit {
           // get return url from query parameters or default to home page
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
           this.router.navigateByUrl(returnUrl);
+          this.loading = false;
         },
         error: error => {
           this.loading = false;

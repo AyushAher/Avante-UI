@@ -260,9 +260,11 @@ export class ServiceReportComponent implements OnInit {
     this.transaction = 0;
     this.user = this.accountService.userValue;
     const role = JSON.parse(localStorage.getItem('roles'));
-    this.role = role[0]?.itemCode;
 
-    this.role == this.environment.engRoleCode ? this.isEng = true : this.isEng = false;
+    if (this.user.username != "admin") {
+      this.role = role[0]?.itemCode;
+      this.role == this.environment.engRoleCode ? this.isEng = true : this.isEng = false;
+    }
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -514,7 +516,7 @@ export class ServiceReportComponent implements OnInit {
 
   FormControlDisable() {
     this.ServiceReportform.get('instrument').disable()
-    if (!this.isEng) {
+    if (!this.isEng && this.user.username != "admin") {
       this.ServiceReportform.get('analyticalassit').disable()
       this.ServiceReportform.get('prevmaintenance').disable()
       this.ServiceReportform.get('rework').disable()
