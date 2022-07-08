@@ -112,6 +112,12 @@ export class TravelexpenseComponent implements OnInit {
     })
 
 
+    this.form.get('startDate').valueChanges
+      .subscribe(() => this.OnDateChange())
+
+    this.form.get('endDate').valueChanges
+      .subscribe(() => this.OnDateChange())
+
     if (this.user.username == "admin") {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
@@ -389,29 +395,31 @@ export class TravelexpenseComponent implements OnInit {
   }
 
   OnDateChange() {
+    setTimeout(() => {
 
-    let currentDate = new Date(this.form.value.startDate);
-    let dateSent = new Date(this.form.value.endDate);
+      let currentDate = new Date(this.form.value.startDate);
+      let dateSent = new Date(this.form.value.endDate);
 
-    if (currentDate && dateSent) {
-      let calc = Math.floor(
-        (Date.UTC(
-          dateSent.getFullYear(),
-          dateSent.getMonth(),
-          dateSent.getDate()
-        ) -
-          Date.UTC(
-            currentDate.getFullYear(),
-            currentDate.getMonth(),
-            currentDate.getDate()
-          )) /
-        (1000 * 60 * 60 * 24)
-      );
-      if (calc > -365)
-        this.form.get('totalDays').setValue(calc)
-      else
-        this.form.get('totalDays').reset()
-    }
+      if (currentDate && dateSent) {
+        let calc = Math.floor(
+          (Date.UTC(
+            dateSent.getFullYear(),
+            dateSent.getMonth(),
+            dateSent.getDate()
+          ) -
+            Date.UTC(
+              currentDate.getFullYear(),
+              currentDate.getMonth(),
+              currentDate.getDate()
+            )) /
+          (1000 * 60 * 60 * 24)
+        );
+        if (calc > -365)
+          this.form.get('totalDays').setValue(calc)
+        else
+          this.form.get('totalDays').reset()
+      }
+    }, 500);
 
   }
 
@@ -421,6 +429,7 @@ export class TravelexpenseComponent implements OnInit {
     this.alertService.clear();
 
     // stop here if form is invalid
+
     if (this.form.invalid) {
       return;
     }
@@ -433,9 +442,16 @@ export class TravelexpenseComponent implements OnInit {
 
     this.model = this.form.value;
     this.model.distId = this.distId
-
     this.model.grandCompanyTotal = parseInt(this.model.grandCompanyTotal)
     this.model.grandEngineerTotal = parseInt(this.model.grandEngineerTotal)
+    console.log(this.form);
+
+    if (isNaN(this.model.grandCompanyTotal)) {
+      this.model.grandCompanyTotal = 0;
+    }
+    if (isNaN(this.model.grandEngineerTotal)) {
+      this.model.grandEngineerTotal = 0;
+    }
 
     if (this.IsEngineerView) this.model.engineerId = this.user.contactId;
 
@@ -446,7 +462,7 @@ export class TravelexpenseComponent implements OnInit {
         .subscribe((data: any) => {
           if (this.file != null) this.uploadFile(this.file, data.object.id);
           if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.notificationService.showSuccess("Saved Successfully", "Success");
             this.router.navigate(["travelexpenselist"]);
           }
         });
@@ -463,10 +479,7 @@ export class TravelexpenseComponent implements OnInit {
           }
 
           if (data.result) {
-            this.notificationService.showSuccess(
-              data.resultMessage,
-              "Success"
-            );
+            this.notificationService.showSuccess("Saved Successfully", "Success");
             this.router.navigate(["travelexpenselist"]);
           }
         });

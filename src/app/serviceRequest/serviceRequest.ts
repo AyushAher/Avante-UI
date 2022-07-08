@@ -422,7 +422,6 @@ export class ServiceRequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.onServiceTypeChange(data.object.visittype);
-            this.getAllInstrument(data.object.siteid);
             this.getInstrumnetsBySiteIds(data.object.siteid)
             var subreq = data.object.subrequesttypeid.split(',');
             let items: ListTypeItem[] = [];
@@ -495,7 +494,7 @@ export class ServiceRequestComponent implements OnInit {
                       this.serviceRequestform.disable()
                       this.isGenerateReport = true;
                     }
-                  }, 1000);
+                  }, 500);
 
                   this.listTypeService.getById('SRQST')
                     .pipe(first()).subscribe({
@@ -729,13 +728,16 @@ export class ServiceRequestComponent implements OnInit {
 
       this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
       this.serviceRequestform.patchValue({ "siteid": this.logindata.sites[0].id });
-      this.getInstrumnetsBySiteIds(this.logindata.sites[0].id)
+      if (this.serviceRequestId == null) this.getInstrumnetsBySiteIds(this.logindata.sites[0].id)
     }
   }
   getInstrumnetsBySiteIds(id: any) {
     this.instrumentService.getinstubysiteIds(id).pipe(first())
       .subscribe({
-        next: (data: any) => this.instrumentList = data.object
+        next: (data: any) => {
+          console.log(data);
+          this.instrumentList = data.object
+        }
       });
   }
   // convenience getter for easy access to form fields

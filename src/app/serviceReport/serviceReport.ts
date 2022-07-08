@@ -502,6 +502,11 @@ export class ServiceReportComponent implements OnInit {
 
   }
 
+
+  ToggleDropdown(id: string) {
+    document.getElementById(id).classList.toggle("show")
+  }
+  
   CancelEdit() {
     this.ServiceReportform.disable()
     this.isEditMode = false;

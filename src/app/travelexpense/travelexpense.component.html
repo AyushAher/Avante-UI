@@ -99,7 +99,7 @@
                         <div class="col-md-4 col-sm-4">
                             <label>Start Date</label>
                             <input type="text" bsDatepicker formControlName="startDate" class="form-control"
-                                (change)="OnDateChange()"
+                                (blur)="OnDateChange()"
                                 [ngClass]="{ 'is-invalid': submitted && f.startDate.errors}" />
 
                             <div *ngIf="submitted && f.startDate.errors" class="invalid-feedback">
@@ -111,7 +111,7 @@
                         <div class="col-md-4 col-sm-4">
                             <label>End Date</label>
                             <input type="text" id="endDate" bsDatepicker formControlName="endDate" class="form-control"
-                                (change)="OnDateChange()" [ngClass]="{ 'is-invalid': submitted && f.endDate.errors}" />
+                                (blur)="OnDateChange()" [ngClass]="{ 'is-invalid': submitted && f.endDate.errors}" />
 
                             <div *ngIf="submitted && f.endDate.errors" class="invalid-feedback">
                                 <div *ngIf="f.endDate.errors.required">End Date is required</div>

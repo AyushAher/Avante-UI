@@ -31,11 +31,11 @@
             </a>
 
             <div class="dropdown">
-              <button class="btn btn-nav-link" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                aria-expanded="false">
+              <button class="btn btn-nav-link" (click)="ToggleDropdown('dropdownMenuButton1')" type="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-ellipsis-v" style="color: #5ba146;"></i>
               </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <ul class="dropdown-menu" id="dropdownMenuButton1">
 
                 <li><a class="dropdown-item" (click)="GeneratePDF(false)"
                     *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !this.isCompleted">
