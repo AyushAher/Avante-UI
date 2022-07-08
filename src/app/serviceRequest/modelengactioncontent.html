@@ -23,7 +23,7 @@
             <div class="row">
               <div class="col-sm-6 form-group">
                 <label for="engineername">Engineer</label>
-                <select formControlName="engineerid" readonly disabled="disabled" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.engineerid.errors }">
+                <select formControlName="engineerid" readonly disabled="disabled" class="form-select" [ngClass]="{ 'is-invalid': submitted && f.engineerid.errors }">
                   <!--<option value="0">--All--</option>-->
                   <option *ngFor="let c of engineerlist" value={{c.id}}>
                     {{c.fname}} {{c.lname}}
@@ -42,7 +42,7 @@
               </div>
               <div class="col-sm-6">
                 <label for="actiontaken">Action taken</label>
-                <select formControlName="actiontaken" class="form-control" (change)="getActiontaken($event.target)" [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }">
+                <select formControlName="actiontaken" class="form-select" (change)="getActiontaken($event.target)" [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }">
                   <!--<option value="0">--All--</option>-->
                   <option *ngFor="let st of actiontakenlist" value={{st.listTypeItemId}}>
                     {{st.itemname}}

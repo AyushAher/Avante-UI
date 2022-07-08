@@ -52,7 +52,7 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="custid">Customer</label>
-              <select formControlName="custid" disabled class="form-control"
+              <select formControlName="custid" disabled class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.custid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let customer of customers" value={{customer.id}}>
@@ -82,7 +82,7 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="regionDistributor">Regional Distributor</label>
-              <select formControlName="distid" class="form-control"
+              <select formControlName="distid" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.distid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let dist of distRegions" value={{dist.id}}>
@@ -172,7 +172,7 @@
               </div>
               <div class="col-sm-4">
                 <label for="countryId">Country</label>
-                <select formControlName="countryid" class="form-control"
+                <select formControlName="countryid" class="form-select"
                   [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
                   <!--<option value="0">--All--</option>-->
                   <option *ngFor="let country of countries" value={{country.id}}>

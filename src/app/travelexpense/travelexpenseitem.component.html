@@ -75,7 +75,7 @@
                     </td>
 
                     <td style="width: 250px;">
-                        <select formControlName="expNature" class="ddl form-control" id="expNature"
+                        <select formControlName="expNature" class="ddl form-select" id="expNature"
                             [ngClass]="{'is-invalid':submitted && f.expNature.errors }">
                             <option *ngFor="let i of natureOfExpense" value="{{i.listTypeItemId}}">{{i.itemname}}
                             </option>
@@ -95,7 +95,7 @@
                     </td>
 
                     <td style="width: 250px;">
-                        <select formControlName="currency" id="currency" class="ddl form-control"
+                        <select formControlName="currency" id="currency" class="ddl form-select"
                             [ngClass]="{'is-invalid':submitted && f.currency.errors }">
                             <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                             </option>
@@ -125,7 +125,7 @@
                     </td>
 
                     <td style="width: 250px;">
-                        <select formControlName="expenseBy" id="expenseBy" class="ddl form-control"
+                        <select formControlName="expenseBy" id="expenseBy" class="ddl form-select"
                             [ngClass]="{'is-invalid':submitted && f.expenseBy.errors }">
                             <option *ngFor="let i of lstExpenseBy" value="{{i.listTypeItemId}}">{{i.itemname}}
                             </option>

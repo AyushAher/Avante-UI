@@ -17,7 +17,7 @@
             <div class="col-sm-4">
               <label>Distributor</label>
               <select #distributorid (input)="getengineers($event.target.value)"
-                [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-control" formControlName="distId">
+                [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-select" formControlName="distId">
                 <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
               </select>
 
@@ -32,7 +32,7 @@
 
               <select formControlName="engineerid" #engineerId
                 [ngClass]="{'is-invalid':submitted && f.engineerid.errors }"
-                (change)="getservicerequest(distId,$event.target.value)" class="form-control">
+                (change)="getservicerequest(distId,$event.target.value)" class="form-select">
                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
               </select>
 
@@ -77,7 +77,7 @@
               <label for="totalamount">Total Amount</label>
               <br>
               <select id="currency" style="display:inline-block; width:30%;" formControlName="currencyId"
-                class="form-control" [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
+                class="form-select" [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors}">
                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                 </option>
               </select>
@@ -112,7 +112,7 @@
 
               <label for="airline">Request Type</label>
 
-              <select name="" placeholder="Travel Class" formControlName="requesttype" class="form-control"
+              <select name="" placeholder="Travel Class" formControlName="requesttype" class="form-select"
                 [ngClass]="{'is-invalid':submitted && f.requesttype.errors }">
                 <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
                 </option>

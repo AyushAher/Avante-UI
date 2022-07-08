@@ -42,7 +42,7 @@
             <div class="col-md-4 col-sm-4 mb-3">
               <label>Distributor</label>
               <select #distributorid (input)="getengineers($event.target.value)"
-                [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-control" formControlName="distId">
+                [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-select" formControlName="distId">
                 <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
               </select>
 
@@ -56,7 +56,7 @@
               <label>Engineer Name</label>
 
               <select formControlName="engineerId" (change)="getservicerequest(distId,$event.target.value)"
-                placeholder="Engineer Name" class="form-control"
+                placeholder="Engineer Name" class="form-select"
                 [ngClass]="{'is-invalid':submitted && f.engineerId.errors }">
                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i["fname"] + " " + i["lname"]}}</option>
               </select>
@@ -71,7 +71,7 @@
             <div class="col-md-4 col-sm-4 mb-3">
               <label for="name">Service Request No</label>
               <select name="" placeholder="Service Request Id" formControlName="serviceRequestId" id=""
-                (change)="onServiceRequestChange()" class="form-control"
+                (change)="onServiceRequestChange()" class="form-select"
                 [ngClass]="{'is-invalid':submitted && f.serviceRequestId.errors }">
                 <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
               </select>

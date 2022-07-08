@@ -18,7 +18,7 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="custSiteId">Customer Site</label>
-              <select formControlName="custSiteId" class="form-control" readonly disabled
+              <select formControlName="custSiteId" class="form-select" readonly disabled
                 [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of customersite" value={{congfig.id}}>
@@ -50,7 +50,7 @@
             <div class="col-sm-4">
               <label for="instype">Instrument Type</label>
               <!--<input type="text" formControlName="instype" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.instype.errors }" />-->
-              <select formControlName="instype" class="form-control" disabled readonly
+              <select formControlName="instype" class="form-select" disabled readonly
                 [ngClass]="{ 'is-invalid': submitted && f.instype.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of instuType" value={{congfig.listTypeItemId}}>
@@ -85,7 +85,7 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="installby">Installed By Distributor</label>
-              <select formControlName="installby" #installedBy class="form-control" readonly disabled
+              <select formControlName="installby" #installedBy class="form-select" readonly disabled
                 [ngClass]="{ 'is-invalid': submitted && f.installby.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of distibutorList" value={{config.id}}>

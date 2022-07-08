@@ -16,7 +16,7 @@
             <div class="col-sm-4">
               <label>Distributor</label>
               <select #distributorid (input)="getengineers($event.target.value)"
-                [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-control" formControlName="distId">
+                [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-select" formControlName="distId">
                 <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
               </select>
 
@@ -28,7 +28,7 @@
 
             <div class="col-sm-4">
               <label>Engineer Name</label>
-              <select [ngClass]="{'is-invalid':submitted && f.engineerid.errors }" class="form-control"
+              <select [ngClass]="{'is-invalid':submitted && f.engineerid.errors }" class="form-select"
                 (change)="getservicerequest(distId,$event.target.value)" formControlName="engineerid">
                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
               </select>
@@ -55,7 +55,7 @@
               <label for="n_Code">Accomodation Type</label>
 
               <select formControlName="accomodationtype" id="" name="" placeholder="Accomodation Class"
-                class="form-control" [ngClass]="{'is-invalid':submitted && f.accomodationtype.errors }">
+                class="form-select" [ngClass]="{'is-invalid':submitted && f.accomodationtype.errors }">
                 <option *ngFor="let i of accomodationtype" value="{{i.listTypeItemId}}">{{i.itemname}}
                 </option>
               </select>
@@ -155,7 +155,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="returndate">Price Per Night</label>
               <br>
-              <select [ngClass]="{ ' is -invalid': submitted && f.perNightCurrencyId.errors}" class="form-control"
+              <select [ngClass]="{ ' is -invalid': submitted && f.perNightCurrencyId.errors}" class="form-select"
                 formControlName="perNightCurrencyId" id="currency" style="display:inline-block; width:30%;">
                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                 </option>
@@ -174,7 +174,7 @@
             <div class="col-md-4 col-sm-4">
               <label>Total Cost</label>
               <br>
-              <select [ngClass]="{ ' is -invalid': submitted && f.totalCurrencyId.errors}" class="form-control"
+              <select [ngClass]="{ ' is -invalid': submitted && f.totalCurrencyId.errors}" class="form-select"
                 formControlName="totalCurrencyId" id="currency" style="display:inline-block; width:30%;">
                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                 </option>

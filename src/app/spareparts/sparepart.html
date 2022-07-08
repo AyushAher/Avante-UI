@@ -40,7 +40,7 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="configTypeid">Config Type</label>
-              <select formControlName="configTypeid" #configType class="form-control"
+              <select formControlName="configTypeid" #configType class="form-select"
                 (change)="onConfigChange(configType.value)"
                 [ngClass]="{ 'is-invalid': submitted && f.configTypeid.errors }">
                 <!--<option value="0">--All--</option>-->
@@ -54,7 +54,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="configValueid">Config Value</label>
-              <select formControlName="configValueid" class="form-control" #configvalue
+              <select formControlName="configValueid" class="form-select" #configvalue
                 (change)="onConfigVChange(configType.value,configvalue.value)">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let c of configValueList" value={{c.id}}>
@@ -100,7 +100,7 @@
             <div class="col-md-4 col-sm-4">
               <label for="partType">Part Type</label>
               <!--<input type="text" formControlName="partType" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.partType.errors }" />-->
-              <select formControlName="partType" class="form-control"
+              <select formControlName="partType" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.partType.errors }">
                 <option *ngFor="let congfig of parttypes" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
@@ -132,7 +132,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="countryid">Country of Origin</label>
-              <select formControlName="countryid" class="form-control"
+              <select formControlName="countryid" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.countryid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let country of countries" value={{country.id}}>
@@ -157,7 +157,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="replacepPartNoId">Replacement Part</label>
-              <select formControlName="replacepPartNoId" class="form-control"
+              <select formControlName="replacepPartNoId" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.replacepPartNoId.errors }">
                 <option value="0"></option>
                 <option *ngFor="let congfig of replacementParts" value={{congfig.id}}>
@@ -188,7 +188,7 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Currency</label>
-              <select formControlName="currencyid" class="form-control"
+              <select formControlName="currencyid" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.currencyid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let c of currency" value={{c.id}}>
@@ -212,7 +212,7 @@
           <div class="row my-2">
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Business Unit</label>
-              <select formControlName="businessUnit" (change)="onBusinessUnitChange()" class="form-control"
+              <select formControlName="businessUnit" (change)="onBusinessUnitChange()" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.businessUnit.errors }">
                 <option *ngFor="let c of businessUnitList" value={{c.listTypeItemId}}>
                   {{c.itemname}}
@@ -225,7 +225,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Analytical Techniques</label>
-              <select formControlName="analyticalTechnique" class="form-control"
+              <select formControlName="analyticalTechnique" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.analyticalTechnique.errors }">
                 <option *ngFor="let c of analyticalList" value={{c.id}}>
                   {{c.name}}
@@ -238,7 +238,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Instrument Model</label>
-              <select formControlName="instrument" class="form-control"
+              <select formControlName="instrument" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.instrument.errors }">
                 <option *ngFor="let c of instrumentList" value={{c.id}}>
                   {{c.instypeName}} - {{c.serialnos}}

@@ -43,7 +43,7 @@
           <div class="row">
             <div class="col-sm-6">
               <label for="userId">User Name</label>
-              <select formControlName="userId" class="form-control" #myuser (change)="onUserChange(myuser.value)"
+              <select formControlName="userId" class="form-select" #myuser (change)="onUserChange(myuser.value)"
                 [ngClass]="{ 'is-invalid': submitted && f.userId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of userlist" value={{congfig.userid}}>
@@ -67,7 +67,7 @@
             </div>
             <div class="col-md-6 col-sm-6">
               <label for="price">Profile</label>
-              <select formControlName="profileId" class="form-control"
+              <select formControlName="profileId" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.profileId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let profile of profilelist" value={{profile.id}}>
@@ -81,7 +81,7 @@
             <div class="col-md-4 col-sm-4" *ngIf="hidetable==true">
               <label for="price">Profile for</label>
               <select formControlName="profileForId" #profileId (change)="onprofileClick(profileId.value)"
-                class="form-control" [ngClass]="{ 'is-invalid': submitted && f.profileForId.errors }">
+                class="form-select" [ngClass]="{ 'is-invalid': submitted && f.profileForId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let l of listTypeItems" value={{l.listTypeItemId}}>
                   {{l.itemname}}
@@ -95,7 +95,7 @@
           <div class="row">
             <div class="col-md-6 col-sm-6">
               <label for="roleId">Role</label>
-              <select formControlName="roleId" class="form-control" (change)="onRoleChange($event.target.value)"
+              <select formControlName="roleId" class="form-select" (change)="onRoleChange($event.target.value)"
                 [ngClass]="{ 'is-invalid': submitted && f.roleId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let r of roleList" value={{r.listTypeItemId}}>

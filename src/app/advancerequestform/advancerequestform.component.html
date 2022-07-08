@@ -40,7 +40,7 @@
 
                         <div class="col-sm-4" hidden>
                             <label>Distributor</label>
-                            <select formControlName="distributorId" class="form-control"
+                            <select formControlName="distributorId" class="form-select"
                                 (input)="getengineers($event.target.value)"
                                 [ngClass]="{'is-invalid':submitted && f.distributorId.errors }">
                                 <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
@@ -53,7 +53,7 @@
 
                         <div class="col-md-12 col-sm-12 mb-3">
                             <label>Full Name of Employee</label>
-                            <select formControlName="engineerId" class="form-control"
+                            <select formControlName="engineerId" class="form-select"
                                 (change)="getservicerequest(distId ,$event.target.value);"
                                 [ngClass]="{'is-invalid':submitted && f.engineerId.errors }">
                                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
@@ -66,7 +66,7 @@
 
                         <div class="col-md-12 col-sm-12 mb-3">
                             <label for="serviceRequestId">Service Request No. in CIM (If applicable)</label>
-                            <select formControlName="serviceRequestId" class="form-control"
+                            <select formControlName="serviceRequestId" class="form-select"
                                 (change)="onServiceRequestChange()"
                                 [ngClass]="{'is-invalid':submitted && f.serviceRequestId.errors }">
                                 <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
@@ -81,7 +81,7 @@
 
                         <div class="col-md-12 col-sm-12 mb-3" hidden>
                             <label>Customer</label>
-                            <select disabled formControlName="customerId" class="form-control"
+                            <select disabled formControlName="customerId" class="form-select"
                                 [ngClass]="{ 'is-invalid': submitted && f.customerId.errors}">
 
                                 <option *ngFor="let i of customerList" value="{{i.id}}">{{i.custname}}</option>
@@ -95,7 +95,7 @@
 
                         <div class="col-md-12 col-sm-12 mb-3">
                             <label>Employee's Office Location</label>
-                            <select id="country" formControlName="officeLocationId" class="form-control"
+                            <select id="country" formControlName="officeLocationId" class="form-select"
                                 [ngClass]="{ ' is -invalid': submitted && f.officeLocationId.errors}">
                                 <option *ngFor="let i of country" value="{{i.id}}">{{i.name}}
                                 </option>
@@ -110,7 +110,7 @@
                             <label>Advance Amount in USD / Local Currency</label>
                             <br>
                             <select id="currency" style="display:inline-block; width:15%;"
-                                formControlName="advanceCurrency" class="form-control"
+                                formControlName="advanceCurrency" class="form-select"
                                 [ngClass]="{ ' is -invalid': submitted && f.advanceCurrency.errors}">
                                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                                 </option>

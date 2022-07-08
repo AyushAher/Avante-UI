@@ -41,7 +41,7 @@
 
             <div class="col-sm-4">
               <label for="instrument">Instrument</label>
-              <select formControlName="instrument" [disabled]="id != null" class="form-control"
+              <select formControlName="instrument" [disabled]="id != null" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.instrument.errors }" (change)="onInstrumentChange()">
                 <option *ngFor="let config of instruments" value={{config.id}}>
                   {{config.instypeName}} - {{config.serialnos}}

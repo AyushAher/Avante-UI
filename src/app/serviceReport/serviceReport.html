@@ -76,7 +76,7 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="department">Department</label>
-              <select formControlName="department" class="form-control"
+              <select formControlName="department" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.department.errors }">
                 <option value="">Select</option>
                 <option *ngFor="let d of departmentList" value={{d.listTypeItemId}}>
@@ -105,7 +105,7 @@
             </div>
             <div class="col-sm-3">
               <label for="respInstrument">Resp. for Instrument</label>
-              <select formControlName="respInstrument" class="form-control"
+              <select formControlName="respInstrument" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.respInstrument.errors }">
                 <option value="">--Select--</option>
                 <option *ngFor="let c of allcontactlist" value={{c.id}}>
@@ -150,7 +150,7 @@
             </div>
             <div class="col-sm-3">
               <label for="brandName">Brand Name</label>
-              <select formControlName="brandName" class="form-control"
+              <select formControlName="brandName" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.brandName.errors }">
                 <option value="">Select</option>
                 <option *ngFor="let d of brandlist" value={{d.listTypeItemId}}>
@@ -328,7 +328,7 @@
               <label for="workCompleted">
                 Work Completed
               </label>
-              <select class="form-control" formControlName="workCompletedstr">
+              <select class="form-select" formControlName="workCompletedstr">
                 <option value="0">Yes</option>
                 <option value="1">No</option>
               </select>
@@ -340,7 +340,7 @@
               <label for="workFinishedstr">
                 Work Finished
               </label>
-              <select class="form-control" (change)="onWorkFinishedChange($event.target.value)"
+              <select class="form-select" (change)="onWorkFinishedChange($event.target.value)"
                 formControlName="workfinishedstr">
                 <option value="0">Yes</option>
                 <option value="1">No</option>
@@ -353,7 +353,7 @@
               <label for="interruptedstr">
                 Interrupted
               </label>
-              <select class="form-control" [disabled]="!isEditMode" (change)="onInteruptedChange($event.target.value)"
+              <select class="form-select" [disabled]="!isEditMode" (change)="onInteruptedChange($event.target.value)"
                 formControlName="interruptedstr">
                 <option value="0">Yes</option>
                 <option value="1">No</option>

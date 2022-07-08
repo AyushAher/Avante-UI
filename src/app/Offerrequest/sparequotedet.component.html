@@ -19,7 +19,7 @@
               <div class="col-md-6 col-sm-6">
                 <label for="status">Raised By</label>
                 <select formControlName="raisedBy" id="raisedby"
-                        [ngClass]="{ 'is-invalid': submitted && f.raisedBy.errors }" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.raisedBy.errors }" class="form-select"
                         (change)="changeDate($event.target.value,'RaisedDate')">
                   <option *ngFor="let d of raisedByList" value="{{d.id}}">
                     {{d.fname + " " + d.lname}}
@@ -72,7 +72,7 @@
                 <label for="status">Status</label>
                 <select formControlName="status" [ngClass]="{ 'is-invalid': submitted && f.status.errors }"
                         (change)="statusChanged($event.target.value)" id="status"
-                        class="form-control">
+                        class="form-select">
                   <option *ngFor="let d of statusList" value="{{d.listTypeItemId}}">
                     {{d.itemname}}
                   </option>

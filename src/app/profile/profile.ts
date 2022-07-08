@@ -231,7 +231,7 @@ export class ProfileComponent implements OnInit {
 
   AddScreen(id: string = "") {
     let screnId = this.profileform.get("screenId")
-    
+
     let array = (<FormArray>this.profileform.get("permissions")).value.findIndex(x => x.screenId == screnId.value)
     if (array != -1) return this.notificationService.showInfo("This Screen Already Exists!", "Info");
 
@@ -329,9 +329,13 @@ export class ProfileComponent implements OnInit {
       this.profileService.update(this.id, this.profile)
         .pipe(first())
         .subscribe((data: ResultMsg) => {
+
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["profilelist"]);
+          }
+          else {
+            console.log(data);
           }
           this.loading = false;
         });

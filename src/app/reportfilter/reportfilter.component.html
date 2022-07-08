@@ -6,7 +6,7 @@
                     <label for="region" class="form-label">Region</label>
                     <select formControlName="region" (change)="onRegionChange()"
                         class="form-select form-select-lg mb-3 text-uppercase"
-                        aria-label=".form-select-lg example form-control">
+                        aria-label=".form-select-lg example form-select">
                         <option *ngFor="let item of regionsList" [value]="item.id">{{item.region}}</option>
                     </select>
                 </div>

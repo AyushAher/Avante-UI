@@ -47,7 +47,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="Customer">Customer</label>
-              <select id="Customer" type="text" formControlName="customerId" class="form-control" [ngClass]="{
+              <select id="Customer" type="text" formControlName="customerId" class="form-select" [ngClass]="{
                   ' is -invalid': submitted && f.customerId.errors
                 }">
                 <option *ngFor="let i of customerList" value="{{ i.id }}">
@@ -62,7 +62,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="distributor">Distributor</label>
-              <select id="distributor" type="text" disabled formControlName="distributorid" class="form-control" [ngClass]="{
+              <select id="distributor" type="text" disabled formControlName="distributorid" class="form-select" [ngClass]="{
                   ' is -invalid': submitted && f.distributorid.errors
                 }">
                 <option *ngFor="let i of distributorList" value="{{ i.id }}">
@@ -79,7 +79,7 @@
               <label for="totalamount">Total Amount</label>
               <br />
               <select id="currency" style="display: inline-block; width: 100px" formControlName="currencyId"
-                class="form-control" [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors }">
+                class="form-select" [ngClass]="{ ' is -invalid': submitted && f.currencyId.errors }">
                 <option *ngFor="let i of currencyList" value="{{ i.id }}">
                   {{ i.code }}
                 </option>
@@ -299,7 +299,7 @@
                     <div *ngIf="isPaymentTerms">
 
                       <label>Payment Type</label>
-                      <select class="pay_terms form-control" formControlName="payterms" id="payment_type">
+                      <select class="pay_terms form-select" formControlName="payterms" id="payment_type">
                         <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
                           {{ i.itemname }}
                         </option>
@@ -309,7 +309,7 @@
                     <div *ngIf="isPaymentAmt">
                       <label>Payment Amount</label><br>
                       <select id="currency" type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
-                        formControlName="payAmtCurrencyId" class="form-control"
+                        formControlName="payAmtCurrencyId" class="form-select"
                         [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
                         <option *ngFor="let i of currencyList" value="{{i.id}}">
                           {{i.code}}

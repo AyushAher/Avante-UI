@@ -95,7 +95,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Currency</label>
-              <select formControlName="currencyid" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.currencyid.errors }">
+              <select formControlName="currencyid" class="form-select" [ngClass]="{ 'is-invalid': submitted && f.currencyid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let c of currency" value={{c.id}}>
                   {{c.name}}

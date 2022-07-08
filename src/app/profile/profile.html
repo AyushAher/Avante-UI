@@ -98,7 +98,7 @@
                         *ngIf="screenCode(i) == 'SAMC' || screenCode(i) == 'OFREQ'|| screenCode(i) == 'SINST' " />
                     </td>
                     <td [formGroupName]="i">
-                      <select type="text" formControlName="privilages" class="form-control">
+                      <select type="text" formControlName="privilages" class="form-select">
                         <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of privilagesList">
                           {{listtypeitem.itemname}}</option>
                       </select>
@@ -113,7 +113,7 @@
                       </button>
                     </td>
                     <td>
-                      <select type="text" formControlName="categoryId" class="form-control"
+                      <select type="text" formControlName="categoryId" class="form-select"
                         (change)="onCategoryChange()">
                         <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of lstCategory">
                           {{listtypeitem.itemname}}</option>
@@ -121,7 +121,7 @@
                     </td>
 
                     <td>
-                      <select type="text" formControlName="screenId" class="form-control">
+                      <select type="text" formControlName="screenId" class="form-select">
                         <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of lstScreens">
                           {{listtypeitem.itemname}}</option>
                       </select>
@@ -150,7 +150,7 @@
 
                     </td>
                     <td>
-                      <select type="text" formControlName="privilages" class="form-control">
+                      <select type="text" formControlName="privilages" class="form-select">
                         <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of privilagesList">
                           {{listtypeitem.itemname}}</option>
                       </select>

@@ -124,7 +124,7 @@
               </div>
               <div class="col-md-4 col-sm-4">
                 <label for="designationid">Designation</label>
-                <select formControlName="designationid" class="form-control"
+                <select formControlName="designationid" class="form-select"
                   [ngClass]="{ 'is-invalid': submitted && f.designationid.errors }">
                   <!--<option value="0">--All--</option>-->
                   <option *ngFor="let designation of listTypeItems" value={{designation.listTypeItemId}}>
@@ -184,7 +184,7 @@
                 </div>
                 <div class="col-sm-4">
                   <label for="countryid">Country</label>
-                  <select formControlName="countryid" class="form-control"
+                  <select formControlName="countryid" class="form-select"
                     [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
                     <!--<option value="0">--All--</option>-->
                     <option *ngFor="let coutry of countries" value={{coutry.id}}>

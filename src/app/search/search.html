@@ -21,7 +21,7 @@
           </div>
           <div class="col-sm-4">
             <label for="search">Customer Site</label>
-            <select formControlName="custSiteId" class="form-control"
+            <select formControlName="custSiteId" class="form-select"
               [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
               <option value="0">--Select--</option>
               <option *ngFor="let config of customersite" value={{config.id}}>

@@ -15,7 +15,7 @@
 
             <div class="col-sm-4">
               <label>Distributor</label>
-              <select formControlName="distId" class="form-control" (input)="getengineers($event.target.value)"
+              <select formControlName="distId" class="form-select" (input)="getengineers($event.target.value)"
                 [ngClass]="{'is-invalid':submitted && t.distId.errors }">
                 <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
               </select>
@@ -28,7 +28,7 @@
 
             <div class="col-sm-4">
               <label>Engineer Name</label>
-              <select formControlName="engineerid" class="form-control"
+              <select formControlName="engineerid" class="form-select"
                 (change)="getservicerequest(distId ,$event.target.value);"
                 [ngClass]="{'is-invalid':submitted && t.engineerid.errors }">
                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
@@ -54,7 +54,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label>Trip Type</label>
-              <select name="" placeholder="Trip Type" formControlName="triptype" class="form-control"
+              <select name="" placeholder="Trip Type" formControlName="triptype" class="form-select"
                 [ngClass]="{'is-invalid':submitted && t.triptype.errors }">
                 <option *ngFor="let i of Triptype" value="{{i.listTypeItemId}}">{{i.itemname}}</option>
               </select>
@@ -91,7 +91,7 @@
             <div class="col-md-4 col-sm-4">
               <label>Travel Class</label>
               <select name="" placeholder="Travel Class" formControlName="travelclass" id="travelclass"
-                class="form-control" [ngClass]="{'is-invalid':submitted && t.travelclass.errors }">
+                class="form-select" [ngClass]="{'is-invalid':submitted && t.travelclass.errors }">
                 <option *ngFor="let i of classoftravel" value="{{i.listTypeItemId}}">{{i.itemname}}
                 </option>
               </select>
@@ -126,7 +126,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label>Request Type</label>
-              <select name="" placeholder="Travel Class" formControlName="requesttype" id="" class="form-control"
+              <select name="" placeholder="Travel Class" formControlName="requesttype" id="" class="form-select"
                 [ngClass]="{'is-invalid':submitted && t.requesttype.errors }">
                 <option *ngFor="let i of travelrequesttype" value="{{i.listTypeItemId}}">{{i.itemname}}
                 </option>
@@ -196,7 +196,7 @@
                 <label>Total Amount</label>
                 <br>
                 <select id="currency" style="display:inline-block; width:30%;" formControlName="currencyId"
-                  class="form-control" [ngClass]="{ ' is -invalid': submitted && f.get('currencyId').errors}">
+                  class="form-select" [ngClass]="{ ' is -invalid': submitted && f.get('currencyId').errors}">
                   <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                   </option>
                 </select>

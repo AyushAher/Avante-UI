@@ -58,7 +58,7 @@
             </div>
             <div class="col-sm-3">
               <label for="distid">Distributor</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.distid.errors }" class="form-control"
+              <select [ngClass]="{ 'is-invalid': submitted && f.distid.errors }" class="form-select"
                 formControlName="distid" readonly>
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of defaultdistributors" value={{distributor.id}}>
@@ -72,7 +72,7 @@
 
             <div class="col-md-3">
               <label for="assignedTo">Customer</label>
-              <select class="form-control" formControlName="custid" (change)="onCustomerChanged($event.target.value)">
+              <select class="form-select" formControlName="custid" (change)="onCustomerChanged($event.target.value)">
                 <option *ngFor="let c of customerlist" value={{c.id}}>
                   {{c.custname}}
                 </option>
@@ -81,7 +81,7 @@
 
             <div class="col-md-3">
               <label for="assignedTo">Site</label>
-              <select class="form-control" (change)="getInstrumnetsBySiteIds($event.target.value)"
+              <select class="form-select" (change)="getInstrumnetsBySiteIds($event.target.value)"
                 formControlName="siteid">
                 <option *ngFor="let c of customerSitelist" value={{c.id}}>
                   {{c.custregname}}
@@ -92,7 +92,7 @@
             <div class="col-md-3 col-sm-3" *ngIf="IsCustomerView==false">
               <label for="assignedTo">Assigned To</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.assignedto.errors }" (change)="onStatusChange()"
-                class="form-control" formControlName="assignedto">
+                class="form-select" formControlName="assignedto">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let c of appendList" value={{c.id}}>
                   {{c.fname}} {{c.lname}}
@@ -113,7 +113,7 @@
 
             <div class="col-md-3 col-sm-3">
               <label for="visittype">Service Type</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }" class="form-control"
+              <select [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }" class="form-select"
                 formControlName="visittype" (change)="onServiceTypeChange($event.target.value)">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let st of serviceTypeList" value={{st.listTypeItemId}}>
@@ -151,7 +151,7 @@
 
             <div class="col-md-3 col-sm-3" *ngIf="!IsCustomerView">
               <label for="country">Country</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.country.errors }" class="form-control"
+              <select [ngClass]="{ 'is-invalid': submitted && f.country.errors }" class="form-select"
                 formControlName="country">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let country of countries" value={{country.id}}>
@@ -182,7 +182,7 @@
             <div class="col-sm-3">
               <label for="machinesNo">Machine SerialNo</label>
               <select #ddlMachine (change)="oninstuchange(ddlMachine.value)"
-                [ngClass]="{ 'is-invalid': submitted && f.machinesno.errors }" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.machinesno.errors }" class="form-select"
                 formControlName="machinesno">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let i of instrumentList" value={{i.id}}>
@@ -295,7 +295,7 @@
 
             <div class="col-sm-3" *ngIf="!isAmc">
               <label for="breakoccurdetailsid">Breakdown Occurance Details</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.breakoccurdetailsid.errors }" class="form-control"
+              <select [ngClass]="{ 'is-invalid': submitted && f.breakoccurdetailsid.errors }" class="form-select"
                 formControlName="breakoccurdetailsid">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let st of breakdownlist" value={{st.listTypeItemId}}>
@@ -322,7 +322,7 @@
             <div class="col-sm-3" hidden>
               <label for="accepted">Accepted</label>
 
-              <select class="form-control" (input)="Accepted($event.target.value)" #accp formControlName="accepted">
+              <select class="form-select" (input)="Accepted($event.target.value)" #accp formControlName="accepted">
                 <option value="false">Not Accepted</option>
                 <option value="true">Accepted</option>
               </select>
@@ -341,7 +341,7 @@
             </div>
             <div class="col-md-3 col-sm-3" [hidden]="IsCustomerView">
               <label for="requesttypeid">Request Type</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.requesttypeid.errors }" class="form-control"
+              <select [ngClass]="{ 'is-invalid': submitted && f.requesttypeid.errors }" class="form-select"
                 formControlName="requesttypeid">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let req of reqtypelist" value={{req.listTypeItemId}}>
@@ -373,7 +373,7 @@
             </div>
             <div class="col-sm-3">
               <label for="currentinstrustatus">Current Instrument Status</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" class="form-control"
+              <select [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" class="form-select"
                 formControlName="currentinstrustatus" type="text">
                 <option *ngFor="let req of instrumentStatus" value={{req.listTypeItemId}}>
                   {{req.itemname}}
@@ -386,7 +386,7 @@
 
             <div class="col-sm-3" *ngIf="!IsCustomerView">
               <label for="stageid">Stage</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.stageid.errors }" class="form-control"
+              <select [ngClass]="{ 'is-invalid': submitted && f.stageid.errors }" class="form-select"
                 formControlName="stageid" type="text">
                 <option *ngFor="let req of stagelist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
@@ -400,7 +400,7 @@
             <div class="col-sm-3" *ngIf="!IsCustomerView">
               <label for="currentinstrustatus">Status</label>
               <select [ngClass]="{ 'is-invalid': submitted && f.statusid.errors }" (change)="Accepted()"
-                class="form-control" formControlName="statusid" type="text">
+                class="form-select" formControlName="statusid" type="text">
                 <option *ngFor="let req of statuslist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
                 </option>
@@ -525,7 +525,7 @@
           <div *ngIf="IsCustomerView" class="row" style="display:none">
             <div class="col-sm-3">
               <label for="">Escalation</label>
-              <select formControlName="escalation" class="form-control">
+              <select formControlName="escalation" class="form-select">
                 <option *ngFor="let i of instrumentList" value={{i.id}}>
                   {{i.serialnos}}
                 </option>

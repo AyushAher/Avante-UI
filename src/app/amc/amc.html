@@ -39,7 +39,7 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="billto">Bill To</label>
-              <select id="billto" formControlName="billtoid" class="form-control"
+              <select id="billto" formControlName="billtoid" class="form-select"
                 (change)="GetSites($event.target['value'])"
                 [ngClass]="{ ' is -invalid': submitted && f.billtoid.errors}">
                 <option *ngFor="let i of customersList" value="{{i.id}}">
@@ -54,7 +54,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="CustSite">Customer Site</label>
-              <select id="CustSite" formControlName="custSite" class="form-control"
+              <select id="CustSite" formControlName="custSite" class="form-select"
                 [ngClass]="{ ' is -invalid': submitted && f.custSite.errors}">
                 <option *ngFor="let i of custSiteList" value="{{i.id}}">
                   {{i.custregname}}
@@ -119,7 +119,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="servicetype">Service Type</label>
-              <select id="servicetype" type="text" formControlName="servicetype" class="form-control"
+              <select id="servicetype" type="text" formControlName="servicetype" class="form-select"
                 [ngClass]="{ ' is -invalid': submitted && f.servicetype.errors}">
                 <option *ngFor="let i of serviceType" value="{{i.listTypeItemId}}">
                   {{i.itemname}}
@@ -134,7 +134,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="brand">Brand</label>
-              <select id="brand" type="text" formControlName="brand" class="form-control"
+              <select id="brand" type="text" formControlName="brand" class="form-select"
                 [ngClass]="{ ' is -invalid': submitted && f.brand.errors}">
                 <option *ngFor="let i of supplierList" value="{{i.listTypeItemId}}">
                   {{i.itemname}}
@@ -149,7 +149,7 @@
               <label for="zerorate">Zerorate</label>
               <br />
               <select id="currency" type="text" style="display: inline-block; width: 30%" formControlName="currency"
-                class="form-control" [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
+                class="form-select" [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
                 <option *ngFor="let i of currencyList" value="{{i.id}}">
                   {{i.code}}
                 </option>
@@ -247,7 +247,7 @@
               <label>Search Instruments By Serial No. </label>
 
               <input (input)="InstrumentSearch($event.target['value'])" #instrumentSearch list="browsers" name="browser"
-                id="browser" class="form-control" />
+                id="browser" class="form-select" />
               <datalist id="browsers">
                 <option *ngFor="let i of instrumentAutoComplete" value="{{i.serialnos}}"></option>
               </datalist>
@@ -351,7 +351,7 @@
                   <td>
                     <div *ngIf="isPaymentTerms">
                       <label>Payment Type</label>
-                      <select class="pay_terms form-control" formControlName="payterms" id="payment_type">
+                      <select class="pay_terms form-select" formControlName="payterms" id="payment_type">
                         <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
                           {{ i.itemname }}
                         </option>
@@ -361,7 +361,7 @@
                     <div *ngIf="isPaymentAmt">
                       <label>Payment Amount</label><br>
                       <select id="currency" type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
-                        formControlName="payAmtCurrencyId" class="form-control"
+                        formControlName="payAmtCurrencyId" class="form-select"
                         [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
                         <option *ngFor="let i of currencyList" value="{{i.id}}">
                           {{i.code}}

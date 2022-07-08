@@ -40,7 +40,7 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="custSiteId">Customer Site</label>
-              <select formControlName="custSiteId" class="form-control"
+              <select formControlName="custSiteId" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }" #ddlcust
                 (change)="onSiteChange(ddlcust.value)">
                 <!--<option value="0">--All--</option>-->
@@ -80,7 +80,7 @@
             <div class="col-sm-4">
               <label for="instype">Instrument Type</label>
               <!--<input type="text" formControlName="instype" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.instype.errors }" />-->
-              <select formControlName="instype" class="form-control"
+              <select formControlName="instype" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.instype.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of instuType" value={{congfig.listTypeItemId}}>
@@ -115,7 +115,7 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="installby">Installed By Distributor</label>
-              <select formControlName="installby" #installedBy class="form-control"
+              <select formControlName="installby" #installedBy class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.installby.errors }">
                 <option *ngFor="let config of distibutorList" value={{config.id}}>
                   {{config.distname}}
@@ -151,7 +151,7 @@
             </div>
             <div class="col-sm-4">
               <label for="operatorId">Operator Name</label>
-              <select formControlName="operatorId" class="form-control"
+              <select formControlName="operatorId" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.operatorId.errors }">
                 <option *ngFor="let config of contactList" value={{config.id}}>
                   {{config.fname}} {{config.lname}}
@@ -163,7 +163,7 @@
             </div>
             <div class="col-sm-4">
               <label for="instruEngineerId">Instrumentation Engineer</label>
-              <select formControlName="instruEngineerId" class="form-control"
+              <select formControlName="instruEngineerId" class="form-select"
                 [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
                 <option *ngFor="let config of contactList" value={{config.id}}>
                   {{config.fname}} {{config.lname}}
@@ -237,7 +237,7 @@
 
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
               <label for="dateOfPurchase">Cost</label><br>
-              <select formControlName="currencyId" style="width: 30%;display: inline-block;" class="form-control">
+              <select formControlName="currencyId" style="width: 30%;display: inline-block;" class="form-select">
                 <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
               </select>
               <input formControlName="cost" type="number" style="width: 68%;display: inline-block;margin-left: 5px;"
@@ -256,7 +256,7 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="configtypeid">Config Type</label>
-              <select [disabled]="!isEditMode && !isNewMode" class="form-control" #mySelect
+              <select [disabled]="!isEditMode && !isNewMode" class="form-select" #mySelect
                 formControlName="configtypeid" (change)="onConfigChange(mySelect.value)"
                 [ngClass]="{ 'is-invalid': submitted && f.configtypeid.errors }">
                 <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
@@ -269,7 +269,7 @@
             </div>
             <div class="col-sm-4">
               <label for="configvalueid">Config Value</label>
-              <select class="form-control" formControlName="configvalueid" [disabled]="!isEditMode && !isNewMode"
+              <select class="form-select" formControlName="configvalueid" [disabled]="!isEditMode && !isNewMode"
                 #myConfigVal>
                 <option value="0"></option>
                 <option *ngFor="let congfig of configValueList" value={{congfig.id}}>

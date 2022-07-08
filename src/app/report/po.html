@@ -39,7 +39,7 @@
           <div class="row">
             <div class="col-sm-3">
               <label for="customername">Customer Name</label>
-              <select formControlName="customername" class="form-control" #mySelect (change)="onConfigChange(mySelect.value)" [ngClass]="{ 'is-invalid': submitted && f.configtype.errors }">
+              <select formControlName="customername" class="form-select" #mySelect (change)="onConfigChange(mySelect.value)" [ngClass]="{ 'is-invalid': submitted && f.configtype.errors }">
                 <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
                 </option>
@@ -55,7 +55,7 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="country">Country</label>
-              <select formControlName="Countryid" class="form-control" [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
+              <select formControlName="Countryid" class="form-select" [ngClass]="{ 'is-invalid': submitted && a.get('countryid').errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let coutry of countries" value={{coutry.id}}>
                   {{coutry.name}}

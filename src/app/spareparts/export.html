@@ -11,7 +11,7 @@
       <div class="row">
         <div class="col-sm-4">
           <label for="configtypeid">Config Type</label>
-          <select class="form-control" #mySelect (change)="onConfigChange(mySelect.value)">
+          <select class="form-select" #mySelect (change)="onConfigChange(mySelect.value)">
             <option value="0"></option>
             <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
               {{congfig.itemname}}
@@ -20,7 +20,7 @@
         </div>
         <div class="col-sm-4">
           <label for="configvalueid">Config Value</label>
-          <select class="form-control" #myConfigVal>
+          <select class="form-select" #myConfigVal>
             <option value="0"></option>
             <option *ngFor="let congfig of configValueList" value={{congfig.id}}>
               {{congfig.configValue}}
