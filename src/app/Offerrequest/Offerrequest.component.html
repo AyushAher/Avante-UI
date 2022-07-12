@@ -6,13 +6,13 @@
       <div class="page-title">
         <div class="title_left" style="display: flex; justify-content: space-between;">
           <div class="d-flex" style="align-items: center;">
-            <a (click)="Back()" class="nav-link">
-              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
-            </a>
             <h3>Spare Quote Details</h3>
           </div>
 
           <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
             <a class="nav-link" (click)="EditMode()"
               *ngIf="hasUpdateAccess && !isEditMode && !isNewMode &&  !isCompleted">
               <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
@@ -62,7 +62,8 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="distributor">Distributor</label>
-              <select id="distributor" type="text" disabled formControlName="distributorid" class="form-select" [ngClass]="{
+              <select id="distributor" type="text" disabled formControlName="distributorid" class="form-select"
+                [ngClass]="{
                   ' is -invalid': submitted && f.distributorid.errors
                 }">
                 <option *ngFor="let i of distributorList" value="{{ i.id }}">
