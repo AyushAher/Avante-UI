@@ -655,7 +655,7 @@ export class InstrumentComponent implements OnInit {
     this.instrument.engcontact = String(this.instrument.engcontact);
     this.instrument.configuration = [];
     this.instrument.baseCurrencyId = this.baseCurrId
-    
+
     for (let i = 0; i < this.selectedConfigType.length; i++) {
       this.config = new instrumentConfig();
       this.config.configtypeid = this.selectedConfigType[i].listTypeItemId;
@@ -691,6 +691,8 @@ export class InstrumentComponent implements OnInit {
               }
               if (this.img != null && this.img != "") this.uploadFile(this.img, this.id)
             }
+            else this.notificationService.showError(data.resultMessage, "Error")
+
             this.loading = false;
           },
         });
@@ -710,6 +712,9 @@ export class InstrumentComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["instrumentlist"]);
             }
+
+            else this.notificationService.showError(data.resultMessage, "Error")
+
             this.loading = false;
 
           },
