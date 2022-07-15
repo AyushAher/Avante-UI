@@ -610,12 +610,13 @@ export class AmcComponent implements OnInit {
           var data = data.object[0];
           data.id = Guid.create();
           data.id = data.id.value;
+          
           if (this.instrumentList.filter(x => x.serialnos == data.serialnos).length == 0) {
             this.instrumentList.push(data);
             this.api.setRowData(this.instrumentList)
-          } else {
-            this.notificationService.showError("Instrument already exists", "Error")
           }
+          else this.notificationService.showError("Instrument already exists", "Error")
+
           this.instrumentSearch.nativeElement.value = ""
         },
       });
@@ -891,18 +892,8 @@ export class AmcComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.notificationService.showSuccess(
-              data.resultMessage,
-              "Success"
-            );
-
-            if (this.instrumentList == null || this.instrumentList.length <= 0) {
-              this.router.navigate(["amclist"]);
-            }
-          },
-          error: (error) => {
-
-            this.loading = false;
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            if (this.instrumentList == null || this.instrumentList.length <= 0) this.router.navigate(["amclist"]);
           },
         });
 
@@ -912,10 +903,6 @@ export class AmcComponent implements OnInit {
           .subscribe({
             next: (data: ResultMsg) => {
               this.router.navigate(["amclist"]);
-            },
-            error: (error) => {
-
-              this.loading = false;
             },
           });
       }

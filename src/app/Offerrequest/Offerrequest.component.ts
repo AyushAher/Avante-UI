@@ -195,6 +195,7 @@ export class OfferrequestComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+      this.hasCommercial = true;
     } else {
       this.role = role[0]?.itemCode;
     }
@@ -555,9 +556,8 @@ export class OfferrequestComponent implements OnInit {
 
     if (cellValue == rowData.id && this.hasDeleteAccess) {
       this.sparePartsList.splice(indexOfSelectedRow, 1);
-      if (rowData.offerRequestId == null && cellValue == rowData.id) {
-        this.api.setRowData(this.sparePartsList);
-      }
+      if (rowData.offerRequestId == null && cellValue == rowData.id) this.api.setRowData(this.sparePartsList);
+
       else {
         this.SparePartsService
           .delete(cellValue)
@@ -565,14 +565,9 @@ export class OfferrequestComponent implements OnInit {
           .subscribe({
             next: (data: any) => {
               if (data.result) {
-                this.notificationService.showSuccess(
-                  data.resultMessage,
-                  "Success"
-                );
+                this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = event.api.getSelectedRows();
                 event.api.applyTransaction({ remove: selectedData });
-              } else {
-
               }
             },
           });
@@ -585,9 +580,7 @@ export class OfferrequestComponent implements OnInit {
     this.sparePartPartNo = searchtext;
 
     this.Service.searchByKeyword(this.sparePartPartNo, this.form.get("instrumentsList").value.toString())
-      .pipe(first()).subscribe({
-        next: (data: any) => this.sparePartsAutoComplete = data.object
-      });
+      .pipe(first()).subscribe((data: any) => this.sparePartsAutoComplete = data.object);
   }
 
   AddSpareParts(instrument: any) {
@@ -605,9 +598,8 @@ export class OfferrequestComponent implements OnInit {
           if (this.sparePartsList.filter(x => x.partno == data.partno).length == 0) {
             this.sparePartsList.push(data);
             this.api.setRowData(this.sparePartsList)
-          } else {
-            this.notificationService.showError("Spare Part already exists", "Error");
           }
+          else this.notificationService.showError("Spare Part already exists", "Error");
           this.sparePartsSearch.nativeElement.value = ""
 
         },
@@ -894,14 +886,10 @@ export class OfferrequestComponent implements OnInit {
         case "remove":
           if (this.hasDeleteAccess) {
             if (confirm("Are you sure, you want to remove the Spare Quotation Details?") == true) {
-              //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
               this.SpareQuoteDetService.delete(data.id)
-                .pipe(first())
-                .subscribe({
+                .pipe(first()).subscribe({
                   next: (d: any) => {
-                    if (d.result) {
-                      this.notificationService.filter("itemadded");
-                    }
+                    if (d.result) this.notificationService.filter("itemadded");
                   }
                 });
             }
@@ -979,10 +967,7 @@ export class OfferrequestComponent implements OnInit {
     this.model.customerId = this.form.get('customerId').value
     this.model.distributorid = this.form.get('distributorid').value
     const datepipie = new DatePipe("en-US");
-    this.model.podate = datepipie.transform(
-      new Date,
-      "MM/dd/yyyy"
-    );
+    this.model.podate = datepipie.transform(new Date, "MM/dd/yyyy");
 
 
     if (this.form.get('paymentTerms').value.length > 0) {
@@ -1008,52 +993,34 @@ export class OfferrequestComponent implements OnInit {
       this.model.id = this.id;
 
       this.Service.save(this.model)
-        .pipe(first())
-        .subscribe({
+        .pipe(first()).subscribe({
           next: (data: any) => {
-            if (this.file != null) {
-              this.uploadFile(this.file, data.object.id);
-            }
-            this.notificationService.showSuccess(
-              data.resultMessage,
-              "Success"
-            );
-
+            if (this.file != null) this.uploadFile(this.file, data.object.id);
+            this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["offerrequestlist"]);
 
+            if (this.sparePartsList != null)
+              this.SparePartsService.SaveSpareParts(this.sparePartsList)
+                .pipe(first()).subscribe();
           },
         });
-      if (!(this.sparePartsList == null)) {
 
-        this.SparePartsService.SaveSpareParts(this.sparePartsList)
-          .pipe(first())
-          .subscribe();
-
-      }
-    } else if (this.hasUpdateAccess) {
-      // this.model = this.form.value;
+    }
+    else if (this.hasUpdateAccess) {
       this.model.id = this.id;
       this.Service.update(this.id, this.model)
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
-
-            if (this.file != null) {
-              this.uploadFile(this.file, this.id);
-            }
-            this.notificationService.showSuccess(
-              data.resultMessage,
-              "Success"
-            );
+            if (this.file != null) this.uploadFile(this.file, this.id);
+            this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["offerrequestlist"]);
-
           },
         });
 
       if (!(this.sparePartsList == null)) {
         this.SparePartsService.SaveSpareParts(this.sparePartsList)
-          .pipe(first())
-          .subscribe();
+          .pipe(first()).subscribe();
       }
     }
   }

@@ -20,11 +20,12 @@ function CustomerDashboardCharts() {
     data: {
       labels: ["AMC", "Service", "PO"],
       datasets: [{
-        data: [poCost?.othrCost, poCost?.poCost, poCost?.poCost],
+        backgroundColor: ["#ef3038", "#e03c31", "#ed1c24"],
+        data: [poCost?.amcCost, poCost?.othrCost, poCost?.poCost],
+
       }]
     },
     options: {
-
       legend: { display: false },
       title: {
         display: true,
