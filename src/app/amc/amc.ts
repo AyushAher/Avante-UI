@@ -92,6 +92,9 @@ export class AmcComponent implements OnInit {
   isDisableSite: any;
   defaultSiteId: any;
   defaultCustomerId: any;
+  baseCurrId: any;
+  @ViewChild('baseAmt') baseAmt
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -161,6 +164,7 @@ export class AmcComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+      this.hasCommercial = true;
     } else {
       let role = JSON.parse(localStorage.getItem('roles'));
       this.role = role[0]?.itemCode;
@@ -206,6 +210,8 @@ export class AmcComponent implements OnInit {
       stageName: [''],
       stageComments: [''],
       stagePaymentType: [],
+      baseCurrencyAmt: [1.00, Validators.required],
+      baseCurrencyId: ["", Validators.required],
       payAmt: [0],
       payAmtCurrencyId: [''],
       secondVisitDateFrom: ['', [Validators.required]],
@@ -258,6 +264,9 @@ export class AmcComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.currencyList = data.object
+
+          this.baseCurrId = data.object.find(x => x.code == this.environment.baseCurrencyCode)?.id
+          this.form.get("baseCurrencyId").setValue(this.baseCurrId)
         },
       })
 
@@ -272,6 +281,20 @@ export class AmcComponent implements OnInit {
         this.supplierList = data;
       });
 
+
+    this.form.get('baseCurrencyAmt').valueChanges
+      .subscribe(value => {
+        if (value >= 1000) this.form.get('baseCurrencyAmt').setValue(1.0)
+      });
+
+    this.form.get('currency').valueChanges
+      .subscribe(value => {
+        if (value == this.form.get('baseCurrencyId').value) {
+          this.form.get('baseCurrencyAmt').setValue(1.00)
+          this.baseAmt.nativeElement.disabled = true
+        }
+        else this.baseAmt.nativeElement.disabled = false
+      });
 
     if (this.id != null) {
       this.Service.getById(this.id)
@@ -354,10 +377,13 @@ export class AmcComponent implements OnInit {
       this.FormControlDisable()
       this.columnDefs = this.createColumnDefs();
 
+      let curr = this.form.get('currency')
+      curr.setValue(curr.value)
     }
   }
 
   FormControlDisable() {
+    this.form.get('baseCurrencyId').disable()
     if (this.isDisableSite) {
       this.form.get('custSite').disable()
     }
@@ -610,7 +636,7 @@ export class AmcComponent implements OnInit {
           var data = data.object[0];
           data.id = Guid.create();
           data.id = data.id.value;
-          
+
           if (this.instrumentList.filter(x => x.serialnos == data.serialnos).length == 0) {
             this.instrumentList.push(data);
             this.api.setRowData(this.instrumentList)
@@ -884,6 +910,7 @@ export class AmcComponent implements OnInit {
     this.model.sqdate = datepipie.transform(this.model.sqdate, "MM/dd/yyyy");
     this.model.sdate = datepipie.transform(this.model.sdate, "MM/dd/yyyy");
     this.model.edate = datepipie.transform(this.model.edate, "MM/dd/yyyy");
+    this.model.baseCurrencyId = this.baseCurrId
 
     if (!this.hasId && this.hasAddAccess) {
       this.model.id = this.id;

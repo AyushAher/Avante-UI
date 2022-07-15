@@ -96,6 +96,8 @@ export class OfferrequestComponent implements OnInit {
   isCompleted: any;
   isEditMode: any;
   isNewMode: any;
+  @ViewChild('baseAmt') baseAmt
+  baseCurrId: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -219,6 +221,8 @@ export class OfferrequestComponent implements OnInit {
       payAmt: [0],
       payAmtCurrencyId: [""],
       stageName: [''],
+      baseCurrencyAmt: [1.00, Validators.required],
+      baseCurrencyId: ["", Validators.required],
       stageComments: [''],
       stagePaymentType: []
     })
@@ -351,7 +355,27 @@ export class OfferrequestComponent implements OnInit {
 
 
     this.currencyService.getAll().pipe(first())
-      .subscribe((data: any) => this.currencyList = data.object)
+      .subscribe((data: any) => {
+        this.currencyList = data.object
+        this.baseCurrId = data.object.find(x => x.code == this.environment.baseCurrencyCode)?.id
+        this.form.get("baseCurrencyId").setValue(this.baseCurrId)
+      })
+
+    this.form.get('baseCurrencyAmt').valueChanges
+      .subscribe(value => {
+        if (value >= 1000) this.form.get('baseCurrencyAmt').setValue(1.0)
+      });
+
+    this.form.get('payAmtCurrencyId').valueChanges
+      .subscribe(value => {
+        if (this.isPaymentAmt) {
+          if (value == this.form.get('baseCurrencyId').value) {
+            this.form.get('baseCurrencyAmt').setValue(1.00)
+            this.baseAmt.nativeElement.disabled = true
+          }
+          else this.baseAmt.nativeElement.disabled = false
+        }
+      });
 
     this.DistributorService.getAll().pipe(first())
       .subscribe((data: any) => this.distributorList = data.object)
@@ -408,6 +432,8 @@ export class OfferrequestComponent implements OnInit {
       this.columnDefs = this.createColumnDefs();
       this.columnDefsAttachments = this.createColumnDefsAttachments();
       this.FormControlDisable();
+      let curr = this.form.get('payAmtCurrencyId')
+      curr.setValue(curr.value)
     }
   }
 
@@ -432,6 +458,7 @@ export class OfferrequestComponent implements OnInit {
 
   FormControlDisable() {
     this.form.get('podate').disable();
+    this.form.get('baseCurrencyId').disable()
 
     if (this.role == this.environment.distRoleCode) {
       this.form.get('distributorid').disable()
@@ -511,6 +538,8 @@ export class OfferrequestComponent implements OnInit {
       payAmt,
       paymentTypeId: paymentTerms,
       payAmtCurrencyId,
+      baseCurrencyId: this.baseCurrId,
+      baseCurrencyAmt: this.form.get('baseCurrencyAmt').value
     }
 
     this.offerRequestProcess.save(offerProcess).pipe(first())

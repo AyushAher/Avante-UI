@@ -145,26 +145,6 @@
               </div>
             </div>
 
-            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
-              <label for="zerorate">Zerorate</label>
-              <br />
-              <select id="currency" type="text" style="display: inline-block; width: 30%" formControlName="currency"
-                class="form-select" [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
-                <option *ngFor="let i of currencyList" value="{{i.id}}">
-                  {{i.code}}
-                </option>
-              </select>
-
-              <input id="zerorate" type="number" formControlName="zerorate" class="form-control"
-                style="display: inline-block; width: 220px; margin-left: 5px"
-                [ngClass]="{ ' is -invalid': submitted && f.zerorate.errors}" />
-              <div style="display: block" *ngIf="submitted && f.zerorate.errors" class="invalid-feedback">
-                <div *ngIf="f.zerorate.errors.required">
-                  Zero Rate is required
-                </div>
-              </div>
-            </div>
-
             <div class="col-md-4 col-sm-4 mt-2">
               <label for="tnc">First Visit Date</label><br />
 
@@ -213,6 +193,35 @@
                   Second Visit Date is required
                 </div>
               </div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="zerorate">Zerorate</label>
+              <br />
+              <select id="currency" type="text" style="display: inline-block; width: 30%" formControlName="currency"
+                class="form-select" [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
+                <option *ngFor="let i of currencyList" value="{{i.id}}">
+                  {{i.code}}
+                </option>
+              </select>
+
+              <input id="zerorate" type="number" formControlName="zerorate" class="form-control"
+                style="display: inline-block; width: 220px; margin-left: 5px"
+                [ngClass]="{ ' is -invalid': submitted && f.zerorate.errors}" />
+              <div style="display: block" *ngIf="submitted && f.zerorate.errors" class="invalid-feedback">
+                <div *ngIf="f.zerorate.errors.required">
+                  Zero Rate is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Base Currency</label><br>
+              <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
+                class="form-select">
+                <option *ngFor="let item of currencyList" value="{{item.id}}">{{item.code}}</option>
+              </select>
+              <input formControlName="baseCurrencyAmt" #baseAmt type="number" class="form-control"
+                style="width: 68%;display: inline-block;margin-left: 5px;" />
             </div>
 
             <div class="col-md-4 col-sm-4">
@@ -330,11 +339,7 @@
                 ">
                 <tr>
                   <td>
-                    <button type="button" (click)="submitStageData()" style="
-                        background-color: transparent;
-                        color: #5ba146;
-                        border: none;
-                      ">
+                    <button type="button" (click)="submitStageData()" class="btn">
                       <i class="fas fa-save" style="font-size: 20px"></i>
                     </button>
                   </td>

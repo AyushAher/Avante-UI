@@ -183,6 +183,17 @@
                 class="form-control" />
             </div>
 
+
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Base Currency</label><br>
+              <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
+                class="form-select">
+                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+              </select>
+              <input formControlName="baseCurrencyAmt" #baseAmt type="number" class="form-control"
+                style="width: 68%;display: inline-block;margin-left: 5px;" />
+            </div>
+
           </div>
           <div class="row">
             <div class="col-md-8">

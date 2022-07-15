@@ -17,6 +17,7 @@ export class EnvService {
   configTypeCode = 'CONTY';
   location = 'PMCL';
   INS = 'INS';
+  baseCurrencyCode = 'USD';
   ANAS = 'ANAS';
   PRMN1 = 'PRMN1';
   PRMN2 = 'PRMN2';

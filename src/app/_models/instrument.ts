@@ -7,6 +7,8 @@ export class Instrument {
   instype: string;
   insversion: string;
   image: string;
+  baseCurrencyId: string;
+  baseCurrencyAmt: any;
   shipdt: any;
   installdt: any;
   installby: string;

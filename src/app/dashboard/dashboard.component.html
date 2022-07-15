@@ -517,7 +517,7 @@
                   <tr [ngClass]="{'showHideRows-PO d-none':i > 3}" *ngFor="let item of amcData;let i = index">
                     <td><a [routerLink]="'/amc/'+item.id">{{item.sqdate}}</a></td>
                     <td>{{item.servicequote}}</td>
-                    <td>{{item.zerorate}}</td>
+                    <td>{{item.zerorate * item.baseCurrencyAmt}}</td>
                     <td>{{item.stageName }}</td>
                   </tr>
                 </tbody>

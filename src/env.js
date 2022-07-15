@@ -9,6 +9,7 @@
     window.__env.currencyConvert = ` https://xecdapi.xe.com/v1/convert_to.json`;
 
     window.__env.custRoleCode = 'RCUST';
+    window.__env.baseCurrencyCode = 'USD';
     window.__env.distRoleCode = 'RDTSP';
     window.__env.engRoleCode = 'RENG';
 

@@ -38,6 +38,7 @@ import {
 import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
 import { DomSanitizer } from "@angular/platform-browser";
 import { DatePipe } from "@angular/common";
+import { EnvService } from '../_services/env/env.service';
 
 
 @Component({
@@ -97,6 +98,8 @@ export class InstrumentComponent implements OnInit {
   isNewMode: boolean;
   siteId: any;
   hasWarrenty: boolean;
+  @ViewChild('baseAmt') baseAmt
+  baseCurrId: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -116,7 +119,8 @@ export class InstrumentComponent implements OnInit {
     private fileshareService: FileshareService,
     private currencyService: CurrencyService,
     private _sanitizer: DomSanitizer,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private enviroment: EnvService
   ) { }
 
   ngOnInit() {
@@ -169,6 +173,8 @@ export class InstrumentComponent implements OnInit {
       dateOfPurchase: [],
       cost: [0],
       currencyId: [""],
+      baseCurrencyAmt: [1.00, Validators.required],
+      baseCurrencyId: ["", Validators.required],
       instruEngineerId: ['', Validators.required]
     });
     this.imageUrl = this.noimageData;
@@ -209,6 +215,20 @@ export class InstrumentComponent implements OnInit {
       }
       );
 
+    this.instrumentform.get('baseCurrencyAmt').valueChanges
+      .subscribe(value => {
+        if (value >= 1000) this.instrumentform.get('baseCurrencyAmt').setValue(1.0)
+      });
+
+    this.instrumentform.get('currencyId').valueChanges
+      .subscribe(value => {
+        if (value == this.instrumentform.get('baseCurrencyId').value) {
+          this.instrumentform.get('baseCurrencyAmt').setValue(1.00)
+          this.baseAmt.nativeElement.disabled = true
+        }
+        else this.baseAmt.nativeElement.disabled = false
+      });
+
     if (this.hasCommercial)
       this.instrumentform.get("currencyId").setValidators([Validators.required])
     else this.instrumentform.get("currencyId").clearValidators()
@@ -241,7 +261,11 @@ export class InstrumentComponent implements OnInit {
       })
 
     this.currencyService.getAll()
-      .pipe(first()).subscribe((data: any) => this.lstCurrency = data.object)
+      .pipe(first()).subscribe((data: any) => {
+        this.lstCurrency = data.object
+        this.baseCurrId = data.object.find(x => x.code == this.enviroment.baseCurrencyCode)?.id
+        this.instrumentform.get("baseCurrencyId").setValue(this.baseCurrId)
+      })
 
 
     this.distributorService.getAll().pipe(first())
@@ -284,7 +308,6 @@ export class InstrumentComponent implements OnInit {
             setTimeout(() => this.instrumentform.patchValue(data.object), 500);
 
             this.sparePartDetails = data.object.spartParts;
-            console.log(data.object.spartParts);
 
             this.recomandFilter(this.sparePartDetails);
             for (let i = 0; i < data.object.spartParts.length; i++) {
@@ -312,15 +335,13 @@ export class InstrumentComponent implements OnInit {
           next: (data: any) =>
             this.PdffileData = data.object
         });
-      setTimeout(() => this.instrumentform.disable(), 500);
+      setTimeout(() => this.instrumentform.disable(), 1000);
       this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
       this.columnDefs = this.createColumnDefsRO();
     }
     else {
       this.isNewMode = true
-      setTimeout(() => {
-        this.FormControlDisable()
-      }, 1000);
+      setTimeout(() => this.FormControlDisable(), 1000);
       this.pdfcolumnDefs = this.pdfcreateColumnDefs();
       this.columnDefs = this.createColumnDefs();
     }
@@ -339,6 +360,9 @@ export class InstrumentComponent implements OnInit {
 
       let warrenty = this.instrumentform.get('warranty')
       warrenty.setValue(warrenty.value)
+
+      let curr = this.instrumentform.get('currencyId')
+      curr.setValue(curr.value)
     }
   }
 
@@ -366,6 +390,7 @@ export class InstrumentComponent implements OnInit {
     if (this.siteId != null || this.siteId != undefined) {
       this.instrumentform.get('custSiteId').disable()
     }
+    this.instrumentform.get('baseCurrencyId').disable()
 
   }
 
@@ -507,8 +532,6 @@ export class InstrumentComponent implements OnInit {
                 cnfig.sparePartId = data.object[i].id;
                 this.selectedConfigType.push(cnfig);
               }
-              console.log(data.object );
-              
             }
           },
           error: error => {
@@ -631,6 +654,8 @@ export class InstrumentComponent implements OnInit {
     this.instrument.dateOfPurchase = this.datepipie.transform(this.instrument.dateOfPurchase, "MM/dd/yyyy")
     this.instrument.engcontact = String(this.instrument.engcontact);
     this.instrument.configuration = [];
+    this.instrument.baseCurrencyId = this.baseCurrId
+    
     for (let i = 0; i < this.selectedConfigType.length; i++) {
       this.config = new instrumentConfig();
       this.config.configtypeid = this.selectedConfigType[i].listTypeItemId;
@@ -651,6 +676,7 @@ export class InstrumentComponent implements OnInit {
     this.instrument.wrntyendt = this.datepipie.transform(this.instrument.wrntyendt, "MM/dd/yyyy")
     this.instrument.wrntystdt = this.datepipie.transform(this.instrument.wrntystdt, "MM/dd/yyyy")
     this.instrument.installdt = this.datepipie.transform(this.instrument.installdt, "MM/dd/yyyy")
+    console.log(this.instrument);
 
     if (this.id == null) {
       this.instrumentService.save(this.instrument)
@@ -843,7 +869,7 @@ export class InstrumentComponent implements OnInit {
         field: 'qty',
         filter: true,
         editable: false,
-        
+
         sortable: true
       },
       {

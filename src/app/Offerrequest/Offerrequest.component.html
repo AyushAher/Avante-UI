@@ -263,7 +263,9 @@
                   <td>
                     {{item.paymentType}} <br *ngIf="item.paymentType"><br *ngIf="item.paymentType">
                     <span *ngIf="item.payAmt">
-                      {{item.payAmtCurrency}} {{item.payAmt}} <br /><br />
+                      {{item.payAmtCurrency}} {{item.payAmt}} <span *ngIf="item.baseCurrencyAmt != 1">==>
+                        {{environment.baseCurrencyCode}} {{item.baseCurrencyAmt
+                        * item.payAmt}} </span><br /><br />
                     </span>
                     {{item.comments}}
                   </td>
@@ -318,6 +320,17 @@
                       </select>
                       <input class="payAmt form-control" style="width:67%;display: inline-block;" type="number"
                         formControlName="payAmt" id="payAmt" />
+                    </div>
+
+
+                    <div *ngIf="isPaymentAmt">
+                      <label for="dateOfPurchase">Base Currency</label><br>
+                      <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
+                        class="form-select">
+                        <option *ngFor="let item of currencyList" value="{{item.id}}">{{item.code}}</option>
+                      </select>
+                      <input formControlName="baseCurrencyAmt" #baseAmt type="number" class="form-control"
+                        style="width: 68%;display: inline-block;margin-left: 5px;" />
                     </div>
 
                     <label for="stageComments" *ngIf="isPaymentTerms || isPaymentAmt">Comments</label>
