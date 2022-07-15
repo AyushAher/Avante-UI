@@ -144,6 +144,13 @@ export class AmcListComponent implements OnInit {
         editable: false,
         sortable: true
       },
+      {
+        headerName: 'Service Type',
+        field: 'amcServiceType',
+        filter: true,
+        editable: false,
+        sortable: true
+      },
 
     ]
   }

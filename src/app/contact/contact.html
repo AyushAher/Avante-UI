@@ -31,9 +31,10 @@
               <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
                 <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
               </a>
-              <a *ngIf="(hasUpdateAccess || hasAddAccess) && (!isEditMode && !isNewMode)" class="nav-link">
-                <i class="fas fa-user" style="color: #5ba146;" (click)="addUser()" title="Add User"></i>
-              </a>
+              <button [disabled]="isUser" (click)="addUser()"
+                *ngIf="(hasUpdateAccess || hasAddAccess) && (!isEditMode && !isNewMode)" class="nav-link btn">
+                <i class="fas fa-user" style="color: #5ba146;" title="Add User"></i>
+              </button>
             </div>
           </div>
 

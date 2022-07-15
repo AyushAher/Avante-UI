@@ -32,7 +32,7 @@
 
             <div class="dropdown">
               <button class="btn btn-nav-link" (click)="ToggleDropdown('dropdownMenuButton1')" type="button"
-                  data-bs-toggle="dropdown" aria-expanded="false">
+                data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-ellipsis-v" style="color: #5ba146;"></i>
               </button>
               <ul class="dropdown-menu" id="dropdownMenuButton1">
@@ -258,9 +258,12 @@
 
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
-              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode"
-                class="btn btn-sm btn-success button" style="margin: 10px;" (click)="open(ServiceReportId)"><i
-                  class="fas fa-plus-circle" title="Add"></i></button>
+
+              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode" class="btn" style="margin: 10px;"
+                (click)="open(ServiceReportId)">
+                <i class="fas fa-plus" title="Add"></i>
+              </button>
+
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
                   (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
@@ -269,9 +272,11 @@
               </div>
             </div>
             <div class="tab-pane fade" id="worktime" role="tabpanel" aria-labelledby="worktime-tab">
-              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode"
-                class="btn btn-sm btn-success button" style="margin: 10px;" (click)="opentime(ServiceReportId)"><i
-                  class="fas fa-plus-circle" title="Add"></i></button>
+
+              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode" class="btn" style="margin: 10px;"
+                (click)="opentime(ServiceReportId)">
+                <i class="fas fa-plus" title="Add"></i>
+              </button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onworktimeRowClicked($event)"
                   (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"

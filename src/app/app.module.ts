@@ -135,6 +135,7 @@ import { ServicecontractrevenuereportComponent } from './servicecontractrevenuer
 import { CostofownershipComponent } from './costofownership/costofownership.component';
 import { EnvServiceProvider } from './_services/env/env.service.provider';
 import { EngdashboardComponent } from './engdashboard/engdashboard.component';
+import { CustomAmountPipe } from './_pipes/amount.pipe';
 
 
 @NgModule({
@@ -245,7 +246,8 @@ import { EngdashboardComponent } from './engdashboard/engdashboard.component';
     PendingquotationrequestComponent,
     ServicecontractrevenuereportComponent,
     CostofownershipComponent,
-    EngdashboardComponent
+    EngdashboardComponent,
+    CustomAmountPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

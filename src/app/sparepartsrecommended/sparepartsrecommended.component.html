@@ -3,17 +3,17 @@
     <div class="container">
       <div class="d-flex" style="align-items: center; justify-content: space-between;">
         <h3>Spareparts Recommended List</h3>
-
-        <button routerLink="/offerrequest" data-action-type="offerrequest" class="btn btn-primary"
-          style="margin-left: 10px;">Raise PO
-        </button>
+        <div class="d-flex">
+          <a *ngIf="showGrid && isDist" (click)="toggleFilter()" class="nav-link">
+            <i class="fas fa-arrow-left" title="filter"></i>
+          </a>
+          <button routerLink="/offerrequest" data-action-type="offerrequest" class="btn btn-primary"
+            style="margin-left: 10px;">Raise PO
+          </button>
+        </div>
       </div>
       <hr />
       <div class="clearfix"></div>
-
-      <a *ngIf="showGrid && isDist" (click)="toggleFilter()" class="nav-link">
-        <i class="fas fa-arrow-left" title="filter"></i>
-      </a>
 
       <app-distributorfilter (showData)="ShowData($event)" *ngIf="!showGrid" (nData)="DataFilter($event)"
         controller="SparePartsRecommended">

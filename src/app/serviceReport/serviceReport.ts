@@ -506,7 +506,7 @@ export class ServiceReportComponent implements OnInit {
   ToggleDropdown(id: string) {
     document.getElementById(id).classList.toggle("show")
   }
-  
+
   CancelEdit() {
     this.ServiceReportform.disable()
     this.isEditMode = false;
@@ -529,6 +529,8 @@ export class ServiceReportComponent implements OnInit {
       this.ServiceReportform.get('corrmaintenance').disable()
       this.ServiceReportform.get('problem').disable()
     }
+    this.onWorkFinishedChange(this.ServiceReportform.get("workfinishedstr").value)
+    this.onInteruptedChange(this.ServiceReportform.get("interruptedstr").value)
   }
 
   DeleteRecord() {

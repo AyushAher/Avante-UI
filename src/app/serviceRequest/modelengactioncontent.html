@@ -1,4 +1,3 @@
-
 <!--<div class="right_col" role="main">
   <div class="container">
 
@@ -6,24 +5,22 @@
 </div>-->
 <script src="node_modules/ngx-bootstrap/datepicker/bs-datepicker.css"></script>
 <div class="model" id="model" role="dialog">
-    <div class="model-dialog">
-      <div class="modal-content">
-        <div class="modal-header" style="background-color: #589b44; color: #fff">
-          <h4 class="modal-title" id="modal-basic-title">Add Engineer Action</h4>
-          <button type="button"
-                  class="close"
-                  aria-label="Close"
-                  data-dismiss="modal" (click)="close()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="px-3 py-3 pb-3">
+  <div class="model-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #589b44; color: #fff">
+        <h4 class="modal-title" id="modal-basic-title">Add Engineer Action</h4>
+        <button type="button" class="btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+          <i class="fas fa-times" style="color: #fff !important" title="Close"></i>
+        </button>
+      </div>
+      <div class="px-3 py-3 pb-3">
         <form [formGroup]="actionForm" (ngSubmit)="onValueSubmit()">
           <div class="modal-body">
             <div class="row">
               <div class="col-sm-6 form-group">
                 <label for="engineername">Engineer</label>
-                <select formControlName="engineerid" readonly disabled="disabled" class="form-select" [ngClass]="{ 'is-invalid': submitted && f.engineerid.errors }">
+                <select formControlName="engineerid" readonly disabled="disabled" class="form-select"
+                  [ngClass]="{ 'is-invalid': submitted && f.engineerid.errors }">
                   <!--<option value="0">--All--</option>-->
                   <option *ngFor="let c of engineerlist" value={{c.id}}>
                     {{c.fname}} {{c.lname}}
@@ -37,26 +34,27 @@
             </div>
             <div class="row">
               <div class="col-sm-6">
-                <label for="comments">Comments</label>
-                <textarea type="text" formControlName="comments" class="form-control" ></textarea>
-              </div>
-              <div class="col-sm-6">
                 <label for="actiontaken">Action taken</label>
-                <select formControlName="actiontaken" class="form-select" (change)="getActiontaken($event.target)" [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }">
+                <select formControlName="actiontaken" class="form-select" (change)="getActiontaken($event.target)"
+                  [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }">
                   <!--<option value="0">--All--</option>-->
                   <option *ngFor="let st of actiontakenlist" value={{st.listTypeItemId}}>
                     {{st.itemname}}
                   </option>
                 </select>
               </div>
+              <div class="col-sm-6">
+                <label for="comments">Comments</label>
+                <textarea type="text" formControlName="comments" class="form-control"></textarea>
+              </div>
             </div>
             <div class="row" *ngIf="hasRemote">
               <div class="col-sm-6">
                 <label for="teamviewrecording">TeamViewer</label>
-                <input type="file" id="myFile" #file  accept=".zip,.rar,.7zip" placeholder="Choose file"
-                       (change)="getfil(file.files);" multiple>
+                <input type="file" id="myFile" #file accept=".zip,.rar,.7zip" placeholder="Choose file"
+                  (change)="getfil(file.files);" multiple>
               </div>
-                <label style="color: red">Files Should be Compressed to a .zip or .rar format</label>
+              <label style="color: red">Files Should be Compressed to a .zip or .rar format</label>
             </div>
           </div>
           <div class="row">
@@ -69,7 +67,7 @@
             </div>
           </div>
         </form>
-        </div>
       </div>
     </div>
   </div>
+</div>

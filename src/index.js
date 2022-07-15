@@ -20,7 +20,7 @@ function CustomerDashboardCharts() {
     data: {
       labels: ["AMC", "Service", "PO"],
       datasets: [{
-        data: [poCost?.amcCost, poCost?.poCost, poCost?.othrCost],
+        data: [poCost?.othrCost, poCost?.poCost, poCost?.poCost],
       }]
     },
     options: {

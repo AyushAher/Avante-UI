@@ -11,12 +11,12 @@ import { DistributorService, ListTypeService, NotificationService, ProfileServic
     <form [formGroup]="Form" (ngSubmit)="onSubmit()">
 <div class="row">
 <div class="col-md-10">
-<select formControlName="assignedto" class="form-control">
+<select formControlName="assignedto" class="form-select">
         <option *ngFor="let c of appendList" value={{c.id}}> {{c.fname}} {{c.lname}} </option>
         </select>
 </div>   
 <div class="col-md-2">
-<button type="submit" *ngIf="hasUpdate && this.isGenerateReport == false" class="btn btn-primary"> <i class="fas fa-save" title="save"></i></button>
+<button type="submit" *ngIf="hasUpdate && this.isGenerateReport == false" class="btn"> <i class="fas fa-save" title="save"></i></button>
 </div>
 </div>
 </form>

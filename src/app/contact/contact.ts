@@ -50,6 +50,7 @@ export class ContactComponent implements OnInit {
   public designations: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
   isEditMode: any;
   isNewMode: any;
+  isUser: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -196,6 +197,7 @@ export class ContactComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            this.isUser = data.object.isUser
             this.contactform.patchValue(data.object);
             //this.pcontactNumber = data.object.pcontactno;
             if (this.inputObj) {
@@ -233,7 +235,7 @@ export class ContactComponent implements OnInit {
 
   CancelEdit() {
     this.contactform.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
@@ -392,7 +394,7 @@ export class ContactComponent implements OnInit {
             }
             // this.alertService.success('Data save successfull');
             //  this.notificationService.showSuccess("Data Save Successful", "Success");
-    
+
             this.contact.id = data.id;
             this.loading = false;
             this.back();

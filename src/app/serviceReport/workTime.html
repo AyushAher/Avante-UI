@@ -1,57 +1,51 @@
-
 <div class="model" id="model" role="dialog">
-    <div class="model-dialog">
-      <div class="modal-content">
-        <div class="modal-header" style="background-color: #589b44; color: #fff">
-          <h4 class="modal-title" id="modal-basic-title">Add WorkTime</h4>
-          <button type="button"
-                  class="close"
-                  aria-label="Close"
-                  data-dismiss="modal" (click)="close()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="py-3 px-3 pb-2">
-          <form [formGroup]="workTimeForm" (ngSubmit)="onValueSubmit()">
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-sm-12 form-group">
-                  <label for="worktimedate">Date</label>
-                  <input bsDatepicker formControlName="worktimedate" class="form-control"/>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12 col-sm-12">
-                  <label for="starttime">start time</label>
-                  <input type="time" formControlName="starttime" (input)="PerDayHrs()"
-                         class="form-control"/>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12 col-sm-12">
-                  <label for="endtime">End time</label>
-                  <input type="time" formControlName="endtime" (input)="PerDayHrs()"
-                         class="form-control"/>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-12">
-                  <label for="perdayhrs">per day hrs</label>
-                  <input type="text" formControlName="perdayhrs" readonly class="form-control"/>
-                </div>
+  <div class="model-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #589b44; color: #fff">
+        <h4 class="modal-title" id="modal-basic-title">Add WorkTime</h4>
+        <button type="button" class="btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+          <i class="fas fa-times" style="color: #fff !important" title="Close"></i>
+        </button>
+      </div>
+      <div class="py-3 px-3 pb-2">
+        <form [formGroup]="workTimeForm" (ngSubmit)="onValueSubmit()">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12 form-group">
+                <label for="worktimedate">Date</label>
+                <input bsDatepicker formControlName="worktimedate" class="form-control" />
               </div>
             </div>
             <div class="row">
-              <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
-                <button [disabled]="loading" class="btn btn-primary">
-                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                  Submit
-                </button>
-                <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
+              <div class="col-md-12 col-sm-12">
+                <label for="starttime">start time</label>
+                <input type="time" formControlName="starttime" (input)="PerDayHrs()" class="form-control" />
               </div>
             </div>
-          </form>
-        </div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+                <label for="endtime">End time</label>
+                <input type="time" formControlName="endtime" (input)="PerDayHrs()" class="form-control" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <label for="perdayhrs">per day hrs</label>
+                <input type="text" formControlName="perdayhrs" readonly class="form-control" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+              <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>

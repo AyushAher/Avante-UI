@@ -29,6 +29,7 @@ export class Instrument {
 export class instrumentConfig {
   configtypeid: string;
   instrumentid: string;
+  instrumentconfigid: string;
   configvalueid: string;
   sparepartid: string;
   insqty: number;

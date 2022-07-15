@@ -208,10 +208,10 @@ export class AmcComponent implements OnInit {
       stagePaymentType: [],
       payAmt: [0],
       payAmtCurrencyId: [''],
-      secondVisitDateFrom: [],
-      secondVisitDateTo: [],
-      firstVisitDateFrom: [],
-      firstVisitDateTo: [],
+      secondVisitDateFrom: ['', [Validators.required]],
+      secondVisitDateTo: ['', [Validators.required]],
+      firstVisitDateFrom: ['', [Validators.required]],
+      firstVisitDateTo: ['', [Validators.required]],
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
@@ -578,19 +578,10 @@ export class AmcComponent implements OnInit {
             .subscribe({
               next: (data: any) => {
                 if (data.result) {
-                  this.notificationService.showSuccess(
-                    data.resultMessage,
-                    "Success"
-                  );
+                  this.notificationService.showSuccess(data.resultMessage, "Success");
                   const selectedData = event.api.getSelectedRows();
                   event.api.applyTransaction({ remove: selectedData });
-                } else {
-
                 }
-              },
-              error: (error) => {
-                // this.alertService.error(error);
-
               },
             });
         }
@@ -601,12 +592,15 @@ export class AmcComponent implements OnInit {
 
   InstrumentSearch = (searchtext) => {
     this.instrumentserialno = searchtext;
+    if (this.instrumentserialno != "" && this.instrumentserialno != null) {
 
-    this.Service.searchByKeyword(this.instrumentserialno, this.form.get("custSite").value)
-      .pipe(first()).subscribe({
-        next: (data: any) => this.instrumentAutoComplete = data.object
-      });
+      this.Service.searchByKeyword(this.instrumentserialno, this.form.get("custSite").value)
+        .pipe(first()).subscribe({
+          next: (data: any) => this.instrumentAutoComplete = data.object
+        });
+    }
   }
+
 
   AddInstrument(instrument: any) {
     this.Service.searchByKeyword(instrument, this.form.get("custSite").value)
@@ -623,10 +617,6 @@ export class AmcComponent implements OnInit {
             this.notificationService.showError("Instrument already exists", "Error")
           }
           this.instrumentSearch.nativeElement.value = ""
-        },
-        error: (error) => {
-
-          this.loading = false;
         },
       });
 
@@ -833,11 +823,49 @@ export class AmcComponent implements OnInit {
 
 
     let calc = this.DateDiff(this.model.sdate, this.model.edate)
+
     if (calc <= 0) {
       this.notificationService.showInfo("End Date should not be greater than Start Date", "Info");
       return;
     }
 
+    let ffsDate = this.DateDiff(this.model.sdate, this.model.firstVisitDateFrom)
+    let ftsDate = this.DateDiff(this.model.sdate, this.model.firstVisitDateTo)
+
+    let ffeDate = this.DateDiff(this.model.firstVisitDateFrom, this.model.edate)
+    let fteDate = this.DateDiff(this.model.firstVisitDateTo, this.model.edate)
+
+    let stsDate = this.DateDiff(this.model.sdate, this.model.secondVisitDateTo)
+    let sfsDate = this.DateDiff(this.model.sdate, this.model.secondVisitDateFrom)
+
+    let sfeDate = this.DateDiff(this.model.secondVisitDateFrom, this.model.edate)
+    let steDate = this.DateDiff(this.model.secondVisitDateTo, this.model.edate)
+
+    if (ffsDate <= 0) {
+      return this.notificationService.showError("First Visit From Date should not be greater than Start Date", "Invalid Date")
+    }
+    if (ftsDate <= 0) {
+      return this.notificationService.showError("First Visit To Date should not be greater than Start Date", "Invalid Date")
+    }
+    if (fteDate <= 0) {
+      return this.notificationService.showError("First Visit To Date should not be greater than End Date", "Invalid Date")
+    }
+    if (ffeDate <= 0) {
+      return this.notificationService.showError("First Visit From Date should not be greater than End Date", "Invalid Date")
+    }
+
+    if (sfsDate <= 0) {
+      return this.notificationService.showError("Second Visit From Date should not be greater than Start Date", "Invalid Date")
+    }
+    if (stsDate <= 0) {
+      return this.notificationService.showError("Second Visit To Date should not be greater than Start Date", "Invalid Date")
+    }
+    if (steDate <= 0) {
+      return this.notificationService.showError("Second Visit To Date should not be greater than End Date", "Invalid Date")
+    }
+    if (sfeDate <= 0) {
+      return this.notificationService.showError("Second Visit From Date should not be greater than End Date", "Invalid Date")
+    }
 
     this.model.firstVisitDateFrom = datepipie.transform(this.model.firstVisitDateFrom, "MM/dd/yyyy");
     this.model.secondVisitDateFrom = datepipie.transform(this.model.secondVisitDateFrom, "MM/dd/yyyy");

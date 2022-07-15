@@ -172,7 +172,12 @@ export class SparePartComponent implements OnInit {
 
       this.sparePartService.getById(this.id).pipe(first())
         .subscribe((data: any) => {
-          this.getfileImage(data.object.id);
+          if (data.object.image == null) this.imageUrl = this.noimageData;
+          else {
+            this.imageUrl = "data:image/jpeg;base64, " + data.object.image;
+            this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
+          }
+
           this.onConfigChange(data.object.configTypeid);
           this.onConfigVChange(data.object.configTypeid, data.object.configValueid);
           this.sparepartform.patchValue(data.object);
@@ -208,7 +213,7 @@ export class SparePartComponent implements OnInit {
 
   CancelEdit() {
     this.sparepartform.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 

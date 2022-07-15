@@ -54,7 +54,7 @@
             </div>
 
             <div class="col-md-3 col-sm-3">
-              <label for="serialnos">Instrumnent Serial No</label>
+              <label for="serialnos">Instrument Serial No</label>
               <input type="text" #serialnos formControlName="serialnos" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.serialnos.errors }" />
               <div *ngIf="submitted && f.serialnos.errors" class="invalid-feedback">
@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-1 col-sm-1">
               <label for=""></label>
-              <button type="button" class="btn btn-primary" style="margin-top: 31px;" *ngIf="isEditMode || isNewMode"
+              <button type="button" class="btn btn-primary mt-4" *ngIf="isEditMode || isNewMode"
                 (click)="getInstrBySerialNo(serialnos.value)">Get</button>
             </div>
 
@@ -173,67 +173,6 @@
                 <div *ngIf="f.instruEngineerId.errors.required">Instrumentation Engineer is required</div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="engemail">Engineer Email</label>
-              <input type="text" formControlName="engemail" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.engemail.errors }" />
-              <div *ngIf="submitted && f.engemail.errors" class="invalid-feedback">
-                <div *ngIf="f.engemail.errors.required">Engineer Email is required</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4">
-              <label for=""></label>
-              <div class="checkbox">
-                <label for="warranty">
-                  <input type="checkbox" formControlName="warranty" class="" />
-                  Warranty
-                </label>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4 instrumentImg" style="text-align: right;" *ngIf="imageUrl && imageUrl !== ''">
-              <img [src]="imageUrl" [alt]="" style="width: 200px;height: 200px; padding:10px;">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="wrntystdt">Warranty Start Date</label>
-              <input formControlName="wrntystdt" bsDatepicker class="form-control" />
-              <div class="invalid-feedback-con">
-                <div *ngIf="instrumentform.controls['wrntystdt'].errors?.required">Warranty Start Date is required</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4">
-              <label for="wrntyendt">Warranty End Date</label>
-              <input formControlName="wrntyendt" bsDatepicker class="form-control" />
-              <div *ngIf="instrumentform.controls['wrntyendt'].errors" class="invalid-feedback-con">
-                <div *ngIf="instrumentform.controls['wrntyendt'].errors?.required">Warranty End Date is required</div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="installdt">Instrument Installation</label>
-              <input placeholder="date" formControlName="installdt" bsDatepicker class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.installdt.errors }" />
-              <div *ngIf="submitted && f.installdt.errors" class="invalid-feedback">
-                <div *ngIf="f.installdt.errors.required">Instrument Installation is required</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4">
-              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
-              <input type='file' [disabled]="!isEditMode && !isNewMode" id="imageUpload" accept=".png, .jpg, .jpeg"
-                #fileInput (change)="uploadFile(fileInput.files,id)" />
-              <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
-                (click)="removeUploadedFile()"></label>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-4 col-sm-4">
-              <label for="dateOfPurchase">Date Of Purchase</label>
-              <input formControlName="dateOfPurchase" bsDatepicker class="form-control" />
-            </div>
 
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
               <label for="dateOfPurchase">Cost</label><br>
@@ -242,6 +181,78 @@
               </select>
               <input formControlName="cost" type="number" style="width: 68%;display: inline-block;margin-left: 5px;"
                 class="form-control" />
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-6 col-sm-6">
+                  <label for="engemail">Engineer Email</label>
+                  <input type="text" formControlName="engemail" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.engemail.errors }" />
+                  <div *ngIf="submitted && f.engemail.errors" class="invalid-feedback">
+                    <div *ngIf="f.engemail.errors.required">Engineer Email is required</div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                  <label for=""></label>
+                  <div class="checkbox">
+                    <label for="warranty">
+                      <input type="checkbox" formControlName="warranty" class="" />
+                      Warranty
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6" *ngIf="hasWarrenty">
+                  <label for="wrntystdt">Warranty Start Date</label>
+                  <input formControlName="wrntystdt"
+                    [ngClass]="{ 'is-invalid': submitted && instrumentform.controls['wrntystdt'].errors}" bsDatepicker
+                    class="form-control" />
+                  <div class="invalid-feedback">
+                    <div *ngIf="instrumentform.controls['wrntystdt'].errors?.required">Warranty Start Date is required
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6" *ngIf="hasWarrenty">
+                  <label for="wrntyendt">Warranty End Date</label>
+                  <input formControlName="wrntyendt" bsDatepicker
+                    [ngClass]="{ 'is-invalid': submitted && instrumentform.controls['wrntyendt'].errors}"
+                    class="form-control" />
+                  <div *ngIf="instrumentform.controls['wrntyendt'].errors" class="invalid-feedback">
+                    <div *ngIf="instrumentform.controls['wrntyendt'].errors?.required">Warranty End Date is required
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                  <label for="installdt">Instrument Installation</label>
+                  <input placeholder="date" formControlName="installdt" bsDatepicker class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.installdt.errors }" />
+                  <div *ngIf="submitted && f.installdt.errors" class="invalid-feedback">
+                    <div *ngIf="f.installdt.errors.required">Instrument Installation is required</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                  <label for="dateOfPurchase">Date Of Purchase</label>
+                  <input formControlName="dateOfPurchase" bsDatepicker class="form-control" />
+                </div>
+
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4 instrumentImg d-flex justify-content-center" style="text-align: right;"
+              *ngIf="imageUrl && imageUrl !== ''">
+              <img [src]="imageUrl" style="width: 200px;height: 200px; padding:10px;">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
+              <input type='file' [disabled]="!isEditMode && !isNewMode" id="imageUpload" accept=".png, .jpg, .jpeg"
+                #fileInput (change)="uploadFile(fileInput.files,id)" />
+              <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
+                (click)="removeUploadedFile()"></label>
             </div>
           </div>
 
@@ -279,8 +290,8 @@
             </div>
             <div class="col-sm-4">
               <label for=""></label>
-              <button type="button" class="btn btn-primary" [disabled]="!isEditMode && !isNewMode"
-                style="margin-top: 31px;" (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Add</button>
+              <button type="button" class="btn btn-primary mt-4" [disabled]="!isEditMode && !isNewMode"
+                (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Add</button>
             </div>
           </div>
           <br />

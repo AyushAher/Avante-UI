@@ -120,8 +120,9 @@ export class DashboardComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data0: any) => {
-            let data = data0.object
-            if (data != null && data.length > 0 && data0.result) {
+              let data = data0.object
+              // if (data != null && data.length > 0 && data0.result) {
+              if (data != null && data0.result) {
               setTimeout(() => {
                 data.forEach(x => {
                   // display only the ones selected in settings
@@ -136,6 +137,7 @@ export class DashboardComponent implements OnInit {
                 .pipe(first())
                 .subscribe({
                   next: (data: any) => {
+
                     let cust = data.object[0]
 
                     this.custSite = cust.sites;
@@ -305,6 +307,8 @@ export class DashboardComponent implements OnInit {
   GetPoCost() {
     this.customerDashboardService.GetCostData()
       .pipe(first()).subscribe((data: any) => {
+        console.log(data);
+        
         localStorage.setItem("costData", JSON.stringify(data.object))
       })
   }

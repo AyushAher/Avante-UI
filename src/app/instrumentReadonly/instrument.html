@@ -110,109 +110,111 @@
                 <div *ngIf="f.engname.errors.required">Engineer Name is required</div>
               </div>
             </div>
-            <div class="col-md-4 col-sm-4">
-              <label for="engcontact">Engineer Contact No</label>
-              <input type="tel" formControlName="engcontact" readonly maxlength="10" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.engcontact.errors }" />
-              <div *ngIf="submitted && f.engcontact.errors" class="invalid-feedback">
-                <div *ngIf="f.engcontact.errors.required">Engineer Contact No is required</div>
-                <div *ngIf="f.engcontact.errors?.maxlength">Max length is 10</div>
-                <div *ngIf="f.engcontact.errors?.minlength">Min length is 10</div>
+            <div class="col-sm-4">
+              <label for="operatorId">Operator Name</label>
+              <select formControlName="operatorId" class="form-select"
+                [ngClass]="{ 'is-invalid': submitted && f.operatorId.errors }">
+                <option *ngFor="let config of contactList" value={{config.id}}>
+                  {{config.fname}} {{config.lname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.operatorId.errors" class="invalid-feedback">
+                <div *ngIf="f.operatorId.errors.required">Operator Name is required</div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="engemail">Engineer Email</label>
-              <input type="text" formControlName="engemail" readonly class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.engemail.errors }" />
-              <div *ngIf="submitted && f.engemail.errors" class="invalid-feedback">
-                <div *ngIf="f.engemail.errors.required">Engineer Email is required</div>
+            <div class="col-sm-4">
+              <label for="instruEngineerId">Instrumentation Engineer</label>
+              <select formControlName="instruEngineerId" class="form-select"
+                [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
+                <option *ngFor="let config of contactList" value={{config.id}}>
+                  {{config.fname}} {{config.lname}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.instruEngineerId.errors" class="invalid-feedback">
+                <div *ngIf="f.instruEngineerId.errors.required">Instrumentation Engineer is required</div>
               </div>
             </div>
+
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Cost</label><br>
+              <select formControlName="currencyId" style="width: 30%;display: inline-block;" class="form-select">
+                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+              </select>
+              <input formControlName="cost" type="number" style="width: 68%;display: inline-block;margin-left: 5px;"
+                class="form-control" />
+            </div>
+
             <div class="col-md-4 col-sm-4">
-              <label for=""></label>
-              <div class="checkbox">
-                <label for="warranty">
-                  <input type="checkbox" formControlName="warranty" disabled readonly class="" />
-                  Warranty
-                </label>
-              </div>
+              <label for="dateOfPurchase">Date Of Purchase</label>
+              <input formControlName="dateOfPurchase" bsDatepicker class="form-control" />
             </div>
-            <div class="col-md-4 col-sm-4 instrumentImg" style="text-align: right;" *ngIf="imageUrl && imageUrl !== ''">
-              <img [src]="imageUrl" [alt]="" style="width: 200px;height: 200px; padding:10px;">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="wrntystdt">Warranty Start Date</label>
-              <input formControlName="wrntystdt" disabled readonly bsDatepicker class="form-control" />
-              <div class="invalid-feedback-con">
-                <div *ngIf="instrumentform.controls['wrntystdt'].errors?.required">Warranty Start Date is required</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4">
-              <label for="wrntyendt">Warranty End Date</label>
-              <input formControlName="wrntyendt" disabled readonly bsDatepicker class="form-control" />
-              <div *ngIf="instrumentform.controls['wrntyendt'].errors" class="invalid-feedback-con">
-                <div *ngIf="instrumentform.controls['wrntyendt'].errors?.required">Warranty End Date is required</div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="installdt">Instrument Installation</label>
-              <input placeholder="date" formControlName="installdt" readonly bsDatepicker class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.installdt.errors }" />
-              <div *ngIf="submitted && f.installdt.errors" class="invalid-feedback">
-                <div *ngIf="f.installdt.errors.required">Instrument Installation is required</div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
 
           </div>
-          <!--<div class="row">
-    <div class="col-sm-4">
-      <label for="configtypeid">Config Type</label>
-      <select formControlName=""  disabled readonly class="form-control" #mySelect [ngClass]="{ 'is-invalid': submitted && f.configtypeid.errors }">
-        <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
-          {{congfig.itemname}}
-        </option>
-      </select>
-      <div *ngIf="submitted && f.configtypeid.errors" class="invalid-feedback">
-        <div *ngIf="f.configtypeid.errors.required">Config Type is required</div>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <label for=""></label>
-      <button type="button" readonly disabled class="btn btn-primary" style="margin-top: 31px;" (click)="onDropdownChange(mySelect.value)">Add</button>
-    </div>
-  </div>-->
-          <!--<div class="row">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Part Number</th>
-            <th>Description</th>
-            <th>Qty</th>
-            <th>Desc As Per Catlog</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let s of sparePartDetails">
-            <td>{{ s.configTypeName }}</td>
-            <td>{{ s.partNo }}</td>
-            <td>{{ s.itemDesc }}</td>
-            <td>{{ s.qty }}</td>
-            <td>{{ s.descCatalogue}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>-->
+          <div class="row">
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-6 col-sm-6">
+                  <label for="engemail">Engineer Email</label>
+                  <input type="text" formControlName="engemail" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.engemail.errors }" />
+                  <div *ngIf="submitted && f.engemail.errors" class="invalid-feedback">
+                    <div *ngIf="f.engemail.errors.required">Engineer Email is required</div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                  <label for=""></label>
+                  <div class="checkbox">
+                    <label for="warranty">
+                      <input type="checkbox" formControlName="warranty" class="" />
+                      Warranty
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6" *ngIf="hasWarrenty">
+                  <label for="wrntystdt">Warranty Start Date</label>
+                  <input formControlName="wrntystdt"
+                    [ngClass]="{ 'is-invalid': submitted && instrumentform.controls['wrntystdt'].errors}" bsDatepicker
+                    class="form-control" />
+                  <div class="invalid-feedback">
+                    <div *ngIf="instrumentform.controls['wrntystdt'].errors?.required">Warranty Start Date is required
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6" *ngIf="hasWarrenty">
+                  <label for="wrntyendt">Warranty End Date</label>
+                  <input formControlName="wrntyendt" bsDatepicker
+                    [ngClass]="{ 'is-invalid': submitted && instrumentform.controls['wrntyendt'].errors}"
+                    class="form-control" />
+                  <div *ngIf="instrumentform.controls['wrntyendt'].errors" class="invalid-feedback">
+                    <div *ngIf="instrumentform.controls['wrntyendt'].errors?.required">Warranty End Date is required
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                  <label for="installdt">Instrument Installation</label>
+                  <input placeholder="date" formControlName="installdt" bsDatepicker class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.installdt.errors }" />
+                  <div *ngIf="submitted && f.installdt.errors" class="invalid-feedback">
+                    <div *ngIf="f.installdt.errors.required">Instrument Installation is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4 instrumentImg d-flex justify-content-center" style="text-align: right;"
+              *ngIf="imageUrl && imageUrl !== ''">
+              <img [src]="imageUrl" style="width: 200px;height: 200px; padding:10px;">
+            </div>
+          </div>
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Spare Parts List</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr />
+
           <br />
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
@@ -254,7 +256,6 @@
                   rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
-
             <div class="tab-pane fade" id="otherspare" role="tabpanel" aria-labelledby="otherspare-tab">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine"
@@ -263,6 +264,14 @@
               </div>
             </div>
           </div>
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Attachments</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr />
+
           <div class="row" *ngIf="PdffileData">
             <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
               <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
@@ -271,9 +280,6 @@
             </div>
           </div>
           <hr />
-          <!--<div class="row" *ngIf="isSave">
-      <a routerLink="/sparepart/{{id}}" class="btn btn-link">Add SparePart</a>
-    </div>-->
         </form>
       </div>
     </div>

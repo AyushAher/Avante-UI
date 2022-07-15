@@ -770,9 +770,12 @@ export class ServiceRequestComponent implements OnInit {
 
     const datepipie = new DatePipe("en-US");
 
-    if (this.serviceRequestform.get('sdate').value != "" && this.serviceRequestform.get('edate').value != "") {
-      let dateSent = new Date(this.serviceRequestform.get('sdate').value);
-      let currentDate = new Date(this.serviceRequestform.get('edate').value);
+    let sDate = this.serviceRequestform.get('sdate').value
+    let eDate = this.serviceRequestform.get('edate').value
+
+    if ((sDate != "" && sDate != null) && (eDate != "" && eDate != null)) {
+      let dateSent = new Date(sDate);
+      let currentDate = new Date(eDate);
 
       let calc = Math.floor(
         (Date.UTC(
@@ -891,29 +894,50 @@ export class ServiceRequestComponent implements OnInit {
       this.isAmc = true;
       this.serviceRequestform.get('sdate').setValidators(Validators.required)
       this.serviceRequestform.get('sdate').updateValueAndValidity()
+      this.serviceRequestform.get('sdate').reset()
+
       this.serviceRequestform.get('edate').setValidators(Validators.required)
       this.serviceRequestform.get('edate').updateValueAndValidity()
+      this.serviceRequestform.get('edate').reset()
+
 
       this.serviceRequestform.get('breakoccurdetailsid').clearValidators()
       this.serviceRequestform.get('breakoccurdetailsid').updateValueAndValidity()
+      this.serviceRequestform.get('breakoccurdetailsid').reset()
+
       this.serviceRequestform.get('alarmdetails').clearValidators()
       this.serviceRequestform.get('alarmdetails').updateValueAndValidity()
+      this.serviceRequestform.get('alarmdetails').reset()
+
       this.serviceRequestform.get('breakdowntype').clearValidators()
       this.serviceRequestform.get('breakdowntype').updateValueAndValidity()
+      this.serviceRequestform.get('breakdowntype').reset()
 
-    } else {
+
+    }
+
+    else {
       this.isAmc = false;
+
       this.serviceRequestform.get('sdate').clearValidators()
       this.serviceRequestform.get('sdate').updateValueAndValidity()
+      this.serviceRequestform.get('sdate').reset()
+
       this.serviceRequestform.get('edate').clearValidators()
       this.serviceRequestform.get('edate').updateValueAndValidity()
+      this.serviceRequestform.get('edate').reset()
 
       this.serviceRequestform.get('breakoccurdetailsid').setValidators(Validators.required)
       this.serviceRequestform.get('breakoccurdetailsid').updateValueAndValidity()
+      this.serviceRequestform.get('breakoccurdetailsid').reset()
+
       this.serviceRequestform.get('alarmdetails').setValidators(Validators.required)
       this.serviceRequestform.get('alarmdetails').updateValueAndValidity()
+      this.serviceRequestform.get('alarmdetails').reset()
+
       this.serviceRequestform.get('breakdowntype').setValidators(Validators.required)
       this.serviceRequestform.get('breakdowntype').updateValueAndValidity()
+      this.serviceRequestform.get('breakdowntype').reset()
 
     }
   }

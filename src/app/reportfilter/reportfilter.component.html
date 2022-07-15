@@ -40,7 +40,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="mb-4">
+                <div class="mb-4" *ngIf="isAmc">
                     <label for="serType" class="form-label">Service Type</label>
                     <select formControlName="serviceType" class="form-select form-select-lg mb-3 text-uppercase"
                         aria-label=".form-select-lg example">

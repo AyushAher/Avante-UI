@@ -5,19 +5,19 @@
         <div class="title_left">
 
           <div class="d-flex" style="align-items: center; justify-content: space-between;">
-            <div class="d-flex" style="align-items: center;justify-content: flex-start;">
+            <h3>Amc List</h3>
+            <div class="d-flex">
 
-              <a *ngIf="!showGrid && isDist" (click)="toggleFilter()" class="nav-link">
+              <a *ngIf="showGrid && isDist" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
                 <i class="fas fa-arrow-left" title="filter"></i>
               </a>
-              <h3>AMC List</h3>
+              <a (click)="Add()" class="nav-link" style="font-size: 1.25rem;" *ngIf="hasAddAccess==true">
+                <i class="fas fa-plus" style="color: #5ba146;" title="Add"></i>
+              </a>
             </div>
-            <a (click)="Add()" class="nav-link" style="font-size: 1.25rem;" *ngIf="hasAddAccess==true">
-              <i class="fas fa-plus" style="color: #5ba146;" title="Add"></i>
-            </a>
           </div>
-
         </div>
+
       </div>
       <hr />
       <div class="clearfix"></div>

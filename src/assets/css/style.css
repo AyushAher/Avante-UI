@@ -15,17 +15,11 @@
 }
 
 @font-face {
-  font-family: "avantgarde_bk_btbook" !important;
+  font-family: "avantgarde_bk_btbook";
   src: url("../fonts/avgardn-webfont.woff2") format("woff2"),
     url("../fonts/avgardn-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal;
-}
-
-body {
-  font-family: "avantgarde_bk_btbook" !important;
-  color: #000;
-  background: #f0f0f0 !important;
 }
 
 a {
@@ -283,8 +277,8 @@ a {
 
 .alert-count {
   position: absolute;
-  top: 5px;
-  left: 22px;
+  top: 0;
+  left: 1rem;
   width: 18px;
   height: 18px;
   display: flex;
@@ -833,6 +827,9 @@ a {
     cursor: move;
     transition: all 0.2s ease-out;
   }
+  .alert-count {
+    left: 0.3rem;
+  }
 }
 
 @-webkit-keyframes animdropdown {
@@ -971,4 +968,38 @@ a {
   .chat-toggle-btn {
     display: none !important;
   }
+}
+
+body {
+  color: #000;
+  background: #f0f0f0 !important;
+}
+* {
+  font-family: "avantgarde_bk_btbook" !important;
+}
+
+i {
+  font-family: "Font Awesome 5 Brands" !important;
+}
+
+i.custLink,
+.fa-arrow-left,
+.fa-pen,
+.fa-times,
+.fa-save,
+.fa-trash,
+.fa-plus,
+.fa-user,
+.fa-ellipsis-v,
+.fa-file-import,
+.fa-search,
+.fa-file-excel,
+.fa-plus-circle,
+.close {
+  color: #0a58ca !important;
+  cursor: pointer;
+}
+
+.notificationDropdown {
+  font-size: 22px;
 }

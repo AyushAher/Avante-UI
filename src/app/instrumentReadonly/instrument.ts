@@ -30,6 +30,7 @@ import {
   SparePartService,
   UploadService
 } from '../_services';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -73,6 +74,9 @@ export class InstrumentRonlyComponent implements OnInit {
   public pdfcolumnDefs: ColDef[];
   private pdfcolumnApi: ColumnApi;
   private pdfapi: GridApi;
+  contactList: any;
+  hasCommercial: boolean;
+  hasWarrenty: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -89,6 +93,8 @@ export class InstrumentRonlyComponent implements OnInit {
     private profileService: ProfileService,
     private distributorService: DistributorService,
     private fileshareService: FileshareService,
+    private _sanitizer: DomSanitizer,
+
   ) { }
 
   ngOnInit() {
@@ -102,6 +108,8 @@ export class InstrumentRonlyComponent implements OnInit {
         this.hasAddAccess = profilePermission[0].create;
         this.hasDeleteAccess = profilePermission[0].delete;
         this.hasUpdateAccess = profilePermission[0].update;
+        this.hasCommercial = profilePermission[0].commercial;
+
       }
     }
     if (this.user.username == "admin") {
@@ -109,6 +117,7 @@ export class InstrumentRonlyComponent implements OnInit {
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
+      this.hasCommercial = true;
     }
 
     this.instrumentform = this.formBuilder.group({
@@ -118,20 +127,27 @@ export class InstrumentRonlyComponent implements OnInit {
       instype: ['', [Validators.required]],
       insversion: ['', Validators.required],
       image: [''],
-      shipdt: ['', Validators.required],
+      shipdt: [''],
       installdt: ['', Validators.required],
       installby: ['', Validators.required],
-      engname: ['', Validators.required],
-      engcontact: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(10)]],
+      engname: [''],
+      engcontact: [''],
       engemail: ['', [Validators.required, Validators.email]],
-      warranty: [''],
+      warranty: false,
+      isactive: true,
+      isdeleted: [false],
       wrntystdt: [''],
       wrntyendt: [''],
       configtypeid: [''],
+      configvalueid: [''],
       installbyOther: [''],
-      isactive: [true],
-      isdeleted: [false],
+      operatorId: ['', Validators.required],
+      dateOfPurchase: [],
+      cost: [0],
+      currencyId: [""],
+      instruEngineerId: ['', Validators.required]
     });
+    
     this.imageUrl = this.noimageData;
     this.instrumentform.get('warranty').valueChanges
       .subscribe(value => {
@@ -206,13 +222,20 @@ export class InstrumentRonlyComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            this.hasWarrenty = data.object.warranty
             //debugger;
-            if (data.object.image != null) {
-              this.getfileImage(data.object.image);
-            }
+            this.customerSiteService.getById(data.object.custSiteId)
+              .pipe(first()).subscribe((dataa: any) => {
+                this.contactList = dataa.object.contacts;
+              });
+
+            if (data.object.image == null) this.imageUrl = this.noimageData;
             else {
-              this.imageUrl = this.noimageData;
+              this.imageUrl = "data:image/jpeg;base64, " + data.object.image;
+              this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
             }
+
+
             this.instrumentform.patchValue(data.object);
             this.sparePartDetails = data.object.spartParts;
             this.recomandFilter(this.sparePartDetails);
@@ -242,6 +265,7 @@ export class InstrumentRonlyComponent implements OnInit {
         });
       this.pdfcolumnDefs = this.pdfcreateColumnDefs();
       this.columnDefs = this.createColumnDefs();
+      this.instrumentform.disable()
     }
   }
 
@@ -256,27 +280,6 @@ export class InstrumentRonlyComponent implements OnInit {
 
   Back() {
     this.router.navigate(["/search"])
-  }
-
-  getfileImage(filePath: string) {
-    //debugger;
-    if (filePath != null && filePath != "") {
-      this.uploadService.getFile(filePath)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            //debugger;
-            this.imageUrl = 'data:image/jpeg;base64,' + data.data;
-            // this.alertService.success('File Upload Successfully.');
-            // this.imagePath = data.path;
-
-          },
-          error: error => {
-
-            this.imageUrl = this.noimageData;
-          }
-        });
-    }
   }
 
 

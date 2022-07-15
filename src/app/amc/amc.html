@@ -182,7 +182,9 @@
                   bsDatepicker />
               </div>
 
-              <div style="display: block" *ngIf="submitted && f.tnc.errors" class="invalid-feedback">
+              <div style="display: block"
+                *ngIf="submitted && (f.firstVisitDateTo.errors || f.firstVisitDateFrom.errors)"
+                class="invalid-feedback">
                 <div *ngIf="f.tnc.errors.required">
                   First Visit Date is required
                 </div>
@@ -204,7 +206,9 @@
                   bsDatepicker />
               </div>
 
-              <div style="display: block" *ngIf="submitted && f.tnc.errors" class="invalid-feedback">
+              <div style="display: block"
+                *ngIf="submitted && (f.secondVisitDateFrom.errors || f.secondVisitDateTo.errors)"
+                class="invalid-feedback">
                 <div *ngIf="f.tnc.errors.required">
                   Second Visit Date is required
                 </div>

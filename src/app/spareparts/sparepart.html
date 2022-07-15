@@ -75,8 +75,7 @@
             </div>
             <div class="col-md-1 col-sm-1">
               <label for=""></label>
-              <button type="button" class="btn btn-primary" style="margin-top: 31px;"
-                [disabled]="!isEditMode && !isNewMode"
+              <button type="button" class="btn btn-primary mt-4" [disabled]="!isEditMode && !isNewMode"
                 (click)="getSpareByNo(partNo.value,configType.value,configvalue.value)">Get</button>
             </div>
           </div>
@@ -147,94 +146,90 @@
           </div>
 
           <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="price">List Price</label>
-              <input type="number" formControlName="price" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.price.errors }" />
-              <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
-                <div *ngIf="f.price.errors.required">List Price is required</div>
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-6 col-sm-6">
+                  <label for="price">List Price</label>
+                  <input type="number" formControlName="price" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.price.errors }" />
+                  <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                    <div *ngIf="f.price.errors.required">List Price is required</div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                  <label for=""></label>
+                  <div class="checkbox">
+                    <label for="isObselete">
+                      <input type="checkbox" formControlName="isObselete" class="" />
+                      Is Obselete
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                  <label for="replacepPartNoId">Replacement Part</label>
+                  <select formControlName="replacepPartNoId" class="form-select"
+                    [ngClass]="{ 'is-invalid': submitted && f.replacepPartNoId.errors }">
+                    <option value="0"></option>
+                    <option *ngFor="let congfig of replacementParts" value={{congfig.id}}>
+                      {{congfig.partNo}}
+                    </option>
+                  </select>
+                  <!--<input type="text" formControlName="replacepPartNoId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.replacepPartNoId.errors }" />-->
+                  <div *ngIf="submitted && f.replacepPartNoId.errors" class="invalid-feedback">
+                    <div *ngIf="f.replacepPartNoId.errors.required">Replacement Part is required</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                  <label for="currencyid">Currency</label>
+                  <select formControlName="currencyid" class="form-select"
+                    [ngClass]="{ 'is-invalid': submitted && f.currencyid.errors }">
+                    <!--<option value="0">--All--</option>-->
+                    <option *ngFor="let c of currency" value={{c.id}}>
+                      {{c.name}}
+                    </option>
+                  </select>
+                  <div *ngIf="submitted && f.currencyid.errors" class="invalid-feedback">
+                    <div *ngIf="f.currencyid.errors.required">Currency is required</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                  <label for="currencyid">Business Unit</label>
+                  <select formControlName="businessUnit" (change)="onBusinessUnitChange()" class="form-select"
+                    [ngClass]="{ 'is-invalid': submitted && f.businessUnit.errors }">
+                    <option *ngFor="let c of businessUnitList" value={{c.listTypeItemId}}>
+                      {{c.itemname}}
+                    </option>
+                  </select>
+                  <div *ngIf="submitted && f.businessUnit.errors" class="invalid-feedback">
+                    <div *ngIf="f.businessUnit.errors.required">Business Unit is required</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                  <label for="currencyid">Analytical Techniques</label>
+                  <select formControlName="analyticalTechnique" class="form-select"
+                    [ngClass]="{ 'is-invalid': submitted && f.analyticalTechnique.errors }">
+                    <option *ngFor="let c of analyticalList" value={{c.id}}>
+                      {{c.name}}
+                    </option>
+                  </select>
+                  <div *ngIf="submitted && f.analyticalTechnique.errors" class="invalid-feedback">
+                    <div *ngIf="f.analyticalTechnique.errors.required">Analytical Technique is required</div>
+                  </div>
+                </div>
+
+
               </div>
             </div>
-            <div class="col-md-4 col-sm-4">
-              <label for="replacepPartNoId">Replacement Part</label>
-              <select formControlName="replacepPartNoId" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.replacepPartNoId.errors }">
-                <option value="0"></option>
-                <option *ngFor="let congfig of replacementParts" value={{congfig.id}}>
-                  {{congfig.partNo}}
-                </option>
-              </select>
-              <!--<input type="text" formControlName="replacepPartNoId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.replacepPartNoId.errors }" />-->
-              <div *ngIf="submitted && f.replacepPartNoId.errors" class="invalid-feedback">
-                <div *ngIf="f.replacepPartNoId.errors.required">Replacement Part is required</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4 sparePartImg" *ngIf="imageUrl && imageUrl !== ''">
-              <img [src]="imageUrl" [alt]="" style="width: 200px;height: 200px; padding:10px;">
+            <div class="col-md-4 col-sm-4 sparePartImg d-flex justify-content-center"
+              *ngIf=" imageUrl && imageUrl !==''">
+              <img [src]=" imageUrl" style="width: 200px;height: 200px; padding:10px;">
             </div>
           </div>
           <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for=""></label>
-              <div class="checkbox">
-                <label for="isObselete">
-                  <input type="checkbox" formControlName="isObselete" class="" />
-                  Is Obselete
-                </label>
-              </div>
-            </div>
-
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="currencyid">Currency</label>
-              <select formControlName="currencyid" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.currencyid.errors }">
-                <!--<option value="0">--All--</option>-->
-                <option *ngFor="let c of currency" value={{c.id}}>
-                  {{c.name}}
-                </option>
-              </select>
-              <div *ngIf="submitted && f.currencyid.errors" class="invalid-feedback">
-                <div *ngIf="f.currencyid.errors.required">Currency is required</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4">
-              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
-              <input type='file' formControlName="image" id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput
-                (change)="uploadFile(fileInput.files,id)" />
-              <div *ngIf="submitted && f.image.errors" class="invalid-feedback">
-                <div *ngIf="f.image.errors.required">Image is required</div>
-              </div>
-            </div>
-
-          </div>
-          <div class="row my-2">
-            <div class="col-md-4 col-sm-4">
-              <label for="currencyid">Business Unit</label>
-              <select formControlName="businessUnit" (change)="onBusinessUnitChange()" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.businessUnit.errors }">
-                <option *ngFor="let c of businessUnitList" value={{c.listTypeItemId}}>
-                  {{c.itemname}}
-                </option>
-              </select>
-              <div *ngIf="submitted && f.businessUnit.errors" class="invalid-feedback">
-                <div *ngIf="f.businessUnit.errors.required">Business Unit is required</div>
-              </div>
-            </div>
-
-            <div class="col-md-4 col-sm-4">
-              <label for="currencyid">Analytical Techniques</label>
-              <select formControlName="analyticalTechnique" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.analyticalTechnique.errors }">
-                <option *ngFor="let c of analyticalList" value={{c.id}}>
-                  {{c.name}}
-                </option>
-              </select>
-              <div *ngIf="submitted && f.analyticalTechnique.errors" class="invalid-feedback">
-                <div *ngIf="f.analyticalTechnique.errors.required">Analytical Technique is required</div>
-              </div>
-            </div>
 
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Instrument Model</label>
@@ -248,6 +243,17 @@
                 <div *ngIf="f.instrument.errors.required">Instrument is required</div>
               </div>
             </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
+              <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput
+                (change)="uploadFile(fileInput.files,id)" />
+              <div *ngIf="submitted && f.image.errors" class="invalid-feedback">
+                <div *ngIf="f.image.errors.required">Image is required</div>
+              </div>
+            </div>
+
+
           </div>
 
           <hr />

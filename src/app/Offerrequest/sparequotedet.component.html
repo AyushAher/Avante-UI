@@ -3,11 +3,8 @@
     <div class="modal-content">
       <div class="modal-header" style="background-color: #589b44; color: #fff">
         <h4 class="modal-title" id="modal-basic-title">Spare Quotation Date</h4>
-        <button type="button"
-                class="close"
-                aria-label="Close"
-                data-dismiss="modal" (click)="close()">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+          <i class="fas fa-times" style="color: #fff !important" title="Close"></i>
         </button>
       </div>
       <div class="py-3 px-3 pb-2">
@@ -19,8 +16,8 @@
               <div class="col-md-6 col-sm-6">
                 <label for="status">Raised By</label>
                 <select formControlName="raisedBy" id="raisedby"
-                        [ngClass]="{ 'is-invalid': submitted && f.raisedBy.errors }" class="form-select"
-                        (change)="changeDate($event.target.value,'RaisedDate')">
+                  [ngClass]="{ 'is-invalid': submitted && f.raisedBy.errors }" class="form-select"
+                  (change)="changeDate($event.target.value,'RaisedDate')">
                   <option *ngFor="let d of raisedByList" value="{{d.id}}">
                     {{d.fname + " " + d.lname}}
                   </option>
@@ -35,8 +32,8 @@
               <div class="col-md-6 col-sm-6">
                 <label for="status">Raised Date</label>
                 <input id="raiseddate" (bsValueChange)="changeDate($event,'RaisedDate')" bsDatepicker type="text"
-                       [ngClass]="{ 'is-invalid': submitted && f.raisedDate.errors }" formControlName="raisedDate"
-                       class="form-control"/>
+                  [ngClass]="{ 'is-invalid': submitted && f.raisedDate.errors }" formControlName="raisedDate"
+                  class="form-control" />
 
                 <div *ngIf="f.raisedDate.errors" class="invalid-feedback">
                   <div *ngIf="f.raisedDate.errors.required">Raised Date is required</div>
@@ -47,7 +44,7 @@
               <div class="col-md-12 col-sm-12">
                 <label for="status">Comments</label>
                 <textarea id="comments" type="text" [ngClass]="{ 'is-invalid': submitted && f.comments.errors }"
-                          formControlName="comments" class="form-control">
+                  formControlName="comments" class="form-control">
                 </textarea>
                 <div *ngIf="f.comments.errors" class="invalid-feedback">
                   <div *ngIf="f.comments.errors.required">Comments is required</div>
@@ -56,11 +53,11 @@
               </div>
 
               <div class="col-md-6 col-sm-6"
-                   [style.display]="(ShowCustResponseDate && isRaisedBy && parentId!=null)?'block':'none'">
+                [style.display]="(ShowCustResponseDate && isRaisedBy && parentId!=null)?'block':'none'">
                 <label for="status">Customer Response Date</label>
                 <input id="custresponsedate" bsDatepicker (bsValueChange)="changeDate($event,'CustResDate')" type="text"
-                       [ngClass]="{ 'is-invalid': submitted && f.custResponseDate.errors }"
-                       formControlName="custResponseDate" class="form-control"/>
+                  [ngClass]="{ 'is-invalid': submitted && f.custResponseDate.errors }"
+                  formControlName="custResponseDate" class="form-control" />
 
                 <div *ngIf="f.custResponseDate.errors" class="invalid-feedback">
                   <div *ngIf="f.custResponseDate.errors.required">Customer Response Date is required</div>
@@ -71,8 +68,7 @@
               <div class="col-md-6 col-sm-6" [style.display]="(showStatus && parentId!=null)? 'block' : 'none' ">
                 <label for="status">Status</label>
                 <select formControlName="status" [ngClass]="{ 'is-invalid': submitted && f.status.errors }"
-                        (change)="statusChanged($event.target.value)" id="status"
-                        class="form-select">
+                  (change)="statusChanged($event.target.value)" id="status" class="form-select">
                   <option *ngFor="let d of statusList" value="{{d.listTypeItemId}}">
                     {{d.itemname}}
                   </option>
@@ -87,9 +83,8 @@
               <div class="col-md-6 col-sm-6" [style.display]="(currentStatus == PORaisedId)?'block':'none'">
                 <label for="status">PO Raised Date (ZOHO)</label>
                 <input id="zohoporaiseddate" bsDatepicker type="text"
-                       [ngClass]="{ 'is-invalid': submitted && f.zohoPORaisedDate.errors }"
-                       formControlName="zohoPORaisedDate"
-                       class="form-control"/>
+                  [ngClass]="{ 'is-invalid': submitted && f.zohoPORaisedDate.errors }"
+                  formControlName="zohoPORaisedDate" class="form-control" />
 
                 <div *ngIf="f.zohoPORaisedDate.errors" class="invalid-feedback">
                   <div>PO Raised Date is required</div>
@@ -100,8 +95,8 @@
               <div class="col-md-6 col-sm-6" [style.display]="currentStatus == completedId ?'block':'none'">
                 <label for="status">Delivered On</label>
                 <input id="deliveredon" bsDatepicker type="text"
-                       [ngClass]="{ 'is-invalid': submitted && f.deliveredOn.errors }" formControlName="deliveredOn"
-                       class="form-control"/>
+                  [ngClass]="{ 'is-invalid': submitted && f.deliveredOn.errors }" formControlName="deliveredOn"
+                  class="form-control" />
 
                 <div *ngIf="f.deliveredOn.errors" class="invalid-feedback">
                   <div>Delivered On is required</div>
@@ -112,8 +107,8 @@
               <div class="col-md-6 col-sm-6" [style.display]="currentStatus == shippedId?'block':'none'">
                 <label for="status">Shipped Date</label>
                 <input id="shippedDate" bsDatepicker type="text"
-                       [ngClass]="{ 'is-invalid': submitted && f.shippedDate.errors }" formControlName="shippedDate"
-                       class="form-control"/>
+                  [ngClass]="{ 'is-invalid': submitted && f.shippedDate.errors }" formControlName="shippedDate"
+                  class="form-control" />
 
                 <div *ngIf="f.shippedDate.errors" class="invalid-feedback">
                   <div>Shipped Date is required</div>
@@ -126,7 +121,8 @@
           </div>
           <div class="row">
             <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
-              <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)" class="btn btn-primary">
+              <button [disabled]="loading" *ngIf="(hasUpdateAccess) || (hasAddAccess && id==null)"
+                class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
               </button>

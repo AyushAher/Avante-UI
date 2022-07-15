@@ -96,6 +96,7 @@ export class InstrumentComponent implements OnInit {
   isEditMode;
   isNewMode: boolean;
   siteId: any;
+  hasWarrenty: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -175,7 +176,12 @@ export class InstrumentComponent implements OnInit {
     this.instrumentform.get('warranty').valueChanges
       .subscribe(value => {
         //debugger;
+        this.hasWarrenty = value
         if (value) {
+          if (this.isEditMode || this.isNewMode) {
+            this.instrumentform.get('wrntystdt').enable();
+            this.instrumentform.get('wrntyendt').enable();
+          }
           this.instrumentform.get('wrntystdt').setValidators([Validators.required]);
           this.instrumentform.get('wrntystdt').updateValueAndValidity();
           this.instrumentform.get('wrntyendt').setValidators([Validators.required]);
@@ -187,6 +193,8 @@ export class InstrumentComponent implements OnInit {
           this.instrumentform.get('engcontact').setValidators([Validators.required]);
           this.instrumentform.get('engcontact').updateValueAndValidity();
         } else {
+          this.instrumentform.get('wrntystdt').disable();
+          this.instrumentform.get('wrntyendt').disable();
           this.instrumentform.get('wrntystdt').clearValidators();
           this.instrumentform.get('wrntystdt').updateValueAndValidity();
           this.instrumentform.get('wrntyendt').clearValidators();
@@ -257,9 +265,12 @@ export class InstrumentComponent implements OnInit {
                 this.contactList = dataa.object.contacts;
               });
 
-            if (data.object.image == null) {
-              this.imageUrl = this.noimageData;
+            if (data.object.image == null) this.imageUrl = this.noimageData;
+            else {
+              this.imageUrl = "data:image/jpeg;base64, " + data.object.image;
+              this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
             }
+
 
             this.fileshareService.list(data.object.id)
               .pipe(first())
@@ -269,19 +280,12 @@ export class InstrumentComponent implements OnInit {
                 },
               });
 
-            this.fileshareService.getImg(data.object.id, "INST")
-              .pipe(first())
-              .subscribe({
-                next: (data: any) => {
-                  this.imageUrl = "data:image/jpeg;base64, " + data.object;
-                  this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
-                  // this.attachments = data.object;
-                },
-              });
-
+            this.hasWarrenty = data.object.warranty
             setTimeout(() => this.instrumentform.patchValue(data.object), 500);
 
             this.sparePartDetails = data.object.spartParts;
+            console.log(data.object.spartParts);
+
             this.recomandFilter(this.sparePartDetails);
             for (let i = 0; i < data.object.spartParts.length; i++) {
               if (this.selectedConfigType.filter(x => x.id == data.object.spartParts[i].configValueid && x.listTypeItemId == data.object.spartParts[i].configTypeid
@@ -308,8 +312,7 @@ export class InstrumentComponent implements OnInit {
           next: (data: any) =>
             this.PdffileData = data.object
         });
-
-      this.instrumentform.disable()
+      setTimeout(() => this.instrumentform.disable(), 500);
       this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
       this.columnDefs = this.createColumnDefsRO();
     }
@@ -334,6 +337,8 @@ export class InstrumentComponent implements OnInit {
       this.pdfcolumnDefs = this.pdfcreateColumnDefs();
       this.columnDefs = this.createColumnDefs();
 
+      let warrenty = this.instrumentform.get('warranty')
+      warrenty.setValue(warrenty.value)
     }
   }
 
@@ -480,7 +485,7 @@ export class InstrumentComponent implements OnInit {
   }
 
   onDropdownChange(value: string, configvalue: string) {
-    //debugger;
+    // debugger;
     if (configvalue == "0") {
       configvalue = "";
     }
@@ -502,6 +507,8 @@ export class InstrumentComponent implements OnInit {
                 cnfig.sparePartId = data.object[i].id;
                 this.selectedConfigType.push(cnfig);
               }
+              console.log(data.object );
+              
             }
           },
           error: error => {
@@ -656,18 +663,10 @@ export class InstrumentComponent implements OnInit {
               if (this.file != null) {
                 this.saveFileShare(this.file, data.object.id)
               }
-              this.uploadFile(this.img, data.object.id)
-
-            }
-            else {
-
+              if (this.img != null && this.img != "") this.uploadFile(this.img, this.id)
             }
             this.loading = false;
           },
-          error: error => {
-
-            this.loading = false;
-          }
         });
     }
     else {
@@ -680,18 +679,14 @@ export class InstrumentComponent implements OnInit {
               if (this.file != null) {
                 this.saveFileShare(this.file, this.id)
               }
+              if (this.img != null && this.img != "") this.uploadFile(this.img, this.id)
+
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["instrumentlist"]);
-            } else {
-
             }
             this.loading = false;
 
           },
-          error: error => {
-
-            this.loading = false;
-          }
         });
     }
   }
@@ -717,6 +712,7 @@ export class InstrumentComponent implements OnInit {
         headerName: 'Type',
         field: 'configTypeName',
         filter: false,
+        resizable: true,
         enableSorting: false,
         editable: false,
         sortable: false,
@@ -729,6 +725,7 @@ export class InstrumentComponent implements OnInit {
         filter: false,
         enableSorting: false,
         editable: false,
+        resizable: true,
         sortable: false,
         width: 0,
         hide: true,
@@ -736,6 +733,7 @@ export class InstrumentComponent implements OnInit {
       {
         headerName: 'Value',
         field: 'configValueName',
+        resizable: true,
         filter: false,
         enableSorting: false,
         editable: false,
@@ -747,6 +745,7 @@ export class InstrumentComponent implements OnInit {
         headerName: 'Part Number',
         field: 'partNo',
         filter: true,
+        resizable: true,
         enableSorting: true,
         editable: false,
         sortable: true,
@@ -755,6 +754,7 @@ export class InstrumentComponent implements OnInit {
         headerName: 'Description',
         field: 'itemDesc',
         filter: true,
+        resizable: true,
         editable: false,
         sortable: true,
         tooltipField: 'itemDesc',
@@ -776,6 +776,7 @@ export class InstrumentComponent implements OnInit {
       {
         headerName: 'Desc. As Per Catlog',
         field: 'descCatalogue',
+        resizable: true,
         filter: true,
         editable: false,
         sortable: true,
@@ -791,6 +792,7 @@ export class InstrumentComponent implements OnInit {
         field: 'configTypeName',
         filter: false,
         enableSorting: false,
+        resizable: true,
         editable: false,
         sortable: false,
         width: 100,
@@ -800,6 +802,7 @@ export class InstrumentComponent implements OnInit {
         headerName: 'Type',
         field: 'configValueid',
         filter: false,
+        resizable: true,
         enableSorting: false,
         editable: false,
         sortable: false,
@@ -809,6 +812,7 @@ export class InstrumentComponent implements OnInit {
       {
         headerName: 'Value',
         field: 'configValueName',
+        resizable: true,
         filter: false,
         enableSorting: false,
         editable: false,
@@ -819,6 +823,7 @@ export class InstrumentComponent implements OnInit {
       {
         headerName: 'Part Number',
         field: 'partNo',
+        resizable: true,
         filter: true,
         enableSorting: true,
         editable: false,
@@ -826,6 +831,7 @@ export class InstrumentComponent implements OnInit {
         tooltipField: 'partNo',
       }, {
         headerName: 'Description',
+        resizable: true,
         field: 'itemDesc',
         filter: true,
         editable: false,
@@ -837,6 +843,7 @@ export class InstrumentComponent implements OnInit {
         field: 'qty',
         filter: true,
         editable: false,
+        
         sortable: true
       },
       {
@@ -850,6 +857,7 @@ export class InstrumentComponent implements OnInit {
         headerName: 'Desc. As Per Catlog',
         field: 'descCatalogue',
         filter: true,
+        resizable: true,
         editable: false,
         sortable: true,
         tooltipField: 'descCatalogue',
@@ -886,34 +894,31 @@ export class InstrumentComponent implements OnInit {
         case "remove":
           if (confirm("Are you sure, you want to remove the config type?") == true) {
             this.config = new instrumentConfig();
-
             this.config.configtypeid = data.configTypeid;
             this.config.configvalueid = data.configValueid;
             this.config.instrumentid = this.id;
             this.config.sparepartid = data.id;
+            if (this.id != null) {
+              this.instrumentService.deleteConfig(this.config)
+                .pipe(first())
+                .subscribe({
+                  next: (d: any) => {
+                    if (d.result) {
+                      this.notificationService.showSuccess(d.resultMessage, "Success");
+                      this.selectedConfigType = this.selectedConfigType.filter(x => !(x.id == data.configValueid && x.listTypeItemId == data.configTypeid && x.sparePartId == data.id));
+                      this.sparePartDetails = this.sparePartDetails.filter(x => !(x.configValueid == data.configValueid && x.configTypeid == data.configTypeid && x.id == data.id));
+                      this.recomandFilter(this.sparePartDetails);
+                    }
+                  },
+                });
+            }
+            else {
+              this.notificationService.showSuccess("Deleted Successfully ", "Success");
+              this.selectedConfigType = this.selectedConfigType.filter(x => !(x.id == data.configValueid && x.listTypeItemId == data.configTypeid && x.sparePartId == data.id));
+              this.sparePartDetails = this.sparePartDetails.filter(x => !(x.configValueid == data.configValueid && x.configTypeid == data.configTypeid && x.id == data.id));
+              this.recomandFilter(this.sparePartDetails);
 
-            //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
-            this.instrumentService.deleteConfig(this.config)
-              .pipe(first())
-              .subscribe({
-                next: (d: any) => {
-                  if (d.result) {
-                    this.notificationService.showSuccess(d.resultMessage, "Success");
-                    this.selectedConfigType = this.selectedConfigType.filter(x => !(x.id == data.configValueid && x.listTypeItemId == data.configTypeid && x.sparePartId == data.id));
-                    const selectedData = this.api.getSelectedRows();
-                    this.sparePartDetails = this.sparePartDetails.filter(x => !(x.configValueid == data.configValueid && x.configTypeid == data.configTypeid && x.id == data.id));
-                    //this.api.applyTransaction({ remove: selectedData });
-                    this.recomandFilter(this.sparePartDetails);
-                  }
-                  else {
-                    (d.resultMessage, "Error");
-                  }
-                },
-                error: error => {
-
-                  this.loading = false;
-                }
-              });
+            }
           }
       }
     }
@@ -1010,20 +1015,9 @@ export class InstrumentComponent implements OnInit {
                           this.PdffileData = data.object;
                           //this.getPdffile(data.object.filePath);
                         },
-                        error: error => {
-
-                          this.loading = false;
-                        }
                       });
                   }
-                  else {
-                    (d.resultMessage, "Error");
-                  }
                 },
-                error: error => {
-
-                  this.loading = false;
-                }
               });
           }
           break;

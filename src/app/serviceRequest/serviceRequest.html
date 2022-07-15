@@ -447,9 +447,12 @@
             <div *ngIf="IsEngineerView" aria-labelledby="home-tab" class="tab-pane fade" id="home" role="tabpanel"
               [ngClass]="{ 'show active': IsEngineerView && !IsDistributorView }">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+
                 <button (click)="open(serviceRequestId)" *ngIf="!accepted && !isGenerateReport && isEditMode"
-                  class="btn btn-sm btn-success button" style="margin: 10px;" type="button"><i
-                    class="fas fa-plus-circle" title="Add"></i></button>
+                  class="btn" style="margin: 10px;" type="button">
+                  <i class="fas fa-plus" title="Add"></i>
+                </button>
+
                 <ag-grid-angular style="width: 100%; height: 250px;" (rowClicked)="onRowClicked($event)"
                   (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
                   (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="engineerCommentList"
@@ -470,8 +473,9 @@
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <div class="" style="display: flex; justify-content:space-between"
                   *ngIf="accepted && !isGenerateReport && isEditMode">
-                  <button (click)="openaction(serviceRequestId)" class="btn btn-sm btn-success button"
-                    style="margin: 10px;" type="button"><i class="fas fa-plus-circle" title="Add"></i>
+                  <button (click)="openaction(serviceRequestId)" class="btn"
+                    style="margin: 10px;" type="button">
+                    <i class="fas fa-plus" title="Add"></i>
                   </button>
                   <a href="teamviewer8://" class="link-primary mt-3">Open TeamViewer</a>
                 </div>

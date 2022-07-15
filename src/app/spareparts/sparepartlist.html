@@ -3,12 +3,18 @@
     <div class="container">
       <div class="page-title">
         <div class="title_left">
-          
+
           <div class="d-flex" style="align-items: center; justify-content: space-between;">
             <h3>Spare part List</h3>
-            <a (click)="Add()" class="nav-link" style="font-size: 1.25rem;" *ngIf="hasAddAccess==true">
-              <i class="fas fa-plus" style="color: #5ba146;" title="Add"></i>
-            </a>
+            <div class="d-flex">
+
+              <a *ngIf="showGrid && isDist" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
+                <i class="fas fa-arrow-left" title="filter"></i>
+              </a>
+              <a (click)="Add()" class="nav-link" style="font-size: 1.25rem;" *ngIf="hasAddAccess==true">
+                <i class="fas fa-plus" style="color: #5ba146;" title="Add"></i>
+              </a>
+            </div>
           </div>
 
         </div>
@@ -22,11 +28,11 @@
       <app-distributorfilter (showData)="ShowData($event)" *ngIf="!showGrid" (nData)="DataFilter($event)"
         controller="SpareParts">
       </app-distributorfilter>
- 
+
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
-        <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="EditRecord()"
-          class="ag-theme-alpine" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="sparePartList"
-          rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+        <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="EditRecord()" class="ag-theme-alpine"
+          (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="sparePartList" rowSelection="single"
+          pagination="true" paginationPageSize=10></ag-grid-angular>
       </div>
     </div>
   </div>

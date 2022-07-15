@@ -350,12 +350,13 @@ export class UserProfileComponent implements OnInit {
     this.contactId = this.userlist.filter(x => x.userid === value)[0].contactid;
     this.customerService.getAllByConId(this.contactId)
       .pipe(first()).subscribe((data: any) => {
-        this.siteList = data.object[0].sites
+        if (data.object.length > 0) this.siteList = data.object[0].sites
+        else this.siteList = []
 
         this.GetDistributorByContactId();
         this.userprofileService.getByUserId(this.contactId)
           .pipe(first()).subscribe((data: any) => {
-            this.isCustomer = data.object.userType.toLowerCase() == "customer";
+            this.isCustomer = data.object?.userType.toLowerCase() == "customer";
             if (this.isCustomer) {
               this.userprofileform.get("custSites").setValidators([Validators.required])
               this.userprofileform.get("custSites").updateValueAndValidity();

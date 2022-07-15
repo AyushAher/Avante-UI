@@ -4,17 +4,15 @@
 
       <div class="page-title">
         <div class="title_left" style="display: flex; justify-content: space-between;">
-          <div class="d-flex" style="align-items: center;">
-            <a (click)="Back()" class="nav-link">
-              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
-            </a>
-            <h3>Audit Trail Details</h3>
-          </div>
+          <h3>Audit Trail Details</h3>
+          <a (click)="Back()" class="nav-link">
+            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+          </a>
         </div>
       </div>
 
       <div class="clearfix"></div>
-      <hr/>
+      <hr />
 
       <div class="col-md-12 col-sm-12 ">
         <form [formGroup]="form">
@@ -37,7 +35,7 @@
               <input type="text" formControlName="screen" id="Screen" class="form-control">
             </div>
           </div>
-          <br/>
+          <br />
           <hr>
 
           <div class="row">
@@ -46,16 +44,16 @@
               <h3>New Value</h3>
               <table class="table table-striped">
                 <thead>
-                <tr>
-                  <th scope="col">Field</th>
-                  <th scope="col">New Value</th>
-                </tr>
+                  <tr>
+                    <th scope="col">Field</th>
+                    <th scope="col">New Value</th>
+                  </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let o of nValue | keyvalue">
-                  <td> {{o.key}}</td>
-                  <td>{{o.value}}</td>
-                </tr>
+                  <tr *ngFor="let o of nValue | keyvalue">
+                    <td> {{o.key}}</td>
+                    <td>{{o.value}}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -64,16 +62,16 @@
               <h3>Old Value</h3>
               <table class="table table-striped">
                 <thead>
-                <tr>
-                  <th scope="col">Field</th>
-                  <th scope="col">Old Value</th>
-                </tr>
+                  <tr>
+                    <th scope="col">Field</th>
+                    <th scope="col">Old Value</th>
+                  </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let o of oValue | keyvalue">
-                  <td> {{o.key}}</td>
-                  <td>{{o.value}}</td>
-                </tr>
+                  <tr *ngFor="let o of oValue | keyvalue">
+                    <td> {{o.key}}</td>
+                    <td>{{o.value}}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>

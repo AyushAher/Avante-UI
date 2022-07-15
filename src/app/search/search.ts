@@ -19,7 +19,7 @@ export class SearchComponent implements OnInit {
 
   user: User;
   form: FormGroup;
-  instrumentList: Instrument[];
+  instrumentList: Instrument[] = [];
   customersite: CustomerSite[];
   loading = false;
   submitted = false;
@@ -52,18 +52,9 @@ export class SearchComponent implements OnInit {
 
     let role = JSON.parse(localStorage.getItem('roles'));
     this.user = this.accountService.userValue;
-    this.customerSiteService.getAllCustomerSites()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          //debugger;
-          this.customersite = data.object;
-        },
-        error: () => {
 
-          this.loading = false;
-        }
-      });
+    this.customerSiteService.getAllCustomerSites()
+      .pipe(first()).subscribe((data: any) => this.customersite = data.object);
 
     if (this.user.username != "admin") {
       role = role[0]?.itemCode;
@@ -87,9 +78,6 @@ export class SearchComponent implements OnInit {
       this.searchKeyword = new search;
       this.searchKeyword.search = JSON.parse(localStorage.getItem('search')).search;
       this.searchKeyword.custSiteId = JSON.parse(localStorage.getItem('search')).custSiteId;
-      //localStorage.removeItem('search');
-
-      //  this.testFormElement.ngSubmit.emit();
     }
   }
 
@@ -99,15 +87,8 @@ export class SearchComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
             this.visible = true;
             this.instrumentList = data.object;
-            // localStorage.setItem('search', JSON.stringify(this.searchKeyword));
-          },
-          error: () => {
-            //this.alertService.error(error);
-
-            this.loading = false;
           }
         });
     }
@@ -194,11 +175,6 @@ export class SearchComponent implements OnInit {
           this.visible = true;
           this.instrumentList = data.object;
           localStorage.setItem('search', JSON.stringify(this.searchKeyword));
-        },
-        error: () => {
-          //this.alertService.error(error);
-
-          this.loading = false;
         }
       });
   }

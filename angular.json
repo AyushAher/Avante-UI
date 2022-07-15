@@ -34,7 +34,7 @@
               "src/assets/css/perfect-scrollbar.css",
               "src/assets/css/metisMenu.min.css",
               "src/assets/css/style.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+              "node_modules/@fortawesome/fontawesome-free/css/all.css"
             ],
             "scripts": [
               "node_modules/intl-tel-input/build/js/intlTelInput.min.js",

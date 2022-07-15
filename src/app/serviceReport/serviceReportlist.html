@@ -6,6 +6,11 @@
 
           <div class="d-flex" style="align-items: center; justify-content: space-between;">
             <h3>Service Report List</h3>
+            <div class="d-flex">
+              <a *ngIf="showGrid && isDist" (click)="toggleFilter()" class="nav-link">
+                <i class="fas fa-arrow-left" title="filter"></i>
+              </a>
+            </div>
           </div>
 
         </div>
@@ -13,9 +18,6 @@
       <hr />
       <div class="clearfix"></div>
 
-      <a *ngIf="showGrid && isDist" (click)="toggleFilter()" class="nav-link">
-        <i class="fas fa-arrow-left" title="filter"></i>
-      </a>
 
       <app-distributorfilter (showData)="ShowData($event)" *ngIf="!showGrid" (nData)="DataFilter($event)"
         controller="ServiceReports">
