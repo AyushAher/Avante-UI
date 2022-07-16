@@ -868,29 +868,29 @@ export class AmcComponent implements OnInit {
     let sfeDate = this.DateDiff(this.model.secondVisitDateFrom, this.model.edate)
     let steDate = this.DateDiff(this.model.secondVisitDateTo, this.model.edate)
 
-    if (ffsDate <= 0) {
+    if (ffsDate < 0) {
       return this.notificationService.showError("First Visit From Date should not be greater than Start Date", "Invalid Date")
     }
-    if (ftsDate <= 0) {
+    if (ftsDate < 0) {
       return this.notificationService.showError("First Visit To Date should not be greater than Start Date", "Invalid Date")
     }
-    if (fteDate <= 0) {
+    if (fteDate < 0) {
       return this.notificationService.showError("First Visit To Date should not be greater than End Date", "Invalid Date")
     }
-    if (ffeDate <= 0) {
+    if (ffeDate < 0) {
       return this.notificationService.showError("First Visit From Date should not be greater than End Date", "Invalid Date")
     }
 
-    if (sfsDate <= 0) {
+    if (sfsDate < 0) {
       return this.notificationService.showError("Second Visit From Date should not be greater than Start Date", "Invalid Date")
     }
-    if (stsDate <= 0) {
+    if (stsDate < 0) {
       return this.notificationService.showError("Second Visit To Date should not be greater than Start Date", "Invalid Date")
     }
-    if (steDate <= 0) {
+    if (steDate < 0) {
       return this.notificationService.showError("Second Visit To Date should not be greater than End Date", "Invalid Date")
     }
-    if (sfeDate <= 0) {
+    if (sfeDate < 0) {
       return this.notificationService.showError("Second Visit From Date should not be greater than End Date", "Invalid Date")
     }
 

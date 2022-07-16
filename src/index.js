@@ -109,10 +109,9 @@ function DistributorDashboardCharts() {
       },
       title: {
         display: true
-      }
+      },
     }
   });
-
 
   var barColors = ["red", "green", "blue"];
 
@@ -123,6 +122,7 @@ function DistributorDashboardCharts() {
   );
 
   var ctx = document.getElementById("serviceRequestRaised").getContext("2d");
+
 
   var myChart = new Chart(ctx, {
     type: "bar",
@@ -143,6 +143,21 @@ function DistributorDashboardCharts() {
       title: {
         text: "Instruments with Highest Service Request",
         display: true
+      },
+
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              callback: function (label, index, labels) {
+                return label
+              }
+            },
+            scaleLabel: {
+              display: true,
+            }
+          }
+        ]
       }
 
     }
