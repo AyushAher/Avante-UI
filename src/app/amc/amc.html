@@ -298,7 +298,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th *ngIf="(hasDeleteAccess || hasAddAccess)&& !isCompleted && isEditMode">Action</th>
+                  <th *ngIf="(hasDeleteAccess || hasUpdateAccess)&& !isCompleted && isEditMode">Action</th>
                   <th>Stage</th>
                   <th>Comments</th>
                   <th>Date</th>
@@ -307,7 +307,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of rowData">
-                  <td *ngIf="(hasDeleteAccess || hasAddAccess)&& !isCompleted && isEditMode">
+                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess)&& !isCompleted && isEditMode">
                     <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)" style="
                         background-color: transparent;
                         color: #5ba146;
@@ -333,7 +333,7 @@
                   </td>
                 </tr>
               </tbody>
-              <tfoot *ngIf="hasAddAccess && !isCompleted && isEditMode" style="
+              <tfoot *ngIf="hasUpdateAccess && !isCompleted && isEditMode" style="
                   background: whitesmoke;
                   border: 0.5px solid rgb(202 170 170);
                 ">

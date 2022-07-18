@@ -242,7 +242,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th *ngIf="(hasDeleteAccess || hasAddAccess )&& !isCompleted && isEditMode">Action</th>
+                  <th *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode">Action</th>
                   <th>Stage</th>
                   <th>Comments</th>
                   <th>Date</th>
@@ -251,7 +251,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of rowData">
-                  <td *ngIf="(hasDeleteAccess || hasAddAccess )&& !isCompleted && isEditMode">
+                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode">
                     <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
                       style="background-color: transparent;color: #5ba146;border: none;">
                       <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
@@ -276,11 +276,11 @@
                   </td>
                 </tr>
               </tbody>
-              <tfoot *ngIf="hasAddAccess && !isCompleted && isEditMode"
+              <tfoot *ngIf="hasUpdateAccess && !isCompleted && isEditMode"
                 style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
                 <tr>
                   <td>
-                    <button type="button" *ngIf="hasAddAccess" (click)="submitStageData()"
+                    <button type="button" *ngIf="hasUpdateAccess" (click)="submitStageData()"
                       style="background-color: transparent; color: #5ba146; border: none;">
                       <i class="fas fa-save" style="font-size: 20px;"></i>
                     </button>
