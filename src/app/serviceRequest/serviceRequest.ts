@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { Component, OnInit } from '@angular/core';
 import {
   actionList,
   Contact,
@@ -395,14 +395,7 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe((data: any) => this.subreqtypelist = data);
 
     this.customerService.getAll().pipe(first())
-      .subscribe((data: any) => {
-        data.object.forEach(element => {
-          if (this.user.distRegionsId?.split(",").find(x => x == element.defdistregionid) != null) this.customerlist.push(element)
-
-          if (this.user.distRegionsId == "" || this.user.distRegionsId == null) this.customerlist = data.object
-
-        });
-      })
+      .subscribe((data: any) => this.customerlist = data.object)
 
 
     this.distributorService.getAll().pipe(first())
@@ -421,6 +414,8 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            console.log(data.object);
+
             this.onServiceTypeChange(data.object.visittype);
             this.getInstrumnetsBySiteIds(data.object.siteid)
             var subreq = data.object.subrequesttypeid.split(',');
@@ -494,7 +489,7 @@ export class ServiceRequestComponent implements OnInit {
                       this.serviceRequestform.disable()
                       this.isGenerateReport = true;
                     }
-                  }, 500);
+                  }, 1000);
 
                   this.listTypeService.getById('SRQST')
                     .pipe(first()).subscribe({
@@ -735,7 +730,6 @@ export class ServiceRequestComponent implements OnInit {
     this.instrumentService.getinstubysiteIds(id).pipe(first())
       .subscribe({
         next: (data: any) => {
-          console.log(data);
           this.instrumentList = data.object
         }
       });

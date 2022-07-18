@@ -272,9 +272,9 @@ export class DashboardComponent implements OnInit {
   }
 
   GetAllAMC(date = this.calenderLst[0]) {
-    this.amcService.getAll().pipe(first())
+    this.offerRequestService.getAll().pipe(first())
       .subscribe((data: any) => {
-        this.amcData = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), new Date(), date));
+        this.amcData = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), new Date(), date) && !x.isCompleted);
       })
   }
 
@@ -306,8 +306,6 @@ export class DashboardComponent implements OnInit {
   GetPoCost() {
     this.customerDashboardService.GetCostData()
       .pipe(first()).subscribe((data: any) => {
-        console.log(data);
-
         localStorage.setItem("costData", JSON.stringify(data.object))
       })
   }

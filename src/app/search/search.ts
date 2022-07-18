@@ -107,6 +107,8 @@ export class SearchComponent implements OnInit {
 
 
   DataFilter(event) {
+    console.log(event );
+    
     this.instrumentList = event
   }
 
