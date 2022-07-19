@@ -207,6 +207,15 @@
     <div class="page-content">
       <div class="d-flex justify-content-end mb-3">
         <div class="btn-group btn-group-sm customBtnGroup">
+          <div style="height: 25px;margin-right: 15px; border-radius: 15px;">
+            <a type="button" (click)="CriticalSerReq()" class="btn"
+              style="background-color: transparent;padding: 0;margin: -15px 25px 0 0; border: none; color: #e24520;">
+              <p *ngIf="criticalSerReq != 0" class="criticalCount">{{criticalSerReq}}</p>
+              <i [ngClass]="{ 'flash': criticalSerReq != 0 }" style="font-size: 20px; margin-top: 18px; 
+              z-index: 999;
+              transform: rotate(23deg);" class="fas fa-bolt" title="Critical Service Requests"></i>
+            </a>
+          </div>
           <a (click)="onCalenderFilter(calenderLst[0])" #MNTHS3 class="btn btn-secondary btn-cim-secondary">3
             Months</a>
           <a (click)="onCalenderFilter(calenderLst[1])" #MNTHS6 class="btn btn-secondary btn-cim-secondary ms-2">6
@@ -298,7 +307,7 @@
       </div>
       <div class="row mt-4">
         <div class="col-sm-4">
-          <div class="card shadow border-0 dashboard-card pb-4">
+          <div class="card shadow border-0 dashboard-card pb-4" style="min-height: 240px;">
             <div class="card-body p-0">
               <h5 class="text-center py-3">Service Request Inprogress</h5>
               <div class="px-3">
@@ -306,7 +315,8 @@
                   <li class="list-group-item" [ngClass]="{' showHideRows-serviceRequest d-none':index>=2}"
                     *ngFor="let x of engHandlingReq">
                     <p>
-                      <span class="fw-bold float-start">{{x.engName}}</span><span class="float-end"><a>3</a></span>
+                      <span class="fw-bold float-start">{{x.engName}}</span><span
+                        class="float-end"><a>{{x.engAssignedToCust}}</a></span>
                     </p>
                     <div class="clearfix"></div>
                     <p class="graycolorbox">
@@ -323,7 +333,7 @@
           </div>
         </div>
         <div class="col-sm-4">
-          <div class="card shadow border-0 dashboard-card">
+          <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
             <div class="card-body p-0">
               <h5 class="text-center py-3">Revenue by Customer</h5>
               <div class="px-3">
@@ -350,7 +360,7 @@
           </div>
         </div>
         <div class="col-sm-4">
-          <div class="card shadow border-0  col-12 dashboard-card">
+          <div class="card shadow border-0  col-12 dashboard-card" style="min-height: 240px;">
             <div class="card-body" id="revenueByCustomer">
               <canvas id="highestServiceRequest" style="width: 100%; max-width: 700px"></canvas>
             </div>

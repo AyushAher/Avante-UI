@@ -30,6 +30,18 @@ function CustomerDashboardCharts() {
       title: {
         display: true,
         text: "Cost"
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              min: 0,
+            },
+            scaleLabel: {
+              display: true,
+            }
+          }
+        ]
       }
 
     }
@@ -149,9 +161,7 @@ function DistributorDashboardCharts() {
         yAxes: [
           {
             ticks: {
-              callback: function (label, index, labels) {
-                return label
-              }
+              min: 0,
             },
             scaleLabel: {
               display: true,
@@ -187,6 +197,18 @@ function DistributorDashboardCharts() {
       title: {
         text: "Instruments",
         display: true
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              min: 0,
+            },
+            scaleLabel: {
+              display: true,
+            }
+          }
+        ]
       }
     }
 

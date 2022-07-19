@@ -76,6 +76,7 @@ export class DashboardComponent implements OnInit {
   shipmentInProcess: number = 0;
   isHidden: boolean = true;
   spInventory: any;
+  isSiteContact: boolean;
   constructor(
     private accountService: AccountService,
     private instrumentService: InstrumentService,
@@ -113,6 +114,8 @@ export class DashboardComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
+
+    this.isSiteContact = this.user.userType.toLowerCase() != "site"
 
     if (this.hasReadAccess) {
       // row 1 data 

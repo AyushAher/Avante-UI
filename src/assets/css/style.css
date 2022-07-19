@@ -1003,3 +1003,94 @@ i.custLink,
 .notificationDropdown {
   font-size: 22px;
 }
+
+.link {
+  cursor: pointer;
+}
+
+@-webkit-keyframes argh-my-eyes {
+  0% {
+    color: #fff;
+  }
+
+  49% {
+    color: #fff;
+  }
+
+  50% {
+    color: rgb(255, 0, 0);
+  }
+
+  99% {
+    color: rgb(255, 0, 0);
+  }
+
+  100% {
+    color: #fff;
+  }
+}
+
+@-moz-keyframes argh-my-eyes {
+  0% {
+    color: #fff;
+  }
+
+  49% {
+    color: #fff;
+  }
+
+  50% {
+    color: rgb(255, 0, 0);
+  }
+
+  99% {
+    color: rgb(255, 0, 0);
+  }
+
+  100% {
+    color: #fff;
+  }
+}
+
+@keyframes argh-my-eyes {
+  0% {
+    color: #fff;
+  }
+
+  49% {
+    color: #fff;
+  }
+
+  50% {
+    color: rgb(255, 0, 0);
+  }
+
+  99% {
+    color: rgb(255, 0, 0);
+  }
+
+  100% {
+    color: #fff;
+  }
+}
+
+.flash {
+  -webkit-animation: argh-my-eyes 1s infinite;
+  -moz-animation: argh-my-eyes 1s infinite;
+  animation: argh-my-eyes 1s infinite;
+}
+
+.criticalCount {
+  color: black;
+  background-color: lavender;
+  border-radius: 6px;
+  height: 19px;
+  width: 18px;
+  font-size: 13px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: inline-block;
+  top: -18px;
+  left: 25px;
+}

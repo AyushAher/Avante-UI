@@ -409,12 +409,23 @@
               <span class="">{{siteRegion}}</span><span>Site Region</span>
             </div>
           </div>
+          <div class="controls" *ngIf="isSiteContact">
+            <button (click)="next()"
+              style="position: absolute;top: 49%;left: 85%;width: fit-content;height: fit-content;padding:1px 4px; margin: 0;border: none;color: #5ba146;font-size: 1.2rem;background-color: transparent">
+              <i class="fas fa-chevron-circle-right"></i>
+
+            </button>
+            <button (click)="prev()"
+              style="position: absolute;top: 49%;right: 85%;width: fit-content;height: fit-content;padding:1px 4px; margin: 0;border: none;color: #5ba146;font-size: 1.2rem;background-color: transparent">
+              <i class="fas fa-chevron-circle-left"></i>
+            </button>
+          </div>
         </div>
       </div>
       <div class="col">
         <div class="card shadow border-0 dashboard-card">
           <div class="card-body p-0">
-            <div class="d-flex align-items-center p-3 my-2">
+            <div class="d-flex align-items-center p-3 mt-2">
               <div class="widgets-icons">
                 <i class="bi bi-person-circle"></i>
               </div>
@@ -422,6 +433,19 @@
                 <p class="mb-0">Instruments</p>
                 <h4 class="my-1">{{instruemntLength}}</h4>
               </div>
+              <div class="mt-1" style="overflow-y: auto;height: 65px;font-size: 12px;width: 11rem;">
+                <ul style="margin: 0; list-style: none;">
+                  <li *ngFor="let item of lstInstrument" style="color: #0a58ca;" class="link">
+                    <span style="font-size: 16px;border-radius: 50%;margin-left: -20px;" title="Cost Of Ownership">
+                      <a class="link" (click)="OnPopUpOpen(item.id)">$</a>
+                    </span>
+                    <a [title]="item.instypeName + '-' +item.serialnos" (click)="criticalServiceRequest(item.id)">
+                      {{item.instypeName}} - {{item.serialnos}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
             </div>
             <div class="d-flex align-items-center px-3 py-2 bottomLabel">
               <span class="noDash">Inclusive of all sites</span>
@@ -473,7 +497,7 @@
     </div>
     <div class="row mt-4">
       <div class="col-12 col-md-4">
-        <div class="card shadow border-0 dashboard-card">
+        <div class="card shadow border-0 dashboard-card" style="min-height: 250px;">
           <div class="card-body p-0">
             <h5 class="text-center py-3">Instruments Down</h5>
             <div class="px-3">
@@ -500,7 +524,7 @@
         </div>
       </div>
       <div class="col-12 col-md-4">
-        <div class="card shadow border-0 dashboard-card">
+        <div class="card shadow border-0 dashboard-card" style="min-height: 250px;">
           <div class="card-body p-0">
             <h5 class="text-center py-3">Purchase Order</h5>
             <div class="px-3">
@@ -528,7 +552,7 @@
         </div>
       </div>
       <div class="col-12 col-md-4">
-        <div class="card shadow border-0 dashboard-card">
+        <div class="card shadow border-0 dashboard-card" style="min-height: 250px;">
           <div class="card-body p-0">
             <h5 class="text-center py-3">Spare Recommended</h5>
             <div class="px-3 py-4">
@@ -550,5 +574,28 @@
 <style>
   canvas {
     height: 185px !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #338b19;
+    border-radius: 10px;
+
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #276b12;
   }
 </style>
