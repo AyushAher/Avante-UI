@@ -125,7 +125,7 @@ function DistributorDashboardCharts() {
     }
   });
 
-  var barColors = ["red", "green", "blue"];
+  var barColors = ["red", "green", "blue", "#f44336", "yellow"];
 
   $('#serviceRequestRaised').remove(); // this is my <canvas> element
   $('#serviceRequestRaisedContainer').append('<canvas id="serviceRequestRaised" class="engineerChart"></canvas>');
@@ -207,6 +207,11 @@ function DistributorDashboardCharts() {
             scaleLabel: {
               display: true,
             }
+          }
+        ],
+        xAxes: [
+          {
+            barPercentage: 0.4
           }
         ]
       }

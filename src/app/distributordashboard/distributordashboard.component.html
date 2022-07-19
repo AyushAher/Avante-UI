@@ -207,7 +207,7 @@
     <div class="page-content">
       <div class="d-flex justify-content-end mb-3">
         <div class="btn-group btn-group-sm customBtnGroup">
-          <div style="height: 25px;margin-right: 15px; border-radius: 15px;">
+          <div style="height: 25px;margin-right: 15px; border-radius: 15px;" *ngIf="criticalSerReq !=0">
             <a type="button" (click)="CriticalSerReq()" class="btn"
               style="background-color: transparent;padding: 0;margin: -15px 25px 0 0; border: none; color: #e24520;">
               <p *ngIf="criticalSerReq != 0" class="criticalCount">{{criticalSerReq}}</p>
@@ -234,7 +234,8 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
-                  <p class="mb-0 bigNumber">$<span>{{amcRevenue}}</span></p>
+                  <p class="mb-0 bigNumber" [title]="amcRevenue | currency">$<span>{{amcRevenue |CustomAmount:2}}</span>
+                  </p>
                 </div>
               </div>
             </div>
@@ -245,7 +246,8 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
-                  <p class="mb-0 bigNumber">$<span>{{preventiveRevenue}}</span></p>
+                  <p class="mb-0 bigNumber" [title]="preventiveRevenue | currency">$<span>{{preventiveRevenue
+                      |CustomAmount:2}}</span></p>
                 </div>
               </div>
             </div>
@@ -256,7 +258,8 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
-                  <p class="mb-0 bigNumber">$<span>{{breakdownRevenue}}</span></p>
+                  <p class="mb-0 bigNumber" [title]="breakdownRevenue | currency">$<span>{{breakdownRevenue
+                      |CustomAmount:2}}</span></p>
                 </div>
               </div>
             </div>
@@ -267,7 +270,8 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
-                  <p class="mb-0 bigNumber">$<span>{{oncallRevenue}}</span></p>
+                  <p class="mb-0 bigNumber" [title]="oncallRevenue | currency">$<span>{{oncallRevenue
+                      |CustomAmount:2}}</span></p>
                 </div>
               </div>
             </div>
@@ -278,7 +282,8 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <p class="mb-0 align-self-end fw-bold" style="visibility: hidden;">$<span>0</span></p>
-                  <p class="mb-0 bigNumber">$<span>{{plannedRevenue}}</span></p>
+                  <p class="mb-0 bigNumber" [title]="plannedRevenue | currency">$<span>{{plannedRevenue
+                      |CustomAmount:2}}</span></p>
                 </div>
               </div>
             </div>
