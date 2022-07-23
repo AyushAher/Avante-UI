@@ -414,8 +414,6 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            console.log(data.object);
-
             this.onServiceTypeChange(data.object.visittype);
             this.getInstrumnetsBySiteIds(data.object.siteid)
             var subreq = data.object.subrequesttypeid.split(',');
@@ -1114,6 +1112,8 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            console.log(data);
+
             this.download(data.data);
           },
         });
@@ -1462,21 +1462,6 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'Team Viewer Recording',
-        field: 'teamviewrecording',
-        filter: false,
-        enableSorting: false,
-        editable: false,
-        sortable: false,
-        cellRenderer: (params) => {
-          if (params.value != null) {
-            return `<button type="button" class="btn btn-link" data-action-type="download" ><i class="fas fas fa-download" title="Edit Value" data-action-type="download"></i></button>`
-          } else {
-            return ``
-          }
-        }
-      },
-      {
         headerName: 'Date',
         field: 'actiondate',
         filter: false,
@@ -1599,8 +1584,11 @@ export class ServiceRequestComponent implements OnInit {
                 }
               });
           }
+          break
         case "edit":
           this.openaction(this.serviceRequestId, data.id);
+          break
+
         case "download":
           let params: any = {}
           params.id = e.data.id;
@@ -1608,11 +1596,10 @@ export class ServiceRequestComponent implements OnInit {
 
           if (e.data.teamviewerrecroding != null || params.teamviewerrecroding == null) {
             this.downloadTeamViewerRecording(params)
-            break
           } else {
             this.notificationService.showError("No Recording ", "Error")
-            break;
           }
+          break
 
       }
     }
