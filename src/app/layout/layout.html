@@ -5,8 +5,6 @@
   <app-nav-sidemenu></app-nav-sidemenu>
   <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
-      <app-notificationspopup (popUpClosed)="popUpClosed($event)" (closePopup)="Notifications($event)"
-        *ngIf="shownotifications"></app-notificationspopup>
       <app-nav-menu [isClosed]="isClosed" (showNotifications)="Notifications($event)"></app-nav-menu>
       <div class=" container-fluid">
         <ng-content></ng-content>
