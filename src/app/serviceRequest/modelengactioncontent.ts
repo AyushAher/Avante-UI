@@ -142,16 +142,12 @@ export class ModelEngActionContentComponent implements OnInit {
   }
 
   onValueSubmit() {
-    //debugger;
-
     this.submitted = true;
+    if (this.hasRemote && this.file == null) return this.notificationService.showInfo("Upload Recording", "Info")
+    if (this.actionForm.invalid) return
 
     this.isSave = true;
     this.loading = true;
-
-    if (this.actionForm.invalid) {
-      return;
-    }
     this.action = this.actionForm.value;
     this.action.servicerequestid = this.itemId;
     this.action.engineerid = this.engineerid;
@@ -171,8 +167,6 @@ export class ModelEngActionContentComponent implements OnInit {
               this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode } })
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
-              //this.configList = data.object;
-              // this.listvalue.get("configValue").setValue("");
             }
             else {
 
