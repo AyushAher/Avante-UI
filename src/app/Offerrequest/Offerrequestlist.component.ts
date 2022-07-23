@@ -36,7 +36,7 @@ export class OfferrequestlistComponent implements OnInit {
   profilePermission: any;
   zohocode: any;
   role: string;
-  showGrid: any;
+  showGrid: any = true;
   isDist: boolean;
 
   constructor(
@@ -73,9 +73,9 @@ export class OfferrequestlistComponent implements OnInit {
     if (this.role == this.environment.distRoleCode) this.isDist = true;
     else {
       this.toggleFilter()
-      this.Service.getAll().pipe(first())
-        .subscribe((data: any) => this.model = data.object?.filter(x => !x.isCompleted));
     }
+    this.Service.getAll().pipe(first())
+      .subscribe((data: any) => this.model = data.object?.filter(x => !x.isCompleted));
     this.columnDefs = this.createColumnDefs();
   }
 

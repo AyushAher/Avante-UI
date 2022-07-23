@@ -38,7 +38,7 @@ export class CustomerListComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
-  showGrid = false;
+  showGrid = true;
   IsDist: boolean;
   constructor(
     private router: Router,
@@ -47,7 +47,7 @@ export class CustomerListComponent implements OnInit {
     private profileService: ProfileService,
     private environment: EnvService
 
-    ) {
+  ) {
 
   }
 
@@ -78,9 +78,9 @@ export class CustomerListComponent implements OnInit {
       this.IsDist = true
     } else {
       this.toggleFilter();
-      this.customerService.getAllByConId(this.user.contactId).pipe(first())
-        .subscribe((data: any) => this.customerList = data.object)
     }
+    this.customerService.getAllByConId(this.user.contactId).pipe(first())
+      .subscribe((data: any) => this.customerList = data.object)
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     this.columnDefs = this.createColumnDefs();
   }

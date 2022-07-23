@@ -7,8 +7,11 @@
           <div class="d-flex" style="align-items: center; justify-content: space-between;">
             <h3>Service Report List</h3>
             <div class="d-flex">
-              <a *ngIf="showGrid && isDist" (click)="toggleFilter()" class="nav-link">
-                <i class="fas fa-arrow-left" title="filter"></i>
+              <a *ngIf="!showGrid && isDist" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
+                <i class="fas fa-arrow-left" title="Grid"></i>
+              </a>
+              <a *ngIf="showGrid && isDist" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
+                <i class="fas fa-search" title="Search"></i>
               </a>
             </div>
           </div>

@@ -8,8 +8,11 @@
             <h3>Service Request List</h3>
             <div class="d-flex">
 
+              <a *ngIf="!showGrid && IsDistributorView" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
+                <i class="fas fa-arrow-left" title="Grid"></i>
+              </a>
               <a *ngIf="showGrid && IsDistributorView" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
-                <i class="fas fa-arrow-left" title="filter"></i>
+                <i class="fas fa-search" title="Search"></i>
               </a>
               <a (click)="Add()" class="nav-link" style="font-size: 1.25rem;"
                 *ngIf="hasAddAccess==true && IsEngineerView == false">

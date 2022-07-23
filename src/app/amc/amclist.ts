@@ -36,7 +36,7 @@ export class AmcListComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
-  showGrid: boolean = false;
+  showGrid: boolean = true;
   isDist: boolean;
 
   constructor(
@@ -71,13 +71,10 @@ export class AmcListComponent implements OnInit {
     if (role == this.environment.distRoleCode) this.isDist = true;
     else {
       this.toggleFilter()
-      this.AmcService.getAll()
-        .pipe(first())
-        .subscribe((data: any) => {
-
-          this.AmcList = data.object?.filter(x => !x.isCompleted)
-        });
     }
+    this.AmcService.getAll()
+      .pipe(first()).subscribe((data: any) => this.AmcList = data.object?.filter(x => !x.isCompleted));
+      
     this.columnDefs = this.createColumnDefs();
   }
 

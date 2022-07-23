@@ -32,7 +32,7 @@ export class InstrumentListComponent implements OnInit {
   private columnApi: ColumnApi;
   private api: GridApi;
   filterData: any;
-  showGrid = false;
+  showGrid = true;
 
   isDist: boolean = false;
   isEng: boolean = false;
@@ -75,9 +75,9 @@ export class InstrumentListComponent implements OnInit {
 
     if (!this.isDist) {
       this.toggleFilter()
-      this.instrumentService.getAll(this.user.userId).pipe(first())
-        .subscribe((data: any) => this.instrumentList = data.object);
     }
+    this.instrumentService.getAll(this.user.userId).pipe(first())
+      .subscribe((data: any) => this.instrumentList = data.object);
     this.columnDefs = this.createColumnDefs();
   }
 

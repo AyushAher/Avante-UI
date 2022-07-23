@@ -31,7 +31,7 @@ export class SparePartListComponent implements OnInit {
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
-  showGrid = false;
+  showGrid = true;
 
   isDist: boolean = false;
   isEng: boolean = false;
@@ -74,9 +74,9 @@ export class SparePartListComponent implements OnInit {
 
     if (!this.isDist) {
       this.toggleFilter();
-      this.sparePartService.getAll().pipe(first())
-        .subscribe((data: any) => this.sparePartList = data.object);
     }
+    this.sparePartService.getAll().pipe(first())
+      .subscribe((data: any) => this.sparePartList = data.object);
 
     this.columnDefs = this.createColumnDefs();
   }

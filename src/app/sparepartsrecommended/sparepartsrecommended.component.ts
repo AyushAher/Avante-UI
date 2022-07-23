@@ -28,7 +28,7 @@ export class SparepartsrecommendedComponent implements OnInit {
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
   user: User;
-  showGrid: any;
+  showGrid: any = true;
   isDist: boolean;
 
 
@@ -67,9 +67,9 @@ export class SparepartsrecommendedComponent implements OnInit {
     if (role == this.environment.distRoleCode) this.isDist = true
     else {
       this.toggleFilter()
-      this.Service.getByGrid(this.user.contactId).pipe(first())
-        .subscribe((data: any) => this.List = data.object)
     }
+    this.Service.getByGrid(this.user.contactId).pipe(first())
+      .subscribe((data: any) => this.List = data.object)
     this.columnDefs = this.createColumnDefs();
   }
 

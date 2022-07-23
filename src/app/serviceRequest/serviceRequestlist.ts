@@ -48,7 +48,7 @@ export class ServiceRequestListComponent implements OnInit {
   distId: any;
   datepipe: any = new DatePipe("en-US");
   appendList: any;
-  showGrid: boolean = false;
+  showGrid: boolean = true;
 
   constructor(
     private router: Router,
