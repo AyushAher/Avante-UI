@@ -63,6 +63,7 @@ export class EngineerschedulerComponent implements OnInit {
   public group: GroupModel = {
     resources: ['Owners']
   };
+  isRemoteDesktop: boolean;
 
   constructor(
     private serviceRequestService: ServiceRequestService,
@@ -83,6 +84,8 @@ export class EngineerschedulerComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
+    this.isRemoteDesktop = this.route.snapshot.queryParams?.action == "RMD"
+
     this.link = `/servicerequest/${this.id}`
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
@@ -437,13 +440,11 @@ export class EngineerschedulerComponent implements OnInit {
       if (!this.hasUpdateAccess) {
         args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
       }
-
-      var serreq: HTMLInputElement = <HTMLInputElement>document.getElementsByName('Subject')[0];
-
-      serreq.value = serreq.value.split(':')[1]?.trim()
-
-      if (serreq.value == undefined || serreq.value == "undefined" || serreq.value == null) {
-        serreq.value = "";
+      
+      if (args.data?.Id == undefined && this.isRemoteDesktop) {
+        var location: HTMLInputElement = <HTMLInputElement>document.getElementsByName('Location')[0];
+        location.disabled = true
+        location.value = "Online"
       }
 
       if (!args.element.querySelector('.custom-servicereqno')) {
@@ -463,6 +464,8 @@ export class EngineerschedulerComponent implements OnInit {
         this.serviceRequestService.getById(this.id)
           .pipe(first())
           .subscribe((data: any) => {
+            console.log(data);
+
             inputEle.setAttribute('value', data.object.serreqno);
           })
       }

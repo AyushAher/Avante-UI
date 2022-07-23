@@ -75,7 +75,7 @@ export class ModelEngActionContentComponent implements OnInit {
           this.actiontakenlist = data;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -168,20 +168,20 @@ export class ModelEngActionContentComponent implements OnInit {
                 this.uploadFile(this.file, data.object.id);
               }
 
-              this.router.navigate([`/schedule/${this.itemId}`])
+              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode } })
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
               //this.configList = data.object;
               // this.listvalue.get("configValue").setValue("");
             }
             else {
-              
+
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -198,18 +198,18 @@ export class ModelEngActionContentComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
 
-              this.router.navigate([`/schedule/${this.itemId}`])
+              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode } })
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
             } else {
-              
+
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
