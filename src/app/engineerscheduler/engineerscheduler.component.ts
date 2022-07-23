@@ -464,8 +464,8 @@ export class EngineerschedulerComponent implements OnInit {
         this.serviceRequestService.getById(this.id)
           .pipe(first())
           .subscribe((data: any) => {
-            console.log(data);
-
+            var title: HTMLInputElement = <HTMLInputElement>document.getElementsByName('Subject')[0];
+            title.value = data.object.serreqno + ": ";
             inputEle.setAttribute('value', data.object.serreqno);
           })
       }
@@ -476,6 +476,9 @@ export class EngineerschedulerComponent implements OnInit {
           .subscribe((data: any) => {
             var serreq: HTMLInputElement = <HTMLInputElement>document.getElementsByName('SerReqNo')[0];
             serreq.value = data.object.serreqno;
+
+            var title: HTMLInputElement = <HTMLInputElement>document.getElementsByName('Subject')[0];
+            title.value = data.object.serreqno + ": ";
           })
         if (!this.hasAddAccess) {
           args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
