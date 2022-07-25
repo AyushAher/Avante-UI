@@ -20,6 +20,7 @@ import {
   ListTypeService,
   NotificationService,
   ProfileService,
+  ServiceReportService,
   ServiceRequestService,
 } from "../../_services";
 
@@ -62,6 +63,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   isNewMode: boolean;
   isEditMode: boolean;
   role: string;
+  servicereportid: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -74,7 +76,9 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     private distributorservice: DistributorService,
     private servicerequestservice: ServiceRequestService,
     private listTypeService: ListTypeService,
-    private environment: EnvService
+    private environment: EnvService,
+    private serviceReportService: ServiceReportService,
+
   ) {
   }
 
@@ -140,26 +144,30 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.distributorservice.getByConId(this.user.contactId).pipe(first())
       .subscribe((data: any) => {
         if (this.user.username != "admin") {
-          this.distId = data.object[0].id;
-          this.form.get('distId').setValue(data.object[0].id)
-          // this.getengineers(data.object[0].id)
-          this.distributorservice.getDistributorRegionContacts(data.object[0].id)
-            .pipe(first())
-            .subscribe((data: any) => {
-              this.engineer = data.object
-              this.servicerequestservice
-                .GetServiceRequestByDist(data.object[0].id)
-                .pipe(first())
-                .subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId && !x.isReportGenerated));
+          if (data.object.length > 0) {
+            this.distId = data.object[0].id;
+            this.form.get('distId').setValue(data.object[0].id)
+            // this.getengineers(data.object[0].id)
+            this.distributorservice.getDistributorRegionContacts(data.object[0].id)
+              .pipe(first())
+              .subscribe((data: any) => {
+                this.engineer = data.object
+                this.servicerequestservice
+                  .GetServiceRequestByDist(data.object[0].id)
+                  .pipe(first())
+                  .subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId && !x.isReportGenerated));
 
-            });
+              });
 
+          }
         }
       })
 
 
 
     this.id = this.route.snapshot.paramMap.get("id");
+    this.servicereportid = this.route.snapshot.queryParams?.servicereportid
+
     if (this.id != null) {
       this.CustomersatisfactionsurveyService.getById(this.id)
         .pipe(first())
@@ -186,6 +194,23 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     else {
       this.isNewMode = true
       this.FormControlsDisable()
+    }
+
+    if (this.servicereportid != null) {
+      this.serviceReportService.getById(this.servicereportid)
+        .pipe().subscribe((data: any) => {
+          let serreq = data.object.serviceRequest
+          this.distId = serreq.distid
+          this.form.get("distId").setValue(serreq.distid)
+
+          this.getengineers(serreq.distid)
+          this.form.get("engineerId").setValue(serreq.assignedto)
+          this.getservicerequest(serreq.distid, serreq.assignedto)
+          this.form.get("serviceRequestId").setValue(serreq.id)
+
+          this.form.get('name').setValue(serreq.contactperson)
+          this.form.get('email').setValue(serreq.email)
+        })
     }
   }
 
@@ -219,7 +244,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
   CancelEdit() {
     this.form.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
@@ -244,7 +269,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.servicerequestservice
       .GetServiceRequestByDist(id)
       .pipe(first())
-      .subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId && !x.isReportGenerated));
+      .subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId));
   }
 
   onServiceRequestChange() {

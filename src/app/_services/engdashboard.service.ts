@@ -24,4 +24,8 @@ export class EngdashboardService {
   GetSPRecomm(date: string) {
     return this.http.get(`${this.environment.apiUrl}/EngDashboard/GetSPRecomm/${date}`)
   }
+  
+  GetTravelExpenses(date: string) {
+    return this.http.get(`${this.environment.apiUrl}/EngDashboard/GetTravelExpenses/${date}`)
+  }
 }

@@ -27,10 +27,6 @@ function CustomerDashboardCharts() {
     },
     options: {
       legend: { display: false },
-      title: {
-        display: true,
-        text: "Cost"
-      },
       scales: {
         yAxes: [
           {
@@ -59,10 +55,6 @@ function CustomerDashboardCharts() {
     },
     options: {
       legend: { display: false },
-      title: {
-        display: true,
-        text: "Completed Service Request"
-      }
     }
   });
 
@@ -82,11 +74,6 @@ function CustomerDashboardCharts() {
     options: {
       legend: {
         display: false,
-      },
-      title: {
-        text: "Pending Service Request",
-        display: true
-
       },
     },
   });
@@ -119,9 +106,6 @@ function DistributorDashboardCharts() {
       legend: {
         display: false,
       },
-      title: {
-        display: true
-      },
     }
   });
 
@@ -152,11 +136,6 @@ function DistributorDashboardCharts() {
         display: false,
         position: 'top',
       },
-      title: {
-        text: "Instruments with Highest Service Request",
-        display: true
-      },
-
       scales: {
         yAxes: [
           {
@@ -193,10 +172,6 @@ function DistributorDashboardCharts() {
       legend: {
         display: false,
         position: 'top',
-      },
-      title: {
-        text: "Instruments",
-        display: true
       },
       scales: {
         yAxes: [
@@ -244,11 +219,6 @@ function DistributorDashboardCharts() {
     legend: {
       display: false,
     },
-    title: {
-      text: "Customer Revenue",
-      display: true
-
-    },
     animation: {
       animateScale: true,
       animateRotate: true,
@@ -295,11 +265,6 @@ function EngDashboardCharts() {
       legend: {
         display: false,
       },
-
-      title: {
-        text: "Completed Service Request",
-        display: true
-      }
     },
   });
 
@@ -319,10 +284,6 @@ function EngDashboardCharts() {
       legend: {
         display: false,
       },
-      title: {
-        text: "Pending Service Request",
-        display: true
-      }
     },
   });
 

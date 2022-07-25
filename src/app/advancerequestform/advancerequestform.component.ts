@@ -432,8 +432,11 @@ export class AdvancerequestformComponent implements OnInit {
       return this.notificationService.showInfo("Please sign the undertaking to procced", "Info")
     }
 
-    this.form.get('bankDetails').value.contactId = this.form.get('engineerId').value;
+    this.form.get('engineerId').enable()
+    this.form.get('bankDetails').get("contactId").setValue(this.form.get('engineerId').value)
+    this.form.get('engineerId').disable()
     // stop here if form is invalid
+    console.log(this.form);
     if (this.form.invalid) {
       return;
     }

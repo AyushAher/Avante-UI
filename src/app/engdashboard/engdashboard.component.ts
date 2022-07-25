@@ -22,6 +22,7 @@ export class EngdashboardComponent implements OnInit {
   @ViewChild('MNTHS3') Mnths3;
   @ViewChild('MNTHS6') Mnths6;
   @ViewChild('MNTHS12') Mnths12;
+  travelExpense: any;
 
   constructor(private EngDashboardService: EngdashboardService) { }
 
@@ -65,13 +66,16 @@ export class EngdashboardComponent implements OnInit {
     this.EngDashboardService.GetSPRecomm(this.currentCalender).pipe(first())
       .subscribe((data: any) => this.spRecom = data.object)
 
+    this.EngDashboardService.GetTravelExpenses(this.currentCalender)
+      .pipe(first()).subscribe((data: any) => this.travelExpense = data.object)
+
     setTimeout(() => EngDashboardCharts(), 1500);
   }
 
   async CalenderChange(date) {
     this.currentCalender = date
     this.GetData();
-    await delay(1000)
+    await delay(2000)
     if (date == this.calenderLst[0]) {
       this.Mnths3.nativeElement.classList.add('active')
       this.Mnths6.nativeElement.classList.remove('active')

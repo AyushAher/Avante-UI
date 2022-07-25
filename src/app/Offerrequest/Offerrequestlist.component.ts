@@ -71,9 +71,7 @@ export class OfferrequestlistComponent implements OnInit {
       this.role = role[0]?.itemCode;
     }
     if (this.role == this.environment.distRoleCode) this.isDist = true;
-    else {
-      this.toggleFilter()
-    }
+
     this.Service.getAll().pipe(first())
       .subscribe((data: any) => this.model = data.object?.filter(x => !x.isCompleted));
     this.columnDefs = this.createColumnDefs();

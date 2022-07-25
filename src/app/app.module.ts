@@ -136,6 +136,7 @@ import { CostofownershipComponent } from './costofownership/costofownership.comp
 import { EnvServiceProvider } from './_services/env/env.service.provider';
 import { EngdashboardComponent } from './engdashboard/engdashboard.component';
 import { CustomAmountPipe } from './_pipes/amount.pipe';
+import { EngschedulerComponent } from './engscheduler/engineerscheduler.component';
 
 
 @NgModule({
@@ -247,7 +248,8 @@ import { CustomAmountPipe } from './_pipes/amount.pipe';
     ServicecontractrevenuereportComponent,
     CostofownershipComponent,
     EngdashboardComponent,
-    CustomAmountPipe
+    CustomAmountPipe,
+    EngschedulerComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

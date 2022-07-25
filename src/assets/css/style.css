@@ -747,7 +747,7 @@ a {
 }
 
 .serviceContractRevenue {
-  height: 350px !important;
+  height: 500px !important;
 }
 
 @media screen and (max-width: 1024px) {
@@ -995,7 +995,8 @@ i.custLink,
 .fa-search,
 .fa-file-excel,
 .fa-plus-circle,
-.close {
+.close,
+.blue-text {
   color: #0a58ca !important;
   cursor: pointer;
 }
@@ -1107,11 +1108,11 @@ body::-webkit-scrollbar-track {
 
 /* Handle */
 body::-webkit-scrollbar-thumb {
-  background: #338b19;
+  background: #68ba59;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 body::-webkit-scrollbar-thumb:hover {
-  background: #276b12;
+  background: #338b19;
 }

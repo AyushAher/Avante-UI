@@ -33,11 +33,11 @@ export class DistributordashboardComponent implements OnInit {
   engHandlingReq: any = []
   instrumnetInstalled: any;
   instrumnetUnderService: any;
-  plannedRevenue: any;
-  oncallRevenue: any;
-  breakdownRevenue: any;
-  preventiveRevenue: any;
-  amcRevenue: any;
+  plannedRevenue: any = 0;
+  oncallRevenue: any = 0;
+  breakdownRevenue: any = 0;
+  preventiveRevenue: any = 0;
+  amcRevenue: any = 0;
   customerRevenueList: any;
   totalRevenue: any;
   customerRevenueBgColors: any = [
@@ -143,7 +143,7 @@ export class DistributordashboardComponent implements OnInit {
           instrumnetInstalled: data.object.instrumentInstalled,
           instrumnetUnderService: data.object.instrumentUnderService
         }
-        localStorage.setItem('instrumentData',JSON.stringify(obj))
+        localStorage.setItem('instrumentData', JSON.stringify(obj))
       })
   }
 

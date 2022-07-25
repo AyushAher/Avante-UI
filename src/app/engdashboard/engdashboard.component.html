@@ -3,35 +3,8 @@
         text-align: center;
     }
 
-    .card {
-        max-width: 32rem;
-        max-height: 35rem;
-        overflow: auto;
-    }
-
     hr {
         margin-top: 0.5rem;
-    }
-
-    /* width */
-    ::-webkit-scrollbar {
-        width: 7px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 5px;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: #888;
-    }
-
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-        background: #555;
     }
 
     td {
@@ -52,32 +25,25 @@
             </div>
         </div>
         <hr>
-        <div class="dashboard">
+        <!-- <div class="dashboard">
             <div class="row my-3">
-                <div class="col-md-6 card mx-3">
+                <div class="col-md-8">
+                    <div style="max-height: 300px; overflow: auto;">
+                        <app-engscheduler></app-engscheduler>
+                    </div>
+                </div>
+                <div class="col-md-4 card">
                     <div class="chart py-3">
                         <div id="compSerReqContainer">
                             <canvas id="compSerReq" class="chart-canvas" height="170"></canvas>
                         </div>
                     </div>
-                    <div class="chart-label py-3 px-3">
-                        <h6>Completed Service Request</h6>
-                    </div>
                 </div>
-                <div class="col-md-6 card mx-3">
-                    <div class="chart py-3">
-                        <div id="pendingSerReqContainer">
-                            <canvas id="pendingSerReq" class="chart-canvas" height="170"></canvas>
-                        </div>
-                    </div>
-                    <div class="chart-label py-3 px-3">
-                        <h6>Pending Service Request</h6>
-                    </div>
-                </div>
+
             </div>
 
             <div class="row my-3">
-                <div class="col-md-6 card mx-3">
+                <div class="col-md-4 card">
                     <div class="card-heading pt-4 px-3">
                         <h6>Spare Parts Recommended</h6>
                     </div>
@@ -103,7 +69,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 card mx-3">
+                <div class="col-md-4 card">
                     <div class="card-heading pt-4 px-3">
                         <h6>Spare Parts Consumed</h6>
                     </div>
@@ -125,6 +91,250 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 card">
+                    <div class="chart py-3">
+                        <div id="pendingSerReqContainer">
+                            <canvas id="pendingSerReq" class="chart-canvas" height="170"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow border-0 dashboard-card">
+                            <div style="height: 725px; overflow: auto;">
+                                <app-engscheduler></app-engscheduler>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-4">
+                        <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
+                            <div class="card-heading pt-4 px-3">
+                                <h6>Spare Parts Recommended</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="sp-table">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <th>Sr.</th>
+                                            <th>Ser. Req.</th>
+                                            <th>SP No.</th>
+                                            <th>Qty</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of spRecom;let i = index"
+                                                [ngClass]="{'showHideRows-sprecom d-none':i >=5}">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.serReqNo}}</td>
+                                                <td>{{item.partNo}}</td>
+                                                <td>{{item.qtyRecommended}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center">
+                                    <i class="bi bi-arrow-down-circle-fill downArrow" id="showHideRows-sprecom"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-4">
+                        <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
+                            <div class="card-heading pt-4 px-3">
+                                <h6>Spare Parts Consumed</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="sp-table">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <th>Sr.</th>
+                                            <th>Ser. Req.</th>
+                                            <th>SP No.</th>
+                                            <th>Qty</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of spCon;let i = index"
+                                                [ngClass]="{'showHideRows-spcon d-none':i >=5}">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.serReqNo}}</td>
+                                                <td>{{item.partNo}}</td>
+                                                <td>{{item.qtyConsumed}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center">
+                                    <i class="bi bi-arrow-down-circle-fill downArrow" id="showHideRows-spcon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
+                            <div class="chart py-3">
+                                <div class="card-heading pt-4 px-3">
+                                    <h6>Pending Service Request</h6>
+                                    <hr>
+                                </div>
+                                <div id="pendingSerReqContainer">
+                                    <canvas id="pendingSerReq" class="chart-canvas" height="170"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
+                            <div class="chart py-3">
+                                <div class="card-heading pt-4 px-3">
+                                    <h6>Completed Service Request</h6>
+                                    <hr>
+                                </div>
+                                <div id="compSerReqContainer">
+                                    <canvas id="compSerReq" class="chart-canvas" height="170"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mt-4">
+                        <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
+                            <div class="card-body p-0">
+                                <div class="px-3">
+                                    <div class="card-heading pt-4 px-3">
+                                        <h6>Travel Expenses</h6>
+                                        <hr>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item border-0 mb-2">
+                                            <p class="pb-3">
+                                                <span class="float-start">Advance Request</span>
+                                                <span class="float-end"
+                                                    [title]="travelExpense.advanceRequest |currency">$
+                                                    {{travelExpense.advanceRequest | CustomAmount:2}}
+                                                    ({{((travelExpense.advanceRequest /travelExpense.total)*100) |
+                                                    number:'1.0-2'}}%)
+                                                </span>
+                                            </p>
+                                            <div class="range" id="range">
+                                                <div class="slider"
+                                                    [style.width]="((travelExpense.advanceRequest/travelExpense.total)*100)+'%'"
+                                                    [style.background]="'green !important'" id="slider">
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item border-0 mb-2">
+                                            <p class="pb-3">
+                                                <span class="float-start">Visa and Related</span>
+                                                <span class="float-end" [title]="travelExpense.visaRelated |currency">$
+                                                    {{travelExpense.visaRelated | CustomAmount:2}}
+                                                    ({{((travelExpense.visaRelated /travelExpense.total)*100) |
+                                                    number:'1.0-2'}}%)
+                                                </span>
+                                            </p>
+                                            <div class="range" id="range">
+                                                <div class="slider"
+                                                    [style.width]="((travelExpense.visaRelated/travelExpense.total)*100)+'%'"
+                                                    [style.background]="'#6f42c1 !important'" id="slider">
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item border-0 mb-2">
+                                            <p class="pb-3">
+                                                <span class="float-start">Hotel</span>
+                                                <span class="float-end" [title]="travelExpense.hotel |currency">$
+                                                    {{travelExpense.hotel | CustomAmount:2}}
+                                                    ({{((travelExpense.hotel /travelExpense.total)*100) |
+                                                    number:'1.0-2'}}%)
+                                                </span>
+                                            </p>
+                                            <div class="range" id="range">
+                                                <div class="slider"
+                                                    [style.width]="((travelExpense.hotel/travelExpense.total)*100)+'%'"
+                                                    [style.background]="'#007bff !important'" id="slider">
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item border-0 mb-2">
+                                            <p class="pb-3">
+                                                <span class="float-start">DA</span>
+                                                <span class="float-end" [title]="travelExpense.da |currency">$
+                                                    {{travelExpense.da | CustomAmount:2}}
+                                                    ({{((travelExpense.da /travelExpense.total)*100) |
+                                                    number:'1.0-2'}}%)
+                                                </span>
+                                            </p>
+                                            <div class="range" id="range">
+                                                <div class="slider"
+                                                    [style.width]="((travelExpense.da/travelExpense.total)*100)+'%'"
+                                                    [style.background]="'#17a2b8 !important'" id="slider">
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item border-0 mb-2  showHideRows-revenueCustomer d-none">
+                                            <p class="pb-3">
+                                                <span class="float-start">Air Ticket</span>
+                                                <span class="float-end" [title]="travelExpense.airTicket |currency">$
+                                                    {{travelExpense.airTicket | CustomAmount:2}}
+                                                    ({{((travelExpense.airTicket /travelExpense.total)*100) |
+                                                    number:'1.0-2'}}%)
+                                                </span>
+                                            </p>
+                                            <div class="range" id="range">
+                                                <div class="slider"
+                                                    [style.width]="((travelExpense.airTicket/travelExpense.total)*100)+'%'"
+                                                    [style.background]="'#00cccc !important'" id="slider">
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item border-0 mb-2 showHideRows-revenueCustomer d-none">
+                                            <p class="pb-3">
+                                                <span class="float-start">Local Travel</span>
+                                                <span class="float-end" [title]="travelExpense.localTravel |currency">$
+                                                    {{travelExpense.localTravel | CustomAmount:2}}
+                                                    ({{((travelExpense.localTravel /travelExpense.total)*100) |
+                                                    number:'1.0-2'}}%)
+                                                </span>
+                                            </p>
+                                            <div class="range" id="range">
+                                                <div class="slider"
+                                                    [style.width]="((travelExpense.localTravel/travelExpense.total)*100)+'%'"
+                                                    [style.background]="'#adb2bd !important'" id="slider">
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item border-0 mb-2 showHideRows-revenueCustomer d-none">
+                                            <p class="pb-3">
+                                                <span class="float-start">Others</span>
+                                                <span class="float-end" [title]="travelExpense.others |currency">$
+                                                    {{travelExpense.others | CustomAmount:2}}
+                                                    ({{((travelExpense.others /travelExpense.total)*100) |
+                                                    number:'1.0-2'}}%)
+                                                </span>
+                                            </p>
+                                            <div class="range" id="range">
+                                                <div class="slider"
+                                                    [style.width]="((travelExpense.others/travelExpense.total)*100)+'%'"
+                                                    [style.background]="'red !important'" id="slider">
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="text-center">
+                                    <i class="bi bi-arrow-down-circle-fill downArrow"
+                                        id="showHideRows-revenueCustomer"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

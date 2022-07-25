@@ -15,7 +15,7 @@
         padding: 6px 16px;
     }
 
-    .no-border >* {
+    .no-border>* {
         border: none;
     }
 </style>
@@ -43,9 +43,9 @@
                         </tr>
                         <tr>
                             <td>Cost Of Instrument</td>
-                            <td>{{insCostCurrency}} {{costOfInstrument}}</td>
+                            <td [title]="costOfInstrument | currency">$ {{costOfInstrument | CustomAmount:2}}</td>
                         </tr>
-                        <tr class="bold">
+                        <tr class="bold blue-text">
                             <td>
                                 Service Contract Value Year
                             </td>
@@ -58,8 +58,8 @@
                                 Service Contract Value Cost
 
                             </td>
-                            <td *ngFor="let item of ownerShip">
-                                {{item.serviceContractCostCurrencyId}} {{item.serviceContractCost}}
+                            <td *ngFor="let item of ownerShip" [title]="item.serviceContractCost | currency">
+                                $ {{item.serviceContractCost | CustomAmount:2}}
                             </td>
                         </tr>
                         <tr>
@@ -67,8 +67,8 @@
                                 Breakdown Visit Cost
 
                             </td>
-                            <td *ngFor="let item of ownerShip">
-                                {{item.breakdownVisitCostCurrencyId}} {{item.breakdownVisitCost}}
+                            <td *ngFor="let item of ownerShip" [title]="item.breakdownVisitCost | currency">
+                                $ {{item.breakdownVisitCost| CustomAmount:2}}
                             </td>
                         </tr>
                         <tr>
@@ -76,16 +76,17 @@
                                 SparePart Cost
 
                             </td>
-                            <td *ngFor="let item of ownerShip">
-                                {{item.sparePartsCostCurrencyId}} {{item.sparePartsCost}}
+                            <td *ngFor="let item of ownerShip" [title]="item.sparePartsCost | currency">
+                                $ {{item.sparePartsCost |
+                                CustomAmount:2}}
                             </td>
                         </tr>
-                        <tr class="bold">
+                        <tr class="bold blue-text">
                             <td>
                                 Total Annual Cost
                             </td>
-                            <td *ngFor="let item of ownerShip">
-                                {{insCostCurrency}} {{item.totalAnnualCost}}
+                            <td *ngFor="let item of ownerShip" [title]="item.totalAnnualCost | currency">
+                                $ {{item.totalAnnualCost| CustomAmount:2}}
                             </td>
                         </tr>
                         <tr>
@@ -93,8 +94,8 @@
                                 Total Cumulative Cost
 
                             </td>
-                            <td *ngFor="let item of ownerShip">
-                                {{insCostCurrency}} {{item.totalCummulativeCost}}
+                            <td *ngFor="let item of ownerShip" [title]="item.totalCummulativeCost | currency">
+                                $ {{item.totalCummulativeCost | CustomAmount:2}}
                             </td>
                         </tr>
                         <tr>
