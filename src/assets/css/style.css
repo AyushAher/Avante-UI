@@ -1116,3 +1116,11 @@ body::-webkit-scrollbar-thumb {
 body::-webkit-scrollbar-thumb:hover {
   background: #338b19;
 }
+
+#pendingSerReq,
+#compSerReq {
+  height: 200px !important;
+}
+#highestServiceRequest {
+  height: 165px !important;
+}

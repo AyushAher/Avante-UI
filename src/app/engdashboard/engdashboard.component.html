@@ -109,17 +109,15 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card shadow border-0 dashboard-card">
-                            <div style="height: 725px; overflow: auto;">
+                            <div style="height: 560px; overflow: auto;">
                                 <app-engscheduler></app-engscheduler>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 mt-4">
                         <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
-                            <div class="card-heading pt-4 px-3">
-                                <h6>Spare Parts Recommended</h6>
-                            </div>
                             <div class="card-body">
+                                <h5 class="text-center pb-3">Spare Parts Recommended</h5>
                                 <div class="sp-table">
                                     <table class="table table-striped">
                                         <thead>
@@ -147,10 +145,8 @@
                     </div>
                     <div class="col-md-6 mt-4">
                         <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
-                            <div class="card-heading pt-4 px-3">
-                                <h6>Spare Parts Consumed</h6>
-                            </div>
                             <div class="card-body">
+                                <h5 class="text-center pb-3">Spare Parts Consumed</h5>
                                 <div class="sp-table">
                                     <table class="table table-striped">
                                         <thead>
@@ -182,11 +178,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
-                            <div class="chart py-3">
-                                <div class="card-heading pt-4 px-3">
-                                    <h6>Pending Service Request</h6>
-                                    <hr>
-                                </div>
+                            <div class="card-body chart py-3">
+                                <h5 class="text-center pb-3">Pending Service Request</h5>
                                 <div id="pendingSerReqContainer">
                                     <canvas id="pendingSerReq" class="chart-canvas" height="170"></canvas>
                                 </div>
@@ -195,11 +188,8 @@
                     </div>
                     <div class="col-md-12 mt-2">
                         <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
-                            <div class="chart py-3">
-                                <div class="card-heading pt-4 px-3">
-                                    <h6>Completed Service Request</h6>
-                                    <hr>
-                                </div>
+                            <div class="card-body chart py-3">
+                                <h5 class="text-center pb-3">Completed Service Request</h5>
                                 <div id="compSerReqContainer">
                                     <canvas id="compSerReq" class="chart-canvas" height="170"></canvas>
                                 </div>
@@ -209,11 +199,9 @@
                     <div class="col-sm-12 mt-4">
                         <div class="card shadow border-0 dashboard-card" style="min-height: 240px;">
                             <div class="card-body p-0">
+                                <h5 class="text-center py-3">Travel Expenses</h5>
+
                                 <div class="px-3">
-                                    <div class="card-heading pt-4 px-3">
-                                        <h6>Travel Expenses</h6>
-                                        <hr>
-                                    </div>
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item border-0 mb-2">
                                             <p class="pb-3">
@@ -248,7 +236,7 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="list-group-item border-0 mb-2">
+                                        <li class="list-group-item border-0 mb-2 showHideRows-revenueCustomer d-none">
                                             <p class="pb-3">
                                                 <span class="float-start">Hotel</span>
                                                 <span class="float-end" [title]="travelExpense.hotel |currency">$
@@ -264,7 +252,7 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="list-group-item border-0 mb-2">
+                                        <li class="list-group-item border-0 mb-2  showHideRows-revenueCustomer d-none">
                                             <p class="pb-3">
                                                 <span class="float-start">DA</span>
                                                 <span class="float-end" [title]="travelExpense.da |currency">$
