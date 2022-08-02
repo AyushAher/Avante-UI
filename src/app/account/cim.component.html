@@ -1,0 +1,59 @@
+<div class="modal" style="display: block" id="modal" role="dialog">
+  <div class="modal-dialog" style="width: 95vw">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #53a446 !important; color: #fff">
+        <h4 class="modal-title" id="modal-basic-title">Select CIM</h4>
+        <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+          <i class="fas fa-fw fa fa-times" style="color: #fff !important"> </i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="py-3 px-3-pb-3">
+          <div class="container">
+            <form [formGroup]="Form" (ngSubmit)="onValueSubmit()">
+
+              <div class="modal-body">
+                <div class="row">
+
+                  <div class="col-sm-12">
+                    <label for="brand">Brand</label>
+                    <select id="brand" formControlName="brandId" class="form-select"
+                      [ngClass]="{ 'is-invalid': submitted && f.brandId.errors }">
+                      <option [value]="i.id" *ngFor="let i of brandList">{{i.brandName}}</option>
+                    </select>
+
+                    <div *ngIf="submitted && f.brandId.errors" class="invalid-feedback">
+                      <div *ngIf="f.brandId.errors.required">Brand is required</div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label for="businessUnitId">Business Unit</label>
+                    <select id="businessUnitId" formControlName="businessUnitId" class="form-select"
+                      [ngClass]="{ 'is-invalid': submitted && f.businessUnitId.errors }">
+                      <option [value]="i.id" *ngFor="let i of businessUnitList">{{i.businessUnitName}}</option>
+                    </select>
+
+                    <div *ngIf="submitted && f.businessUnitId.errors" class="invalid-feedback">
+                      <div *ngIf="f.businessUnitId.errors.required">Business Unit is required</div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+                  <button class="btn btn-primary" style="background-color: #53a446;border: #53a446;">Next</button>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

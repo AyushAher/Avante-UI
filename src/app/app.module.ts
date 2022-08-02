@@ -137,6 +137,7 @@ import { EnvServiceProvider } from './_services/env/env.service.provider';
 import { EngdashboardComponent } from './engdashboard/engdashboard.component';
 import { CustomAmountPipe } from './_pipes/amount.pipe';
 import { EngschedulerComponent } from './engscheduler/engineerscheduler.component';
+import { CIMComponent } from './account/cim.component';
 
 
 @NgModule({
@@ -249,7 +250,8 @@ import { EngschedulerComponent } from './engscheduler/engineerscheduler.componen
     CostofownershipComponent,
     EngdashboardComponent,
     CustomAmountPipe,
-    EngschedulerComponent
+    EngschedulerComponent,
+    CIMComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

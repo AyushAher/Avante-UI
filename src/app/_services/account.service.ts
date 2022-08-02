@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 
 import { ChangePasswordModel, User } from '../_models';
 import { EnvService } from './env/env.service';
@@ -47,10 +48,10 @@ export class AccountService {
   }
 
 
-  login(username, password) {
+  login(username, password, cimId) {
 
     password = window.btoa(password);
-    return this.http.post<User>(`${this.environment.apiUrl}/user/authenticate`, { username, password })
+    return this.http.post<User>(`${this.environment.apiUrl}/user/authenticate`, { username, password, cimId })
       .pipe(map(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('user', JSON.stringify(user));
@@ -60,6 +61,15 @@ export class AccountService {
       }));
   }
 
+
+
+  Authenticate = (username, password, cimId = "") => {
+    this.login(username, password, cimId)
+      .pipe(first()).subscribe({
+        next: () => this.router.navigate(["/"]),
+        error: () => false
+      });
+  }
 
 
   logout() {

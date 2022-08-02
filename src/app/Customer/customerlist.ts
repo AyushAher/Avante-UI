@@ -73,12 +73,8 @@ export class CustomerListComponent implements OnInit {
       role = role[0]?.itemCode;
     }
 
-    if (role == this.environment.distRoleCode) {
-      // this.showGrid = true;
-      this.IsDist = true
-    } else {
-      this.toggleFilter();
-    }
+    this.IsDist = role == this.environment.distRoleCode    
+    
     this.customerService.getAllByConId(this.user.contactId).pipe(first())
       .subscribe((data: any) => this.customerList = data.object)
     // this.distributorId = this.route.snapshot.paramMap.get('id');
