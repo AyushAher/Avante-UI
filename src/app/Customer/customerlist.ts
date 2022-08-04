@@ -66,7 +66,6 @@ export class CustomerListComponent implements OnInit {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.showGrid = true;
-      this.toggleFilter();
       this.IsDist = false
     }
     else {

@@ -72,9 +72,6 @@ export class SparePartListComponent implements OnInit {
     else if (role == this.environment.engRoleCode) this.isEng = true;
     else if (role == this.environment.custRoleCode) this.isCust = true;
 
-    if (!this.isDist) {
-      this.toggleFilter();
-    }
     this.sparePartService.getAll().pipe(first())
       .subscribe((data: any) => this.sparePartList = data.object);
 

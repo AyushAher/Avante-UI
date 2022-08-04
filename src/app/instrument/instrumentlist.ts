@@ -55,10 +55,8 @@ export class InstrumentListComponent implements OnInit {
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SINST");
       if (profilePermission.length > 0) {
-
         this.hasAddAccess = profilePermission[0].create;
         this.hasDeleteAccess = profilePermission[0].delete;
-
       }
     }
     if (this.user.username == "admin") {
@@ -73,9 +71,6 @@ export class InstrumentListComponent implements OnInit {
     else if (role == this.environment.engRoleCode) this.isEng = true;
     else if (role == this.environment.custRoleCode) this.isCust = true;
 
-    if (!this.isDist) {
-      this.toggleFilter()
-    }
     this.instrumentService.getAll(this.user.userId).pipe(first())
       .subscribe((data: any) => this.instrumentList = data.object);
     this.columnDefs = this.createColumnDefs();

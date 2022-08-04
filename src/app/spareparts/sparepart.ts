@@ -276,9 +276,7 @@ export class SparePartComponent implements OnInit {
       });
     }
 
-    if (files.length === 0 && id == null) {
-      return;
-    }
+    if (files.length === 0 && id == null) return
     let filesToUpload: File[] = files;
     const formData = new FormData();
 
@@ -343,7 +341,11 @@ export class SparePartComponent implements OnInit {
 
   onConfigChange(param: string) {
     this.configService.getById(param).pipe(first())
-      .subscribe((data: any) => this.configValueList = data.object);
+      .subscribe((data: any) =>{
+        this.configValueList = data.object
+        console.log(data);
+        
+      });
   }
 
   onConfigVChange(configid: string, configval: string) {
