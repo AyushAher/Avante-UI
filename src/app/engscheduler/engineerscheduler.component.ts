@@ -44,7 +44,7 @@ export class EngschedulerComponent implements OnInit {
   @ViewChild("scheduleObj")
   public scheduleObj: ScheduleComponent;
   private distId: any;
-  public setView = "WorkWeek";
+  public setView = "Month";
   isEng: boolean = false;
   isDistSupp: boolean = false;
 

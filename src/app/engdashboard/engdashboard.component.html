@@ -207,15 +207,15 @@
                                             <p class="pb-3">
                                                 <span class="float-start">Advance Request</span>
                                                 <span class="float-end"
-                                                    [title]="travelExpense.advanceRequest |currency">$
-                                                    {{travelExpense.advanceRequest | CustomAmount:2}}
-                                                    ({{((travelExpense.advanceRequest /travelExpense.total)*100) |
+                                                    [title]="travelExpense?.advanceRequest |currency">$
+                                                    {{travelExpense?.advanceRequest | CustomAmount:2}}
+                                                    ({{((travelExpense?.advanceRequest /travelExpense?.total)*100) |
                                                     number:'1.0-2'}}%)
                                                 </span>
                                             </p>
                                             <div class="range" id="range">
                                                 <div class="slider"
-                                                    [style.width]="((travelExpense.advanceRequest/travelExpense.total)*100)+'%'"
+                                                    [style.width]="((travelExpense?.advanceRequest/travelExpense?.total)*100)+'%'"
                                                     [style.background]="'green !important'" id="slider">
                                                 </div>
                                             </div>
@@ -223,15 +223,15 @@
                                         <li class="list-group-item border-0 mb-2">
                                             <p class="pb-3">
                                                 <span class="float-start">Visa and Related</span>
-                                                <span class="float-end" [title]="travelExpense.visaRelated |currency">$
-                                                    {{travelExpense.visaRelated | CustomAmount:2}}
-                                                    ({{((travelExpense.visaRelated /travelExpense.total)*100) |
+                                                <span class="float-end" [title]="travelExpense?.visaRelated |currency">$
+                                                    {{travelExpense?.visaRelated | CustomAmount:2}}
+                                                    ({{((travelExpense?.visaRelated /travelExpense?.total)*100) |
                                                     number:'1.0-2'}}%)
                                                 </span>
                                             </p>
                                             <div class="range" id="range">
                                                 <div class="slider"
-                                                    [style.width]="((travelExpense.visaRelated/travelExpense.total)*100)+'%'"
+                                                    [style.width]="((travelExpense?.visaRelated/travelExpense?.total)*100)+'%'"
                                                     [style.background]="'#6f42c1 !important'" id="slider">
                                                 </div>
                                             </div>
@@ -239,15 +239,15 @@
                                         <li class="list-group-item border-0 mb-2 showHideRows-revenueCustomer d-none">
                                             <p class="pb-3">
                                                 <span class="float-start">Hotel</span>
-                                                <span class="float-end" [title]="travelExpense.hotel |currency">$
-                                                    {{travelExpense.hotel | CustomAmount:2}}
-                                                    ({{((travelExpense.hotel /travelExpense.total)*100) |
+                                                <span class="float-end" [title]="travelExpense?.hotel |currency">$
+                                                    {{travelExpense?.hotel | CustomAmount:2}}
+                                                    ({{((travelExpense?.hotel /travelExpense?.total)*100) |
                                                     number:'1.0-2'}}%)
                                                 </span>
                                             </p>
                                             <div class="range" id="range">
                                                 <div class="slider"
-                                                    [style.width]="((travelExpense.hotel/travelExpense.total)*100)+'%'"
+                                                    [style.width]="((travelExpense?.hotel/travelExpense?.total)*100)+'%'"
                                                     [style.background]="'#007bff !important'" id="slider">
                                                 </div>
                                             </div>
@@ -255,15 +255,15 @@
                                         <li class="list-group-item border-0 mb-2  showHideRows-revenueCustomer d-none">
                                             <p class="pb-3">
                                                 <span class="float-start">DA</span>
-                                                <span class="float-end" [title]="travelExpense.da |currency">$
-                                                    {{travelExpense.da | CustomAmount:2}}
-                                                    ({{((travelExpense.da /travelExpense.total)*100) |
+                                                <span class="float-end" [title]="travelExpense?.da |currency">$
+                                                    {{travelExpense?.da | CustomAmount:2}}
+                                                    ({{((travelExpense?.da /travelExpense?.total)*100) |
                                                     number:'1.0-2'}}%)
                                                 </span>
                                             </p>
                                             <div class="range" id="range">
                                                 <div class="slider"
-                                                    [style.width]="((travelExpense.da/travelExpense.total)*100)+'%'"
+                                                    [style.width]="((travelExpense?.da/travelExpense?.total)*100)+'%'"
                                                     [style.background]="'#17a2b8 !important'" id="slider">
                                                 </div>
                                             </div>
@@ -271,15 +271,15 @@
                                         <li class="list-group-item border-0 mb-2  showHideRows-revenueCustomer d-none">
                                             <p class="pb-3">
                                                 <span class="float-start">Air Ticket</span>
-                                                <span class="float-end" [title]="travelExpense.airTicket |currency">$
-                                                    {{travelExpense.airTicket | CustomAmount:2}}
-                                                    ({{((travelExpense.airTicket /travelExpense.total)*100) |
+                                                <span class="float-end" [title]="travelExpense?.airTicket |currency">$
+                                                    {{travelExpense?.airTicket | CustomAmount:2}}
+                                                    ({{((travelExpense?.airTicket /travelExpense?.total)*100) |
                                                     number:'1.0-2'}}%)
                                                 </span>
                                             </p>
                                             <div class="range" id="range">
                                                 <div class="slider"
-                                                    [style.width]="((travelExpense.airTicket/travelExpense.total)*100)+'%'"
+                                                    [style.width]="((travelExpense?.airTicket/travelExpense?.total)*100)+'%'"
                                                     [style.background]="'#00cccc !important'" id="slider">
                                                 </div>
                                             </div>
@@ -287,15 +287,15 @@
                                         <li class="list-group-item border-0 mb-2 showHideRows-revenueCustomer d-none">
                                             <p class="pb-3">
                                                 <span class="float-start">Local Travel</span>
-                                                <span class="float-end" [title]="travelExpense.localTravel |currency">$
-                                                    {{travelExpense.localTravel | CustomAmount:2}}
-                                                    ({{((travelExpense.localTravel /travelExpense.total)*100) |
+                                                <span class="float-end" [title]="travelExpense?.localTravel |currency">$
+                                                    {{travelExpense?.localTravel | CustomAmount:2}}
+                                                    ({{((travelExpense?.localTravel /travelExpense?.total)*100) |
                                                     number:'1.0-2'}}%)
                                                 </span>
                                             </p>
                                             <div class="range" id="range">
                                                 <div class="slider"
-                                                    [style.width]="((travelExpense.localTravel/travelExpense.total)*100)+'%'"
+                                                    [style.width]="((travelExpense?.localTravel/travelExpense?.total)*100)+'%'"
                                                     [style.background]="'#adb2bd !important'" id="slider">
                                                 </div>
                                             </div>
@@ -303,15 +303,15 @@
                                         <li class="list-group-item border-0 mb-2 showHideRows-revenueCustomer d-none">
                                             <p class="pb-3">
                                                 <span class="float-start">Others</span>
-                                                <span class="float-end" [title]="travelExpense.others |currency">$
-                                                    {{travelExpense.others | CustomAmount:2}}
-                                                    ({{((travelExpense.others /travelExpense.total)*100) |
+                                                <span class="float-end" [title]="travelExpense?.others |currency">$
+                                                    {{travelExpense?.others | CustomAmount:2}}
+                                                    ({{((travelExpense?.others /travelExpense?.total)*100) |
                                                     number:'1.0-2'}}%)
                                                 </span>
                                             </p>
                                             <div class="range" id="range">
                                                 <div class="slider"
-                                                    [style.width]="((travelExpense.others/travelExpense.total)*100)+'%'"
+                                                    [style.width]="((travelExpense?.others/travelExpense?.total)*100)+'%'"
                                                     [style.background]="'red !important'" id="slider">
                                                 </div>
                                             </div>
