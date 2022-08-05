@@ -189,6 +189,63 @@
                 class="form-control"></textarea>
             </div>
           </div>
+
+          <div class="row mt-2">
+            <div class="col-md-4">
+              <label>Air Freight charges</label>
+              <br>
+              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+                formControlName="airFreightChargesCurr" class="form-select">
+                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
+              </select>
+              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
+                formControlName="airFreightChargesAmt" />
+            </div>
+
+            <div class="col-md-4">
+              <label>PVOC / Inspection Charges </label>
+              <br>
+              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+                formControlName="inspectionChargesCurr" class="form-select">
+                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
+              </select>
+              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
+                formControlName="inspectionChargesAmt" />
+            </div>
+
+            <div class="col-md-4">
+              <label>LC Administrative Charges</label>
+              <br>
+              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+                formControlName="lcadministrativeChargesCurr" class="form-select">
+                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
+              </select>
+              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
+                formControlName="lcadministrativeChargesAmt" />
+            </div>
+
+            <div class="col-md-4">
+              <label>Total</label>
+              <br>
+              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+                formControlName="totalCurr" class="form-select">
+                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
+              </select>
+              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
+                formControlName="totalAmt" />
+            </div>
+
+            <div class="col-md-4">
+              <label>Base Currency Amount</label>
+              <br>
+              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+                formControlName="baseCurrencyId" class="form-select">
+                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
+              </select>
+              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
+                formControlName="basePCurrencyAmt" />
+            </div>
+          </div>
           <br />
 
           <div class="attachment my-4">
@@ -318,7 +375,7 @@
                           {{i.code}}
                         </option>
                       </select>
-                      <input class="payAmt form-control" style="width:67%;display: inline-block;" type="number"
+                      <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
                         formControlName="payAmt" id="payAmt" />
                     </div>
 
@@ -330,7 +387,7 @@
                         <option *ngFor="let item of currencyList" value="{{item.id}}">{{item.code}}</option>
                       </select>
                       <input formControlName="baseCurrencyAmt" #baseAmt type="number" class="form-control"
-                        style="width: 68%;display: inline-block;margin-left: 5px;" />
+                        style="width: 68%;display: inline-block;margin-left: 5px;text-align: right;" />
                     </div>
 
                     <label for="stageComments" *ngIf="isPaymentTerms || isPaymentAmt">Comments</label>

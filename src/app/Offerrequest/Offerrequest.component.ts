@@ -10,6 +10,7 @@ import { Offerrequest } from '../_models/Offerrequest.model';
 import {
   AccountService,
   AlertService,
+  CountryService,
   CurrencyService,
   CustomerService,
   DistributorService,
@@ -27,6 +28,7 @@ import { SparequotedetComponent } from './sparequotedet.component';
 import { SparequotedetService } from '../_services/sparequotedet.service';
 import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
 import { EnvService } from '../_services/env/env.service';
+import { AgRendererComponent } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -224,7 +226,22 @@ export class OfferrequestComponent implements OnInit {
       baseCurrencyAmt: [1.00, Validators.required],
       baseCurrencyId: ["", Validators.required],
       stageComments: [''],
-      stagePaymentType: []
+      stagePaymentType: [],
+
+      airFreightChargesAmt: [0],
+      airFreightChargesCurr: [""],
+
+      lcadministrativeChargesAmt: [0],
+      lcadministrativeChargesCurr: [0],
+
+      inspectionChargesCurr: [0],
+      inspectionChargesAmt: [0],
+
+      totalAmt: [0],
+      totalCurr: [0],
+
+      basePCurrencyAmt: [0],
+
     })
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -313,6 +330,7 @@ export class OfferrequestComponent implements OnInit {
 
                   this.rowData = stageData.object
                   this.form.patchValue(data.object);
+                  this.GetSparePartTotal()
                   this.form.get('stageName').reset()
                 })
             })
@@ -329,6 +347,7 @@ export class OfferrequestComponent implements OnInit {
         .pipe(first())
         .subscribe((data: any) => {
           this.sparePartsList = data.object;
+          this.GetSparePartTotal()
           this.api.setRowData(this.sparePartsList);
         });
 
@@ -421,6 +440,18 @@ export class OfferrequestComponent implements OnInit {
     if (this.isCompleted) {
       setInterval(() => this.form.disable(), 10);
     }
+    this.GetSparePartTotal()
+
+  }
+
+
+  GetSparePartTotal() {
+    var total = 0;
+    this.sparePartsList.forEach((data) => total += data.amount)
+    total += this.form.get("airFreightChargesAmt").value
+    total += this.form.get("inspectionChargesAmt").value
+    total += this.form.get("lcadministrativeChargesAmt").value
+    this.form.get("totalAmt").setValue(total)
 
   }
 
@@ -429,6 +460,7 @@ export class OfferrequestComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.form.enable();
+      this.api.redrawRows()
       this.columnDefs = this.createColumnDefs();
       this.columnDefsAttachments = this.createColumnDefsAttachments();
       this.FormControlDisable();
@@ -454,6 +486,7 @@ export class OfferrequestComponent implements OnInit {
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();
     this.isEditMode = false;
     this.isNewMode = false;
+    this.api.redrawRows()
   }
 
   FormControlDisable() {
@@ -585,7 +618,10 @@ export class OfferrequestComponent implements OnInit {
 
     if (cellValue == rowData.id && this.hasDeleteAccess) {
       this.sparePartsList.splice(indexOfSelectedRow, 1);
-      if (rowData.offerRequestId == null && cellValue == rowData.id) this.api.setRowData(this.sparePartsList);
+      if (rowData.offerRequestId == null && cellValue == rowData.id) {
+        this.api.setRowData(this.sparePartsList)
+        this.GetSparePartTotal()
+      }
 
       else {
         this.SparePartsService
@@ -597,6 +633,8 @@ export class OfferrequestComponent implements OnInit {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
                 const selectedData = event.api.getSelectedRows();
                 event.api.applyTransaction({ remove: selectedData });
+                this.GetSparePartTotal()
+
               }
             },
           });
@@ -687,12 +725,28 @@ export class OfferrequestComponent implements OnInit {
       hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
     },
     {
+      cellRendererFramework: OfferrequestCurrencyComponent,
       headerName: 'Currency',
       field: 'currency',
       hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
       // hide: true,
       filter: true,
-      sortable: true
+      sortable: true,
+      cellRendererParams: {
+        readonly: false
+      },
+    },
+    {
+      cellRendererFramework: OfferrequestCountryComponent,
+      headerName: 'Country Of Origin',
+      field: 'country',
+      hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
+      // hide: true,
+      filter: true,
+      sortable: true,
+      cellRendererParams: {
+        readonly: false
+      },
     },
     {
       headerName: 'Description',
@@ -741,12 +795,28 @@ export class OfferrequestComponent implements OnInit {
         hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
       },
       {
+        cellRendererFramework: OfferrequestCurrencyComponent,
         headerName: 'Currency',
         field: 'currency',
         hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
         // hide: true,
         filter: true,
-        sortable: true
+        sortable: true,
+        cellRendererParams: {
+          readonly: true
+        },
+      },
+      {
+        cellRendererFramework: OfferrequestCountryComponent,
+        headerName: 'Country Of Origin',
+        field: 'country',
+        hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
+        // hide: true,
+        filter: true,
+        sortable: true,
+        cellRendererParams: {
+          readonly: true
+        },
       },
       {
         headerName: 'Description',
@@ -769,6 +839,7 @@ export class OfferrequestComponent implements OnInit {
       d[0].price = Number(data.price)
       d[0].qty = Number(data.qty)
       this.api.setRowData(this.sparePartsList)
+      this.GetSparePartTotal()
     }
   }
 
@@ -983,13 +1054,11 @@ export class OfferrequestComponent implements OnInit {
     if (this.form.invalid) return
 
     if (this.sparePartsList != [] && this.sparePartsList != null) {
-
-      console.log(this.sparePartsList);
       this.sparePartsList.forEach(instrument => {
-
         instrument.offerRequest = this.id;
         instrument.offerRequestId = this.id;
       })
+
     }
 
     this.model = this.form.value;
@@ -1052,5 +1121,83 @@ export class OfferrequestComponent implements OnInit {
           .pipe(first()).subscribe();
       }
     }
+  }
+}
+
+
+@Component({
+  template: `
+  <form [formGroup]="form">
+    <select formControlName="currency" class="form-select">
+      <option *ngFor="let c of lstCurrency" value={{c.id}}> {{c.code}}</option>
+    </select>
+  </form>
+  `
+})
+export class OfferrequestCurrencyComponent implements AgRendererComponent {
+
+  lstCurrency: any[] = []
+  form: FormGroup
+  params: any;
+
+  constructor(private currencyService: CurrencyService, private formBuilder: FormBuilder) {
+    this.form = this.formBuilder.group({
+      currency: ['', Validators.required]
+    })
+
+    this.form.get("currency").valueChanges.subscribe((data: any) => this.params.data.currency = data)
+
+    this.currencyService.getAll()
+      .pipe(first()).subscribe((data: any) => this.lstCurrency = data.object)
+  }
+
+  agInit(params: any): void {
+    this.params = params;
+    this.form.get("currency").setValue(params.value)
+    if (params.readonly) this.form.get("currency").disable()
+    else this.form.get("currency").enable()
+  }
+
+  refresh(params: any): boolean {
+    return false;
+  }
+}
+
+@Component({
+  template: `
+  <form [formGroup]="form">
+    <select formControlName="country" class="form-select">
+      <option *ngFor="let c of lstCountry" value={{c.id}}> {{c.name}}</option>
+    </select>
+  </form>
+  `
+})
+export class OfferrequestCountryComponent implements AgRendererComponent {
+
+  lstCountry: any[] = []
+  form: FormGroup
+  params: any;
+
+  constructor(private countryService: CountryService, private formBuilder: FormBuilder) {
+    this.form = this.formBuilder.group({
+      country: ['', Validators.required]
+    })
+
+    this.form.get("country").valueChanges.subscribe((data: any) => this.params.data.country = data)
+
+    this.countryService.getAll()
+      .pipe(first()).subscribe((data: any) => this.lstCountry = data.object)
+  }
+
+  agInit(params: any): void {
+    this.params = params;
+    this.form.get("country").setValue(params.value)
+
+    if (params.readonly) this.form.get("country").disable()
+    else this.form.get("country").enable()
+  }
+
+  refresh(params: any): boolean {
+    return false;
   }
 }

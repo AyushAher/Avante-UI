@@ -31,7 +31,7 @@ export class UserProfileListComponent implements OnInit {
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
-  showGrid: any;
+  showGrid: any = true;
   IsCustomerView: boolean;
   IsDistributorView: boolean;
   IsEngineerView: boolean;
@@ -87,8 +87,6 @@ export class UserProfileListComponent implements OnInit {
       .subscribe((data: any) => {
         this.userprofileList = data.object
       });
-
-    if (!this.IsDistributorView) this.toggleFilter()
 
     this.columnDefs = this.createColumnDefs();
   }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { first } from 'rxjs/operators';
 import { RenderComponent } from '../distributor/rendercomponent';
 import { User } from '../_models';
@@ -9,6 +10,7 @@ import { Offerrequest } from '../_models/Offerrequest.model';
 import { AccountService, NotificationService, ProfileService } from '../_services';
 import { EnvService } from '../_services/env/env.service';
 import { OfferrequestService } from '../_services/Offerrequest.service';
+import { ImportOfferRequestComponent } from './importofferrequest.component';
 import { OfferRequestListRenderer } from './offerrequestlistrenderer';
 
 @Component({
@@ -38,11 +40,13 @@ export class OfferrequestlistComponent implements OnInit {
   role: string;
   showGrid: any = true;
   isDist: boolean;
+  bsModalRef: BsModalRef;
 
   constructor(
     private router: Router,
     private accountService: AccountService,
     private environment: EnvService,
+    private modalService: BsModalService,
     private Service: OfferrequestService,
     private profileService: ProfileService,
   ) {
@@ -153,4 +157,17 @@ export class OfferrequestlistComponent implements OnInit {
     this.columnApi = params.columnApi;
     this.api.sizeColumnsToFit();
   }
+
+  ImportData() {
+
+    const config: any = {
+      backdrop: 'static',
+      keyboard: false,
+      animated: true,
+      ignoreBackdropClick: true,
+    };
+    this.bsModalRef = this.modalService.show(ImportOfferRequestComponent, config);
+  }
+
 }
+

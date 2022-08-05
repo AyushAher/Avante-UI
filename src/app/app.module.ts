@@ -85,7 +85,7 @@ import { srrptComponent } from './report/srrpt';
 import { AmcComponent } from './amc/amc';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AmcListComponent } from './amc/amclist';
-import { OfferrequestComponent } from './Offerrequest/Offerrequest.component';
+import { OfferrequestComponent, OfferrequestCountryComponent, OfferrequestCurrencyComponent } from './Offerrequest/Offerrequest.component';
 import { OfferrequestlistComponent } from './Offerrequest/Offerrequestlist.component';
 import { AmcInstrumentRendererComponent } from './amc/amc-instrument-renderer.component';
 import { FilerendercomponentComponent } from './Offerrequest/filerendercomponent.component';
@@ -138,6 +138,7 @@ import { EngdashboardComponent } from './engdashboard/engdashboard.component';
 import { CustomAmountPipe } from './_pipes/amount.pipe';
 import { EngschedulerComponent } from './engscheduler/engineerscheduler.component';
 import { CIMComponent } from './account/cim.component';
+import { ImportOfferRequestComponent } from './Offerrequest/importofferrequest.component';
 
 
 @NgModule({
@@ -251,7 +252,10 @@ import { CIMComponent } from './account/cim.component';
     EngdashboardComponent,
     CustomAmountPipe,
     EngschedulerComponent,
-    CIMComponent
+    CIMComponent,
+    ImportOfferRequestComponent,
+    OfferrequestCurrencyComponent,
+    OfferrequestCountryComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
