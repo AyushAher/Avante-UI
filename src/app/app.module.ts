@@ -270,7 +270,10 @@ import { ImportOfferRequestComponent } from './Offerrequest/importofferrequest.c
     Ng2TelInputModule,
     SignaturePadModule,
     ModalModule.forRoot(),
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      timeOut: 2000,
+      preventDuplicates: true,
+    }),
     BsDatepickerModule.forRoot(),
     NgMultiSelectDropDownModule.forRoot(),
     AgGridModule.withComponents([]),
