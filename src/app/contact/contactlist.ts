@@ -115,7 +115,6 @@ export class ContactListComponent implements OnInit {
             this.contactList = data.object.contacts;
           },
           error: error => {
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });
@@ -128,7 +127,6 @@ export class ContactListComponent implements OnInit {
             this.contactList = data.object.contacts;
           },
           error: error => {
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });
@@ -142,7 +140,6 @@ export class ContactListComponent implements OnInit {
             this.contactList = data.object.contacts;
           },
           error: error => {
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });
@@ -156,7 +153,6 @@ export class ContactListComponent implements OnInit {
             this.contactList = data.object.contacts;
           },
           error: error => {
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });

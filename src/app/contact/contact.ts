@@ -273,14 +273,8 @@ export class ContactComponent implements OnInit {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
           }
-          else {
-
-          }
-          // this.notificationService.showSuccess("User Added successful", "Success");
         },
         error: error => {
-          //  this.alertService.error(error);
-
           this.loading = false;
         }
       });

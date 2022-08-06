@@ -119,7 +119,7 @@ export class poComponent implements OnInit {
         },
         error: error => {
         //  this.alertService.error(error);
-          this.notificationService.showSuccess(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -132,7 +132,7 @@ export class poComponent implements OnInit {
         },
         error: error => {
          // this.alertService.error(error);
-          this.notificationService.showSuccess(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -150,8 +150,6 @@ export class poComponent implements OnInit {
             this.Poform.patchValue(data.object);
           },
           error: error => {
-           // this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });
@@ -196,8 +194,6 @@ export class poComponent implements OnInit {
            
           },
           error: error => {
-           // this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });
@@ -220,8 +216,6 @@ export class poComponent implements OnInit {
             
           },
           error: error => {
-          //  this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });

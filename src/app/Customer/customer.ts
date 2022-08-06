@@ -183,7 +183,7 @@ export class CustomerComponent implements OnInit {
           this.distRegionsList = data.object.find(x => x.id === distId)?.regions;
         },
         error: error => {
-          this.notificationService.showSuccess(error, "Error");
+          
           this.loading = false;
         }
       });
@@ -231,7 +231,7 @@ export class CustomerComponent implements OnInit {
           },
           error: error => {
             // this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
+            
             this.loading = false;
           }
         });
@@ -255,7 +255,7 @@ export class CustomerComponent implements OnInit {
           },
           error: error => {
             //  this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
+            
             this.loading = false;
           }
         });

@@ -55,7 +55,6 @@ export class ForgotpasswoardComponent implements OnInit {
         next: (data: any) => {
           if (data.result) {
             this.close();
-            this.notificationService.showSuccess(data.resultMessage, "Success");
           } else {
 
           }

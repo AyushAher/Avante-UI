@@ -67,8 +67,6 @@ export class WorkTimeContentComponent implements OnInit {
             this.PerDayHrs()
           },
           error: error => {
-            // this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });

@@ -195,8 +195,6 @@ export class ServiceReportComponent implements OnInit {
               this.spconsumedlist = data.object.lstSPConsumed;
             },
             error: error => {
-              // this.alertService.error(error);
-              this.notificationService.showSuccess(error, 'Error');
               this.loading = false;
             }
           });
@@ -335,11 +333,6 @@ export class ServiceReportComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.countries = data.object;
-        },
-        error: error => {
-          //  this.alertService.error(error);
-          this.notificationService.showSuccess(error, 'Error');
-          this.loading = false;
         }
       });
 
@@ -438,7 +431,6 @@ export class ServiceReportComponent implements OnInit {
             }
           },
           error: error => {
-            this.notificationService.showSuccess(error, 'Error');
             this.loading = false;
           }
         });

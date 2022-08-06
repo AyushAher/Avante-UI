@@ -64,6 +64,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   isEditMode: boolean;
   role: string;
   servicereportid: any;
+  serviceRequestId: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -205,8 +206,11 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
           this.getengineers(serreq.distid)
           this.form.get("engineerId").setValue(serreq.assignedto)
+          this.engId = serreq.assignedto
+
           this.getservicerequest(serreq.distid, serreq.assignedto)
           this.form.get("serviceRequestId").setValue(serreq.id)
+          this.serviceRequestId = serreq.id
 
           this.form.get('name').setValue(serreq.contactperson)
           this.form.get('email').setValue(serreq.email)
@@ -221,6 +225,12 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     }
     else if (this.role == this.environment.distRoleCode) {
       this.form.get('distId').disable()
+    }
+
+    if (this.servicereportid) {
+      this.form.get('serviceRequestId').disable()
+      this.form.get('distId').disable()
+      this.form.get('engineerId').disable()
     }
   }
 
@@ -305,8 +315,10 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
       this.customersatisfactionsurvey = this.form.value;
 
-      if (this.isEng) this.customersatisfactionsurvey.engineerId = this.user.contactId
+      if (this.isEng) this.customersatisfactionsurvey.engineerId = this.engId
+      if (this.servicereportid) this.customersatisfactionsurvey.serviceRequestId = this.serviceRequestId
       this.customersatisfactionsurvey.distId = this.distId
+
       this.CustomersatisfactionsurveyService.save(this.form.value)
         .pipe(first())
         .subscribe({

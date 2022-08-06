@@ -83,6 +83,7 @@ export class EngschedulerComponent implements OnInit {
   // public eventSettings: EventSettingsModel;
 
   ngOnInit() {
+    // alert("1")
     this.id = this.route.snapshot.paramMap.get('id');
     this.isRemoteDesktop = this.route.snapshot.queryParams?.action == "RMD"
 
@@ -124,6 +125,7 @@ export class EngschedulerComponent implements OnInit {
               .pipe(first())
               .subscribe({
                 next: (Engdata: any) => {
+                  // alert("2")
                   Engdata.object = Engdata.object.filter(x => x.engId === this.user.contactId)
                   if (Engdata.result && Engdata.object != [] && Engdata.object != null) {
                     Engdata.object.forEach(x => {
@@ -421,6 +423,8 @@ export class EngschedulerComponent implements OnInit {
   }
 
   onPopupOpen(args: PopupOpenEventArgs): void {
+    // alert("3")
+
     if (args.type === "QuickInfo") {
       args.element.querySelector('.e-event-save')?.setAttribute('hidden', 'true')
       args.element.querySelector('.e-event-create')?.setAttribute('hidden', 'true')
@@ -440,7 +444,7 @@ export class EngschedulerComponent implements OnInit {
       if (!this.hasUpdateAccess) {
         args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
       }
-      
+
       if (args.data?.Id == undefined && this.isRemoteDesktop) {
         var location: HTMLInputElement = <HTMLInputElement>document.getElementsByName('Location')[0];
         location.disabled = true
@@ -464,8 +468,10 @@ export class EngschedulerComponent implements OnInit {
         this.serviceRequestService.getById(this.id)
           .pipe(first())
           .subscribe((data: any) => {
+            console.log(data);
+
             var title: HTMLInputElement = <HTMLInputElement>document.getElementsByName('Subject')[0];
-            title.value = data.object.serreqno + ": ";
+            title.value = data.object.machmodelname + " - " + data.object.machineModelName + ": ";
             inputEle.setAttribute('value', data.object.serreqno);
           })
       }
@@ -476,9 +482,10 @@ export class EngschedulerComponent implements OnInit {
           .subscribe((data: any) => {
             var serreq: HTMLInputElement = <HTMLInputElement>document.getElementsByName('SerReqNo')[0];
             serreq.value = data.object.serreqno;
+            console.log(data);
 
             var title: HTMLInputElement = <HTMLInputElement>document.getElementsByName('Subject')[0];
-            title.value = data.object.serreqno + ": ";
+            title.value = data.object.machmodelname + " - " + data.object.machineModelName + ": ";
           })
         if (!this.hasAddAccess) {
           args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')

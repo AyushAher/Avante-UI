@@ -89,8 +89,6 @@ export class ModelEngActionContentComponent implements OnInit {
             this.actionForm.patchValue({ "actiondate": new Date(data.object.actiondate) });
           },
           error: error => {
-            // this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });
@@ -193,7 +191,6 @@ export class ModelEngActionContentComponent implements OnInit {
             if (data.result) {
 
               this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode } })
-              this.notificationService.showSuccess(data.resultMessage, "Success");
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
             } else {

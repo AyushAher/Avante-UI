@@ -105,11 +105,6 @@ export class ServiceRequestListComponent implements OnInit {
             this.distId = data.object.defdistid;
             this.GetAllRecord();
           },
-          error: error => {
-            //  this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
-            this.loading = false;
-          }
         });
 
       // this.distributorId = this.route.snapshot.paramMap.get('id');

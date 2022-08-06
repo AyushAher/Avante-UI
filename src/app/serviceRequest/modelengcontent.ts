@@ -71,8 +71,6 @@ export class ModelEngContentComponent implements OnInit {
             this.engineerCommentForm.patchValue({"nextdate": new Date(data.object.nextdate)});
           },
           error: error => {
-            // this.alertService.error(error);
-            this.notificationService.showSuccess(error, "Error");
             this.loading = false;
           }
         });

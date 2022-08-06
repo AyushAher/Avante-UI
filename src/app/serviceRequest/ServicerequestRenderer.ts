@@ -165,9 +165,6 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
 
                         }
                     },
-                    error: error => {
-                        this.notificationService.showSuccess(error, "Error");
-                    }
                 });
         }
     }
@@ -193,8 +190,6 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
                         this.addAssignedHistory(srrqData)
                         this.notificationService.showSuccess(data.resultMessage, "Success")
                         this.notificationService.filter("itemadded");
-                    } else {
-
                     }
                 })
         }
