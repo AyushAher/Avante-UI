@@ -67,7 +67,22 @@ export class EngdashboardComponent implements OnInit {
       .subscribe((data: any) => this.spRecom = data.object)
 
     this.EngDashboardService.GetTravelExpenses(this.currentCalender)
-      .pipe(first()).subscribe((data: any) => this.travelExpense = data.object)
+      .pipe(first()).subscribe((data: any) => {
+        this.travelExpense = data.object
+        if (!data.object) {
+          this.travelExpense = {
+            localTravel: 0,
+            airTicket: 0,
+            da: 0,
+            hotel: 0,
+            others: 0,
+            visaRelated: 0,
+            total: 0,
+            advanceRequest: 0
+          }
+        }
+
+      })
 
     setTimeout(() => EngDashboardCharts(), 1500);
   }

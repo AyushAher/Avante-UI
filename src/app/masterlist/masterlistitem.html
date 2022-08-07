@@ -67,6 +67,11 @@
                 <div *ngIf="f.itemname.errors.required">Item Name is required</div>
               </div>
             </div>
+            <div class="col-md-4 col-sm-4" *ngIf="designation">
+              <label for="iso_2">Is Escalation Supervisor?</label>
+              <br>
+              <input class="form-check-input" formControlName="isEscalationSupervisor" type="checkbox">
+            </div>
           </div>
           <br />
         </form>
@@ -81,7 +86,7 @@
               rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
 
             <ag-grid-angular *ngIf="!isEditMode" (rowClicked)="onRowClicked($event)" style="width: 100%; height: 500px;"
-              class="ag-theme-alpine" (gridReady)="onGridReady($event)" [columnDefs]="colReadOnlyDefs"
+              class="ag-theme-alpine" (gridReady)="onGridReadyRO($event)" [columnDefs]="colReadOnlyDefs"
               [rowData]="itemList" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
           </div>
         </div>

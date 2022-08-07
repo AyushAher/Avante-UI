@@ -131,6 +131,7 @@ export class ServiceRequestComponent implements OnInit {
   isGenerateReport: boolean = false;
   isNewMode: boolean;
   isEditMode: boolean;
+  designationList: ListTypeItem[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -325,6 +326,13 @@ export class ServiceRequestComponent implements OnInit {
           if (this.IsCustomerView) {
             this.serviceTypeList = this.serviceTypeList.filter(x => x.itemCode != "PREV" && x.itemCode != "PLAN")
           }
+        }
+      });
+
+    this.listTypeService.getById('DESIG').pipe(first())
+      .subscribe({
+        next: (data: any[]) => {
+          this.designationList = data.filter(x => x.isEscalationSupervisor)
         }
       });
 

@@ -151,6 +151,7 @@ export class ServiceReportComponent implements OnInit {
   isCompleted: boolean = false;
   isEditMode: boolean;
   isNewMode: boolean;
+  isCust: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -262,6 +263,7 @@ export class ServiceReportComponent implements OnInit {
     if (this.user.username != "admin") {
       this.role = role[0]?.itemCode;
       this.role == this.environment.engRoleCode ? this.isEng = true : this.isEng = false;
+      this.role == this.environment.custRoleCode ? this.isCust = true : this.isCust = false;
     }
 
     this.profilePermission = this.profileService.userProfileValue;
@@ -472,14 +474,16 @@ export class ServiceReportComponent implements OnInit {
   EditMode() {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
-      this.ServiceReportform.enable();
-      this.FormControlDisable();
 
-      this.columnworkdefs = this.createworkdoneColumnDefs();
-      this.columnDefs = this.createColumnDefs();
-      this.spcolumnDefs = this.createColumnspDefs();
-      this.spRecomandDefs = this.createColumnspreDefs();
-      this.pdfcolumnDefs = this.pdfcreateColumnDefs();
+      if (!this.isCust) {
+        this.ServiceReportform.enable();
+        this.FormControlDisable();
+        this.columnworkdefs = this.createworkdoneColumnDefs();
+        this.columnDefs = this.createColumnDefs();
+        this.spcolumnDefs = this.createColumnspDefs();
+        this.spRecomandDefs = this.createColumnspreDefs();
+        this.pdfcolumnDefs = this.pdfcreateColumnDefs();
+      }
     }
   }
 
@@ -564,7 +568,6 @@ export class ServiceReportComponent implements OnInit {
     if (this.signaturePad.toDataURL() == 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAABkCAYAAABwx8J9AAAAAXNSR0IArs4c6QAABEZJREFUeF7t1QENAAAIwzDwbxodLMXBe5LvOAIECBAgQOC9wL5PIAABAgQIECAwBt0TECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQOEexAGVgyV5WAAAAAElFTkSuQmCC') {
       if (this.custsign != null) {
         this.ServiceReport.custsignature = this.custsign;
-        this.router.navigate(["customersatisfactionsurvey"], { queryParams: { servicereportid: this.ServiceReportId } })
       }
     } else {
       this.ServiceReport.custsignature = this.signaturePad.toDataURL();
@@ -587,6 +590,7 @@ export class ServiceReportComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (data.result) {
+              this.CancelEdit()
               this.saveFileShare(data.object.id);
               if (this.file != null) {
                 this.uploadPdfFile(this.file, data.object.id);
@@ -606,12 +610,6 @@ export class ServiceReportComponent implements OnInit {
             this.loading = false;
 
           },
-          error: () => {
-            // this.alertService.error(error);
-
-
-            this.loading = false;
-          }
         });
     } else {
       this.ServiceReport = this.ServiceReportform.value;
@@ -621,6 +619,7 @@ export class ServiceReportComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (data.result) {
+              this.CancelEdit()
               this.saveFileShare(this.ServiceReportId);
 
               if (this.file != null) {
@@ -642,12 +641,6 @@ export class ServiceReportComponent implements OnInit {
 
               this.notificationService.showSuccess(data.resultMessage, 'Success');
             }
-            this.loading = false;
-
-          },
-          error: () => {
-            //  this.alertService.error(error);
-
             this.loading = false;
           }
         });

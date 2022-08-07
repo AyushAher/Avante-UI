@@ -65,9 +65,7 @@ export class SparepartsrecommendedComponent implements OnInit {
     }
     else role = role[0]?.itemCode;
     if (role == this.environment.distRoleCode) this.isDist = true
-    else {
-      this.toggleFilter()
-    }
+   
     this.Service.getByGrid(this.user.contactId).pipe(first())
       .subscribe((data: any) => this.List = data.object)
     this.columnDefs = this.createColumnDefs();

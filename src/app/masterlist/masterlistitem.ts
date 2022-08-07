@@ -11,6 +11,7 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { ModelContentComponent } from './modelcontent';
 import { PrevchklocpartelementvalueComponent } from "./prevchklocpartelementvalue.component";
 import { EnvService } from '../_services/env/env.service';
+import { AgRendererComponent } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-masterlistitem',
@@ -41,6 +42,7 @@ export class MasterListItemComponent implements OnInit {
   list2
   isNewMode: any;
   isEditMode: any;
+  designation: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,7 +82,8 @@ export class MasterListItemComponent implements OnInit {
       code: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(5)])],
       listName: [''],
       listTypeId: [''],
-      id: ['']
+      id: [''],
+      isEscalationSupervisor: false,
     });
 
     this.listid = this.route.snapshot.paramMap.get('id');
@@ -93,8 +96,13 @@ export class MasterListItemComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.itemList = data.object
+          if (this.itemList.length > 0) this.designation = this.itemList[0].listCode == "DESIG";
           this.masterlistitemform.get("listName").setValue(this.itemList[0].listName);
           this.masterlistitemform.get("listTypeId").setValue(this.itemList[0].listTypeId);
+          setTimeout(() => {
+            this.columnDefs = this.createColumnDefs();
+            this.colReadOnlyDefs = this.columnReadOnlyDefs();
+          }, 0);
         }
       });
     this.list2 = JSON.parse(localStorage.getItem(this.listid))
@@ -195,6 +203,15 @@ export class MasterListItemComponent implements OnInit {
         editable: false,
         sortable: true,
         tooltipField: 'itemname',
+      },
+      {
+        headerName: "Is Escalation Supervisor?",
+        field: "isEscalationSupervisor",
+        filter: true,
+        enableSorting: true,
+        hide: !this.designation,
+        sortable: true,
+        cellRendererFramework: IsEscationSupervisor,
       }
     ]
   }
@@ -209,8 +226,24 @@ export class MasterListItemComponent implements OnInit {
         editable: false,
         sortable: true,
         tooltipField: 'itemname',
+        width: 800
+      },
+      {
+        headerName: "Is Escalation Supervisor?",
+        field: "isEscalationSupervisor",
+        cellRendererFramework: IsEscationSupervisor,
+        filter: true,
+        enableSorting: true,
+        sortable: true,
+        hide: !this.designation
       }
     ]
+  }
+
+  onGridReadyRO(params): void {
+    this.api = params.api;
+    this.columnApi = params.columnApi;
+    // this.api.sizeColumnsToFit();
   }
 
   onGridReady(params): void {
@@ -230,13 +263,15 @@ export class MasterListItemComponent implements OnInit {
           this.open(data.listTypeItemId, this.list2[0].listCode);
 
         case "edit":
+          if (data.isMaster) this.masterlistitemform.get("isEscalationSupervisor").disable()
           this.masterlistitemform.get("id").setValue(data.listTypeItemId);
           this.masterlistitemform.get("itemname").setValue(data.itemname);//itemCode
           this.masterlistitemform.get("code").setValue(data.itemCode);
           this.masterlistitemform.get("code").disable();
-          //this.masterlistitemform.get("listName").setValue(data.listName);
+          this.masterlistitemform.get("isEscalationSupervisor").setValue(data.isEscalationSupervisor);
           this.masterlistitemform.get("listTypeId").setValue(data.listTypeId);
           this.id = data.listTypeItemId;
+          this.code = data.itemCode
       }
     }
   };
@@ -284,31 +319,58 @@ export class MasterListItemComponent implements OnInit {
     }
     else {
       this.ItemData = this.masterlistitemform.value;
+      this.ItemData.code = this.code;
       this.listTypeService.update(this.id, this.ItemData)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.masterlistitemform.get("itemname").setValue('');
-              this.masterlistitemform.get("code").setValue('');
+              this.masterlistitemform.get("itemname").reset();
+              this.masterlistitemform.get("code").reset();
+              this.masterlistitemform.get("isEscalationSupervisor").reset();
               this.id = null;
               this.itemList = data.object;
-            }
-            else {
-
+              this.submitted = false
             }
             this.loading = false;
-
           },
-          error: error => {
-
-            this.loading = false;
-          }
         });
 
     }
 
+  }
+
+}
+
+
+@Component({
+  template: `
+  <form [formGroup]="form">
+      <input class="form-check-input" formControlName="isEscalationSupervisor" type="checkbox">
+  </form>
+
+  `
+})
+export class IsEscationSupervisor implements AgRendererComponent {
+  form: FormGroup
+
+  params: any;
+  constructor(private formBuilder: FormBuilder) {
+    this.form = this.formBuilder.group({
+      isEscalationSupervisor: [0]
+    })
+  }
+
+
+  agInit(params: any): void {
+    this.params = params;
+    this.form.get("isEscalationSupervisor").setValue(params.value)
+    this.form.get("isEscalationSupervisor").disable()
+  }
+
+  refresh(params: any): boolean {
+    return false;
   }
 
 }

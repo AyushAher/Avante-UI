@@ -311,14 +311,11 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.loading = true;
     this.customersatisfactionsurvey = this.form.value;
 
+    if (this.servicereportid) this.customersatisfactionsurvey.serviceRequestId = this.serviceRequestId
+    this.customersatisfactionsurvey.engineerId = this.engId
+    this.customersatisfactionsurvey.distId = this.distId
+
     if (this.id == null) {
-
-      this.customersatisfactionsurvey = this.form.value;
-
-      if (this.isEng) this.customersatisfactionsurvey.engineerId = this.engId
-      if (this.servicereportid) this.customersatisfactionsurvey.serviceRequestId = this.serviceRequestId
-      this.customersatisfactionsurvey.distId = this.distId
-
       this.CustomersatisfactionsurveyService.save(this.form.value)
         .pipe(first())
         .subscribe({

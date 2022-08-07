@@ -69,9 +69,7 @@ export class AmcListComponent implements OnInit {
 
 
     if (role == this.environment.distRoleCode) this.isDist = true;
-    else {
-      this.toggleFilter()
-    }
+   
     this.AmcService.getAll()
       .pipe(first()).subscribe((data: any) => this.AmcList = data.object?.filter(x => !x.isCompleted));
       

@@ -23,7 +23,7 @@
       <hr />
       <div class="clearfix"></div>
 
-      <app-distributorfilter [hasInstrument]="false" (showData)="ShowData($event)" *ngIf="!showGrid"
+      <app-distributorfilter [hasInstrument]="false" (showData)="ShowData($event)" *ngIf="!showGrid && isDist"
         (nData)="DataFilter($event)" controller="Instrument">
       </app-distributorfilter>
 

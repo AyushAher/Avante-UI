@@ -73,9 +73,7 @@ export class ServiceReportListComponent implements OnInit {
     }
 
     if (this.role == this.environment.distRoleCode) this.isDist = true;
-    else {
-      this.toggleFilter()
-    }
+    
     this.getAllRecords();
 
     this.columnDefs = this.createColumnDefs();

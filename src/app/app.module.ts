@@ -51,7 +51,7 @@ import { CurrencyComponent } from './currency/currency';
 import { CountryListComponent } from './country/countrylist';
 import { CountryComponent } from './country/country';
 import { MasterListComponent } from './masterlist/masterlist';
-import { MasterListItemComponent } from './masterlist/masterlistitem';
+import { IsEscationSupervisor, MasterListItemComponent } from './masterlist/masterlistitem';
 import { ModelContentComponent } from './masterlist/modelcontent';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ModelEngContentComponent } from './serviceRequest/modelengcontent';
@@ -255,7 +255,8 @@ import { ImportOfferRequestComponent } from './Offerrequest/importofferrequest.c
     CIMComponent,
     ImportOfferRequestComponent,
     OfferrequestCurrencyComponent,
-    OfferrequestCountryComponent
+    OfferrequestCountryComponent,
+    IsEscationSupervisor
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

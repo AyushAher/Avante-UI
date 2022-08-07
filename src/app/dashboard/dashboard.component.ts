@@ -205,7 +205,7 @@ export class DashboardComponent implements OnInit {
     this.GetAllAMC(date);
     this.GetPoCost();
     this.GetSparePartsRecommended(date);
-    setTimeout(() => CustomerDashboardCharts(), 1000)
+    setTimeout(() => CustomerDashboardCharts(), 1500)
   }
 
 

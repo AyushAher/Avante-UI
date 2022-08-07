@@ -31,7 +31,7 @@
       <div class="clearfix"></div>
 
       <app-distributorfilter (showData)="ShowData($event)" (nData)="getallrecored($event)" controller="ServiceRequest"
-        *ngIf="!showGrid">
+        *ngIf="!showGrid && IsDistributorView">
       </app-distributorfilter>
 
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
