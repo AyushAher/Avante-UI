@@ -86,7 +86,7 @@ export class EngschedulerComponent implements OnInit {
     // alert("1")
     this.id = this.route.snapshot.paramMap.get('id');
     this.isRemoteDesktop = this.route.snapshot.queryParams?.action == "RMD"
-
+    let role = JSON.parse(localStorage.getItem('roles'));
     this.link = `/servicerequest/${this.id}`
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
@@ -108,126 +108,117 @@ export class EngschedulerComponent implements OnInit {
       this.isAdmin = true;
     }
 
+    else role = role[0]?.itemCode;
 
-    this.listTypeService.getById("ROLES")
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          data = data.filter(x => x.listTypeItemId == this.user.roleId)[0]
-          if (data?.itemCode == this.environment.engRoleCode) {
-            this.isEng = true
-          } else if (data?.itemCode == this.environment.distRoleCode) {
-            this.isDistSupp = true
-          }
-          if (this.isEng) {
-            this.isEng = true;
-            this.EngschedulerService.getByEngId(this.user.contactId)
-              .pipe(first())
-              .subscribe({
-                next: (Engdata: any) => {
-                  // alert("2")
-                  Engdata.object = Engdata.object.filter(x => x.engId === this.user.contactId)
-                  if (Engdata.result && Engdata.object != [] && Engdata.object != null) {
-                    Engdata.object.forEach(x => {
-                      let obj = {
-                        Id: x.id,
-                        Subject: x.displayName,
-                        Location: x.location,
-                        StartTime: new Date(x.startTime),
-                        EndTime: new Date(x.endTime),
-                        IsAllDay: x.isAllDay,
-                        IsBlock: false,
-                        IsReadonly: this.id == x.serReqId ? false : true,
-                        RoomId: x.roomId,
-                        ResourceId: x.resourceId,
-                        Description: x.description,
-                        SerReqId: x.serReqId,
-                        RecurrenceRule: x.recurrenceRule,
-                        RecurrenceException: x.RecurrenceException,
-                        StartTimezone: x.StartTimezone,
-                        EndTimezone: x.EndTimezone,
-                      };
-                      this.dataSrc.push(obj);
-                    })
-                    this.eventSettings = {
+    this.isEng = role == this.environment.engRoleCode
+    this.isDistSupp = role == this.environment.distRoleCode
 
-                      dataSource: this.dataSrc,
-                      fields: {
-                        id: 'Id',
-                        subject: { name: 'Subject' },
-                        location: { name: 'Location' },
-                        description: { name: 'Description' },
-                        startTime: { name: 'StartTime' },
-                        endTime: { name: 'EndTime' },
-
-                      }
-                    };
-                  }
-                }
+    if (this.isEng) {
+      this.isEng = true;
+      this.EngschedulerService.getByEngId(this.user.contactId)
+        .pipe(first()).subscribe({
+          next: (Engdata: any) => {
+            Engdata.object = Engdata.object.filter(x => x.engId === this.user.contactId)
+            if (Engdata.result && Engdata.object != [] && Engdata.object != null) {
+              Engdata.object.forEach(x => {
+                let obj = {
+                  Id: x.id,
+                  Subject: x.displayName,
+                  Location: x.location,
+                  StartTime: new Date(x.startTime),
+                  EndTime: new Date(x.endTime),
+                  IsAllDay: x.isAllDay,
+                  IsBlock: false,
+                  IsReadonly: this.id == x.serReqId ? false : true,
+                  RoomId: x.roomId,
+                  ResourceId: x.resourceId,
+                  Description: x.description,
+                  SerReqId: x.serReqId,
+                  RecurrenceRule: x.recurrenceRule,
+                  RecurrenceException: x.RecurrenceException,
+                  StartTimezone: x.StartTimezone,
+                  EndTimezone: x.EndTimezone,
+                };
+                this.dataSrc.push(obj);
               })
-          } else if (this.isDistSupp) {
-            this.isDistSupp = true;
-            this.DistData = [];
-            this.distributorService.GetDistributorRegionContactsByContactId(this.user.contactId)
-              .pipe(first())
-              .subscribe({
-                next: (Distdata: any) => {
-                  if (Distdata.result && Distdata.object != null) {
-                    let owerner = []
-                    Distdata.object.forEach(x => {
-                      this.EngschedulerService.getByEngId(x.id)
-                        .pipe(first())
-                        .subscribe({
-                          next: (engSch: any) => {
-                            if (engSch.object != null && engSch.object.length > 0) {
-                              engSch = engSch.object;
-                              engSch.forEach(y => {
-                                let obj = {
-                                  Id: y.id,
-                                  Subject: y.displayName,
-                                  Location: y.location,
-                                  StartTime: new Date(y.startTime),
-                                  EndTime: new Date(y.endTime),
-                                  IsAllDay: y.isAllDay,
-                                  IsBlock: false,
-                                  IsReadonly: true,
-                                  RoomId: y.roomId,
-                                  OwnerId: y.roomId,
-                                  Description: y.description,
-                                  SerReqId: y.serReqId,
-                                  RecurrenceRule: y.recurrenceRule,
-                                  RecurrenceException: y.recurrenceException,
-                                  StartTimezone: y.startTimezone,
-                                  EndTimezone: y.endTimezone,
-                                };
-                                this.DistData.push(obj);
-                              })
-                            }
-                            this.eventSettings = {
-                              dataSource: this.DistData,
-                            };
+              this.eventSettings = {
+
+                dataSource: this.dataSrc,
+                fields: {
+                  id: 'Id',
+                  subject: { name: 'Subject' },
+                  location: { name: 'Location' },
+                  description: { name: 'Description' },
+                  startTime: { name: 'StartTime' },
+                  endTime: { name: 'EndTime' },
+
+                }
+              };
+            }
+          }
+        })
+    }
+    else if (this.isDistSupp) {
+      this.isDistSupp = true;
+      this.DistData = [];
+
+      this.distributorService.getByConId(this.user.contactId).pipe(first())
+        .subscribe((data: any) => {
+          if (data.object.length > 0) {
+            this.distributorService.getDistributorRegionContacts(data.object[0].id)
+              .pipe(first()).subscribe((Distdata: any) => {
+                if (Distdata.result && Distdata.object != null) {
+                  let owerner = []
+                  Distdata.object.forEach(x => {
+                    this.EngschedulerService.getByEngId(x.id)
+                      .pipe(first())
+                      .subscribe({
+                        next: (engSch: any) => {
+                          if (engSch.object != null && engSch.object.length > 0) {
+                            engSch = engSch.object;
+                            engSch.forEach(y => {
+                              let obj = {
+                                Id: y.id,
+                                Subject: y.displayName,
+                                Location: y.location,
+                                StartTime: new Date(y.startTime),
+                                EndTime: new Date(y.endTime),
+                                IsAllDay: y.isAllDay,
+                                IsBlock: false,
+                                IsReadonly: true,
+                                RoomId: y.roomId,
+                                OwnerId: y.roomId,
+                                Description: y.description,
+                                SerReqId: y.serReqId,
+                                RecurrenceRule: y.recurrenceRule,
+                                RecurrenceException: y.recurrenceException,
+                                StartTimezone: y.startTimezone,
+                                EndTimezone: y.endTimezone,
+                              };
+                              this.DistData.push(obj);
+                            })
                           }
-                        })
-                      owerner.push({ OwnerText: x.fname + " " + x.lname, Id: x.id })
-                    })
+                          this.eventSettings = {
+                            dataSource: this.DistData,
+                          };
+                        }
+                      })
+                    owerner.push({ OwnerText: x.fname + " " + x.lname, Id: x.id })
+                  })
 
-                    let owner = localStorage.getItem('ownerDataSrc')
-                    localStorage.setItem('ownerDataSrc', JSON.stringify(owerner))
-                    if (owner == null) {
-                      window.location.reload()
-                    }
-
+                  let owner = localStorage.getItem('ownerDataSrc')
+                  localStorage.setItem('ownerDataSrc', JSON.stringify(owerner))
+                  if (owner == null) {
+                    window.location.reload()
                   }
+
                 }
+
               })
-
           }
+        })
+    }
 
-        },
-        error: error => {
-
-        }
-      });
   }
 
   onActionBegin(e) {

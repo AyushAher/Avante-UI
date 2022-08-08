@@ -21,7 +21,7 @@
       </div>
       <hr />
       <div class="clearfix"></div>
-      <app-distributorfilter (showData)="ShowData($event)" *ngIf="!showGrid" (nData)="DataFilter($event)"
+      <app-distributorfilter (showData)="ShowData($event)" *ngIf="!showGrid && isDist" (nData)="DataFilter($event)"
         controller="CustSPInventory">
       </app-distributorfilter>
 
