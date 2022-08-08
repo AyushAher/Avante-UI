@@ -67,7 +67,7 @@ export class ProfileListComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           //debugger;
-          this.profileList = data;
+          this.profileList = data.object;
         },
         error: error => {
 
