@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ListTypeItem, Profile, User } from '../_models';
 import { AccountService, ListTypeService, NotificationService, ProfileService } from '../_services';
 import { first } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -17,12 +17,16 @@ export class HomeComponent {
   constructor(private accountService: AccountService,
     private profileServicce: ProfileService,
     private router: Router,
-    private notificationService: NotificationService,
+    private route: ActivatedRoute,
     private listTypeService: ListTypeService,
   ) {
     //this.profile = this.profileServicce.userProfileValue;
     this.user = this.accountService.userValue;
+    let isRedirected;
 
+    this.route.queryParams.subscribe((data: any) => {
+      isRedirected = data.redirected === "true" || data.redirected === true
+    })
     if (this.user.userProfileId != null) {
       (async () => {
         // Do something before delay
@@ -37,7 +41,7 @@ export class HomeComponent {
                 this.roles = data;
                 this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
                 localStorage.setItem('roles', JSON.stringify(this.userrole))
-                if (this.userrole != [] && this.userrole != null) {
+                if (!isRedirected && this.userrole != [] && this.userrole != null) {
                   switch (this.userrole[0].itemname) {
                     case "Distributor Support":
                       this.router.navigate(["distdashboard"]);

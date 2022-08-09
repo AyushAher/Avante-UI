@@ -209,9 +209,8 @@ export class EngschedulerComponent implements OnInit {
                   let owner = localStorage.getItem('ownerDataSrc')
                   localStorage.setItem('ownerDataSrc', JSON.stringify(owerner))
                   if (owner == null) {
-                    window.location.reload()
+                    this.router.navigate(["/"], { queryParams: { redirected: true } }).then((data: any) => this.router.navigate(["/schedule"]))
                   }
-
                 }
 
               })
