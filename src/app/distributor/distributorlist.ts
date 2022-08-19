@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 import { User, Distributor, Country, ProfileReadOnly } from '../_models';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
 
-import { AccountService, AlertService, DistributorService, CountryService, NotificationService, ProfileService } from '../_services';
-import { RenderComponent } from './rendercomponent';
+import { AccountService, DistributorService, NotificationService, ProfileService } from '../_services';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ImportDistributorComponent } from './importdistributor.component';
 
 
 @Component({
@@ -30,19 +31,20 @@ export class DistributorListComponent implements OnInit {
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
   private api: GridApi;
+  bsModalRef: BsModalRef;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
+    private modalService: BsModalService,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
     private distributorService: DistributorService,
-    private countryService: CountryService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
+    private notificationService: NotificationService,
   ) {
-
+    this.notificationService.listen().subscribe((m: any) => {
+      this.distributorService.getAll()
+        .pipe(first()).subscribe((data: any) => this.distributorModel = data.object);
+    })
   }
 
   ngOnInit() {
@@ -63,41 +65,12 @@ export class DistributorListComponent implements OnInit {
     this.columnDefs = this.createColumnDefs();
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     this.distributorService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          //debugger;
-          this.distributorModel = data.object;
-
-        },
-        error: error => {
-
-          //this.alertService.error(error);
-          this.loading = false;
-        }
-      });
+      .pipe(first()).subscribe((data: any) => this.distributorModel = data.object);
 
   }
 
   Add() {
     this.router.navigate(['distributor']);
-  }
-
-  delete(value: any) {
-    //debugger;
-    this.distributorService.delete(value)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          //debugger;
-          alert('deleted');
-        },
-        error: error => {
-          // this.alertService.error(error);
-
-          this.loading = false;
-        }
-      });
   }
 
   EditRecord() {
@@ -134,4 +107,14 @@ export class DistributorListComponent implements OnInit {
     this.api.sizeColumnsToFit();
   }
 
+  ImportData() {
+
+    const config: any = {
+      backdrop: 'static',
+      keyboard: false,
+      animated: true,
+      ignoreBackdropClick: true,
+    };
+    this.bsModalRef = this.modalService.show(ImportDistributorComponent, config);
+  }
 }

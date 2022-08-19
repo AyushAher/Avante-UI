@@ -66,6 +66,10 @@ export class DistributorService {
       }));
   }
 
+  ImportData(data: any) {
+    return this.http.post(`${this.environment.apiUrl}/Distributors/importdata`, data)
+  }
+
   delete(id: string) {
     return this.http.delete(`${this.environment.apiUrl}/Distributors/${id}`)
       .pipe(map(x => {

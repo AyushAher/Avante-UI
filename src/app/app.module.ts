@@ -139,6 +139,7 @@ import { CustomAmountPipe } from './_pipes/amount.pipe';
 import { EngschedulerComponent } from './engscheduler/engineerscheduler.component';
 import { CIMComponent } from './account/cim.component';
 import { ImportOfferRequestComponent } from './Offerrequest/importofferrequest.component';
+import { ImportDistributorComponent } from './distributor/importdistributor.component';
 
 
 @NgModule({
@@ -256,7 +257,8 @@ import { ImportOfferRequestComponent } from './Offerrequest/importofferrequest.c
     ImportOfferRequestComponent,
     OfferrequestCurrencyComponent,
     OfferrequestCountryComponent,
-    IsEscationSupervisor
+    IsEscationSupervisor,
+    ImportDistributorComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
