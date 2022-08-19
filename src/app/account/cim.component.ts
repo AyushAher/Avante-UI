@@ -8,6 +8,7 @@ import { first } from "rxjs/operators";
 import { BrandService } from '../_services/brand.service';
 import { BusinessUnitService } from '../_services/businessunit.service';
 import { CIMService } from '../_services/CIM.service';
+import { CompanyService } from '../_services/company.service';
 
 @Component({
   selector: 'app-CIM',
@@ -23,6 +24,8 @@ export class CIMComponent implements OnInit {
   businessUnitList: any = []
   brandList: any = []
   cimList: any = []
+  companyList: any = []
+
   @Input('username') username
   @Input('password') password
 
@@ -34,6 +37,7 @@ export class CIMComponent implements OnInit {
     public BrandService: BrandService,
     public BusinessUnitService: BusinessUnitService,
     public CIMService: CIMService,
+    public companyService: CompanyService,
   ) { }
 
   ngOnInit() {
@@ -46,10 +50,14 @@ export class CIMComponent implements OnInit {
     this.CIMService.GetAll()
       .pipe(first()).subscribe((data: any) => this.cimList = data.object)
 
+    this.companyService.GetAllCompany()
+      .pipe(first()).subscribe((data: any) => this.companyList = data.object)
+
 
     this.Form = this.formBuilder.group({
       brandId: ["", Validators.required],
-      businessUnitId: ["", Validators.required]
+      businessUnitId: ["", Validators.required],
+      companyId: ["", Validators.required]
     })
   }
 
@@ -65,14 +73,11 @@ export class CIMComponent implements OnInit {
       return;
     }
 
-    var cim = this.cimList.find(x => x.brandId == this.f.brandId.value && x.businessUnitId == this.f.businessUnitId.value)
-    console.log(cim, this.cimList);
+    var cim = this.cimList.find(x => x.brandId == this.f.brandId.value && x.businessUnitId == this.f.businessUnitId.value && x.companyId == this.f.companyId.value)
 
     if ((cim == undefined || !cim) && confirm("CIM does not exists, do you want to Create New CIM?")) {
       this.CIMService.Save(this.Form.value)
         .pipe(first()).subscribe((data: any) => {
-          console.log(data);
-
           if (data.result) {
             this.cimList.push(data.object)
             cim = data.object.id
@@ -88,9 +93,7 @@ export class CIMComponent implements OnInit {
   }
 
   close() {
-    //alert('test cholde');
     this.activeModal.hide();
     this.notificationService.filter("itemadded");
   }
 }
-	
