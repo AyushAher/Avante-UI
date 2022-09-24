@@ -17,6 +17,8 @@ export class UserProfile {
   roleId: string;
   profileRegions: ProfileRegions
   distRegions: any;
+  businessUnitId: any;
+  brandId: any;
   custSites: any;
 }
 

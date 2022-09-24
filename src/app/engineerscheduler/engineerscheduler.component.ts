@@ -125,7 +125,7 @@ export class EngineerschedulerComponent implements OnInit {
               .subscribe({
                 next: (Engdata: any) => {
                   Engdata.object = Engdata.object.filter(x => x.engId === this.user.contactId)
-                  if (Engdata.result && Engdata.object != [] && Engdata.object != null) {
+                  if (Engdata.result && Engdata.object.length > 0 && Engdata.object != null) {
                     Engdata.object.forEach(x => {
                       let obj = {
                         Id: x.id,
@@ -440,7 +440,7 @@ export class EngineerschedulerComponent implements OnInit {
       if (!this.hasUpdateAccess) {
         args.element.querySelector('.e-event-save ')?.setAttribute('disabled', 'true')
       }
-      
+
       if (args.data?.Id == undefined && this.isRemoteDesktop) {
         var location: HTMLInputElement = <HTMLInputElement>document.getElementsByName('Location')[0];
         location.disabled = true

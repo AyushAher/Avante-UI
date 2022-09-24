@@ -39,6 +39,8 @@ import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponen
 import { DomSanitizer } from "@angular/platform-browser";
 import { DatePipe } from "@angular/common";
 import { EnvService } from '../_services/env/env.service';
+import { BusinessUnitService } from '../_services/businessunit.service';
+import { BrandService } from '../_services/brand.service';
 
 
 @Component({
@@ -100,6 +102,8 @@ export class InstrumentComponent implements OnInit {
   hasWarrenty: boolean;
   @ViewChild('baseAmt') baseAmt
   baseCurrId: any;
+  businessUnitList: any[]
+  brandList: any[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -120,7 +124,9 @@ export class InstrumentComponent implements OnInit {
     private currencyService: CurrencyService,
     private _sanitizer: DomSanitizer,
     private customerService: CustomerService,
-    private enviroment: EnvService
+    private businessUnitService: BusinessUnitService,
+    private enviroment: EnvService,
+    private brandService: BrandService,
   ) { }
 
   ngOnInit() {
@@ -175,7 +181,9 @@ export class InstrumentComponent implements OnInit {
       currencyId: [""],
       baseCurrencyAmt: [1.00, Validators.required],
       baseCurrencyId: ["", Validators.required],
-      instruEngineerId: ['', Validators.required]
+      instruEngineerId: ['', Validators.required],
+      businessUnitId: ["", Validators.required],
+      brandId: ["", Validators.required],
     });
     this.imageUrl = this.noimageData;
 
@@ -267,6 +275,11 @@ export class InstrumentComponent implements OnInit {
         this.instrumentform.get("baseCurrencyId").setValue(this.baseCurrId)
       })
 
+    this.businessUnitService.GetAll()
+      .pipe(first()).subscribe((data: any) => this.businessUnitList = data.object)
+
+    this.brandService.GetAll()
+      .pipe(first()).subscribe((data: any) => this.brandList = data.object)
 
     this.distributorService.getAll().pipe(first())
       .subscribe((data: any) => this.distibutorList = data.object);

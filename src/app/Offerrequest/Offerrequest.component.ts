@@ -310,7 +310,15 @@ export class OfferrequestComponent implements OnInit {
             .subscribe((mstData: any) => {
               this.isCompleted = data.object.isCompleted
               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
+              
+              var instrumentLst = []
               data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
+              data.object.instrumentList.forEach(ins => {
+                if (this.instruments.find(x => x.id == ins) != null) instrumentLst.push(ins)
+              });
+
+              data.object.instrumentList = instrumentLst;
+
               this.paymentTypes = []
               this.payTypes = mstData;
 
@@ -1053,7 +1061,7 @@ export class OfferrequestComponent implements OnInit {
     // stop here if form is invalid
     if (this.form.invalid) return
 
-    if (this.sparePartsList != [] && this.sparePartsList != null) {
+    if (this.sparePartsList?.length > 0 && this.sparePartsList != null) {
       this.sparePartsList.forEach(instrument => {
         instrument.offerRequest = this.id;
         instrument.offerRequestId = this.id;

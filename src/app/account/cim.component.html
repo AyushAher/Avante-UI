@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header" style="background-color: #53a446 !important; color: #fff">
         <h4 class="modal-title" id="modal-basic-title">Select CIM</h4>
-        <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+        <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close(false)">
           <i class="fas fa-fw fa fa-times" style="color: #fff !important"> </i>
         </button>
       </div>
@@ -15,8 +15,7 @@
 
               <div class="modal-body">
                 <div class="row">
-
-                  <div class="col-sm-12">
+                  <div class="col-sm-12" *ngIf="companyList.length > 0">
                     <label for="companyId">Company Name</label>
                     <select id="companyId" formControlName="companyId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.companyId.errors }">
@@ -28,7 +27,7 @@
                     </div>
                   </div>
 
-                  <div class="col-sm-12">
+                  <div class="col-sm-12" *ngIf="businessUnitList.length > 0">
                     <label for="businessUnitId">Business Unit</label>
                     <select id="businessUnitId" formControlName="businessUnitId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.businessUnitId.errors }">
@@ -40,7 +39,7 @@
                     </div>
                   </div>
 
-                  <div class="col-sm-12">
+                  <div class="col-sm-12" *ngIf="brandList.length > 0">
                     <label for="brand">Brand</label>
                     <select id="brand" formControlName="brandId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.brandId.errors }">

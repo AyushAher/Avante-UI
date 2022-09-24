@@ -265,6 +265,33 @@
               <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
                 (click)="removeUploadedFile()"></label>
             </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="currencyid">Business Unit</label>
+              <select formControlName="businessUnitId" class="form-select"
+                [ngClass]="{ 'is-invalid': submitted && f.businessUnit.errors }">
+                <option *ngFor="let c of businessUnitList" value={{c.id}}>
+                  {{c.businessUnitName}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.businessUnit.errors" class="invalid-feedback">
+                <div *ngIf="f.businessUnit.errors.required">Business Unit is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="brandId">Brand</label>
+              <select formControlName="brandId" class="form-select"
+                [ngClass]="{ 'is-invalid': submitted && f.brandId.errors }">
+                <option *ngFor="let c of brandList" value={{c.id}}>
+                  {{c.brandName}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.brandId.errors" class="invalid-feedback">
+                <div *ngIf="f.brandId.errors.required">Brand is required</div>
+              </div>
+            </div>
+
           </div>
 
           <div class="page-title">

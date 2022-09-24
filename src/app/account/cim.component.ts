@@ -1,13 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from "../_models";
-import { FormBuilder, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AccountService, NotificationService } from "../_services";
 import { BsModalService } from "ngx-bootstrap/modal";
-import { first } from "rxjs/operators";
-import { BrandService } from '../_services/brand.service';
-import { BusinessUnitService } from '../_services/businessunit.service';
-import { CIMService } from '../_services/CIM.service';
+import { Subject } from 'rxjs';
 import { CompanyService } from '../_services/company.service';
 
 @Component({
@@ -18,7 +14,7 @@ export class CIMComponent implements OnInit {
 
   NewPasswoard: string;
   user: User;
-  Form: any;
+  Form: FormGroup;
   loading: boolean = false;
   submitted: boolean = false;
   businessUnitList: any = []
@@ -26,39 +22,44 @@ export class CIMComponent implements OnInit {
   cimList: any = []
   companyList: any = []
 
+  public onClose: Subject<boolean>;
   @Input('username') username
   @Input('password') password
+  @Input('cimData') cimData
 
   constructor(
     private formBuilder: FormBuilder,
-    private accountService: AccountService,
     private notificationService: NotificationService,
     public activeModal: BsModalService,
-    public BrandService: BrandService,
-    public BusinessUnitService: BusinessUnitService,
-    public CIMService: CIMService,
-    public companyService: CompanyService,
+    public CompanyService: CompanyService,
+    private accountService: AccountService
   ) { }
 
   ngOnInit() {
-    this.BusinessUnitService.GetAll()
-      .pipe(first()).subscribe((data: any) => this.businessUnitList = data.object)
 
-    this.BrandService.GetAll()
-      .pipe(first()).subscribe((data: any) => this.brandList = data.object)
-
-    this.CIMService.GetAll()
-      .pipe(first()).subscribe((data: any) => this.cimList = data.object)
-
-    this.companyService.GetAllCompany()
-      .pipe(first()).subscribe((data: any) => this.companyList = data.object)
-
+    this.onClose = new Subject();
 
     this.Form = this.formBuilder.group({
       brandId: ["", Validators.required],
       businessUnitId: ["", Validators.required],
       companyId: ["", Validators.required]
     })
+
+    let data = this.cimData;
+
+    if (data == null)
+      return this.notificationService.showError("Some Error Occurred. Please Refresh the page.", "Error")
+
+
+    this.user = this.accountService.userValue;
+    this.brandList = data.brandList;
+    this.companyList = data.companyList;
+    this.businessUnitList = data.businessUnitList;
+    
+    if (this.user.username == "admin") return;
+    
+    this.f.companyId.setValue(this.user.companyId)
+    this.f.companyId.disable();
   }
 
   get f() {
@@ -69,30 +70,15 @@ export class CIMComponent implements OnInit {
 
     this.submitted = true;
     // stop here if form is invalid
-    if (this.Form.invalid) {
-      return;
-    }
+    if (this.Form.invalid) return;
+    this.Form.enable()
+    this.close({ result: true, form: this.Form.value })
+    this.Form.disable()
 
-    var cim = this.cimList.find(x => x.brandId == this.f.brandId.value && x.businessUnitId == this.f.businessUnitId.value && x.companyId == this.f.companyId.value)
-
-    if ((cim == undefined || !cim) && confirm("CIM does not exists, do you want to Create New CIM?")) {
-      this.CIMService.Save(this.Form.value)
-        .pipe(first()).subscribe((data: any) => {
-          if (data.result) {
-            this.cimList.push(data.object)
-            cim = data.object.id
-            this.accountService.Authenticate(this.username, this.password, cim)
-            this.close()
-          }
-        })
-    }
-    else {
-      this.accountService.Authenticate(this.username, this.password, cim.id)
-      this.close()
-    }
   }
 
-  close() {
+  close(ressult: any) {
+    this.onClose.next(ressult);
     this.activeModal.hide();
     this.notificationService.filter("itemadded");
   }

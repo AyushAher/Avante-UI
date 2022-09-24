@@ -147,7 +147,7 @@ export class ServiceReportComponent implements OnInit {
   isEng = false;
   interrupted: boolean = false;
   finished: boolean = false;
-  @ViewChild('file') fileInput
+  @ViewChild('file') fileInput: any
   isCompleted: boolean = false;
   isEditMode: boolean;
   isNewMode: boolean;
@@ -208,10 +208,10 @@ export class ServiceReportComponent implements OnInit {
     // this.signaturePad is now available
     if (!this.isCompleted) {
 
-      this.signaturePad.set('minWidth', 2);
-      this.signaturePad.clear();
-      this.signaturePadcust.set('minWidth', 2);
-      this.signaturePadcust.clear();
+      this.signaturePad?.set('minWidth', 2);
+      this.signaturePad?.clear();
+      this.signaturePadcust?.set('minWidth', 2);
+      this.signaturePadcust?.clear();
     }
   }
 
@@ -256,6 +256,10 @@ export class ServiceReportComponent implements OnInit {
 
   ngOnInit() {
     this.ServiceReportId = this.route.snapshot.paramMap.get('id');
+    
+    var isShowPreview = this.route.snapshot.queryParams.showPdf == "true";
+    if(isShowPreview) this.pdf(true, isShowPreview);
+    
     this.transaction = 0;
     this.user = this.accountService.userValue;
     const role = JSON.parse(localStorage.getItem('roles'));
@@ -431,21 +435,11 @@ export class ServiceReportComponent implements OnInit {
               this.hasUpdateAccess = false;
               this.hasDeleteAccess = false
             }
-          },
-          error: error => {
-            this.loading = false;
           }
         });
 
       this.fileshareService.list(this.ServiceReportId)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.PdffileData = data.object;
-          },
-          error: () => {
-          },
-        });
+        .pipe(first()).subscribe((data: any) => this.PdffileData = data.object);
 
       setTimeout(() => {
         this.ServiceReportform.disable()
@@ -474,10 +468,10 @@ export class ServiceReportComponent implements OnInit {
   EditMode() {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
-
       if (!this.isCust) {
         this.ServiceReportform.enable();
         this.FormControlDisable();
+
         this.columnworkdefs = this.createworkdoneColumnDefs();
         this.columnDefs = this.createColumnDefs();
         this.spcolumnDefs = this.createColumnspDefs();
@@ -527,6 +521,7 @@ export class ServiceReportComponent implements OnInit {
     }
     this.onWorkFinishedChange(this.ServiceReportform.get("workfinishedstr").value)
     this.onInteruptedChange(this.ServiceReportform.get("interruptedstr").value)
+
   }
 
   DeleteRecord() {
@@ -564,7 +559,6 @@ export class ServiceReportComponent implements OnInit {
     this.ServiceReport.workCompleted = this.ServiceReport.workCompletedstr == '0' ? true : false;
     this.ServiceReport.workfinished = this.ServiceReport.workfinishedstr == '0' ? true : false;
     this.ServiceReport.interrupted = this.ServiceReport.interruptedstr == '0' ? true : false;
-
     if (this.signaturePad.toDataURL() == 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAABkCAYAAABwx8J9AAAAAXNSR0IArs4c6QAABEZJREFUeF7t1QENAAAIwzDwbxodLMXBe5LvOAIECBAgQOC9wL5PIAABAgQIECAwBt0TECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQMOh+gAABAgQIBAQMeqBEEQgQIECAgEH3AwQIECBAICBg0AMlikCAAAECBAy6HyBAgAABAgEBgx4oUQQCBAgQIGDQ/QABAgQIEAgIGPRAiSIQIECAAAGD7gcIECBAgEBAwKAHShSBAAECBAgYdD9AgAABAgQCAgY9UKIIBAgQIEDAoPsBAgQIECAQEDDogRJFIECAAAECBt0PECBAgACBgIBBD5QoAgECBAgQOEexAGVgyV5WAAAAAElFTkSuQmCC') {
       if (this.custsign != null) {
         this.ServiceReport.custsignature = this.custsign;
@@ -608,8 +602,7 @@ export class ServiceReportComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, 'Success');
             }
             this.loading = false;
-
-          },
+          }
         });
     } else {
       this.ServiceReport = this.ServiceReportform.value;
@@ -873,7 +866,7 @@ export class ServiceReportComponent implements OnInit {
                   }
                 });
             } else {
-              this.notificationService.showError('The Consumed Qty. is not Available. Please Recommend the Spare' +
+              this.notificationService.showInfo('The Consumed Qty. is not Available. Please Recommend the Spare' +
                 ' Parts', 'Error');
             }
 
@@ -1206,7 +1199,7 @@ export class ServiceReportComponent implements OnInit {
             }
           });
       } else {
-        this.notificationService.showError("Incorrect Value", "Error")
+        this.notificationService.showInfo("Incorrect Value", "Error")
       }
       this.ServiceReportform.get('consumed').setValue("");
     }
@@ -1574,21 +1567,18 @@ export class ServiceReportComponent implements OnInit {
     }
   }
 
-  pdf(preview: boolean) {
+  pdf(preview: boolean, currentWindow: boolean = false) {
     this.ServiceReportService.getView(this.ServiceReportId)
-      .pipe(first())
-      .subscribe({
+      .pipe(first()).subscribe({
         next: (data: any) => {
           data = data.object;
           let totalHrs = 0;
 
           this.preventivemaintenancesService.getById(this.ServiceReportId)
-            .pipe(first())
-            .subscribe({
+            .pipe(first()).subscribe({
               next: () => {
                 this.serviceRequestService.getById(data.serviceRequestId)
-                  .pipe(first())
-                  .subscribe((serReq: any) => {
+                  .pipe(first()).subscribe((serReq: any) => {
 
                     {
 
@@ -2103,7 +2093,9 @@ export class ServiceReportComponent implements OnInit {
                       },
                       pageMargins: [40, 10, 40, 60]
                     };
-                    preview ? pdfMake.createPdf(docDefinition).download(`${data.serReqNo}.pdf`) :
+
+                    preview ? (currentWindow ? pdfMake.createPdf(docDefinition).open({}, window) : pdfMake.createPdf(docDefinition).open()) :
+                      // preview ? pdfMake.createPdf(docDefinition).download(`${data.serReqNo}.pdf`) :
                       pdfMake.createPdf(docDefinition).getBase64(data => {
                         const obj = {
                           serReqId: this.ServiceRequestId,
@@ -2113,8 +2105,6 @@ export class ServiceReportComponent implements OnInit {
                           if (data.result) {
                             this.notificationService.showSuccess(data.resultMessage, "Success")
                             this.router.navigate(['servicereportlist'])
-                          } else {
-
                           }
                         });
                       });

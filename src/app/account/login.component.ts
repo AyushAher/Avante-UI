@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-
-import { AccountService, AlertService, NotificationService } from '../_services';
-import { ChangepasswoardComponent } from "./changepasswoard.component";
+import { AccountService, AlertService } from '../_services';
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { ForgotpasswoardComponent } from "./forgotpasswoard.component";
-import { CIMComponent } from './cim.component';
 
 @Component({
   templateUrl: 'login.component.html',
@@ -21,11 +16,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
     private alertService: AlertService,
-    private notificationService: NotificationService,
     private modalService: BsModalService,
   ) { }
 
@@ -53,17 +45,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    const modalOptions: any = {
-      backdrop: 'static',
-      ignoreBackdropClick: true,
-      keyboard: false,
-      initialState: {
-        username: this.f.username.value,
-        password: this.f.password.value
-      },
-    }
-    if (this.f.username.value.toLowerCase() == "admin") return this.modalService.show(CIMComponent, modalOptions);
-
     this.submitted = true;
     this.loading = true;
     // reset alerts on submit
@@ -75,7 +56,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    this.accountService.Authenticate(this.f.username.value, this.f.password.value)
+    this.accountService.Authenticate(this.f.username.value, this.f.password.value, "", "", "")
     setTimeout(() => this.loading = false, 5000);
   }
 

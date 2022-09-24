@@ -17,7 +17,6 @@ import {
   AccountService,
   AlertService,
   CustomerService,
-  CustomerSiteService,
   DistributorService,
   ListTypeService,
   NotificationService,
@@ -26,6 +25,8 @@ import {
 } from '../_services';
 import { IDropdownSettings } from "ng-multiselect-dropdown";
 import { EnvService } from '../_services/env/env.service';
+import { BusinessUnitService } from '../_services/businessunit.service';
+import { BrandService } from '../_services/brand.service';
 
 
 @Component({
@@ -63,6 +64,10 @@ export class UserProfileComponent implements OnInit {
   isNewMode: boolean;
   siteList: any;
   isCustomer: any;
+  businessUnitDropdownSettings: any;
+  businessUnitList: any[];
+  brandDropdownSettings: any;
+  brandList: any[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,7 +81,9 @@ export class UserProfileComponent implements OnInit {
     private userprofileService: UserProfileService,
     private DistributorService: DistributorService,
     private environment: EnvService,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private businessUnitService: BusinessUnitService,
+    private brandService: BrandService
   ) { }
 
   ngOnInit() {
@@ -88,6 +95,16 @@ export class UserProfileComponent implements OnInit {
     this.siteDropdownSettings = {
       idField: 'id',
       textField: 'custregname',
+    };
+
+    this.businessUnitDropdownSettings = {
+      idField: 'id',
+      textField: 'businessUnitName',
+    };
+
+    this.brandDropdownSettings = {
+      idField: 'id',
+      textField: 'brandName',
     };
 
     this.user = this.accountService.userValue;
@@ -120,6 +137,8 @@ export class UserProfileComponent implements OnInit {
       custSites: [],
       isdeleted: [false],
       profileRegions: this.formBuilder.array([]),
+      businessUnitId: [[], Validators.required],
+      brandId: [[], Validators.required],
     });
 
     this.listTypeService.getById("RF").pipe(first())
@@ -132,10 +151,16 @@ export class UserProfileComponent implements OnInit {
       .subscribe((data: ListTypeItem[]) => this.roleList = data);
 
     this.profileService.getAll().pipe(first())
-      .subscribe((data: any) => this.profilelist = data);
+      .subscribe((data: any) => this.profilelist = data.object);
 
     this.userprofileService.getUserAll().pipe(first())
       .subscribe((data: any) => this.userlist = data.object);
+
+    this.businessUnitService.GetAll()
+      .pipe(first()).subscribe((data: any) => this.businessUnitList = data.object)
+
+    this.brandService.GetAll()
+      .pipe(first()).subscribe((data: any) => this.brandList = data.object)
 
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -146,6 +171,7 @@ export class UserProfileComponent implements OnInit {
           this.contactId = data.object.contactid;
           let role = data.object.roleId;
           this.isCustomer = data.object.userType.toLowerCase() == "customer";
+
           if (this.isCustomer) {
             this.userprofileform.get("custSites").setValidators([Validators.required])
             this.userprofileform.get("custSites").updateValueAndValidity();
@@ -175,6 +201,10 @@ export class UserProfileComponent implements OnInit {
                     this.isEng = false;
                     this.userprofileform.get('distRegions').clearValidators()
                     this.userprofileform.get('distRegions').updateValueAndValidity()
+                    this.userprofileform.get('businessUnitId').clearValidators()
+                    this.userprofileform.get('businessUnitId').updateValueAndValidity()
+                    this.userprofileform.get('brandId').clearValidators()
+                    this.userprofileform.get('brandId').updateValueAndValidity()
                     break;
                 }
               }
@@ -188,6 +218,26 @@ export class UserProfileComponent implements OnInit {
               items.push(t);
             }
             this.userprofileform.patchValue({ "distRegions": items });
+          }
+
+          subreq = data.object.businessUnitId?.split(',');
+          items = [];
+          if (subreq != null && subreq.length > 0) {
+            for (var i = 0; i < subreq.length; i++) {
+              let t = { id: subreq[i] }
+              items.push(t);
+            }
+            this.userprofileform.patchValue({ "businessUnitId": items });
+          }
+
+          subreq = data.object.brandId?.split(',');
+          items = [];
+          if (subreq != null && subreq.length > 0) {
+            for (var i = 0; i < subreq.length; i++) {
+              let t = { id: subreq[i] }
+              items.push(t);
+            }
+            this.userprofileform.patchValue({ "brandId": items });
           }
 
           subreq = data.object.custSites?.split(',');
@@ -207,9 +257,12 @@ export class UserProfileComponent implements OnInit {
           this.userprofileform.patchValue({ "distributorName": data.object.distributorName });
           this.userprofileform.patchValue({ "roleId": data.object.roleId });
           this.userprofileform.patchValue({ "isdeleted": data.object.isdeleted });
-          this.userprofileform.patchValue({ "profileRegions": data.object.profileRegions });
 
-          this.profilewithregdata = data.object.profileRegions;
+          if (data.object.profileRegions != null) {
+            this.userprofileform.patchValue({ "profileRegions": data.object.profileRegions });
+            this.profilewithregdata = data.object.profileRegions;
+          }
+
           this.onprofileClick(data.object.profileForId);
 
         });
@@ -276,6 +329,10 @@ export class UserProfileComponent implements OnInit {
             this.isEng = false;
             this.userprofileform.get('distRegions').clearValidators()
             this.userprofileform.get('distRegions').updateValueAndValidity()
+            this.userprofileform.get('businessUnitId').clearValidators()
+            this.userprofileform.get('businessUnitId').updateValueAndValidity()
+            this.userprofileform.get('brandId').clearValidators()
+            this.userprofileform.get('brandId').updateValueAndValidity()
             break;
         }
       })
@@ -385,6 +442,16 @@ export class UserProfileComponent implements OnInit {
     if (this.userprofileform.get('distRegions').value?.length > 0) {
       var selectarray = this.userprofileform.get('distRegions').value;
       this.userprofile.distRegions = selectarray.map(x => x.id).join(',');
+    }
+
+    if (this.userprofileform.get('businessUnitId').value?.length > 0) {
+      var selectarray = this.userprofileform.get('businessUnitId').value;
+      this.userprofile.businessUnitId = selectarray.map(x => x.id).join(',');
+    }
+
+    if (this.userprofileform.get('brandId').value?.length > 0) {
+      var selectarray = this.userprofileform.get('brandId').value;
+      this.userprofile.brandId = selectarray.map(x => x.id).join(',');
     }
 
     if (this.userprofileform.get('custSites').value?.length > 0) {

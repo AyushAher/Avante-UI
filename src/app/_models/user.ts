@@ -15,11 +15,13 @@ export class User {
   distRegionsId: string
   custSites: string
   userType: string
+  companyId: string
 }
 
 export class AuthenticateModel {
   username: string;
   password: string;
+  companyId: string;
 }
 
 export class ChangePasswordModel {

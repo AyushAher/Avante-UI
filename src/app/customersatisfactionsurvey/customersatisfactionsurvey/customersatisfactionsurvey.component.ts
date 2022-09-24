@@ -147,16 +147,16 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
         if (this.user.username != "admin") {
           if (data.object.length > 0) {
             this.distId = data.object[0].id;
-            this.form.get('distId').setValue(data.object[0].id)
-            // this.getengineers(data.object[0].id)
-            this.distributorservice.getDistributorRegionContacts(data.object[0].id)
-              .pipe(first())
-              .subscribe((data: any) => {
+            this.form.get('distId').setValue(this.distId)
+
+            this.distributorservice.getDistributorRegionContacts(this.distId)
+              .pipe(first()).subscribe((data: any) => {
                 this.engineer = data.object
-                this.servicerequestservice
-                  .GetServiceRequestByDist(data.object[0].id)
-                  .pipe(first())
-                  .subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId && !x.isReportGenerated));
+
+                this.servicerequestservice.GetServiceRequestByDist(this.distId)
+                  .pipe(first()).subscribe((data: any) =>
+                    this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId
+                      && !x.isReportGenerated));
 
               });
 
@@ -276,10 +276,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   }
 
   getservicerequest(id: string, engId = null) {
-    this.servicerequestservice
-      .GetServiceRequestByDist(id)
-      .pipe(first())
-      .subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId));
+    this.servicerequestservice.GetServiceRequestByDist(id)
+      .pipe(first()).subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId));
   }
 
   onServiceRequestChange() {

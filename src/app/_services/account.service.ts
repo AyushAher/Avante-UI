@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { first } from 'rxjs/operators';
 
-import { ChangePasswordModel, User } from '../_models';
+import { ChangePasswordModel, ListTypeItem, Profile, User } from '../_models';
 import { EnvService } from './env/env.service';
+import { ListTypeService } from './listType.service';
+import { ProfileService } from './profile.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { CIMComponent } from '../account/cim.component';
+import { NotificationService } from './notification.service';
+import { CompanyService } from './company.service';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -14,11 +20,20 @@ export class AccountService {
   private zohoSubject: BehaviorSubject<string>;
   public user: Observable<User>;
 
+  public modalRef: BsModalRef;
+  private currentuser: User;
+  private roles: ListTypeItem[];
+  private userrole: ListTypeItem;
 
   constructor(
     private router: Router,
     private http: HttpClient,
     private environment: EnvService,
+    private profileServicce: ProfileService,
+    private listTypeService: ListTypeService,
+    private modalService: BsModalService,
+    private notificationService: NotificationService,
+    private companyService: CompanyService
   ) {
     this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
     this.zohoSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('zohotoken')));
@@ -48,10 +63,10 @@ export class AccountService {
   }
 
 
-  login(username, password, cimId) {
+  login(username, password, companyId, businessUnitId, brandId) {
 
     password = window.btoa(password);
-    return this.http.post<User>(`${this.environment.apiUrl}/user/authenticate`, { username, password, cimId })
+    return this.http.post<User>(`${this.environment.apiUrl}/user/authenticate`, { username, password, companyId, businessUnitId, brandId })
       .pipe(map(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('user', JSON.stringify(user));
@@ -63,12 +78,77 @@ export class AccountService {
 
 
 
-  Authenticate = (username, password, cimId = "") => {
-    this.login(username, password, cimId)
+  Authenticate = (username: any, password: any, companyId = "", businessUnitId = "", brandId = "") => {
+    this.login(username, password, companyId, businessUnitId, brandId)
       .pipe(first()).subscribe({
-        next: () => this.router.navigate(["/"]),
+        next: () => {
+          this.currentuser = this.userValue;
+          if (this.currentuser.username == "admin") return this.CIMConfig(username, password)
+
+          else {
+            this.profileServicce.getUserProfile(this.currentuser.userProfileId);
+            setTimeout(() => {
+              this.listTypeService.getById("ROLES")
+                .pipe(first()).subscribe((data: ListTypeItem[]) => {
+                  this.roles = data;
+                  let userrole = this.roles.find(x => x.listTypeItemId == this.currentuser.roleId)
+                  if (userrole == null) return;
+                  localStorage.setItem('roles', JSON.stringify([userrole]))
+
+                  switch (userrole.itemname) {
+                    case "Distributor Support":
+                      this.CIMConfig(username, password)
+                      break;
+
+                    case "Customer":
+                      this.router.navigate(["custdashboard"]);
+                      break;
+
+                    case "Engineer":
+                      this.router.navigate(["engdashboard"]);
+                      break;
+                  }
+                });
+            }, 1000);
+          }
+
+        },
         error: () => false
       });
+  }
+
+  private CIMConfig(username, password) {
+
+    this.companyService.GetAllModelData()
+      .pipe(first()).subscribe({
+        next: (data: any) => {
+          data = data.object;
+          if (data == null)
+            return this.notificationService.showError("Some Error Occurred. Please Refresh the page.", "Error")
+
+          const modalOptions: any = {
+            backdrop: 'static',
+            ignoreBackdropClick: true,
+            keyboard: false,
+            initialState: {
+              username,
+              password,
+              cimData: data
+            },
+          }
+          this.modalRef = this.modalService.show(CIMComponent, modalOptions);
+          this.modalRef.content.onClose.subscribe(result => {
+            if (!result.result) return;
+            this.login(username, password, result.form.companyId, result.form.businessUnitId, result.form.brandId)
+              .pipe(first()).subscribe(() => {
+                this.router.navigate(["/"])
+                this.currentuser = this.userValue;
+              })
+
+          })
+        },
+        error: () => this.notificationService.showError("Some Error Occurred. Please Refresh the page.", "Error")
+      })
   }
 
 

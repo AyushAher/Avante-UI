@@ -114,6 +114,6 @@ export class AdvancerequestlistformComponent implements OnInit {
     onGridReady(params): void {
         this.api = params.api;
         this.columnApi = params.columnApi;
-        // this.api.sizeColumnsToFit();
+        this.api.sizeColumnsToFit();
     }
 }  

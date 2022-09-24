@@ -72,7 +72,10 @@ export class InstrumentListComponent implements OnInit {
     else if (role == this.environment.custRoleCode) this.isCust = true;
 
     this.instrumentService.getAll(this.user.userId).pipe(first())
-      .subscribe((data: any) => this.instrumentList = data.object);
+      .subscribe((data: any) => {
+        console.log(data.object);
+        this.instrumentList = data.object
+      });
     this.columnDefs = this.createColumnDefs();
   }
 
@@ -107,13 +110,27 @@ export class InstrumentListComponent implements OnInit {
         editable: false,
         sortable: true,
         tooltipField: 'custSiteName'
-      }, {
+      },
+      {
         headerName: 'Serial No',
         field: 'serialnos',
         filter: true,
-        editable: false,
         sortable: true,
         tooltipField: 'serialnos'
+      },
+      {
+        headerName: 'Business Unit',
+        field: 'businessUnit',
+        filter: true,
+        sortable: true,
+        tooltipField: 'Business Unit'
+      },
+      {
+        headerName: 'Brand',
+        field: 'brand',
+        filter: true,
+        sortable: true,
+        tooltipField: 'Brand'
       }
     ]
   }

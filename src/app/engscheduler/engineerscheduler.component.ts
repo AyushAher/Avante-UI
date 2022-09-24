@@ -119,7 +119,7 @@ export class EngschedulerComponent implements OnInit {
         .pipe(first()).subscribe({
           next: (Engdata: any) => {
             Engdata.object = Engdata.object.filter(x => x.engId === this.user.contactId)
-            if (Engdata.result && Engdata.object != [] && Engdata.object != null) {
+            if (Engdata.result && Engdata.object.length && Engdata.object != null) {
               Engdata.object.forEach(x => {
                 let obj = {
                   Id: x.id,
@@ -208,9 +208,13 @@ export class EngschedulerComponent implements OnInit {
 
                   let owner = localStorage.getItem('ownerDataSrc')
                   localStorage.setItem('ownerDataSrc', JSON.stringify(owerner))
+
                   if (owner == null) {
-                    this.router.navigate(["/"], { queryParams: { redirected: true } }).then((data: any) => this.router.navigate(["/schedule"]))
+                    this.router.navigate(["/"], { queryParams: { redirected: true } }).then((data: any) => {
+                      setTimeout(() => this.router.navigate(["/schedule"]), 1000);
+                    })
                   }
+
                 }
 
               })

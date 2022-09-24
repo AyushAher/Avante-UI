@@ -146,6 +146,11 @@ function DistributorDashboardCharts() {
               display: true,
             }
           }
+        ],
+        xAxes: [
+          {
+            barPercentage: 0.4
+          }
         ]
       }
 
