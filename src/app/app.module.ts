@@ -140,6 +140,9 @@ import { EngschedulerComponent } from './engscheduler/engineerscheduler.componen
 import { CIMComponent } from './account/cim.component';
 import { ImportOfferRequestComponent } from './Offerrequest/importofferrequest.component';
 import { ImportDistributorComponent } from './distributor/importdistributor.component';
+import { CreateBusinessUnitComponent } from './account/businessunit.component';
+import { CreateCompanyComponent } from './account/company.component';
+import { CreateBrandComponent } from './account/brand.component';
 
 
 @NgModule({
@@ -258,7 +261,10 @@ import { ImportDistributorComponent } from './distributor/importdistributor.comp
     OfferrequestCurrencyComponent,
     OfferrequestCountryComponent,
     IsEscationSupervisor,
-    ImportDistributorComponent
+    ImportDistributorComponent,
+    CreateBusinessUnitComponent,
+    CreateBrandComponent,
+    CreateCompanyComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

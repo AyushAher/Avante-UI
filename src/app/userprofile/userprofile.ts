@@ -137,8 +137,8 @@ export class UserProfileComponent implements OnInit {
       custSites: [],
       isdeleted: [false],
       profileRegions: this.formBuilder.array([]),
-      businessUnitId: [[], Validators.required],
-      brandId: [[], Validators.required],
+      businessUnitId: ["", Validators.required],
+      brandId: ["", Validators.required],
     });
 
     this.listTypeService.getById("RF").pipe(first())

@@ -2,9 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { User } from "../_models";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AccountService, NotificationService } from "../_services";
-import { BsModalService } from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Subject } from 'rxjs';
 import { CompanyService } from '../_services/company.service';
+import { BrandService } from '../_services/brand.service';
+import { first } from 'rxjs/operators';
+import { CreateBrandComponent } from './brand.component';
+import { CreateBusinessUnitComponent } from './businessunit.component';
+import { CreateCompanyComponent } from './company.component';
 
 @Component({
   selector: 'app-CIM',
@@ -21,8 +26,9 @@ export class CIMComponent implements OnInit {
   brandList: any = []
   cimList: any = []
   companyList: any = []
+  public modalRef: BsModalRef;
 
-  public onClose: Subject<boolean>;
+  public onClose: Subject<any>;
   @Input('username') username
   @Input('password') password
   @Input('cimData') cimData
@@ -32,8 +38,20 @@ export class CIMComponent implements OnInit {
     private notificationService: NotificationService,
     public activeModal: BsModalService,
     public CompanyService: CompanyService,
+    public brandService: BrandService,
     private accountService: AccountService
-  ) { }
+  ) {
+    this.notificationService.listen().subscribe((m: any) => {
+      if (this.modalRef != null) this.modalRef.hide()
+      this.CompanyService.GetAllModelData()
+        .pipe(first()).subscribe((data: any) => {
+          this.brandList = data.object.brandList
+          this.businessUnitList = data.object.businessUnitList
+          this.companyList = data.object.companyList
+        })
+    })
+
+  }
 
   ngOnInit() {
 
@@ -50,14 +68,35 @@ export class CIMComponent implements OnInit {
     if (data == null)
       return this.notificationService.showError("Some Error Occurred. Please Refresh the page.", "Error")
 
-
     this.user = this.accountService.userValue;
     this.brandList = data.brandList;
     this.companyList = data.companyList;
     this.businessUnitList = data.businessUnitList;
-    
+
+    this.f.brandId.valueChanges.subscribe((data: any) => {
+      if (data != "new") return;
+      this.onClose.next({ result: false })
+      this.activeModal.hide();
+      this.notificationService.filter("brand")
+    })
+
+    this.f.companyId.valueChanges.subscribe((data: any) => {
+      if (data != "new") return;
+      this.onClose.next({ result: false })
+      this.activeModal.hide();
+      this.notificationService.filter("company")
+    })
+
+    this.f.businessUnitId.valueChanges.subscribe((data: any) => {
+      if (data != "new") return;
+      this.onClose.next({ result: false })
+      this.activeModal.hide();
+      this.notificationService.filter("businessunit")
+    })
+
+
     if (this.user.username == "admin") return;
-    
+
     this.f.companyId.setValue(this.user.companyId)
     this.f.companyId.disable();
   }
@@ -69,8 +108,9 @@ export class CIMComponent implements OnInit {
   onValueSubmit() {
 
     this.submitted = true;
+    let form = this.Form.value
     // stop here if form is invalid
-    if (this.Form.invalid) return;
+    if (this.Form.invalid || this.f.companyId.value === "new" || this.f.businessUnitId.value === "new" || this.f.brandId.value === "new") return;
     this.Form.enable()
     this.close({ result: true, form: this.Form.value })
     this.Form.disable()
@@ -83,3 +123,4 @@ export class CIMComponent implements OnInit {
     this.notificationService.filter("itemadded");
   }
 }
+

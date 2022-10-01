@@ -13,6 +13,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CIMComponent } from '../account/cim.component';
 import { NotificationService } from './notification.service';
 import { CompanyService } from './company.service';
+import { CreateCompanyComponent } from '../account/company.component';
+import { CreateBusinessUnitComponent } from '../account/businessunit.component';
+import { CreateBrandComponent } from '../account/brand.component';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -23,7 +26,7 @@ export class AccountService {
   public modalRef: BsModalRef;
   private currentuser: User;
   private roles: ListTypeItem[];
-  private userrole: ListTypeItem;
+  private password: string;
 
   constructor(
     private router: Router,
@@ -38,6 +41,35 @@ export class AccountService {
     this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
     this.zohoSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('zohotoken')));
     this.user = this.userSubject.asObservable();
+    this.notificationService.listen().subscribe((data: any) => {
+
+      const modalOptions: any = {
+        backdrop: 'static',
+        ignoreBackdropClick: true,
+        keyboard: false,
+      }
+
+      setTimeout(() => {
+        switch (data) {
+          case "cim":
+            this.CIMConfig(this.userValue.username, this.password)
+            break;
+
+          case "company":
+            this.modalRef = this.modalService.show(CreateCompanyComponent, modalOptions)
+            break;
+
+          case "brand":
+            this.modalRef = this.modalService.show(CreateBrandComponent, modalOptions)
+            break;
+
+          case "businessunit":
+            this.modalRef = this.modalService.show(CreateBusinessUnitComponent, modalOptions)
+            break;
+        }
+      }, 1000);
+
+    })
   }
 
   public get userValue(): User {
@@ -118,7 +150,7 @@ export class AccountService {
   }
 
   private CIMConfig(username, password) {
-
+    this.password = password
     this.companyService.GetAllModelData()
       .pipe(first()).subscribe({
         next: (data: any) => {

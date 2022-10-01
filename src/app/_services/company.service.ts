@@ -16,6 +16,10 @@ export class CompanyService {
     return this.http.get(`${this.environment.apiUrl}/Company`)
   }
 
+  Save = (data) => {
+    return this.http.post(`${this.environment.apiUrl}/Company`, data)
+  }
+
   GetAllModelData = () => this.http.get(`${this.environment.apiUrl}/company/GetAllModelData`)
 
   GetCompanyById(id: string) {

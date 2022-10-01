@@ -1,0 +1,35 @@
+<div class="modal" style="display: block" id="modal" role="dialog">
+    <div class="modal-dialog" style="width: 95vw;height:400px;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #53a446 !important; color: #fff">
+                <h4 class="modal-title" id="modal-basic-title">Brand</h4>
+                <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+                    <i class="fas fa-fw fa fa-times" style="color: #fff !important"> </i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label>Business Unit</label>
+                            <input formControlName="businessUnitName" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.businessUnitName.errors }" />
+
+                            <div *ngIf="submitted && f.businessUnitName.errors" class="invalid-feedback">
+                                <div *ngIf="f.businessUnitName.errors.required">Business Unit Name is required</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary" type="submit"
+                                style="background-color: #53a446;border: #53a446;">Next</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -16,6 +16,10 @@ export class BusinessUnitService {
         return this.http.get(`${this.environment.apiUrl}/BusinessUnits`)
     }
 
+    Save = (data) => {
+        return this.http.post(`${this.environment.apiUrl}/BusinessUnits`, data)
+    }
+
     GetById(id: string) {
         return this.http.get(`${this.environment.apiUrl}/BusinessUnits/${id}`)
     }
