@@ -96,9 +96,20 @@ export class MasterListItemComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.itemList = data.object
-          if (this.itemList.length > 0) this.designation = this.itemList[0].listCode == "DESIG";
-          this.masterlistitemform.get("listName").setValue(this.itemList[0].listName);
-          this.masterlistitemform.get("listTypeId").setValue(this.itemList[0].listTypeId);
+          if (this.itemList.length > 0) {
+            this.designation = this.itemList[0].listCode == "DESIG";
+            this.masterlistitemform.get("listName").setValue(this.itemList[0].listName);
+            this.masterlistitemform.get("listTypeId").setValue(this.itemList[0].listTypeId);
+          }
+          else {
+            this.listTypeService.GetListById(this.listid)
+              .subscribe((data: any) => {
+                console.log(data.object);
+                
+                this.masterlistitemform.get("listName").setValue(data.object.listname);
+                this.masterlistitemform.get("listTypeId").setValue(data.object.id);
+              })
+          }
           setTimeout(() => {
             this.columnDefs = this.createColumnDefs();
             this.colReadOnlyDefs = this.columnReadOnlyDefs();

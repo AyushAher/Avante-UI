@@ -47,6 +47,10 @@ export class ListTypeService {
       }));
   }
 
+  GetListById(listid: string) {
+    return this.http.get(`${this.environment.apiUrl}/ListItems/GetListById/${listid}`)
+  }
+
   getByListId(listid: string) {
     return this.http.get<ListTypeItem[]>(`${this.environment.apiUrl}/ListItems/GetItemsByListId/${listid}`);
   }
