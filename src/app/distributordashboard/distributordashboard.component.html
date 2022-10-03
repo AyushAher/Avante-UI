@@ -207,11 +207,11 @@
     <div class="page-content">
       <div class="d-flex justify-content-end mb-3">
         <div class="btn-group btn-group-sm customBtnGroup">
-          <div style="height: 25px;margin-right: 15px; border-radius: 15px;" *ngIf="criticalSerReq !=0">
+          <div style="height: 25px;margin-right: 15px; border-radius: 15px;" *ngIf="criticalSerReq > 0">
             <a type="button" (click)="CriticalSerReq()" class="btn"
               style="background-color: transparent;padding: 0;margin: -15px 25px 0 0; border: none; color: #e24520;">
-              <p *ngIf="criticalSerReq != 0" class="criticalCount">{{criticalSerReq}}</p>
-              <i [ngClass]="{ 'flash': criticalSerReq != 0 }" style="font-size: 20px; margin-top: 18px; 
+              <p *ngIf="criticalSerReq > 0" class="criticalCount">{{criticalSerReq}}</p>
+              <i [ngClass]="{ 'flash': criticalSerReq > 0 }" style="font-size: 20px; margin-top: 18px; 
               z-index: 999;
               transform: rotate(23deg);" class="fas fa-bolt" title="Critical Service Requests"></i>
             </a>

@@ -99,89 +99,45 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.user = this.accountService.userValue;
-    this.profilePermission = this.profileService.userProfileValue;
-
-    setTimeout(() => this.onCalenderFilter(this.calenderLst[0]), 1000)
-
-    if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "CUSDH");
-      if (profilePermission.length > 0) {
-        this.hasReadAccess = profilePermission[0].read;
-        this.hasAddAccess = profilePermission[0].create;
-        this.hasDeleteAccess = profilePermission[0].delete;
-        this.hasUpdateAccess = profilePermission[0].update;
-      }
-    }
-
     this.isSiteContact = this.user.userType.toLowerCase() != "site"
+    
+    setTimeout(() => this.onCalenderFilter(this.calenderLst[0]), 1000)
+    this.customerService.getAllByConId(this.user.contactId)
+      .pipe(first()).subscribe((data: any) => {
 
-    if (this.hasReadAccess) {
-      // row 1 data 
-      this.SettingsService.getById(this.user.userId)
-        .pipe(first())
-        .subscribe({
-          next: (data0: any) => {
-            let data = data0.object
-            // if (data != null && data.length > 0 && data0.result) {
-            if (data != null && data0.result) {
-              setTimeout(() => {
-                data.forEach(x => {
-                  // display only the ones selected in settings
+        let cust = data.object[0]
 
-                  let ele = document.getElementById(x.graphNameCode)
-                  if (ele) {
-                    ele.style.display = "block";
-                  }
-                })
-              }, 1000);
-              this.customerService.getAllByConId(this.user.contactId)
-                .pipe(first())
-                .subscribe({
-                  next: (data: any) => {
+        this.custSite = cust.sites;
 
-                    let cust = data.object[0]
+        this.siteName = this.custSite[this.currentIndex].custregname;
+        this.siteRegion = this.custSite[this.currentIndex].regname;
+        this.currentSiteId = this.custSite[this.currentIndex].id;
+        this.GetInstrumentsByCurrentSiteId()
+        this.customerName = cust?.custname;
+        this.customerCountry = cust?.address.countryName
+        this.custDefDistName = cust.defdist
+        this.custDefDistId = cust.defdistid
 
-                    this.custSite = cust.sites;
-
-                    this.siteName = this.custSite[this.currentIndex].custregname;
-                    this.siteRegion = this.custSite[this.currentIndex].regname;
-                    this.currentSiteId = this.custSite[this.currentIndex].id;
-                    this.GetInstrumentsByCurrentSiteId()
-                    this.customerName = cust?.custname;
-                    this.customerCountry = cust?.address.countryName
-                    this.custDefDistName = cust.defdist
-                    this.custDefDistId = cust.defdistid
-
-                    data.object.forEach(x => {
-                      this.totalCustContacts += x.contacts.length
-                      x.sites.forEach(y => this.totalCustContacts += y.contacts.length)
-                    })
-
-                    this.distributorService.getById(cust.defdistid)
-                      .pipe(first())
-                      .subscribe({
-                        next: (dist: any) => this.defDistCountryName = dist.object.address.countryName
-                      })
-
-                  }
-                })
-
-              this.offerRequestService.getAll().pipe(first())
-                .subscribe((OfReqData: any) => this.shipmentInProcess = OfReqData.object?.filter(x => !x.isCompleted && x.isShipment)?.length)
-
-              this.custSpInventoryService.getAll(this.user.contactId).pipe(first())
-                .subscribe((spInv: any) => this.spInventory = spInv.object)
-
-            }
-          }
+        data.object.forEach(x => {
+          this.totalCustContacts += x.contacts.length
+          x.sites.forEach(y => this.totalCustContacts += y.contacts.length)
         })
 
-      this.GetSparePartsRecommended()
+        this.distributorService.getById(cust.defdistid)
+          .pipe(first()).subscribe((dist: any) => this.defDistCountryName = dist.object.address.countryName)
 
-    }
+      })
+
+    this.offerRequestService.getAll().pipe(first())
+      .subscribe((OfReqData: any) => this.shipmentInProcess = OfReqData.object?.filter(x => !x.isCompleted && x.isShipment)?.length)
+
+    this.custSpInventoryService.getAll(this.user.contactId).pipe(first())
+      .subscribe((spInv: any) => this.spInventory = spInv.object)
+
+    this.GetSparePartsRecommended()
   }
+
   toggle = () => this.isHidden = !this.isHidden
 
   onCalenderFilter(date) {

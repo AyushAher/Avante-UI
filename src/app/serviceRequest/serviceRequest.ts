@@ -370,17 +370,6 @@ export class ServiceRequestComponent implements OnInit {
     this.listTypeService.getById('CINSS').pipe(first())
       .subscribe((data: ListTypeItem[]) => this.instrumentStatus = data);
 
-
-    this.serviceRequestService.getSerReqNo()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          let srno = data.object;
-          this.serviceRequestform.patchValue({ "serreqno": srno });
-        },
-      });
-
-
     this.listTypeService.getById("BDOD").pipe(first())
       .subscribe((data: ListTypeItem[]) => this.breakdownlist = data);
 
@@ -557,6 +546,8 @@ export class ServiceRequestComponent implements OnInit {
 
     }
     else {
+      this.serviceRequestService.getSerReqNo()
+        .pipe(first()).subscribe((data: any) => this.serviceRequestform.patchValue({ "serreqno": data.object }));
       this.serviceRequestform.get('requesttime').setValue(this.datepipe.transform(Date.now(), "H:mm"))
       this.serviceRequestform.get('serreqdate').setValue(this.datepipe.transform(Date.now(), "MM/dd/yyyy"))
 

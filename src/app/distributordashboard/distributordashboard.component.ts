@@ -79,28 +79,11 @@ export class DistributordashboardComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
-    if (this.hasReadAccess) {
-      this.SettingsService.getById(this.user.userId)
-        .pipe(first())
-        .subscribe((data0: any) => {
-          let data = data0.object;
-          if (data != null && data.length > 0 && data0.result) {
-            data.forEach(x => {
-              let ele = document.getElementById(x.graphNameCode)
-              if (ele)
-                ele.style.visibility = "visible";
+    setTimeout(() => this.onCalenderFilter(this.calenderLst[0]), 500);
 
-            })
-          }
-        })
-
-      setTimeout(() => this.onCalenderFilter(this.calenderLst[0]), 500);
-
-      this.serviceRequestService.getAll(this.user.userId)
-        .pipe(first()).subscribe((data: any) => {
-          this.criticalSerReq = data.object.filter(x => x.isCritical).length
-        })
-    }
+    this.serviceRequestService.getAll(this.user.userId)
+      .pipe(first()).subscribe((data: any) =>
+        this.criticalSerReq = data.object.filter(x => x.isCritical).length)
 
   }
 
