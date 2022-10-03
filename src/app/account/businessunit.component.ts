@@ -1,4 +1,4 @@
-import { OnInit, Component } from "@angular/core";
+import { OnInit, Component, Input } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BsModalService } from "ngx-bootstrap/modal";
 import { first } from "rxjs/operators";
@@ -11,6 +11,7 @@ import { BusinessUnitService } from "../_services/businessunit.service";
 export class CreateBusinessUnitComponent implements OnInit {
   Form: FormGroup
   submitted: boolean
+  @Input("companyId") companyId: any
 
   constructor(
     private notificationService: NotificationService,
@@ -22,8 +23,15 @@ export class CreateBusinessUnitComponent implements OnInit {
 
   ngOnInit(): void {
     this.Form = this.formBuilder.group({
-      businessUnitName: ['']
+      businessUnitName: [''],
+      companyId: ['']
     });
+
+    if (this.companyId) this.f.companyId.setValue(this.companyId)
+    else {
+      this.close()
+      this.notificationService.showError("Some Error Occurred", "Error")
+    }
   }
 
   onSubmit() {

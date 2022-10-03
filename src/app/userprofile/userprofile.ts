@@ -156,10 +156,10 @@ export class UserProfileComponent implements OnInit {
     this.userprofileService.getUserAll().pipe(first())
       .subscribe((data: any) => this.userlist = data.object);
 
-    this.businessUnitService.GetAll()
+    this.businessUnitService.GetByCompanyId()
       .pipe(first()).subscribe((data: any) => this.businessUnitList = data.object)
 
-    this.brandService.GetAll()
+    this.brandService.GetByCompanyId()
       .pipe(first()).subscribe((data: any) => this.brandList = data.object)
 
 

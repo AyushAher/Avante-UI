@@ -20,6 +20,10 @@ export class BrandService {
     return this.http.get(`${this.environment.apiUrl}/Brands/${id}`)
   }
 
+  GetByCompanyId() {
+    return this.http.get(`${this.environment.apiUrl}/Brands/GetByCompanyId`)
+  }
+
   Delete(id: string) {
     return this.http.delete(`${this.environment.apiUrl}/Brands/${id}`)
   }

@@ -1,4 +1,4 @@
-import { OnInit, Component } from "@angular/core";
+import { OnInit, Component, Input } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BsModalService } from "ngx-bootstrap/modal";
 import { first } from "rxjs/operators";
@@ -12,6 +12,7 @@ import { BrandService } from "../_services/brand.service";
 export class CreateBrandComponent implements OnInit {
   Form: FormGroup
   submitted: boolean
+  @Input("companyId") companyId: any
 
   constructor(
     private notificationService: NotificationService,
@@ -23,8 +24,13 @@ export class CreateBrandComponent implements OnInit {
 
   ngOnInit(): void {
     this.Form = this.formBuilder.group({
-      brandName: ['']
+      brandName: [''],
+      companyId: ['']
     });
+
+    if (this.companyId) this.f.companyId.setValue(this.companyId)
+    console.log(this.companyId);
+
   }
 
   onSubmit() {

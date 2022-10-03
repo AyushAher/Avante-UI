@@ -33,6 +33,10 @@ export class CIMComponent implements OnInit {
   @Input('password') password
   @Input('cimData') cimData
 
+  lstBusinessUnit: any = []
+  lstBrand: any = []
+  currentCompanyId: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
@@ -45,8 +49,8 @@ export class CIMComponent implements OnInit {
       if (this.modalRef != null) this.modalRef.hide()
       this.CompanyService.GetAllModelData()
         .pipe(first()).subscribe((data: any) => {
-          this.brandList = data.object.brandList
-          this.businessUnitList = data.object.businessUnitList
+          this.lstBrand = data.object.brandList
+          this.lstBusinessUnit = data.object.businessUnitList
           this.companyList = data.object.companyList
         })
     })
@@ -69,27 +73,39 @@ export class CIMComponent implements OnInit {
       return this.notificationService.showError("Some Error Occurred. Please Refresh the page.", "Error")
 
     this.user = this.accountService.userValue;
-    this.brandList = data.brandList;
+    this.lstBrand = data.brandList;
     this.companyList = data.companyList;
-    this.businessUnitList = data.businessUnitList;
+    this.lstBusinessUnit = data.businessUnitList;
 
     this.f.brandId.valueChanges.subscribe((data: any) => {
-      if (data != "new") return;
-      this.onClose.next({ result: false })
+      let companyId = this.f.companyId.value
+      if (data != "new" || !companyId) return;
+      this.onClose.next({ result: false, companyId })
       this.activeModal.hide();
       this.notificationService.filter("brand")
     })
 
     this.f.companyId.valueChanges.subscribe((data: any) => {
-      if (data != "new") return;
-      this.onClose.next({ result: false })
-      this.activeModal.hide();
-      this.notificationService.filter("company")
+      this.currentCompanyId = data
+      if (data != "new") {
+        this.brandList = this.lstBrand.filter(x => x.companyId == data);
+        this.businessUnitList = this.lstBusinessUnit.filter(x => x.companyId == data)
+        setTimeout(() => {
+          this.f.brandId.reset()
+          this.f.businessUnitId.reset()
+        }, 500);
+      }
+      else {
+        this.onClose.next({ result: false, companyId: null })
+        this.activeModal.hide();
+        this.notificationService.filter("company")
+      }
     })
 
     this.f.businessUnitId.valueChanges.subscribe((data: any) => {
-      if (data != "new") return;
-      this.onClose.next({ result: false })
+      let companyId = this.f.companyId.value
+      if (data != "new" || !companyId) return;
+      this.onClose.next({ result: false, companyId })
       this.activeModal.hide();
       this.notificationService.filter("businessunit")
     })
@@ -108,11 +124,11 @@ export class CIMComponent implements OnInit {
   onValueSubmit() {
 
     this.submitted = true;
-    let form = this.Form.value
     // stop here if form is invalid
     if (this.Form.invalid || this.f.companyId.value === "new" || this.f.businessUnitId.value === "new" || this.f.brandId.value === "new") return;
     this.Form.enable()
-    this.close({ result: true, form: this.Form.value })
+    let companyId = this.f.companyId.value
+    this.close({ result: true, form: this.Form.value, companyId })
     this.Form.disable()
 
   }

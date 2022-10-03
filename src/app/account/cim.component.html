@@ -15,7 +15,7 @@
 
               <div class="modal-body">
                 <div class="row">
-                  <div class="col-sm-12" *ngIf="companyList.length > 0">
+                  <div class="col-sm-12">
                     <label for="companyId">Company Name</label>
                     <select id="companyId" formControlName="companyId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.companyId.errors }">
@@ -28,7 +28,7 @@
                     </div>
                   </div>
 
-                  <div class="col-sm-12" *ngIf="businessUnitList.length > 0">
+                  <div class="col-sm-12" *ngIf="currentCompanyId">
                     <label for="businessUnitId">Business Unit</label>
                     <select id="businessUnitId" formControlName="businessUnitId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.businessUnitId.errors }">
@@ -41,7 +41,7 @@
                     </div>
                   </div>
 
-                  <div class="col-sm-12" *ngIf="brandList.length > 0">
+                  <div class="col-sm-12" *ngIf="currentCompanyId">
                     <label for="brand">Brand</label>
                     <select id="brand" formControlName="brandId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.brandId.errors }">
@@ -59,7 +59,8 @@
 
               <div class="row">
                 <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
-                  <button class="btn btn-primary" type="submit" style="background-color: #53a446;border: #53a446;">Next</button>
+                  <button class="btn btn-primary" type="submit"
+                    style="background-color: #53a446;border: #53a446;">Next</button>
                 </div>
               </div>
 

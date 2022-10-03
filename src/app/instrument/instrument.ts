@@ -275,10 +275,10 @@ export class InstrumentComponent implements OnInit {
         this.instrumentform.get("baseCurrencyId").setValue(this.baseCurrId)
       })
 
-    this.businessUnitService.GetAll()
+    this.businessUnitService.GetByCompanyId()
       .pipe(first()).subscribe((data: any) => this.businessUnitList = data.object)
 
-    this.brandService.GetAll()
+    this.brandService.GetByCompanyId()
       .pipe(first()).subscribe((data: any) => this.brandList = data.object)
 
     this.distributorService.getAll().pipe(first())

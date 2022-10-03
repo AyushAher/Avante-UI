@@ -24,6 +24,10 @@ export class BusinessUnitService {
         return this.http.get(`${this.environment.apiUrl}/BusinessUnits/${id}`)
     }
 
+    GetByCompanyId() {
+        return this.http.get(`${this.environment.apiUrl}/BusinessUnits/GetByCompanyId`)
+    }
+
     Delete(id: string) {
         return this.http.delete(`${this.environment.apiUrl}/BusinessUnits/${id}`)
     }

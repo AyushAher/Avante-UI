@@ -27,6 +27,7 @@ export class AccountService {
   private currentuser: User;
   private roles: ListTypeItem[];
   private password: string;
+  companyId: any;
 
   constructor(
     private router: Router,
@@ -47,6 +48,9 @@ export class AccountService {
         backdrop: 'static',
         ignoreBackdropClick: true,
         keyboard: false,
+        initialState: {
+          companyId: this.companyId
+        },
       }
 
       setTimeout(() => {
@@ -170,7 +174,10 @@ export class AccountService {
           }
           this.modalRef = this.modalService.show(CIMComponent, modalOptions);
           this.modalRef.content.onClose.subscribe(result => {
-            if (!result.result) return;
+            if (!result.result) {
+              this.companyId = result.companyId;
+              return;
+            }
             this.login(username, password, result.form.companyId, result.form.businessUnitId, result.form.brandId)
               .pipe(first()).subscribe(() => {
                 this.router.navigate(["/"])
