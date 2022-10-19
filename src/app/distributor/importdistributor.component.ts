@@ -150,7 +150,7 @@ export class ImportDistributorComponent {
         });
 
         this.distributorService.ImportData(workbookData)
-            .pipe(first()).subscribe(this.close)
+            .pipe(first()).subscribe(() => this.close())
 
     }
 
