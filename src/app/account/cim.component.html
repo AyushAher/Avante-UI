@@ -19,8 +19,9 @@
                     <label for="companyId">Company Name</label>
                     <select id="companyId" formControlName="companyId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.companyId.errors }">
+                      <option style="background: #53a446;color:#fff;" value="new">+ New</option>
+                      <hr>
                       <option [value]="i.id" *ngFor="let i of companyList">{{i.companyName}}</option>
-                      <option value="new">Create New</option>
                     </select>
 
                     <div *ngIf="submitted && f.companyId.errors" class="invalid-feedback">
@@ -32,8 +33,9 @@
                     <label for="businessUnitId">Business Unit</label>
                     <select id="businessUnitId" formControlName="businessUnitId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.businessUnitId.errors }">
+                      <option style="background: #53a446;color:#fff;" value="new">+ New</option>
+                      <hr>
                       <option [value]="i.id" *ngFor="let i of businessUnitList">{{i.businessUnitName}}</option>
-                      <option value="new">Create New</option>
                     </select>
 
                     <div *ngIf="submitted && f.businessUnitId.errors" class="invalid-feedback">
@@ -45,8 +47,9 @@
                     <label for="brand">Brand</label>
                     <select id="brand" formControlName="brandId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.brandId.errors }">
+                      <option style="background: #53a446;color:#fff;" value="new">+ New</option>
+                      <hr>
                       <option [value]="i.id" *ngFor="let i of brandList">{{i.brandName}}</option>
-                      <option value="new">Create New</option>
                     </select>
 
                     <div *ngIf="submitted && f.brandId.errors" class="invalid-feedback">

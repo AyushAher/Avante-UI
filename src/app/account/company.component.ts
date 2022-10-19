@@ -24,13 +24,13 @@ export class CreateCompanyComponent implements OnInit {
 
   ngOnInit(): void {
     this.Form = this.formBuilder.group({
-      companyName: ['']
+      companyName: ['', [Validators.required]]
     });
   }
 
   onSubmit() {
     this.submitted = true;
-    if (this.Form.invalid) return;
+    if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
 
     this.companyService.Save(this.Form.value)
       .pipe(first()).subscribe(() => this.close())

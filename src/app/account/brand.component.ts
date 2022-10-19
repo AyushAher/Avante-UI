@@ -24,18 +24,17 @@ export class CreateBrandComponent implements OnInit {
 
   ngOnInit(): void {
     this.Form = this.formBuilder.group({
-      brandName: [''],
-      companyId: ['']
+      brandName: ['', [Validators.required]],
+      companyId: ['', [Validators.required]]
     });
 
     if (this.companyId) this.f.companyId.setValue(this.companyId)
-    console.log(this.companyId);
 
   }
 
   onSubmit() {
     this.submitted = true;
-    if (this.Form.invalid) return;
+    if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
 
     this.brandService.Save(this.Form.value)
       .pipe(first()).subscribe(() => this.close())

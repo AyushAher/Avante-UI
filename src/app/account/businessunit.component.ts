@@ -23,8 +23,8 @@ export class CreateBusinessUnitComponent implements OnInit {
 
   ngOnInit(): void {
     this.Form = this.formBuilder.group({
-      businessUnitName: [''],
-      companyId: ['']
+      businessUnitName: ['', [Validators.required]],
+      companyId: ['', [Validators.required]]
     });
 
     if (this.companyId) this.f.companyId.setValue(this.companyId)
@@ -36,7 +36,7 @@ export class CreateBusinessUnitComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    if (this.Form.invalid) return;
+    if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
 
     this.businessUnitService.Save(this.Form.value)
       .pipe(first()).subscribe(() => this.close())

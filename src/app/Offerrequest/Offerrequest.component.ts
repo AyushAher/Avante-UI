@@ -313,7 +313,7 @@ export class OfferrequestComponent implements OnInit {
               
               var instrumentLst = []
               data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
-              data.object.instrumentList.forEach(ins => {
+              data.object.instrumentsList.forEach(ins => {
                 if (this.instruments.find(x => x.id == ins) != null) instrumentLst.push(ins)
               });
 

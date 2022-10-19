@@ -2,7 +2,7 @@
     <div class="modal-dialog" style="width: 95vw;height:400px;">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #53a446 !important; color: #fff">
-                <h4 class="modal-title" id="modal-basic-title">Brand</h4>
+                <h4 class="modal-title" id="modal-basic-title">New Company</h4>
                 <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close()">
                     <i class="fas fa-fw fa fa-times" style="color: #fff !important"> </i>
                 </button>
@@ -18,7 +18,7 @@
                                 [ngClass]="{ 'is-invalid': submitted && f.companyName.errors }" />
 
                             <div *ngIf="submitted && f.companyName.errors" class="invalid-feedback">
-                                <div *ngIf="f.companyName.errors.required">Brand Name is required</div>
+                                <div *ngIf="f.companyName.errors.required">Company Name is required</div>
                             </div>
                         </div>
 
