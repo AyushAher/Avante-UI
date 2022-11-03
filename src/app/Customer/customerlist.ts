@@ -1,21 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Country, Customer, ProfileReadOnly, User } from '../_models';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
-  AlertService,
-  CountryService,
   CustomerService,
-  NotificationService,
   ProfileService
 } from '../_services';
-import { RenderComponent } from '../distributor/rendercomponent';
 import { EnvService } from '../_services/env/env.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ImportCustomerData } from './ImportCustomer.component';
 
 
 @Component({
@@ -40,16 +38,17 @@ export class CustomerListComponent implements OnInit {
   private api: GridApi;
   showGrid = true;
   IsDist: boolean;
+  bsModalRef: BsModalRef;
+
   constructor(
     private router: Router,
+    private modalService: BsModalService,
     private accountService: AccountService,
     private customerService: CustomerService,
     private profileService: ProfileService,
     private environment: EnvService
 
-  ) {
-
-  }
+  ) { }
 
   ngOnInit() {
     let role = JSON.parse(localStorage.getItem('roles'));
@@ -72,8 +71,8 @@ export class CustomerListComponent implements OnInit {
       role = role[0]?.itemCode;
     }
 
-    this.IsDist = role == this.environment.distRoleCode    
-    
+    this.IsDist = role == this.environment.distRoleCode
+
     this.customerService.getAllByConId(this.user.contactId).pipe(first())
       .subscribe((data: any) => this.customerList = data.object)
     // this.distributorId = this.route.snapshot.paramMap.get('id');
@@ -138,4 +137,14 @@ export class CustomerListComponent implements OnInit {
     this.api.sizeColumnsToFit();
   }
 
+  ImportData() {
+
+    const config: any = {
+      backdrop: 'static',
+      keyboard: false,
+      animated: true,
+      ignoreBackdropClick: true,
+    };
+    this.bsModalRef = this.modalService.show(ImportCustomerData, config);
+  }
 }

@@ -73,8 +73,8 @@
                 <tbody>
                   <tr formArrayName="permissions"
                     *ngFor="let item of profileform.get('permissions')['controls'];let i=index">
-                    <td *ngIf="hasDeleteAccess && (isEditMode || isNewMode)">
-                      <button class="btn" type="button" (click)="DeleteScreen(i)">
+                    <td *ngIf="(isEditMode || isNewMode)">
+                      <button *ngIf="hasDeleteAccess" class="btn" type="button" (click)="DeleteScreen(i)">
                         <i style="color: #5ba146;" class="fas fa-trash"></i>
                       </button>
                     </td>
