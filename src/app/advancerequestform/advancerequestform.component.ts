@@ -128,10 +128,12 @@ export class AdvancerequestformComponent implements OnInit {
 
 
     if (this.user.username == "admin") {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = false;
+      this.notificationService.RestrictAdmin()
+      return;
     }
 
     else role = role[0]?.itemCode;

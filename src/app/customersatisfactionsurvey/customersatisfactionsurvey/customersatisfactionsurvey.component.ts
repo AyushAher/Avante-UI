@@ -101,12 +101,16 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
+
     if (this.user.username == "admin") {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
-    } else {
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = false;
+      this.notificationService.RestrictAdmin()
+      return;
+    }
+    else {
       role = role[0]?.itemCode;
       this.role = role
     }

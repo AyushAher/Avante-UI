@@ -256,10 +256,10 @@ export class ServiceReportComponent implements OnInit {
 
   ngOnInit() {
     this.ServiceReportId = this.route.snapshot.paramMap.get('id');
-    
+
     var isShowPreview = this.route.snapshot.queryParams.showPdf == "true";
-    if(isShowPreview) this.pdf(true, isShowPreview);
-    
+    if (isShowPreview) this.pdf(true, isShowPreview);
+
     this.transaction = 0;
     this.user = this.accountService.userValue;
     const role = JSON.parse(localStorage.getItem('roles'));
@@ -281,11 +281,13 @@ export class ServiceReportComponent implements OnInit {
       }
     }
 
-    if (this.user.username == 'admin') {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
+    if (this.user.username == "admin") {
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = false;
+      this.notificationService.RestrictAdmin()
+      return;
     }
 
     this.ServiceReportform = this.formBuilder.group({

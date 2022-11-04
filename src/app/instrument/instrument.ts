@@ -144,13 +144,16 @@ export class InstrumentComponent implements OnInit {
         this.hasCommercial = profilePermission[0].commercial;
       }
     }
+
     if (this.user.username == "admin") {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
-      this.hasCommercial = true;
-    } else {
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = false;
+      this.notificationService.RestrictAdmin()
+      return;
+    }
+    else {
       role = role[0]?.itemCode;
     }
 

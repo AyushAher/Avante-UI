@@ -216,12 +216,17 @@ export class ServiceRequestComponent implements OnInit {
       }
     }
 
-    if (this.user.username == 'admin') {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
-    } else {
+
+    if (this.user.username == "admin") {
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = false;
+      this.notificationService.RestrictAdmin()
+      return;
+    }
+
+    else {
       let role = JSON.parse(localStorage.getItem('roles'));
       this.role = role[0]?.itemCode;
     }

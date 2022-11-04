@@ -118,12 +118,16 @@ export class TravelexpenseComponent implements OnInit {
     this.form.get('endDate').valueChanges
       .subscribe(() => this.OnDateChange())
 
+
     if (this.user.username == "admin") {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
-    } else role = role[0]?.itemCode;
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = false;
+      this.notificationService.RestrictAdmin()
+      return;
+    }
+    else role = role[0]?.itemCode;
 
 
     if (role == this.environment.custRoleCode) {

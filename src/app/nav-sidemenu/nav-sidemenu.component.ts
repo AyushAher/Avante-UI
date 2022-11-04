@@ -348,26 +348,19 @@ export class NavSideMenuComponent {
       this.serviceContractRevenueReport = true;
     }
 
-    this.listTypeService
-      .getById("ROLES")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          this.roles = data;
-          this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
-          switch (this.userrole[0]?.itemname) {
-            case "Distributor Support":
-              this.hasDistributorSettings = true;
-              break;
+    this.listTypeService.getById("ROLES")
+      .pipe(first()).subscribe((data: ListTypeItem[]) => {
+        this.roles = data;
+        this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
+        switch (this.userrole[0]?.itemname) {
+          case "Distributor Support":
+            this.hasDistributorSettings = true;
+            break;
 
-            case "Customer":
-              this.hasCustomerSettings = true;
-              break;
-          }
-        },
-        error: (error) => {
-
-        },
+          case "Customer":
+            this.hasCustomerSettings = true;
+            break;
+        }
       });
 
 

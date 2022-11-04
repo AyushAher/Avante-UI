@@ -94,10 +94,12 @@ export class CustSPInventoryComponent implements OnInit {
     }
 
     if (this.user.username == "admin") {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = false;
+      this.notificationService.RestrictAdmin()
+      return;
     }
 
     this.form = this.formBuilder.group({
@@ -182,7 +184,7 @@ export class CustSPInventoryComponent implements OnInit {
 
   CancelEdit() {
     this.form.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 

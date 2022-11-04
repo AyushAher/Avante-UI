@@ -194,13 +194,15 @@ export class OfferrequestComponent implements OnInit {
       }
     }
 
-    if (this.user.username == 'admin') {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
-      this.hasCommercial = true;
-    } else {
+    if (this.user.username == "admin") {
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = false;
+      this.notificationService.RestrictAdmin()
+      return;
+    }
+    else {
       this.role = role[0]?.itemCode;
     }
 
@@ -310,7 +312,7 @@ export class OfferrequestComponent implements OnInit {
             .subscribe((mstData: any) => {
               this.isCompleted = data.object.isCompleted
               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
-              
+
               var instrumentLst = []
               data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
               data.object.instrumentsList.forEach(ins => {

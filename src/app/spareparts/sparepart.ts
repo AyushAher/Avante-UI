@@ -111,10 +111,12 @@ export class SparePartComponent implements OnInit {
     }
 
     if (this.user.username == "admin") {
-      this.hasAddAccess = true;
-      this.hasDeleteAccess = true;
-      this.hasUpdateAccess = true;
-      this.hasReadAccess = true;
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = false;
+      this.notificationService.RestrictAdmin()
+      return;
     }
 
     this.sparepartform = this.formBuilder.group({
@@ -341,10 +343,10 @@ export class SparePartComponent implements OnInit {
 
   onConfigChange(param: string) {
     this.configService.getById(param).pipe(first())
-      .subscribe((data: any) =>{
+      .subscribe((data: any) => {
         this.configValueList = data.object
         console.log(data);
-        
+
       });
   }
 
