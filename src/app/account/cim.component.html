@@ -20,7 +20,7 @@
                     <select id="companyId" formControlName="companyId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.companyId.errors }">
                       <option style="background: #53a446;color:#fff;" value="new">+ New</option>
-                      <hr>
+                      <hr *ngIf="isAdmin">
                       <option [value]="i.id" *ngFor="let i of companyList">{{i.companyName}}</option>
                     </select>
 
@@ -33,8 +33,8 @@
                     <label for="businessUnitId">Business Unit</label>
                     <select id="businessUnitId" formControlName="businessUnitId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.businessUnitId.errors }">
-                      <option style="background: #53a446;color:#fff;" value="new">+ New</option>
-                      <hr>
+                      <option *ngIf="isAdmin" style="background: #53a446;color:#fff;" value="new">+ New</option>
+                      <hr *ngIf="isAdmin">
                       <option [value]="i.id" *ngFor="let i of businessUnitList">{{i.businessUnitName}}</option>
                     </select>
 
@@ -47,8 +47,8 @@
                     <label for="brand">Brand</label>
                     <select id="brand" formControlName="brandId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.brandId.errors }">
-                      <option style="background: #53a446;color:#fff;" value="new">+ New</option>
-                      <hr>
+                      <option *ngIf="isAdmin" style="background: #53a446;color:#fff;" value="new">+ New</option>
+                      <hr *ngIf="isAdmin">
                       <option [value]="i.id" *ngFor="let i of brandList">{{i.brandName}}</option>
                     </select>
 
