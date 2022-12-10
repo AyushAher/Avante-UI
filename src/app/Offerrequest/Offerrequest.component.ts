@@ -234,13 +234,13 @@ export class OfferrequestComponent implements OnInit {
       airFreightChargesCurr: [""],
 
       lcadministrativeChargesAmt: [0],
-      lcadministrativeChargesCurr: [0],
+      lcadministrativeChargesCurr: [""],
 
-      inspectionChargesCurr: [0],
+      inspectionChargesCurr: [""],
       inspectionChargesAmt: [0],
 
       totalAmt: [0],
-      totalCurr: [0],
+      totalCurr: [""],
 
       basePCurrencyAmt: [0],
 
@@ -701,11 +701,11 @@ export class OfferrequestComponent implements OnInit {
       headerName: 'Part No',
       field: 'partno',
       filter: true,
-      editable: true,
       enableSorting: true,
       sortable: true,
       tooltipField: 'instrument',
-    }, {
+    },
+    {
       headerName: 'HSC Code',
       field: 'hscode',
       filter: true,
@@ -959,7 +959,10 @@ export class OfferrequestComponent implements OnInit {
       return formData.append("file" + index, file, file.name);
     });
 
-    this.FileShareService.upload(formData, id, code).subscribe((event) => { });
+    this.FileShareService.upload(formData, id, code).subscribe((event) => {
+      console.log(event);
+      this.notificationService.filter("itemadded");
+    });
   };
 
   GetFileList(id: string) {

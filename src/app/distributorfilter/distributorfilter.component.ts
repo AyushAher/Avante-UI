@@ -76,6 +76,8 @@ export class DistributorfilterComponent implements OnInit {
         this.regionService.getAll().pipe(first())
           .subscribe((dataReg: any) => {
             this.allRegionsList = dataReg;
+            console.log(dataReg);
+
             data.object.forEach(element => {
               if (element != "" && element != null) {
                 this.regionsList.push(dataReg.find(x => x.id == element))

@@ -134,6 +134,7 @@ export class InstrumentComponent implements OnInit {
     this.user = this.accountService.userValue;
     let role = JSON.parse(localStorage.getItem('roles'));
     this.profilePermission = this.profileService.userProfileValue;
+
     if (this.profilePermission != null) {
       let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SINST");
       if (profilePermission.length > 0) {
@@ -228,7 +229,7 @@ export class InstrumentComponent implements OnInit {
 
     this.instrumentform.get('baseCurrencyAmt').valueChanges
       .subscribe(value => {
-        if (value >= 1000) this.instrumentform.get('baseCurrencyAmt').setValue(1.0)
+        if (value >= 100000) this.instrumentform.get('baseCurrencyAmt').setValue(1.0)
       });
 
     this.instrumentform.get('currencyId').valueChanges
@@ -239,6 +240,10 @@ export class InstrumentComponent implements OnInit {
         }
         else this.baseAmt.nativeElement.disabled = false
       });
+
+    if (this.hasCommercial)
+      this.instrumentform.get("cost").setValidators([Validators.required])
+    else this.instrumentform.get("cost").clearValidators()
 
     if (this.hasCommercial)
       this.instrumentform.get("currencyId").setValidators([Validators.required])
@@ -327,8 +332,13 @@ export class InstrumentComponent implements OnInit {
 
             this.recomandFilter(this.sparePartDetails);
             for (let i = 0; i < data.object.spartParts.length; i++) {
-              if (this.selectedConfigType.filter(x => x.id == data.object.spartParts[i].configValueid && x.listTypeItemId == data.object.spartParts[i].configTypeid
-                && x.sparePartId == data.object.spartParts[i].id).length == 0) {
+
+              if (this.selectedConfigType.filter(x =>
+                x.id == data.object.spartParts[i].configValueid
+                && x.listTypeItemId == data.object.spartParts[i].configTypeid
+                && x.sparePartId == data.object.spartParts[i].id).length == 0
+              ) {
+                console.log(data.object.spartParts[i]);
                 let cnfig: ConfigTypeValue;
                 cnfig = new ConfigTypeValue;
                 cnfig.id = data.object.spartParts[i].configValueid;
@@ -533,26 +543,21 @@ export class InstrumentComponent implements OnInit {
     if (this.selectedConfigType.length > 0 && this.selectedConfigType.filter(x => x.id == configvalue && x.listTypeItemId == value).length == 0) {
       // for (let i = 0; i < this.selectedConfigType.length; i++) {
       this.sparePartService.getByConfignValueId(value, configvalue)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.object.length > 0) {
-              this.sparePartDetails = this.sparePartDetails.concat(data.object);
-              this.recomandFilter(this.sparePartDetails);
-              //this.sparePartDetails.push(...data.object);
-              for (let i = 0; i < data.object.length; i++) {
-                let cnfig: ConfigTypeValue;
-                cnfig = new ConfigTypeValue;
-                cnfig.id = configvalue;
-                cnfig.listTypeItemId = value;
-                cnfig.sparePartId = data.object[i].id;
-                this.selectedConfigType.push(cnfig);
-              }
+        .pipe(first()).subscribe((data: any) => {
+          if (data.object.length > 0) {
+            this.sparePartDetails = this.sparePartDetails.concat(data.object);
+            this.recomandFilter(this.sparePartDetails);
+            for (let i = 0; i < data.object.length; i++) {
+              let cnfig: ConfigTypeValue;
+              cnfig = new ConfigTypeValue;
+              cnfig.id = configvalue;
+              cnfig.listTypeItemId = value;
+              cnfig.sparePartId = data.object[i].id;
+              this.selectedConfigType.push(cnfig);
             }
-          },
-          error: error => {
-
-            this.loading = false;
+            this.notificationService.showInfo("Spare Parts Added", "Parts Added")
+            this.instrumentform.get("configtypeid").reset();
+            this.instrumentform.get("configvalueid").reset();
           }
         });
       // }
@@ -580,6 +585,9 @@ export class InstrumentComponent implements OnInit {
                   cnfig.sparePartId = data.object[i].id;
                   this.selectedConfigType.push(cnfig);
                 }
+                this.notificationService.showInfo("Spare Parts Added", "Parts Added")
+                this.instrumentform.get("configtypeid").reset();
+                this.instrumentform.get("configvalueid").reset();
               }
             },
             error: error => {
@@ -654,7 +662,6 @@ export class InstrumentComponent implements OnInit {
   }
 
   onSubmit() {
-    debugger;
     this.submitted = true;
 
     this.alertService.clear();
@@ -692,7 +699,6 @@ export class InstrumentComponent implements OnInit {
     this.instrument.wrntyendt = this.datepipie.transform(this.instrument.wrntyendt, "MM/dd/yyyy")
     this.instrument.wrntystdt = this.datepipie.transform(this.instrument.wrntystdt, "MM/dd/yyyy")
     this.instrument.installdt = this.datepipie.transform(this.instrument.installdt, "MM/dd/yyyy")
-    console.log(this.instrument);
 
     if (this.id == null) {
       this.instrumentService.save(this.instrument)
@@ -919,16 +925,7 @@ export class InstrumentComponent implements OnInit {
 
   onConfigChange(param: string) {
     this.configService.getById(param)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.configValueList = data.object;
-        },
-        error: error => {
-
-          this.loading = false;
-        }
-      });
+      .pipe(first()).subscribe((data: any) => this.configValueList = data.object);
   }
 
   public onRowClicked(e) {
@@ -945,18 +942,15 @@ export class InstrumentComponent implements OnInit {
             this.config.configvalueid = data.configValueid;
             this.config.instrumentid = this.id;
             this.config.sparepartid = data.id;
+            debugger;
             if (this.id != null) {
               this.instrumentService.deleteConfig(this.config)
                 .pipe(first())
-                .subscribe({
-                  next: (d: any) => {
-                    if (d.result) {
-                      this.notificationService.showSuccess(d.resultMessage, "Success");
-                      this.selectedConfigType = this.selectedConfigType.filter(x => !(x.id == data.configValueid && x.listTypeItemId == data.configTypeid && x.sparePartId == data.id));
-                      this.sparePartDetails = this.sparePartDetails.filter(x => !(x.configValueid == data.configValueid && x.configTypeid == data.configTypeid && x.id == data.id));
-                      this.recomandFilter(this.sparePartDetails);
-                    }
-                  },
+                .subscribe(() => {
+                  this.notificationService.showSuccess("Deleted Successfully", "Success");
+                  this.selectedConfigType = this.selectedConfigType.filter(x => !(x.id == data.configValueid && x.listTypeItemId == data.configTypeid && x.sparePartId == data.id));
+                  this.sparePartDetails = this.sparePartDetails.filter(x => !(x.configValueid == data.configValueid && x.configTypeid == data.configTypeid && x.id == data.id));
+                  this.recomandFilter(this.sparePartDetails);
                 });
             }
             else {

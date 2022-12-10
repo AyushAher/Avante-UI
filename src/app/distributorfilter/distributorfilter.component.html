@@ -6,7 +6,7 @@
                     <label for="region" class="form-label">Region</label>
                     <select id="region" formControlName="region" (change)="onRegionChange()"
                         class="form-select form-select-lg mb-3 text-uppercase">
-                        <option *ngFor="let item of regionsList" [value]="item.id">{{item.region}}</option>
+                        <option *ngFor="let item of regionsList" [value]="item.id">{{item.distregname}}</option>
                     </select>
                 </div>
                 <div class="mb-4" [@enterAnimation] *ngIf="stage>=2">

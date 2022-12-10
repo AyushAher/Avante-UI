@@ -69,10 +69,16 @@ export class AmcListComponent implements OnInit {
 
 
     if (role == this.environment.distRoleCode) this.isDist = true;
-   
+
     this.AmcService.getAll()
-      .pipe(first()).subscribe((data: any) => this.AmcList = data.object?.filter(x => !x.isCompleted));
-      
+      .pipe(first()).subscribe((data: any) => {
+        this.AmcList = data.object?.filter(x => !x.isCompleted)
+        if (this.AmcList == null || this.AmcList.length <= 0) return;
+        this.AmcList.forEach(x => x.period = x.sdate + " - " + x.edate);
+        console.log(this.AmcList);
+
+      });
+
     this.columnDefs = this.createColumnDefs();
   }
 
@@ -101,33 +107,17 @@ export class AmcListComponent implements OnInit {
   private createColumnDefs() {
     return [
       {
-        headerName: 'Bill To',
-        field: 'billto',
-        filter: true,
-        enableSorting: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'Bill To',
-      },
-      {
         headerName: 'Customer Site',
         field: 'custSiteName',
         filter: true,
         enableSorting: true,
         editable: false,
         sortable: true,
-        tooltipField: 'Bill To',
+        tooltipField: 'custSiteName',
       },
       {
         headerName: 'Service Quote',
         field: 'servicequote',
-        filter: true,
-        editable: false,
-        sortable: true
-      },
-      {
-        headerName: 'SQ Date',
-        field: 'sqdate',
         filter: true,
         editable: false,
         sortable: true
@@ -146,7 +136,15 @@ export class AmcListComponent implements OnInit {
         editable: false,
         sortable: true
       },
-
+      {
+        headerName: 'Period',
+        field: 'period',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'period',
+      },
     ]
   }
 

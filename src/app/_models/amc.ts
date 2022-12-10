@@ -19,6 +19,7 @@ export class Amc {
   secondVisitDateTo: string;
   secondVisitDate: string;
   firstVisitDate: string;
+  period: string;
 }
 
 export class instrumentList {

@@ -159,7 +159,7 @@ export class AmcComponent implements OnInit {
       }
     }
 
-    
+
     if (this.user.username == "admin") {
       this.hasAddAccess = false;
       this.hasDeleteAccess = false;
@@ -169,7 +169,7 @@ export class AmcComponent implements OnInit {
       return;
     }
 
-     else {
+    else {
       let role = JSON.parse(localStorage.getItem('roles'));
       this.role = role[0]?.itemCode;
     }
@@ -419,7 +419,7 @@ export class AmcComponent implements OnInit {
       this.Service.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["distributorlist"]);
+            this.router.navigate(["amclist"]);
         })
     }
   }
@@ -923,8 +923,11 @@ export class AmcComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            if (this.instrumentList == null || this.instrumentList.length <= 0) this.router.navigate(["amclist"]);
+            if (data.result) {
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              if (this.instrumentList == null || this.instrumentList.length <= 0) this.router.navigate(["amclist"]);
+            }
+            else this.notificationService.showError(data.resultMessage, "Error");
           },
         });
 
@@ -933,7 +936,11 @@ export class AmcComponent implements OnInit {
           .pipe(first())
           .subscribe({
             next: (data: ResultMsg) => {
-              this.router.navigate(["amclist"]);
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                this.router.navigate(["amclist"]);
+              }
+              else this.notificationService.showError(data.resultMessage, "Error");
             },
           });
       }

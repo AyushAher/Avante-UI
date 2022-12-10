@@ -176,16 +176,23 @@
 
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
               <label for="dateOfPurchase">Cost</label><br>
-              <select formControlName="currencyId" style="width: 30%;display: inline-block;" class="form-select">
+              <select formControlName="currencyId" [ngClass]="{ 'is-invalid': submitted && f.currencyId.errors }"
+                style="width: 30%;display: inline-block;" class="form-select">
                 <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
               </select>
-              <input formControlName="cost" type="number" style="width: 68%;display: inline-block;margin-left: 5px;"
-                class="form-control" />
+
+              <input formControlName="cost" type="number"
+               [ngClass]="{ 'is-invalid': submitted && f.cost.errors }"
+                style="width: 68%;display: inline-block;margin-left: 5px;" class="form-control" />
+              
+              <div *ngIf="submitted && (f.currencyId.errors || f.cost.errors)" class="invalid-feedback">
+                <div *ngIf="f.currencyId.errors.required || f.cost.errors.required">Cost is required</div>
+              </div>
             </div>
 
 
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
-              <label for="dateOfPurchase">Base Currency</label><br>
+              <label for="dateOfPurchase">Exchange Rate</label><br>
               <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
                 class="form-select">
                 <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
@@ -269,13 +276,13 @@
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Business Unit</label>
               <select formControlName="businessUnitId" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.businessUnit.errors }">
+                [ngClass]="{ 'is-invalid': submitted && f.businessUnitId.errors }">
                 <option *ngFor="let c of businessUnitList" value={{c.id}}>
                   {{c.businessUnitName}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.businessUnit.errors" class="invalid-feedback">
-                <div *ngIf="f.businessUnit.errors.required">Business Unit is required</div>
+              <div *ngIf="submitted && f.businessUnitId.errors" class="invalid-feedback">
+                <div *ngIf="f.businessUnitId.errors.required">Business Unit is required</div>
               </div>
             </div>
 
