@@ -94,6 +94,7 @@ export class AmcComponent implements OnInit {
   defaultCustomerId: any;
   baseCurrId: any;
   @ViewChild('baseAmt') baseAmt
+  isOnCall: any = false;
 
 
   constructor(
@@ -225,6 +226,33 @@ export class AmcComponent implements OnInit {
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
+
+    this.form.get("servicetype").valueChanges
+      .subscribe((data: any) => {
+        if (this.serviceType == null) return;
+
+        this.isOnCall = this.serviceType.find(x => x.listTypeItemId == data).itemCode == "ONCAL";
+
+        if (this.isOnCall) {
+          this.form.get("secondVisitDateFrom").clearValidators();
+          this.form.get("secondVisitDateFrom").updateValueAndValidity();
+          this.form.get("secondVisitDateFrom").setValue("");
+
+          this.form.get("secondVisitDateTo").clearValidators();
+          this.form.get("secondVisitDateTo").updateValueAndValidity();
+          this.form.get("secondVisitDateTo").setValue("");
+        }
+
+        else {
+          this.form.get("secondVisitDateFrom").setValidators([Validators.required]);
+          this.form.get("secondVisitDateFrom").updateValueAndValidity();
+
+          this.form.get("secondVisitDateTo").setValidators([Validators.required]);
+          this.form.get("secondVisitDateTo").updateValueAndValidity();
+
+        }
+      })
+
 
     this.listTypeService.getById("AMCSG").pipe(first())
       .subscribe((data: any) => {
@@ -885,28 +913,30 @@ export class AmcComponent implements OnInit {
       return this.notificationService.showError("First Visit From Date should not be greater than End Date", "Invalid Date")
     }
 
-    if (sfsDate < 0) {
-      return this.notificationService.showError("Second Visit From Date should not be greater than Start Date", "Invalid Date")
-    }
-    if (stsDate < 0) {
-      return this.notificationService.showError("Second Visit To Date should not be greater than Start Date", "Invalid Date")
-    }
-    if (steDate < 0) {
-      return this.notificationService.showError("Second Visit To Date should not be greater than End Date", "Invalid Date")
-    }
-    if (sfeDate < 0) {
-      return this.notificationService.showError("Second Visit From Date should not be greater than End Date", "Invalid Date")
+    if (!this.isOnCall) {
+      if (sfsDate < 0) {
+        return this.notificationService.showError("Second Visit From Date should not be greater than Start Date", "Invalid Date")
+      }
+      if (stsDate < 0) {
+        return this.notificationService.showError("Second Visit To Date should not be greater than Start Date", "Invalid Date")
+      }
+      if (steDate < 0) {
+        return this.notificationService.showError("Second Visit To Date should not be greater than End Date", "Invalid Date")
+      }
+      if (sfeDate < 0) {
+        return this.notificationService.showError("Second Visit From Date should not be greater than End Date", "Invalid Date")
+      }
     }
 
+    if (!this.isOnCall) {
+      this.model.secondVisitDateFrom = datepipie.transform(this.model.secondVisitDateFrom, "MM/dd/yyyy");
+      this.model.secondVisitDateTo = datepipie.transform(this.model.secondVisitDateTo, "MM/dd/yyyy");
+      if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value)
+        this.model.secondVisitDate = this.model.secondVisitDateFrom + "-" + this.model.secondVisitDateTo;
+    }
+    
     this.model.firstVisitDateFrom = datepipie.transform(this.model.firstVisitDateFrom, "MM/dd/yyyy");
-    this.model.secondVisitDateFrom = datepipie.transform(this.model.secondVisitDateFrom, "MM/dd/yyyy");
-
     this.model.firstVisitDateTo = datepipie.transform(this.model.firstVisitDateTo, "MM/dd/yyyy");
-    this.model.secondVisitDateTo = datepipie.transform(this.model.secondVisitDateTo, "MM/dd/yyyy");
-
-    if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value)
-      this.model.secondVisitDate = this.model.secondVisitDateFrom + "-" + this.model.secondVisitDateTo;
-
     if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value)
       this.model.firstVisitDate = this.model.firstVisitDateFrom + "-" + this.model.firstVisitDateTo
 
@@ -924,26 +954,28 @@ export class AmcComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              if (this.instrumentList == null || this.instrumentList.length <= 0) this.router.navigate(["amclist"]);
+              {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+                if (this.instrumentList == null || this.instrumentList.length <= 0) this.router.navigate(["amclist"]);
+
+                if (this.instrumentList != null && this.instrumentList.length > 0) {
+                  this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
+                    .pipe(first())
+                    .subscribe({
+                      next: (data: ResultMsg) => {
+                        if (data.result) {
+                          this.notificationService.showSuccess(data.resultMessage, "Success");
+                          this.router.navigate(["amclist"]);
+                        }
+                        else this.notificationService.showError(data.resultMessage, "Error");
+                      },
+                    });
+                }
+              }
             }
             else this.notificationService.showError(data.resultMessage, "Error");
           },
         });
-
-      if (this.instrumentList != null && this.instrumentList.length > 0) {
-        this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
-          .pipe(first())
-          .subscribe({
-            next: (data: ResultMsg) => {
-              if (data.result) {
-                this.notificationService.showSuccess(data.resultMessage, "Success");
-                this.router.navigate(["amclist"]);
-              }
-              else this.notificationService.showError(data.resultMessage, "Error");
-            },
-          });
-      }
     }
     else if (this.hasUpdateAccess) {
       this.model.id = this.id;
@@ -952,32 +984,23 @@ export class AmcComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
-            this.notificationService.showSuccess(
-              data.resultMessage,
-              "Success"
-            );
-            if (this.instrumentList == null || this.instrumentList.length <= 0) {
-              this.router.navigate(["amclist"]);
+            if (data.result) {
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              if (this.instrumentList == null || this.instrumentList.length <= 0) {
+                this.router.navigate(["amclist"]);
+              }
+              if (this.instrumentList != null && this.instrumentList.length > 0) {
+                this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
+                  .pipe(first()).subscribe({
+                    next: (data: ResultMsg) => {
+                      this.router.navigate(["amclist"]);
+                    },
+                  });
+              }
             }
-          },
-          error: (error) => {
-
-            this.loading = false;
-          },
+            else this.notificationService.showError(data.resultMessage, "Error");
+          }
         });
-      if (this.instrumentList != null && this.instrumentList.length > 0) {
-        this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
-          .pipe(first())
-          .subscribe({
-            next: (data: ResultMsg) => {
-              this.router.navigate(["amclist"]);
-            },
-            error: (error) => {
-
-              this.loading = false;
-            },
-          });
-      }
     }
   }
 }
