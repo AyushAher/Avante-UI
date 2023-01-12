@@ -136,7 +136,7 @@ export class AmcComponent implements OnInit {
             this.form.get('stageName').reset()
             this.form.get('stageComments').reset()
             this.form.get('payterms').reset()
-            this.form.get('payAmt').reset()
+            this.form.get('payAmt').setValue(0)
             this.isPaymentAmt = false;
             this.stageFiles.nativeElement.value = "";
             var selectedfiles = document.getElementById("stageFilesList");

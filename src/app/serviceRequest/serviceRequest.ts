@@ -397,7 +397,11 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe((data: any) => this.subreqtypelist = data);
 
     this.customerService.getAll().pipe(first())
-      .subscribe((data: any) => this.customerlist = data.object)
+      .subscribe((data: any) => {
+
+        this.customerlist = data.object
+        this.onCustomerChanged()
+      })
 
 
     this.distributorService.getAll().pipe(first())
@@ -437,7 +441,7 @@ export class ServiceRequestComponent implements OnInit {
 
             }
 
-            this.onCustomerChanged(data.object.custid)
+            this.customerId = data.object.custid
             this.distributorService.getDistributorRegionContacts(data.object.distid)
               .pipe(first())
               .subscribe({
@@ -694,7 +698,7 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
 
-  onCustomerChanged(value: any) {
+  onCustomerChanged(value: any = this.customerId) {
     let object = this.customerlist.find(x => x.id == value);
     this.SetCustomerData(object)
   }
@@ -885,7 +889,7 @@ export class ServiceRequestComponent implements OnInit {
 
   onServiceTypeChange(serviceTypeId) {
     this.isAmc = false;
-    let servicetypeCode = this.serviceTypeList.filter(x => x.listTypeItemId == serviceTypeId)[0]?.itemCode;
+    let servicetypeCode = this.serviceTypeList?.filter(x => x.listTypeItemId == serviceTypeId)[0]?.itemCode;
     if (servicetypeCode == "AMC" || servicetypeCode == "PLAN") {
       this.isAmc = true;
       this.serviceRequestform.get('sdate').setValidators(Validators.required)

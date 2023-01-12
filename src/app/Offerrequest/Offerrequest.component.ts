@@ -165,7 +165,7 @@ export class OfferrequestComponent implements OnInit {
             this.form.get('stageName').reset()
             this.form.get('stageComments').reset()
             this.form.get('payterms').reset()
-            this.form.get('payAmt').reset()
+            this.form.get('payAmt').setValue(0)
             this.stageFiles.nativeElement.value = "";
             var selectedfiles = document.getElementById("stageFilesList");
             selectedfiles.innerHTML = '';
@@ -709,6 +709,7 @@ export class OfferrequestComponent implements OnInit {
       headerName: 'HSC Code',
       field: 'hscode',
       filter: true,
+      editable: true,
     },
     {
       headerName: 'Qty',
@@ -848,6 +849,7 @@ export class OfferrequestComponent implements OnInit {
       d[0].amount = rowAmount;
       d[0].price = Number(data.price)
       d[0].qty = Number(data.qty)
+      d[0].hscode = data.hscode;
       this.api.setRowData(this.sparePartsList)
       this.GetSparePartTotal()
     }
