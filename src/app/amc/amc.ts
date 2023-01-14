@@ -3,12 +3,11 @@ import { HttpEventType } from "@angular/common/http";
 import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ColumnApi, GridApi } from "ag-grid-community";
 import { Guid } from "guid-typescript";
 import { first } from "rxjs/operators";
 
-import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
-import { Amc, Currency, Customer, ListTypeItem, ResultMsg, User } from "../_models";
+import { Currency, Customer, ListTypeItem, ResultMsg, User } from "../_models";
 import { AmcInstrument } from "../_models/Amcinstrument";
 import {
   AccountService,
@@ -18,6 +17,7 @@ import {
   CurrencyService,
   CustomerService,
   FileshareService,
+  InstrumentService,
   ListTypeService,
   NotificationService,
   ProfileService
@@ -113,7 +113,8 @@ export class AmcComponent implements OnInit {
     private contactService: ContactService,
     private amcStagesService: AmcstagesService,
     private FileShareService: FileshareService,
-    private environment: EnvService
+    private environment: EnvService,
+    private instrumentService: InstrumentService
 
   ) {
 
@@ -226,7 +227,6 @@ export class AmcComponent implements OnInit {
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
-
     this.form.get("servicetype").valueChanges
       .subscribe((data: any) => {
         if (this.serviceType == null) return;
@@ -377,6 +377,7 @@ export class AmcComponent implements OnInit {
                   this.form.get('stageName').reset()
                   setTimeout(() => {
                     this.form.patchValue(data.object);
+                    this.InstrumentSearch();
                   }, 500);
                 })
             })
@@ -648,37 +649,44 @@ export class AmcComponent implements OnInit {
     }
   }
 
-  InstrumentSearch = (searchtext) => {
-    this.instrumentserialno = searchtext;
-    if (this.instrumentserialno != "" && this.instrumentserialno != null) {
+  InstrumentSearch = () => {
 
-      this.Service.searchByKeyword(this.instrumentserialno, this.form.get("custSite").value)
-        .pipe(first()).subscribe({
-          next: (data: any) => this.instrumentAutoComplete = data.object
-        });
-    }
+    this.instrumentService.getAll(this.user.userId)
+      .pipe(first()).subscribe((data: any) => {
+        this.instrumentAutoComplete = data.object?.filter(x => x.customerId == this.f.billtoid.value);
+        this.instrumentSearch.value = ""
+      });
+
   }
 
 
   AddInstrument(instrument: any) {
-    this.Service.searchByKeyword(instrument, this.form.get("custSite").value)
-      .pipe(first()).subscribe({
-        next: (data: any) => {
-          this.instrumentList = this.instrumentList || [];
-          var data = data.object[0];
-          data.id = Guid.create();
-          data.id = data.id.value;
+    if (!instrument || instrument == "")
+      return this.notificationService.showError("Value Cannot be Empty. Select an option", "Error");
 
-          if (this.instrumentList.filter(x => x.serialnos == data.serialnos).length == 0) {
-            this.instrumentList.push(data);
-            this.api.setRowData(this.instrumentList)
-          }
-          else this.notificationService.showError("Instrument already exists", "Error")
+    let d = this.instrumentAutoComplete.find(x => x.id == instrument)
 
-          this.instrumentSearch.nativeElement.value = ""
-        },
-      });
+    if (this.instrumentList.find(x => x.serialnos == d.serialnos))
+      return this.notificationService.showError("Instrument already exists", "Error")
 
+    var data = new AmcInstrument();
+    data = {
+      id: Guid.create().toString(),
+      serialnos: d.serialnos,
+      insTypeId: d.instype,
+      insType: d.instypeName,
+      insversion: d.insversion,
+      qty: 0,
+      rate: 0,
+      amount: 0,
+      instrumentId: d.id,
+      modified: false,
+      amcId: this.id,
+    };
+
+    this.instrumentList = this.instrumentList || [];
+    this.instrumentList.push(data);
+    this.api.setRowData(this.instrumentList)
   }
 
   private createColumnDefs() {
@@ -934,7 +942,7 @@ export class AmcComponent implements OnInit {
       if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value)
         this.model.secondVisitDate = this.model.secondVisitDateFrom + "-" + this.model.secondVisitDateTo;
     }
-    
+
     this.model.firstVisitDateFrom = datepipie.transform(this.model.firstVisitDateFrom, "MM/dd/yyyy");
     this.model.firstVisitDateTo = datepipie.transform(this.model.firstVisitDateTo, "MM/dd/yyyy");
     if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value)

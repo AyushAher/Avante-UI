@@ -258,15 +258,13 @@
           <div class="row" *ngIf="!isCompleted && (isEditMode || isNewMode)">
             <div class="col-md-9">
               <label>Search Instruments By Serial No. </label>
-
-              <input (input)="InstrumentSearch($event.target['value'])" #instrumentSearch list="browsers" name="browser"
-                id="browser" class="form-select" />
-              <datalist id="browsers">
-                <option *ngFor="let i of instrumentAutoComplete" value="{{i.serialnos}}"></option>
-              </datalist>
+              <select #instrumentSearch class="form-select">
+                <option></option>
+                <option *ngFor="let i of instrumentAutoComplete" [value]="i.id">{{i.serialnos}}</option>
+              </select>
             </div>
 
-            <div class="col-md-3" style="margin-top: 30px">
+            <div class="col-md-3" style="margin-top: 25px">
               <button class="btn btn-primary" (click)="AddInstrument(instrumentSearch.value)" type="button"
                 class="btn btn-primary">
                 Add Instrument

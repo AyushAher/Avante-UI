@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Instrument, instrumentConfig } from '../_models';
 import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class InstrumentService {
-  private distrubutorSubject: BehaviorSubject<Instrument>;
   public distributor: Observable<Instrument>;
 
   constructor(
-    private router: Router,
     private environment: EnvService,
     private http: HttpClient
   ) {
