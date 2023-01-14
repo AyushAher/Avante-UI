@@ -132,6 +132,14 @@ export class UserProfileListComponent implements OnInit {
         editable: false,
         sortable: true,
         tooltipField: 'profileName',
+      },
+      {
+        headerName: 'Description',
+        field: 'description',
+        filter: true,
+        enableSorting: true,
+        sortable: true,
+        tooltipField: 'Description',
       }
     ]
   }

@@ -146,35 +146,17 @@
               </div>
             </div>
 
-
-          </div>
-          <div class="row" *ngIf="hidetable==true">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Select</th>
-                    <th>Level 1</th>
-                    <th>Level 2</th>
-                    <th>Region</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr formArrayName="profileRegions"
-                    *ngFor="let item of userprofileform.get('profileRegions')['controls'];let i=index">
-                    <td [formGroupName]="i">
-                      <input type="hidden" formControlName="level1id" />
-                      <input type="hidden" formControlName="level2id" />
-                      <input type="hidden" formControlName="profileRegionId" />
-                      <input type="checkbox" formControlName="select" />
-                    </td>
-                    <td [formGroupName]="i">{{ getName(i).level1Name }}</td>
-                    <td [formGroupName]="i">{{ getName(i).level2Name}}</td>
-                    <td [formGroupName]="i">{{ getName(i).Level2Level1Name}}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="col-md-6 col-sm-6">
+              <label>Description</label>
+              <textarea class="form-control" required [disabled]="!isEditMode && !isNewMode"
+                formControlName="description">
+              </textarea>
+              <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                <div *ngIf="f.description.errors.required">Description is required</div>
+              </div>
             </div>
+
+
           </div>
           <hr />
         </form>

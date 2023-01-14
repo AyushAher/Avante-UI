@@ -139,6 +139,7 @@ export class UserProfileComponent implements OnInit {
       profileRegions: this.formBuilder.array([]),
       businessUnitId: ["", Validators.required],
       brandId: ["", Validators.required],
+      description: ["", Validators.required]
     });
 
     this.listTypeService.getById("RF").pipe(first())
