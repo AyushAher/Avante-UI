@@ -1001,6 +1001,11 @@ i.custLink,
   cursor: pointer;
 }
 
+.fa-calendar {
+  color: #53a446 !important;
+  cursor: pointer;
+}
+
 .notificationDropdown {
   font-size: 22px;
 }
@@ -1123,4 +1128,8 @@ body::-webkit-scrollbar-thumb:hover {
 }
 #highestServiceRequest {
   height: 165px !important;
+}
+
+.v-0 {
+  visibility: hidden;
 }

@@ -100,6 +100,8 @@ export class OfferrequestComponent implements OnInit {
   isNewMode: any;
   @ViewChild('baseAmt') baseAmt
   baseCurrId: any;
+  mainCurrencyId: any
+  costUsd
 
   constructor(
     private formBuilder: FormBuilder,
@@ -241,10 +243,34 @@ export class OfferrequestComponent implements OnInit {
 
       totalAmt: [0],
       totalCurr: [""],
-
-      basePCurrencyAmt: [0],
+      mainCurrencyId: "",
+      basePCurrencyAmt: [1],
 
     })
+
+
+    this.form.get("airFreightChargesAmt").valueChanges
+      .subscribe(() => this.GetSparePartTotal())
+
+    this.form.get("inspectionChargesAmt").valueChanges
+      .subscribe(() => this.GetSparePartTotal())
+
+    this.form.get("lcadministrativeChargesAmt").valueChanges
+      .subscribe(() => this.GetSparePartTotal())
+
+    this.form.get("basePCurrencyAmt").valueChanges
+      .subscribe(() => this.GetSparePartTotal())
+
+    this.form.get("mainCurrencyId").valueChanges
+      .subscribe((data) => {
+        this.mainCurrencyId = data
+        this.f.totalCurr.setValue(data)
+        this.f.inspectionChargesCurr.setValue(data)
+        this.f.lcadministrativeChargesCurr.setValue(data)
+        this.f.airFreightChargesCurr.setValue(data)
+        this.f.payAmtCurrencyId.setValue(data)
+        this.f.currencyId.setValue(data)
+      })
 
     this.id = this.route.snapshot.paramMap.get('id');
     this.form.get('podate').setValue(this.datepipie.transform(new Date, "MM/dd/yyyy"))
@@ -303,13 +329,14 @@ export class OfferrequestComponent implements OnInit {
     if (this.role == this.environment.distRoleCode) this.isDist = true
 
     if (this.id != null) {
-      localStorage.setItem('offerrequestid', this.id)
       this.Service.getById(this.id)
         .pipe(first())
         .subscribe((data: any) => {
           this.listTypeService.getById("ORQPT")
             .pipe(first())
             .subscribe((mstData: any) => {
+              this.f.mainCurrencyId.setValue(data.object.airFreightChargesCurr)
+
               this.isCompleted = data.object.isCompleted
               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
 
@@ -456,12 +483,17 @@ export class OfferrequestComponent implements OnInit {
 
 
   GetSparePartTotal() {
-    var total = 0;
-    this.sparePartsList.forEach((data) => total += data.amount)
-    total += this.form.get("airFreightChargesAmt").value
-    total += this.form.get("inspectionChargesAmt").value
-    total += this.form.get("lcadministrativeChargesAmt").value
-    this.form.get("totalAmt").setValue(total)
+    let total = 0;
+    this.sparePartsList.forEach((x) => {
+      total += (x.price * x.qty)
+    })
+
+    total += this.form.get("inspectionChargesAmt").value;
+    total += this.form.get("lcadministrativeChargesAmt").value;
+    total += this.form.get("airFreightChargesAmt").value;
+
+    this.form.get("totalAmt").setValue(total);
+    this.costUsd = total * this.form.get("basePCurrencyAmt").value;
 
   }
 
@@ -667,16 +699,17 @@ export class OfferrequestComponent implements OnInit {
           this.sparePartsList = this.sparePartsList || [];
           var data = data.object[0];
 
+          if (this.sparePartsList.find(x => x.partno == data.partno)) {
+            return this.notificationService.showError("Spare Part already exists", "Error");
+          }
+
           data.id = Guid.create();
           data.id = data.id.value;
 
           data.amount = Number(data.price) * Number(data.qty)
 
-          if (this.sparePartsList.filter(x => x.partno == data.partno).length == 0) {
-            this.sparePartsList.push(data);
-            this.api.setRowData(this.sparePartsList)
-          }
-          else this.notificationService.showError("Spare Part already exists", "Error");
+          this.sparePartsList.push(data);
+          this.api.setRowData(this.sparePartsList)
           this.sparePartsSearch.nativeElement.value = ""
 
         },
@@ -734,18 +767,6 @@ export class OfferrequestComponent implements OnInit {
       filter: true,
       sortable: true,
       hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
-    },
-    {
-      cellRendererFramework: OfferrequestCurrencyComponent,
-      headerName: 'Currency',
-      field: 'currency',
-      hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
-      // hide: true,
-      filter: true,
-      sortable: true,
-      cellRendererParams: {
-        readonly: false
-      },
     },
     {
       cellRendererFramework: OfferrequestCountryComponent,
@@ -806,18 +827,6 @@ export class OfferrequestComponent implements OnInit {
         hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
       },
       {
-        cellRendererFramework: OfferrequestCurrencyComponent,
-        headerName: 'Currency',
-        field: 'currency',
-        hide: this.role == this.environment.custRoleCode || !this.hasCommercial,
-        // hide: true,
-        filter: true,
-        sortable: true,
-        cellRendererParams: {
-          readonly: true
-        },
-      },
-      {
         cellRendererFramework: OfferrequestCountryComponent,
         headerName: 'Country Of Origin',
         field: 'country',
@@ -840,19 +849,19 @@ export class OfferrequestComponent implements OnInit {
   }
 
   onCellValueChanged(event) {
+    if (this.sparePartsList.find(x => x.id == event.data.id)) return;
+
     var data = event.data;
+    var d = this.sparePartsList.find(x => x.id == data.id);
+    
     event.data.modified = true;
 
-    if (this.sparePartsList.filter(x => x.id == data.id).length > 0) {
-      var d = this.sparePartsList.filter(x => x.id == data.id);
-      var rowAmount = (Number(data.qty) * Number(data.price));
-      d[0].amount = rowAmount;
-      d[0].price = Number(data.price)
-      d[0].qty = Number(data.qty)
-      d[0].hscode = data.hscode;
-      this.api.setRowData(this.sparePartsList)
-      this.GetSparePartTotal()
-    }
+    d.amount = (Number(data.qty) * Number(data.price));
+    d.price = Number(data.price)
+    d.qty = Number(data.qty)
+    d.hscode = data.hscode;
+    this.api.setRowData(this.sparePartsList)
+    this.GetSparePartTotal()
   }
 
   onGridReady(params): void {

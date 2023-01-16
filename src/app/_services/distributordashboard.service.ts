@@ -10,16 +10,16 @@ export class DistributordashboardService {
   constructor(private http: HttpClient, private environment: EnvService,) { }
 
 
-  GetInstrumentInstalled(date: string) {
-    return this.http.get(`${this.environment.apiUrl}/DistributorDashboard/GetInstrumentInstalled/${date}`)
+  GetInstrumentInstalled({ distId, sdate, edate }) {
+    return this.http.post(`${this.environment.apiUrl}/DistributorDashboard/GetInstrumentInstalled`, { distId, sdate, edate })
   }
 
-  RevenueFromCustomer(date: string) {
-    return this.http.get(`${this.environment.apiUrl}/DistributorDashboard/RevenueFromCustomer/${date}`)
+  RevenueFromCustomer({ distId, sdate, edate }) {
+    return this.http.post(`${this.environment.apiUrl}/DistributorDashboard/RevenueFromCustomer`, { distId, sdate, edate })
   }
 
-  ServiceContractRevenue(date: string) {
-    return this.http.get(`${this.environment.apiUrl}/DistributorDashboard/ServiceContractRevenue/${date}`)
+  ServiceContractRevenue({ distId, sdate, edate }) {
+    return this.http.post(`${this.environment.apiUrl}/DistributorDashboard/ServiceContractRevenue`, { distId, sdate, edate })
   }
 
 

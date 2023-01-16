@@ -83,165 +83,167 @@ function CustomerDashboardCharts() {
 }
 // distdashboard
 function DistributorDashboardCharts() {
+  setTimeout(() => {
 
-  var xLineValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
-  var yLineValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+    var xLineValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+    var yLineValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
 
-  var ctx = document.getElementById("chartLine").getContext("2d");
+    var ctx = document.getElementById("chartLine").getContext("2d");
 
-  var myChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: xLineValues,
-      datasets: [{
-        fill: false,
-        lineTension: 0,
-        backgroundColor: "rgba(0,0,255,1.0)",
-        borderColor: "rgba(0,0,255,0.1)",
-        data: yLineValues
-      }]
-    },
-    options: {
-      responsive: true,
-      legend: {
-        display: false,
+    var myChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: xLineValues,
+        datasets: [{
+          fill: false,
+          lineTension: 0,
+          backgroundColor: "rgba(0,0,255,1.0)",
+          borderColor: "rgba(0,0,255,0.1)",
+          data: yLineValues
+        }]
       },
-    }
-  });
+      options: {
+        responsive: true,
+        legend: {
+          display: false,
+        },
+      }
+    });
 
-  var barColors = ["red", "green", "blue", "#f44336", "yellow"];
+    var barColors = ["red", "green", "blue", "#f44336", "yellow"];
 
-  $('#serviceRequestRaised').remove(); // this is my <canvas> element
-  $('#serviceRequestRaisedContainer').append('<canvas id="serviceRequestRaised" class="engineerChart"></canvas>');
-  let instrumentWithHighestServiceRequest = JSON.parse(
-    localStorage.getItem("instrumentWithHighestServiceRequest")
-  );
+    $('#serviceRequestRaised').remove(); // this is my <canvas> element
+    $('#serviceRequestRaisedContainer').append('<canvas id="serviceRequestRaised" class="engineerChart"></canvas>');
+    let instrumentWithHighestServiceRequest = JSON.parse(
+      localStorage.getItem("instrumentWithHighestServiceRequest")
+    );
 
-  var ctx = document.getElementById("serviceRequestRaised").getContext("2d");
+    var ctx = document.getElementById("serviceRequestRaised").getContext("2d");
 
 
-  var myChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: instrumentWithHighestServiceRequest?.label,
-      datasets: [{
-        backgroundColor: barColors,
-        data: instrumentWithHighestServiceRequest?.data,
+    var myChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: instrumentWithHighestServiceRequest?.label,
+        datasets: [{
+          backgroundColor: barColors,
+          data: instrumentWithHighestServiceRequest?.data,
 
-      }]
-    },
-    options: {
-      responsive: true,
-      legend: {
-        display: false,
-        position: 'top',
+        }]
       },
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              min: 0,
-            },
-            scaleLabel: {
-              display: true,
+      options: {
+        responsive: true,
+        legend: {
+          display: false,
+          position: 'top',
+        },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+              },
+              scaleLabel: {
+                display: true,
+              }
             }
-          }
-        ],
-        xAxes: [
-          {
-            barPercentage: 0.4
-          }
-        ]
+          ],
+          xAxes: [
+            {
+              barPercentage: 0.4
+            }
+          ]
+        }
+
+      }
+    });
+
+    $('#instrumentsChart').remove(); // this is my <canvas> element
+    $('#instrumentsChartContainer').append('<canvas id="instrumentsChart" class="engineerChart"></canvas>');
+
+    var ctx = document.getElementById("instrumentsChart").getContext("2d");
+
+    var data = JSON.parse(localStorage.getItem('instrumentData'))
+    var myChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Installed", "Under Service"],
+        datasets: [{
+          backgroundColor: barColors,
+          data: [data.instrumnetInstalled, data.instrumnetUnderService]
+        }]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          display: false,
+          position: 'top',
+        },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+              },
+              scaleLabel: {
+                display: true,
+              }
+            }
+          ],
+          xAxes: [
+            {
+              barPercentage: 0.4
+            }
+          ]
+        }
       }
 
-    }
-  });
+    });
 
-  $('#instrumentsChart').remove(); // this is my <canvas> element
-  $('#instrumentsChartContainer').append('<canvas id="instrumentsChart" class="engineerChart"></canvas>');
+    var customerData = JSON.parse(localStorage.getItem('customerrevenue'))
+    // Donut Chart
+    var datapie = {
+      labels: [...customerData?.map(x => x.customer.custname)],
+      datasets: [
+        {
+          data: [...customerData?.map(x => x.total)],
+          backgroundColor: [
+            "#6f42c1",
+            "#007bff",
+            "#17a2b8",
+            "#00cccc",
+            "#adb2bd",
+          ],
+        },
+      ],
+    };
 
-  var ctx = document.getElementById("instrumentsChart").getContext("2d");
-
-  var data = JSON.parse(localStorage.getItem('instrumentData'))
-  var myChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: ["Installed", "Under Service"],
-      datasets: [{
-        backgroundColor: barColors,
-        data: [data.instrumnetInstalled, data.instrumnetUnderService]
-      }]
-    },
-    options: {
+    var optionpie = {
+      maintainAspectRatio: false,
+      height: 30,
       responsive: true,
       legend: {
         display: false,
-        position: 'top',
       },
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              min: 0,
-            },
-            scaleLabel: {
-              display: true,
-            }
-          }
-        ],
-        xAxes: [
-          {
-            barPercentage: 0.4
-          }
-        ]
-      }
-    }
-
-  });
-
-  var customerData = JSON.parse(localStorage.getItem('customerrevenue'))
-  // Donut Chart
-  var datapie = {
-    labels: [...customerData?.map(x => x.customer.custname)],
-    datasets: [
-      {
-        data: [...customerData?.map(x => x.total)],
-        backgroundColor: [
-          "#6f42c1",
-          "#007bff",
-          "#17a2b8",
-          "#00cccc",
-          "#adb2bd",
-        ],
+      animation: {
+        animateScale: true,
+        animateRotate: true,
       },
-    ],
-  };
+    };
 
-  var optionpie = {
-    maintainAspectRatio: false,
-    height: 30,
-    responsive: true,
-    legend: {
-      display: false,
-    },
-    animation: {
-      animateScale: true,
-      animateRotate: true,
-    },
-  };
-
-  $('#highestServiceRequest').remove(); // this is my <canvas> element
-  $('#revenueByCustomer').append('<canvas id="highestServiceRequest" style="width: 100%; max-width: 700px"></canvas>');
+    $('#highestServiceRequest').remove(); // this is my <canvas> element
+    $('#revenueByCustomer').append('<canvas id="highestServiceRequest" style="width: 100%; max-width: 700px"></canvas>');
 
 
-  // For a doughnut chart
-  var ctxpie = document.getElementById("highestServiceRequest");
-  new Chart(ctxpie, {
-    type: "doughnut",
-    data: datapie,
-    options: optionpie,
-  });
+    // For a doughnut chart
+    var ctxpie = document.getElementById("highestServiceRequest");
+    new Chart(ctxpie, {
+      type: "doughnut",
+      data: datapie,
+      options: optionpie,
+    });
 
+  }, 500);
 
 }
 

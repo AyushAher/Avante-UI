@@ -47,18 +47,16 @@ export class DistributordashboardComponent implements OnInit {
     "#00cccc",
     "#adb2bd",
   ]
-  calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
-  currentFilter = this.calenderLst[0];
+  // calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
+  // currentFilter = this.calenderLst[0];
 
-  @ViewChild('MNTHS3') Mnths3;
-  @ViewChild('MNTHS6') Mnths6;
-  @ViewChild('MNTHS12') Mnths12;
+  // @ViewChild('MNTHS3') Mnths3;
+  // @ViewChild('MNTHS6') Mnths6;
+  // @ViewChild('MNTHS12') Mnths12;
   criticalSerReq: any;
   isHidden: boolean = true;
   constructor(
     private accountService: AccountService,
-    private listTypeService: ListTypeService,
-    private SettingsService: CustdashboardsettingsService,
     private profileService: ProfileService,
     private serviceRequestService: ServiceRequestService,
     private distributorService: DistributorService,
@@ -68,6 +66,7 @@ export class DistributordashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -79,7 +78,12 @@ export class DistributordashboardComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
-    setTimeout(() => this.onCalenderFilter(this.calenderLst[0]), 500);
+
+    setTimeout(() => {
+      var e = new Date();
+      var s = new Date(e.getDate() - 90);
+      this.onCalenderFilter(s, e)
+    }, 500);
 
     this.serviceRequestService.getAll(this.user.userId)
       .pipe(first()).subscribe((data: any) =>
@@ -93,32 +97,16 @@ export class DistributordashboardComponent implements OnInit {
 
   toggle = () => this.isHidden = !this.isHidden
 
-  onCalenderFilter(date) {
-    if (date == this.calenderLst[0]) {
-      this.Mnths3.nativeElement.classList.add("active")
-      this.Mnths6.nativeElement.classList.remove("active")
-      this.Mnths12.nativeElement.classList.remove("active")
-    }
-    else if (date == this.calenderLst[1]) {
-      this.Mnths6.nativeElement.classList.add("active")
-      this.Mnths3.nativeElement.classList.remove("active")
-      this.Mnths12.nativeElement.classList.remove("active")
-    }
-    else if (date == this.calenderLst[2]) {
-      this.Mnths12.nativeElement.classList.add("active")
-      this.Mnths6.nativeElement.classList.remove("active")
-      this.Mnths3.nativeElement.classList.remove("active")
-    }
-
-    this.GetInstrumentsInstalled(date)
-    this.GetRevenuefromCustomer(date)
-    this.GetServiceContractRevenue(date)
-    this.GetDistDashboardData(date)
+  onCalenderFilter(sdate, edate) {
+    this.GetInstrumentsInstalled(sdate, edate)
+    this.GetRevenuefromCustomer(sdate, edate)
+    this.GetServiceContractRevenue(sdate, edate)
+    this.GetDistDashboardData(sdate, edate)
     setTimeout(() => DistributorDashboardCharts(), 1000)
   }
 
-  GetInstrumentsInstalled(date = this.calenderLst[0]) {
-    this.distributorDashboardService.GetInstrumentInstalled(date)
+  GetInstrumentsInstalled(sdate, edate) {
+    this.distributorDashboardService.GetInstrumentInstalled({ distId: "", sdate, edate })
       .pipe(first()).subscribe((data: any) => {
         this.instrumnetInstalled = data.object.instrumentInstalled
         this.instrumnetUnderService = data.object.instrumentUnderService
@@ -130,8 +118,8 @@ export class DistributordashboardComponent implements OnInit {
       })
   }
 
-  GetRevenuefromCustomer(date = this.calenderLst[0]) {
-    this.distributorDashboardService.RevenueFromCustomer(date)
+  GetRevenuefromCustomer(sdate, edate) {
+    this.distributorDashboardService.RevenueFromCustomer({ distId: "", sdate, edate })
       .pipe(first()).subscribe((data: any) => {
         this.customerRevenueList = data.object
         this.totalRevenue = data.object.map(x => x.total).reduce((a, b) => a + b, 0);
@@ -139,8 +127,8 @@ export class DistributordashboardComponent implements OnInit {
       })
   }
 
-  GetServiceContractRevenue(date = this.calenderLst[0]) {
-    this.distributorDashboardService.ServiceContractRevenue(date)
+  GetServiceContractRevenue(sdate, edate) {
+    this.distributorDashboardService.ServiceContractRevenue({ distId: "", sdate, edate })
       .pipe(first()).subscribe((data: any) => {
         this.plannedRevenue = data.object.plannedRevenue
         this.oncallRevenue = data.object.oncallRevenue
@@ -150,11 +138,11 @@ export class DistributordashboardComponent implements OnInit {
       })
   }
 
-  GetDistDashboardData(date = this.calenderLst[0]) {
+  GetDistDashboardData(sdate, edate) {
     this.distributorService.getByConId(this.user.contactId)
       .pipe(first())
       .subscribe((data: any) => {
-        this.serviceRequestService.getDistDashboardData(data.object[0].id, date)
+        this.serviceRequestService.getDistDashboardData({ distId: data.object[0].id, sdate, edate })
           .pipe(first()).subscribe((sreq: any) => {
             sreq = sreq.object
             let label = []
@@ -170,5 +158,13 @@ export class DistributordashboardComponent implements OnInit {
             this.engHandlingReq = sreq.engHandlingReq
           })
       })
+  }
+  
+  dateRange(va) {
+    if (!va || va.length <= 1) return;
+
+    let sDate = new Date(va[0]);
+    let eDate = new Date(va[1]);
+    this.onCalenderFilter(sDate, eDate);
   }
 }

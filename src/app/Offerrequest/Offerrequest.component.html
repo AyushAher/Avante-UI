@@ -127,6 +127,17 @@
 
 
             <div class="col-sm-4">
+              <label for="PaymentTerms">Currency</label>
+              <select id="currency" formControlName="mainCurrencyId" class="form-select"
+                [ngClass]="{ ' is -invalid': submitted && f.mainCurrencyId.errors }">
+                <option *ngFor="let i of currencyList" value="{{ i.id }}">
+                  {{ i.code }}
+                </option>
+              </select>
+            </div>
+
+
+            <div class="col-sm-4">
               <label for="instrumentsList">Instruments</label>
               <ng-select formControlName="instrumentsList" [multiple]="true" id="instrumentsList" [virtualScroll]="true"
                 [ngClass]="{'is-invalid':submitted && f.instrumentsList.errors }">
@@ -194,56 +205,41 @@
             <div class="col-md-4">
               <label>Air Freight charges</label>
               <br>
-              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
-                formControlName="airFreightChargesCurr" class="form-select">
-                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
-              </select>
-              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
-                formControlName="airFreightChargesAmt" />
+              <input class="payAmt form-control" type="number" formControlName="airFreightChargesAmt" />
             </div>
 
             <div class="col-md-4">
               <label>PVOC / Inspection Charges </label>
               <br>
-              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
-                formControlName="inspectionChargesCurr" class="form-select">
-                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
-              </select>
-              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
-                formControlName="inspectionChargesAmt" />
+              <input class="payAmt form-control" type="number" formControlName="inspectionChargesAmt" />
             </div>
 
             <div class="col-md-4">
               <label>LC Administrative Charges</label>
               <br>
-              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
-                formControlName="lcadministrativeChargesCurr" class="form-select">
-                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
-              </select>
-              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
-                formControlName="lcadministrativeChargesAmt" />
+              <input class="payAmt form-control" type="number" formControlName="lcadministrativeChargesAmt" />
             </div>
 
             <div class="col-md-4">
               <label>Total</label>
               <br>
-              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
-                formControlName="totalCurr" class="form-select">
-                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
-              </select>
-              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
-                formControlName="totalAmt" />
+              <input class="payAmt form-control" type="number" formControlName="totalAmt" />
             </div>
 
             <div class="col-md-4">
-              <label>Base Currency Amount</label>
+              <label>Exchange Rate</label>
               <br>
-              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;padding:3%;"
                 formControlName="baseCurrencyId" class="form-select">
                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
               </select>
-              <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
-                formControlName="basePCurrencyAmt" />
+              <input style="width:67%;display: inline-block;text-align: right;" class="payAmt form-control"
+                type="number" formControlName="basePCurrencyAmt" />
+            </div>
+            <div class="col-md-4">
+              <label>Cost in USD</label>
+              <input class="form-control" type="number" disabled
+                [value]="costUsd" />
             </div>
           </div>
           <br />
@@ -375,8 +371,7 @@
                           {{i.code}}
                         </option>
                       </select>
-                      <input class="payAmt form-control" style="width:67%;display: inline-block;text-align: right;" type="number"
-                        formControlName="payAmt" id="payAmt" />
+                      <input class="payAmt form-control" type="number" formControlName="payAmt" id="payAmt" />
                     </div>
 
 
