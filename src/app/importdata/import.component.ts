@@ -4,6 +4,7 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { first } from 'rxjs/operators';
 import * as XLSX from 'xlsx'
+import { GetParsedDate } from '../_helpers/Providers';
 import { ListTypeItem } from '../_models';
 import { NotificationService } from '../_services';
 import { ImportdataService } from '../_services/importdata.service';
@@ -110,8 +111,8 @@ export class ImportDataComponent implements OnInit {
       item.get('expenseBy').setValue(element.Expenses_Incurred_By)
 
       let calc = this.CalculateDateDiff(this.form.value.startDate, this.form.value.endDate)
-      this.form.value.startDate = this.datepipe.transform(this.form.value.startDate, "MM/dd/yyyy");
-      this.form.value.endDate = this.datepipe.transform(this.form.value.endDate, "MM/dd/yyyy");
+      this.form.value.startDate = this.datepipe.transform(GetParsedDate(this.form.value.startDate), "dd/MM/YYYY");
+      this.form.value.endDate = this.datepipe.transform(GetParsedDate(this.form.value.endDate), "dd/MM/YYYY");
 
       if (calc > -365)
         this.form.get('totalDays').value = calc
@@ -127,8 +128,8 @@ export class ImportDataComponent implements OnInit {
 
       if (StartCalc < 0 || EndCalc < 0) return this.notificationService.showError("Expense Date should be between Start Date and End Date", "Error")
 
-      this.form.get('startDate').value = this.datepipe.transform(this.form.get('startDate').value, "MM/dd/yyyy")
-      this.form.get('endDate').value = this.datepipe.transform(this.form.get('endDate').value, "MM/dd/yyyy")
+      this.form.get('startDate').value = this.datepipe.transform(GetParsedDate(this.form.get('startDate').value), "dd/MM/YYYY")
+      this.form.get('endDate').value = this.datepipe.transform(GetParsedDate(this.form.get('endDate').value), "dd/MM/YYYY")
 
       if (!isNaN(element.Amount_in_BCY) && element.Amount_in_BCY > 0 && isNaN(element.Amount_in_USD) && element.Currency != undefined) {
         this.service.convertCurrency(element.Currency, element.Amount_in_BCY).pipe(first())
@@ -186,7 +187,7 @@ export class ImportDataComponent implements OnInit {
     var utc_value = utc_days * 86400;
     var date = new Date(utc_value * 1000);
     let datepipe = new DatePipe('en-US')
-    return datepipe.transform(new Date(date), "MM/dd/yyyy");
+    return datepipe.transform(new Date(date), "dd/MM/YYYY");
   }
 
   ExportTOExcel(data: any) {
@@ -222,7 +223,7 @@ export class ImportDataComponent implements OnInit {
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `${this.datepipe.transform(new Date, "MM/dd/yyyy")}ExpenseUpload.xlsx`);
+    XLSX.writeFile(wb, `${this.datepipe.transform(new Date, "dd/MM/YYYY")}ExpenseUpload.xlsx`);
   }
 
   CalculateDateDiff(startDate, endDate) {

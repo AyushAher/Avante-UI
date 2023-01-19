@@ -19,6 +19,7 @@ import { RenderComponent } from '../distributor/rendercomponent';
 import { DatePipe } from '@angular/common';
 import { ServiceRComponent } from './ServicerequestRenderer';
 import { EnvService } from '../_services/env/env.service';
+import { GetParsedDate } from '../_helpers/Providers';
 
 
 @Component({
@@ -348,18 +349,18 @@ export class ServiceRequestListComponent implements OnInit {
     data = data.filter(x => !x.isReportGenerated);
     data?.forEach(ser => {
       ser.accepted ? ser.accepted = "Accepted" : ser.accepted = "Not Accepted"
-      ser.createdon = this.datepipe.transform(ser.createdon, "MM/dd/yyyy HH:mm")
+      ser.createdon = this.datepipe.transform(GetParsedDate(ser.createdon), "MM/dd/yyyy HH:mm")
       if (ser.scheduledCalls.length > 0) {
         ser.scheduledCalls = ser.scheduledCalls[0]
         let date = new Date(ser.scheduledCalls.endTime)
-        let datestr = this.datepipe.transform(date, "MM/dd/yyyy")
-        ser.scheduledCalls.endTime = this.datepipe.transform(ser.scheduledCalls.endTime, "shortTime")
-        ser.scheduledCalls.startTime = this.datepipe.transform(ser.scheduledCalls.startTime, "shortTime")
+        let datestr = this.datepipe.transform(GetParsedDate(date), 'dd/MM/YYYY')
+        ser.scheduledCalls.endTime = this.datepipe.transform(GetParsedDate(ser.scheduledCalls.endTime), "shortTime")
+        ser.scheduledCalls.startTime = this.datepipe.transform(GetParsedDate(ser.scheduledCalls.startTime), "shortTime")
         ser.scheduledCalls.Time = ser.scheduledCalls.location + " : " + datestr + " At " + ser.scheduledCalls.startTime + " - " + ser.scheduledCalls.endTime
 
       }
       if (ser.engComments?.length > 0) {
-        let date = this.datepipe.transform(ser.engComments[0]?.nextdate, "MM/dd/yyyy")
+        let date = this.datepipe.transform(GetParsedDate(ser.engComments[0]?.nextdate), 'dd/MM/YYYY')
         ser.engComments = date + " : " + ser.engComments[0].comments
       }
     });

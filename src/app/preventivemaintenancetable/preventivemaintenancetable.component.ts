@@ -53,7 +53,7 @@ export class PreventivemaintenancetableComponent implements OnInit {
 
   ngOnInit() {
     debugger;
-    this.dateObj = this.datepipe.transform(Date.now(), "MM/dd/yyyy");
+    this.dateObj = this.datepipe.transform(Date.now(), "dd/MM/YYYY");
     this.Form = this.formBuilder.group({
       serviceReportId: ['', Validators.required],
       maintenance: this.formBuilder.array([]),

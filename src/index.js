@@ -84,25 +84,102 @@ function CustomerDashboardCharts() {
 // distdashboard
 function DistributorDashboardCharts() {
   setTimeout(() => {
+    var lines = JSON.parse(localStorage.getItem('lines'));
+    console.log(lines);
+    var xLineValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    var xLineValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
-    var yLineValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+    var prevLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var AMCLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var PlanLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var oncallLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var brkdwLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    if (lines.AMC) {
+      var amcmonths = Object.keys(lines.AMC)?.map(x => Number.parseInt(x));
+      amcmonths?.forEach((x) => AMCLineValues[x] = lines.AMC[x])
+    }
+
+    if (lines.PLAN) {
+      var planmonths = Object.keys(lines.PLAN)?.map(x => Number.parseInt(x));
+      planmonths?.forEach((x) => PlanLineValues[x] = lines.PLAN[x])
+    }
+
+    if (lines.PREV) {
+      var prevmonths = Object.keys(lines.PREV)?.map(x => Number.parseInt(x));
+      prevmonths?.forEach((x) => prevLineValues[x] = lines.PREV[x])
+    }
+
+    if (lines.ONCAL) {
+      var oncalmonths = Object.keys(lines.ONCAL)?.map(x => Number.parseInt(x));
+      oncalmonths?.forEach((x) => oncallLineValues[x] = lines?.ONCAL[x]);
+    }
+
+    if (lines.BRKDW) {
+      var brkdwmonths = Object.keys(lines.BRKDW)?.map(x => Number.parseInt(x));
+      brkdwmonths?.forEach((x) => brkdwLineValues[x] = lines?.BRKDW[x]);
+    }
 
     var ctx = document.getElementById("chartLine").getContext("2d");
+
 
     var myChart = new Chart(ctx, {
       type: "line",
       data: {
         labels: xLineValues,
-        datasets: [{
-          fill: false,
-          lineTension: 0,
-          backgroundColor: "rgba(0,0,255,1.0)",
-          borderColor: "rgba(0,0,255,0.1)",
-          data: yLineValues
-        }]
+        datasets: [
+          {
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "#233f76",
+            borderColor: "#233f76de",
+            data: AMCLineValues
+          },
+          {
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "#77d0f0",
+            borderColor: "#77d0f04d",
+            data: oncallLineValues
+          },
+          {
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "#77d0a0",
+            borderColor: "#77d0a04d",
+            data: brkdwLineValues
+          },
+          {
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "#f8d877",
+            borderColor: "rgb(248 216 119 / 30%)",
+            data: prevLineValues
+          },
+          {
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "#f8a485",
+            borderColor: "#f8a4854d",
+            data: prevLineValues
+          },
+        ]
       },
       options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                callback: function (label, index, labels) {
+                  return label > 1000 ? (label / 1000 + 'k') : label;
+                }
+              },
+              scaleLabel: {
+                display: true,
+                labelString: '1k = $1000'
+              }
+            }
+          ]
+        },
         responsive: true,
         legend: {
           display: false,

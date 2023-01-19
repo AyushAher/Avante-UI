@@ -50,9 +50,10 @@ export class DistributordashboardComponent implements OnInit {
   // calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
   // currentFilter = this.calenderLst[0];
 
-  // @ViewChild('MNTHS3') Mnths3;
-  // @ViewChild('MNTHS6') Mnths6;
-  // @ViewChild('MNTHS12') Mnths12;
+  @ViewChild('3MNTHS') Mnths3;
+  @ViewChild('6MNTHS') Mnths6;
+  @ViewChild('12MNTHS') Mnths12;
+
   criticalSerReq: any;
   isHidden: boolean = true;
   constructor(
@@ -80,15 +81,19 @@ export class DistributordashboardComponent implements OnInit {
     }
 
     setTimeout(() => {
-      var e = new Date();
-      var s = new Date(e.getDate() - 90);
-      this.onCalenderFilter(s, e)
+      this.CalenderChange(365)
     }, 500);
 
     this.serviceRequestService.getAll(this.user.userId)
       .pipe(first()).subscribe((data: any) =>
         this.criticalSerReq = data.object.filter(x => x.isCritical).length)
 
+  }
+  CalenderChange(days) {
+    this.BtnBackgroundChange(days)
+    var e = new Date();
+    var s = new Date(new Date().setDate(e.getDate() - days));
+    this.onCalenderFilter(s, e)
   }
 
   CriticalSerReq() {
@@ -135,6 +140,54 @@ export class DistributordashboardComponent implements OnInit {
         this.breakdownRevenue = data.object.breakdownRevenue
         this.preventiveRevenue = data.object.preventiveRevenue
         this.amcRevenue = data.object.amcRevenue
+
+        var parentGrp = data.object?.grpAmc.reduce(function (r, a) {
+          r[a.amcServiceTypeCode] = r[a.amcServiceTypeCode] || [];
+          r[a.amcServiceTypeCode].push(a);
+          return r;
+        }, Object.create(null));
+
+        var amcGrp = parentGrp.AMC?.reduce(function (r, a) {
+          a.createdon = new Date(a.createdon).getMonth();
+          r[a.createdon] = r[a.createdon] || 0;
+          r[a.createdon] += (a.zerorate * a.baseCurrencyAmt);
+
+          return r;
+        }, Object.create(null));
+
+        var oncallGrp = parentGrp.ONCAL?.reduce(function (r, a) {
+          a.createdon = new Date(a.createdon).getMonth();
+          r[a.createdon] = r[a.createdon] || 0;
+          r[a.createdon] += (a.zerorate * a.baseCurrencyAmt);
+          return r;
+        }, Object.create(null));
+
+        var prevGrp = parentGrp.PREV?.reduce(function (r, a) {
+          a.createdon = new Date(a.createdon).getMonth();
+          r[a.createdon] = r[a.createdon] || 0;
+          r[a.createdon] += (a.zerorate * a.baseCurrencyAmt);
+          return r;
+        }, Object.create(null));
+
+
+        var brkdwGrp = parentGrp.BRKDW?.reduce(function (r, a) {
+          a.createdon = new Date(a.createdon).getMonth();
+          r[a.createdon] = r[a.createdon] || 0;
+          r[a.createdon] += (a.zerorate * a.baseCurrencyAmt);
+          return r;
+        }, Object.create(null));
+
+
+        var planGrp = parentGrp.PLAN?.reduce(function (r, a) {
+          a.createdon = new Date(a.createdon).getMonth();
+          r[a.createdon] = r[a.createdon] || 0;
+          r[a.createdon] += (a.zerorate * a.baseCurrencyAmt);
+          return r;
+        }, Object.create(null));
+
+        var lines = { AMC: amcGrp, PREV: prevGrp, ONCAL: oncallGrp, BRKDW: brkdwGrp, PLAN: planGrp }
+        localStorage.setItem('lines', JSON.stringify(lines));
+
       })
   }
 
@@ -159,12 +212,45 @@ export class DistributordashboardComponent implements OnInit {
           })
       })
   }
-  
+
   dateRange(va) {
     if (!va || va.length <= 1) return;
 
     let sDate = new Date(va[0]);
     let eDate = new Date(va[1]);
+    var diff = eDate.getDate() - sDate.getDate()
+    this.BtnBackgroundChange(diff);
+
+
     this.onCalenderFilter(sDate, eDate);
+  }
+  BtnBackgroundChange(diff) {
+    switch (diff) {
+      case 90:
+        this.Mnths3.nativeElement.classList.add("active")
+        this.Mnths6.nativeElement.classList.remove("active")
+        this.Mnths12.nativeElement.classList.remove("active")
+        break;
+
+      case 180:
+        this.Mnths6.nativeElement.classList.add("active")
+        this.Mnths3.nativeElement.classList.remove("active")
+        this.Mnths12.nativeElement.classList.remove("active")
+        break;
+
+      case 365:
+        this.Mnths12.nativeElement.classList.add("active")
+        this.Mnths6.nativeElement.classList.remove("active")
+        this.Mnths3.nativeElement.classList.remove("active")
+        break;
+
+
+      default:
+        this.Mnths6.nativeElement.classList.remove("active")
+        this.Mnths3.nativeElement.classList.remove("active")
+        this.Mnths12.nativeElement.classList.remove("active")
+        break;
+
+    }
   }
 }

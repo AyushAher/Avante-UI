@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angu
 import { FormBuilder } from "@angular/forms";
 import { first } from "rxjs/operators";
 import { FilerendercomponentComponent } from "../Offerrequest/filerendercomponent.component";
+import { GetParsedDate } from "../_helpers/Providers";
 import { ListTypeItem, ProfileReadOnly, User } from "../_models";
 import { ListTypeService, ServiceRequestService, CurrencyService, CustomerService, NotificationService, FileshareService, AccountService, ProfileService } from "../_services";
 import { ImportdataService } from "../_services/importdata.service";
@@ -169,7 +170,7 @@ export class TravelexpenseItemComponent implements OnInit {
         let hasNoAttachment = this.form.get('isBillsAttached').value
 
         if (!hasNoAttachment && this.processFile == null) return this.notificationService.showInfo("No Attachments Selected.", "Error")
-        this.form.get('expDate').setValue(this.datepipe.transform(this.form.get('expDate').value, "MM/dd/yyyy"))
+        this.form.get('expDate').setValue(this.datepipe.transform(GetParsedDate(this.form.get('expDate').value), 'dd/MM/YYYY'))
 
         let StartCalc = this.CalculateDateDiff(this.StartDate, this.form.get('expDate').value)
         let EndCalc = this.CalculateDateDiff(this.form.get('expDate').value, this.EndDate)

@@ -26,7 +26,7 @@ export class AmcstagesService {
 
   update(params) {
     return this.http
-      .put(`${this.environment.apiUrl}/AMCStages`, params)
+      .put(`${this.environment.apiUrl}/AMCStages/${params.id}`, params)
       .pipe(
         map((x) => {
           return x;

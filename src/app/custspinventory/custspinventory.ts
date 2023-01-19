@@ -134,7 +134,7 @@ export class CustSPInventoryComponent implements OnInit {
               (data: any) => {
                 const datepipie = new DatePipe("en-US");
                 data.object.forEach(value => {
-                  value.serviceReportDate = datepipie.transform(value.serviceReportDate, "MM/dd/yyyy")
+                  value.serviceReportDate = datepipie.transform(value.serviceReportDate, 'dd/MM/YYYY')
                 })
                 this.historyModel = data.object;
               })

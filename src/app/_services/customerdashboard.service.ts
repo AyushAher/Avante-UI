@@ -22,8 +22,8 @@ export class CustomerdashboardService {
 
   ) { }
 
-  GetCostData() {
-    return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetCostData`);
+  GetCostData({ sdate, edate }) {
+    return this.http.post(`${this.environment.apiUrl}/CustomerDashboard/GetCostData`, { sdate, edate });
   }
 
   GetCostOfOwnerShip(insId: string) {

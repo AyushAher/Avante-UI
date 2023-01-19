@@ -83,7 +83,7 @@ export class SparepartsrecommendedComponent implements OnInit {
       value.assignedTofName = value.assignedTofName + " " + value.assignedTolName
       value.serviceReportDate = datepipie.transform(
         value.serviceReportDate,
-        "MM/dd/yyyy"
+        'dd/MM/YYYY'
       );
     })
 

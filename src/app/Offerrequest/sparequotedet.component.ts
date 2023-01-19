@@ -129,11 +129,11 @@ export class SparequotedetComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            data.object.zohoPORaisedDate = this.datepipie.transform(data.object.zohoPORaisedDate, "MM/dd/yyyy");
-            data.object.deliveredOn = this.datepipie.transform(data.object.deliveredOn, "MM/dd/yyyy");
-            data.object.custResponseDate = this.datepipie.transform(data.object.custResponseDate, "MM/dd/yyyy");
-            data.object.shippedDate = this.datepipie.transform(data.object.shippedDate, "MM/dd/yyyy");
-            data.object.raisedDate = this.datepipie.transform(data.object.raisedDate, "MM/dd/yyyy");
+            data.object.zohoPORaisedDate = this.datepipie.transform(data.object.zohoPORaisedDate, 'dd/MM/YYYY');
+            data.object.deliveredOn = this.datepipie.transform(data.object.deliveredOn, 'dd/MM/YYYY');
+            data.object.custResponseDate = this.datepipie.transform(data.object.custResponseDate, 'dd/MM/YYYY');
+            data.object.shippedDate = this.datepipie.transform(data.object.shippedDate, 'dd/MM/YYYY');
+            data.object.raisedDate = this.datepipie.transform(data.object.raisedDate, 'dd/MM/YYYY');
             this.statusChanged(data.object.status)
 
             if ((data.object.raisedBy != null && data.object.raisedBy != "") && (data.object.raisedDate != null && data.object.raisedDate != "")) {
@@ -252,11 +252,11 @@ export class SparequotedetComponent implements OnInit {
     this.sparequotedet = this.Form.value;
     this.sparequotedet.offerRequestId = this.parentId;
 
-    this.sparequotedet.zohoPORaisedDate = this.datepipie.transform(this.sparequotedet.zohoPORaisedDate, "MM/dd/yyyy");
-    this.sparequotedet.deliveredOn = this.datepipie.transform(this.sparequotedet.deliveredOn, "MM/dd/yyyy");
-    this.sparequotedet.custResponseDate = this.datepipie.transform(this.sparequotedet.custResponseDate, "MM/dd/yyyy");
-    this.sparequotedet.raisedDate = this.datepipie.transform(this.sparequotedet.raisedDate, "MM/dd/yyyy");
-    this.sparequotedet.shippedDate = this.datepipie.transform(this.sparequotedet.shippedDate, "MM/dd/yyyy");
+    this.sparequotedet.zohoPORaisedDate = this.datepipie.transform(this.sparequotedet.zohoPORaisedDate, 'dd/MM/YYYY');
+    this.sparequotedet.deliveredOn = this.datepipie.transform(this.sparequotedet.deliveredOn, 'dd/MM/YYYY');
+    this.sparequotedet.custResponseDate = this.datepipie.transform(this.sparequotedet.custResponseDate, 'dd/MM/YYYY');
+    this.sparequotedet.raisedDate = this.datepipie.transform(this.sparequotedet.raisedDate, 'dd/MM/YYYY');
+    this.sparequotedet.shippedDate = this.datepipie.transform(this.sparequotedet.shippedDate, 'dd/MM/YYYY');
 
     if (this.id == null) {
       this.Service.save(this.sparequotedet)

@@ -13,6 +13,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { DatePipe } from '@angular/common';
 import { PreventivemaintenancesService } from '../_services/preventivemaintenances.service';
 import { EnvService } from '../_services/env/env.service';
+import { GetParsedDate } from '../_helpers/Providers';
 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -119,7 +120,7 @@ export class ServiceReportListComponent implements OnInit {
         }
 
         this.ServiceReportList.forEach((x: any) => {
-          x.serviceRequestRaisedOn = this.datepipe.transform(x.serviceRequestRaisedOn, "MM/dd/yyyy")
+          x.serviceRequestRaisedOn = this.datepipe.transform(GetParsedDate(x.serviceRequestRaisedOn), 'dd/MM/YYYY')
         })
 
       })
@@ -258,16 +259,16 @@ export class ServiceReportListComponent implements OnInit {
                         }
 
                       ] : data.workTime.forEach(x => {
-                        x.worktimedate = this.datepipe.transform(x.worktimedate, 'dd-MM-yy');
+                        x.worktimedate = this.datepipe.transform(GetParsedDate(x.worktimedate), 'dd-MM-yy');
                         totalHrs = totalHrs + Number(x.perdayhrs);
                       });
-                      data.nextvisitscheduled = this.datepipe.transform(data.nextvisitscheduled, 'dd-MMM-yy');
+                      data.nextvisitscheduled = this.datepipe.transform(GetParsedDate(data.nextvisitscheduled), 'dd-MMM-yy');
                       if (data.nextvisitscheduled == "" || data.nextvisitscheduled == null) data.nextvisitscheduled = "NIL";
                     }
 
                     serReq = serReq.object.engAction
                     serReq.forEach((value) => {
-                      value.actiondate = this.datepipe.transform(value.actiondate, "dd/MM/YYYY")
+                      value.actiondate = this.datepipe.transform(GetParsedDate(value.actiondate), "dd/MM/YYYY")
                     })
 
                     const docDefinition = {

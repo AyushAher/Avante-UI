@@ -298,12 +298,12 @@ export class StaydetailsComponent implements OnInit {
     const datepipie = new DatePipe("en-US");
     this.form.value.checkindate = datepipie.transform(
       currentDate,
-      "MM/dd/yyyy"
+      'dd/MM/YYYY'
     );
 
     this.form.value.checkoutdate = datepipie.transform(
       dateSent,
-      "MM/dd/yyyy"
+      'dd/MM/YYYY'
     );
     this.travelDetail = this.form.value;
 

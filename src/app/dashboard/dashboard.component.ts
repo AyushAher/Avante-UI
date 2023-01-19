@@ -68,20 +68,19 @@ export class DashboardComponent implements OnInit {
   calenderLst = ["3MNTHS", "6MNTHS", "12MNTHS"]
   costData: any[];
 
-  @ViewChild('MNTHS3') Mnths3;
-  @ViewChild('MNTHS6') Mnths6;
-  @ViewChild('MNTHS12') Mnths12;
+  @ViewChild('3MNTHS') Mnths3;
+  @ViewChild('6MNTHS') Mnths6;
+  @ViewChild('12MNTHS') Mnths12;
 
   instruemntLength = 0;
   shipmentInProcess: number = 0;
   isHidden: boolean = true;
   spInventory: any;
   isSiteContact: boolean;
+
   constructor(
     private accountService: AccountService,
     private instrumentService: InstrumentService,
-    private profileService: ProfileService,
-    private SettingsService: CustdashboardsettingsService,
     private customerService: CustomerService,
     private distributorService: DistributorService,
     private spareRecomService: SrRecomandService,
@@ -91,7 +90,6 @@ export class DashboardComponent implements OnInit {
     private contactService: ContactService,
     private listTypeItemService: ListTypeService,
     private modalService: BsModalService,
-    private amcService: AmcService,
     private customerDashboardService: CustomerdashboardService,
     private offerRequestService: OfferrequestService,
     private custSpInventoryService: CustspinventoryService
@@ -101,8 +99,11 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.user = this.accountService.userValue;
     this.isSiteContact = this.user.userType.toLowerCase() != "site"
-    
-    setTimeout(() => this.onCalenderFilter(this.calenderLst[0]), 1000)
+
+    setTimeout(() => {
+      this.CalenderChange(365)
+    }, 500);
+
     this.customerService.getAllByConId(this.user.contactId)
       .pipe(first()).subscribe((data: any) => {
 
@@ -134,38 +135,66 @@ export class DashboardComponent implements OnInit {
 
     this.custSpInventoryService.getAll(this.user.contactId).pipe(first())
       .subscribe((spInv: any) => this.spInventory = spInv.object)
+  }
 
-    this.GetSparePartsRecommended()
+  CalenderChange(days) {
+    this.BtnBackgroundChange(days)
+    var e = new Date();
+    var s = new Date(new Date().setDate(e.getDate() - days));
+    this.onCalenderFilter(s, e)
+  }
+
+  dateRange(va) {
+    if (!va || va.length <= 1) return;
+
+    let sDate = new Date(va[0]);
+    let eDate = new Date(va[1]);
+    var diff = eDate.getDate() - sDate.getDate()
+    this.BtnBackgroundChange(diff);
+    this.onCalenderFilter(sDate, eDate);
+  }
+
+  BtnBackgroundChange(diff) {
+    switch (diff) {
+      case 90:
+        this.Mnths3.nativeElement.classList.add("active")
+        this.Mnths6.nativeElement.classList.remove("active")
+        this.Mnths12.nativeElement.classList.remove("active")
+        break;
+
+      case 180:
+        this.Mnths6.nativeElement.classList.add("active")
+        this.Mnths3.nativeElement.classList.remove("active")
+        this.Mnths12.nativeElement.classList.remove("active")
+        break;
+
+      case 365:
+        this.Mnths12.nativeElement.classList.add("active")
+        this.Mnths6.nativeElement.classList.remove("active")
+        this.Mnths3.nativeElement.classList.remove("active")
+        break;
+        
+      default:
+        this.Mnths6.nativeElement.classList.remove("active")
+        this.Mnths3.nativeElement.classList.remove("active")
+        this.Mnths12.nativeElement.classList.remove("active")
+        break;
+
+    }
   }
 
   toggle = () => this.isHidden = !this.isHidden
 
-  onCalenderFilter(date) {
-    if (date == this.calenderLst[0]) {
-      this.Mnths3.nativeElement.classList.add('active')
-      this.Mnths6.nativeElement.classList.remove('active')
-      this.Mnths12.nativeElement.classList.remove('active')
-    }
-    else if (date == this.calenderLst[1]) {
-      this.Mnths6.nativeElement.classList.add('active')
-      this.Mnths3.nativeElement.classList.remove('active')
-      this.Mnths12.nativeElement.classList.remove('active')
-    }
-    else if (date == this.calenderLst[2]) {
-      this.Mnths12.nativeElement.classList.add('active')
-      this.Mnths6.nativeElement.classList.remove('active')
-      this.Mnths3.nativeElement.classList.remove('active')
-    }
-
-    this.getServiceRequestData(date);
-    this.GetAllAMC(date);
-    this.GetPoCost();
-    this.GetSparePartsRecommended(date);
+  onCalenderFilter(sdate, edate) {
+    this.getServiceRequestData(sdate, edate);
+    this.GetAllAMC(sdate, edate);
+    this.GetPoCost(sdate, edate);
+    this.GetSparePartsRecommended(sdate, edate);
     setTimeout(() => CustomerDashboardCharts(), 1500)
   }
 
 
-  GetSparePartsRecommended(date = this.calenderLst[0]) {
+  GetSparePartsRecommended(sdate, edate) {
     this.spareRecomService.getByGrid(this.user.contactId)
       .pipe(first())
       .subscribe({
@@ -173,7 +202,7 @@ export class DashboardComponent implements OnInit {
           this.spRecomList = [];
 
           data.object.forEach((value) => {
-            if (this.GetDiffDate(new Date(value.createdOn), new Date(), date)) {
+            if (this.GetDiffDate(new Date(value.createdOn), edate, sdate)) {
               value.assignedTofName = value.assignedTofName + " " + value.assignedTolName
               this.spRecomList.push(value)
             }
@@ -183,7 +212,7 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  getServiceRequestData(date = this.calenderLst[0]) {
+  getServiceRequestData(sdate, edate) {
     this.serviceRequestService.getAll(this.user.userId)
       .pipe(first())
       .subscribe({
@@ -197,7 +226,7 @@ export class DashboardComponent implements OnInit {
           let pendingrequestBgColor = []
           // data.object = data.object.filter(x => !x.isReportGenerated)
           data.object.forEach(x => {
-            if (this.GetDiffDate(new Date(x.createdon), new Date(), date)) {
+            if (this.GetDiffDate(new Date(x.createdon), edate, sdate)) {
 
               if (x.isReportGenerated == false)
                 pendingRequestLabels.push(x.visittypeName)
@@ -211,44 +240,46 @@ export class DashboardComponent implements OnInit {
 
           for (let i = 0; i < label.length; i++) {
             const element = label[i];
-            chartData.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == true && this.GetDiffDate(new Date(x.createdon), new Date(), date)).length)
+            chartData.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == true && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
             bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
           }
 
           for (let i = 0; i < pendingRequestLabels.length; i++) {
             const element = pendingRequestLabels[i];
-            pendingRequestValue.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == false && this.GetDiffDate(new Date(x.createdon), new Date(), date)).length)
+            pendingRequestValue.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == false && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
             pendingrequestBgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
           }
 
           localStorage.setItem('servicerequesttype', JSON.stringify({ label, chartData }))
           localStorage.setItem('pendingservicerequest', JSON.stringify({ chartData: pendingRequestValue, label: pendingRequestLabels }))
 
-          this.srList = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), new Date(), date));
+          this.srList = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate));
         }
       });
 
   }
 
-  GetAllAMC(date = this.calenderLst[0]) {
+  GetAllAMC(sdate, edate) {
     this.offerRequestService.getAll().pipe(first())
       .subscribe((data: any) => {
-        this.amcData = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), new Date(), date) && !x.isCompleted);
+        this.amcData = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate) && !x.isCompleted);
       })
   }
 
-  GetDiffDate(sdate: Date, edate: Date, type: string) {
-    var isDateValid = edate.getTime() > sdate.getTime()
-    var diff = edate.getTime() - sdate.getTime()
-    diff = diff / (1000 * 60 * 60 * 24)
+  GetDiffDate(createdOn: Date, edate: Date, sdate: Date) {
+    var seCompare = edate.getTime() - sdate.getTime()
+    seCompare = seCompare / (1000 * 60 * 60 * 24)
 
-    if (isDateValid) {
-      if (type == this.calenderLst[0] && diff <= 90 && diff >= 0) return true
-      else if (type == this.calenderLst[1] && diff <= 180 && diff >= 0) return true
-      else if (type == this.calenderLst[2] && diff <= 360 && diff >= 0) return true
+    var eCompare = edate.getTime() - createdOn.getTime()
+    eCompare = eCompare / (1000 * 60 * 60 * 24)
 
-    }
-    return false
+    var sCompare = createdOn.getTime() - sdate.getTime()
+    sCompare = sCompare / (1000 * 60 * 60 * 24)
+
+    if (sCompare < 0) return false;
+    if (seCompare < 0) return false;
+    if (eCompare < 0) return false;
+    return true;
   }
 
 
@@ -262,9 +293,11 @@ export class DashboardComponent implements OnInit {
     this.GetInstrumentsByCurrentSiteId();
   }
 
-  GetPoCost() {
-    this.customerDashboardService.GetCostData()
+  GetPoCost(sdate, edate) {
+    this.customerDashboardService.GetCostData({ sdate, edate })
       .pipe(first()).subscribe((data: any) => {
+        console.log(data);
+
         localStorage.setItem("costData", JSON.stringify(data.object))
       })
   }
@@ -375,7 +408,7 @@ export class DashboardComponent implements OnInit {
         this.serviceRequestform.get('requesttypeid').setValue(data.find(x => x.itemCode == 'CUSTR')?.listTypeItemId);
       });
     this.serviceRequestform.get('requesttime').setValue(this.datepipe.transform(Date.now(), "H:mm"))
-    this.serviceRequestform.get('serreqdate').setValue(this.datepipe.transform(Date.now(), "MM/dd/yyyy"))
+    this.serviceRequestform.get('serreqdate').setValue(this.datepipe.transform(Date.now(), "dd/MM/YYYY"))
     this.contactService.getCustomerSiteByContact(this.user.contactId)
       .pipe(first())
       .subscribe({

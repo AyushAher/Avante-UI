@@ -16,7 +16,6 @@ export class CostofownershipComponent implements OnInit {
   dateOfPurchased: Date | string;
   insSerialNo: string;
   ownerShip: any[] = []
-  datePipe = new DatePipe('en-US')
   insCostCurrency:string;
 
   constructor(

@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ColumnApi, GridApi } from "ag-grid-community";
 import { Guid } from "guid-typescript";
 import { first } from "rxjs/operators";
+import { GetParsedDate } from "../_helpers/Providers";
 
 import { Currency, Customer, ListTypeItem, ResultMsg, User } from "../_models";
 import { AmcInstrument } from "../_models/Amcinstrument";
@@ -95,6 +96,7 @@ export class AmcComponent implements OnInit {
   baseCurrId: any;
   @ViewChild('baseAmt') baseAmt
   isOnCall: any = false;
+  totalStages = 0;
 
 
   constructor(
@@ -130,10 +132,11 @@ export class AmcComponent implements OnInit {
         this.amcStagesService.getAll(this.id).pipe(first())
           .subscribe((stageData: any) => {
             stageData.object.forEach(element => {
-              element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+              element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
             });
 
             this.rowData = stageData.object;
+            this.totalStages = this.rowData?.length | 0;
             this.form.get('stageName').reset()
             this.form.get('stageComments').reset()
             this.form.get('payterms').reset()
@@ -321,11 +324,12 @@ export class AmcComponent implements OnInit {
 
     this.form.get('currency').valueChanges
       .subscribe(value => {
-        if (value == this.form.get('baseCurrencyId').value) {
-          this.form.get('baseCurrencyAmt').setValue(1.00)
-          this.baseAmt.nativeElement.disabled = true
-        }
-        else this.baseAmt.nativeElement.disabled = false
+        if (this.baseAmt)
+          if (value == this.form.get('baseCurrencyId').value) {
+            this.form.get('baseCurrencyAmt').setValue(1.00)
+            this.baseAmt.nativeElement.disabled = true
+          }
+          else this.baseAmt.nativeElement.disabled = false
       });
 
     if (this.id != null) {
@@ -368,11 +372,13 @@ export class AmcComponent implements OnInit {
 
               this.amcStagesService.getAll(this.id).pipe(first())
                 .subscribe((stageData: any) => {
+
                   stageData.object?.forEach(element => {
-                    element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+                    element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
                   });
 
                   this.rowData = stageData.object;
+                  this.totalStages = this.rowData?.length | 0;
                   this.GetSites(data.object.billtoid);
                   this.form.get('stageName').reset()
                   setTimeout(() => {
@@ -495,6 +501,7 @@ export class AmcComponent implements OnInit {
       isactive: false,
       comments,
       IsCompleted: true,
+      stageIndex: this.totalStages + 1,
       parentId: this.id,
       stage,
       index,
@@ -515,7 +522,7 @@ export class AmcComponent implements OnInit {
         this.notificationService.filter("itemadded");
 
         data.object.forEach(element => {
-          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+          element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
         });
 
         this.rowData = data.object
@@ -525,6 +532,28 @@ export class AmcComponent implements OnInit {
       })
   }
 
+
+  StageMoveUp(initialIndex) {
+    var rd = this.rowData;
+    var initial = rd.find(x => x.stageIndex == initialIndex);
+    var beforeInitial = rd.find(x => x.stageIndex == initialIndex - 1);
+
+    initial.stageIndex = initialIndex - 1;
+    beforeInitial.stageIndex = initialIndex;
+    this.rowData.sort((a, b) => a.stageIndex - b.stageIndex);
+
+  }
+
+  StageMoveDown(initialIndex) {
+    var rd = this.rowData;
+    var initial = rd.find(x => x.stageIndex == initialIndex);
+    var beforeInitial = rd.find(x => x.stageIndex == initialIndex + 1);
+
+    initial.stageIndex = initialIndex + 1;
+    beforeInitial.stageIndex = initialIndex;
+    this.rowData.sort((a, b) => a.stageIndex - b.stageIndex);
+
+  }
 
   onstageNameChanged(stage) {
     stage = this.stagesList.find(x => x.listTypeItemId == stage)?.itemCode
@@ -536,7 +565,7 @@ export class AmcComponent implements OnInit {
     this.amcStagesService.delete(id).pipe(first())
       .subscribe((data: any) => {
         data.object.forEach(element => {
-          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+          element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
         });
 
         this.rowData = data.object
@@ -654,7 +683,7 @@ export class AmcComponent implements OnInit {
     this.instrumentService.getAll(this.user.userId)
       .pipe(first()).subscribe((data: any) => {
         this.instrumentAutoComplete = data.object?.filter(x => x.customerId == this.f.billtoid.value);
-        this.instrumentSearch.value = ""
+        if (this.instrumentSearch) this.instrumentSearch.value = ""
       });
 
   }
@@ -822,8 +851,8 @@ export class AmcComponent implements OnInit {
   }
 
   DateDiff(date1, date2) {
-    let dateSent = new Date(date1);//early
-    let currentDate = new Date(date2);//later
+    let dateSent = new Date((date1));//early
+    let currentDate = new Date((date2));//later
     return Math.floor(
       (Date.UTC(
         currentDate.getFullYear(),
@@ -869,8 +898,6 @@ export class AmcComponent implements OnInit {
     else if (this.form.get('paymentTerms').value.length == 0) {
       this.model.paymentTerms = ""
     }
-
-    const datepipie = new DatePipe("en-US");
 
     if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value) {
       let FirstFromToDiff = this.DateDiff(this.form.get('firstVisitDateFrom').value, this.form.get('firstVisitDateTo').value)
@@ -937,21 +964,14 @@ export class AmcComponent implements OnInit {
     }
 
     if (!this.isOnCall) {
-      this.model.secondVisitDateFrom = datepipie.transform(this.model.secondVisitDateFrom, "MM/dd/yyyy");
-      this.model.secondVisitDateTo = datepipie.transform(this.model.secondVisitDateTo, "MM/dd/yyyy");
       if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value)
         this.model.secondVisitDate = this.model.secondVisitDateFrom + "-" + this.model.secondVisitDateTo;
     }
 
-    this.model.firstVisitDateFrom = datepipie.transform(this.model.firstVisitDateFrom, "MM/dd/yyyy");
-    this.model.firstVisitDateTo = datepipie.transform(this.model.firstVisitDateTo, "MM/dd/yyyy");
     if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value)
       this.model.firstVisitDate = this.model.firstVisitDateFrom + "-" + this.model.firstVisitDateTo
 
 
-    this.model.sqdate = datepipie.transform(this.model.sqdate, "MM/dd/yyyy");
-    this.model.sdate = datepipie.transform(this.model.sdate, "MM/dd/yyyy");
-    this.model.edate = datepipie.transform(this.model.edate, "MM/dd/yyyy");
     this.model.baseCurrencyId = this.baseCurrId
 
     if (!this.hasId && this.hasAddAccess) {
@@ -993,6 +1013,13 @@ export class AmcComponent implements OnInit {
         .subscribe({
           next: (data: ResultMsg) => {
             if (data.result) {
+              console.log(this.rowData);
+
+              this.rowData?.forEach((x) => {
+                x.createdOn = new Date()
+                this.amcStagesService.update(x).subscribe();
+              })
+
               this.notificationService.showSuccess(data.resultMessage, "Success");
               if (this.instrumentList == null || this.instrumentList.length <= 0) {
                 this.router.navigate(["amclist"]);

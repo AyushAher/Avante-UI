@@ -305,15 +305,22 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of rowData">
-                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess)&& !isCompleted && isEditMode">
-                    <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)" style="
-                        background-color: transparent;
-                        color: #5ba146;
-                        border: none;
-                      ">
-                      <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px"></i>
+                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode" class="d-flex w-100">
+                    <div class="d-flex w-50 flex-column">
+                      <button class="btn" [disabled]="item.stageIndex <= 1" (click)="StageMoveUp(item.stageIndex)">
+                        <i *ngIf="item.stageIndex > 1" class="fas fa-arrow-up"></i>
+                      </button>
+                      <button class="btn" [disabled]="item.stageIndex >= totalStages"
+                        (click)="StageMoveDown(item.stageIndex)">
+                        <i *ngIf="item.stageIndex < totalStages" class="fas fa-arrow-down"></i>
+                      </button>
+                    </div>
+                    <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
+                      class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
+                      <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
                     </button>
                   </td>
+
 
                   <td>{{item.stageName}}</td>
 
@@ -336,12 +343,16 @@
                   border: 0.5px solid rgb(202 170 170);
                 ">
                 <tr>
-                  <td>
-                    <button type="button" (click)="submitStageData()" class="btn">
-                      <i class="fas fa-save" style="font-size: 20px"></i>
-                    </button>
-                  </td>
 
+                  <td>
+                    <div class="d-flex justify-content-center">
+                      <button type="button" *ngIf="hasUpdateAccess" (click)="submitStageData()"
+                        style="background-color: transparent; color: #5ba146; border: none;">
+                        <i class="fas fa-save" style="font-size: 20px;"></i>
+                      </button>
+                    </div>
+                  </td>
+                  
                   <td style="width: 250px">
                     <ng-select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
                       [virtualScroll]="true" [ngClass]="{'is-invalid':submitted && f.stageName.errors }">

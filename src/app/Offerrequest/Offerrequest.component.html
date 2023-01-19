@@ -47,7 +47,8 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="Customer">Customer</label>
-              <select id="Customer" type="text" formControlName="customerId" class="form-select" [ngClass]="{
+              <select id="Customer" type="text" (change)="CustomerChange()" formControlName="customerId"
+                class="form-select" [ngClass]="{
                   ' is -invalid': submitted && f.customerId.errors
                 }">
                 <option *ngFor="let i of customerList" value="{{ i.id }}">
@@ -57,6 +58,21 @@
               <div Style="display: block" *ngIf="submitted && f.customerId.errors" class="invalid-feedback">
                 <div *ngIf="f.customerId.errors.required">
                   Customer is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="CustomerSite">Customer Site</label>
+              <select id="CustomerSite" type="text" formControlName="customerSiteId" class="form-select" [ngClass]="{
+                  ' is -invalid': submitted && f.customerId.errors
+                }">
+                <option *ngFor="let i of siteList" value="{{ i.id }}">
+                  {{ i.custregname }}
+                </option>
+              </select>
+              <div Style="display: block" *ngIf="submitted && f.customerSiteId.errors" class="invalid-feedback">
+                <div *ngIf="f.customerSiteId.errors.required">
+                  Customer Site is required
                 </div>
               </div>
             </div>
@@ -229,7 +245,7 @@
             <div class="col-md-4">
               <label>Exchange Rate</label>
               <br>
-              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;padding:3%;"
+              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
                 formControlName="baseCurrencyId" class="form-select">
                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
               </select>
@@ -238,8 +254,7 @@
             </div>
             <div class="col-md-4">
               <label>Cost in USD</label>
-              <input class="form-control" type="number" disabled
-                [value]="costUsd" />
+              <input class="form-control" type="number" disabled [value]="(costUsd)" />
             </div>
           </div>
           <br />
@@ -304,9 +319,18 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of rowData">
-                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode">
+                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode" class="d-flex w-100">
+                    <div class="d-flex w-50 flex-column">
+                      <button class="btn" [disabled]="item.stageIndex <= 1" (click)="StageMoveUp(item.stageIndex)">
+                        <i *ngIf="item.stageIndex > 1" class="fas fa-arrow-up"></i>
+                      </button>
+                      <button class="btn" [disabled]="item.stageIndex >= totalStages"
+                        (click)="StageMoveDown(item.stageIndex)">
+                        <i *ngIf="item.stageIndex < totalStages" class="fas fa-arrow-down"></i>
+                      </button>
+                    </div>
                     <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
-                      style="background-color: transparent;color: #5ba146;border: none;">
+                      class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
                       <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
                     </button>
                   </td>
@@ -333,10 +357,12 @@
                 style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
                 <tr>
                   <td>
-                    <button type="button" *ngIf="hasUpdateAccess" (click)="submitStageData()"
-                      style="background-color: transparent; color: #5ba146; border: none;">
-                      <i class="fas fa-save" style="font-size: 20px;"></i>
-                    </button>
+                    <div class="d-flex justify-content-center">
+                      <button type="button" *ngIf="hasUpdateAccess" (click)="submitStageData()"
+                        style="background-color: transparent; color: #5ba146; border: none;">
+                        <i class="fas fa-save" style="font-size: 20px;"></i>
+                      </button>
+                    </div>
                   </td>
 
                   <td style="width: 250px;">

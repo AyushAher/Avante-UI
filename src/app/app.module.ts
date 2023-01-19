@@ -27,7 +27,7 @@ import { InstrumentComponent } from './instrument/instrument';
 import { DistributorListComponent } from './distributor/distributorlist';
 // Datepicker module
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AgGridModule } from 'ag-grid-angular';
@@ -143,6 +143,7 @@ import { ImportDistributorComponent } from './distributor/importdistributor.comp
 import { CreateBusinessUnitComponent } from './account/businessunit.component';
 import { CreateCompanyComponent } from './account/company.component';
 import { CreateBrandComponent } from './account/brand.component';
+import { ConfigBsDatepicker, GetParsedDate, GetParsedDatePipe } from './_helpers/Providers';
 
 
 @NgModule({
@@ -290,7 +291,10 @@ import { CreateBrandComponent } from './account/brand.component';
   ],
   providers: [EnvServiceProvider, DecimalPipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    fakeBackendProvider, DatePipe, DayService, WeekService, MonthService, WorkWeekService, MonthAgendaService, TimelineMonthService,
+    { provide: BsDatepickerConfig, useFactory: ConfigBsDatepicker },
+    { provide: Date, useFactory: GetParsedDate },
+    { provide: DatePipe, useFactory: GetParsedDatePipe },
+    fakeBackendProvider, DayService, WeekService, MonthService, WorkWeekService, MonthAgendaService, TimelineMonthService,
   ],
   bootstrap: [AppComponent]
 })

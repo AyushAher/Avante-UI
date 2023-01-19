@@ -63,6 +63,7 @@ import { PreventivemaintenancetableComponent } from '../preventivemaintenancetab
 import { environment } from '../../environments/environment';
 import { PreventivemaintenancesService } from '../_services/preventivemaintenances.service';
 import { EnvService } from '../_services/env/env.service';
+import { GetParsedDate } from '../_helpers/Providers';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -189,7 +190,7 @@ export class ServiceReportComponent implements OnInit {
               this.workTime = data.object.lstWorktime;
 
               this.workTime.forEach((value) => {
-                value.worktimedate = this.datepipe.transform(value.worktimedate, 'dd/MM/YYYY');
+                value.worktimedate = this.datepipe.transform(GetParsedDate(value.worktimedate), 'dd/MM/YYYY');
               });
 
               this.sparePartRecomanded = data.object.lstSPRecommend;
@@ -399,7 +400,7 @@ export class ServiceReportComponent implements OnInit {
 
             const datepipe = new DatePipe('en-US');
             this.workTime.forEach((value) => {
-              value.worktimedate = datepipe.transform(value.worktimedate, 'dd/MM/YYYY');
+              value.worktimedate = datepipe.transform(GetParsedDate(value.worktimedate), 'dd/MM/YYYY');
             });
             this.spconsumedlist = data.object.lstSPConsumed;
             this.sparePartRecomanded = data.object.lstSPRecommend;
@@ -554,8 +555,8 @@ export class ServiceReportComponent implements OnInit {
     this.ServiceReport = this.ServiceReportform.value;
 
     if (this.ServiceReport.nextvisitscheduled) {
-      const nextvisitscheduled = new Date(this.ServiceReport.nextvisitscheduled);
-      this.ServiceReport.nextvisitscheduled = this.datepipe.transform(nextvisitscheduled, 'MM/dd/yyyy');
+      const nextvisitscheduled = new Date(GetParsedDate(this.ServiceReport.nextvisitscheduled));
+      this.ServiceReport.nextvisitscheduled = this.datepipe.transform(nextvisitscheduled, 'dd/MM/YYYY');
     }
 
     this.ServiceReport.workCompleted = this.ServiceReport.workCompletedstr == '0' ? true : false;
@@ -1611,15 +1612,15 @@ export class ServiceReportComponent implements OnInit {
                         }
 
                       ] : data.workTime.forEach(x => {
-                        x.worktimedate = this.datepipe.transform(x.worktimedate, 'dd-MM-yy');
+                        x.worktimedate = this.datepipe.transform(GetParsedDate(x.worktimedate), 'dd/MM/YYYY');
                         totalHrs = totalHrs + Number(x.perdayhrs);
                       });
-                      data.nextvisitscheduled = this.datepipe.transform(data.nextvisitscheduled, 'dd-MMM-yy');
+                      data.nextvisitscheduled = this.datepipe.transform(GetParsedDate(data.nextvisitscheduled), 'dd/MM/YYYY');
                       if (data.nextvisitscheduled == "" || data.nextvisitscheduled == null) data.nextvisitscheduled = "NIL";
 
                       serReq = serReq.object.engAction
                       serReq.forEach((value) => {
-                        value.actiondate = this.datepipe.transform(value.actiondate, "MM/dd/YYYY")
+                        value.actiondate = this.datepipe.transform(GetParsedDate(value.actiondate), 'dd/MM/YYYY')
                       })
 
                     }

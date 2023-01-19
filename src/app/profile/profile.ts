@@ -92,6 +92,7 @@ export class ProfileComponent implements OnInit {
 
     this.profileform = this.formBuilder.group({
       profilename: ['', Validators.required],
+      description: ['', Validators.required],
       permissions: this.formBuilder.array([]),
       isactive: [true],
       isdeleted: [false],
@@ -132,6 +133,7 @@ export class ProfileComponent implements OnInit {
             .pipe(first())
             .subscribe((profileData: any) => {
               this.profileform.get("profilename").setValue(profileData.object.profilename)
+              this.profileform.get("description").setValue(profileData.object.description)
               profileData.object.permissions.forEach(x => {
                 this.profileform.get("categoryId").setValue(x.category)
                 this.onCategoryChange()

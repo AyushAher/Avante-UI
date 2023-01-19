@@ -41,6 +41,7 @@ import { DatePipe } from "@angular/common";
 import { EnvService } from '../_services/env/env.service';
 import { BusinessUnitService } from '../_services/businessunit.service';
 import { BrandService } from '../_services/brand.service';
+import { GetParsedDate } from '../_helpers/Providers';
 
 
 @Component({
@@ -338,7 +339,6 @@ export class InstrumentComponent implements OnInit {
                 && x.listTypeItemId == data.object.spartParts[i].configTypeid
                 && x.sparePartId == data.object.spartParts[i].id).length == 0
               ) {
-                console.log(data.object.spartParts[i]);
                 let cnfig: ConfigTypeValue;
                 cnfig = new ConfigTypeValue;
                 cnfig.id = data.object.spartParts[i].configValueid;
@@ -674,7 +674,7 @@ export class InstrumentComponent implements OnInit {
     this.loading = true;
     this.instrument = this.instrumentform.value;
     this.instrument.image = this.imagePath;
-    this.instrument.dateOfPurchase = this.datepipie.transform(this.instrument.dateOfPurchase, "MM/dd/yyyy")
+    this.instrument.dateOfPurchase = this.datepipie.transform(GetParsedDate(this.instrument.dateOfPurchase), 'dd/MM/YYYY')
     this.instrument.engcontact = String(this.instrument.engcontact);
     this.instrument.configuration = [];
     this.instrument.baseCurrencyId = this.baseCurrId
@@ -694,11 +694,11 @@ export class InstrumentComponent implements OnInit {
       this.instrument.configuration.push(this.config);
     }
     this.instrument.custSiteId = this.instrumentform.get('custSiteId').value
-    this.instrument.insmfgdt = this.datepipie.transform(this.instrument.insmfgdt, "MM/dd/yyyy")
-    this.instrument.shipdt = this.datepipie.transform(this.instrument.shipdt, "MM/dd/yyyy")
-    this.instrument.wrntyendt = this.datepipie.transform(this.instrument.wrntyendt, "MM/dd/yyyy")
-    this.instrument.wrntystdt = this.datepipie.transform(this.instrument.wrntystdt, "MM/dd/yyyy")
-    this.instrument.installdt = this.datepipie.transform(this.instrument.installdt, "MM/dd/yyyy")
+    this.instrument.insmfgdt = this.datepipie.transform(GetParsedDate(this.instrument.insmfgdt), 'dd/MM/YYYY')
+    this.instrument.shipdt = this.datepipie.transform(GetParsedDate(this.instrument.shipdt), 'dd/MM/YYYY')
+    this.instrument.wrntyendt = this.datepipie.transform(GetParsedDate(this.instrument.wrntyendt), 'dd/MM/YYYY')
+    this.instrument.wrntystdt = this.datepipie.transform(GetParsedDate(this.instrument.wrntystdt), 'dd/MM/YYYY')
+    this.instrument.installdt = this.datepipie.transform(GetParsedDate(this.instrument.installdt), 'dd/MM/YYYY')
 
     if (this.id == null) {
       this.instrumentService.save(this.instrument)

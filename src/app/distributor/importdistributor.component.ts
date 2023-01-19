@@ -160,14 +160,14 @@ export class ImportDistributorComponent {
         var date_info = new Date(utc_value * 1000);
         let datepipe = new DatePipe('en-US')
 
-        return datepipe.transform(date_info, "MM/dd/yyyy");
+        return datepipe.transform(date_info, "dd/MM/YYYY");
     }
 
     ExportTOExcel(data: any) {
         const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data.object);
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, `${this.datepipe.transform(new Date, "MM/dd/yyyy")}Upload.xlsx`);
+        XLSX.writeFile(wb, `${this.datepipe.transform(new Date, "dd/MM/YYYY")}Upload.xlsx`);
     }
 
     close() {

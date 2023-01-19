@@ -46,6 +46,15 @@
                 <div *ngIf="f.profilename.errors.required">Profile Name is required</div>
               </div>
             </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="description">Description</label>
+              <textarea type="text" formControlName="description" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
+              <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                <div *ngIf="f.description.errors.required">Description is required</div>
+              </div>
+            </div>
           </div>
 
           <hr />

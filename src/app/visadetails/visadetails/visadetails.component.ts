@@ -432,11 +432,11 @@ export class VisadetailsComponent implements OnInit {
     const datepipie = new DatePipe("en-US");
     this.form.value.startdate = datepipie.transform(
       currentDate,
-      "MM/dd/yyyy"
+      'dd/MM/YYYY'
     );
     this.form.value.enddate = datepipie.transform(
       dateSent,
-      "MM/dd/yyyy"
+      'dd/MM/YYYY'
     );
 
     if (calc > 1) {

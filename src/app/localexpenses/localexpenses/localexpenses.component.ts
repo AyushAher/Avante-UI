@@ -107,7 +107,7 @@ export class LocalexpensesComponent implements OnInit {
       this.localExpReService.getAll(this.id).pipe(first())
         .subscribe((stageData: any) => {
           stageData.object.forEach(element => {
-            element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+            element.createdOn = this.datepipe.transform(element.createdOn, 'dd/MM/YYYY')
           });
 
           this.rowData = stageData.object;
@@ -319,7 +319,7 @@ export class LocalexpensesComponent implements OnInit {
         this.notificationService.filter("itemadded");
 
         data.object.forEach(element => {
-          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+          element.createdOn = this.datepipe.transform(element.createdOn, 'dd/MM/YYYY')
         });
 
         this.rowData = data.object
@@ -333,7 +333,7 @@ export class LocalexpensesComponent implements OnInit {
     this.localExpReService.delete(id).pipe(first())
       .subscribe((data: any) => {
         data.object.forEach(element => {
-          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+          element.createdOn = this.datepipe.transform(element.createdOn, 'dd/MM/YYYY')
         });
 
         this.rowData = data.object
@@ -476,7 +476,7 @@ export class LocalexpensesComponent implements OnInit {
     const datepipie = new DatePipe("en-US");
     this.form.value.traveldate = datepipie.transform(
       traveldate,
-      "MM/dd/yyyy"
+      'dd/MM/YYYY'
     );
 
     if (!this.form.value.isactive) {

@@ -20,7 +20,6 @@ export class ImportOfferRequestComponent implements OnInit {
     @ViewChild('files') files: any
 
     constructor(
-        private formBuilder: FormBuilder,
         private modalService: BsModalService,
         private notificationService: NotificationService
     ) { }
@@ -46,13 +45,9 @@ export class ImportOfferRequestComponent implements OnInit {
     }
 
     submitData(workbook: XLSX.WorkBook) {
-        workbook.SheetNames.forEach(sheet => {
-            var worksheet = workbook.Sheets[sheet];
-            this.fileData = XLSX.utils.sheet_to_json(worksheet, { raw: true })
-            console.log(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
-        });
-
-
+        var worksheet = workbook.Sheets["SparePartQuotation"];
+        this.fileData = XLSX.utils.sheet_to_json(worksheet, { raw: true })
+        console.log(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
     }
 
     ExcelDateToJSDate(serial) {
@@ -61,14 +56,14 @@ export class ImportOfferRequestComponent implements OnInit {
         var date_info = new Date(utc_value * 1000);
         let datepipe = new DatePipe('en-US')
 
-        return datepipe.transform(date_info, "MM/dd/yyyy");
+        return datepipe.transform(date_info, "dd/MM/YYYY");
     }
 
     ExportTOExcel(data: any) {
         const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data.object);
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, `${this.datepipe.transform(new Date, "MM/dd/yyyy")}Upload.xlsx`);
+        XLSX.writeFile(wb, `${this.datepipe.transform(new Date, "dd/MM/YYYY")}Upload.xlsx`);
     }
     close() {
         this.modalService.hide();

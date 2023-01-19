@@ -51,6 +51,7 @@ import {
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponent.component';
 import { EnvService } from '../_services/env/env.service';
+import { GetParsedDate } from '../_helpers/Providers';
 
 
 @Component({
@@ -132,6 +133,7 @@ export class ServiceRequestComponent implements OnInit {
   isNewMode: boolean;
   isEditMode: boolean;
   designationList: ListTypeItem[];
+  datepipe = new DatePipe('en-US')
 
   constructor(
     private formBuilder: FormBuilder,
@@ -155,7 +157,6 @@ export class ServiceRequestComponent implements OnInit {
     private actionservice: EngActionService,
     private srAssignedHistoryService: SRAssignedHistoryService,
     private servicereportService: ServiceReportService,
-    public datepipe: DatePipe,
     private environment: EnvService,
     private EngschedulerService: EngschedulerService,
   ) {
@@ -167,12 +168,12 @@ export class ServiceRequestComponent implements OnInit {
               this.engineerCommentList = data.object.engComments;
 
               this.engineerCommentList.forEach((value, index) => {
-                value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
+                value.nextdate = this.datepipe.transform(GetParsedDate(value.nextdate), "dd/MM/YYYY")
               })
 
               this.actionList = data.object.engAction;
               this.actionList.forEach((value, index) => {
-                value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
+                value.actiondate = this.datepipe.transform(GetParsedDate(value.actiondate), "dd/MM/YYYY")
               })
               this.api.refreshCells()
             }
@@ -187,11 +188,11 @@ export class ServiceRequestComponent implements OnInit {
               this.engineerCommentList = data.object.engComments;
 
               this.engineerCommentList.forEach((value, index) => {
-                value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY")
+                value.nextdate = this.datepipe.transform(GetParsedDate(value.nextdate), "dd/MM/YYYY")
               })
               this.actionList = data.object.engAction;
               this.actionList.forEach((value, index) => {
-                value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY")
+                value.actiondate = this.datepipe.transform(GetParsedDate(value.actiondate), "dd/MM/YYYY")
               })
               this.api.refreshCells()
             },
@@ -458,10 +459,10 @@ export class ServiceRequestComponent implements OnInit {
                         this.serviceRequestform.patchValue({ "sdate": data.object.sdate });
                         this.serviceRequestform.patchValue({ "edate": data.object.edate });
                         this.serviceRequestform.patchValue({ "serreqno": data.object.serreqno });
-                        this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy") });
+                        this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(GetParsedDate(data.object.serreqdate), 'dd/MM/YYYY') });
                         this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
                         this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
-                        this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(data.object.serreqdate, "MM/dd/yyyy") });
+                        this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(GetParsedDate(data.object.serreqdate), 'dd/MM/YYYY') });
                         this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
                         this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
                         this.serviceRequestform.patchValue({ "distid": data.object.distid });
@@ -521,8 +522,8 @@ export class ServiceRequestComponent implements OnInit {
                               if (this.scheduleData.length > 0) this.hasCallScheduled = true;
 
                               this.scheduleData.forEach(element => {
-                                element.endTime = this.datepipe.transform(element.endTime, "short")
-                                element.startTime = this.datepipe.transform(element.startTime, "short")
+                                element.endTime = this.datepipe.transform(GetParsedDate(element.endTime), "short")
+                                element.startTime = this.datepipe.transform(GetParsedDate(element.startTime), "short")
                                 element.Time = element.location + " : " + element.startTime + " - " + element.endTime
                               });
 
@@ -538,15 +539,15 @@ export class ServiceRequestComponent implements OnInit {
 
                       let datepipe = new DatePipe("en-US");
 
-                      this.engineerCommentList.forEach((value) => value.nextdate = datepipe.transform(value.nextdate, "dd/MM/YYYY"))
+                      this.engineerCommentList.forEach((value) => value.nextdate = datepipe.transform(GetParsedDate(value.nextdate), "dd/MM/YYYY"))
 
                       this.actionList = data.object.engAction;
-                      this.actionList.forEach((value) => value.actiondate = datepipe.transform(value.actiondate, "dd/MM/YYYY"))
+                      this.actionList.forEach((value) => value.actiondate = datepipe.transform(GetParsedDate(value.actiondate), "dd/MM/YYYY"))
 
                       this.engineerid = data.object.assignedto;
                       this.ticketHistoryList = data.object.assignedHistory;
 
-                      this.ticketHistoryList.forEach((value) => value.assigneddate = datepipe.transform(value.assigneddate, "dd/MM/YYYY"))
+                      this.ticketHistoryList.forEach((value) => value.assigneddate = datepipe.transform(GetParsedDate(value.assigneddate), "dd/MM/YYYY"))
                     }
                   });
               })
@@ -569,7 +570,7 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestService.getSerReqNo()
         .pipe(first()).subscribe((data: any) => this.serviceRequestform.patchValue({ "serreqno": data.object }));
       this.serviceRequestform.get('requesttime').setValue(this.datepipe.transform(Date.now(), "H:mm"))
-      this.serviceRequestform.get('serreqdate').setValue(this.datepipe.transform(Date.now(), "MM/dd/yyyy"))
+      this.serviceRequestform.get('serreqdate').setValue(this.datepipe.transform(Date.now(), 'dd/MM/YYYY'))
 
       this.contactService.getCustomerSiteByContact(this.user.contactId)
         .pipe(first())
@@ -804,8 +805,8 @@ export class ServiceRequestComponent implements OnInit {
       if (calc <= 0)
         return this.notificationService.showError("End Date should not be greater than Start Date", "Error");
 
-      this.serviceRequestform.get('sdate').setValue(datepipie.transform(this.serviceRequestform.get('sdate').value, "MM/dd/yyyy"));
-      this.serviceRequestform.get('edate').setValue(datepipie.transform(this.serviceRequestform.get('edate').value, "MM/dd/yyyy"));
+      this.serviceRequestform.get('sdate').setValue(datepipie.transform(this.serviceRequestform.get('sdate').value, 'dd/MM/YYYY'));
+      this.serviceRequestform.get('edate').setValue(datepipie.transform(this.serviceRequestform.get('edate').value, 'dd/MM/YYYY'));
     }
 
 
@@ -991,7 +992,7 @@ export class ServiceRequestComponent implements OnInit {
 
               this.servicereport.serviceRequestId = this.serviceRequestId;
               this.servicereport.customer = this.serviceRequestform.get('companyname').value;
-              this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(this.serviceRequestform.get('serreqdate').value, 'yyyy-MM-dd');
+              this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(GetParsedDate(this.serviceRequestform.get('serreqdate').value), 'yyyy-MM-dd');
               this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
               this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + '||' + this.serviceRequestform.get('alarmdetails')?.value + '||' + this.serviceRequestform.get('remarks')?.value;
 

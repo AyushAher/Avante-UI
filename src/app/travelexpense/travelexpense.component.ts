@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponent.component';
+import { GetParsedDate } from '../_helpers/Providers';
 import { travelDetails, ProfileReadOnly, DistributorRegionContacts, ServiceRequest, ListTypeItem, Currency, User, Customer } from '../_models';
 import { AccountService, AlertService, CurrencyService, CustomerService, DistributorService, FileshareService, ListTypeService, NotificationService, ProfileService, ServiceRequestService, TravelDetailService } from '../_services';
 import { EnvService } from '../_services/env/env.service';
@@ -441,8 +442,8 @@ export class TravelexpenseComponent implements OnInit {
     if (this.form.get('totalDays').value != null && this.form.get('totalDays').value < 1)
       return this.notificationService.showError("The difference between Start Date and End Date should be more than 1 day !", "Error");
 
-    this.form.value.startDate = this.datepipe.transform(this.form.value.startDate, "MM/dd/yyyy");
-    this.form.value.endDate = this.datepipe.transform(this.form.value.endDate, "MM/dd/yyyy");
+    this.form.value.startDate = this.datepipe.transform(GetParsedDate(this.form.value.startDate), 'dd/MM/YYYY');
+    this.form.value.endDate = this.datepipe.transform(GetParsedDate(this.form.value.endDate), 'dd/MM/YYYY');
 
     this.model = this.form.value;
     this.model.distId = this.distId

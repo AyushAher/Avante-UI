@@ -131,8 +131,8 @@ export class EngineerschedulerComponent implements OnInit {
                         Id: x.id,
                         Subject: x.displayName,
                         Location: x.location,
-                        StartTime: new Date(x.startTime),
-                        EndTime: new Date(x.endTime),
+                        StartTime: new Date((x.startTime)),
+                        EndTime: new Date((x.endTime)),
                         IsAllDay: x.isAllDay,
                         IsBlock: false,
                         IsReadonly: this.id == x.serReqId ? false : true,
@@ -184,8 +184,8 @@ export class EngineerschedulerComponent implements OnInit {
                                   Id: y.id,
                                   Subject: y.displayName,
                                   Location: y.location,
-                                  StartTime: new Date(y.startTime),
-                                  EndTime: new Date(y.endTime),
+                                  StartTime:new Date((y.startTime)),
+                                  EndTime: new Date((y.endTime)),
                                   IsAllDay: y.isAllDay,
                                   IsBlock: false,
                                   IsReadonly: true,
@@ -241,7 +241,7 @@ export class EngineerschedulerComponent implements OnInit {
             .subscribe({
               next: (data: any) => {
                 data = data.object;
-                let serReqDate = new Date(data.serreqdate)
+                let serReqDate = new Date((data.serreqdate))
                 let SDate: Date = x.StartTime;
                 let diff = SDate.valueOf() - serReqDate.valueOf()
                 if (diff >= 0) {
@@ -302,7 +302,7 @@ export class EngineerschedulerComponent implements OnInit {
               next: (data: any) => {
                 this.loading = true;
                 data = data.object;
-                let serReqDate = new Date(data.serreqdate)
+                let serReqDate = new Date((data.serreqdate))
                 let SDate: Date = x.StartTime;
                 let diff = SDate.valueOf() - serReqDate.valueOf()
                 if (diff >= 0) {
@@ -502,7 +502,7 @@ export class EngineerschedulerComponent implements OnInit {
               .subscribe({
                 next: (data: any) => {
                   data = data.object
-                  let serReqDate = new Date(data.serreqdate)
+                  let serReqDate = new Date((data.serreqdate))
                   let SDate: Date = x.StartTime;
                   let diff = SDate.valueOf() - serReqDate.valueOf()
 
@@ -555,7 +555,7 @@ export class EngineerschedulerComponent implements OnInit {
             .subscribe({
               next: (data: any) => {
                 data = data.object;
-                let serReqDate = new Date(data.serreqdate)
+                let serReqDate = new Date((data.serreqdate))
                 let SDate: Date = x.StartTime;
                 let diff = SDate.valueOf() - serReqDate.valueOf()
 

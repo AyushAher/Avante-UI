@@ -29,6 +29,7 @@ import { SparequotedetService } from '../_services/sparequotedet.service';
 import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
 import { EnvService } from '../_services/env/env.service';
 import { AgRendererComponent } from 'ag-grid-angular';
+import { GetParsedDate } from '../_helpers/Providers';
 
 @Component({
   selector: 'app-Offerrequest',
@@ -102,7 +103,9 @@ export class OfferrequestComponent implements OnInit {
   baseCurrId: any;
   mainCurrencyId: any
   costUsd
-
+  customerId: any;
+  siteList: any[]
+  totalStages = 0;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -131,10 +134,10 @@ export class OfferrequestComponent implements OnInit {
             next: (data: any) => {
               this.SpareQuotationDetailsList = data.object;
               this.SpareQuotationDetailsList.forEach(value => {
-                value.zohoPORaisedDate = this.datepipie.transform(value.zohoPORaisedDate, "MM/dd/yyyy");
-                value.deliveredOn = this.datepipie.transform(value.deliveredOn, "MM/dd/yyyy");
-                value.custResponseDate = this.datepipie.transform(value.custResponseDate, "MM/dd/yyyy");
-                value.raisedDate = this.datepipie.transform(value.raisedDate, "MM/dd/yyyy");
+                value.zohoPORaisedDate = this.datepipie.transform(GetParsedDate(value.zohoPORaisedDate), "dd/MM/YYYY");
+                value.deliveredOn = this.datepipie.transform(GetParsedDate(value.deliveredOn), "dd/MM/YYYY");
+                value.custResponseDate = this.datepipie.transform(GetParsedDate(value.custResponseDate), "dd/MM/YYYY");
+                value.raisedDate = this.datepipie.transform(GetParsedDate(value.raisedDate), "dd/MM/YYYY");
               })
             },
           });
@@ -161,9 +164,10 @@ export class OfferrequestComponent implements OnInit {
         this.offerRequestProcess.getAll(this.id).pipe(first())
           .subscribe((stageData: any) => {
             stageData.object.forEach(element => {
-              element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+              element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
             });
             this.rowData = stageData.object;
+            this.totalStages = this.rowData?.length | 0;
             this.form.get('stageName').reset()
             this.form.get('stageComments').reset()
             this.form.get('payterms').reset()
@@ -179,7 +183,7 @@ export class OfferrequestComponent implements OnInit {
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.transaction = 0;
     this.user = this.accountService.userValue;
     let role = JSON.parse(localStorage.getItem('roles'));
@@ -234,6 +238,7 @@ export class OfferrequestComponent implements OnInit {
 
       airFreightChargesAmt: [0],
       airFreightChargesCurr: [""],
+      customerSiteId: [""],
 
       lcadministrativeChargesAmt: [0],
       lcadministrativeChargesCurr: [""],
@@ -248,6 +253,9 @@ export class OfferrequestComponent implements OnInit {
 
     })
 
+
+    this.form.get("airFreightChargesAmt").valueChanges
+      .subscribe(() => this.GetSparePartTotal())
 
     this.form.get("airFreightChargesAmt").valueChanges
       .subscribe(() => this.GetSparePartTotal())
@@ -273,7 +281,6 @@ export class OfferrequestComponent implements OnInit {
       })
 
     this.id = this.route.snapshot.paramMap.get('id');
-    this.form.get('podate').setValue(this.datepipie.transform(new Date, "MM/dd/yyyy"))
 
     this.instrumentService.getAll(this.user.userId)
       .pipe(first())
@@ -281,38 +288,7 @@ export class OfferrequestComponent implements OnInit {
         this.instruments = data.object
       })
 
-    this.custService.getAllByConId(this.user.contactId).pipe(first())
-      .subscribe((data: any) => {
-        let custList = []
-        if (this.role == this.environment.distRoleCode) {
-          let regions = this.user.distRegionsId.split(',')
-
-          data.object.forEach(element => {
-            if (regions.includes(element.defdistregionid)) {
-              custList.push(element)
-            }
-          });
-
-        }
-
-        else if (this.role == this.environment.custRoleCode) {
-          this.custService.getAllByConId(this.user.contactId)
-            .pipe(first())
-            .subscribe((custData: any) => {
-              custData.object.forEach(element => {
-                custList.push(element)
-              });
-
-              this.form.get('customerId').setValue(custData.object[0]?.id)
-              this.form.get('customerId').updateValueAndValidity()
-
-              this.form.get('distributorid').setValue(custData.object[0]?.defdistid)
-              this.form.get('distributorid').updateValueAndValidity()
-            })
-        }
-
-        this.customerList = data.object
-      })
+    await this.SetCustomer(true)
 
     this.listTypeService.getById("OFRQP").pipe(first())
       .subscribe((data: any) => this.stagesList = data)
@@ -351,6 +327,7 @@ export class OfferrequestComponent implements OnInit {
               this.paymentTypes = []
               this.payTypes = mstData;
 
+
               data.object.paymentTerms?.forEach(y => {
                 mstData.forEach(x => {
                   if (y == x.listTypeItemId) {
@@ -359,14 +336,20 @@ export class OfferrequestComponent implements OnInit {
                 });
               });
 
+              this.customerId = data.object.customerId;
+              this.siteList = this.customerList.find(x => x.id == this.customerId)?.sites;
+
               this.offerRequestProcess.getAll(this.id).pipe(first())
                 .subscribe((stageData: any) => {
                   stageData.object.forEach(element => {
-                    element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+                    element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
                   });
 
-                  this.rowData = stageData.object
+
                   this.form.patchValue(data.object);
+                  this.rowData = stageData.object
+                  this.totalStages = this.rowData?.length | 0;
+
                   this.GetSparePartTotal()
                   this.form.get('stageName').reset()
                 })
@@ -441,10 +424,10 @@ export class OfferrequestComponent implements OnInit {
         next: (data: any) => {
           this.SpareQuotationDetailsList = data.object;
           this.SpareQuotationDetailsList.forEach(value => {
-            value.zohoPORaisedDate = this.datepipie.transform(value.zohoPORaisedDate, "MM/dd/yyyy");
-            value.deliveredOn = this.datepipie.transform(value.deliveredOn, "MM/dd/yyyy");
-            value.custResponseDate = this.datepipie.transform(value.custResponseDate, "MM/dd/yyyy");
-            value.raisedDate = this.datepipie.transform(value.raisedDate, "MM/dd/yyyy");
+            value.zohoPORaisedDate = this.datepipie.transform(GetParsedDate(value.zohoPORaisedDate), 'dd/MM/YYYY');
+            value.deliveredOn = this.datepipie.transform(GetParsedDate(value.deliveredOn), 'dd/MM/YYYY');
+            value.custResponseDate = this.datepipie.transform(GetParsedDate(value.custResponseDate), 'dd/MM/YYYY');
+            value.raisedDate = this.datepipie.transform(GetParsedDate(value.raisedDate), 'dd/MM/YYYY');
           })
 
         }
@@ -481,10 +464,48 @@ export class OfferrequestComponent implements OnInit {
 
   }
 
+  async CustomerChange() {
+    await this.SetCustomer();
+    this.customerId = this.f.customerId.value;
+    this.siteList = this.customerList.find(x => x.id == this.customerId)?.sites;
+    setTimeout(() => { this.f.customerSiteId.setValue(""); }, 0);
+  }
+
+  async SetCustomer(setCustomer = false) {
+    var data: any = await this.custService.getAllByConId(this.user.contactId).toPromise()
+
+    let custList = []
+    if (this.role == this.environment.distRoleCode) {
+      let regions = this.user.distRegionsId.split(',')
+
+      data.object.forEach(element => {
+        if (regions.includes(element.defdistregionid)) {
+          custList.push(element)
+        }
+      });
+
+    }
+
+    else if (this.role == this.environment.custRoleCode) {
+      var custData: any = this.custService.getAllByConId(this.user.contactId).toPromise();
+
+      custData.object.forEach(element => {
+        custList.push(element)
+      });
+
+      this.form.get('customerId').setValue(custData.object[0]?.id)
+      this.form.get('customerId').updateValueAndValidity()
+      this.siteList = custData.object[0]?.sites;
+      this.form.get('distributorid').setValue(custData.object[0]?.defdistid)
+      this.form.get('distributorid').updateValueAndValidity()
+    }
+
+    if (setCustomer) this.customerList = data.object;
+  }
 
   GetSparePartTotal() {
     let total = 0;
-    this.sparePartsList.forEach((x) => {
+    this.sparePartsList?.forEach((x) => {
       total += (x.price * x.qty)
     })
 
@@ -494,7 +515,7 @@ export class OfferrequestComponent implements OnInit {
 
     this.form.get("totalAmt").setValue(total);
     this.costUsd = total * this.form.get("basePCurrencyAmt").value;
-
+    this.costUsd = Math.round(this.costUsd * 100) / 100
   }
 
 
@@ -611,6 +632,7 @@ export class OfferrequestComponent implements OnInit {
       stage,
       index,
       payAmt,
+      stageIndex: this.totalStages + 1,
       paymentTypeId: paymentTerms,
       payAmtCurrencyId,
       baseCurrencyId: this.baseCurrId,
@@ -628,12 +650,32 @@ export class OfferrequestComponent implements OnInit {
         this.processFile = null;
         this.notificationService.filter("itemadded");
         data.object.forEach(element => {
-          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+          element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
         });
         this.rowData = data.object
       })
   }
+  StageMoveUp(initialIndex) {
+    var rd = this.rowData;
+    var initial = rd.find(x => x.stageIndex == initialIndex);
+    var beforeInitial = rd.find(x => x.stageIndex == initialIndex - 1);
 
+    initial.stageIndex = initialIndex - 1;
+    beforeInitial.stageIndex = initialIndex;
+    this.rowData.sort((a, b) => a.stageIndex - b.stageIndex);
+
+  }
+
+  StageMoveDown(initialIndex) {
+    var rd = this.rowData;
+    var initial = rd.find(x => x.stageIndex == initialIndex);
+    var beforeInitial = rd.find(x => x.stageIndex == initialIndex + 1);
+
+    initial.stageIndex = initialIndex + 1;
+    beforeInitial.stageIndex = initialIndex;
+    this.rowData.sort((a, b) => a.stageIndex - b.stageIndex);
+
+  }
 
   onstageNameChanged(stage) {
     stage = this.stagesList.find(x => x.listTypeItemId == stage)?.itemCode
@@ -645,7 +687,7 @@ export class OfferrequestComponent implements OnInit {
     this.offerRequestProcess.delete(id).pipe(first())
       .subscribe((data: any) => {
         data.object.forEach(element => {
-          element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
+          element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
         });
 
         this.rowData = data.object
@@ -711,6 +753,7 @@ export class OfferrequestComponent implements OnInit {
           this.sparePartsList.push(data);
           this.api.setRowData(this.sparePartsList)
           this.sparePartsSearch.nativeElement.value = ""
+          this.GetSparePartTotal();
 
         },
       });
@@ -849,13 +892,12 @@ export class OfferrequestComponent implements OnInit {
   }
 
   onCellValueChanged(event) {
-    if (this.sparePartsList.find(x => x.id == event.data.id)) return;
-
     var data = event.data;
     var d = this.sparePartsList.find(x => x.id == data.id);
-    
-    event.data.modified = true;
 
+    if (!d) return;
+
+    data.modified = true;
     d.amount = (Number(data.qty) * Number(data.price));
     d.price = Number(data.price)
     d.qty = Number(data.qty)
@@ -1089,7 +1131,7 @@ export class OfferrequestComponent implements OnInit {
     this.model.customerId = this.form.get('customerId').value
     this.model.distributorid = this.form.get('distributorid').value
     const datepipie = new DatePipe("en-US");
-    this.model.podate = datepipie.transform(new Date, "MM/dd/yyyy");
+    this.model.podate = datepipie.transform(new Date, 'dd/MM/YYYY');
 
 
     if (this.form.get('paymentTerms').value.length > 0) {
@@ -1137,6 +1179,12 @@ export class OfferrequestComponent implements OnInit {
             if (this.file != null) this.uploadFile(this.file, this.id);
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["offerrequestlist"]);
+
+            this.rowData?.forEach((x) => {
+              x.createdOn = new Date(x.createdOn)
+              this.offerRequestProcess.update(x).subscribe();
+            })
+
           },
         });
 

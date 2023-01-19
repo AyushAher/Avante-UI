@@ -447,17 +447,17 @@ export class TraveldetailsComponent implements OnInit {
     const datepipie = new DatePipe("en-US");
     this.Form.value.departuredate = datepipie.transform(
       currentDate,
-      "MM/dd/yyyy"
+      'dd/MM/YYYY'
     );
 
     this.Form.value.returndate = datepipie.transform(
       dateSent,
-      "MM/dd/yyyy"
+      'dd/MM/YYYY'
     );
     if (this.isDist && this.id != null) {
       this.Form.value.flightdetails.flightdate = datepipie.transform(
         flightdate,
-        "MM/dd/yyyy"
+        'dd/MM/YYYY'
       );
     }
 
