@@ -377,7 +377,10 @@ export class AmcComponent implements OnInit {
                     element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
                   });
 
+                  stageData.object?.sort((a, b) => a.stageIndex - b.stageIndex);
                   this.rowData = stageData.object;
+                  console.log(this.rowData);
+
                   this.totalStages = this.rowData?.length | 0;
                   this.GetSites(data.object.billtoid);
                   this.form.get('stageName').reset()
@@ -1013,8 +1016,6 @@ export class AmcComponent implements OnInit {
         .subscribe({
           next: (data: ResultMsg) => {
             if (data.result) {
-              console.log(this.rowData);
-
               this.rowData?.forEach((x) => {
                 x.createdOn = new Date()
                 this.amcStagesService.update(x).subscribe();

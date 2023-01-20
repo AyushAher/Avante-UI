@@ -73,12 +73,12 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="hsccode">HSC Code</label>
+              <label for="hsccode">HSN Code</label>
               <input id="hsccode" type="text" readonly formControlName="hscCode" class="form-control"
                 [ngClass]="{ ' is -invalid': submitted && f.hscCode.errors}" />
               <div *ngIf="submitted && f.hscCode.errors" class="invalid-feedback">
                 <div *ngIf="f.hscCode.errors.required">
-                  hsccode is required
+                  HSN code is required
                 </div>
               </div>
             </div>

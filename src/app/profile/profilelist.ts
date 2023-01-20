@@ -96,6 +96,14 @@ export class ProfileListComponent implements OnInit {
       editable: false,
       sortable: true,
       tooltipField: 'profilename',
+    },
+    {
+      headerName: 'Description',
+      field: 'description',
+      filter: true,
+      enableSorting: true,
+      sortable: true,
+      tooltipField: 'description',
     }]
   }
 

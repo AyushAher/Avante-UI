@@ -167,6 +167,7 @@ export class OfferrequestComponent implements OnInit {
               element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
             });
             this.rowData = stageData.object;
+            this.rowData?.sort((a, b) => a.stageIndex - b.stageIndex);
             this.totalStages = this.rowData?.length | 0;
             this.form.get('stageName').reset()
             this.form.get('stageComments').reset()
@@ -347,7 +348,8 @@ export class OfferrequestComponent implements OnInit {
 
 
                   this.form.patchValue(data.object);
-                  this.rowData = stageData.object
+                  this.rowData = stageData.object;
+                  this.rowData?.sort((a, b) => a.stageIndex - b.stageIndex);
                   this.totalStages = this.rowData?.length | 0;
 
                   this.GetSparePartTotal()
@@ -892,18 +894,24 @@ export class OfferrequestComponent implements OnInit {
   }
 
   onCellValueChanged(event) {
+    debugger;
     var data = event.data;
-    var d = this.sparePartsList.find(x => x.id == data.id);
+    var d = this.sparePartsList.findIndex(x => x.id == data.id);
+    var spare = this.sparePartsList;
 
-    if (!d) return;
+    if (d === -1) return;
 
     data.modified = true;
-    d.amount = (Number(data.qty) * Number(data.price));
-    d.price = Number(data.price)
-    d.qty = Number(data.qty)
-    d.hscode = data.hscode;
-    this.api.setRowData(this.sparePartsList)
-    this.GetSparePartTotal()
+    spare[d].price = Number(data.price)
+    spare[d].qty = Number(data.qty)
+    spare[d].hscode = data.hscode;
+    spare[d].amount = spare[d].qty * spare[d].price;
+    this.sparePartsList = [];
+
+    setTimeout(() => {
+      this.sparePartsList = spare;
+      this.GetSparePartTotal()
+    }, 200);
   }
 
   onGridReady(params): void {
@@ -1181,7 +1189,7 @@ export class OfferrequestComponent implements OnInit {
             this.router.navigate(["offerrequestlist"]);
 
             this.rowData?.forEach((x) => {
-              x.createdOn = new Date(x.createdOn)
+              x.createdOn = new Date()
               this.offerRequestProcess.update(x).subscribe();
             })
 

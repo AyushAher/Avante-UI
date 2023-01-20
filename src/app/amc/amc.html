@@ -307,10 +307,10 @@
                 <tr *ngFor="let item of rowData">
                   <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode" class="d-flex w-100">
                     <div class="d-flex w-50 flex-column">
-                      <button class="btn" [disabled]="item.stageIndex <= 1" (click)="StageMoveUp(item.stageIndex)">
+                      <button type="button" class="btn" [disabled]="item.stageIndex <= 1" (click)="StageMoveUp(item.stageIndex)">
                         <i *ngIf="item.stageIndex > 1" class="fas fa-arrow-up"></i>
                       </button>
-                      <button class="btn" [disabled]="item.stageIndex >= totalStages"
+                      <button type="button" class="btn" [disabled]="item.stageIndex >= totalStages"
                         (click)="StageMoveDown(item.stageIndex)">
                         <i *ngIf="item.stageIndex < totalStages" class="fas fa-arrow-down"></i>
                       </button>
