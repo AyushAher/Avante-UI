@@ -113,7 +113,7 @@ export class CustomerListComponent implements OnInit {
         tooltipField: 'custname',
       },
       {
-        headerName: 'Default Distributor',
+        headerName: 'Principal Distributor',
         field: 'defdist',
         filter: true,
         enableSorting: true,

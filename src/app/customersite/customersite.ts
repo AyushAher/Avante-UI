@@ -179,8 +179,6 @@ export class CustomerSiteComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            console.log(data);
-
             this.distRegions = data;
           },
         });
@@ -190,8 +188,6 @@ export class CustomerSiteComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            console.log(data);
-
             this.distRegions = data.object;
           },
         });
@@ -215,7 +211,6 @@ export class CustomerSiteComponent implements OnInit {
     }
     this.isSave = true;
     this.loading = true;
-    console.log(this.customersiteform.value);
 
     if (this.csiteid == null) {
       this.customersiteService.save(this.customersiteform.value)

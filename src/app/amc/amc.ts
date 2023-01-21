@@ -379,7 +379,6 @@ export class AmcComponent implements OnInit {
 
                   stageData.object?.sort((a, b) => a.stageIndex - b.stageIndex);
                   this.rowData = stageData.object;
-                  console.log(this.rowData);
 
                   this.totalStages = this.rowData?.length | 0;
                   this.GetSites(data.object.billtoid);
@@ -685,7 +684,7 @@ export class AmcComponent implements OnInit {
 
     this.instrumentService.getAll(this.user.userId)
       .pipe(first()).subscribe((data: any) => {
-        this.instrumentAutoComplete = data.object?.filter(x => x.customerId == this.f.billtoid.value);
+        this.instrumentAutoComplete = data.object?.filter(x => x.customerId == this.f.billtoid.value && x.custSiteId == this.f.custSite.value);
         if (this.instrumentSearch) this.instrumentSearch.value = ""
       });
 

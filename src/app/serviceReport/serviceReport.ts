@@ -1240,7 +1240,7 @@ export class ServiceReportComponent implements OnInit {
         tooltipField: 'partno',
       },
       {
-        headerName: 'HSC Code',
+        headerName: 'HSN Code',
         field: 'hsccode',
         filter: false,
         enableSorting: false,
@@ -1285,7 +1285,7 @@ export class ServiceReportComponent implements OnInit {
         tooltipField: 'partno',
       },
       {
-        headerName: 'HSC Code',
+        headerName: 'HSN Code',
         field: 'hsccode',
         filter: false,
         enableSorting: false,
@@ -1358,7 +1358,7 @@ export class ServiceReportComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'HS Code',
+        headerName: 'HSN Code',
         field: 'hsccode',
         filter: false,
         enableSorting: false,
@@ -1397,7 +1397,7 @@ export class ServiceReportComponent implements OnInit {
         sortable: false
       },
       {
-        headerName: 'HS Code',
+        headerName: 'HSN Code',
         field: 'hsccode',
         filter: false,
         enableSorting: false,

@@ -336,9 +336,6 @@ export class ProfileComponent implements OnInit {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["profilelist"]);
           }
-          else {
-            console.log(data);
-          }
           this.loading = false;
         });
     }

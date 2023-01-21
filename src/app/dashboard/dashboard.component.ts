@@ -296,8 +296,6 @@ export class DashboardComponent implements OnInit {
   GetPoCost(sdate, edate) {
     this.customerDashboardService.GetCostData({ sdate, edate })
       .pipe(first()).subscribe((data: any) => {
-        console.log(data);
-
         localStorage.setItem("costData", JSON.stringify(data.object))
       })
   }

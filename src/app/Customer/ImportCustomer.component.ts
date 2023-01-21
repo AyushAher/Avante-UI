@@ -100,7 +100,6 @@ export class ImportCustomerData {
 
         worksheet = workbook.Sheets["Customer Site Contact"];
         this.fileData = XLSX.utils.sheet_to_json(worksheet, { raw: true })
-        console.log(this.fileData);
         
         workbookData["siteContact"] = []
         this.fileData.forEach((ele: any) => {
@@ -155,7 +154,6 @@ export class ImportCustomerData {
             };
             workbookData["customerSite"].push(element);
         });
-        console.log(workbookData);
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
         // this.customerService.importData(workbookData)
         //     .pipe(first()).subscribe(() => this.close())

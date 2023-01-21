@@ -157,7 +157,7 @@
               <label for="instrumentsList">Instruments</label>
               <ng-select formControlName="instrumentsList" [multiple]="true" id="instrumentsList" [virtualScroll]="true"
                 [ngClass]="{'is-invalid':submitted && f.instrumentsList.errors }">
-                <ng-option *ngFor="let i of instruments" value="{{i.id}}">{{i.instypeName}} - {{i.serialnos}}
+                <ng-option *ngFor="let i of instrumentslst" value="{{i.id}}">{{i.instypeName}} - {{i.serialnos}}
                 </ng-option>
               </ng-select>
 

@@ -73,7 +73,6 @@ export class InstrumentListComponent implements OnInit {
 
     this.instrumentService.getAll(this.user.userId).pipe(first())
       .subscribe((data: any) => {
-        console.log(data.object);
         this.instrumentList = data.object
       });
     this.columnDefs = this.createColumnDefs();

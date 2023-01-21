@@ -438,7 +438,6 @@ export class AdvancerequestformComponent implements OnInit {
     this.form.get('bankDetails').get("contactId").setValue(this.form.get('engineerId').value)
     this.form.get('engineerId').disable()
     // stop here if form is invalid
-    console.log(this.form);
     if (this.form.invalid) {
       return;
     }

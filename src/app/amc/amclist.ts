@@ -75,8 +75,6 @@ export class AmcListComponent implements OnInit {
         this.AmcList = data.object?.filter(x => !x.isCompleted)
         if (this.AmcList == null || this.AmcList.length <= 0) return;
         this.AmcList.forEach(x => x.period = x.sdate + " - " + x.edate);
-        console.log(this.AmcList);
-
       });
 
     this.columnDefs = this.createColumnDefs();

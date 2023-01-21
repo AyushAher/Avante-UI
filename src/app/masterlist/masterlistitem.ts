@@ -103,9 +103,7 @@ export class MasterListItemComponent implements OnInit {
           }
           else {
             this.listTypeService.GetListById(this.listid)
-              .subscribe((data: any) => {
-                console.log(data.object);
-                
+              .subscribe((data: any) => {                
                 this.masterlistitemform.get("listName").setValue(data.object.listname);
                 this.masterlistitemform.get("listTypeId").setValue(data.object.id);
               })

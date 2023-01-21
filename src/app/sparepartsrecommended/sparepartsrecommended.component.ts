@@ -138,7 +138,7 @@ export class SparepartsrecommendedComponent implements OnInit {
         sortable: true
       },
       {
-        headerName: "HSC Code",
+        headerName: "HSN Code",
         field: "hsccode",
         filter: true,
         editable: false,

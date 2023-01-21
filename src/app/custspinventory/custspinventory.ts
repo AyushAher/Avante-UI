@@ -275,7 +275,7 @@ export class CustSPInventoryComponent implements OnInit {
         headerName: "Service Request No.",
         field: "serReqNo",
         filter: true,
-        tooltipField: "hsccode",
+        tooltipField: "serReqNo",
         enableSorting: true,
         editable: false,
         sortable: true,

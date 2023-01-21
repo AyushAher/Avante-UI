@@ -94,8 +94,6 @@ export class CustspinventorylistComponent implements OnInit {
 
   DataFilter(event) {
     this.model = event
-    console.log(event);
-
   }
 
   toggleFilter() {
@@ -123,7 +121,7 @@ export class CustspinventorylistComponent implements OnInit {
         sortable: true,
       },
       {
-        headerName: "HSC Code",
+        headerName: "HSN Code",
         field: "hscCode",
         filter: true,
         tooltipField: "hsccode",

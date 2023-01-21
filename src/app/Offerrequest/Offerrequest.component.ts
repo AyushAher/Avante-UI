@@ -88,6 +88,7 @@ export class OfferrequestComponent implements OnInit {
   customerList: any[];
   rowData: any[] = [];
   instruments = []
+  instrumentslst = []
   vScroll: boolean = true;
   isLocked: boolean;
   processGridDefs: any[];
@@ -269,6 +270,11 @@ export class OfferrequestComponent implements OnInit {
 
     this.form.get("basePCurrencyAmt").valueChanges
       .subscribe(() => this.GetSparePartTotal())
+
+    this.form.get("customerSiteId").valueChanges
+      .subscribe((value) => {
+        this.instrumentslst = this.instruments.filter(x => x.custSiteId == value)
+      })
 
     this.form.get("mainCurrencyId").valueChanges
       .subscribe((data) => {
@@ -784,7 +790,7 @@ export class OfferrequestComponent implements OnInit {
       tooltipField: 'instrument',
     },
     {
-      headerName: 'HSC Code',
+      headerName: 'HSN Code',
       field: 'hscode',
       filter: true,
       editable: true,
@@ -845,7 +851,7 @@ export class OfferrequestComponent implements OnInit {
         sortable: true,
         tooltipField: 'instrument',
       }, {
-        headerName: 'HSC Code',
+        headerName: 'HSN Code',
         field: 'hscode',
         filter: true,
       },
@@ -1021,7 +1027,6 @@ export class OfferrequestComponent implements OnInit {
     });
 
     this.FileShareService.upload(formData, id, code).subscribe((event) => {
-      console.log(event);
       this.notificationService.filter("itemadded");
     });
   };

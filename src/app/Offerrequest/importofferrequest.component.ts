@@ -47,7 +47,6 @@ export class ImportOfferRequestComponent implements OnInit {
     submitData(workbook: XLSX.WorkBook) {
         var worksheet = workbook.Sheets["SparePartQuotation"];
         this.fileData = XLSX.utils.sheet_to_json(worksheet, { raw: true })
-        console.log(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
     }
 
     ExcelDateToJSDate(serial) {

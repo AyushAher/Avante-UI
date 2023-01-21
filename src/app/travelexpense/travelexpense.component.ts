@@ -449,7 +449,6 @@ export class TravelexpenseComponent implements OnInit {
     this.model.distId = this.distId
     this.model.grandCompanyTotal = parseInt(this.model.grandCompanyTotal)
     this.model.grandEngineerTotal = parseInt(this.model.grandEngineerTotal)
-    console.log(this.form);
 
     if (isNaN(this.model.grandCompanyTotal)) {
       this.model.grandCompanyTotal = 0;

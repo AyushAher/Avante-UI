@@ -122,11 +122,11 @@
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="hsCode">H.S Code</label>
+              <label for="hsCode">HSN Code</label>
               <input type="text" formControlName="hsCode" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.hsCode.errors }" />
               <div *ngIf="submitted && f.hsCode.errors" class="invalid-feedback">
-                <div *ngIf="f.hsCode.errors.required">H.S Code is required</div>
+                <div *ngIf="f.hsCode.errors.required">HSN Code is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">

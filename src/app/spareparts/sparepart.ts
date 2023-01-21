@@ -345,8 +345,6 @@ export class SparePartComponent implements OnInit {
     this.configService.getById(param).pipe(first())
       .subscribe((data: any) => {
         this.configValueList = data.object
-        console.log(data);
-
       });
   }
 

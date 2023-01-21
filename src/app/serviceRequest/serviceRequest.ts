@@ -1132,8 +1132,6 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            console.log(data);
-
             this.download(data.data);
           },
         });

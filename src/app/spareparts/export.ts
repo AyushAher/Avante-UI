@@ -194,15 +194,6 @@ export class ExportSparePartComponent implements OnInit {
               // this.alertService.success('File Upload Successfully.');
               this.notificationService.showSuccess("File Upload Successfully", "Success");
             }
-            else {
-
-            }
-            // this.imagePath = data.path;
-            // console.log(data);
-
-          },
-          error: () => {
-
           }
         });
     }
