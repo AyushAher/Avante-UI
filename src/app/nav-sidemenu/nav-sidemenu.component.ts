@@ -28,6 +28,7 @@ export class NavSideMenuComponent {
   hasStayDetails: boolean = false;
   hasVisaDetails: boolean = false;
   hasLocalExpenses: boolean = false;
+  haspastservicereport: boolean = false;
   hascustomersatisfactionsurveylist: boolean = false
   serviceContractRevenueReport: boolean = false
 
@@ -301,14 +302,14 @@ export class NavSideMenuComponent {
           || this.profile.permissions.filter(x => x.screenCode == 'SRCRR')[0].delete == true
       }
 
+      if (this.profile.permissions.filter(x => x.screenCode == 'PSRRP').length > 0) {
+        this.haspastservicereport = this.profile.permissions.filter(x => x.screenCode == 'PSRRP')[0].create == true
+          || this.profile.permissions.filter(x => x.screenCode == 'PSRRP')[0].update == true
+          || this.profile.permissions.filter(x => x.screenCode == 'PSRRP')[0].read == true
+          || this.profile.permissions.filter(x => x.screenCode == 'PSRRP')[0].delete == true
+      }
 
-      //
-      // hasTravelDetails: boolean = false;
-      // hasStayDetails: boolean = false;
-      // hasVisaDetails: boolean = false;
-      // hasLocalExpenses: boolean = false;
-      // hascustomersatisfactionsurveylist: boolean = false
-      //this.hasDistributor = this.profile.Permissions
+
     }
     if (this.user.username == "admin") {
       this.hasDistributor = true;
@@ -346,6 +347,7 @@ export class NavSideMenuComponent {
       this.hasServiceCompletionReport = true;
       this.serviceRequestReport = true;
       this.serviceContractRevenueReport = true;
+      this.haspastservicereport = true;
     }
 
     this.listTypeService.getById("ROLES")
@@ -375,7 +377,7 @@ export class NavSideMenuComponent {
       this.hasMasters = true;
     }
 
-    if (this.hasSearch || this.hasexport || this.hasAuditTrail || this.hascustomersatisfactionsurveylist) {
+    if (this.hasSearch || this.hasexport || this.hasAuditTrail || this.hascustomersatisfactionsurveylist || this.haspastservicereport) {
       this.hasUtilities = true;
     }
 

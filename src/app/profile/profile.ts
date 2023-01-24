@@ -66,7 +66,12 @@ export class ProfileComponent implements OnInit {
     private listTypeService: ListTypeService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
-  ) { }
+  ) {
+    notificationService.listen().subscribe((m) => {
+      this.GetById();
+    })
+
+  }
 
   ngOnInit() {
     //debugger;
@@ -129,24 +134,7 @@ export class ProfileComponent implements OnInit {
         this.screensList = data.object;
 
         if (this.id != null) {
-          this.profileService.getById(this.id)
-            .pipe(first())
-            .subscribe((profileData: any) => {
-              this.profileform.get("profilename").setValue(profileData.object.profilename)
-              this.profileform.get("description").setValue(profileData.object.description)
-              profileData.object.permissions.forEach(x => {
-                this.profileform.get("categoryId").setValue(x.category)
-                this.onCategoryChange()
-                this.profileform.get("screenId").setValue(x.screenId)
-                this.profileform.get("create").setValue(x.create)
-                this.profileform.get("read").setValue(x.read)
-                this.profileform.get("update").setValue(x.update)
-                this.profileform.get("delete").setValue(x.delete)
-                this.profileform.get("commercial").setValue(x.commercial)
-                this.profileform.get("privilages").setValue(x.privilages)
-                this.AddScreen(x.id)
-              });
-            });
+          this.GetById();
           setTimeout(() => this.profileform.disable(), 500);
         }
         else {
@@ -172,6 +160,27 @@ export class ProfileComponent implements OnInit {
 
     else this.router.navigate(["profilelist"])
 
+  }
+  GetById() {
+
+    this.profileService.getById(this.id)
+      .pipe(first())
+      .subscribe((profileData: any) => {
+        this.profileform.get("profilename").setValue(profileData.object.profilename)
+        this.profileform.get("description").setValue(profileData.object.description)
+        profileData.object.permissions.forEach(x => {
+          this.profileform.get("categoryId").setValue(x.category)
+          this.onCategoryChange()
+          this.profileform.get("screenId").setValue(x.screenId)
+          this.profileform.get("create").setValue(x.create)
+          this.profileform.get("read").setValue(x.read)
+          this.profileform.get("update").setValue(x.update)
+          this.profileform.get("delete").setValue(x.delete)
+          this.profileform.get("commercial").setValue(x.commercial)
+          this.profileform.get("privilages").setValue(x.privilages)
+          this.AddScreen(x.id)
+        });
+      });
   }
 
   CancelEdit() {
@@ -270,7 +279,6 @@ export class ProfileComponent implements OnInit {
 
     this.listTypeItems = obj
     this.addItem()
-
   }
 
   DeleteScreen(index) {
@@ -319,6 +327,7 @@ export class ProfileComponent implements OnInit {
         .pipe(first())
         .subscribe((data: any) => {
           //debugger;
+          this.notificationService.filter("itemadded")
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["profilelist"]);
@@ -331,7 +340,7 @@ export class ProfileComponent implements OnInit {
       this.profileService.update(this.id, this.profile)
         .pipe(first())
         .subscribe((data: ResultMsg) => {
-
+          this.notificationService.filter("itemadded")
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["profilelist"]);

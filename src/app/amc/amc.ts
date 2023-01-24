@@ -117,7 +117,6 @@ export class AmcComponent implements OnInit {
     private FileShareService: FileshareService,
     private environment: EnvService,
     private instrumentService: InstrumentService
-
   ) {
 
     this.notificationService.listen().subscribe((m: any) => {
@@ -256,6 +255,9 @@ export class AmcComponent implements OnInit {
         }
       })
 
+    this.form.get('custSite').valueChanges
+      .subscribe(() => this.InstrumentSearch())
+
 
     this.listTypeService.getById("AMCSG").pipe(first())
       .subscribe((data: any) => {
@@ -336,7 +338,6 @@ export class AmcComponent implements OnInit {
       this.Service.getById(this.id)
         .pipe(first())
         .subscribe((data: any) => {
-
           this.listTypeService.getById("ORQPT")
             .pipe(first())
             .subscribe((mstData: any) => {
@@ -382,9 +383,9 @@ export class AmcComponent implements OnInit {
 
                   this.totalStages = this.rowData?.length | 0;
                   this.GetSites(data.object.billtoid);
-                  this.form.get('stageName').reset()
                   setTimeout(() => {
                     this.form.patchValue(data.object);
+                    this.form.get('stageName').reset()
                     this.InstrumentSearch();
                   }, 500);
                 })
@@ -472,7 +473,6 @@ export class AmcComponent implements OnInit {
 
 
   submitStageData() {
-
     if (this.isPaymentTerms && !this.f.payterms.value) return this.notificationService.showInfo("Payterms is required", "Info")
     if (this.isPaymentAmt && !this.f.payAmt.value && !this.f.payAmtCurrencyId.value) return this.notificationService.showInfo("Payment Amount cannot be empty", "Info")
     if (!this.f.stageName.value) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
@@ -483,7 +483,7 @@ export class AmcComponent implements OnInit {
     let hasNoAttachment = false;
 
     let Attachment = <HTMLInputElement>document.getElementById("stageFilesList_Attachment")
-    hasNoAttachment = Attachment?.checked
+    if (Attachment) hasNoAttachment = Attachment.checked
 
 
     let comments = this.form.get('stageComments').value;
@@ -493,6 +493,7 @@ export class AmcComponent implements OnInit {
       return;
     }
 
+    this.submitted = true;
     let stage = this.form.get('stageName').value
     let index = 0;
     let paymentTerms = this.form.get('payterms').value
@@ -514,6 +515,7 @@ export class AmcComponent implements OnInit {
 
     this.amcStagesService.save(offerProcess).pipe(first())
       .subscribe((data: any) => {
+        this.submitted = false;
         if (offerProcess.stage == this.stagesList.find(x => x.itemCode == "AMPFI")?.listTypeItemId)
           this.notificationService.showInfo('Please select payment terms for Customer', "");
 
@@ -528,10 +530,17 @@ export class AmcComponent implements OnInit {
         });
 
         this.rowData = data.object
+        this.totalStages = this.rowData?.length | 0;
         this.form.get("stageName").reset()
         this.form.get("stageComments").reset()
         this.form.get("stagePaymentType").reset()
+
+        if (Attachment && hasNoAttachment) {
+          this.DisableChoseFile('stageFilesList_class')
+          Attachment.checked = false;
+        }
       })
+
   }
 
 
@@ -543,7 +552,6 @@ export class AmcComponent implements OnInit {
     initial.stageIndex = initialIndex - 1;
     beforeInitial.stageIndex = initialIndex;
     this.rowData.sort((a, b) => a.stageIndex - b.stageIndex);
-
   }
 
   StageMoveDown(initialIndex) {
@@ -871,7 +879,6 @@ export class AmcComponent implements OnInit {
   }
 
   onSubmit() {
-
     this.submitted = true;
     this.alertService.clear();
 
@@ -965,14 +972,25 @@ export class AmcComponent implements OnInit {
       }
     }
 
+    const datepipe = new DatePipe('en-US');
+
     if (!this.isOnCall) {
-      if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value)
+      if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value) {
+        this.model.secondVisitDateFrom = datepipe.transform(this.model.secondVisitDateFrom, 'dd/MM/YYYY');
+        this.model.secondVisitDateTo = datepipe.transform(this.model.secondVisitDateTo, 'dd/MM/YYYY');
         this.model.secondVisitDate = this.model.secondVisitDateFrom + "-" + this.model.secondVisitDateTo;
+      }
     }
 
-    if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value)
+    if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value) {
+      this.model.firstVisitDateFrom = datepipe.transform(this.model.firstVisitDateFrom, 'dd/MM/YYYY');
+      this.model.firstVisitDateTo = datepipe.transform(this.model.firstVisitDateTo, 'dd/MM/YYYY');
       this.model.firstVisitDate = this.model.firstVisitDateFrom + "-" + this.model.firstVisitDateTo
+    }
 
+    this.model.sdate = datepipe.transform(this.model.sdate, 'dd/MM/YYYY');
+    this.model.edate = datepipe.transform(this.model.edate, 'dd/MM/YYYY');
+    this.model.sqdate = datepipe.transform(this.model.sqdate, 'dd/MM/YYYY');
 
     this.model.baseCurrencyId = this.baseCurrId
 

@@ -322,14 +322,14 @@ export class OfferrequestComponent implements OnInit {
 
               this.isCompleted = data.object.isCompleted
               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
-
+              debugger;
               var instrumentLst = []
               data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
               data.object.instrumentsList.forEach(ins => {
-                if (this.instruments.find(x => x.id == ins) != null) instrumentLst.push(ins)
+                if (this.instrumentslst.find(x => x.id == ins) != null) instrumentLst.push(ins)
               });
 
-              data.object.instrumentList = instrumentLst;
+              data.object.instrumentsList = instrumentLst;
 
               this.paymentTypes = []
               this.payTypes = mstData;
@@ -359,7 +359,7 @@ export class OfferrequestComponent implements OnInit {
                   this.totalStages = this.rowData?.length | 0;
 
                   this.GetSparePartTotal()
-                  this.form.get('stageName').reset()
+                  setTimeout(() => this.form.get('stageName').reset(), 200);
                 })
             })
         });
@@ -597,6 +597,7 @@ export class OfferrequestComponent implements OnInit {
 
 
   submitStageData() {
+
     if (this.isPaymentTerms) {
       this.form.get('payterms').setValidators([Validators.required])
       this.form.get('payterms').updateValueAndValidity();
@@ -618,14 +619,14 @@ export class OfferrequestComponent implements OnInit {
     let hasNoAttachment = false;
 
     let Attachment = <HTMLInputElement>document.getElementById("stageFilesList_Attachment")
-    hasNoAttachment = Attachment?.checked
+    if (Attachment) hasNoAttachment = Attachment.checked
 
 
     let comments = this.form.get('stageComments').value;
 
     if (!hasNoAttachment && this.processFile == null) return this.notificationService.showInfo("No Attachments Selected.", "Error")
 
-
+    this.submitted = true;
     let stage = this.form.get('stageName').value
     let index = 0;
     let paymentTerms = this.form.get('payterms').value;
@@ -649,6 +650,7 @@ export class OfferrequestComponent implements OnInit {
 
     this.offerRequestProcess.save(offerProcess).pipe(first())
       .subscribe((data: any) => {
+        this.submitted = false;
         if (offerProcess.stage == this.stagesList.find(x => x.itemCode == "PFI")?.listTypeItemId)
           this.notificationService.showInfo('Please select payment terms for Customer', "");
 
@@ -661,6 +663,12 @@ export class OfferrequestComponent implements OnInit {
           element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
         });
         this.rowData = data.object
+        this.totalStages = this.rowData?.length | 0;
+
+        if (Attachment && hasNoAttachment) {
+          this.DisableChoseFile('stageFilesList_class')
+          Attachment.checked = false;
+        }
       })
   }
   StageMoveUp(initialIndex) {
@@ -759,10 +767,15 @@ export class OfferrequestComponent implements OnInit {
           data.amount = Number(data.price) * Number(data.qty)
 
           this.sparePartsList.push(data);
-          this.api.setRowData(this.sparePartsList)
-          this.sparePartsSearch.nativeElement.value = ""
-          this.GetSparePartTotal();
+          var spares = this.sparePartsList;
+          this.sparePartsList = [];
 
+          setTimeout(() => {
+            this.sparePartsList = spares;
+            this.sparePartsSearch.nativeElement.value = ""
+            this.GetSparePartTotal();
+
+          }, 200);
         },
       });
 

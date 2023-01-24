@@ -81,6 +81,8 @@ import { PendingquotationrequestComponent } from './pendingquotationrequest/pend
 import { ServicecontractrevenuereportComponent } from './servicecontractrevenuereport/servicecontractrevenuereport.component';
 import { CostofownershipComponent } from './costofownership/costofownership.component';
 import { EngdashboardComponent } from './engdashboard/engdashboard.component';
+import { PastservicereportComponent } from './pastservicereport/pastservicereport.component';
+import { PastservicereportlistComponent } from './pastservicereport/pastservicereportlist.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
@@ -398,6 +400,21 @@ const routes: Routes = [
   {
     path: "advancerequestformlist",
     component: AdvancerequestlistformComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "pastservicereport",
+    component: PastservicereportComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "pastservicereport/:id",
+    component: PastservicereportComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "pastservicereportlist",
+    component: PastservicereportlistComponent,
     canActivate: [AuthGuard],
   },
   {

@@ -195,6 +195,12 @@
                     </li>
 
                     <li>
+                      <a class="collapse-item" (click)="navigate('/pastservicereportlist')" *ngIf="haspastservicereport">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Past Service Report</a>
+                    </li>
+
+                    <li>
                       <a class="collapse-item" (click)="navigate('/exportsparepart')" *ngIf="hasexport">
                         <i class="bx bx-right-arrow-alt"></i>
                         Export template</a>
