@@ -1008,7 +1008,7 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        tooltipField: 'Work Done',
+        tooltipField: 'workdone',
       }
     ];
   }
@@ -1023,7 +1023,7 @@ export class ServiceReportComponent implements OnInit {
         enableSorting: false,
         editable: false,
         sortable: false,
-        tooltipField: 'Work Done',
+        tooltipField: 'workdone',
       }
     ];
   }

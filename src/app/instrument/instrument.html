@@ -317,7 +317,7 @@
           <div class="clearfix"></div>
           <hr />
 
-          <div class="row">
+          <div *ngIf="!isAccessories" class="row">
             <div class="col-sm-4">
               <label for="configtypeid">Config Type</label>
               <select [disabled]="!isEditMode && !isNewMode" class="form-select" #mySelect
@@ -347,23 +347,36 @@
                 (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Add</button>
             </div>
           </div>
+          <div *ngIf="isAccessories" class="row">
+            <div class="col-md-12">
+              <button (click)="openAccessoryModel()" [disabled]="!isEditMode && !isNewMode" class="btn btn-primary"
+                style="margin: 10px;" type="button">
+                <i class="fas fa-plus" title="Add" style="color: white !important;"></i>
+              </button>
+            </div>
+
+          </div>
           <br />
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="home-tab" data-bs-toggle="tab" role="tab" data-bs-target="#home"
-                aria-selected="true">Recommended</a>
+              <a class="nav-link active" id="home-tab" (click)="ChangeTab(false)" data-bs-toggle="tab" role="tab"
+                data-bs-target="#home" aria-selected="true">Recommended</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="profile-tab" data-bs-toggle="tab" role="tab" data-bs-target="#profile"
-                aria-selected="false">Consumables</a>
+              <a class="nav-link" id="profile-tab" (click)="ChangeTab(false)" data-bs-toggle="tab" role="tab"
+                data-bs-target="#profile" aria-selected="false">Consumables</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="contact-tab" data-bs-toggle="tab" role="tab" data-bs-target="#contact"
-                aria-selected="false">Full Spare</a>
+              <a class="nav-link" id="contact-tab" (click)="ChangeTab(false)" data-bs-toggle="tab" role="tab"
+                data-bs-target="#contact" aria-selected="false">Full Spare</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="otherspare-tab" data-bs-toggle="tab" role="tab" data-bs-target="#otherspare"
-                aria-selected="false">Other Spare</a>
+              <a class="nav-link" id="otherspare-tab" (click)="ChangeTab(false)" data-bs-toggle="tab" role="tab"
+                data-bs-target="#otherspare" aria-selected="false">Other Spare</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="accessories-tab" (click)="ChangeTab(true)" data-bs-toggle="tab" role="tab"
+                data-bs-target="#accessories" aria-selected="false">Accessories</a>
             </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -397,6 +410,14 @@
                   class="ag-theme-alpine" (gridReady)="onGridReady($event)"
                   (cellValueChanged)="onCellValueChanged($event)" [columnDefs]="columnDefs" [rowData]="othersparefilter"
                   rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="accessories" role="tabpanel" aria-labelledby="accessories-tab">
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="DeleteInstrumentAccessory($event)"
+                  class="ag-theme-alpine" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs"
+                  [rowData]="accessoriesData" rowSelection="single" pagination="true"
+                  paginationPageSize=10></ag-grid-angular>
               </div>
             </div>
           </div>

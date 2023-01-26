@@ -42,6 +42,9 @@ import { EnvService } from '../_services/env/env.service';
 import { BusinessUnitService } from '../_services/businessunit.service';
 import { BrandService } from '../_services/brand.service';
 import { GetParsedDate } from '../_helpers/Providers';
+import { Accessories } from './Accessories.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { InstrumentAccessoryService } from '../_services/InstrumentAccessory.Service';
 
 
 @Component({
@@ -105,6 +108,9 @@ export class InstrumentComponent implements OnInit {
   baseCurrId: any;
   businessUnitList: any[]
   brandList: any[];
+  isAccessories: any;
+  bsActionModalRef: BsModalRef;
+  accessoriesData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -127,8 +133,18 @@ export class InstrumentComponent implements OnInit {
     private customerService: CustomerService,
     private businessUnitService: BusinessUnitService,
     private enviroment: EnvService,
+    private modalService: BsModalService,
     private brandService: BrandService,
-  ) { }
+    private instrumentAccessoryService: InstrumentAccessoryService,
+  ) {
+
+    notificationService.listen().subscribe((data) => {
+
+      this.instrumentAccessoryService.GetByInsId(this.id).subscribe((data: any) => this.accessoriesData = data.object)
+
+    })
+
+  }
 
   ngOnInit() {
     this.transaction = 0;
@@ -228,6 +244,13 @@ export class InstrumentComponent implements OnInit {
       }
       );
 
+    this.id = this.route.snapshot.paramMap.get('id');
+
+    this.instrumentAccessoryService.GetByInsId(this.id).subscribe((data: any) => {
+      console.log(data);
+      this.accessoriesData = data.object;
+    })
+
     this.instrumentform.get('baseCurrencyAmt').valueChanges
       .subscribe(value => {
         if (value >= 100000) this.instrumentform.get('baseCurrencyAmt').setValue(1.0)
@@ -265,7 +288,7 @@ export class InstrumentComponent implements OnInit {
         this.customerSiteService.GetCustomerSiteContacts().pipe(first())
           .subscribe((data1: any) => {
             this.siteId = data1.object.find(x => x.id == this.user.contactId)?.parentId
-            this.instrumentform.get('custSiteId').setValue(this.siteId);
+            if (this.id == null) this.instrumentform.get('custSiteId').setValue(this.siteId);
 
             if (this.siteId) {
               this.customerSiteService.getById(this.siteId)
@@ -299,7 +322,6 @@ export class InstrumentComponent implements OnInit {
     this.listTypeService.getById(this.code).pipe(first())
       .subscribe((data: ListTypeItem[]) => this.listTypeItems = data);
 
-    this.id = this.route.snapshot.paramMap.get('id');
     if (this.id != null) {
       this.instrumentService.getById(this.id)
         .pipe(first())
@@ -327,7 +349,7 @@ export class InstrumentComponent implements OnInit {
               });
 
             this.hasWarrenty = data.object.warranty
-            setTimeout(() => this.instrumentform.patchValue(data.object), 500);
+            setTimeout(() => this.instrumentform.patchValue(data.object), 700);
 
             this.sparePartDetails = data.object.spartParts;
 
@@ -374,7 +396,40 @@ export class InstrumentComponent implements OnInit {
 
   }
 
+  ChangeTab(isAccessories) {
+    this.isAccessories = isAccessories;
+    if (isAccessories)
+      if (this.isEditMode)
+        this.columnDefs = this.createColumnDefsAccessory();
+      else this.columnDefs = this.createColumnDefsAccessoryRO();
+    else
+      if (this.isEditMode)
+        this.columnDefs = this.createColumnDefs();
+      else this.columnDefs = this.createColumnDefsRO();
+  }
 
+  openAccessoryModel() {
+    if (this.isAccessories == true) {
+      const modalOptions: any = {
+        backdrop: 'static',
+        ignoreBackdropClick: true,
+        keyboard: false,
+        initialState: {
+          instrumentId: this.id
+        },
+      }
+      if (this.id != null)
+        this.bsActionModalRef = this.modalService.show(Accessories, modalOptions);
+      else this.notificationService.showInfo("Please save the Instrument to add Accessory.", "Info")
+    }
+  }
+  DeleteInstrumentAccessory(event) {
+    var data = event.data;
+    event.data.modified = true;
+    this.instrumentAccessoryService.delete(data.id)
+      .subscribe((data) => this.notificationService.filter("itemadded"))
+
+  }
 
   EditMode() {
     if (confirm("Are you sure you want to edit the record?")) {
@@ -382,7 +437,10 @@ export class InstrumentComponent implements OnInit {
       this.instrumentform.enable();
       this.FormControlDisable();
       this.pdfcolumnDefs = this.pdfcreateColumnDefs();
-      this.columnDefs = this.createColumnDefs();
+
+      if (!this.isAccessories)
+        this.columnDefs = this.createColumnDefs();
+      else this.columnDefs = this.createColumnDefsAccessory();
 
       let warrenty = this.instrumentform.get('warranty')
       warrenty.setValue(warrenty.value)
@@ -835,6 +893,159 @@ export class InstrumentComponent implements OnInit {
         sortable: true,
         tooltipField: 'descCatalogue',
       }
+    ]
+  }
+
+  private createColumnDefsAccessory() {
+    return [
+      {
+        headerName: 'Action',
+        field: 'id',
+        filter: false,
+        enableSorting: false,
+        editable: false,
+        width: 100,
+        sortable: false,
+        lockPosition: "left",
+        cellRenderer: (params) => {
+          if (this.hasDeleteAccess) {
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+          }
+        }
+      },
+      {
+        headerName: 'Accessory Name',
+        field: 'accessoryName',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'accessoryName',
+      },
+      {
+        headerName: 'Brand Name',
+        field: 'brandName',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'brandName',
+      },
+      {
+        headerName: 'Model Name',
+        field: 'modelName',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'modelName',
+      },
+      {
+        headerName: 'Model Number',
+        field: 'modelNumber',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'modelNumber',
+      },
+      {
+        headerName: 'Serial Number',
+        field: 'serialNumber',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'serialNumber',
+      },
+      {
+        headerName: 'Year Of Purchase',
+        field: 'yearOfPurchase',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'yearOfPurchase',
+      },
+      {
+        headerName: 'Quantity',
+        field: 'quantity',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'quantity',
+      },
+      {
+        headerName: 'Accessory Description',
+        field: 'accessoryDescription',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'accessoryDescription',
+      },
+    ]
+  }
+
+  private createColumnDefsAccessoryRO() {
+    return [
+      {
+        headerName: 'Accessory Name',
+        field: 'accessoryName',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'accessoryName',
+      },
+      {
+        headerName: 'Brand Name',
+        field: 'brandName',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'brandName',
+      },
+      {
+        headerName: 'Model Name',
+        field: 'modelName',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'modelName',
+      },
+      {
+        headerName: 'Model Number',
+        field: 'modelNumber',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'modelNumber',
+      },
+      {
+        headerName: 'Serial Number',
+        field: 'serialNumber',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'serialNumber',
+      },
+      {
+        headerName: 'Year Of Purchase',
+        field: 'yearOfPurchase',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'yearOfPurchase',
+      },
+      {
+        headerName: 'Quantity',
+        field: 'quantity',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'quantity',
+      },
+      {
+        headerName: 'Accessory Description',
+        field: 'accessoryDescription',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        tooltipField: 'accessoryDescription',
+      },
     ]
   }
 

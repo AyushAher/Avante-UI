@@ -331,7 +331,7 @@
                 <div *ngIf="f.accepted.errors.required">accepted is required</div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-3" *ngIf="IsDistributorView">
+            <div class="col-md-3 col-sm-3" *ngIf="!IsEngineerView">
               <label for="serresolutiondate">Resolution Date</label>
               <input [ngClass]="{ 'is-invalid': submitted && f.serresolutiondate.errors }" bsDatepicker
                 class="form-control" formControlName="serresolutiondate" type="text" />

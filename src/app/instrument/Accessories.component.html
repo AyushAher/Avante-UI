@@ -1,0 +1,70 @@
+<div class="modal" style="display: block" id="modal" id="model" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #589b44;color: #fff !important">
+                <h6 class="modal-title" id="modal-basic-title">Cost Of Instrument Ownership</h6>
+                <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+                    <i class="fas fa-times" style="color: #fff !important" title="Close"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow-x: auto;">
+                <form [formGroup]="form">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label for="engineername">Accessory Name</label>
+                                <input formControlName="accessoryName" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.accessoryName.errors }" />
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="engineername">Brand Name</label>
+                                <input formControlName="brandName" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.brandName.errors }" />
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="engineername">Model Name</label>
+                                <input formControlName="modelName" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.modelName.errors }" />
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="engineername">Model Number</label>
+                                <input formControlName="modelNumber" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.modalNumber.errors }" />
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="engineername">Serial Number</label>
+                                <input formControlName="serialNumber" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.serialNumber.errors }" />
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="engineername">Year Of Purchase</label>
+                                <input formControlName="yearOfPurchase" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.yearOfPurchase.errors }" />
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="engineername">Quantity</label>
+                                <input formControlName="quantity" type="number" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }" />
+                            </div>
+
+                            <div class="col-sm-6 form-group">
+                                <label for="engineername">Accessory Description</label>
+                                <textarea formControlName="accessoryDescription" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.accessoryDescription.errors }"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+                            <button [disabled]="loading" (click)="onValueSubmit()" type="submit"
+                                class="btn btn-primary">
+                                Submit
+                            </button>
+                            <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

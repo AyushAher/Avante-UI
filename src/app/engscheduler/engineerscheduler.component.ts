@@ -18,6 +18,7 @@ import { DatePipe } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TextBox, Input } from '@syncfusion/ej2-inputs';
 import { EnvService } from '../_services/env/env.service';
+import { GetParsedDate } from '../_helpers/Providers';
 
 L10n.load({
   'en-US': {
@@ -64,6 +65,7 @@ export class EngschedulerComponent implements OnInit {
     resources: ['Owners']
   };
   isRemoteDesktop: boolean;
+  dateFormat = "dd/MM/yyyy"
 
   constructor(
     private serviceRequestService: ServiceRequestService,
@@ -237,9 +239,10 @@ export class EngschedulerComponent implements OnInit {
             .subscribe({
               next: (data: any) => {
                 data = data.object;
-                let serReqDate = new Date((data.serreqdate))
-                let SDate: Date = x.StartTime;
+                let serReqDate = new Date(GetParsedDate(data.serreqdate))
+                let SDate = new Date(x.StartTime);
                 let diff = SDate.valueOf() - serReqDate.valueOf()
+
                 if (diff >= 0) {
                   x.StartTime = x.StartTime.toString();
                   x.EndTime = x.EndTime.toString();
@@ -298,8 +301,8 @@ export class EngschedulerComponent implements OnInit {
               next: (data: any) => {
                 this.loading = true;
                 data = data.object;
-                let serReqDate = new Date((data.serreqdate))
-                let SDate: Date = x.StartTime;
+                let serReqDate = new Date(GetParsedDate(data.serreqdate))
+                let SDate = new Date(x.StartTime);
                 let diff = SDate.valueOf() - serReqDate.valueOf()
                 if (diff >= 0) {
                   x.StartTime = x.StartTime.toString();

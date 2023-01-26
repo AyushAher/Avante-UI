@@ -85,7 +85,6 @@ function CustomerDashboardCharts() {
 function DistributorDashboardCharts() {
   setTimeout(() => {
     var lines = JSON.parse(localStorage.getItem('lines'));
-    console.log(lines);
     var xLineValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     var prevLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

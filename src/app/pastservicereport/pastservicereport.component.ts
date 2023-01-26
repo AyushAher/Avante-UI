@@ -204,10 +204,10 @@ export class PastservicereportComponent implements OnInit {
       this.pastServiceReportService.save(this.ServiceReport)
         .pipe(first())
         .subscribe({
-          next: (data: any) => {
+          next: async (data: any) => {
             if (!data.result) return;
             this.CancelEdit()
-            this.uploadFile(this.file, data.object.id);
+            await this.uploadFile(this.file, data.object.id);
             this.notificationService.filter("itemadded");
             document.getElementById('selectedfiles').style.display = 'none';
             this.notificationService.showSuccess(data.resultMessage, 'Success');
@@ -220,10 +220,10 @@ export class PastservicereportComponent implements OnInit {
       this.ServiceReport.id = this.id;
       this.pastServiceReportService.update(this.id, this.ServiceReport)
         .pipe(first())
-        .subscribe((data: any) => {
+        .subscribe(async (data: any) => {
           if (!data.result) return;
           this.CancelEdit()
-          if (this.file != null) this.uploadFile(this.file, data.object.id);
+          if (this.file != null) await this.uploadFile(this.file, data.object.id);
           this.notificationService.filter("itemadded");
           document.getElementById('selectedfiles').style.display = 'none';
           this.notificationService.showSuccess(data.resultMessage, 'Success');
@@ -271,10 +271,7 @@ export class PastservicereportComponent implements OnInit {
       return formData.append("file" + index, file, file.name);
     });
 
-    this.fileshareService.upload(formData, id, "PSTSRP", null).subscribe((event) => {
-      if (event.type === HttpEventType.UploadProgress)
-        this.progress = Math.round((100 * event.loaded) / event.total);
-    });
+    return this.fileshareService.upload(formData, id, "PSTSRP", null).toPromise();
   };
 
   GetFileList(id: string) {

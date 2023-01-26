@@ -83,7 +83,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.user = this.accountService.userValue;
 
     let role = JSON.parse(localStorage.getItem('roles'));
@@ -140,38 +140,17 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       .pipe(first())
       .subscribe((data: any) => this.DistributorList = data.object)
 
+    await this.GetDistAndEng();
+
+
+    this.id = this.route.snapshot.paramMap.get("id");
+    this.servicereportid = this.route.snapshot.queryParams?.servicereportid
+
     if (this.role == this.environment.engRoleCode) {
       this.eng = true
       this.form.get('engineerId').setValue(this.user.contactId)
       this.engId = this.user.contactId;
     }
-
-    this.distributorservice.getByConId(this.user.contactId).pipe(first())
-      .subscribe((data: any) => {
-        if (this.user.username != "admin") {
-          if (data.object.length > 0) {
-            this.distId = data.object[0].id;
-            this.form.get('distId').setValue(this.distId)
-
-            this.distributorservice.getDistributorRegionContacts(this.distId)
-              .pipe(first()).subscribe((data: any) => {
-                this.engineer = data.object
-
-                this.servicerequestservice.GetServiceRequestByDist(this.distId)
-                  .pipe(first()).subscribe((data: any) =>
-                    this.servicerequest = data.object.filter(x => x.assignedto == this.user.contactId
-                      && !x.isReportGenerated));
-
-              });
-
-          }
-        }
-      })
-
-
-
-    this.id = this.route.snapshot.paramMap.get("id");
-    this.servicereportid = this.route.snapshot.queryParams?.servicereportid
 
     if (this.id != null) {
       this.CustomersatisfactionsurveyService.getById(this.id)
@@ -202,24 +181,38 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     }
 
     if (this.servicereportid != null) {
-      this.serviceReportService.getById(this.servicereportid)
-        .pipe().subscribe((data: any) => {
-          let serreq = data.object.serviceRequest
-          this.distId = serreq.distid
-          this.form.get("distId").setValue(serreq.distid)
-
-          this.getengineers(serreq.distid)
-          this.form.get("engineerId").setValue(serreq.assignedto)
-          this.engId = serreq.assignedto
-
-          this.getservicerequest(serreq.distid, serreq.assignedto)
-          this.form.get("serviceRequestId").setValue(serreq.id)
-          this.serviceRequestId = serreq.id
-
-          this.form.get('name').setValue(serreq.contactperson)
-          this.form.get('email').setValue(serreq.email)
-        })
+      let data: any = await this.serviceReportService.getById(this.servicereportid).toPromise();
+      let serreq = data.object.serviceRequest
+      if (!this.isEng) await this.getengineers(serreq.distid)
+      await this.getservicerequest(serreq.distid, serreq.assignedto)
+      setTimeout(() => {
+        this.distId = serreq.distid;
+        this.form.get("distId").setValue(serreq.distid)
+        this.form.get("engineerId").setValue(serreq.assignedto)
+        this.engId = serreq.assignedto;
+        this.form.get("serviceRequestId").setValue(serreq.id)
+        this.serviceRequestId = serreq.id;
+        this.form.get('name').setValue(serreq.contactperson)
+        this.form.get('email').setValue(serreq.email)
+      }, 200);
     }
+  }
+
+  async GetDistAndEng() {
+    var data: any = await this.distributorservice.getByConId(this.user.contactId).toPromise();
+    if (this.user.username == "admin") return;
+    if (data.object.length <= 0) return;
+
+    this.distId = data.object[0].id;
+    this.form.get('distId').setValue(this.distId)
+
+    var engdata: any = await this.distributorservice.getDistributorRegionContacts(this.distId).toPromise()
+    this.engineer = engdata.object
+
+    var serreqdata: any = await this.servicerequestservice.GetServiceRequestByDist(this.distId).toPromise();
+    this.servicerequest = serreqdata.object.filter(x => x.assignedto == this.user.contactId
+      && !x.isReportGenerated);
+
   }
 
   FormControlsDisable() {
@@ -279,9 +272,9 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     return this.form.controls;
   }
 
-  getservicerequest(id: string, engId = null) {
-    this.servicerequestservice.GetServiceRequestByDist(id)
-      .pipe(first()).subscribe((data: any) => this.servicerequest = data.object.filter(x => x.assignedto == engId));
+  async getservicerequest(id: string, engId = null) {
+    var data: any = await this.servicerequestservice.GetServiceRequestByDist(id).toPromise();
+    this.servicerequest = data.object.filter(x => x.assignedto == engId);
   }
 
   onServiceRequestChange() {
@@ -293,11 +286,10 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
   }
 
-  getengineers(id: string) {
+  async getengineers(id: string) {
     this.distId = id
-    this.distributorservice.getDistributorRegionContacts(id)
-      .pipe(first())
-      .subscribe((data: any) => this.engineer = data.object);
+    var data: any = await this.distributorservice.getDistributorRegionContacts(id).toPromise();
+    this.engineer = data.object;
   }
 
   onSubmit() {

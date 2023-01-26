@@ -1,10 +1,11 @@
-<ejs-schedule *ngIf="isEng==true" width='100%' height='100%' #scheduleObj [currentView]="setView"
-  (actionBegin)="onActionBegin($event)" (popupOpen)='onPopupOpen($event)' [eventSettings]="eventSettings">
+<ejs-schedule *ngIf="isEng==true" [dateFormat]="dateFormat" width='100%' height='100%' #scheduleObj
+  [currentView]="setView" (actionBegin)="onActionBegin($event)" (popupOpen)='onPopupOpen($event)'
+  [eventSettings]="eventSettings">
 </ejs-schedule>
-<ejs-schedule *ngIf="isAdmin==true" width='100%' height='100%'></ejs-schedule>
+<ejs-schedule *ngIf="isAdmin==true" [dateFormat]="dateFormat" width='100%' height='100%'></ejs-schedule>
 <!--   -->
-<ejs-schedule *ngIf="isDistSupp==true" width='100%' height='100%' #scheduleObj [views]="views" [currentView]="setView"
-  [eventSettings]="eventSettings" [group]='group' (popupOpen)='onPopupOpenDist($event)'>
+<ejs-schedule *ngIf="isDistSupp==true" [dateFormat]="dateFormat" width='100%' height='100%' #scheduleObj [views]="views"
+  [currentView]="setView" [eventSettings]="eventSettings" [group]='group' (popupOpen)='onPopupOpenDist($event)'>
   <e-resources>
     <e-resource field="OwnerId" title="Owner" name="Owners" [dataSource]="ownerDataSource" [allowMultiple]="false"
       textField='OwnerText' idField='Id' colorField='OwnerColor'>

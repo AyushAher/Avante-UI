@@ -146,6 +146,7 @@ import { CreateBrandComponent } from './account/brand.component';
 import { ConfigBsDatepicker, GetParsedDate, GetParsedDatePipe } from './_helpers/Providers';
 import { PastservicereportComponent } from './pastservicereport/pastservicereport.component';
 import { DownloadReportFile, PastservicereportlistComponent } from './pastservicereport/pastservicereportlist.component';
+import { Accessories } from './instrument/Accessories.component';
 
 
 @NgModule({
@@ -270,7 +271,8 @@ import { DownloadReportFile, PastservicereportlistComponent } from './pastservic
     CreateCompanyComponent,
     PastservicereportComponent,
     PastservicereportlistComponent,
-    DownloadReportFile
+    DownloadReportFile,
+    Accessories
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

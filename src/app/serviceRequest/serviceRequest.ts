@@ -761,7 +761,7 @@ export class ServiceRequestComponent implements OnInit {
     return this.serviceRequestform.controls.engineer;
   }
 
-  onSubmit() {
+  onSubmit(redirect = true) {
     this.submitted = true
     this.serviceRequestform.get('subrequesttypeid').enable();
 
@@ -786,8 +786,8 @@ export class ServiceRequestComponent implements OnInit {
     let eDate = this.serviceRequestform.get('edate').value
 
     if ((sDate != "" && sDate != null) && (eDate != "" && eDate != null)) {
-      let dateSent = new Date(sDate);
-      let currentDate = new Date(eDate);
+      let dateSent = GetParsedDate(sDate);
+      let currentDate = GetParsedDate(eDate);
 
       let calc = Math.floor(
         (Date.UTC(
@@ -805,8 +805,8 @@ export class ServiceRequestComponent implements OnInit {
       if (calc <= 0)
         return this.notificationService.showError("End Date should not be greater than Start Date", "Error");
 
-      this.serviceRequestform.get('sdate').setValue(datepipie.transform(this.serviceRequestform.get('sdate').value, 'dd/MM/YYYY'));
-      this.serviceRequestform.get('edate').setValue(datepipie.transform(this.serviceRequestform.get('edate').value, 'dd/MM/YYYY'));
+      this.serviceRequestform.get('sdate').setValue(datepipie.transform(dateSent, 'dd/MM/YYYY'));
+      this.serviceRequestform.get('edate').setValue(datepipie.transform(currentDate, 'dd/MM/YYYY'));
     }
 
 
@@ -847,8 +847,8 @@ export class ServiceRequestComponent implements OnInit {
                 this.addAssignedHistory(this.serviceRequest);
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
-
-              this.router.navigate(["servicerequestlist"]);
+              if (redirect)
+                this.router.navigate(["servicerequestlist"]);
             }
           },
         });
@@ -882,7 +882,8 @@ export class ServiceRequestComponent implements OnInit {
                 this.addAssignedHistory(this.serviceRequest);
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["servicerequestlist"]);
+              if (redirect)
+                this.router.navigate(["servicerequestlist"]);
             }
           }
         });
