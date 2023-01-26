@@ -13,7 +13,8 @@
             <a (click)="Back()" class="nav-link">
               <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
             </a>
-            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+            <a class="nav-link" (click)="EditMode()"
+              *ngIf="!lockRequest && hasUpdateAccess && !isEditMode && !isNewMode">
               <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
             </a>
 
@@ -81,8 +82,7 @@
 
             <div class="col-md-3">
               <label for="assignedTo">Site</label>
-              <select class="form-select" (change)="getInstrumnetsBySiteIds($event.target.value)"
-                formControlName="siteid">
+              <select class="form-select" formControlName="siteid">
                 <option *ngFor="let c of customerSitelist" value={{c.id}}>
                   {{c.custregname}}
                 </option>

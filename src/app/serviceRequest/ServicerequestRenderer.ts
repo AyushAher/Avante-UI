@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AgRendererComponent } from "ag-grid-angular";
 import { first } from "rxjs/operators";
 import { ListTypeItem, ProfileReadOnly, ServiceRequest, tickersAssignedHistory } from "../_models";
@@ -25,7 +25,7 @@ import { DistributorService, ListTypeService, NotificationService, ProfileServic
 export class ServiceRComponent implements AgRendererComponent, OnInit {
     params: any;
     appendList: any;
-    Form: any;
+    Form: FormGroup;
     statuslist: any;
     hasUpdate: boolean = false;
     profilePermission: ProfileReadOnly;
@@ -137,7 +137,7 @@ export class ServiceRComponent implements AgRendererComponent, OnInit {
                 this.appendList = data.object;
             });
         setTimeout(() => {
-            if (this.params.data.isReportGenerated) {
+            if (this.params.data.isReportGenerated || this.params.data.lockRequest) {
                 this.Form.disable()
                 this.isGenerateReport = true;
             }

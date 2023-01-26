@@ -112,15 +112,30 @@ export class ReportfilterComponent implements OnInit {
       serviceType: [""],
     })
 
+    this.form.get("region").valueChanges.subscribe((data) => {
+      this.onRegionChange(data)
+    })
+
+    this.form.get("country").valueChanges.subscribe((data) => {
+      this.countryChange(data)
+    })
+
+    this.form.get("customer").valueChanges.subscribe((data) => {
+      this.onCustomerChange(data)
+    })
+
+    this.form.get("site").valueChanges.subscribe((data) => {
+      this.SiteChange(data)
+    })
+
     this.accountService.GetUserRegions().pipe(first())
       .subscribe((data: any) => {
         this.regionService.getAll().pipe(first())
           .subscribe((dataReg: any) => {
             this.allRegionsList = dataReg;
             data.object.forEach(element => {
-              if (element != "" && element != null) {
+              if (element != "" && element != null)
                 this.regionsList.push(dataReg.find(x => x.id == element))
-              }
             });
           })
       })
@@ -139,23 +154,19 @@ export class ReportfilterComponent implements OnInit {
 
               this.form.get('region').setValue(cust.defdistregionid)
               this.form.get('region').disable()
-              this.onRegionChange()
 
               this.form.get('country').setValue(cust.countryid)
               this.form.get('country').disable()
-              this.countryChange();
 
               setTimeout(() => {
                 this.form.get('customer').setValue(cust.id)
                 this.form.get('customer').disable()
-                this.onCustomerChange()
 
                 cust.sites.forEach(element => {
                   element.contacts.forEach(con => {
                     if (con.id == this.user.contactId) {
                       this.form.get('site').setValue(element.id)
                       this.form.get('site').disable()
-                      this.SiteChange()
                     }
                   });
                 });
@@ -178,23 +189,30 @@ export class ReportfilterComponent implements OnInit {
 
   }
 
-  onCustomerChange() {
-    this.siteList = this.customerList.find(x => x.id == this.form.get('customer').value).sites
-    this.form.get('site').reset();
+  onCustomerChange(customer) {
+    if (!customer) return;
+    this.siteList = this.customerList.find(x => x.id == customer).sites
+    setTimeout(() => this.form.get('site').reset(), 20);
   }
 
-  SiteChange() {
-    this.siteBInstrumentList = this.instrumentList.filter(x => x.custSiteId == this.form.get('site').value)
+  SiteChange(site) {
+    if (!site) return;
+    this.siteBInstrumentList = this.instrumentList.filter(x => x.custSiteId == site)
     setTimeout(() => this.form.get('insSerialNo').reset(), 200);
   }
 
-  countryChange() {
-    this.customerBCountryList = this.customerList.filter(x => x.countryid == this.form.get('country').value)
+  countryChange(country) {
+    if (!country) return;
+    this.customerBCountryList = this.customerList.filter(x => x.countryid == country)
 
-    setTimeout(() => this.form.get('customer').reset(), 100);
+    setTimeout(() => {
+      this.form.get('customer').reset()
+      this.form.get("site").reset()
+      this.form.get("insSerialNo").reset()
+    }, 10);
   }
 
-  onRegionChange() {
+  onRegionChange(region) {
     if (this.hasInstrument) {
       this.form.get('insSerialNo').setValidators([Validators.required])
       this.form.get('insSerialNo').updateValueAndValidity()
@@ -212,12 +230,17 @@ export class ReportfilterComponent implements OnInit {
       this.form.get('site').updateValueAndValidity()
     }
 
-    var country = this.regionsList.find(x => x.id == this.form.get('region').value)?.countries
+    var country = this.regionsList.find(x => x.id == region)?.countries
     this.regionCountryList = []
 
     country.split(',').forEach(x => {
       this.regionCountryList.push(this.countryList.find(element => element.id == x))
     });
+
+
+    setTimeout(() => {
+      this.form.get("country").reset()
+    }, 20);
   }
 
   clear() {
@@ -225,32 +248,28 @@ export class ReportfilterComponent implements OnInit {
     this.form.reset();
   }
 
-  onSubmit() {
+  async onSubmit() {
+    if (this.form.invalid) return this.notificationService.showError("Please fill all fields", "Form Invalid")
 
-    if (this.form.valid) {
-      this.modal = this.form.value
+    this.modal = this.form.value
+    let data: any = await this.instrumentService.getFilteredAll(this.modal, this.controller).toPromise();
+    var nData = []
 
-      this.instrumentService.getFilteredAll(this.modal, this.controller).pipe(first())
-        .subscribe((data: any) => {
-          var nData = []
+    data.object.forEach(x => {
+      var co = new Date(x.createdon)?.getTime()
+      var sDate = this.form.get("sDate").value?.getTime()
+      var eDate = this.form.get("eDate").value?.getTime()
+      if (sDate <= co && co <= eDate) {
+        nData.push(x)
+      }
+    });
 
-          data.object.forEach(x => {
-            var co = new Date(x.createdon)?.getTime()
-            var sDate = this.form.get("sDate").value?.getTime()
-            var eDate = this.form.get("eDate").value?.getTime()
-            if (sDate <= co && co <= eDate) {
-              nData.push(x)
-            }
-          });
+    if (this.isAmc) nData = nData.filter(x => x.servicetype == this.form.get('serviceType').value)
 
-          if (this.isAmc) nData = nData.filter(x => x.servicetype == this.form.get('serviceType').value)
-
-          this.nData.emit(nData)
-          this.showData.emit(true)
-        })
-    } else {
-      this.notificationService.showError("Please fill all fields", "Form Invalid")
-    }
+    this.nData.emit(nData)
+    this.showData.emit(true)
   }
 
 }
+
+

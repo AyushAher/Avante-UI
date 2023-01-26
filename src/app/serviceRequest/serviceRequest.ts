@@ -134,6 +134,7 @@ export class ServiceRequestComponent implements OnInit {
   isEditMode: boolean;
   designationList: ListTypeItem[];
   datepipe = new DatePipe('en-US')
+  lockRequest: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -310,6 +311,14 @@ export class ServiceRequestComponent implements OnInit {
       })
     });
 
+    this.serviceRequestform.get("siteid").valueChanges.subscribe((data: any) => {
+      this.getInstrumnetsBySiteIds(data)
+      if (this.serviceRequestId == null) setTimeout(() => this.serviceRequestform.get("machinesno").reset(), 1000);
+    })
+
+    this.serviceRequestform.get("machinesno").valueChanges.subscribe((data: any) => {
+      if (data) this.oninstuchange(data)
+    })
     if (this.IsEngineerView == true) {
       this.serviceRequestform.get('requesttypeid').setValidators([Validators.required]);
       this.serviceRequestform.get('requesttypeid').updateValueAndValidity();
@@ -421,6 +430,7 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            this.lockRequest = data.object.lockRequest
             this.onServiceTypeChange(data.object.visittype);
             this.getInstrumnetsBySiteIds(data.object.siteid)
             var subreq = data.object.subrequesttypeid.split(',');
@@ -983,97 +993,92 @@ export class ServiceRequestComponent implements OnInit {
   generatereport() {
     if (this.isGenerateReport == false) {
       this.onSubmit();
-      this.EngschedulerService.getAll().pipe(first()).subscribe({
-        next: (data: any) => {
+      let scheduleCalls = this.scheduleData.filter(x => x.serReqId == this.serviceRequestId)
+      if (this.scheduleData == null || this.scheduleData.length <= 0 || scheduleCalls.length <= 0) {
+        return this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
+      }
 
-          if (data.result) {
-            let scheduleCalls = data.object.filter(x => x.serReqId == this.serviceRequestId)
-            if (scheduleCalls != null && scheduleCalls.length > 0) {
-              this.servicereport = new ServiceReport();
+      this.servicereport = new ServiceReport();
 
-              this.servicereport.serviceRequestId = this.serviceRequestId;
-              this.servicereport.customer = this.serviceRequestform.get('companyname').value;
-              this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(GetParsedDate(this.serviceRequestform.get('serreqdate').value), 'yyyy-MM-dd');
-              this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
-              this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + '||' + this.serviceRequestform.get('alarmdetails')?.value + '||' + this.serviceRequestform.get('remarks')?.value;
+      this.servicereport.serviceRequestId = this.serviceRequestId;
+      this.servicereport.customer = this.serviceRequestform.get('companyname').value;
+      this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(GetParsedDate(this.serviceRequestform.get('serreqdate').value), 'yyyy-MM-dd');
+      this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
+      this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + '||' + this.serviceRequestform.get('alarmdetails')?.value + '||' + this.serviceRequestform.get('remarks')?.value;
 
-              this.instrumentService.getAll(this.user.userId)
+      this.instrumentService.getAll(this.user.userId)
+        .pipe(first())
+        .subscribe((data: any) => {
+          let instrumentList = data.object;
+          this.servicereport.instrument = instrumentList.find(x => x.id == this.serviceRequestform.get('machinesno').value)?.id;
+        });
+
+      if (this.isAmc) this.servicereport.problem = 'AMC';
+
+      this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.INS)).length > 0;
+      this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.ANAS)).length > 0;
+      this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.PRMN1)).length > 0;
+      this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.REWK)).length > 0;
+      this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.CRMA)).length > 0;
+      if (this.customerId != null) {
+        this.customerService.getById(this.customerId)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              this.custcityname = data.object.address.city;
+              this.servicereport.town = this.custcityname;
+
+              this.servicereportService.save(this.servicereport)
                 .pipe(first())
-                .subscribe((data: any) => {
-                  let instrumentList = data.object;
-                  this.servicereport.instrument = instrumentList.find(x => x.id == this.serviceRequestform.get('machinesno').value)?.id;
+                .subscribe({
+                  next: (data: any) => {
+
+                    if (data.result) {
+                      this.notificationService.showSuccess(data.resultMessage, "Success");
+
+                      this.srAssignedHistory = new tickersAssignedHistory;
+                      this.srAssignedHistory.engineerid = this.engineerid;
+                      this.srAssignedHistory.servicerequestid = this.serviceRequestId;
+                      this.srAssignedHistory.ticketstatus = "INPRG";
+                      this.srAssignedHistory.assigneddate = new Date()
+
+                      this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
+
+                      this.router.navigate(["servicereport", data.object.id]);
+                    }
+
+                  }
                 });
-
-              if (this.isAmc) this.servicereport.problem = 'AMC';
-
-              this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.INS)).length > 0;
-              this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.ANAS)).length > 0;
-              this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.PRMN1)).length > 0;
-              this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.REWK)).length > 0;
-              this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.CRMA)).length > 0;
-              if (this.customerId != null) {
-                this.customerService.getById(this.customerId)
-                  .pipe(first())
-                  .subscribe({
-                    next: (data: any) => {
-                      this.custcityname = data.object.address.city;
-                      this.servicereport.town = this.custcityname;
-
-                      this.servicereportService.save(this.servicereport)
-                        .pipe(first())
-                        .subscribe({
-                          next: (data: any) => {
-
-                            if (data.result) {
-                              this.notificationService.showSuccess(data.resultMessage, "Success");
-
-                              this.srAssignedHistory = new tickersAssignedHistory;
-                              this.srAssignedHistory.engineerid = this.engineerid;
-                              this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-                              this.srAssignedHistory.ticketstatus = "INPRG";
-                              this.srAssignedHistory.assigneddate = new Date()
-
-                              this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
-
-                              this.router.navigate(["servicereport", data.object.id]);
-                            }
-
-                          }
-                        });
-                    }
-                  });
-              }
-              else {
-                this.servicereportService.save(this.servicereport)
-                  .pipe(first())
-                  .subscribe({
-                    next: (data: any) => {
-
-                      if (data.result) {
-                        this.notificationService.showSuccess(data.resultMessage, "Success");
-
-                        this.srAssignedHistory = new tickersAssignedHistory;
-                        this.srAssignedHistory.engineerid = this.engineerid;
-                        this.srAssignedHistory.servicerequestid = this.serviceRequestId;
-                        this.srAssignedHistory.ticketstatus = "INPRG";
-                        this.srAssignedHistory.assigneddate = new Date()
-
-                        this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
-
-                        this.router.navigate(["servicereport", data.object.id]);
-                      }
-
-
-                    }
-                  });
-              }
-
-            } else {
-              this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
             }
-          }
-        },
-      })
+          });
+      }
+      else {
+        this.servicereportService.save(this.servicereport)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+
+              if (data.result) {
+                this.notificationService.showSuccess(data.resultMessage, "Success");
+
+                this.srAssignedHistory = new tickersAssignedHistory;
+                this.srAssignedHistory.engineerid = this.engineerid;
+                this.srAssignedHistory.servicerequestid = this.serviceRequestId;
+                this.srAssignedHistory.ticketstatus = "INPRG";
+                this.srAssignedHistory.assigneddate = new Date()
+
+                this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
+
+                this.router.navigate(["servicereport", data.object.id]);
+              }
+
+
+            }
+          });
+      }
+
+
+
     }
 
   }

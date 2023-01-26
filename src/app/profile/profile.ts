@@ -326,8 +326,6 @@ export class ProfileComponent implements OnInit {
       this.profileService.save(this.profile)
         .pipe(first())
         .subscribe((data: any) => {
-          //debugger;
-          this.notificationService.filter("itemadded")
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["profilelist"]);
@@ -340,7 +338,6 @@ export class ProfileComponent implements OnInit {
       this.profileService.update(this.id, this.profile)
         .pipe(first())
         .subscribe((data: ResultMsg) => {
-          this.notificationService.filter("itemadded")
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["profilelist"]);

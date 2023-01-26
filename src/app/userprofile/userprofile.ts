@@ -89,7 +89,7 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
     this.dropdownSettings = {
       idField: 'id',
-      textField: 'region',
+      textField: 'distregname',
     };
 
     this.siteDropdownSettings = {

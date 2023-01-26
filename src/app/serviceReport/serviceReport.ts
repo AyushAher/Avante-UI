@@ -323,6 +323,7 @@ export class ServiceReportComponent implements OnInit {
       engineerSing: [''],
       signcustname: ['', Validators.required],
       customerSing: [''],
+      servicerequestno: ["", Validators.required],
       workTime: this.formBuilder.group({
         date: [''],
         startTime: [''],
@@ -390,6 +391,7 @@ export class ServiceReportComponent implements OnInit {
           next: (data: any) => {
             this.ServiceReportform.patchValue(data.object);
             this.ServiceReportform.patchValue({ 'workCompletedstr': data.object.workCompleted == true ? '0' : '1' });
+            this.ServiceReportform.patchValue({ 'servicerequestno': data.object.serviceRequest.serreqno });
             this.ServiceReportform.patchValue({ 'workfinishedstr': data.object.workfinished == true ? '0' : '1' });
             this.ServiceReportform.patchValue({ 'interruptedstr': data.object.interrupted == true ? '0' : '1' });
             this.onInteruptedChange(this.ServiceReportform.get('interruptedstr').value)

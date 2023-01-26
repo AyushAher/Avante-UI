@@ -4,30 +4,29 @@
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div class="mb-4">
                     <label for="region" class="form-label">Region</label>
-                    <select formControlName="region" (change)="onRegionChange()"
-                        class="form-select form-select-lg mb-3 text-uppercase"
+                    <select formControlName="region" class="form-select form-select-lg mb-3 text-uppercase"
                         aria-label=".form-select-lg example form-select">
-                        <option *ngFor="let item of regionsList" [value]="item.id">{{item.region}}</option>
+                        <option *ngFor="let item of regionsList" [value]="item.id">{{item.distregname}}</option>
                     </select>
                 </div>
                 <div class="mb-4">
                     <label for="country" class="form-label">Country</label>
-                    <select formControlName="country" (change)="countryChange()"
-                        class="form-select form-select-lg mb-3 text-uppercase" aria-label=".form-select-lg example">
+                    <select formControlName="country" class="form-select form-select-lg mb-3 text-uppercase"
+                        aria-label=".form-select-lg example">
                         <option *ngFor="let item of regionCountryList" [value]="item.id">{{item.name}}</option>
                     </select>
                 </div>
                 <div class="mb-4">
                     <label for="customer" class="form-label">Customer</label>
-                    <select formControlName="customer" (change)="onCustomerChange()"
-                        class="form-select form-select-lg mb-3 text-uppercase" aria-label=".form-select-lg example">
+                    <select formControlName="customer" class="form-select form-select-lg mb-3 text-uppercase"
+                        aria-label=".form-select-lg example">
                         <option *ngFor="let item of customerBCountryList" [value]="item.id">{{item.custname}}</option>
                     </select>
                 </div>
                 <div class="mb-4">
                     <label for="site" class="form-label">Site</label>
-                    <select formControlName="site" (change)="SiteChange()"
-                        class="form-select form-select-lg mb-3 text-uppercase" aria-label=".form-select-lg example">
+                    <select formControlName="site" class="form-select form-select-lg mb-3 text-uppercase"
+                        aria-label=".form-select-lg example">
                         <option *ngFor="let item of siteList" [value]="item.id">{{item.custregname}}</option>
                     </select>
                 </div>

@@ -63,6 +63,14 @@
               </div>
             </div>
             <div class="col-sm-3">
+              <label for="serreqno">Service Request No.</label>
+              <input [ngClass]="{ 'is-invalid': submitted && f.servicerequestno .errors }" class="form-control"
+                formControlName="servicerequestno" readonly type="text" />
+              <div *ngIf="submitted && f.servicerequestno.errors" class="invalid-feedback">
+                <div *ngIf="f.servicerequestno.errors.required">Service Request No. is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
               <label for="customer">Customer</label>
               <input type="text" formControlName="customer" class="form-control" readonly />
             </div>

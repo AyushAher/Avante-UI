@@ -59,7 +59,7 @@ export class ModelEngActionContentComponent implements OnInit {
     this.actionForm = this.formBuilder.group({
       engineerid: ['', Validators.required],
       comments: ['', Validators.required],
-      actiondate: ['', Validators.required],
+      actiondate: [new Date(), Validators.required],
       actiontaken: [''],
       isactive: [true],
       isdeleted: [false],
