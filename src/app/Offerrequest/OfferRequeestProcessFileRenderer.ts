@@ -24,20 +24,20 @@ export class OfferRequeestProcessFileRenderer implements OnInit {
 
     }
 
-    download(params: any) {
+    download(params: any, name: any) {
         this.FileShareService.download(params).subscribe((event) => {
             if (event.type === HttpEventType.Response) {
-                this.downloadFile(event);
+                this.downloadFile(event, name);
             }
         });
     }
 
-    private downloadFile(data: HttpResponse<Blob>) {
+    private downloadFile(data: HttpResponse<Blob>, name: any) {
         const downloadedFile = new Blob([data.body], { type: data.body.type });
         const a = document.createElement("a");
         a.setAttribute("style", "display:block;");
         document.body.appendChild(a);
-        a.download = this.parameters.id;
+        a.download = name;
         a.href = URL.createObjectURL(downloadedFile);
         a.innerHTML = this.parameters.fileUrl;
         a.target = "_blank";
