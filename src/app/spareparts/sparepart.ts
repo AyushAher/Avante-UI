@@ -246,6 +246,7 @@ export class SparePartComponent implements OnInit {
   get f() { return this.sparepartform.controls; }
 
   getSpareByNo(partNo: string, configType: string, configValue: string) {
+    if (!configType || !configValue) return this.notificationService.showInfo("Please select config type and config value to get Spare Part", "Error");
     this.configPartCombo = new ConfigPartCombo;
     this.configPartCombo.configTypeId = configType;
     this.configPartCombo.configValueId = configValue;

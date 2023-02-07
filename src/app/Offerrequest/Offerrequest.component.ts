@@ -289,11 +289,8 @@ export class OfferrequestComponent implements OnInit {
 
     this.id = this.route.snapshot.paramMap.get('id');
 
-    this.instrumentService.getAll(this.user.userId)
-      .pipe(first())
-      .subscribe((data: any) => {
-        this.instruments = data.object
-      })
+    var data: any = await this.instrumentService.getAll(this.user.userId).toPromise()
+    this.instruments = data.object
 
     await this.SetCustomer(true)
 
@@ -322,14 +319,6 @@ export class OfferrequestComponent implements OnInit {
 
               this.isCompleted = data.object.isCompleted
               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
-              debugger;
-              var instrumentLst = []
-              data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
-              data.object.instrumentsList.forEach(ins => {
-                if (this.instrumentslst.find(x => x.id == ins) != null) instrumentLst.push(ins)
-              });
-
-              data.object.instrumentsList = instrumentLst;
 
               this.paymentTypes = []
               this.payTypes = mstData;
@@ -352,12 +341,21 @@ export class OfferrequestComponent implements OnInit {
                     element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
                   });
 
-
                   this.form.patchValue(data.object);
+
+                  setTimeout(() => {
+                    var instrumentLst = []
+                    data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
+                    data.object.instrumentsList.forEach(ins => {
+                      if (this.instrumentslst.find(x => x.id == ins) != null) instrumentLst.push(ins)
+                    });
+                    data.object.instrumentsList = instrumentLst;
+                    this.form.patchValue(data.object);
+                  }, 500);
+
                   this.rowData = stageData.object;
                   this.rowData?.sort((a, b) => a.stageIndex - b.stageIndex);
                   this.totalStages = this.rowData?.length | 0;
-
                   this.GetSparePartTotal()
                   setTimeout(() => this.form.get('stageName').reset(), 200);
                 })
@@ -745,9 +743,11 @@ export class OfferrequestComponent implements OnInit {
 
   SparePartsSearch = (searchtext) => {
     this.sparePartPartNo = searchtext;
-
-    this.Service.searchByKeyword(this.sparePartPartNo, this.form.get("instrumentsList").value.toString())
-      .pipe(first()).subscribe((data: any) => this.sparePartsAutoComplete = data.object);
+    if (searchtext) {
+      if (!this.form.get("instrumentsList").value.toString()) return this.notificationService.showError("Please Select Instrument", "Error");
+      this.Service.searchByKeyword(this.sparePartPartNo, this.form.get("instrumentsList").value.toString())
+        .pipe(first()).subscribe((data: any) => this.sparePartsAutoComplete = data.object);
+    }
   }
 
   AddSpareParts(instrument: any) {
@@ -1160,12 +1160,12 @@ export class OfferrequestComponent implements OnInit {
     this.model.podate = datepipie.transform(new Date, 'dd/MM/YYYY');
 
 
-    if (this.form.get('paymentTerms').value.length > 0) {
+    if (this.form.get('paymentTerms').value?.length > 0) {
       var selectarray = this.form.get('paymentTerms').value;
       this.model.paymentTerms = selectarray.toString();
     }
 
-    else if (this.form.get('paymentTerms').value.length == 0) {
+    else if (this.form.get('paymentTerms').value?.length == 0) {
       this.model.paymentTerms = ""
     }
 
