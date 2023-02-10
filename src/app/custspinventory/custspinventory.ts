@@ -200,26 +200,18 @@ export class CustSPInventoryComponent implements OnInit {
 
 
 
-  onInstrumentChange() {
+  async onInstrumentChange() {
     var insId = this.form.get('instrument').value;
-    this.sparePartService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          data.result ? this.sparepartlist = data.object : this.sparepartlist = []
-          this.instrumentService.getById(insId).pipe(first())
-            .subscribe((data: any) => {
-              this.instruments = data.object;
-              this.instrumentService.getInstrumentConfif(data.object.id)
-                .pipe(first())
-                .subscribe((dataa: any) => {
-                  this.lstSpareParts = []
-                  this.lstSpareParts = dataa;
-                })
 
-            })
-        }
-      })
+    var data: any = await this.sparePartService.getAll().toPromise();
+    data.result ? this.sparepartlist = data.object : this.sparepartlist = []
+
+    data = await this.instrumentService.getById(insId).toPromise();
+    this.instruments = data.object;
+
+    var dataa: any = await this.instrumentService.getInstrumentConfif(data.object.id).toPromise();
+    this.lstSpareParts = []
+    this.lstSpareParts = dataa;
   }
 
   onConfigChange(param: string) {

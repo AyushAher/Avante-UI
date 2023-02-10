@@ -224,7 +224,7 @@ export class OfferrequestComponent implements OnInit {
       authtoken: [''],
       status: [''],
       otherSpareDesc: [''],
-      podate: ['', Validators.required],
+      podate: [this.datepipe.transform(new Date,"dd/MM/YYYY"), Validators.required],
       spareQuoteNo: [{ value: '', disabled: true }],
       payterms: [''],
       paymentTerms: [""],

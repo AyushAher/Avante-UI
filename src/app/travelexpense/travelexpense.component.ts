@@ -1,14 +1,13 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { HttpEventType } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { FilerendercomponentComponent } from '../Offerrequest/filerendercomponent.component';
 import { GetParsedDate } from '../_helpers/Providers';
-import { travelDetails, ProfileReadOnly, DistributorRegionContacts, ServiceRequest, ListTypeItem, Currency, User, Customer } from '../_models';
-import { AccountService, AlertService, CurrencyService, CustomerService, DistributorService, FileshareService, ListTypeService, NotificationService, ProfileService, ServiceRequestService, TravelDetailService } from '../_services';
+import { ProfileReadOnly, ServiceRequest, Currency, User, Customer } from '../_models';
+import { AccountService, AlertService, CurrencyService, CustomerService, DistributorService, FileshareService, ListTypeService, NotificationService, ProfileService, ServiceRequestService } from '../_services';
 import { EnvService } from '../_services/env/env.service';
 import { TravelExpenseService } from '../_services/travel-expense.service';
 
@@ -78,7 +77,7 @@ export class TravelexpenseComponent implements OnInit {
     private environment: EnvService,
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.transaction = 0;
 
     this.user = this.accountService.userValue;
@@ -161,53 +160,38 @@ export class TravelexpenseComponent implements OnInit {
       .subscribe((data: any) => this.customerList = data.object);
 
 
-    this.distributorservice.getByConId(this.user.contactId)
-      .pipe(first())
-      .subscribe((data: any) => {
-        if (this.user.username != "admin") {
-          this.form.get('distributorId').setValue(data.object[0].id);
-          this.distributorservice.getDistributorRegionContacts(data.object[0].id).pipe(first())
-            .subscribe((Engdata: any) => {
-              this.distId = data.object[0].id
-              this.engineer = Engdata.object;
-              this.servicerequestservice.GetServiceRequestByDist(data.object[0].id).pipe(first())
-                .subscribe((Srqdata: any) =>
-                  this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object[0].id && !x.isReportGenerated)
-                );
+    var data: any = await this.distributorservice.getByConId(this.user.contactId).toPromise();
 
-              if (this.IsEngineerView) {
-                this.form.get('engineerId').setValue(this.user.contactId)
-                this.getservicerequest(this.distId, this.user.contactId)
-              }
-            });
+    if (this.user.username == "admin") return;
+    this.form.get('distributorId').setValue(data.object[0].id);
+    var Engdata: any = await this.distributorservice.getDistributorRegionContacts(data.object[0].id).toPromise()
+    this.distId = data.object[0].id
+    this.engineer = Engdata.object;
+    this.servicerequestservice.GetServiceRequestByDist(data.object[0].id).pipe(first())
+      .subscribe((Srqdata: any) =>
+        this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object[0].id && !x.isReportGenerated)
+      );
 
-        }
-      })
+    if (this.IsEngineerView) {
+      this.form.get('engineerId').setValue(this.user.contactId)
+      await this.getservicerequest(this.distId, this.user.contactId)
+    }
+
 
 
     if (this.id != null) {
-      this.TravelExpenseService.getById(this.id).pipe(first())
-        .subscribe((data: any) => {
-          this.distributorservice.getDistributorRegionContacts(data.object.distributorId)
-            .pipe(first())
-            .subscribe((Engdata: any) => {
-              this.distId = data.object.distributorId
-              this.engineer = Engdata.object;
-              this.servicerequestservice
-                .GetServiceRequestByDist(data.object.distributorId)
-                .pipe(first())
-                .subscribe((Srqdata: any) => {
-                  this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
-                  this.GetFileList(data.object.id)
+      this.TravelExpenseService.getById(this.id)
+        .pipe(first()).subscribe((data: any) => {
+          this.getservicerequest(data.object.distributorId, data.object.engineerId);
+          setTimeout(() => {
+            console.log(data.object)
+            this.GetFileList(data.object.id)
+            this.form.patchValue(data.object)
+            this.form.patchValue({ "grandEngineerTotal": this.numberPipe.transform(this.grandEngineerTotalAmt) })
+            this.form.patchValue({ "grandCompanyTotal": this.numberPipe.transform(this.grandCompanyTotalAmt) })
+          }, 400)
+        });
 
-                  setTimeout(() => {
-                    this.form.patchValue(data.object)
-                    this.form.patchValue({ "grandEngineerTotal": this.numberPipe.transform(this.grandEngineerTotalAmt) })
-                    this.form.patchValue({ "grandCompanyTotal": this.numberPipe.transform(this.grandCompanyTotalAmt) })
-                  }, 1000);
-                });
-            });
-        })
       this.form.disable()
       this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     }
@@ -228,14 +212,11 @@ export class TravelexpenseComponent implements OnInit {
   }
 
   Back() {
-
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.router.navigate(["travelexpenselist"])
     }
-
     else this.router.navigate(["travelexpenselist"])
-
   }
 
   CancelEdit() {
@@ -249,6 +230,7 @@ export class TravelexpenseComponent implements OnInit {
     if (this.IsEngineerView) {
       this.form.get('engineerId').disable()
     }
+    this.form.get('totalDays').disable()
   }
 
   DeleteRecord() {
@@ -275,20 +257,15 @@ export class TravelexpenseComponent implements OnInit {
   }
 
 
-  getservicerequest(id: string, engId = null) {
+  async getservicerequest(id: string, engId = null) {
     let engid = this.form.get('engineerId').value
-
     if (engid) {
       let designation = this.engineer.find(x => x.id == engid).designationid
       this.form.get('designation').setValue(designation)
     }
 
-    this.servicerequestservice
-      .GetServiceRequestByDist(id)
-      .pipe(first())
-      .subscribe((Srqdata: any) => {
-        this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
-      });
+    var Srqdata: any = await this.servicerequestservice.GetServiceRequestByDist(id).toPromise();
+    this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
   }
 
   getengineers(id: string) {
@@ -401,9 +378,8 @@ export class TravelexpenseComponent implements OnInit {
 
   OnDateChange() {
     setTimeout(() => {
-
-      let currentDate = new Date(this.form.value.startDate);
-      let dateSent = new Date(this.form.value.endDate);
+      let currentDate = GetParsedDate(this.form.value.startDate);
+      let dateSent = GetParsedDate(this.form.value.endDate);
 
       if (currentDate && dateSent) {
         let calc = Math.floor(
@@ -424,7 +400,7 @@ export class TravelexpenseComponent implements OnInit {
         else
           this.form.get('totalDays').reset()
       }
-    }, 500);
+    }, 100)
 
   }
 
@@ -438,6 +414,8 @@ export class TravelexpenseComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+    this.form.enable();
+    this.OnDateChange()
 
     if (this.form.get('totalDays').value != null && this.form.get('totalDays').value < 1)
       return this.notificationService.showError("The difference between Start Date and End Date should be more than 1 day !", "Error");
@@ -449,7 +427,8 @@ export class TravelexpenseComponent implements OnInit {
     this.model.distId = this.distId
     this.model.grandCompanyTotal = parseInt(this.model.grandCompanyTotal)
     this.model.grandEngineerTotal = parseInt(this.model.grandEngineerTotal)
-
+    this.form.disable();
+    
     if (isNaN(this.model.grandCompanyTotal)) {
       this.model.grandCompanyTotal = 0;
     }
@@ -460,10 +439,8 @@ export class TravelexpenseComponent implements OnInit {
     if (this.IsEngineerView) this.model.engineerId = this.user.contactId;
 
     if (this.id == null) {
-      this.TravelExpenseService
-        .save(this.model)
-        .pipe(first())
-        .subscribe((data: any) => {
+      this.TravelExpenseService.save(this.model)
+        .pipe(first()).subscribe((data: any) => {
           if (this.file != null) this.uploadFile(this.file, data.object.id);
           if (data.result) {
             this.notificationService.showSuccess("Saved Successfully", "Success");
@@ -474,10 +451,8 @@ export class TravelexpenseComponent implements OnInit {
 
     else {
       this.model.id = this.id
-      this.TravelExpenseService
-        .update(this.id, this.model)
-        .pipe(first())
-        .subscribe((data: any) => {
+      this.TravelExpenseService.update(this.id, this.model)
+        .pipe(first()).subscribe((data: any) => {
           if (this.file != null) {
             this.uploadFile(this.file, this.id);
           }

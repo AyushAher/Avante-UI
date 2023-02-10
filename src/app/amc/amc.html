@@ -308,10 +308,10 @@
                   <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode" class="d-flex w-100">
                     <div class="d-flex w-50 flex-column">
                       <button type="button" class="btn" [disabled]="first" (click)="StageMoveUp(item.stageIndex)">
-                        <i *ngIf="!first" class="fas fa-arrow-up"></i>
+                        <i class="fas fa-arrow-up"></i>
                       </button>
                       <button type="button" class="btn" [disabled]="last" (click)="StageMoveDown(item.stageIndex)">
-                        <i *ngIf="!last" class="fas fa-arrow-down"></i>
+                        <i class="fas fa-arrow-down"></i>
                       </button>
                     </div>
                     <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"

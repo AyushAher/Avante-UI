@@ -81,8 +81,6 @@ export class TravelexpenseItemComponent implements OnInit {
     ngOnInit(): void {
         this.transaction = 0;
         this.user = this.accountService.userValue;
-        this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
-        let role = JSON.parse(localStorage.getItem('roles'));
 
         this.profilePermission = this.profileService.userProfileValue;
         if (this.profilePermission != null) {
@@ -154,9 +152,6 @@ export class TravelexpenseItemComponent implements OnInit {
         this.file = null;
 
         this.itemFiles.nativeElement.value = "";
-        // var selectedfiles = document.getElementById("expFilesList");
-        // selectedfiles.innerHTML = '';
-        // document.getElementById('expFilesList').innerHTML = ""
     }
 
 
@@ -294,11 +289,8 @@ export class TravelexpenseItemComponent implements OnInit {
 
     GetFileList(id: string) {
         this.FileShareService.list(id)
-            .pipe(first())
-            .subscribe({
-                next: (data: any) => {
-                    this.attachments = data.object;
-                },
+            .pipe(first()).subscribe((data: any) => {
+                this.attachments = data.object;
             });
     }
 
