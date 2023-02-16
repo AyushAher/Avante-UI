@@ -125,19 +125,19 @@
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
-              <label for="labChief">Lab Chief</label>
+              <label for="labChief">Lab Chief<span class="text-danger">*</span></label>
               <input type="text" formControlName="labChief" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.labChief.errors }" />
-              <div *ngIf="submitted && f.labChief.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.labChief.touched && f.labChief.errors }" />
+              <div *ngIf="f.labChief.touched && f.labChief.errors" class="invalid-feedback">
                 <div *ngIf="f.labChief.errors?.required">labChief is required</div>
 
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="computerarlsn">Computer ARL S/N</label>
+              <label for="computerarlsn">Computer ARL S/N<span class="text-danger">*</span></label>
               <input type="text" formControlName="computerarlsn" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.computerarlsn.errors }" />
-              <div *ngIf="submitted && f.computerarlsn.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.computerarlsn.touched && f.computerarlsn.errors }" />
+              <div *ngIf="f.computerarlsn.touched && f.computerarlsn.errors" class="invalid-feedback">
                 <div *ngIf="f.computerarlsn.errors.required">computerArl is required</div>
               </div>
             </div>
@@ -149,31 +149,31 @@
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="software">Software</label>
+              <label for="software">Software<span class="text-danger">*</span></label>
               <input type="text" formControlName="software" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.software.errors }" />
-              <div *ngIf="submitted && f.software.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.software.touched && f.software.errors }" />
+              <div *ngIf="f.software.touched && f.software.errors" class="invalid-feedback">
                 <div *ngIf="f.software.errors.required">Software is required</div>
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="brandName">Brand Name</label>
+              <label for="brandName">Brand Name<span class="text-danger">*</span></label>
               <select formControlName="brandName" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.brandName.errors }">
+                [ngClass]="{ 'is-invalid': f.brandName.touched && f.brandName.errors }">
                 <option value="">Select</option>
                 <option *ngFor="let d of brandlist" value={{d.listTypeItemId}}>
                   {{d.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.brandName.errors" class="invalid-feedback">
+              <div *ngIf="f.brandName.touched && f.brandName.errors" class="invalid-feedback">
                 <div *ngIf="f.brandName.errors.required">brandName is required</div>
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="firmaware">Firmware</label>
+              <label for="firmaware">Firmware<span class="text-danger">*</span></label>
               <input type="text" formControlName="firmaware" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.firmaware.errors }" />
-              <div *ngIf="submitted && f.firmaware.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.firmaware.touched && f.firmaware.errors }" />
+              <div *ngIf="f.firmaware.touched && f.firmaware.errors" class="invalid-feedback">
                 <div *ngIf="f.firmaware.errors.required">firmware</div>
               </div>
             </div>
@@ -376,10 +376,10 @@
               </div>
             </div>
             <div class="col-sm-3" *ngIf="interrupted">
-              <label for="reason">Reason</label>
+              <label for="reason">Reason<span class="text-danger">*</span></label>
               <input type="text" [disabled]="!isEditMode" formControlName="reason" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.reason.errors }" />
-              <div *ngIf="submitted && f.reason.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.reason.touched && f.reason.errors }" />
+              <div *ngIf="f.reason.touched && f.reason.errors" class="invalid-feedback">
                 <div *ngIf="f.reason.errors.required">reason is required</div>
               </div>
             </div>
@@ -391,20 +391,20 @@
             </div>
 
             <div class="col-sm-3">
-              <label for="nextVisitScheduled">Engineer Comment</label>
+              <label for="nextVisitScheduled">Engineer Comment<span class="text-danger">*</span></label>
               <textarea type="text" formControlName="engineercomments" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.engineercomments.errors }"></textarea>
-              <div *ngIf="submitted && f.engineercomments.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.engineercomments.touched && f.engineercomments.errors }"></textarea>
+              <div *ngIf="f.engineercomments.touched && f.engineercomments.errors" class="invalid-feedback">
                 <div *ngIf="f.engineercomments.errors.required">engineerComment is required</div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-sm-3">
-              <label for="signcustname">Customer Name</label>
+              <label for="signcustname">Customer Name<span class="text-danger">*</span></label>
               <input type="text" formControlName="signcustname" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.signcustname.errors }" />
-              <div *ngIf="submitted && f.signcustname.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.signcustname.touched && f.signcustname.errors }" />
+              <div *ngIf="f.signcustname.touched && f.signcustname.errors" class="invalid-feedback">
                 <div *ngIf="f.signcustname.errors.required">Customer Name is required</div>
               </div>
             </div>
@@ -421,10 +421,10 @@
           </div>
           <div class="row">
             <div class="col-sm-3">
-              <label for="signengname">Engineer Name</label>
+              <label for="signengname">Engineer Name<span class="text-danger">*</span></label>
               <input type="text" formControlName="signengname" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.signengname.errors }" />
-              <div *ngIf="submitted && f.signengname.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.signengname.touched && f.signengname.errors }" />
+              <div *ngIf="f.signengname.touched && f.signengname.errors" class="invalid-feedback">
                 <div *ngIf="f.signengname.errors.required">Engineer Name is required</div>
               </div>
             </div>

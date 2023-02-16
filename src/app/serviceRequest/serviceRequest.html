@@ -50,23 +50,23 @@
         <form [formGroup]="serviceRequestform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-3">
-              <label for="serreqno">Sr. No.</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.serreqno.errors }" class="form-control"
+              <label for="serreqno">Sr. No.<span class="text-danger">*</span></label>
+              <input [ngClass]="{ 'is-invalid': f.serreqno.touched && f.serreqno.errors }" class="form-control"
                 formControlName="serreqno" readonly type="text" />
-              <div *ngIf="submitted && f.serreqno.errors" class="invalid-feedback">
+              <div *ngIf="f.serreqno.touched && f.serreqno.errors" class="invalid-feedback">
                 <div *ngIf="f.serreqno.errors.required">SrNo is required</div>
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="distid">Distributor</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.distid.errors }" class="form-select"
+              <label for="distid">Distributor<span class="text-danger">*</span></label>
+              <select [ngClass]="{ 'is-invalid': f.distid.touched && f.distid.errors }" class="form-select"
                 formControlName="distid" readonly>
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of defaultdistributors" value={{distributor.id}}>
                   {{distributor.distname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.distid.errors" class="invalid-feedback">
+              <div *ngIf="f.distid.touched && f.distid.errors" class="invalid-feedback">
                 <div *ngIf="f.distid.errors.required">Distributor is required</div>
               </div>
             </div>
@@ -89,16 +89,16 @@
               </select>
             </div>
 
-            <div class="col-md-3 col-sm-3" *ngIf="IsCustomerView==false">
-              <label for="assignedTo">Assigned To</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.assignedto.errors }" (change)="onStatusChange()"
-                class="form-select" formControlName="assignedto">
+            <div class="col-md-3 col-sm-3" *ngIf="IsCustomerView==false && serviceRequestId!=null">
+              <label for="assignedTo">Assigned To<span class="text-danger">*</span></label>
+              <select [ngClass]="{ 'is-invalid': f.assignedto.touched && f.assignedto.errors }"
+                (change)="onStatusChange()" class="form-select" formControlName="assignedto">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let c of appendList" value={{c.id}}>
                   {{c.fname}} {{c.lname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.assignedto.errors" class="invalid-feedback">
+              <div *ngIf="f.assignedto.touched && f.assignedto.errors" class="invalid-feedback">
                 <div *ngIf="f.assignedto.errors.required">Assigned To is required</div>
               </div>
             </div>
@@ -112,31 +112,31 @@
             </div>
 
             <div class="col-md-3 col-sm-3">
-              <label for="visittype">Service Type</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.visittype.errors }" class="form-select"
+              <label for="visittype">Service Type<span class="text-danger">*</span></label>
+              <select [ngClass]="{ 'is-invalid': f.visittype.touched && f.visittype.errors }" class="form-select"
                 formControlName="visittype" (change)="onServiceTypeChange($event.target.value)">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let st of serviceTypeList" value={{st.listTypeItemId}}>
                   {{st.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.visittype.errors" class="invalid-feedback">
+              <div *ngIf="f.visittype.touched && f.visittype.errors" class="invalid-feedback">
                 <div *ngIf="f.visittype.errors.required">Service Type is required</div>
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="companyname">Company Name</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.companyname.errors }" class="form-control"
+              <label for="companyname">Company Name<span class="text-danger">*</span></label>
+              <input [ngClass]="{ 'is-invalid': f.companyname.touched && f.companyname.errors }" class="form-control"
                 formControlName="companyname" readonly type="text" />
-              <div *ngIf="submitted && f.companyname.errors" class="invalid-feedback">
+              <div *ngIf="f.companyname.touched && f.companyname.errors" class="invalid-feedback">
                 <div *ngIf="f.companyname.errors.required">companyName is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
-              <label for="time">Time</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.requesttime.errors }" readonly class="form-control"
-                formControlName="requesttime" type="text" />
-              <div *ngIf="submitted && f.requesttime.errors" class="invalid-feedback">
+              <label for="time">Time<span class="text-danger">*</span></label>
+              <input [ngClass]="{ 'is-invalid': f.requesttime.touched && f.requesttime.errors }" readonly
+                class="form-control" formControlName="requesttime" type="text" />
+              <div *ngIf="f.requesttime.touched && f.requesttime.errors" class="invalid-feedback">
                 <div *ngIf="f.requesttime.errors.required">time is required</div>
               </div>
             </div>
@@ -150,46 +150,46 @@
             </div>
 
             <div class="col-md-3 col-sm-3" *ngIf="!IsCustomerView">
-              <label for="country">Country</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.country.errors }" class="form-select"
+              <label for="country">Country<span class="text-danger">*</span></label>
+              <select [ngClass]="{ 'is-invalid': f.country.touched && f.country.errors }" class="form-select"
                 formControlName="country">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let country of countries" value={{country.id}}>
                   {{country.name}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
+              <div *ngIf="f.country.touched && f.country.errors" class="invalid-feedback">
                 <div *ngIf="f.country.errors.required">Country is required</div>
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="contactperson">Contact Person</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.contactperson.errors }" class="form-control"
-                formControlName="contactperson" type="text" />
-              <div *ngIf="submitted && f.contactperson.errors" class="invalid-feedback">
+              <label for="contactperson">Contact Person<span class="text-danger">*</span></label>
+              <input [ngClass]="{ 'is-invalid': f.contactperson.touched && f.contactperson.errors }"
+                class="form-control" formControlName="contactperson" type="text" />
+              <div *ngIf="f.contactperson.touched && f.contactperson.errors" class="invalid-feedback">
                 <div *ngIf="f.contactperson.errors.required">contactperson is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
-              <label for="email">Email</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.email.errors }" class="form-control"
+              <label for="email">Email<span class="text-danger">*</span></label>
+              <input [ngClass]="{ 'is-invalid': f.email.touched && f.email.errors }" class="form-control"
                 formControlName="email" type="email" />
-              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              <div *ngIf="f.email.touched && f.email.errors" class="invalid-feedback">
                 <div *ngIf="f.email.errors?.required">Email is required</div>
                 <div *ngIf="f.email.errors?.pattern">Please provide valid email</div>
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="machinesNo">Machine SerialNo</label>
+              <label for="machinesNo">Machine SerialNo<span class="text-danger">*</span></label>
               <select #ddlMachine (change)="oninstuchange(ddlMachine.value)"
-                [ngClass]="{ 'is-invalid': submitted && f.machinesno.errors }" class="form-select"
+                [ngClass]="{ 'is-invalid': f.machinesno.touched && f.machinesno.errors }" class="form-select"
                 formControlName="machinesno">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let i of instrumentList" value={{i.id}}>
                   {{i.serialnos}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.machinesno.errors" class="invalid-feedback">
+              <div *ngIf="f.machinesno.touched && f.machinesno.errors" class="invalid-feedback">
                 <div *ngIf="f.machinesno.errors.required">machineSerialNo is required</div>
               </div>
             </div>
@@ -268,10 +268,10 @@
             </div>
 
             <div class="col-sm-3" *ngIf="!isAmc">
-              <label for="breakdowntype">Breakdown Type</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.breakdowntype.errors }" class="form-control"
-                formControlName="breakdowntype" type="text" />
-              <div *ngIf="submitted && f.breakdowntype.errors" class="invalid-feedback">
+              <label for="breakdowntype">Breakdown Type<span class="text-danger">*</span></label>
+              <input [ngClass]="{ 'is-invalid': f.breakdowntype.touched && f.breakdowntype.errors }"
+                class="form-control" formControlName="breakdowntype" type="text" />
+              <div *ngIf="f.breakdowntype.touched && f.breakdowntype.errors" class="invalid-feedback">
                 <div *ngIf="f.breakdowntype.errors.required">breakdownType is required</div>
               </div>
             </div>
@@ -294,15 +294,15 @@
             </div>
 
             <div class="col-sm-3" *ngIf="!isAmc">
-              <label for="breakoccurdetailsid">Breakdown Occurance Details</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.breakoccurdetailsid.errors }" class="form-select"
-                formControlName="breakoccurdetailsid">
+              <label for="breakoccurdetailsid">Breakdown Occurance Details<span class="text-danger">*</span></label>
+              <select [ngClass]="{ 'is-invalid': f.breakoccurdetailsid.touched && f.breakoccurdetailsid.errors }"
+                class="form-select" formControlName="breakoccurdetailsid">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let st of breakdownlist" value={{st.listTypeItemId}}>
                   {{st.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.breakoccurdetailsid.errors" class="invalid-feedback">
+              <div *ngIf="f.breakoccurdetailsid.touched && f.breakoccurdetailsid.errors" class="invalid-feedback">
                 <div *ngIf="f.breakoccurdetailsid.errors.required">breakdownOccuranceDetails is required</div>
               </div>
             </div>
@@ -353,12 +353,13 @@
               </div>
             </div>
             <div class="col-md-6 col-sm-6">
-              <label for="subrequesttypeid">SubRequest Type</label>
+              <label for="subrequesttypeid">SubRequest Type<span class="text-danger">*</span></label>
               <ng-multiselect-dropdown [settings]="dropdownSettings"
                 [disabled]="IsEngineerView || isGenerateReport || (!isEditMode && !isNewMode)" [data]="subreqtypelist"
                 formControlName="subrequesttypeid">
               </ng-multiselect-dropdown>
-              <div *ngIf="submitted && f.subrequesttypeid.errors" style="display: block;" class="invalid-feedback">
+              <div *ngIf="f.subrequesttypeid.touched && f.subrequesttypeid.errors" style="display: block;"
+                class="invalid-feedback">
                 <div *ngIf="f.subrequesttypeid.errors.required">Sub Request Type is required</div>
               </div>
             </div>
@@ -373,13 +374,13 @@
             </div>
             <div class="col-sm-3">
               <label for="currentinstrustatus">Current Instrument Status</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.currentinstrustatus.errors }" class="form-select"
-                formControlName="currentinstrustatus" type="text">
+              <select [ngClass]="{ 'is-invalid': f.currentinstrustatus.touched && f.currentinstrustatus.errors }"
+                class="form-select" formControlName="currentinstrustatus" type="text">
                 <option *ngFor="let req of instrumentStatus" value={{req.listTypeItemId}}>
                   {{req.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.currentinstrustatus.errors" class="invalid-feedback">
+              <div *ngIf="f.currentinstrustatus.touched && f.currentinstrustatus.errors" class="invalid-feedback">
                 <div *ngIf="f.currentinstrustatus.errors.required">Current Instrument Status is required</div>
               </div>
             </div>

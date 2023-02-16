@@ -299,7 +299,7 @@ export class SparePartComponent implements OnInit {
   onSubmit() {
     //debugger;
     this.submitted = true;
-
+    this.sparepartform.markAllAsTouched()
     // reset alerts on submit
     this.alertService.clear();
 

@@ -544,7 +544,7 @@ export class ServiceReportComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+    this.ServiceReportform.markAllAsTouched();
     // reset alerts on submit
     this.alertService.clear();
     if (this.isCompleted) return

@@ -160,12 +160,20 @@ export class DistributorRegionComponent implements OnInit {
   }
 
 
+
   // convenience getter for easy access to form fields
-  get f() { return this.destributorRegionform.controls; }
-  get a() { return this.destributorRegionform.controls.address; }
+  get f() {
+    return this.destributorRegionform.controls;
+  }
+
+  get a() {
+    var controls: any = (this.destributorRegionform.controls.address);
+    return controls.controls;
+  }
 
   onSubmit() {
     //debugger;
+    this.destributorRegionform.markAllAsTouched()
     this.submitted = true;
 
     // reset alerts on submit

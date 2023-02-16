@@ -40,14 +40,15 @@
           <div class="row">
 
             <div class="col-sm-4">
-              <label for="instrument">Instrument</label>
+              <label for="instrument">Instrument<span class="text-danger">*</span></label>
               <select formControlName="instrument" [disabled]="id != null" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.instrument.errors }" (change)="onInstrumentChange()">
+                [ngClass]="{ 'is-invalid': f.instrument.touched && f.instrument.errors }"
+                (change)="onInstrumentChange()">
                 <option *ngFor="let config of instruments" value={{config.id}}>
                   {{config.instypeName}} - {{config.serialnos}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.instrument.errors" class="invalid-feedback">
+              <div *ngIf="f.instrument.touched && f.instrument.errors" class="invalid-feedback">
                 <div *ngIf="f.instrument.errors.required">Instrument is required</div>
               </div>
             </div>
@@ -62,10 +63,10 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="partno">Part No.</label>
+              <label for="partno">Part No.<span class="text-danger">*</span></label>
               <input id="partno" type="text" readonly formControlName="partNo" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.partNo.errors}" />
-              <div *ngIf="submitted && f.partNo.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.partNo.touched && f.partNo.errors}" />
+              <div *ngIf="f.partNo.touched && f.partNo.errors" class="invalid-feedback">
                 <div *ngIf="f.partNo.errors.required">
                   partno is required
                 </div>
@@ -73,10 +74,10 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="hsccode">HSN Code</label>
+              <label for="hsccode">HSN Code<span class="text-danger">*</span></label>
               <input id="hsccode" type="text" readonly formControlName="hscCode" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.hscCode.errors}" />
-              <div *ngIf="submitted && f.hscCode.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.hscCode.touched && f.hscCode.errors}" />
+              <div *ngIf="f.hscCode.touched && f.hscCode.errors" class="invalid-feedback">
                 <div *ngIf="f.hscCode.errors.required">
                   HSN code is required
                 </div>
@@ -84,10 +85,10 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="qtyAvailable">Qty. Available</label>
+              <label for="qtyAvailable">Qty. Available<span class="text-danger">*</span></label>
               <input id="qtyAvailable" type="number" formControlName="qtyAvailable" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.qtyAvailable.errors}" />
-              <div *ngIf="submitted && f.qtyAvailable.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.qtyAvailable.touched && f.qtyAvailable.errors}" />
+              <div *ngIf="f.qtyAvailable.touched && f.qtyAvailable.errors" class="invalid-feedback">
                 <div *ngIf="f.qtyAvailable.errors.required">
                   Qty. Available is required
                 </div>

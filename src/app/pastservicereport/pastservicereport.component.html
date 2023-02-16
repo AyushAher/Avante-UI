@@ -41,58 +41,59 @@
                     <div class="row">
 
                         <div class="col-sm-3">
-                            <label for="customer">Customer</label>
-                            <select [ngClass]="{ 'is-invalid': submitted && f.customerId.errors }"
+                            <label for="customer">Customer<span class="text-danger">*</span></label>
+                            <select [ngClass]="{ 'is-invalid': f.customerId.touched && f.customerId.errors }"
                                 formControlName="customerId" class="form-select">
                                 <option *ngFor="let site of customerList;" [value]="site.id">{{site.custname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.customerId.errors" class="invalid-feedback">
+                            <div *ngIf="f.customerId.touched && f.customerId.errors" class="invalid-feedback">
                                 <div *ngIf="f.customerId.errors.required">Customer is required</div>
                             </div>
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="Site">Site</label>
-                            <select [ngClass]="{ 'is-invalid': submitted && f.siteId.errors }" formControlName="siteId"
-                                class="form-select">
+                            <label for="Site">Site<span class="text-danger">*</span></label>
+                            <select [ngClass]="{ 'is-invalid': f.siteId.touched && f.siteId.errors }"
+                                formControlName="siteId" class="form-select">
                                 <option *ngFor="let site of siteList;" [value]="site.id">{{site.custregname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.siteId.errors" class="invalid-feedback">
+                            <div *ngIf="f.siteId.touched && f.siteId.errors" class="invalid-feedback">
                                 <div *ngIf="f.siteId.errors.required">Site is required</div>
                             </div>
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="instrumentId">Instrument</label>
+                            <label for="instrumentId">Instrument<span class="text-danger">*</span></label>
                             <select id="typeahead-format" type="text" formControlName="instrumentId"
-                                class="form-select">
-                                <option *ngFor="let i of instrumentLst" [value]="i.id">{{i.instypeName}} - {{i.serialnos}}</option>
+                                [ngClass]="{ 'is-invalid': f.instrumentId.touched && f.instrumentId.errors }" class="form-select">
+                                <option *ngFor="let i of instrumentLst" [value]="i.id">{{i.instypeName}} -
+                                    {{i.serialnos}}</option>
                             </select>
-                            <div *ngIf="submitted && f.instrumentId.errors" class="invalid-feedback">
+                            <div *ngIf="f.instrumentId.touched && f.instrumentId.errors" class="invalid-feedback">
                                 <div *ngIf="f.instrumentId.errors.required">Instrument is required</div>
                             </div>
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="brand">Brand</label>
+                            <label for="brand">Brand<span class="text-danger">*</span></label>
                             <select id="brand" formControlName="brandId" class="form-select"
-                                [ngClass]="{ 'is-invalid': submitted && f.brandId.errors }">
+                                [ngClass]="{ 'is-invalid': f.brandId.touched && f.brandId.errors }">
                                 <option [value]="i.id" *ngFor="let i of brandList">{{i.brandName}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.brandId.errors" class="invalid-feedback">
+                            <div *ngIf="f.brandId.touched && f.brandId.errors" class="invalid-feedback">
                                 <div *ngIf="f.brandId.errors.required">Brand is required</div>
                             </div>
                         </div>
 
 
                         <div class="col-md-3 col-sm-3">
-                            <label for="of">OF</label>
+                            <label for="of">OF<span class="text-danger">*</span></label>
                             <input type="text" formControlName="of" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.of.errors }" />
-                            <div *ngIf="submitted && f.of.errors" class="invalid-feedback">
+                                [ngClass]="{ 'is-invalid': f.of.touched && f.of.errors }" />
+                            <div *ngIf="f.of.touched && f.of.errors" class="invalid-feedback">
                                 <div *ngIf="f.of.errors.required">OF is required</div>
                             </div>
                         </div>

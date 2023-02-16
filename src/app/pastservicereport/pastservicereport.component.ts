@@ -193,6 +193,7 @@ export class PastservicereportComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.form.markAllAsTouched()
     // stop here if form is invalid
     if (this.form.invalid) return;
     this.ServiceReport = this.form.value;

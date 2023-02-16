@@ -194,14 +194,21 @@ export class CustomerSiteComponent implements OnInit {
     }
   }
 
+
   // convenience getter for easy access to form fields
-  get f() { return this.customersiteform.controls; }
-  get a() { return this.customersiteform.controls.address; }
+  get f() {
+    return this.customersiteform.controls;
+  }
+
+  get a() {
+    var controls: any = (this.customersiteform.controls.address);
+    return controls.controls;
+  }
 
   onSubmit() {
     //debugger;
     this.submitted = true;
-
+    this.customersiteform.markAllAsTouched()
     // reset alerts on submit
     this.alertService.clear();
 

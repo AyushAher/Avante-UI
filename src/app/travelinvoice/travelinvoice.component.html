@@ -44,39 +44,39 @@
                     <div class="row">
 
                         <div class="col-sm-4">
-                            <label>Distributor</label>
+                            <label>Distributor<span class="text-danger">*</span></label>
                             <select formControlName="distributorId" class="form-select"
                                 (input)="getengineers($event.target.value)"
-                                [ngClass]="{'is-invalid':submitted && f.distributorId.errors }">
+                                [ngClass]="{'is-invalid':f.distributorId.touched && f.distributorId.errors }">
                                 <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.distributorId.errors" class="invalid-feedback">
+                            <div *ngIf="f.distributorId.touched && f.distributorId.errors" class="invalid-feedback">
                                 <div *ngIf="f.distributorId.errors.required">Distributor is required</div>
                             </div>
                         </div>
 
                         <div class="col-sm-4">
-                            <label>Engineer Name</label>
+                            <label>Engineer Name<span class="text-danger">*</span></label>
                             <select formControlName="engineerId" class="form-select"
                                 (change)="getservicerequest(distId ,$event.target.value);"
-                                [ngClass]="{'is-invalid':submitted && f.engineerId.errors }">
+                                [ngClass]="{'is-invalid':f.engineerId.touched && f.engineerId.errors }">
                                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.engineerId.errors" class="invalid-feedback">
+                            <div *ngIf="f.engineerId.touched && f.engineerId.errors" class="invalid-feedback">
                                 <div *ngIf="f.engineerId.errors.required">Engineer Name is required</div>
                             </div>
 
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label for="serviceRequestId">Service Request No.</label>
+                            <label for="serviceRequestId">Service Request No.<span class="text-danger">*</span></label>
                             <select formControlName="serviceRequestId" class="form-select"
-                                [ngClass]="{'is-invalid':submitted && f.serviceRequestId.errors }">
+                                [ngClass]="{'is-invalid':f.serviceRequestId.touched && f.serviceRequestId.errors }">
                                 <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
                             </select>
-                            <div Style="display: block" *ngIf="submitted && f.serviceRequestId.errors"
+                            <div Style="display: block" *ngIf="f.serviceRequestId.touched && f.serviceRequestId.errors"
                                 class="invalid-feedback">
                                 <div *ngIf="f.serviceRequestId.errors.required">
                                     Service Request is required
@@ -85,9 +85,9 @@
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label>Amount Build</label>
+                            <label>Amount Build<span class="text-danger">*</span></label>
                             <input formControlName="amountBuild" type="number" class="form-control" />
-                            <div Style="display: block" *ngIf="submitted && f.amountBuild.errors"
+                            <div Style="display: block" *ngIf="f.amountBuild.touched && f.amountBuild.errors"
                                 class="invalid-feedback">
                                 <div *ngIf="f.amountBuild.errors.required">
                                     Amount is required

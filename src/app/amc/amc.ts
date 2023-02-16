@@ -261,6 +261,8 @@ export class AmcComponent implements OnInit {
 
     this.listTypeService.getById("AMCSG").pipe(first())
       .subscribe((data: any) => {
+        console.log(data);
+
         this.stagesList = data
       })
     this.contactService.getCustomerSiteByContact(this.user.contactId)
@@ -880,6 +882,7 @@ export class AmcComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.form.markAllAsTouched();
     this.alertService.clear();
 
     if (this.instrumentList != null && this.instrumentList.length > 0) {

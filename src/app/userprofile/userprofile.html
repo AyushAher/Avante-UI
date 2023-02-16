@@ -42,15 +42,15 @@
         <form [formGroup]="userprofileform">
           <div class="row">
             <div class="col-sm-6">
-              <label for="userId">User Name</label>
+              <label for="userId">User Name<span class="text-danger">*</span></label>
               <select formControlName="userId" class="form-select" #myuser (change)="onUserChange(myuser.value)"
-                [ngClass]="{ 'is-invalid': submitted && f.userId.errors }">
+                [ngClass]="{ 'is-invalid':  f.userId.touched && f.userId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of userlist" value={{congfig.userid}}>
                   {{congfig.username}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.userId.errors" class="invalid-feedback">
+              <div *ngIf="f.userId.touched && f.userId.errors" class="invalid-feedback">
                 <div *ngIf="f.userId.errors.required">Username is required</div>
               </div>
             </div>
@@ -66,43 +66,43 @@
               <input type="text" formControlName="distributorName" class="form-control" readonly />
             </div>
             <div class="col-md-6 col-sm-6">
-              <label for="price">Profile</label>
+              <label for="price">Profile<span class="text-danger">*</span></label>
               <select formControlName="profileId" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.profileId.errors }">
+                [ngClass]="{ 'is-invalid': f.profileId.touched && f.profileId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let profile of profilelist" value={{profile.id}}>
                   {{profile.profilename}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.profileId.errors" class="invalid-feedback">
+              <div *ngIf="f.profileId.touched && f.profileId.errors" class="invalid-feedback">
                 <div *ngIf="f.profileId.errors.required">Profile Name is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4" *ngIf="hidetable==true">
               <label for="price">Profile for</label>
               <select formControlName="profileForId" #profileId (change)="onprofileClick(profileId.value)"
-                class="form-select" [ngClass]="{ 'is-invalid': submitted && f.profileForId.errors }">
+                class="form-select" [ngClass]="{ 'is-invalid': f.profileForId.touched && f.profileForId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let l of listTypeItems" value={{l.listTypeItemId}}>
                   {{l.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.profileForId.errors" class="invalid-feedback">
+              <div *ngIf="f.profileForId.touched && f.profileForId.errors" class="invalid-feedback">
                 <div *ngIf="f.profileForId.errors.required">Profile Name is required</div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 col-sm-6">
-              <label for="roleId">Role</label>
+              <label for="roleId">Role<span class="text-danger">*</span></label>
               <select formControlName="roleId" class="form-select" (change)="onRoleChange($event.target.value)"
-                [ngClass]="{ 'is-invalid': submitted && f.roleId.errors }">
+                [ngClass]="{ 'is-invalid': f.roleId.touched && f.roleId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let r of roleList" value={{r.listTypeItemId}}>
                   {{r.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.roleId.errors" class="invalid-feedback">
+              <div *ngIf="f.roleId.touched && f.roleId.errors" class="invalid-feedback">
                 <div *ngIf="f.roleId.errors.required">Role is required</div>
               </div>
             </div>
@@ -111,7 +111,7 @@
               <ng-multiselect-dropdown [settings]="dropdownSettings" [disabled]="!isEditMode && !isNewMode"
                 [data]="regionList" id="regions" formControlName="distRegions">
               </ng-multiselect-dropdown>
-              <div *ngIf="submitted && f.distRegions.errors" class="invalid-feedback">
+              <div *ngIf="f.distRegions.touched && f.distRegions.errors" class="invalid-feedback">
                 <div *ngIf="f.distRegions.errors.required">Distributor Region is required</div>
               </div>
             </div>
@@ -121,7 +121,7 @@
               <ng-multiselect-dropdown [settings]="businessUnitDropdownSettings" [disabled]="!isEditMode && !isNewMode"
                 [data]="businessUnitList" id="businessUnitId" formControlName="businessUnitId">
               </ng-multiselect-dropdown>
-              <div *ngIf="submitted && f.businessUnitId.errors" class="invalid-feedback">
+              <div *ngIf="f.businessUnitId.touched && f.businessUnitId.errors" class="invalid-feedback">
                 <div *ngIf="f.businessUnitId.errors.required">Business Unit is required</div>
               </div>
             </div>
@@ -131,7 +131,7 @@
               <ng-multiselect-dropdown [settings]="brandDropdownSettings" [disabled]="!isEditMode && !isNewMode"
                 [data]="brandList" id="brandId" formControlName="brandId">
               </ng-multiselect-dropdown>
-              <div *ngIf="submitted && f.brandId.errors" class="invalid-feedback">
+              <div *ngIf="f.brandId.touched && f.brandId.errors" class="invalid-feedback">
                 <div *ngIf="f.brandId.errors.required">Brand is required</div>
               </div>
             </div>
@@ -141,17 +141,18 @@
               <ng-multiselect-dropdown [settings]="siteDropdownSettings" [disabled]="!isEditMode && !isNewMode"
                 [data]="siteList" id="site" formControlName="custSites">
               </ng-multiselect-dropdown>
-              <div *ngIf="submitted && f.custSites.errors" class="invalid-feedback">
+              <div *ngIf="f.custSites.touched && f.custSites.errors" class="invalid-feedback">
                 <div *ngIf="f.custSites.errors.required">Customer Site is required</div>
               </div>
             </div>
 
             <div class="col-md-6 col-sm-6">
-              <label>Description</label>
+              <label>Description<span class="text-danger">*</span></label>
               <textarea class="form-control" required [disabled]="!isEditMode && !isNewMode"
+              [ngClass]="{ 'is-invalid':  f.userId.touched && f.userId.errors }"
                 formControlName="description">
               </textarea>
-              <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+              <div *ngIf="f.description.touched && f.description.errors" class="invalid-feedback">
                 <div *ngIf="f.description.errors.required">Description is required</div>
               </div>
             </div>

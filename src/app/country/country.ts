@@ -136,7 +136,7 @@ export class CountryComponent implements OnInit {
 
   CancelEdit() {
     this.countryform.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
@@ -156,7 +156,7 @@ export class CountryComponent implements OnInit {
   onSubmit() {
     //debugger;
     this.submitted = true;
-
+    this.countryform.markAllAsTouched();
     // reset alerts on submit
     this.alertService.clear();
 

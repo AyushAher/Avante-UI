@@ -39,25 +39,25 @@
         <form [formGroup]="instrumentform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-4">
-              <label for="custSiteId">Customer Site</label>
+              <label for="custSiteId">Customer Site<span class="text-danger">*</span></label>
               <select formControlName="custSiteId" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }" #ddlcust
+                [ngClass]="{ 'is-invalid': f.custSiteId.touched && f.custSiteId.errors }" #ddlcust
                 (change)="onSiteChange(ddlcust.value)">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let config of customersite" value={{config.id}}>
                   {{config.custregname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.custSiteId.errors" class="invalid-feedback">
+              <div *ngIf="f.custSiteId.touched && f.custSiteId.errors" class="invalid-feedback">
                 <div *ngIf="f.custSiteId.errors.required">Customer Site is required</div>
               </div>
             </div>
 
             <div class="col-md-3 col-sm-3">
-              <label for="serialnos">Instrument Serial No</label>
+              <label for="serialnos">Instrument Serial No<span class="text-danger">*</span></label>
               <input type="text" #serialnos formControlName="serialnos" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.serialnos.errors }" />
-              <div *ngIf="submitted && f.serialnos.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.serialnos.touched && f.serialnos.errors }" />
+              <div *ngIf="f.serialnos.touched && f.serialnos.errors" class="invalid-feedback">
                 <div *ngIf="f.serialnos.errors.required">Instrument Serial No is required</div>
               </div>
             </div>
@@ -68,43 +68,41 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="insmfgdt">Instrument Manufacturing Date</label>
+              <label for="insmfgdt">Instrument Manufacturing Date<span class="text-danger">*</span></label>
               <input formControlName="insmfgdt" class="form-control" bsDatepicker
-                [ngClass]="{ 'is-invalid': submitted && f.insmfgdt.errors }" />
-              <div *ngIf="submitted && f.insmfgdt.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.insmfgdt.touched && f.insmfgdt.errors }" />
+              <div *ngIf="f.insmfgdt.touched && f.insmfgdt.errors" class="invalid-feedback">
                 <div *ngIf="f.insmfgdt.errors.required">Instrument Manufacturing Date is required</div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-sm-4">
-              <label for="instype">Instrument Type</label>
-              <!--<input type="text" formControlName="instype" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.instype.errors }" />-->
+              <label for="instype">Instrument Type<span class="text-danger">*</span></label>
               <select formControlName="instype" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.instype.errors }">
-                <!--<option value="0">--All--</option>-->
+                [ngClass]="{ 'is-invalid': f.instype.touched && f.instype.errors }">
                 <option *ngFor="let congfig of instuType" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.instype.errors" class="invalid-feedback">
+              <div *ngIf="f.instype.touched && f.instype.errors" class="invalid-feedback">
                 <div *ngIf="f.instype.errors.required">Instrument Type is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="insversion">Instrument Version</label>
+              <label for="insversion">Instrument Version<span class="text-danger">*</span></label>
               <input type="text" formControlName="insversion" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.insversion.errors }" />
-              <div *ngIf="submitted && f.insversion.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.insversion.touched && f.insversion.errors }" />
+              <div *ngIf="f.insversion.touched && f.insversion.errors" class="invalid-feedback">
                 <div *ngIf="f.insversion.errors.required">Instrument Version is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="shipdt">Shipment Date</label>
-              <!--<input type="text" formControlName="shipdt" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.shipdt.errors shipdt}" />-->
+              <!--<input type="text" formControlName="shipdt" class="form-control" [ngClass]="{ 'is-invalid': f.custid.touched && f.shipdt.errors shipdt}" />-->
               <input formControlName="shipdt" class="form-control" bsDatepicker
-                [ngClass]="{ 'is-invalid': submitted && f.shipdt.errors }">
-              <div *ngIf="submitted && f.shipdt.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.shipdt.touched && f.shipdt.errors }">
+              <div *ngIf="f.shipdt.touched && f.shipdt.errors" class="invalid-feedback">
                 <div *ngIf="f.shipdt.errors.required">Shipment Date is required</div>
               </div>
             </div>
@@ -114,77 +112,83 @@
           </div>
           <div class="row">
             <div class="col-md-4 col-sm-4">
-              <label for="installby">Installed By Distributor</label>
+              <label for="installby">Installed By Distributor<span class="text-danger">*</span></label>
               <select formControlName="installby" #installedBy class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.installby.errors }">
+                [ngClass]="{ 'is-invalid': f.installby.touched && f.installby.errors }">
                 <option *ngFor="let config of distibutorList" value={{config.id}}>
                   {{config.distname}}
                 </option>
                 <option value="0">Others</option>
               </select>
-              <div *ngIf="submitted && f.installby.errors" class="invalid-feedback">
+              <div *ngIf="f.installby.touched && f.installby.errors" class="invalid-feedback">
                 <div *ngIf="f.installby.errors.required">Installed By Distributor is required</div>
               </div>
             </div>
-            <div class="col-md-4 col-sm-4" *ngIf="installedBy.value==0">
-              <label for="installbyOther">Other</label>
+            <div class="col-md-4 col-sm-4" *ngIf="f.installby.value == 0">
+              <label for="installbyOther">Other<span *ngIf="f.installby.value == 0" class="text-danger">*</span></label>
               <input type="text" formControlName="installbyOther" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.installbyOther.errors }" />
+                [ngClass]="{ 'is-invalid': f.installbyOther.touched && f.installbyOther.errors }" />
+              <div *ngIf="f.installbyOther.touched && f.installbyOther.errors" class="invalid-feedback">
+                <div *ngIf="f.installbyOther.errors.required">Other name is required</div>
+              </div>
+
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="engname">Engineer Name</label>
               <input type="text" formControlName="engname" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.engname.errors }" />
-              <div *ngIf="submitted && f.engname.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.engname.touched && f.engname.errors }" />
+              <div *ngIf="f.engname.touched && f.engname.errors" class="invalid-feedback">
                 <div *ngIf="f.engname.errors.required">Engineer Name is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="engcontact">Engineer Contact No</label>
               <input type="tel" formControlName="engcontact" maxlength="10" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.engcontact.errors }" />
-              <div *ngIf="submitted && f.engcontact.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.engcontact.touched && f.engcontact.errors }" />
+              <div *ngIf="f.engcontact.touched && f.engcontact.errors" class="invalid-feedback">
                 <div *ngIf="f.engcontact.errors.required">Engineer Contact No is required</div>
                 <div *ngIf="f.engcontact.errors?.maxlength">Max length is 10</div>
                 <div *ngIf="f.engcontact.errors?.minlength">Min length is 10</div>
               </div>
             </div>
             <div class="col-sm-4">
-              <label for="operatorId">Operator Name</label>
+              <label for="operatorId">Operator Name<span class="text-danger">*</span></label>
               <select formControlName="operatorId" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.operatorId.errors }">
+                [ngClass]="{ 'is-invalid': f.operatorId.touched && f.operatorId.errors }">
                 <option *ngFor="let config of contactList" value={{config.id}}>
                   {{config.fname}} {{config.lname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.operatorId.errors" class="invalid-feedback">
+              <div *ngIf="f.operatorId.touched && f.operatorId.errors" class="invalid-feedback">
                 <div *ngIf="f.operatorId.errors.required">Operator Name is required</div>
               </div>
             </div>
             <div class="col-sm-4">
-              <label for="instruEngineerId">Instrumentation Engineer</label>
+              <label for="instruEngineerId">Instrumentation Engineer<span class="text-danger">*</span></label>
               <select formControlName="instruEngineerId" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.custSiteId.errors }">
+                [ngClass]="{ 'is-invalid': f.instruEngineerId.touched && f.instruEngineerId.errors }">
                 <option *ngFor="let config of contactList" value={{config.id}}>
                   {{config.fname}} {{config.lname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.instruEngineerId.errors" class="invalid-feedback">
+              <div *ngIf="f.instruEngineerId.touched && f.instruEngineerId.errors" class="invalid-feedback">
                 <div *ngIf="f.instruEngineerId.errors.required">Instrumentation Engineer is required</div>
               </div>
             </div>
 
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
-              <label for="dateOfPurchase">Cost</label><br>
-              <select formControlName="currencyId" [ngClass]="{ 'is-invalid': submitted && f.currencyId.errors }"
+              <label for="dateOfPurchase">Cost<span class="text-danger">*</span></label><br>
+              <select formControlName="currencyId"
+                [ngClass]="{ 'is-invalid': f.currencyId.touched && f.currencyId.errors }"
                 style="width: 30%;display: inline-block;" class="form-select">
                 <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
               </select>
 
-              <input formControlName="cost" type="number" [ngClass]="{ 'is-invalid': submitted && f.cost.errors }"
+              <input formControlName="cost" type="number" [ngClass]="{ 'is-invalid': f.cost.touched && f.cost.errors }"
                 style="width: 68%;display: inline-block;margin-left: 5px;" class="form-control" />
 
-              <div *ngIf="submitted && (f.currencyId.errors || f.cost.errors)" class="invalid-feedback">
+              <div *ngIf="(f.currencyId.touched || f.cost.touched) && (f.currencyId.errors || f.cost.errors)"
+                class="invalid-feedback">
                 <div *ngIf="f.currencyId.errors.required || f.cost.errors.required">Cost is required</div>
               </div>
             </div>
@@ -202,10 +206,6 @@
 
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
               <label for="dateOfPurchase">Cost in USD</label><br>
-              <!-- <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
-                class="form-select">
-                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
-              </select> -->
               <input [value]="(f.baseCurrencyAmt.value * f.cost.value)" disabled type="number" class="form-control" />
             </div>
 
@@ -214,10 +214,10 @@
             <div class="col-md-8">
               <div class="row">
                 <div class="col-md-6 col-sm-6">
-                  <label for="engemail">Engineer Email</label>
+                  <label for="engemail">Engineer Email<span class="text-danger">*</span></label>
                   <input type="text" formControlName="engemail" class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f.engemail.errors }" />
-                  <div *ngIf="submitted && f.engemail.errors" class="invalid-feedback">
+                    [ngClass]="{ 'is-invalid': f.engemail.touched && f.engemail.errors }" />
+                  <div *ngIf="f.engemail.touched && f.engemail.errors" class="invalid-feedback">
                     <div *ngIf="f.engemail.errors.required">Engineer Email is required</div>
                   </div>
                 </div>
@@ -233,8 +233,8 @@
                 <div class="col-md-6 col-sm-6" *ngIf="hasWarrenty">
                   <label for="wrntystdt">Warranty Start Date</label>
                   <input formControlName="wrntystdt"
-                    [ngClass]="{ 'is-invalid': submitted && instrumentform.controls['wrntystdt'].errors}" bsDatepicker
-                    class="form-control" />
+                    [ngClass]="{ 'is-invalid': f.wrntystdt.touched && instrumentform.controls['wrntystdt'].errors}"
+                    bsDatepicker class="form-control" />
                   <div class="invalid-feedback">
                     <div *ngIf="instrumentform.controls['wrntystdt'].errors?.required">Warranty Start Date is required
                     </div>
@@ -243,7 +243,7 @@
                 <div class="col-md-6 col-sm-6" *ngIf="hasWarrenty">
                   <label for="wrntyendt">Warranty End Date</label>
                   <input formControlName="wrntyendt" bsDatepicker
-                    [ngClass]="{ 'is-invalid': submitted && instrumentform.controls['wrntyendt'].errors}"
+                    [ngClass]="{ 'is-invalid': f.wrntyendt.touched && instrumentform.controls['wrntyendt'].errors}"
                     class="form-control" />
                   <div *ngIf="instrumentform.controls['wrntyendt'].errors" class="invalid-feedback">
                     <div *ngIf="instrumentform.controls['wrntyendt'].errors?.required">Warranty End Date is required
@@ -252,10 +252,10 @@
                 </div>
 
                 <div class="col-md-6 col-sm-6">
-                  <label for="installdt">Instrument Installation</label>
-                  <input placeholder="date" formControlName="installdt" bsDatepicker class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f.installdt.errors }" />
-                  <div *ngIf="submitted && f.installdt.errors" class="invalid-feedback">
+                  <label for="installdt">Instrument Installation<span class="text-danger">*</span></label>
+                  <input formControlName="installdt" bsDatepicker class="form-control"
+                    [ngClass]="{ 'is-invalid': f.installdt.touched && f.installdt.errors }" />
+                  <div *ngIf="f.installdt.touched && f.installdt.errors" class="invalid-feedback">
                     <div *ngIf="f.installdt.errors.required">Instrument Installation is required</div>
                   </div>
                 </div>
@@ -282,27 +282,27 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="currencyid">Business Unit</label>
+              <label for="currencyid">Business Unit<span class="text-danger">*</span></label>
               <select formControlName="businessUnitId" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.businessUnitId.errors }">
+                [ngClass]="{ 'is-invalid': f.businessUnitId.touched && f.businessUnitId.errors }">
                 <option *ngFor="let c of businessUnitList" value={{c.id}}>
                   {{c.businessUnitName}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.businessUnitId.errors" class="invalid-feedback">
+              <div *ngIf="f.businessUnitId.touched && f.businessUnitId.errors" class="invalid-feedback">
                 <div *ngIf="f.businessUnitId.errors.required">Business Unit is required</div>
               </div>
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="brandId">Brand</label>
+              <label for="brandId">Brand<span class="text-danger">*</span></label>
               <select formControlName="brandId" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.brandId.errors }">
+                [ngClass]="{ 'is-invalid': f.brandId.touched && f.brandId.errors }">
                 <option *ngFor="let c of brandList" value={{c.id}}>
                   {{c.brandName}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.brandId.errors" class="invalid-feedback">
+              <div *ngIf="f.brandId.touched && f.brandId.errors" class="invalid-feedback">
                 <div *ngIf="f.brandId.errors.required">Brand is required</div>
               </div>
             </div>
@@ -322,12 +322,12 @@
               <label for="configtypeid">Config Type</label>
               <select [disabled]="!isEditMode && !isNewMode" class="form-select" #mySelect
                 formControlName="configtypeid" (change)="onConfigChange(mySelect.value)"
-                [ngClass]="{ 'is-invalid': submitted && f.configtypeid.errors }">
+                [ngClass]="{ 'is-invalid': f.configtypeid.touched && f.configtypeid.errors }">
                 <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.configtypeid.errors" class="invalid-feedback">
+              <div *ngIf="f.configtypeid.touched && f.configtypeid.errors" class="invalid-feedback">
                 <div *ngIf="f.configtypeid.errors.required">Config Type is required</div>
               </div>
             </div>

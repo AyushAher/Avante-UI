@@ -39,16 +39,16 @@
         <form [formGroup]="sparepartform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-4">
-              <label for="configTypeid">Config Type</label>
+              <label for="configTypeid">Config Type<span class="text-danger">*</span></label>
               <select formControlName="configTypeid" #configType class="form-select"
                 (change)="onConfigChange(configType.value)"
-                [ngClass]="{ 'is-invalid': submitted && f.configTypeid.errors }">
+                [ngClass]="{ 'is-invalid': f.configTypeid.touched && f.configTypeid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.configTypeid.errors" class="invalid-feedback">
+              <div *ngIf="f.configTypeid.touched && f.configTypeid.errors" class="invalid-feedback">
                 <div *ngIf="f.configTypeid.errors.required">Config Type is required</div>
               </div>
             </div>
@@ -61,15 +61,12 @@
                   {{c.configValue}}
                 </option>
               </select>
-              <!--<div *ngIf="submitted && f.configValueid.errors" class="invalid-feedback">
-                <div *ngIf="f.configValueid.errors.required">Config Value is required</div>
-              </div>-->
             </div>
             <div class="col-md-3 col-sm-3">
-              <label for="partNo">Part Number</label>
+              <label for="partNo">Part Number<span class="text-danger">*</span></label>
               <input type="text" #partNo formControlName="partNo" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.partNo.errors }" />
-              <div *ngIf="submitted && f.partNo.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.partNo.touched && f.partNo.errors }" />
+              <div *ngIf="f.partNo.touched && f.partNo.errors" class="invalid-feedback">
                 <div *ngIf="f.partNo.errors.required">Part Number is required</div>
               </div>
             </div>
@@ -81,31 +78,31 @@
           </div>
           <div class="row">
             <div class="col-md-4 col-sm-4">
-              <label for="itemDesc">Item Description</label>
+              <label for="itemDesc">Item Description<span class="text-danger">*</span></label>
               <input type="text" formControlName="itemDesc" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.itemDesc.errors }" />
-              <div *ngIf="submitted && f.itemDesc.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.itemDesc.touched && f.itemDesc.errors }" />
+              <div *ngIf="f.itemDesc.touched && f.itemDesc.errors" class="invalid-feedback">
                 <div *ngIf="f.itemDesc.errors.required">Item Description is required</div>
               </div>
             </div>
             <div class="col-sm-4">
-              <label for="qty">Qty</label>
+              <label for="qty">Qty<span class="text-danger">*</span></label>
               <input type="number" formControlName="qty" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.qty.errors }" />
-              <div *ngIf="submitted && f.qty.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.qty.touched && f.qty.errors }" />
+              <div *ngIf="f.qty.touched && f.qty.errors" class="invalid-feedback">
                 <div *ngIf="f.qty.errors.required">Qty is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="partType">Part Type</label>
-              <!--<input type="text" formControlName="partType" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.partType.errors }" />-->
+              <label for="partType">Part Type<span class="text-danger">*</span></label>
+              <!--<input type="text" formControlName="partType" class="form-control" [ngClass]="{ 'is-invalid': f.custid.touched && f.partType.errors }" />-->
               <select formControlName="partType" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.partType.errors }">
+                [ngClass]="{ 'is-invalid': f.partType.touched && f.partType.errors }">
                 <option *ngFor="let congfig of parttypes" value={{congfig.listTypeItemId}}>
                   {{congfig.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.partType.errors" class="invalid-feedback">
+              <div *ngIf="f.partType.touched && f.partType.errors" class="invalid-feedback">
                 <div *ngIf="f.partType.errors.required">Part Type is required</div>
               </div>
             </div>
@@ -114,31 +111,31 @@
           </div>
           <div class="row">
             <div class="col-md-4 col-sm-4">
-              <label for="descCatalogue">Desc per Catalogue</label>
+              <label for="descCatalogue">Desc per Catalogue<span class="text-danger">*</span></label>
               <input type="text" formControlName="descCatalogue" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.descCatalogue.errors }" />
-              <div *ngIf="submitted && f.descCatalogue.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.descCatalogue.touched && f.descCatalogue.errors }" />
+              <div *ngIf="f.descCatalogue.touched && f.descCatalogue.errors" class="invalid-feedback">
                 <div *ngIf="f.descCatalogue.errors.required">Desc per Catalogue is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="hsCode">HSN Code</label>
+              <label for="hsCode">HSN Code<span class="text-danger">*</span></label>
               <input type="text" formControlName="hsCode" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.hsCode.errors }" />
-              <div *ngIf="submitted && f.hsCode.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.hsCode.touched && f.hsCode.errors }" />
+              <div *ngIf="f.hsCode.touched && f.hsCode.errors" class="invalid-feedback">
                 <div *ngIf="f.hsCode.errors.required">HSN Code is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="countryid">Country of Origin</label>
+              <label for="countryid">Country of Origin<span class="text-danger">*</span></label>
               <select formControlName="countryid" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.countryid.errors }">
+                [ngClass]="{ 'is-invalid': f.countryid.touched && f.countryid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let country of countries" value={{country.id}}>
                   {{country.name}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.countryid.errors" class="invalid-feedback">
+              <div *ngIf="f.countryid.touched && f.countryid.errors" class="invalid-feedback">
                 <div *ngIf="f.countryid.errors.required">Country of Origin is required</div>
               </div>
             </div>
@@ -149,10 +146,10 @@
             <div class="col-md-8">
               <div class="row">
                 <div class="col-md-6 col-sm-6">
-                  <label for="price">List Price</label>
+                  <label for="price">List Price<span class="text-danger">*</span></label>
                   <input type="number" formControlName="price" class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f.price.errors }" />
-                  <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                    [ngClass]="{ 'is-invalid': f.price.touched && f.price.errors }" />
+                  <div *ngIf="f.price.touched && f.price.errors" class="invalid-feedback">
                     <div *ngIf="f.price.errors.required">List Price is required</div>
                   </div>
                 </div>
@@ -169,28 +166,28 @@
                 <div class="col-md-6 col-sm-6">
                   <label for="replacepPartNoId">Replacement Part</label>
                   <select formControlName="replacepPartNoId" class="form-select"
-                    [ngClass]="{ 'is-invalid': submitted && f.replacepPartNoId.errors }">
+                    [ngClass]="{ 'is-invalid': f.replacepPartNoId.touched && f.replacepPartNoId.errors }">
                     <option value="0"></option>
                     <option *ngFor="let congfig of replacementParts" value={{congfig.id}}>
                       {{congfig.partNo}}
                     </option>
                   </select>
-                  <!--<input type="text" formControlName="replacepPartNoId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.replacepPartNoId.errors }" />-->
-                  <div *ngIf="submitted && f.replacepPartNoId.errors" class="invalid-feedback">
+                  <!--<input type="text" formControlName="replacepPartNoId" class="form-control" [ngClass]="{ 'is-invalid': f.custid.touched && f.replacepPartNoId.errors }" />-->
+                  <div *ngIf="f.replacepPartNoId.touched && f.replacepPartNoId.errors" class="invalid-feedback">
                     <div *ngIf="f.replacepPartNoId.errors.required">Replacement Part is required</div>
                   </div>
                 </div>
 
                 <div class="col-md-6 col-sm-6">
-                  <label for="currencyid">Currency</label>
+                  <label for="currencyid">Currency<span class="text-danger">*</span></label>
                   <select formControlName="currencyid" class="form-select"
-                    [ngClass]="{ 'is-invalid': submitted && f.currencyid.errors }">
+                    [ngClass]="{ 'is-invalid': f.currencyid.touched && f.currencyid.errors }">
                     <!--<option value="0">--All--</option>-->
                     <option *ngFor="let c of currency" value={{c.id}}>
                       {{c.name}}
                     </option>
                   </select>
-                  <div *ngIf="submitted && f.currencyid.errors" class="invalid-feedback">
+                  <div *ngIf="f.currencyid.touched && f.currencyid.errors" class="invalid-feedback">
                     <div *ngIf="f.currencyid.errors.required">Currency is required</div>
                   </div>
                 </div>
@@ -198,12 +195,12 @@
                 <div class="col-md-6 col-sm-6">
                   <label for="currencyid">Business Unit</label>
                   <select formControlName="businessUnit" (change)="onBusinessUnitChange()" class="form-select"
-                    [ngClass]="{ 'is-invalid': submitted && f.businessUnit.errors }">
+                    [ngClass]="{ 'is-invalid': f.businessUnit.touched && f.businessUnit.errors }">
                     <option *ngFor="let c of businessUnitList" value={{c.listTypeItemId}}>
                       {{c.itemname}}
                     </option>
                   </select>
-                  <div *ngIf="submitted && f.businessUnit.errors" class="invalid-feedback">
+                  <div *ngIf="f.businessUnit.touched && f.businessUnit.errors" class="invalid-feedback">
                     <div *ngIf="f.businessUnit.errors.required">Business Unit is required</div>
                   </div>
                 </div>
@@ -211,12 +208,12 @@
                 <div class="col-md-6 col-sm-6">
                   <label for="currencyid">Analytical Techniques</label>
                   <select formControlName="analyticalTechnique" class="form-select"
-                    [ngClass]="{ 'is-invalid': submitted && f.analyticalTechnique.errors }">
+                    [ngClass]="{ 'is-invalid': f.analyticalTechnique.touched && f.analyticalTechnique.errors }">
                     <option *ngFor="let c of analyticalList" value={{c.id}}>
                       {{c.name}}
                     </option>
                   </select>
-                  <div *ngIf="submitted && f.analyticalTechnique.errors" class="invalid-feedback">
+                  <div *ngIf="f.analyticalTechnique.touched && f.analyticalTechnique.errors" class="invalid-feedback">
                     <div *ngIf="f.analyticalTechnique.errors.required">Analytical Technique is required</div>
                   </div>
                 </div>
@@ -234,12 +231,12 @@
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Instrument Model</label>
               <select formControlName="instrument" class="form-select"
-                [ngClass]="{ 'is-invalid': submitted && f.instrument.errors }">
+                [ngClass]="{ 'is-invalid': f.instrument.touched && f.instrument.errors }">
                 <option *ngFor="let c of instrumentList" value={{c.id}}>
                   {{c.instypeName}} - {{c.serialnos}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.instrument.errors" class="invalid-feedback">
+              <div *ngIf="f.instrument.touched && f.instrument.errors" class="invalid-feedback">
                 <div *ngIf="f.instrument.errors.required">Instrument is required</div>
               </div>
             </div>
@@ -248,7 +245,7 @@
               <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
               <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput
                 (change)="uploadFile(fileInput.files,id)" />
-              <div *ngIf="submitted && f.image.errors" class="invalid-feedback">
+              <div *ngIf="f.image.touched && f.image.errors" class="invalid-feedback">
                 <div *ngIf="f.image.errors.required">Image is required</div>
               </div>
             </div>

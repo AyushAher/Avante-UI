@@ -108,7 +108,7 @@ export class CustSPInventoryComponent implements OnInit {
       qtyAvailable: [0, Validators.required],
       SearchPartNo: [""],
       sparePartId: [""],
-      instrument: [""],
+      instrument: ["", Validators.required],
       isactive: [true],
       isdeleted: [false],
     })
@@ -301,6 +301,7 @@ export class CustSPInventoryComponent implements OnInit {
   }
 
   onSubmit() {
+    this.form.markAllAsTouched()
     this.submitted = true;
     // reset alerts on submit
     this.alertService.clear();

@@ -111,7 +111,7 @@ export class CurrencyComponent implements OnInit {
 
   CancelEdit() {
     this.currencyform.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
@@ -131,6 +131,7 @@ export class CurrencyComponent implements OnInit {
   onSubmit() {
     //debugger;
     this.submitted = true;
+    this.currencyform.markAllAsTouched();
     // reset alerts on submit
     this.alertService.clear();
 

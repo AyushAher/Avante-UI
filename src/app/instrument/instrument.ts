@@ -195,7 +195,7 @@ export class InstrumentComponent implements OnInit {
       wrntyendt: [''],
       configtypeid: [''],
       configvalueid: [''],
-      installbyOther: [''],
+      installbyOther: ['', Validators.required],
       operatorId: ['', Validators.required],
       dateOfPurchase: [],
       cost: [0],
@@ -207,6 +207,19 @@ export class InstrumentComponent implements OnInit {
       brandId: ["", Validators.required],
     });
     this.imageUrl = this.noimageData;
+
+    this.instrumentform.get('installby').valueChanges.subscribe((data) => {
+      if (data == 0) {
+        this.instrumentform.get('installbyOther').setValidators(Validators.required)
+        this.instrumentform.get('installbyOther').updateValueAndValidity()
+      }
+      else {
+        this.instrumentform.get('installbyOther').clearValidators
+        this.instrumentform.get('installbyOther').updateValueAndValidity()
+      }
+
+    })
+
 
     this.instrumentform.get('warranty').valueChanges
       .subscribe(value => {
@@ -723,7 +736,7 @@ export class InstrumentComponent implements OnInit {
     this.submitted = true;
 
     this.alertService.clear();
-
+    this.instrumentform.markAllAsTouched()
     // stop here if form is invalid
     if (this.instrumentform.invalid) {
       return;

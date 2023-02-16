@@ -365,7 +365,7 @@ export class TravelinvoiceComponent implements OnInit {
   }
 
   onSubmit() {
-    debugger;
+    this.form.markAllAsTouched()
     this.submitted = true;
     // reset alerts on submit
     this.alertService.clear();

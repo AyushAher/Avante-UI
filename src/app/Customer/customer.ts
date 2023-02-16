@@ -93,13 +93,14 @@ export class CustomerComponent implements OnInit {
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
-        zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
+        zip: ['', [Validators.minLength(4), Validators.maxLength(15)]],
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
         isActive: true,
         isdeleted: [false],
       }),
     });
+
 
     this.countryService.getAll()
       .pipe(first()).subscribe({
@@ -172,7 +173,8 @@ export class CustomerComponent implements OnInit {
   }
 
   get a() {
-    return this.customerform.controls.address;
+    var controls: any = (this.customerform.controls.address);
+    return controls.controls;
   }
 
   onDefDistchanged(distId) {
@@ -183,7 +185,7 @@ export class CustomerComponent implements OnInit {
           this.distRegionsList = data.object.find(x => x.id === distId)?.regions;
         },
         error: error => {
-          
+
           this.loading = false;
         }
       });
@@ -203,7 +205,7 @@ export class CustomerComponent implements OnInit {
   onSubmit() {
     // //debugger;
     this.submitted = true;
-
+    this.customerform.markAllAsTouched()
     // reset alerts on submit
     this.alertService.clear();
 
@@ -231,7 +233,7 @@ export class CustomerComponent implements OnInit {
           },
           error: error => {
             // this.alertService.error(error);
-            
+
             this.loading = false;
           }
         });
@@ -255,7 +257,7 @@ export class CustomerComponent implements OnInit {
           },
           error: error => {
             //  this.alertService.error(error);
-            
+
             this.loading = false;
           }
         });

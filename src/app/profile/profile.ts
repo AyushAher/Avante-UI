@@ -310,7 +310,7 @@ export class ProfileComponent implements OnInit {
   onSubmit() {
     //debugger;
     this.submitted = true;
-
+    this.profileform.markAllAsTouched();
     // reset alerts on submit
     this.alertService.clear();
 

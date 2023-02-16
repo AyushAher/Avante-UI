@@ -406,6 +406,7 @@ export class TravelexpenseComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.form.markAllAsTouched()
     // reset alerts on submit
     this.alertService.clear();
 

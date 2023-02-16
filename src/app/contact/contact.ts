@@ -253,9 +253,16 @@ export class ContactComponent implements OnInit {
     document.getElementById(id).classList.toggle("show")
   }
 
+
   // convenience getter for easy access to form fields
-  get f() { return this.contactform.controls; }
-  get a() { return this.contactform.controls.address }
+  get f() {
+    return this.contactform.controls;
+  }
+
+  get a() {
+    var controls: any = (this.contactform.controls.address);
+    return controls.controls;
+  }
 
   addUser() {
     //debugger;
@@ -328,6 +335,7 @@ export class ContactComponent implements OnInit {
   onSubmit() {
     //debugger;
     this.submitted = true;
+    this.contactform.markAllAsTouched()
     //this.id = this.route.snapshot.paramMap.get('cid');
     //this.type = this.route.snapshot.paramMap.get('type');
     // reset alerts on submit

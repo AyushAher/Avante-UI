@@ -78,7 +78,7 @@ export class DistributorComponent implements OnInit {
         zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
         geolat: ['', Validators.required],
         geolong: ['', Validators.required],
-        isActive: false,
+        isActive: true,
       }),
     });
     this.countryService.getAll()
@@ -90,17 +90,16 @@ export class DistributorComponent implements OnInit {
 
     this.distributorId = this.route.snapshot.paramMap.get('id');
     if (this.distributorId != null) {
+
       this.hasAddAccess = false;
+
       if (this.user.username == "admin") {
         this.hasAddAccess = true;
       }
+
       this.distributorService.getById(this.distributorId)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.form.patchValue(data.object);
-          }
-        });
+        .pipe(first()).subscribe((data: any) => this.form.patchValue(data.object));
+
       this.form.disable()
     }
     else {
@@ -109,8 +108,14 @@ export class DistributorComponent implements OnInit {
 
   }
 
+  // convenience getter for easy access to form fields
   get f() {
     return this.form.controls;
+  }
+
+  get a() {
+    var controls: any = (this.form.controls.address);
+    return controls.controls;
   }
 
 
@@ -134,7 +139,7 @@ export class DistributorComponent implements OnInit {
 
   CancelEdit() {
     this.form.disable()
-     this.isEditMode = false;
+    this.isEditMode = false;
     this.isNewMode = false;
   }
 
@@ -149,13 +154,9 @@ export class DistributorComponent implements OnInit {
   }
 
 
-  get a() {
-    return this.form.controls.address;
-  }
-
   onSubmit() {
     this.submitted = true;
-
+    this.form.markAllAsTouched()
     // reset alerts on submit
     this.alertService.clear();
 

@@ -39,19 +39,19 @@
         <form [formGroup]="profileform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-md-4 col-sm-4">
-              <label for="profilename">Profile Name</label>
+              <label for="profilename">Profile Name<span class="text-danger">*</span></label>
               <input type="text" formControlName="profilename" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.profilename.errors }" />
-              <div *ngIf="submitted && f.profilename.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid':  f.profilename.touched && f.profilename.errors }" />
+              <div *ngIf=" f.profilename.touched && f.profilename.errors" class="invalid-feedback">
                 <div *ngIf="f.profilename.errors.required">Profile Name is required</div>
               </div>
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="description">Description</label>
+              <label for="description">Description<span class="text-danger">*</span></label>
               <textarea type="text" formControlName="description" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
-              <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid':  f.description.touched && f.description.errors }"></textarea>
+              <div *ngIf=" f.description.touched && f.description.errors" class="invalid-feedback">
                 <div *ngIf="f.description.errors.required">Description is required</div>
               </div>
             </div>

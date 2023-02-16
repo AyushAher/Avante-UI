@@ -39,19 +39,19 @@
         <form [formGroup]="currencyform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-4">
-              <label for="code">Code</label>
+              <label for="code">Code<span class="text-danger">*</span></label>
               <input type="text" formControlName="code" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.code.errors }" />
-              <div *ngIf="submitted && f.code.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.code.touched && f.code.errors }" />
+              <div *ngIf="f.code.touched && f.code.errors" class="invalid-feedback">
                 <div *ngIf="f.code.errors.required">Code is required</div>
                 <div *ngIf="f.code.errors?.maxlength">Max length is 3</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="name">Currency Name</label>
+              <label for="name">Currency Name<span class="text-danger">*</span></label>
               <input type="text" formControlName="name" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
-              <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.name.touched && f.name.errors }" />
+              <div *ngIf="f.name.touched && f.name.errors" class="invalid-feedback">
                 <div *ngIf="f.name.errors.required">Currency Name is required</div>
               </div>
             </div>
@@ -62,10 +62,10 @@
           </div>
           <div class="row">
             <div class="col-md-4 col-sm-4">
-              <label for="minor_Unit">Minor Unit</label>
+              <label for="minor_Unit">Minor Unit<span class="text-danger">*</span></label>
               <input type="number" formControlName="minor_Unit" maxLength="10" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.minor_Unit.errors }" />
-              <div *ngIf="submitted && f.minor_Unit.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.minor_Unit.touched && f.minor_Unit.errors }" />
+              <div *ngIf="f.minor_Unit.touched && f.minor_Unit.errors" class="invalid-feedback">
                 <div *ngIf="f.minor_Unit.errors.required">Minor Unit is required</div>
                 <div *ngIf="f.minor_Unit.errors?.maxlength">Max length is 5</div>
               </div>

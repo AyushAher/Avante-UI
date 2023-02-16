@@ -38,30 +38,30 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-md-4 col-sm-4">
-              <label for="billto">Bill To</label>
+              <label for="billto">Bill To<span class="text-danger">*</span></label>
               <select id="billto" formControlName="billtoid" class="form-select"
                 (change)="GetSites($event.target['value'])"
-                [ngClass]="{ ' is -invalid': submitted && f.billtoid.errors}">
+                [ngClass]="{ ' is -invalid': f.billtoid.touched && f.billtoid.errors}">
                 <option *ngFor="let i of customersList" value="{{i.id}}">
                   {{i.custname}}
                 </option>
               </select>
 
-              <div style="display: block" *ngIf="submitted && f.billtoid.errors" class="invalid-feedback">
+              <div style="display: block" *ngIf="f.billtoid.touched && f.billtoid.errors" class="invalid-feedback">
                 <div *ngIf="f.billtoid.errors.required">Billto is required</div>
               </div>
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="CustSite">Customer Site</label>
+              <label for="CustSite">Customer Site<span class="text-danger">*</span></label>
               <select id="CustSite" formControlName="custSite" class="form-select"
-                [ngClass]="{ ' is -invalid': submitted && f.custSite.errors}">
+                [ngClass]="{ ' is -invalid': f.custSite.touched && f.custSite.errors}">
                 <option *ngFor="let i of custSiteList" value="{{i.id}}">
                   {{i.custregname}}
                 </option>
               </select>
 
-              <div style="display: block" *ngIf="submitted && f.custSite.errors" class="invalid-feedback">
+              <div style="display: block" *ngIf="f.custSite.touched && f.custSite.errors" class="invalid-feedback">
                 <div *ngIf="f.custSite.errors.required">
                   Customer Site is required
                 </div>
@@ -69,10 +69,11 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="servicequote">Service Quote</label>
+              <label for="servicequote">Service Quote<span class="text-danger">*</span></label>
               <input id="servicequote" type="text" formControlName="servicequote" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.servicequote.errors}" />
-              <div style="display: block" *ngIf="submitted && f.servicequote.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.servicequote.touched && f.servicequote.errors}" />
+              <div style="display: block" *ngIf="f.servicequote.touched && f.servicequote.errors"
+                class="invalid-feedback">
                 <div *ngIf="f.servicequote.errors.required">
                   Service Quote is required
                 </div>
@@ -80,19 +81,19 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="sqdate">SQ Date</label>
+              <label for="sqdate">SQ Date<span class="text-danger">*</span></label>
               <input id="sqdate" bsDatepicker type="text" formControlName="sqdate" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.sqdate.errors}" />
-              <div style="display: block" *ngIf="submitted && f.sqdate.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.sqdate.touched && f.sqdate.errors}" />
+              <div style="display: block" *ngIf="f.sqdate.touched && f.sqdate.errors" class="invalid-feedback">
                 <div *ngIf="f.sqdate.errors.required">SQ Date is required</div>
               </div>
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="sdate">Start Date</label>
+              <label for="sdate">Start Date<span class="text-danger">*</span></label>
               <input id="sdate" bsDatepicker type="text" formControlName="sdate" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.sdate.errors}" />
-              <div style="display: block" *ngIf="submitted && f.sdate.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.sdate.touched && f.sdate.errors}" />
+              <div style="display: block" *ngIf="f.sdate.touched && f.sdate.errors" class="invalid-feedback">
                 <div *ngIf="f.sdate.errors.required">
                   Start Date is required
                 </div>
@@ -100,32 +101,33 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="edate">End Date</label>
+              <label for="edate">End Date<span class="text-danger">*</span></label>
               <input id="edate" bsDatepicker type="text" formControlName="edate" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.edate.errors}" />
-              <div style="display: block" *ngIf="submitted && f.edate.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.edate.touched && f.edate.errors}" />
+              <div style="display: block" *ngIf="f.edate.touched && f.edate.errors" class="invalid-feedback">
                 <div *ngIf="f.edate.errors.required">End Date is required</div>
               </div>
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="project">Project</label>
+              <label for="project">Project<span class="text-danger">*</span></label>
               <input id="project" type="text" formControlName="project" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.project.errors}" />
-              <div style="display: block" *ngIf="submitted && f.project.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.project.touched && f.project.errors}" />
+              <div style="display: block" *ngIf="f.project.touched && f.project.errors" class="invalid-feedback">
                 <div *ngIf="f.project.errors.required">Project is required</div>
               </div>
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="servicetype">Service Type</label>
+              <label for="servicetype">Service Type<span class="text-danger">*</span></label>
               <select id="servicetype" type="text" formControlName="servicetype" class="form-select"
-                [ngClass]="{ ' is -invalid': submitted && f.servicetype.errors}">
+                [ngClass]="{ ' is -invalid': f.servicetype.touched && f.servicetype.errors}">
                 <option *ngFor="let i of serviceType" value="{{i.listTypeItemId}}">
                   {{i.itemname}}
                 </option>
               </select>
-              <div style="display: block" *ngIf="submitted && f.servicetype.errors" class="invalid-feedback">
+              <div style="display: block" *ngIf="f.servicetype.touched && f.servicetype.errors"
+                class="invalid-feedback">
                 <div *ngIf="f.servicetype.errors.required">
                   Service Type is required
                 </div>
@@ -133,72 +135,76 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="brand">Brand</label>
+              <label for="brand">Brand<span class="text-danger">*</span></label>
               <select id="brand" type="text" formControlName="brand" class="form-select"
-                [ngClass]="{ ' is -invalid': submitted && f.brand.errors}">
+                [ngClass]="{ ' is -invalid': f.brand.touched && f.brand.errors}">
                 <option *ngFor="let i of supplierList" value="{{i.listTypeItemId}}">
                   {{i.itemname}}
                 </option>
               </select>
-              <div style="display: block" *ngIf="submitted && f.brand.errors" class="invalid-feedback">
+              <div style="display: block" *ngIf="f.brand.touched && f.brand.errors" class="invalid-feedback">
                 <div *ngIf="f.brand.errors.required">Brand is required</div>
               </div>
             </div>
 
             <div class="col-md-4 col-sm-4 mt-2">
-              <label for="tnc">First Visit Date</label><br />
+              <label for="tnc">First Visit Date<span class="text-danger">*</span></label><br />
 
               <div class="mr-2" style="width: 47%; display: inline-block">
                 <small style="margin: 0" id="emailHelp" class="form-text text-muted">From</small>
-                <!-- <label style="font-weight: 300;" for="tnc">From</label><br> -->
+                <!-- <label style="font-weight: 300;" for="tnc">From<span class="text-danger">*</span></label><br> -->
                 <input type="text" formControlName="firstVisitDateFrom" placeholder="From" class="form-control"
+                  [ngClass]="{ ' is -invalid': f.firstVisitDateFrom.touched && f.firstVisitDateFrom.errors}"
                   bsDatepicker />
               </div>
 
               <div class="ml-2" style="width: 47%; display: inline-block">
                 <small style="margin: 0" id="emailHelp" class="form-text text-muted">To</small>
-                <!-- <label style="font-weight: 300;" for="tnc">To</label><br> -->
+                <!-- <label style="font-weight: 300;" for="tnc">To<span class="text-danger">*</span></label><br> -->
                 <input type="text" formControlName="firstVisitDateTo" placeholder="To" class="form-control"
-                  bsDatepicker />
+                  [ngClass]="{ ' is -invalid': f.firstVisitDateTo.touched && f.firstVisitDateTo.errors}" bsDatepicker />
               </div>
 
               <div style="display: block"
-                *ngIf="submitted && (f.firstVisitDateTo.errors || f.firstVisitDateFrom.errors)"
+                *ngIf="(f.firstVisitDateFrom.touched||f.firstVisitDateTo.touched) && (f.firstVisitDateTo.errors || f.firstVisitDateFrom.errors)"
                 class="invalid-feedback">
-                <div *ngIf="f.tnc.errors.required">
+                <div *ngIf=" (f.firstVisitDateTo.errors.required || f.firstVisitDateFrom.errors.required)">
                   First Visit Date is required
                 </div>
               </div>
             </div>
 
             <div *ngIf="!isOnCall" class="col-md-4 col-sm-4 mt-2">
-              <label for="tnc">Second Visit Date</label><br />
+              <label for="tnc">Second Visit Date<span class="text-danger">*</span></label><br />
 
               <div class="mr-2" style="width: 47%; display: inline-block">
                 <small style="margin: 0" id="emailHelp" class="form-text text-muted">From</small>
                 <input type="text" formControlName="secondVisitDateFrom" placeholder="From" class="form-control mr-2"
+                  [ngClass]="{ ' is -invalid': f.secondVisitDateFrom.touched && f.secondVisitDateFrom.errors}"
                   bsDatepicker />
+
               </div>
 
               <div class="mr-2" style="width: 47%; display: inline-block">
                 <small style="margin: 0" id="emailHelp" class="form-text text-muted">To</small>
                 <input type="text" formControlName="secondVisitDateTo" placeholder="To" class="form-control ml-2"
+                  [ngClass]="{ ' is -invalid': f.secondVisitDateTo.touched && f.secondVisitDateTo.errors}"
                   bsDatepicker />
-              </div>
 
+              </div>
               <div style="display: block"
-                *ngIf="submitted && (f.secondVisitDateFrom.errors || f.secondVisitDateTo.errors)"
+                *ngIf="(f.secondVisitDateFrom.touched||f.secondVisitDateTo.touched) && (f.secondVisitDateTo.errors || f.secondVisitDateFrom.errors)"
                 class="invalid-feedback">
-                <div *ngIf="f.tnc.errors.required">
+                <div *ngIf=" (f.secondVisitDateTo.errors.required || f.secondVisitDateFrom.errors.required)">
                   Second Visit Date is required
                 </div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
-              <label for="zerorate">Zerorate</label>
+              <label for="zerorate">Zerorate<span class="text-danger">*</span></label>
               <br />
               <select id="currency" type="text" style="display: inline-block; width: 30%" formControlName="currency"
-                class="form-select" [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
+                class="form-select" [ngClass]="{ ' is -invalid': f.currency.touched && f.currency.errors}">
                 <option *ngFor="let i of currencyList" value="{{i.id}}">
                   {{i.code}}
                 </option>
@@ -206,8 +212,8 @@
 
               <input id="zerorate" type="number" formControlName="zerorate" class="form-control"
                 style="display: inline-block; width: 220px; margin-left: 5px"
-                [ngClass]="{ ' is -invalid': submitted && f.zerorate.errors}" />
-              <div style="display: block" *ngIf="submitted && f.zerorate.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.zerorate.touched && f.zerorate.errors}" />
+              <div style="display: block" *ngIf="f.zerorate.touched && f.zerorate.errors" class="invalid-feedback">
                 <div *ngIf="f.zerorate.errors.required">
                   Zero Rate is required
                 </div>
@@ -215,7 +221,7 @@
             </div>
 
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
-              <label for="dateOfPurchase">Base Currency</label><br>
+              <label for="dateOfPurchase">Base Currency<span class="text-danger">*</span></label><br>
               <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
                 class="form-select">
                 <option *ngFor="let item of currencyList" value="{{item.id}}">{{item.code}}</option>
@@ -225,10 +231,10 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="tnc">Comments</label>
+              <label for="tnc">Comments<span class="text-danger">*</span></label>
               <textarea id="tnc" type="text" formControlName="tnc" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.tnc.errors}"></textarea>
-              <div style="display: block" *ngIf="submitted && f.tnc.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.tnc.touched && f.tnc.errors}"></textarea>
+              <div style="display: block" *ngIf="f.tnc.touched && f.tnc.errors" class="invalid-feedback">
                 <div *ngIf="f.tnc.errors.required">Comments is required</div>
               </div>
             </div>
@@ -239,7 +245,8 @@
                 formControlName="paymentTerms">
                 <ng-option *ngFor="let i of payTypes" value="{{i.listTypeItemId}}">{{i.itemname}}</ng-option>
               </ng-select>
-              <div style="display: block" *ngIf="submitted && f.paymentTerms.errors" class="invalid-feedback">
+              <div style="display: block" *ngIf="f.paymentTerms.touched && f.paymentTerms.errors"
+                class="invalid-feedback">
                 <div *ngIf="f.paymentTerms.errors.required">
                   Payment Terms is required
                 </div>
@@ -257,7 +264,7 @@
           <hr />
           <div class="row" *ngIf="!isCompleted && (isEditMode || isNewMode)">
             <div class="col-md-9">
-              <label>Search Instruments By Serial No. </label>
+              <label>Search Instruments By Serial No.</label>
               <select #instrumentSearch class="form-select">
                 <option></option>
                 <option *ngFor="let i of instrumentAutoComplete" [value]="i.id">{{i.serialnos}}</option>
@@ -345,7 +352,8 @@
 
                   <td>
                     <div class="d-flex justify-content-center">
-                      <button type="button" *ngIf="hasUpdateAccess" [disabled]="submitted" (click)="submitStageData()"
+                      <button type="button" *ngIf="hasUpdateAccess" [disabled]="submitted"
+                        (click)="submitStageData()"
                         style="background-color: transparent; color: #5ba146; border: none;">
                         <i class="fas fa-save" style="font-size: 20px;"></i>
                       </button>
@@ -354,12 +362,12 @@
 
                   <td style="width: 250px">
                     <ng-select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
-                      [virtualScroll]="true" [ngClass]="{'is-invalid':submitted && f.stageName.errors }">
+                      [virtualScroll]="true" [ngClass]="{'is-invalid':f.stageName.touched && f.stageName.errors }">
                       <ng-option *ngFor="let i of stagesList" value="{{i.listTypeItemId}}">{{i.itemname}}
                       </ng-option>
                     </ng-select>
 
-                    <div *ngIf="submitted && f.stageName.errors" class="invalid-feedback">
+                    <div *ngIf="f.stageName.touched && f.stageName.errors" class="invalid-feedback">
                       <div *ngIf="f.stageName.errors.required">
                         Stage Name is required
                       </div>
@@ -367,7 +375,7 @@
                   </td>
                   <td>
                     <div *ngIf="isPaymentTerms">
-                      <label>Payment Type</label>
+                      <label>Payment Type<span class="text-danger">*</span></label>
                       <select class="pay_terms form-select" formControlName="payterms" id="payment_type">
                         <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
                           {{ i.itemname }}
@@ -376,10 +384,10 @@
                     </div>
 
                     <div *ngIf="isPaymentAmt">
-                      <label>Payment Amount</label><br>
+                      <label>Payment Amount<span class="text-danger">*</span></label><br>
                       <select id="currency" type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
                         formControlName="payAmtCurrencyId" class="form-select"
-                        [ngClass]="{ ' is -invalid': submitted && f.currency.errors}">
+                        [ngClass]="{ ' is -invalid': f.payAmtCurrencyId.touched && f.payAmtCurrencyId.errors}">
                         <option *ngFor="let i of currencyList" value="{{i.id}}">
                           {{i.code}}
                         </option>
@@ -388,11 +396,12 @@
                         formControlName="payAmt" id="payAmt" />
                     </div>
 
-                    <label for="stageComments" *ngIf="isPaymentTerms || isPaymentAmt">Comments</label>
+                    <label for="stageComments" *ngIf="isPaymentTerms || isPaymentAmt">Comments<span
+                        class="text-danger">*</span></label>
                     <textarea formControlName="stageComments" class="form-control"
-                      [ngClass]="{'is-invalid':submitted && f.stageComments.errors }"></textarea>
+                      [ngClass]="{'is-invalid':f.stageComments.touched && f.stageComments.errors }"></textarea>
 
-                    <div *ngIf="submitted && f.stageComments.errors" class="invalid-feedback">
+                    <div *ngIf="f.stageComments.touched && f.stageComments.errors" class="invalid-feedback">
                       <div *ngIf="f.stageComments.errors.required">
                         Stage Comments is required
                       </div>

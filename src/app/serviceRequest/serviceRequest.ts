@@ -202,7 +202,7 @@ export class ServiceRequestComponent implements OnInit {
     })
   }
 
-  ngOnInit() {
+  async ngOnInit() {
 
     this.transaction = 0;
     this.user = this.accountService.userValue;
@@ -331,6 +331,14 @@ export class ServiceRequestComponent implements OnInit {
         })
     }
 
+    this.customerService.getAll().pipe(first())
+      .subscribe((data: any) => {
+        this.customerlist = data.object
+        setTimeout(() => {
+          this.onCustomerChanged()
+        }, 500);
+      })
+
     this.countryService.getAll().pipe(first())
       .subscribe((data: any) => this.countries = data.object);
 
@@ -405,14 +413,6 @@ export class ServiceRequestComponent implements OnInit {
 
     this.listTypeService.getById('SRT').pipe(first())
       .subscribe((data: any) => this.subreqtypelist = data);
-
-    this.customerService.getAll().pipe(first())
-      .subscribe((data: any) => {
-
-        this.customerlist = data.object
-        this.onCustomerChanged()
-      })
-
 
     this.distributorService.getAll().pipe(first())
       .subscribe({
@@ -721,7 +721,10 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   onCustomerChanged(value: any = this.customerId) {
-    let object = this.customerlist.find(x => x.id == value);
+    let object;
+    if (value) object = this.customerlist.find(x => x.id == value);
+    else object = this.customerlist[0]
+
     this.SetCustomerData(object)
   }
 
@@ -773,6 +776,7 @@ export class ServiceRequestComponent implements OnInit {
 
   onSubmit(redirect = true) {
     this.submitted = true
+    this.serviceRequestform.markAllAsTouched();
     this.serviceRequestform.get('subrequesttypeid').enable();
 
     if (this.IsEngineerView && this.accepted) {

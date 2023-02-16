@@ -220,11 +220,11 @@ export class OfferrequestComponent implements OnInit {
       offReqNo: [''],
       distributorid: ['', Validators.required],
       totalamount: [0],
-      currencyId: [''],
+      currencyId: ['', Validators.required],
       authtoken: [''],
       status: [''],
       otherSpareDesc: [''],
-      podate: [this.datepipe.transform(new Date,"dd/MM/YYYY"), Validators.required],
+      podate: [this.datepipe.transform(new Date, "dd/MM/YYYY"), Validators.required],
       spareQuoteNo: [{ value: '', disabled: true }],
       payterms: [''],
       paymentTerms: [""],
@@ -240,7 +240,7 @@ export class OfferrequestComponent implements OnInit {
 
       airFreightChargesAmt: [0],
       airFreightChargesCurr: [""],
-      customerSiteId: [""],
+      customerSiteId: ["", Validators.required],
 
       lcadministrativeChargesAmt: [0],
       lcadministrativeChargesCurr: [""],
@@ -250,7 +250,7 @@ export class OfferrequestComponent implements OnInit {
 
       totalAmt: [0],
       totalCurr: [""],
-      mainCurrencyId: "",
+      mainCurrencyId: [""],
       basePCurrencyAmt: [1],
 
     })
@@ -1140,7 +1140,7 @@ export class OfferrequestComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+    this.form.markAllAsTouched()
     // reset alerts on submit
     this.alertService.clear();
     // stop here if form is invalid

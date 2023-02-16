@@ -41,40 +41,40 @@
                     <div class="row">
 
                         <div class="col-sm-4" hidden>
-                            <label>Distributor</label>
+                            <label>Distributor<span class="text-danger">*</span></label>
                             <select formControlName="distributorId" class="form-select"
                                 (input)="getengineers($event.target.value)"
-                                [ngClass]="{'is-invalid':submitted && f.distributorId.errors }">
+                                [ngClass]="{'is-invalid':f.distributorId.touched && f.distributorId.errors }">
                                 <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.distributorId.errors" class="invalid-feedback">
+                            <div *ngIf="f.distributorId.touched && f.distributorId.errors" class="invalid-feedback">
                                 <div *ngIf="f.distributorId.errors.required">Distributor is required</div>
                             </div>
                         </div>
 
                         <div class="col-sm-4">
-                            <label>Engineer Name</label>
+                            <label>Engineer Name<span class="text-danger">*</span></label>
                             <select formControlName="engineerId" class="form-select"
                                 (change)="getservicerequest(distId ,$event.target.value);"
-                                [ngClass]="{'is-invalid':submitted && f.engineerId.errors }">
+                                [ngClass]="{'is-invalid':f.engineerId.touched && f.engineerId.errors }">
                                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.engineerId.errors" class="invalid-feedback">
+                            <div *ngIf="f.engineerId.touched && f.engineerId.errors" class="invalid-feedback">
                                 <div *ngIf="f.engineerId.errors.required">Engineer Name is required</div>
                             </div>
 
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label for="serviceRequestId">Service Request No.</label>
+                            <label for="serviceRequestId">Service Request No.<span class="text-danger">*</span></label>
                             <select formControlName="serviceRequestId" class="form-select"
                                 (change)="onServiceRequestChange()"
-                                [ngClass]="{'is-invalid':submitted && f.serviceRequestId.errors }">
+                                [ngClass]="{'is-invalid':f.serviceRequestId.touched && f.serviceRequestId.errors }">
                                 <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
                             </select>
-                            <div Style="display: block" *ngIf="submitted && f.serviceRequestId.errors"
+                            <div Style="display: block" *ngIf="f.serviceRequestId.touched && f.serviceRequestId.errors"
                                 class="invalid-feedback">
                                 <div *ngIf="f.serviceRequestId.errors.required">
                                     Service Request is required
@@ -83,37 +83,38 @@
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label>Customer</label>
+                            <label>Customer<span class="text-danger">*</span></label>
                             <select disabled formControlName="customerId" class="form-select"
-                                [ngClass]="{ 'is-invalid': submitted && f.customerId.errors}">
+                                [ngClass]="{ 'is-invalid': f.customerId.touched && f.customerId.errors}">
 
                                 <option *ngFor="let i of customerList" value="{{i.id}}">{{i.custname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.customerId.errors" class="invalid-feedback">
+                            <div *ngIf="f.customerId.touched && f.customerId.errors" class="invalid-feedback">
                                 <div *ngIf="f.customerId.errors.required">Customer is required</div>
                             </div>
 
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label>Start Date</label>
+                            <label>Start Date<span class="text-danger">*</span></label>
                             <input type="text" bsDatepicker formControlName="startDate" class="form-control"
                                 (blur)="OnDateChange()"
-                                [ngClass]="{ 'is-invalid': submitted && f.startDate.errors}" />
+                                [ngClass]="{ 'is-invalid': f.startDate.touched && f.startDate.errors}" />
 
-                            <div *ngIf="submitted && f.startDate.errors" class="invalid-feedback">
+                            <div *ngIf="f.startDate.touched && f.startDate.errors" class="invalid-feedback">
                                 <div *ngIf="f.startDate.errors.required">Start Date is required</div>
                             </div>
 
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label>End Date</label>
+                            <label>End Date<span class="text-danger">*</span></label>
                             <input type="text" id="endDate" bsDatepicker formControlName="endDate" class="form-control"
-                                (blur)="OnDateChange()" [ngClass]="{ 'is-invalid': submitted && f.endDate.errors}" />
+                                (blur)="OnDateChange()"
+                                [ngClass]="{ 'is-invalid': f.endDate.touched && f.endDate.errors}" />
 
-                            <div *ngIf="submitted && f.endDate.errors" class="invalid-feedback">
+                            <div *ngIf="f.endDate.touched && f.endDate.errors" class="invalid-feedback">
                                 <div *ngIf="f.endDate.errors.required">End Date is required</div>
                             </div>
 
