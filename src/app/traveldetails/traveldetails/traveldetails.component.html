@@ -138,7 +138,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label>Amount</label>
-              <input formControlName="amount" type="number" class="form-control"
+              <input formControlName="amount" type="number" min="0" class="form-control"
                 [ngClass]="{'is-invalid':submitted && t.amount.errors }" />
               <div *ngIf="submitted && t.amount.errors" class="invalid-feedback">
                 <div *ngIf="t.amount.errors.required">Amount is required</div>
@@ -200,7 +200,7 @@
                   <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                   </option>
                 </select>
-                <input id="totalamount" [readonly]="isEng" type="number" formControlName="flightcost"
+                <input id="totalamount" [readonly]="isEng" type="number" min="0" formControlName="flightcost"
                   class="form-control" style="display:inline-block; width:68%; margin-left: 5px;"
                   [ngClass]="{ ' is -invalid': submitted && f.get('flightcost').errors}" />
                 <div *ngIf="submitted && f.get('flightcost').errors" class="invalid-feedback">

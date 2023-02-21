@@ -1126,7 +1126,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 #pendingSerReq,
 #compSerReq {
-  height: 200px !important;
+  height: 236px !important;
 }
 #highestServiceRequest {
   height: 165px !important;

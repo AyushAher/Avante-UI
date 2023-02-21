@@ -69,7 +69,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label>Amount</label>
-              <input formControlName="amount" type="number" class="form-control"
+              <input formControlName="amount" type="number" min="0" class="form-control"
                 [ngClass]="{'is-invalid':submitted && f.amount.errors }" />
               <div *ngIf="submitted && f.amount.errors" class="invalid-feedback">
                 <div *ngIf="t.amount.errors.required">Amount is required</div>
@@ -133,7 +133,7 @@
                 </option>
               </select>
 
-              <input id="totalamount" type="number" formControlName="visacost" class="form-control"
+              <input id="totalamount" type="number" min="0" formControlName="visacost" class="form-control"
                 style="display:inline-block; width:68%; margin-left: 5px;"
                 [ngClass]="{ ' is -invalid': submitted && f.visacost.errors}" />
               <div *ngIf="submitted && f.visacost.errors" class="invalid-feedback">

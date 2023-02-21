@@ -2,15 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ListTypeItem, ProfileReadOnly, User } from "../_models";
 import {
   AccountService,
-  AmcService,
   ContactService,
-  CustdashboardsettingsService,
   CustomerService,
   DistributorService,
   InstrumentService,
   ListTypeService,
   NotificationService,
-  ProfileService,
   ServiceRequestService,
   SrRecomandService
 } from "../_services";
@@ -173,7 +170,7 @@ export class DashboardComponent implements OnInit {
         this.Mnths6.nativeElement.classList.remove("active")
         this.Mnths3.nativeElement.classList.remove("active")
         break;
-        
+
       default:
         this.Mnths6.nativeElement.classList.remove("active")
         this.Mnths3.nativeElement.classList.remove("active")
@@ -190,7 +187,7 @@ export class DashboardComponent implements OnInit {
     this.GetAllAMC(sdate, edate);
     this.GetPoCost(sdate, edate);
     this.GetSparePartsRecommended(sdate, edate);
-    setTimeout(() => CustomerDashboardCharts(), 1500)
+    setTimeout(() => CustomerDashboardCharts(), 2000)
   }
 
 
@@ -426,8 +423,10 @@ export class DashboardComponent implements OnInit {
         this.serviceRequestService.save(this.serviceRequest).pipe(first())
           .subscribe({
             next: (data: any) => {
-              if (data.result)
+              if (data.result) {
+                this.ngOnInit()
                 this.notificationService.showSuccess(data.resultMessage, "Success")
+              }
             }
           })
       }

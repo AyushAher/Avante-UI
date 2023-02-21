@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label for="engineername">Quantity</label>
-                                <input formControlName="quantity" type="number" class="form-control"
+                                <input formControlName="quantity" type="number" min="0" class="form-control"
                                     [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }" />
                             </div>
 

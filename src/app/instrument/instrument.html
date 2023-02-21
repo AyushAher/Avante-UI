@@ -184,7 +184,7 @@
                 <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
               </select>
 
-              <input formControlName="cost" type="number" [ngClass]="{ 'is-invalid': f.cost.touched && f.cost.errors }"
+              <input formControlName="cost" type="number" min="0" [ngClass]="{ 'is-invalid': f.cost.touched && f.cost.errors }"
                 style="width: 68%;display: inline-block;margin-left: 5px;" class="form-control" />
 
               <div *ngIf="(f.currencyId.touched || f.cost.touched) && (f.currencyId.errors || f.cost.errors)"
@@ -200,13 +200,13 @@
                 class="form-select">
                 <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
               </select>
-              <input formControlName="baseCurrencyAmt" #baseAmt type="number" class="form-control"
+              <input formControlName="baseCurrencyAmt" #baseAmt type="number" min="0" class="form-control"
                 style="width: 68%;display: inline-block;margin-left: 5px;" />
             </div>
 
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
               <label for="dateOfPurchase">Cost in USD</label><br>
-              <input [value]="(f.baseCurrencyAmt.value * f.cost.value)" disabled type="number" class="form-control" />
+              <input [value]="(f.baseCurrencyAmt.value * f.cost.value)" disabled type="number" min="0" class="form-control" />
             </div>
 
           </div>

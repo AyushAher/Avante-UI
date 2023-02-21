@@ -86,7 +86,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="qtyAvailable">Qty. Available<span class="text-danger">*</span></label>
-              <input id="qtyAvailable" type="number" formControlName="qtyAvailable" class="form-control"
+              <input id="qtyAvailable" type="number" min="0" formControlName="qtyAvailable" class="form-control"
                 [ngClass]="{ ' is -invalid': f.qtyAvailable.touched && f.qtyAvailable.errors}" />
               <div *ngIf="f.qtyAvailable.touched && f.qtyAvailable.errors" class="invalid-feedback">
                 <div *ngIf="f.qtyAvailable.errors.required">

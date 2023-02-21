@@ -107,7 +107,7 @@
                     </td>
 
                     <td>
-                        <input formControlName="bcyAmt" type="number" id="bcyAmt" class="form-control"
+                        <input formControlName="bcyAmt" type="number" min="0" id="bcyAmt" class="form-control"
                             [ngClass]="{'is-invalid':submitted && f.bcyAmt.errors }" />
 
                         <div *ngIf="submitted && f.bcyAmt.errors" class="invalid-feedback">
@@ -116,7 +116,7 @@
                     </td>
 
                     <td>
-                        <input formControlName="usdAmt" type="number" id="usdAmt" class="form-control"
+                        <input formControlName="usdAmt" type="number" min="0" id="usdAmt" class="form-control"
                             [ngClass]="{'is-invalid':submitted && f.usdAmt.errors }" />
 
                         <div *ngIf="submitted && f.usdAmt.errors" class="invalid-feedback">

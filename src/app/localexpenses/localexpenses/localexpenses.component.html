@@ -81,7 +81,7 @@
                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                 </option>
               </select>
-              <input id="totalamount" type="number" formControlName="totalamount" class="form-control"
+              <input id="totalamount" type="number" min="0" formControlName="totalamount" class="form-control"
                 style="display:inline-block; width:68%; margin-left: 5px;"
                 [ngClass]="{ ' is -invalid': submitted && f.totalamount.errors}" />
 
@@ -204,7 +204,7 @@
                   </td>
 
                   <td style="width: 250px;">
-                    <input type="number" class="form-control" formControlName="amount">
+                    <input type="number" min="0" class="form-control" formControlName="amount">
                   </td>
 
                   <td>

@@ -99,7 +99,7 @@
                 </option>
               </select>
 
-              <input id="totalamount" type="number" formControlName="totalamount" class="form-control"
+              <input id="totalamount" type="number" min="0" formControlName="totalamount" class="form-control"
                 style="display: inline-block; width: 270px; margin-left: 5px"
                 [ngClass]="{' is -invalid': f.totalamount.touched && f.totalamount.errors}" />
               <div Style="display: block" *ngIf="f.totalamount.touched && f.totalamount.errors"
@@ -220,25 +220,25 @@
             <div class="col-md-4">
               <label>Air Freight charges</label>
               <br>
-              <input class="payAmt form-control" type="number" formControlName="airFreightChargesAmt" />
+              <input class="payAmt form-control" type="number" min="0" formControlName="airFreightChargesAmt" />
             </div>
 
             <div class="col-md-4">
               <label>PVOC / Inspection Charges </label>
               <br>
-              <input class="payAmt form-control" type="number" formControlName="inspectionChargesAmt" />
+              <input class="payAmt form-control" type="number" min="0" formControlName="inspectionChargesAmt" />
             </div>
 
             <div class="col-md-4">
               <label>LC Administrative Charges</label>
               <br>
-              <input class="payAmt form-control" type="number" formControlName="lcadministrativeChargesAmt" />
+              <input class="payAmt form-control" type="number" min="0" formControlName="lcadministrativeChargesAmt" />
             </div>
 
             <div class="col-md-4">
               <label>Total</label>
               <br>
-              <input class="payAmt form-control" type="number" formControlName="totalAmt" />
+              <input class="payAmt form-control" type="number" min="0" formControlName="totalAmt" />
             </div>
 
             <div class="col-md-4">
@@ -249,11 +249,11 @@
                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
               </select>
               <input style="width:67%;display: inline-block;text-align: right;" class="payAmt form-control"
-                type="number" formControlName="basePCurrencyAmt" />
+                type="number" min="0" formControlName="basePCurrencyAmt" />
             </div>
             <div class="col-md-4">
               <label>Cost in USD</label>
-              <input class="form-control" type="number" disabled [value]="(costUsd)" />
+              <input class="form-control" type="number" min="0" disabled [value]="(costUsd)" />
             </div>
           </div>
           <br />
@@ -395,7 +395,7 @@
                           {{i.code}}
                         </option>
                       </select>
-                      <input class="payAmt form-control" type="number" formControlName="payAmt" id="payAmt" />
+                      <input class="payAmt form-control" type="number" min="0" formControlName="payAmt" id="payAmt" />
                     </div>
 
 
@@ -405,7 +405,7 @@
                         class="form-select">
                         <option *ngFor="let item of currencyList" value="{{item.id}}">{{item.code}}</option>
                       </select>
-                      <input formControlName="baseCurrencyAmt" #baseAmt type="number" class="form-control"
+                      <input formControlName="baseCurrencyAmt" #baseAmt type="number" min="0" class="form-control"
                         style="width: 68%;display: inline-block;margin-left: 5px;text-align: right;" />
                     </div>
 

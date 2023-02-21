@@ -102,7 +102,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label>Amount</label>
-              <input formControlName="amount" type="number" class="form-control"
+              <input formControlName="amount" type="number" min="0" class="form-control"
                 [ngClass]="{'is-invalid':submitted && f.amount.errors }" />
               <div *ngIf="submitted && f.amount.errors" class="invalid-feedback">
                 <div *ngIf="t.amount.errors.required">Amount is required</div>
@@ -162,7 +162,7 @@
               </select>
               <input [ngClass]="{ 'is-invalid': submitted && f.pricepernight.errors }" class="form-control"
                 formControlName="pricepernight" style="display:inline-block; width:68%; margin-left: 5px;"
-                type="number" />
+                type="number" min="0" />
 
               <div *ngIf="submitted && f.pricepernight.errors" class="invalid-feedback">
                 <div *ngIf="f.pricepernight.errors.required">Price per night is required</div>
@@ -180,7 +180,7 @@
                 </option>
               </select>
               <input [ngClass]="{ 'is-invalid': submitted && f.totalcost.errors }" class="form-control"
-                formControlName="totalcost" style="display:inline-block; width:68%; margin-left: 5px;" type="number" />
+                formControlName="totalcost" style="display:inline-block; width:68%; margin-left: 5px;" type="number" min="0" />
 
               <div *ngIf="submitted && f.totalcost.errors" class="invalid-feedback">
                 <div *ngIf="f.totalcost.errors.required">Total cost is required</div>

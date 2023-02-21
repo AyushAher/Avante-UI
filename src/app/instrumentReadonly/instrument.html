@@ -140,7 +140,7 @@
               <select formControlName="currencyId" style="width: 30%;display: inline-block;" class="form-select">
                 <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
               </select>
-              <input formControlName="cost" type="number" style="width: 68%;display: inline-block;margin-left: 5px;"
+              <input formControlName="cost" type="number" min="0" style="width: 68%;display: inline-block;margin-left: 5px;"
                 class="form-control" />
             </div>
 

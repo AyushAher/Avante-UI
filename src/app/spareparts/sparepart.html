@@ -87,7 +87,7 @@
             </div>
             <div class="col-sm-4">
               <label for="qty">Qty<span class="text-danger">*</span></label>
-              <input type="number" formControlName="qty" class="form-control"
+              <input type="number" min="0" formControlName="qty" class="form-control"
                 [ngClass]="{ 'is-invalid': f.qty.touched && f.qty.errors }" />
               <div *ngIf="f.qty.touched && f.qty.errors" class="invalid-feedback">
                 <div *ngIf="f.qty.errors.required">Qty is required</div>
@@ -147,7 +147,7 @@
               <div class="row">
                 <div class="col-md-6 col-sm-6">
                   <label for="price">List Price<span class="text-danger">*</span></label>
-                  <input type="number" formControlName="price" class="form-control"
+                  <input type="number" min="0" formControlName="price" class="form-control"
                     [ngClass]="{ 'is-invalid': f.price.touched && f.price.errors }" />
                   <div *ngIf="f.price.touched && f.price.errors" class="invalid-feedback">
                     <div *ngIf="f.price.errors.required">List Price is required</div>

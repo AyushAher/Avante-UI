@@ -86,7 +86,7 @@
 
                         <div class="col-md-4 col-sm-4">
                             <label>Amount Build<span class="text-danger">*</span></label>
-                            <input formControlName="amountBuild" type="number" class="form-control" />
+                            <input formControlName="amountBuild" type="number" min="0" class="form-control" />
                             <div Style="display: block" *ngIf="f.amountBuild.touched && f.amountBuild.errors"
                                 class="invalid-feedback">
                                 <div *ngIf="f.amountBuild.errors.required">

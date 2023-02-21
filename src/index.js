@@ -1,84 +1,86 @@
 // customer dashboard
 
 function CustomerDashboardCharts() {
-  $('#poCharts').remove(); // this is my <canvas> element
-  $('#poChartsContainer').append('<canvas id="poCharts" style="width:100%;max-width:700px"></canvas>');
+  setTimeout(() => {
 
-  $('#compSerReq').remove(); // this is my <canvas> element
-  $('#compSerReqContainer').append('<canvas id="compSerReq" style="width:100%;max-width:600px"></canvas>');
+    $('#poCharts').remove(); // this is my <canvas> element
+    $('#poChartsContainer').append('<canvas id="poCharts" style="width:100%;max-width:700px;height: 236px !important;"></canvas>');
 
-  $('#pendingSerReq').remove(); // this is my <canvas> element
-  $('#pendingSerReqContainer').append('<canvas id="pendingSerReq" style="width:100%;max-width:600px"></canvas>');
+    $('#compSerReq').remove(); // this is my <canvas> element
+    $('#compSerReqContainer').append('<canvas id="compSerReq" style="width:100%;max-width:600px;height: 236px !important;"></canvas>');
 
-
-  let sReqType = JSON.parse(localStorage.getItem("servicerequesttype"));
-  let pendingServiceRequest = JSON.parse(localStorage.getItem("pendingservicerequest"));
-  let poCost = JSON.parse(localStorage.getItem("costData"))
-
-  new Chart(document.getElementById('poCharts').getContext("2d"), {
-    type: "bar",
-    data: {
-      labels: ["AMC", "Service", "PO"],
-      datasets: [{
-        backgroundColor: ["#ef3038", "#e03c31", "#ed1c24"],
-        data: [poCost?.amcCost, poCost?.othrCost, poCost?.poCost],
-
-      }]
-    },
-    options: {
-      legend: { display: false },
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              min: 0,
-            },
-            scaleLabel: {
-              display: true,
-            }
-          }
-        ]
-      }
-
-    }
-  });
-
-  new Chart(document.getElementById('compSerReq').getContext("2d"), {
-    type: "doughnut",
-    data: {
-      labels: sReqType?.label,
-
-      datasets: [{
-        backgroundColor: ["#8400ff", "#a442ff", "#c484ff", "#e1c1ff", "#f9f1ff"],
-        data: sReqType?.chartData,
-      }]
-    },
-    options: {
-      legend: { display: false },
-    }
-  });
+    $('#pendingSerReq').remove(); // this is my <canvas> element
+    $('#pendingSerReqContainer').append('<canvas id="pendingSerReq" style="width:100%;max-width:600px;height: 236px !important;"></canvas>');
 
 
+    let sReqType = JSON.parse(localStorage.getItem("servicerequesttype"));
+    let pendingServiceRequest = JSON.parse(localStorage.getItem("pendingservicerequest"));
+    let poCost = JSON.parse(localStorage.getItem("costData"))
 
-  new Chart(document.getElementById('pendingSerReq').getContext("2d"), {
-    type: "pie",
-    data: {
-      labels: pendingServiceRequest?.label,
-      datasets: [
-        {
-          backgroundColor: ["#2aa7ff", "#5abbff", "#89ceff", "#bce3ff", "#eff8ff"],
-          data: pendingServiceRequest?.chartData,
-        },
-      ],
-    },
-    options: {
-      legend: {
-        display: false,
+    new Chart(document.getElementById('poCharts').getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: ["AMC", "Service", "PO"],
+        datasets: [{
+          backgroundColor: ["#ef3038", "#e03c31", "#ed1c24"],
+          data: [poCost?.amcCost, poCost?.othrCost, poCost?.poCost],
+
+        }]
       },
-    },
-  });
+      options: {
+        legend: { display: false },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+              },
+              scaleLabel: {
+                display: true,
+              }
+            }
+          ]
+        }
+
+      }
+    });
+
+    new Chart(document.getElementById('compSerReq').getContext("2d"), {
+      type: "doughnut",
+      data: {
+        labels: sReqType?.label,
+
+        datasets: [{
+          backgroundColor: ["#8400ff", "#a442ff", "#c484ff", "#e1c1ff", "#f9f1ff"],
+          data: sReqType?.chartData,
+        }]
+      },
+      options: {
+        legend: { display: false },
+      }
+    });
 
 
+
+    new Chart(document.getElementById('pendingSerReq').getContext("2d"), {
+      type: "pie",
+      data: {
+        labels: pendingServiceRequest?.label,
+        datasets: [
+          {
+            backgroundColor: ["#2aa7ff", "#5abbff", "#89ceff", "#bce3ff", "#eff8ff"],
+            data: pendingServiceRequest?.chartData,
+          },
+        ],
+      },
+      options: {
+        legend: {
+          display: false,
+        },
+      },
+    });
+
+  }, 1500);
 
 }
 // distdashboard

@@ -107,7 +107,7 @@ export class DistributordashboardComponent implements OnInit {
     this.GetRevenuefromCustomer(sdate, edate)
     this.GetServiceContractRevenue(sdate, edate)
     this.GetDistDashboardData(sdate, edate)
-    setTimeout(() => DistributorDashboardCharts(), 1000)
+    setTimeout(() => DistributorDashboardCharts(),2000)
   }
 
   GetInstrumentsInstalled(sdate, edate) {
