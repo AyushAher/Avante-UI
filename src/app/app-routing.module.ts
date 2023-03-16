@@ -83,10 +83,16 @@ import { CostofownershipComponent } from './costofownership/costofownership.comp
 import { EngdashboardComponent } from './engdashboard/engdashboard.component';
 import { PastservicereportComponent } from './pastservicereport/pastservicereport.component';
 import { PastservicereportlistComponent } from './pastservicereport/pastservicereportlist.component';
+import { CreateBrandComponent } from './account/brand.component';
+import { BrandListComponent } from './account/brandlist.component';
+import { CreateBusinessUnitComponent } from './account/businessunit.component';
+import { BusinessUnitListComponent } from './account/businessunitlist.component';
+import { CreateCompanyComponent } from './account/company.component';
+import { CompanyListComponent } from './account/companylist.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
 // import {PreventivemaintenancetableComponent} from "./preventivemaintenancetable/preventivemaintenancetable.component";
 
-const accountModule = () => import('./account/account.module').then(x => x.AccountModule); 
+const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 
 //const usersModule = () => import('./users/users.module').then(x => x.UsersModule);
 
@@ -442,6 +448,55 @@ const routes: Routes = [
     component: EngdashboardComponent,
     canActivate: [AuthGuard, TextValidator],
   },
+
+  {
+    path: "brandlist",
+    component: BrandListComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+  {
+    path: "brand/:id",
+    component: CreateBrandComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+  {
+    path: "brand",
+    component: CreateBrandComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+
+  {
+    path: "businessunitlist",
+    component: BusinessUnitListComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+  {
+    path: "businessunit/:id",
+    component: CreateBusinessUnitComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+  {
+    path: "businessunit",
+    component: CreateBusinessUnitComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+  {
+    path: "company/:id",
+    component: CreateCompanyComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+  {
+    path: "company",
+    component: CreateCompanyComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+  {
+    path: "companylist",
+    component: CompanyListComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+
+
   { path: 'account', loadChildren: accountModule },
   { path: '**', redirectTo: '' }
 ];

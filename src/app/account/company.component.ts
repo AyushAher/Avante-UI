@@ -1,47 +1,102 @@
-import { OnInit, Component } from "@angular/core";
+import { OnInit, Component, AfterViewInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { BsModalService } from "ngx-bootstrap/modal";
-import { first } from "rxjs/operators";
-import { NotificationService } from "../_services";
-import { BrandService } from "../_services/brand.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NotificationService, AccountService } from "../_services";
 import { CompanyService } from "../_services/company.service";
 
 @Component({
   selector: "CreateBrand",
   templateUrl: "./company.component.html"
 })
-export class CreateCompanyComponent implements OnInit {
+export class CreateCompanyComponent implements OnInit, AfterViewInit {
   Form: FormGroup
   submitted: boolean
+  companyId: any
+  id: any;
+  isNewMode: any;
+  isEditMode: any;
+  hasDeleteAccess: boolean = false;
 
   constructor(
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
-    private bsModelService: BsModalService,
+    private AccountService: AccountService,
     private companyService: CompanyService,
+    private activeRoute: ActivatedRoute,
+    private router: Router
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.Form = this.formBuilder.group({
-      companyName: ['', [Validators.required]]
+      companyName: ['', [Validators.required]],
+      id: [""]
     });
+
+    var id = this.activeRoute.snapshot.paramMap.get("id")
+    this.isNewMode = id == null;
+
+    if (id) {
+      this.id = id;
+      this.Form.get('id').setValue(id);
+      var getByIdRequest: any = await this.companyService.GetCompanyById(id).toPromise();
+      this.Form.patchValue(getByIdRequest.object)
+    }
   }
 
-  onSubmit() {
+  ngAfterViewInit(): void {
+    if (!this.isNewMode) this.Form.disable();
+  }
+
+  Back() {
+    this.router.navigate(["/companylist"])
+  }
+
+
+  EditMode() {
+    if (!confirm("Are you sure you want to edit the record?")) return;
+
+    this.isEditMode = true;
+    this.Form.enable();
+  }
+
+  CancelEdit() {
+    this.Form.disable()
+    this.isEditMode = false;
+    this.isNewMode = false;
+  }
+
+  async onSubmit() {
     this.submitted = true;
+    this.Form.markAllAsTouched();
+
+    this.Form.enable();
+    let formData = this.Form.value;
     if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
 
-    this.companyService.Save(this.Form.value)
-      .pipe(first()).subscribe(() => this.close())
+    this.CancelEdit();
+
+    if (!this.id) {
+      var saveRequest: any = await this.companyService.Save(this.Form.value).toPromise();
+      let success = saveRequest.httpResponceCode == 200;
+      if (success) {
+        this.notificationService.showSuccess("Company created successfully1", "Success")
+        this.router.navigate(["/companylist"])
+      }
+    }
+
+    else {
+      var updateRequest: any = await this.companyService.Update(this.id, formData).toPromise();
+      let success = updateRequest.httpResponceCode == 200;
+      if (success) {
+        this.notificationService.showSuccess("Company updated successfully!", "Success")
+        this.router.navigate(["/companylist"])
+      }
+    }
   }
 
   get f() {
     return this.Form.controls;
   }
 
-  close() {
-    this.bsModelService.hide();
-    this.notificationService.filter("cim");
-  }
 }

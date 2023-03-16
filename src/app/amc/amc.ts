@@ -261,8 +261,6 @@ export class AmcComponent implements OnInit {
 
     this.listTypeService.getById("AMCSG").pipe(first())
       .subscribe((data: any) => {
-        console.log(data);
-
         this.stagesList = data
       })
     this.contactService.getCustomerSiteByContact(this.user.contactId)
@@ -896,6 +894,7 @@ export class AmcComponent implements OnInit {
     this.form.get('billtoid').enable()
     this.model = this.form.value;
     this.form.get('billtoid').disable()
+    
     if (this.IsCustomerView) {
       this.model.billtoid == this.defaultCustomerId
       if (!this.model.custSite) {

@@ -99,7 +99,7 @@
                 [ngClass]="{ 'is-invalid': f.defdistregionid.touched && f.defdistregionid.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of distRegionsList" value="{{distributor.id}}">
-                  {{distributor.region}}
+                  {{distributor.distregname}}
                 </option>
               </select>
               <div *ngIf="f.defdistregionid.touched && f.defdistregionid.errors" class="invalid-feedback">

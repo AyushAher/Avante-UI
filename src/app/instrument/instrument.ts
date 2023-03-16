@@ -260,7 +260,6 @@ export class InstrumentComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
 
     this.instrumentAccessoryService.GetByInsId(this.id).subscribe((data: any) => {
-      console.log(data);
       this.accessoriesData = data.object;
     })
 

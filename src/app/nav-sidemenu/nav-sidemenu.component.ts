@@ -64,6 +64,7 @@ export class NavSideMenuComponent {
   serviceRequestReport: boolean;
   hasServiceCompletionReport: boolean;
   pendingQuoteRequestReport: boolean;
+  isAdmin: boolean;
 
   constructor(
     private accountService: AccountService,
@@ -74,6 +75,8 @@ export class NavSideMenuComponent {
     this.user = this.accountService.userValue;
     this.profile = this.profileService.userProfileValue;
 
+    this.isAdmin = this.user.username == "admin";
+    
     if (this.profile != null) {
       if (this.profile.permissions.filter(x => x.screenCode == 'SDIST').length > 0) {
         this.hasDistributor = this.profile.permissions.filter(x => x.screenCode == 'SDIST')[0].create == true

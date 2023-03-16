@@ -494,8 +494,6 @@ export class OfferrequestComponent implements OnInit {
 
     else if (this.role == this.environment.custRoleCode) {
       var custData: any = await this.custService.getAllByConId(this.user.contactId).toPromise();
-      console.log(custData);
-
       custData.object?.forEach(element => {
         custList.push(element)
       });

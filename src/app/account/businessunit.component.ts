@@ -1,53 +1,122 @@
-import { OnInit, Component, Input } from "@angular/core";
+import { OnInit, Component, AfterViewInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { BsModalService } from "ngx-bootstrap/modal";
-import { first } from "rxjs/operators";
-import { NotificationService } from "../_services";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NotificationService, AccountService } from "../_services";
 import { BusinessUnitService } from "../_services/businessunit.service";
+import { CompanyService } from "../_services/company.service";
 
 @Component({
   templateUrl: "./businessunit.component.html"
 })
-export class CreateBusinessUnitComponent implements OnInit {
+export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   Form: FormGroup
   submitted: boolean
-  @Input("companyId") companyId: any
+  companyId: any
+  id: any;
 
+  isNewMode: any;
+  isEditMode: any;
+
+  hasDeleteAccess: boolean = false;
+  companyList: any;
   constructor(
-    private notificationService: NotificationService,
-    private bsModelService: BsModalService,
-    private formBuilder: FormBuilder,
     private businessUnitService: BusinessUnitService,
+    private notificationService: NotificationService,
+    private formBuilder: FormBuilder,
+    private AccountService: AccountService,
+    private CompanyService: CompanyService,
+    private activeRoute: ActivatedRoute,
+    private router: Router
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.Form = this.formBuilder.group({
       businessUnitName: ['', [Validators.required]],
-      companyId: ['', [Validators.required]]
+      companyId: ['', [Validators.required]],
+      id: [""]
     });
+    var id = this.activeRoute.snapshot.paramMap.get("id")
+    this.isNewMode = id == null;
+
+    if (id) {
+      this.id = id;
+      this.Form.get('id').setValue(id);
+
+      var getByIdRequest: any = await this.businessUnitService.GetById(id).toPromise();
+      this.Form.patchValue(getByIdRequest.object)
+    }
+
+    let user = this.AccountService.userValue;
+    this.companyId = user.companyId;
+
+    var request: any = await this.CompanyService.GetAllCompany().toPromise();
+
+    this.companyList = request.object;
 
     if (this.companyId) this.f.companyId.setValue(this.companyId)
-    else {
-      this.close()
-      this.notificationService.showError("Some Error Occurred", "Error")
-    }
   }
 
-  onSubmit() {
+  ngAfterViewInit(): void {
+    if (!this.isNewMode) {
+      this.Form.disable();
+    }
+    this.FormControlDisable()
+  }
+
+  Back() {
+    this.router.navigate(["/businessunitlist"])
+  }
+
+
+  EditMode() {
+    if (!confirm("Are you sure you want to edit the record?")) return;
+
+    this.isEditMode = true;
+    this.Form.enable();
+    this.FormControlDisable();
+  }
+
+  CancelEdit() {
+    this.Form.disable()
+    this.isEditMode = false;
+    this.isNewMode = false;
+  }
+  FormControlDisable() {
+    // this.Form.get('companyId').disable();
+  }
+
+  async onSubmit() {
     this.submitted = true;
+    this.Form.markAllAsTouched();
+
+    this.Form.enable();
+    let formData = this.Form.value;
     if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
 
-    this.businessUnitService.Save(this.Form.value)
-      .pipe(first()).subscribe(() => this.close())
+    this.CancelEdit();
+
+    if (!this.id) {
+      var saveRequest: any = await this.businessUnitService.Save(this.Form.value).toPromise();
+      let success = saveRequest.httpResponceCode == 200;
+      if (success) {
+        this.notificationService.showSuccess("Business Unit created successfully1", "Success")
+        this.router.navigate(["/businessunitlist"])
+      }
+    }
+
+    else {
+      var updateRequest: any = await this.businessUnitService.Update(this.id, formData).toPromise();
+      let success = updateRequest.httpResponceCode == 200;
+      if (success) {
+        this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
+        this.router.navigate(["/businessunitlist"])
+      }
+    }
   }
 
   get f() {
     return this.Form.controls;
   }
 
-  close() {
-    this.bsModelService.hide();
-    this.notificationService.filter("cim");
-  }
 }

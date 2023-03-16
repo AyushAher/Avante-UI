@@ -41,17 +41,8 @@ export class NotificationService {
     this.showWarning("Admin cannot create records.", "Warning")
   }
 
-  private HasInvalidCharacter(string: string) {
-    let isInvalid = false;
-    this.invalidCharactersArray.map((x) => {
-      isInvalid = string.includes(x);
-      if (isInvalid) this.showError(`The text cannot contain characters like ${x}`, "Invalid character");
-    });
-    return isInvalid;
-  }
 
   ValidateTextInputFields() {
-    debugger;
     let inputElementArray = document.getElementsByTagName('input');
     let textAreaElementArray = document.getElementsByTagName('textarea');
 
@@ -65,7 +56,7 @@ export class NotificationService {
     textElementArray.forEach((e) => this.ValidateField(e));
     textAreaArray.forEach((e) => this.ValidateField(e));
   }
-  
+
   ValidateField(x) {
     x.addEventListener('keydown', (event) => {
       if (event.ctrlKey // (A)
@@ -75,7 +66,12 @@ export class NotificationService {
         return;
       }
 
-      if (this.HasInvalidCharacter(event.key)) event.preventDefault();
+      this.invalidCharactersArray.map((y) => {
+        if (event.key.includes(y)) {
+          this.showError(`The text cannot contain characters like ${y}`, "Invalid character");
+          event.preventDefault();
+        }
+      });
     }, false);
 
   }

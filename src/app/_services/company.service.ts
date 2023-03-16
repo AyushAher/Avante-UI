@@ -30,4 +30,9 @@ export class CompanyService {
     return this.http.delete(`${this.environment.apiUrl}/Company/${id}`)
   }
 
+
+  Update(id: string, data: any) {
+    return this.http.put(`${this.environment.apiUrl}/Company/${id}`, data)
+  }
+
 }

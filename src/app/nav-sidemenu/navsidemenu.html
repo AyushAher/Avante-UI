@@ -16,7 +16,7 @@
               <!--navigation-->
               <ul class="metismenu mm-show" id="menu">
                 <li class="">
-                  <a (click)="navigate('/')"  aria-expanded="false">
+                  <a (click)="navigate('/')" aria-expanded="false">
                     <div class="parent-icon">
                       <img src="../../assets/img/home-icon.png" />
                     </div>
@@ -35,6 +35,21 @@
                     <li>
                       <a class="collapse-item" (click)="navigate('/masterlist')" *ngIf="hasMaster">
                         <i class="bx bx-right-arrow-alt"></i>Master List
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/businessunitlist')" *ngIf="isAdmin">
+                        <i class="bx bx-right-arrow-alt"></i>Business Unit
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/brandlist')" *ngIf="isAdmin">
+                        <i class="bx bx-right-arrow-alt"></i> Brand
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/companylist')" *ngIf="isAdmin">
+                        <i class="bx bx-right-arrow-alt"></i> Company
                       </a>
                     </li>
 
@@ -195,7 +210,8 @@
                     </li>
 
                     <li>
-                      <a class="collapse-item" (click)="navigate('/pastservicereportlist')" *ngIf="haspastservicereport">
+                      <a class="collapse-item" (click)="navigate('/pastservicereportlist')"
+                        *ngIf="haspastservicereport">
                         <i class="bx bx-right-arrow-alt"></i>
                         Past Service Report</a>
                     </li>
@@ -205,7 +221,7 @@
                         <i class="bx bx-right-arrow-alt"></i>
                         Export template</a>
                     </li>
-                    
+
                     <li>
                       <a class="collapse-item" (click)="navigate('/audittrail')" *ngIf="hasAuditTrail">
                         <i class="bx bx-right-arrow-alt"></i>

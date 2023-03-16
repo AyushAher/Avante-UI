@@ -147,6 +147,9 @@ import { ConfigBsDatepicker, GetParsedDate, GetParsedDatePipe } from './_helpers
 import { PastservicereportComponent } from './pastservicereport/pastservicereport.component';
 import { DownloadReportFile, PastservicereportlistComponent } from './pastservicereport/pastservicereportlist.component';
 import { Accessories } from './instrument/Accessories.component';
+import { BrandListComponent } from './account/brandlist.component';
+import { BusinessUnitListComponent } from './account/businessunitlist.component';
+import { CompanyListComponent } from './account/companylist.component';
 
 
 @NgModule({
@@ -272,7 +275,10 @@ import { Accessories } from './instrument/Accessories.component';
     PastservicereportComponent,
     PastservicereportlistComponent,
     DownloadReportFile,
-    Accessories
+    Accessories,
+    BrandListComponent,
+    BusinessUnitListComponent,
+    CompanyListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

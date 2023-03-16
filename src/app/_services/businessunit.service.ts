@@ -31,4 +31,8 @@ export class BusinessUnitService {
     Delete(id: string) {
         return this.http.delete(`${this.environment.apiUrl}/BusinessUnits/${id}`)
     }
+
+    Update(id: string, data: any) {
+        return this.http.put(`${this.environment.apiUrl}/BusinessUnits/${id}`, data)
+    }
 }

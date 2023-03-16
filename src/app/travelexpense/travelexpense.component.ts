@@ -184,7 +184,6 @@ export class TravelexpenseComponent implements OnInit {
         .pipe(first()).subscribe((data: any) => {
           this.getservicerequest(data.object.distributorId, data.object.engineerId);
           setTimeout(() => {
-            console.log(data.object)
             this.GetFileList(data.object.id)
             this.form.patchValue(data.object)
             this.form.patchValue({ "grandEngineerTotal": this.numberPipe.transform(this.grandEngineerTotalAmt) })

@@ -28,6 +28,10 @@ export class BrandService {
     return this.http.delete(`${this.environment.apiUrl}/Brands/${id}`)
   }
 
+  Update(id: string, data: any) {
+    return this.http.put(`${this.environment.apiUrl}/Brands/${id}`, data)
+  }
+
   Save = (brand) => this.http.post(`${this.environment.apiUrl}/Brands`, brand)
 
 }

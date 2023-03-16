@@ -179,16 +179,7 @@ export class CustomerComponent implements OnInit {
 
   onDefDistchanged(distId) {
     this.distributorService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.distRegionsList = data.object.find(x => x.id === distId)?.regions;
-        },
-        error: error => {
-
-          this.loading = false;
-        }
-      });
+      .pipe(first()).subscribe((data: any) => this.distRegionsList = data.object.find(x => x.id === distId)?.regions);
   }
 
   onDistributorRegion(e) {

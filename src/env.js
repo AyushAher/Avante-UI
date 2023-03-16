@@ -1,10 +1,10 @@
 (function (window) {
     window.__env = window.__env || {};
-    // window.__env.apiUrl = 'https://localhost:44317/api';
-    // window.__env.uiUrl = 'https://localhost:44378/';
+    window.__env.apiUrl = 'https://localhost:44317/api';
+    window.__env.uiUrl = 'https://localhost:44378/';
 
-    window.__env.apiUrl = 'https://service.avantgardeinc.com/api/api';
-    window.__env.uiUrl = 'https://service.avantgardeinc.com/';
+    // window.__env.apiUrl = 'https://service.avantgardeinc.com/api/api';
+    // window.__env.uiUrl = 'https://service.avantgardeinc.com/';
 
     window.__env.currencyConvert = ` https://xecdapi.xe.com/v1/convert_to.json`;
 

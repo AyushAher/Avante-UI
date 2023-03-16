@@ -1,35 +1,62 @@
-<div class="modal" style="display: block" id="modal" role="dialog">
-    <div class="modal-dialog" style="width: 95vw;height:400px;">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #53a446 !important; color: #fff">
-                <h4 class="modal-title" id="modal-basic-title">Business Unit</h4>
-                <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close()">
-                    <i class="fas fa-fw fa fa-times" style="color: #fff !important"> </i>
-                </button>
-            </div>
+<layout>
+    <div class="right_col" role="main">
+        <div class="container">
 
-            <div class="modal-body">
+            <div class="page-title">
+                <div class="title_left" style="display: flex; justify-content: space-between;">
+                    <div class="d-flex" style="align-items: center;">
+                        <h3>Brand</h3>
+                    </div>
+
+
+                    <div class="controls" style="display: flex;">
+                        <a (click)="Back()" class="nav-link">
+                            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+                        </a>
+                        <a class="nav-link" (click)="EditMode()" *ngIf="!isEditMode && !isNewMode">
+                            <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+                            <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="onSubmit()" *ngIf="(isEditMode || isNewMode)">
+                            <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+                            <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+            <div class="col-md-12 col-sm-12">
                 <form [formGroup]="Form" (ngSubmit)="onSubmit()">
                     <div class="row">
-                        <div class="col-sm-12">
-                            <label>Business Unit</label>
-                            <input formControlName="businessUnitName" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.businessUnitName.errors }" />
 
-                            <div *ngIf="submitted && f.businessUnitName.errors" class="invalid-feedback">
-                                <div *ngIf="f.businessUnitName.errors.required">Business Unit Name is required</div>
-                            </div>
+                        <div class="col-md-6">
+                            <label for="companyId">Company Name</label>
+                            <select id="companyId" formControlName="companyId" class="form-select"
+                                [ngClass]="{ 'is-invalid': f.companyId.touched && f.companyId.errors }">
+                                <option [value]="i.id" *ngFor="let i of companyList">{{i.companyName}}</option>
+                            </select>
                         </div>
 
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <button class="btn btn-primary" type="submit"
-                                style="background-color: #53a446;border: #53a446;">Next</button>
+                        <div class="col-md-6">
+                            <label>Business Unit</label>
+                            <input formControlName="businessUnitName" class="form-control"
+                                [ngClass]="{ 'is-invalid': f.businessUnitName.touched  && f.businessUnitName.errors }" />
+
+                            <div *ngIf=" f.businessUnitName.touched && f.businessUnitName.errors" class="invalid-feedback">
+                                <div *ngIf="f.businessUnitName.errors.required">Business Unit is required</div>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
+</layout>
