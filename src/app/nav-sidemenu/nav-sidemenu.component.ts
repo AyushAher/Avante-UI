@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ListTypeItem, ProfileReadOnly, User } from '../_models';
 import { AccountService, ListTypeService, NotificationService, ProfileService } from '../_services';
 import { first } from "rxjs/operators";
@@ -10,7 +10,7 @@ declare function CustomMenu(): any;
   templateUrl: './navsidemenu.html',
 
 })
-export class NavSideMenuComponent {
+export class NavSideMenuComponent implements OnInit {
   user: User;
   profile: ProfileReadOnly;
   hasDistributor: boolean = false;
@@ -71,12 +71,23 @@ export class NavSideMenuComponent {
     private profileService: ProfileService,
     private router: Router,
     private listTypeService: ListTypeService,
+    private notificationService: NotificationService
   ) {
+    this.notificationService.listen().subscribe((data) => {
+      if (data != "loggedin") return;
+      setTimeout(() => {
+        this.ngOnInit();
+      }, 1000);
+    })
+  }
+  ngOnInit(): void {
+
     this.user = this.accountService.userValue;
-    this.profile = this.profileService.userProfileValue;
+    this.profileService.getUserProfile(this.user.userProfileId);
+    this.profile = JSON.parse(localStorage.getItem('userprofile'));
 
     this.isAdmin = this.user.username == "admin";
-    
+
     if (this.profile != null) {
       if (this.profile.permissions.filter(x => x.screenCode == 'SDIST').length > 0) {
         this.hasDistributor = this.profile.permissions.filter(x => x.screenCode == 'SDIST')[0].create == true
@@ -353,22 +364,6 @@ export class NavSideMenuComponent {
       this.haspastservicereport = true;
     }
 
-    this.listTypeService.getById("ROLES")
-      .pipe(first()).subscribe((data: ListTypeItem[]) => {
-        this.roles = data;
-        this.userrole = this.roles.filter(x => x.listTypeItemId == this.user.roleId)
-        switch (this.userrole[0]?.itemname) {
-          case "Distributor Support":
-            this.hasDistributorSettings = true;
-            break;
-
-          case "Customer":
-            this.hasCustomerSettings = true;
-            break;
-        }
-      });
-
-
     if (this.hasMaster || this.hasProfile || this.hasUserProfile) {
       this.hasAdministrator = true;
     }
@@ -398,6 +393,7 @@ export class NavSideMenuComponent {
     if (this.serviceRequestReport || this.hasServiceCompletionReport || this.pendingQuoteRequestReport || this.serviceContractRevenueReport) {
       this.hasReports = true;
     }
+
     CustomMenu()
   }
 

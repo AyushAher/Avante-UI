@@ -1,6 +1,8 @@
-import { OnInit, Component, AfterViewInit } from "@angular/core";
+import { OnInit, Component, AfterViewInit, Input } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { Subject } from "rxjs";
 import { NotificationService, AccountService } from "../_services";
 import { CompanyService } from "../_services/company.service";
 
@@ -17,17 +19,24 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
   isEditMode: any;
   hasDeleteAccess: boolean = false;
 
+  public modalRef: BsModalRef;
+  public onClose: Subject<any>;
+  @Input("isDialog") isDialog: boolean = false;
+
   constructor(
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private AccountService: AccountService,
     private companyService: CompanyService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public activeModal: BsModalService,
+
   ) {
   }
 
   async ngOnInit() {
+    this.onClose = new Subject();
     this.Form = this.formBuilder.group({
       companyName: ['', [Validators.required]],
       id: [""]
@@ -74,25 +83,42 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     let formData = this.Form.value;
     if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
 
-    this.CancelEdit();
+    if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
       var saveRequest: any = await this.companyService.Save(this.Form.value).toPromise();
       let success = saveRequest.httpResponceCode == 200;
+
       if (success) {
-        this.notificationService.showSuccess("Company created successfully1", "Success")
-        this.router.navigate(["/companylist"])
+        this.onClose.next({ result: success, object: saveRequest.object });
+        
+        if (!this.isDialog) {
+          this.notificationService.showSuccess("Company created successfully", "Success")
+          this.router.navigate(["/companylist"])
+          return;
+        }
+
       }
     }
 
     else {
       var updateRequest: any = await this.companyService.Update(this.id, formData).toPromise();
       let success = updateRequest.httpResponceCode == 200;
+
       if (success) {
-        this.notificationService.showSuccess("Company updated successfully!", "Success")
-        this.router.navigate(["/companylist"])
+        this.onClose.next({ result: success, object: updateRequest.object });
+        if (!this.isDialog) {
+          this.notificationService.showSuccess("Company Updated successfully", "Success")
+          this.router.navigate(["/companylist"])
+          return;
+        }
       }
+
     }
+  }
+
+  close(success) {
+    this.onClose.next(success);
   }
 
   get f() {

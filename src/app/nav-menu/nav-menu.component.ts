@@ -5,6 +5,7 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { ChangepasswoardComponent } from "../account/changepasswoard.component";
 import { UsernotificationService } from '../_services/usernotification.service';
 import { first } from 'rxjs/operators';
+import ChangeCIM from '../account/ChangeCIM.component';
 
 @Component({
   selector: 'app-nav-menu',
@@ -59,6 +60,9 @@ export class NavMenuComponent {
 
   ChangePassword() {
     this.bsModalRef = this.modalService.show(ChangepasswoardComponent);
+  }
+  ChangeCIM() {
+    this.bsModalRef = this.modalService.show(ChangeCIM);
   }
 
   ToggleDropdown(id: string) {

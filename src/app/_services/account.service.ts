@@ -16,6 +16,7 @@ import { CompanyService } from './company.service';
 import { CreateCompanyComponent } from '../account/company.component';
 import { CreateBusinessUnitComponent } from '../account/businessunit.component';
 import { CreateBrandComponent } from '../account/brand.component';
+import SetUp from '../account/setup.component';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -112,6 +113,9 @@ export class AccountService {
       }));
   }
 
+  ChangeCIM(){
+    
+  }
 
 
   Authenticate = (username: any, password: any, companyId = "", businessUnitId = "", brandId = "") => {
@@ -119,8 +123,13 @@ export class AccountService {
       .pipe(first()).subscribe({
         next: () => {
           this.currentuser = this.userValue;
-          if (this.currentuser.username == "admin") return this.CIMConfig(username, password)
-
+          if (this.currentuser.username == "admin") {
+            this.router.navigate(["/"],
+              {
+                queryParams: { redirected: true }
+              });
+            return this.SetUpConfig(username, password)
+          }
           else {
             this.profileServicce.getUserProfile(this.currentuser.userProfileId);
             setTimeout(() => {
@@ -133,7 +142,11 @@ export class AccountService {
 
                   switch (userrole.itemname) {
                     case "Distributor Support":
-                      this.CIMConfig(username, password)
+                      this.router.navigate(["/"],
+                        {
+                          queryParams: { redirected: true }
+                        })
+                      this.CIMConfig(username, password, false)
                       break;
 
                     case "Customer":
@@ -153,7 +166,58 @@ export class AccountService {
       });
   }
 
-  private CIMConfig(username, password) {
+  private SetUpConfig(username, password) {
+    this.password = password
+
+    const modalOptions: any = {
+      backdrop: 'static',
+      ignoreBackdropClick: true,
+      keyboard: false,
+      initialState: {
+        isDialog: true,
+        username,
+        password
+      },
+    }
+    this.modalRef = this.modalService.show(SetUp, modalOptions);
+
+    this.modalRef.content.onClose.subscribe(result => {
+      if (!result.newSetUp) return this.CIMConfig(username, this.password);
+      this.modalRef = this.modalService.show(CreateCompanyComponent, modalOptions)
+
+      this.modalRef.content.onClose.subscribe((companySuccess) => {
+        if (!companySuccess.result) return;
+        modalOptions.initialState.companyId = companySuccess.object.id;
+        this.modalRef = this.modalService.show(CreateBrandComponent, modalOptions)
+        this.modalRef.content.onClose.subscribe((brandData) => {
+          if (!brandData.result) return;
+          modalOptions.initialState.brandId = brandData.object.id;
+
+          this.modalRef = this.modalService.show(CreateBusinessUnitComponent, modalOptions)
+          this.modalRef.content.onClose.subscribe((buData) => {
+            if (!brandData.result) return;
+            modalOptions.initialState.businessUnitId = buData.object.id;
+            this.modalService.hide()
+            this.login(modalOptions.initialState.username, this.password, modalOptions.initialState.companyId, modalOptions.initialState.businessUnitId, modalOptions.initialState.brandId)
+              .pipe(first()).subscribe(() => {
+                this.router.navigate(["/distributor"], {
+                  queryParams: {
+                    isNewSetUp: true
+                  }
+                })
+                this.notificationService.filter('newSetup');
+              })
+
+
+          })
+        })
+
+      })
+
+    })
+  }
+
+  private CIMConfig(username, password, isAdmin = true) {
     this.password = password
     this.companyService.GetAllModelData()
       .pipe(first()).subscribe({
@@ -178,10 +242,19 @@ export class AccountService {
               this.companyId = result.companyId;
               return;
             }
+
             this.login(username, password, result.form.companyId, result.form.businessUnitId, result.form.brandId)
               .pipe(first()).subscribe(() => {
-                this.router.navigate(["/"])
                 this.currentuser = this.userValue;
+
+                if (isAdmin) this.router.navigate(["/"]);
+                else {
+                  this.notificationService.filter('loggedin');
+                  this.router.navigate(['/distdashboard'])
+                  setTimeout(() => {
+                    this.router.navigate(['/']);
+                  }, 200);
+                }
               })
 
           })

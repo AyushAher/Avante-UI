@@ -1,6 +1,8 @@
-import { OnInit, Component, AfterViewInit } from "@angular/core";
+import { OnInit, Component, AfterViewInit, Input } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { Subject } from "rxjs";
 import { NotificationService, AccountService } from "../_services";
 import { BusinessUnitService } from "../_services/businessunit.service";
 import { CompanyService } from "../_services/company.service";
@@ -11,7 +13,7 @@ import { CompanyService } from "../_services/company.service";
 export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   Form: FormGroup
   submitted: boolean
-  companyId: any
+  @Input("companyId") companyId: any
   id: any;
 
   isNewMode: any;
@@ -19,7 +21,14 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
 
   hasDeleteAccess: boolean = false;
   companyList: any;
+
+
+  public modalRef: BsModalRef;
+  public onClose: Subject<any>;
+  @Input("isDialog") isDialog: boolean = false;
+
   constructor(
+    public activeModal: BsModalService,
     private businessUnitService: BusinessUnitService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
@@ -31,6 +40,8 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
+    this.onClose = new Subject();
+
     this.Form = this.formBuilder.group({
       businessUnitName: ['', [Validators.required]],
       companyId: ['', [Validators.required]],
@@ -47,14 +58,16 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
       this.Form.patchValue(getByIdRequest.object)
     }
 
-    let user = this.AccountService.userValue;
-    this.companyId = user.companyId;
-
     var request: any = await this.CompanyService.GetAllCompany().toPromise();
 
     this.companyList = request.object;
 
+
     if (this.companyId) this.f.companyId.setValue(this.companyId)
+    else {
+      let user = this.AccountService.userValue;
+      this.companyId = user.companyId;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -93,15 +106,18 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     this.Form.enable();
     let formData = this.Form.value;
     if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
+    if (!this.isDialog) this.CancelEdit();
 
-    this.CancelEdit();
 
     if (!this.id) {
       var saveRequest: any = await this.businessUnitService.Save(this.Form.value).toPromise();
       let success = saveRequest.httpResponceCode == 200;
       if (success) {
-        this.notificationService.showSuccess("Business Unit created successfully1", "Success")
-        this.router.navigate(["/businessunitlist"])
+        this.onClose.next({ result: success, object: saveRequest.object });
+        if (!this.isDialog) {
+          this.notificationService.showSuccess("Business Unit created successfully!", "Success")
+          this.router.navigate(["/businessunitlist"])
+        }
       }
     }
 
@@ -109,12 +125,20 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
       var updateRequest: any = await this.businessUnitService.Update(this.id, formData).toPromise();
       let success = updateRequest.httpResponceCode == 200;
       if (success) {
-        this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
-        this.router.navigate(["/businessunitlist"])
+        this.onClose.next({ result: success, object: updateRequest.object });
+        if (!this.isDialog) {
+          this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
+          this.router.navigate(["/businessunitlist"])
+        }
       }
     }
   }
 
+
+  close(success) {
+    this.onClose.next(success);
+  }
+  
   get f() {
     return this.Form.controls;
   }

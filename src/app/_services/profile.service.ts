@@ -8,7 +8,7 @@ import { EnvService } from './env/env.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
-  private profileSubject: BehaviorSubject<ProfileReadOnly>;
+  public profileSubject: BehaviorSubject<ProfileReadOnly>;
   public userprofile: Observable<ProfileReadOnly>;
 
   constructor(

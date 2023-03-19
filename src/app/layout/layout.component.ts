@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { LoaderService } from '../_services/loader.service';
 
 @Component({
@@ -6,6 +6,9 @@ import { LoaderService } from '../_services/loader.service';
   templateUrl: './layout.html',
 })
 export class LayoutComponent implements OnInit {
+  @Input("showNavs") showNavs: boolean;
+  @Input("isNewSetUp") isNewSetUp: boolean;
+
   shownotifications: boolean = false;
 
   showSpinner = false;

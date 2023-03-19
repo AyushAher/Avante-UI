@@ -2,11 +2,15 @@
   <app-loader *ngIf="showSpinner"
     style="position: absolute;top: 40%;left: 50%;transform: translate(50%, 50%);z-index: 60;"></app-loader>
 
-  <app-nav-sidemenu></app-nav-sidemenu>
+  <app-nav-sidemenu *ngIf="showNavs || !isNewSetUp"></app-nav-sidemenu>
+
   <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
-      <app-nav-menu [isClosed]="isClosed" (showNotifications)="Notifications($event)"></app-nav-menu>
-      <div class=" container-fluid">
+
+      <app-nav-menu [isClosed]="isClosed" *ngIf="showNavs || !isNewSetUp" (showNotifications)="Notifications($event)">
+      </app-nav-menu>
+
+      <div class="container-fluid" [ngClass]="{'mt-4': !(showNavs || !isNewSetUp) }">
         <ng-content></ng-content>
       </div>
     </div>

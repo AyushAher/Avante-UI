@@ -150,6 +150,8 @@ import { Accessories } from './instrument/Accessories.component';
 import { BrandListComponent } from './account/brandlist.component';
 import { BusinessUnitListComponent } from './account/businessunitlist.component';
 import { CompanyListComponent } from './account/companylist.component';
+import SetUp from './account/setup.component';
+import ChangeCIM from './account/ChangeCIM.component';
 
 
 @NgModule({
@@ -278,7 +280,9 @@ import { CompanyListComponent } from './account/companylist.component';
     Accessories,
     BrandListComponent,
     BusinessUnitListComponent,
-    CompanyListComponent
+    CompanyListComponent,
+    SetUp,
+    ChangeCIM
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -5,6 +5,7 @@ import {
   DistributorService,
   InstrumentService,
   ListTypeService,
+  NotificationService,
   ProfileService,
   ServiceRequestService
 } from "../_services";
@@ -63,11 +64,9 @@ export class DistributordashboardComponent implements OnInit {
     private distributorService: DistributorService,
     private router: Router,
     private distributorDashboardService: DistributordashboardService,
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
-
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -107,7 +106,7 @@ export class DistributordashboardComponent implements OnInit {
     this.GetRevenuefromCustomer(sdate, edate)
     this.GetServiceContractRevenue(sdate, edate)
     this.GetDistDashboardData(sdate, edate)
-    setTimeout(() => DistributorDashboardCharts(),2000)
+    setTimeout(() => DistributorDashboardCharts(), 2000)
   }
 
   GetInstrumentsInstalled(sdate, edate) {

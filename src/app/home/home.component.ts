@@ -13,18 +13,22 @@ export class HomeComponent {
   user: User;
   profile: Profile;
   roles: ListTypeItem[];
-  constructor(private accountService: AccountService,
+  isRedirected: boolean;
+  
+  constructor(
+    private accountService: AccountService,
     private profileServicce: ProfileService,
     private router: Router,
     private route: ActivatedRoute,
     private listTypeService: ListTypeService,
   ) {
-    let isRedirected;
+
     this.route.queryParams.subscribe((data: any) => {
-      isRedirected = data.redirected === "true" || data.redirected === true
+      this.isRedirected = data.redirected === "true" || data.redirected === true
     })
+  
     this.user = this.accountService.userValue;
-    if (!isRedirected && this.user.username != "admin") {
+    if (this.user.username != "admin") {
       this.profileServicce.getUserProfile(this.user.userProfileId);
       setTimeout(() => {
         this.listTypeService.getById("ROLES")
@@ -32,7 +36,7 @@ export class HomeComponent {
             this.roles = data;
             let userrole = this.roles.find(x => x.listTypeItemId == this.user.roleId)
             localStorage.setItem('roles', JSON.stringify([userrole]))
-            if (userrole != null) {
+            if (userrole != null && !this.isRedirected) {
               switch (userrole.itemname) {
                 case "Distributor Support":
                   this.router.navigate(["distdashboard"]);

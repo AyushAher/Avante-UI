@@ -31,6 +31,8 @@ export class DistributorComponent implements OnInit {
   isNewMode: boolean;
 
 
+  isNewSetUp: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -44,6 +46,13 @@ export class DistributorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.distributorId = this.route.snapshot.paramMap.get('id');
+
+    this.route.queryParams.subscribe((data) => {
+      this.isNewSetUp = data.isNewSetUp != null && data.isNewSetUp != undefined;      
+    });
+
+
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
@@ -88,7 +97,6 @@ export class DistributorComponent implements OnInit {
         }
       });
 
-    this.distributorId = this.route.snapshot.paramMap.get('id');
     if (this.distributorId != null) {
 
       this.hasAddAccess = false;
@@ -170,22 +178,13 @@ export class DistributorComponent implements OnInit {
       this.distributorService.save(this.form.value)
         .pipe(first())
         .subscribe({
-          next: (data: ResultMsg) => {
-            //debugger;
+          next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["distributorlist"]);
+              this.distributorId = data.object.id;
+              if (this.isNewSetUp) return this.router.navigate([`/contact/${this.type}/${this.distributorId}`])
+              else this.router.navigate(["distributorlist"]);
             }
-            else {
-
-            }
-
-            this.loading = false;
-
-          },
-          error: error => {
-            //this.alertService.error(error);
-
             this.loading = false;
           }
         });

@@ -1,0 +1,39 @@
+<div class="modal" style="display: block" id="modal" role="dialog">
+    <div class="modal-dialog" style="width: 95vw">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #53a446 !important; color: #fff">
+                <h4 class="modal-title" id="modal-basic-title">Setup</h4>
+                <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close(false)">
+                    <i class="fas fa-fw fa fa-times" style="color: #fff !important"> </i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="p-2">
+                    <form [formGroup]="Form" (ngSubmit)="onValueSubmit()">
+                        <div class="modal-body">
+                            <h5>New Setup?</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input id="yes" type="radio" value="1" formControlName="nSetUp">
+                                    <label for="yes">Yes</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="no" type="radio" value="0" formControlName="nSetUp">
+                                    <label for="no">No</label>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6 col-sm-6">
+                                    <button class="btn btn-primary" type="submit"
+                                        style="background-color: #53a446;border: #53a446;">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

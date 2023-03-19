@@ -1,7 +1,6 @@
-<layout>
+<layout *ngIf="!isDialog">
     <div class="right_col" role="main">
         <div class="container">
-
             <div class="page-title">
                 <div class="title_left" style="display: flex; justify-content: space-between;">
                     <div class="d-flex" style="align-items: center;">
@@ -40,8 +39,7 @@
                             <input formControlName="companyName" class="form-control"
                                 [ngClass]="{ 'is-invalid': f.companyName.touched  && f.companyName.errors }" />
 
-                            <div *ngIf=" f.companyName.touched && f.companyName.errors"
-                                class="invalid-feedback">
+                            <div *ngIf=" f.companyName.touched && f.companyName.errors" class="invalid-feedback">
                                 <div *ngIf="f.companyName.errors.required">Company is required</div>
                             </div>
                         </div>
@@ -51,3 +49,43 @@
         </div>
     </div>
 </layout>
+
+
+<div class="modal" style="display: block" id="modal" role="dialog" *ngIf="isDialog">
+    <div class="modal-dialog" style="width: 95vw;height: 50vh;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #53a446 !important; color: #fff">
+                <h4 class="modal-title" id="modal-basic-title">Create Company</h4>
+            </div>
+
+            <div class="modal-body" style="height: 200px;">
+                <div class="py-3 px-3-pb-3">
+                    <div class="container">
+                        <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Company</label>
+                                    <input formControlName="companyName" class="form-control"
+                                        [ngClass]="{ 'is-invalid': f.companyName.touched  && f.companyName.errors }" />
+
+                                    <div *ngIf=" f.companyName.touched && f.companyName.errors"
+                                        class="invalid-feedback">
+                                        <div *ngIf="f.companyName.errors.required">Company is required</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary" type="submit"
+                                        style="background-color: #53a446;border: #53a446;">Next</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
