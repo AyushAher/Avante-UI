@@ -16,6 +16,9 @@ export class User {
   custSites: string
   userType: string
   companyId: string
+  brand: string
+  bu: string
+  company: string
 }
 
 export class AuthenticateModel {

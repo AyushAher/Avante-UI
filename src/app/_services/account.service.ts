@@ -20,7 +20,7 @@ import SetUp from '../account/setup.component';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private userSubject: BehaviorSubject<User>;
+  private userSubject: BehaviorSubject<any>;
   private zohoSubject: BehaviorSubject<string>;
   public user: Observable<User>;
 
@@ -103,8 +103,10 @@ export class AccountService {
   login(username, password, companyId, businessUnitId, brandId) {
 
     password = window.btoa(password);
-    return this.http.post<User>(`${this.environment.apiUrl}/user/authenticate`, { username, password, companyId, businessUnitId, brandId })
+    return this.http.post(`${this.environment.apiUrl}/user/authenticate`, { username, password, companyId, businessUnitId, brandId })
       .pipe(map(user => {
+        console.log(user);
+
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('user', JSON.stringify(user));
         this.userSubject.next(user);
@@ -113,8 +115,8 @@ export class AccountService {
       }));
   }
 
-  ChangeCIM(){
-    
+  ChangeCIM() {
+
   }
 
 
@@ -317,10 +319,5 @@ export class AccountService {
         }
         return x;
       }));
-  }
-
-
-  GetCurrentCIMDetails(){
-    return this.http.get(`${this.environment.apiUrl}/users/CIMDetails`);
   }
 }

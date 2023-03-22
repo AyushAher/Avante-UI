@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/co
 import { ActivatedRoute } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import ChangeCIM from '../account/ChangeCIM.component';
+import { User } from '../_models';
+import { AccountService } from '../_services';
 import { LoaderService } from '../_services/loader.service';
 
 @Component({
@@ -18,15 +20,20 @@ export class LayoutComponent implements OnInit {
   showSpinner = false;
   isClosed: any;
   hideBreadCrumbs: boolean = false
+  user: User
 
   constructor(
     private spinnerService: LoaderService,
     private cdRef: ChangeDetectorRef,
     private modalService: BsModalService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private accountService: AccountService
   ) { }
 
   ngOnInit(): void {
+    
+    this.user = this.accountService.userValue
+
     this.spinnerService.getSpinnerObserver().subscribe((status) => {
       this.showSpinner = (status === 'start');
       this.cdRef.detectChanges();
@@ -49,7 +56,7 @@ export class LayoutComponent implements OnInit {
   }
 
   ChangeCIM() {
-    this.bsModalRef = this.modalService.show(ChangeCIM);
+    this.accountService.Authenticate(this.user.username, localStorage.getItem('password'), this.user.companyId)
   }
 
   private HideBreadCrumbRoutes: string[] = ['', 'distdashboard', 'custdashboard'];

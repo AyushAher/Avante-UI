@@ -22,7 +22,7 @@ export class HomeComponent {
     private route: ActivatedRoute,
     private listTypeService: ListTypeService,
   ) {
-    this.GetCIM()
+    // this.GetCIM()
     this.route.queryParams.subscribe((data: any) => {
       this.isRedirected = data.redirected === "true" || data.redirected === true
     })
@@ -54,12 +54,6 @@ export class HomeComponent {
           });
       }, 1000);
     }
-
-  }
-
-  async GetCIM() {
-    var data = await this.accountService.GetCurrentCIMDetails().toPromise();
-    console.log(data);
 
   }
 }
