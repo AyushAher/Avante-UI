@@ -318,4 +318,9 @@ export class AccountService {
         return x;
       }));
   }
+
+
+  GetCurrentCIMDetails(){
+    return this.http.get(`${this.environment.apiUrl}/users/CIMDetails`);
+  }
 }

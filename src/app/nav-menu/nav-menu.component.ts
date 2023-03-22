@@ -61,9 +61,6 @@ export class NavMenuComponent {
   ChangePassword() {
     this.bsModalRef = this.modalService.show(ChangepasswoardComponent);
   }
-  ChangeCIM() {
-    this.bsModalRef = this.modalService.show(ChangeCIM);
-  }
 
   ToggleDropdown(id: string) {
     document.getElementById(id).classList.toggle("show")

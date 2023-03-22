@@ -14,7 +14,7 @@ export class HomeComponent {
   profile: Profile;
   roles: ListTypeItem[];
   isRedirected: boolean;
-  
+
   constructor(
     private accountService: AccountService,
     private profileServicce: ProfileService,
@@ -22,11 +22,11 @@ export class HomeComponent {
     private route: ActivatedRoute,
     private listTypeService: ListTypeService,
   ) {
-
+    this.GetCIM()
     this.route.queryParams.subscribe((data: any) => {
       this.isRedirected = data.redirected === "true" || data.redirected === true
     })
-  
+
     this.user = this.accountService.userValue;
     if (this.user.username != "admin") {
       this.profileServicce.getUserProfile(this.user.userProfileId);
@@ -57,8 +57,9 @@ export class HomeComponent {
 
   }
 
-}
+  async GetCIM() {
+    var data = await this.accountService.GetCurrentCIMDetails().toPromise();
+    console.log(data);
 
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  }
 }

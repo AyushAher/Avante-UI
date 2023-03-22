@@ -11,6 +11,23 @@
       </app-nav-menu>
 
       <div class="container-fluid" [ngClass]="{'mt-4': !(showNavs || !isNewSetUp) }">
+        <div class="container mt-3" *ngIf="(!isNewSetUp || showNavs) && !hideBreadCrumbs">
+          <div class="d-flex align-items-baseline">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item" title="Company"><a class="blue-text">Company</a></li>
+                <li class="breadcrumb-item" title="Business Unit"><a class="blue-text">Business Unit</a></li>
+                <li class="breadcrumb-item" title="Brand"><a class="blue-text">Brand</a></li>
+              </ol>
+            </nav>
+            <div class="ml-5  ">
+              <a (click)="ChangeCIM()" class="nav-link" style="font-size: 1.25rem;">
+                <i class="fas fa-cog" style="color: #5ba146;" title="Settings"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <ng-content></ng-content>
       </div>
     </div>
