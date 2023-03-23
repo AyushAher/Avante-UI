@@ -25,15 +25,10 @@ export class LayoutComponent implements OnInit {
   constructor(
     private spinnerService: LoaderService,
     private cdRef: ChangeDetectorRef,
-    private modalService: BsModalService,
-    private route: ActivatedRoute,
-    private accountService: AccountService
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    
-    this.user = this.accountService.userValue
-
     this.spinnerService.getSpinnerObserver().subscribe((status) => {
       this.showSpinner = (status === 'start');
       this.cdRef.detectChanges();
@@ -55,9 +50,6 @@ export class LayoutComponent implements OnInit {
     this.isClosed = event
   }
 
-  ChangeCIM() {
-    this.accountService.Authenticate(this.user.username, localStorage.getItem('password'), this.user.companyId)
-  }
 
   private HideBreadCrumbRoutes: string[] = ['', 'distdashboard', 'custdashboard'];
 }

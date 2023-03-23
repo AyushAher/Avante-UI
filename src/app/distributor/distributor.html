@@ -1,8 +1,8 @@
-<layout [isNewSetup]="isNewSetUp" [showNavs]="!isNewSetUp">
+<layout [isNewSetUp]="isNewSetUp" [showNavs]="!isNewSetUp">
   <div class="right_col" role="main">
     <div class="container">
       <!-- Tabs navs -->
-      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist" *ngIf="!isNewSetUp">
         <li class="nav-item" role="presentation">
           <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" routerLink="/distributor"
             routerLinkActive="active" role="tab" aria-controls="ex1-tabs-1" aria-selected="true">Distributor</a>

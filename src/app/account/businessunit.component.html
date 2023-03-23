@@ -74,7 +74,7 @@
                     <div class="container">
                         <form [formGroup]="Form" (ngSubmit)="onSubmit()">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label>Business Unit</label>
                                     <input formControlName="businessUnitName" class="form-control"
                                         [ngClass]="{ 'is-invalid': f.businessUnitName.touched  && f.businessUnitName.errors }" />

@@ -68,6 +68,7 @@ export class UserProfileComponent implements OnInit {
   businessUnitList: any[];
   brandDropdownSettings: any;
   brandList: any[];
+  isNewSetup: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -165,6 +166,11 @@ export class UserProfileComponent implements OnInit {
 
 
     this.id = this.route.snapshot.paramMap.get('id');
+
+    this.route.queryParams.subscribe((data) => {
+      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
+    });
+
     if (this.id != null) {
       this.userprofileService.getById(this.id)
         .pipe(first())

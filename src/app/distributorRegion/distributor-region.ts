@@ -31,6 +31,7 @@ export class DistributorRegionComponent implements OnInit {
   hasAddAccess: boolean = false;
   isEditMode: boolean;
   isNewMode: boolean;
+  isNewSetup: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -103,6 +104,11 @@ export class DistributorRegionComponent implements OnInit {
 
     this.distributorId = this.route.snapshot.paramMap.get('id');
     this.distributorRegionId = this.route.snapshot.paramMap.get('rid');
+
+    this.route.queryParams.subscribe((data) => {
+      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
+    });
+
     this.destributorRegionform.controls['distid'].setValue(this.distributorId, { onlySelf: true });
 
     if (this.distributorRegionId != null) {
@@ -197,9 +203,13 @@ export class DistributorRegionComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
-            if (data.result) {
+            if (data.result && !this.isNewSetup) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["distregionlist", this.distributorId]);
+            }
+            else if (data.result && this.isNewSetup) {
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
             }
           }
         });

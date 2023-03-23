@@ -34,7 +34,7 @@
             <div class="col-md-12 col-sm-12">
                 <form [formGroup]="Form" (ngSubmit)="onSubmit()">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label>Company</label>
                             <input formControlName="companyName" class="form-control"
                                 [ngClass]="{ 'is-invalid': f.companyName.touched  && f.companyName.errors }" />
@@ -63,7 +63,7 @@
                     <div class="container">
                         <form [formGroup]="Form" (ngSubmit)="onSubmit()">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label>Company</label>
                                     <input formControlName="companyName" class="form-control"
                                         [ngClass]="{ 'is-invalid': f.companyName.touched  && f.companyName.errors }" />

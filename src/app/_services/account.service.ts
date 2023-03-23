@@ -20,7 +20,7 @@ import SetUp from '../account/setup.component';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private userSubject: BehaviorSubject<any>;
+  public userSubject: BehaviorSubject<User>;
   private zohoSubject: BehaviorSubject<string>;
   public user: Observable<User>;
 
@@ -103,14 +103,10 @@ export class AccountService {
   login(username, password, companyId, businessUnitId, brandId) {
 
     password = window.btoa(password);
-    return this.http.post(`${this.environment.apiUrl}/user/authenticate`, { username, password, companyId, businessUnitId, brandId })
+    return this.http.post<User>(`${this.environment.apiUrl}/user/authenticate`, { username, password, companyId, businessUnitId, brandId })
       .pipe(map(user => {
-        console.log(user);
-
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('user', JSON.stringify(user));
         this.userSubject.next(user);
-        // this.clear();
         return user;
       }));
   }
@@ -190,16 +186,20 @@ export class AccountService {
       this.modalRef.content.onClose.subscribe((companySuccess) => {
         if (!companySuccess.result) return;
         modalOptions.initialState.companyId = companySuccess.object.id;
-        this.modalRef = this.modalService.show(CreateBrandComponent, modalOptions)
-        this.modalRef.content.onClose.subscribe((brandData) => {
-          if (!brandData.result) return;
-          modalOptions.initialState.brandId = brandData.object.id;
 
-          this.modalRef = this.modalService.show(CreateBusinessUnitComponent, modalOptions)
-          this.modalRef.content.onClose.subscribe((buData) => {
-            if (!brandData.result) return;
-            modalOptions.initialState.businessUnitId = buData.object.id;
-            this.modalService.hide()
+        this.modalRef = this.modalService.show(CreateBusinessUnitComponent, modalOptions)
+
+        this.modalRef.content.onClose.subscribe((businessUnitData) => {
+          if (!businessUnitData.result) return;
+          modalOptions.initialState.businessUnitId = businessUnitData.object.id;
+
+          this.modalRef = this.modalService.show(CreateBrandComponent, modalOptions)
+          this.modalRef.content.onClose.subscribe((brandData) => {
+            if (!businessUnitData.result) return;
+            modalOptions.initialState.brandId = brandData.object.id;
+
+            this.modalService.hide();
+
             this.login(modalOptions.initialState.username, this.password, modalOptions.initialState.companyId, modalOptions.initialState.businessUnitId, modalOptions.initialState.brandId)
               .pipe(first()).subscribe(() => {
                 this.router.navigate(["/distributor"], {
@@ -219,7 +219,7 @@ export class AccountService {
     })
   }
 
-  private CIMConfig(username, password, isAdmin = true) {
+  CIMConfig(username, password, isAdmin = true) {
     this.password = password
     this.companyService.GetAllModelData()
       .pipe(first()).subscribe({

@@ -16,6 +16,7 @@ export class NavMenuComponent {
   user: User;
   bsModalRef: BsModalRef;
   notifications: any = 0;
+  isAdmin: boolean = false;
   @Output() showNotifications = new EventEmitter<boolean>()
   @Input() isClosed = false;
   notificationList: any[];
@@ -26,7 +27,9 @@ export class NavMenuComponent {
     private userNotification: UsernotificationService,
     private userNotificationService: UsernotificationService
   ) {
-    this.user = this.accountService.userValue;
+    this.accountService.userSubject.subscribe((data) => this.user = data);
+    this.isAdmin = this.user.username == "admin";
+
     setTimeout(() => {
       this.userNotificationService.getAll().pipe(first())
         .subscribe((data: any) => {
@@ -82,6 +85,14 @@ export class NavMenuComponent {
           this.closed()
         }
       })
+  }
+
+  ChangeCIM() {
+    this.accountService.CIMConfig(this.user.username, localStorage.getItem('password'));
+  }
+
+  NewCIMSetup() {
+    this.accountService.Authenticate(this.user.username, localStorage.getItem('password'), this.user.companyId);
   }
 
   logout() {

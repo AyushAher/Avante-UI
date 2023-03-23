@@ -49,7 +49,7 @@ export class DistributorComponent implements OnInit {
     this.distributorId = this.route.snapshot.paramMap.get('id');
 
     this.route.queryParams.subscribe((data) => {
-      this.isNewSetUp = data.isNewSetUp != null && data.isNewSetUp != undefined;      
+      this.isNewSetUp = data.isNewSetUp != null && data.isNewSetUp != undefined;
     });
 
 
@@ -182,7 +182,11 @@ export class DistributorComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.distributorId = data.object.id;
-              if (this.isNewSetUp) return this.router.navigate([`/contact/${this.type}/${this.distributorId}`])
+              if (this.isNewSetUp) return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
+                queryParams: {
+                  isNewSetUp: true
+                }
+              })
               else this.router.navigate(["distributorlist"]);
             }
             this.loading = false;

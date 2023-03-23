@@ -1,4 +1,4 @@
-<layout>
+<layout [isNewSetUp]="isNewSetup" [showNavs]="!isNewSetup">
   <div class="right_col" role="main">
     <div class="container">
 
@@ -10,14 +10,14 @@
           </div>
 
           <div class="controls" style="display: flex;">
-            <a (click)="Back()" class="nav-link">
+            <a (click)="Back()" class="nav-link" *ngIf="!isNewSetup">
               <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
             </a>
-            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode&&!isNewSetup">
               <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
             </a>
 
-            <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode &&!isNewSetup">
               <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
             </a>
 
@@ -26,7 +26,7 @@
               <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
             </a>
 
-            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess &&!isNewSetup">
               <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
             </a>
           </div>
@@ -149,8 +149,7 @@
             <div class="col-md-6 col-sm-6">
               <label>Description<span class="text-danger">*</span></label>
               <textarea class="form-control" required [disabled]="!isEditMode && !isNewMode"
-              [ngClass]="{ 'is-invalid':  f.userId.touched && f.userId.errors }"
-                formControlName="description">
+                [ngClass]="{ 'is-invalid':  f.userId.touched && f.userId.errors }" formControlName="description">
               </textarea>
               <div *ngIf="f.description.touched && f.description.errors" class="invalid-feedback">
                 <div *ngIf="f.description.errors.required">Description is required</div>

@@ -75,7 +75,7 @@
                     <div class="container">
                         <form [formGroup]="Form" (ngSubmit)="onSubmit()">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label>Brand Name</label>
                                     <input formControlName="brandName" class="form-control"
                                         [ngClass]="{ 'is-invalid': f.brandName.touched  && f.brandName.errors }" />

@@ -1,8 +1,8 @@
-<layout>
+<layout [isNewSetUp]="isNewSetup" [showNavs]="!isNewSetup">
   <div class="right_col" role="main">
     <div class="container">
       <!-- Tabs navs -->
-      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist" *ngIf="!isNewSetup">
         <li class="nav-item" role="presentation">
           <a class="nav-link active" id="ex1-tab-3" data-mdb-toggle="tab" routerLink="/distributorregion"
             routerLinkActive="active" role="tab" aria-controls="ex1-tabs-3" aria-selected="true">Distributor Region</a>
@@ -21,14 +21,15 @@
           </div>
 
           <div class="controls" style="display: flex;">
-            <a (click)="Back()" class="nav-link">
+            <a (click)="Back()" class="nav-link" *ngIf="!isNewSetup">
               <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
             </a>
-            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+            <a class="nav-link" (click)="EditMode()"
+              *ngIf="hasUpdateAccess && !isEditMode && !isNewMode && !isNewSetup">
               <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
             </a>
 
-            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode) && !isNewSetup">
               <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
             </a>
 
@@ -37,7 +38,7 @@
               <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
             </a>
 
-            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewSetup">
               <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
             </a>
           </div>

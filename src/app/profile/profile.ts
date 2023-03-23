@@ -56,6 +56,7 @@ export class ProfileComponent implements OnInit {
   screensList: any[];
   lstScreens: any[] = [];
   lstCategory: any[];
+  isNewSetup: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -113,6 +114,10 @@ export class ProfileComponent implements OnInit {
 
 
     this.id = this.route.snapshot.paramMap.get('id');
+
+    this.route.queryParams.subscribe((data) => {
+      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
+    });
 
     this.listTypeService.getById("PVGLS")
       .pipe(first()).subscribe((data: any) => this.privilagesList = data)
@@ -328,7 +333,8 @@ export class ProfileComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["profilelist"]);
+            if (!this.isNewSetup) this.router.navigate(["profilelist"]);
+            else this.router.navigate(['userprofile'], { queryParams: { isNewSetUp: true } });
           }
           this.loading = false;
         });

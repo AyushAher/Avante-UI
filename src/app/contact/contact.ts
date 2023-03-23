@@ -51,6 +51,8 @@ export class ContactComponent implements OnInit {
   isEditMode: any;
   isNewMode: any;
   isUser: boolean;
+  isNewSetup: boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -105,6 +107,10 @@ export class ContactComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('cid');
     this.masterId = this.route.snapshot.paramMap.get('id');
     this.type = this.route.snapshot.paramMap.get('type');
+
+    this.route.queryParams.subscribe((data) => {
+      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
+    });
 
 
     if (this.type == "DR" || this.type == "CS") {
@@ -253,8 +259,6 @@ export class ContactComponent implements OnInit {
     document.getElementById(id).classList.toggle("show")
   }
 
-
-  // convenience getter for easy access to form fields
   get f() {
     return this.contactform.controls;
   }
@@ -265,25 +269,22 @@ export class ContactComponent implements OnInit {
   }
 
   addUser() {
-    //debugger;
     this.user = new User;
     this.contactmodel = this.contactform.value;
     this.user.firstName = this.contactmodel.fname,
       this.user.lastName = this.contactmodel.lname,
       this.user.email = this.contactmodel.pemail,
       this.user.contactid = this.id
+
     this.user.username = this.contactmodel.fname + this.contactmodel.lname;
+
     this.accountService.register(this.user)
-      .pipe(first())
-      .subscribe({
+      .pipe(first()).subscribe({
         next: (data: any) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
           }
         },
-        error: error => {
-          this.loading = false;
-        }
       });
   }
   telInputObjectCo(obj) {
@@ -301,7 +302,6 @@ export class ContactComponent implements OnInit {
   }
 
   telInputObject(obj) {
-    //debugger;
     this.inputObj = obj;
     if (this.pcontactNumber) {
       obj.setNumber(this.pcontactNumber);
@@ -309,64 +309,57 @@ export class ContactComponent implements OnInit {
   }
 
   countryChange(country: any) {
-    //debugger;
     this.countryCode = country.dialCode;
-    //  this.setValue();
   }
 
   countryChange2(country: any) {
-    //debugger;
     this.country2Code = country.dialCode;
-    //  this.setValue();
   }
 
   countryChange2w(country: any) {
-    //debugger;
     this.country2Codew = country.dialCode;
-    //  this.setValue();
   }
 
   getNumber(e: any) {
-    //debugger;
   }
 
-
-
   onSubmit() {
-    //debugger;
     this.submitted = true;
     this.contactform.markAllAsTouched()
-    //this.id = this.route.snapshot.paramMap.get('cid');
-    //this.type = this.route.snapshot.paramMap.get('type');
-    // reset alerts on submit
     this.alertService.clear();
 
     // stop here if form is invalid
     if (this.contactform.invalid) {
       return;
     }
-    // this.isSave = true;
+
     this.loading = true;
 
     this.contact = this.contactform.value;
+
     if (this.contact.pcontactno != null) {
       if (!this.contact.pcontactno.includes("+")) {
         this.contact.pcontactno = '+' + this.countryCode + this.contact.pcontactno;
       }
     }
+
     if (this.contact.scontactno != null) {
       if (!this.contact.scontactno.includes("+")) {
         this.contact.scontactno = '+' + this.country2Code + this.contact.scontactno;
       }
     }
+
     if (this.contact.whatsappNo != null) {
       if (!this.contact.whatsappNo.includes("+")) {
         this.contact.whatsappNo = '+' + this.country2Codew + this.contact.whatsappNo;
       }
     }
+
     this.contact.address.zip = String(this.contact.address.zip);
     this.contact.address.geolat = String(this.contact.address.geolat);
     this.contact.address.geolong = String(this.contact.address.geolong);
+
+
     if (this.type == "D") {
       this.contact.contactMapping.mappedFor = "DIST";
     }
@@ -381,77 +374,53 @@ export class ContactComponent implements OnInit {
       this.id = this.route.snapshot.paramMap.get('did');
       this.contact.contactMapping.mappedFor = "SITE";
     }
+
     this.contact.contactMapping.parentId = this.masterId;
+
     if (this.id == null) {
       this.contactService.save(this.contact)
-        .pipe(first())
-        .subscribe({
+        .pipe(first()).subscribe({
           next: (data: any) => {
-            //debugger;
             if (data.result) {
+
+              if (this.isNewSetup) {
+                this.id = data.object.id;
+                this.addUser();
+              }
               this.notificationService.showSuccess(data.resultMessage, "Success");
             }
-            else {
-
-            }
-            // this.alertService.success('Data save successfull');
-            //  this.notificationService.showSuccess("Data Save Successful", "Success");
-
             this.contact.id = data.id;
             this.loading = false;
             this.back();
-            //if (this.type == "D") {
-            //  this.router.navigate(["/customerlist", this.id]);
-            //}
-            //else if (this.type == "DR") {
-            //  this.router.navigate(["/customerlist", this.id]);
-            //}
-            //else if (this.type == "C") {
-            //  this.router.navigate(["/customerlist", this.id]);
-            //}
-            //else if (this.type == "CS") {
-            //  this.router.navigate(["/customerlist", this.id]);
-            //}
-            //this.router.navigate(['../login'], { relativeTo: this.route });
           },
-          error: error => {
-            // this.alertService.error(error);
-
-            this.loading = false;
-          }
         });
     }
     else {
       this.contact.id = this.id;
       this.contactService.update(this.id, this.contact)
-        .pipe(first())
-        .subscribe({
+        .pipe(first()).subscribe({
           next: (data: any) => {
             //debugger;
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.back();
             }
-            else {
-
-            }
-
             this.contact.id = data.id;
             this.loading = false;
           },
-          error: error => {
-            // this.alertService.error(error);
-
-            this.loading = false;
-          }
         });
     }
   }
 
   back() {
-
-
-    if (this.type == "D") {
+    if (this.isNewSetup) {
+      this.router.navigate(['distributorregion', this.masterId], {
+        queryParams: {
+          isNewSetUp: true
+        }
+      });
+    }
+    else if (this.type == "D") {
       this.router.navigate(['contactlist', this.type, this.masterId]);
     }
     else if (this.type == "DR") {

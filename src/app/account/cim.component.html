@@ -3,9 +3,6 @@
     <div class="modal-content">
       <div class="modal-header" style="background-color: #53a446 !important; color: #fff">
         <h4 class="modal-title" id="modal-basic-title">Select CIM</h4>
-        <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close(false)">
-          <i class="fas fa-fw fa fa-times" style="color: #fff !important"> </i>
-        </button>
       </div>
 
       <div class="modal-body">
@@ -20,7 +17,7 @@
                     <select id="companyId" formControlName="companyId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.companyId.errors }">
                       <!-- <option style="background: #53a446;color:#fff;" value="new">+ New</option> -->
-                      
+
                       <option [value]="i.id" *ngFor="let i of companyList">{{i.companyName}}</option>
                     </select>
 
@@ -34,7 +31,7 @@
                     <select id="businessUnitId" formControlName="businessUnitId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.businessUnitId.errors }">
                       <!-- <option *ngIf="isAdmin" style="background: #53a446;color:#fff;" value="new">+ New</option> -->
-                      
+
                       <option [value]="i.id" *ngFor="let i of businessUnitList">{{i.businessUnitName}}</option>
                     </select>
 
@@ -48,7 +45,7 @@
                     <select id="brand" formControlName="brandId" class="form-select"
                       [ngClass]="{ 'is-invalid': submitted && f.brandId.errors }">
                       <!-- <option *ngIf="isAdmin" style="background: #53a446;color:#fff;" value="new">+ New</option> -->
-                      
+
                       <option [value]="i.id" *ngFor="let i of brandList">{{i.brandName}}</option>
                     </select>
 
