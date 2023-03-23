@@ -10,17 +10,16 @@ import { BrandService } from "../_services/brand.service";
     templateUrl: "./setup.component.html"
 })
 export default class SetUp implements OnInit {
-
-    Form: FormGroup
+    Form: FormGroup;
     public onClose: Subject<any>;
     public modalRef: BsModalRef;
+
     @Input('username') username
     @Input('password') password
 
-    constructor(private formBuilder: FormBuilder,
-        private notificationService: NotificationService,
-        public activeModal: BsModalService,
-        public brandService: BrandService
+    constructor(
+        private formBuilder: FormBuilder,
+        private notificationService: NotificationService
     ) { }
 
     ngOnInit(): void {
@@ -33,13 +32,12 @@ export default class SetUp implements OnInit {
     onValueSubmit() {
         var data = this.Form.get("nSetUp").value
         if (this.Form.invalid || !data) return this.notificationService.showError("Form Invalid", "Error");
-
-        this.close(data == 1 || data == "1");
+        var result = (data == 1 || data == "1") && data != "existing";
+        this.close(result, (data == "existing"));
     }
 
-    close(result: any) {
-
-        this.onClose.next({ newSetUp: result });
+    close(result: any, existing) {
+        this.onClose.next({ newSetUp: result, isExisting: existing });
         this.notificationService.filter("itemadded");
     }
 }

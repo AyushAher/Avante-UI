@@ -472,7 +472,11 @@ export class UserProfileComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["userprofilelist"]);
+            if (this.isNewSetup) {
+              this.notificationService.showInfo("New CIM Setup completed", "Setup Completed");
+              this.router.navigate(['/']);
+            }
+            else this.router.navigate(["userprofilelist"]);
           }
         });
     }

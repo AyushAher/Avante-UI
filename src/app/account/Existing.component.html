@@ -1,0 +1,31 @@
+<div class="modal" style="display: block" id="modal" role="dialog">
+    <div class="modal-dialog" style="width: 95vw">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #53a446 !important; color: #fff">
+                <h4 class="modal-title" id="modal-basic-title">Continue Existing Setup</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="p-2">
+                    <form [formGroup]="Form">
+                        <div class="modal-body">
+                            <div class="row">
+                                <label for="company">Company</label>
+                                <select formControlName="company" class="form-select" id="company">
+                                    <option [value]="i.id" *ngFor="let i of companyList">{{i.companyName}}</option>
+                                </select>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6 col-sm-6">
+                                    <button class="btn btn-primary" (click)="OnCompanyChange()" type="submit"
+                                        style="background-color: #53a446;border: #53a446;">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

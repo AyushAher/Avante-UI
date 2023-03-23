@@ -17,6 +17,7 @@ import { CreateCompanyComponent } from '../account/company.component';
 import { CreateBusinessUnitComponent } from '../account/businessunit.component';
 import { CreateBrandComponent } from '../account/brand.component';
 import SetUp from '../account/setup.component';
+import ExistingCIM from '../account/Existing.component';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -101,7 +102,6 @@ export class AccountService {
 
 
   login(username, password, companyId, businessUnitId, brandId) {
-
     password = window.btoa(password);
     return this.http.post<User>(`${this.environment.apiUrl}/user/authenticate`, { username, password, companyId, businessUnitId, brandId })
       .pipe(map(user => {
@@ -180,7 +180,11 @@ export class AccountService {
     this.modalRef = this.modalService.show(SetUp, modalOptions);
 
     this.modalRef.content.onClose.subscribe(result => {
-      if (!result.newSetUp) return this.CIMConfig(username, this.password);
+      if (!result.newSetUp && !result.isExisting) return this.CIMConfig(username, this.password);
+      else if (!result.newSetUp && result.isExisting) {
+        return this.modalService.show(ExistingCIM, modalOptions)
+      }
+
       this.modalRef = this.modalService.show(CreateCompanyComponent, modalOptions)
 
       this.modalRef.content.onClose.subscribe((companySuccess) => {
@@ -195,7 +199,7 @@ export class AccountService {
 
           this.modalRef = this.modalService.show(CreateBrandComponent, modalOptions)
           this.modalRef.content.onClose.subscribe((brandData) => {
-            if (!businessUnitData.result) return;
+            if (!brandData.result) return;
             modalOptions.initialState.brandId = brandData.object.id;
 
             this.modalService.hide();

@@ -152,6 +152,7 @@ import { BusinessUnitListComponent } from './account/businessunitlist.component'
 import { CompanyListComponent } from './account/companylist.component';
 import SetUp from './account/setup.component';
 import ChangeCIM from './account/ChangeCIM.component';
+import ExistingCIM from './account/Existing.component';
 
 
 @NgModule({
@@ -282,7 +283,8 @@ import ChangeCIM from './account/ChangeCIM.component';
     BusinessUnitListComponent,
     CompanyListComponent,
     SetUp,
-    ChangeCIM
+    ChangeCIM,
+    ExistingCIM
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
