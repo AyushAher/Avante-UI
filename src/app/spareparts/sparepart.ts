@@ -215,6 +215,7 @@ export class SparePartComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.sparepartform.patchValue(this.formData);
     else this.sparepartform.reset();
     this.sparepartform.disable()

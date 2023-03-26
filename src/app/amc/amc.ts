@@ -448,6 +448,7 @@ export class AmcComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.form.patchValue(this.formData);
     else this.form.reset();
     this.form.disable()

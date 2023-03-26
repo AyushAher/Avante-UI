@@ -72,6 +72,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.Form.patchValue(this.formData);
     else this.Form.reset();
     this.Form.disable()

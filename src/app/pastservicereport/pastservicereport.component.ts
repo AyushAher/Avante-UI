@@ -176,6 +176,7 @@ export class PastservicereportComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     if (this.id != null) this.form.patchValue(this.formData);
     else this.form.reset();

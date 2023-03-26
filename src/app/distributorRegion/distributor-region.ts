@@ -152,6 +152,7 @@ export class DistributorRegionComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.distributorRegionId != null) this.destributorRegionform.patchValue(this.formData);
     else this.destributorRegionform.reset();
     this.destributorRegionform.disable()

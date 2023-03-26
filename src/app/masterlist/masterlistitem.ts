@@ -147,6 +147,7 @@ export class MasterListItemComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     this.masterlistitemform.disable()
     this.isEditMode = false;
     this.isNewMode = false;

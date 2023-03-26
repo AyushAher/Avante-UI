@@ -506,6 +506,7 @@ export class ServiceReportComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.ServiceReportId != null) this.ServiceReportform.patchValue(this.formData);
     else this.ServiceReportform.reset();
     this.ServiceReportform.disable()

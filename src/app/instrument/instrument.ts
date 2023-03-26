@@ -478,6 +478,7 @@ export class InstrumentComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.instrumentform.patchValue(this.formData);
     else this.instrumentform.reset();
     this.instrumentform.disable()

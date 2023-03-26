@@ -305,6 +305,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.userprofileform.patchValue(this.formData);
     else this.userprofileform.reset();
     this.userprofileform.disable()

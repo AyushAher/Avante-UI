@@ -158,6 +158,7 @@ export class CustomerSiteComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.csiteid != null) this.customersiteform.patchValue(this.formData);
     else this.customersiteform.reset();
     this.customersiteform.disable()

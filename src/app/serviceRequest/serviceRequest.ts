@@ -646,6 +646,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.serviceRequestId != null) this.serviceRequestform.patchValue(this.formData);
     else this.serviceRequestform.reset();
     this.serviceRequestform.disable()

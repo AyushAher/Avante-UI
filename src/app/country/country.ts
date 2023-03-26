@@ -137,6 +137,7 @@ export class CountryComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.countryform.patchValue(this.formData);
     else this.countryform.reset();
     this.countryform.disable()

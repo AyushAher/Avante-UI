@@ -113,6 +113,7 @@ export class CurrencyComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.currencyform.patchValue(this.formData);
     else this.currencyform.reset();
     this.currencyform.disable()
