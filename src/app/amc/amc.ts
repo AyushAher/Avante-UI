@@ -97,6 +97,7 @@ export class AmcComponent implements OnInit {
   @ViewChild('baseAmt') baseAmt
   isOnCall: any = false;
   totalStages = 0;
+  formData: any;
 
 
   constructor(
@@ -384,7 +385,8 @@ export class AmcComponent implements OnInit {
                   this.totalStages = this.rowData?.length | 0;
                   this.GetSites(data.object.billtoid);
                   setTimeout(() => {
-                    this.form.patchValue(data.object);
+                    this.formData = data.object;
+                    this.form.patchValue(this.formData);
                     this.form.get('stageName').reset()
                     this.InstrumentSearch();
                   }, 500);
@@ -446,6 +448,8 @@ export class AmcComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.form.patchValue(this.formData);
+    else this.form.reset();
     this.form.disable()
     this.columnDefs = this.createColumnDefsRO();
     this.isEditMode = false;
@@ -894,7 +898,7 @@ export class AmcComponent implements OnInit {
     this.form.get('billtoid').enable()
     this.model = this.form.value;
     this.form.get('billtoid').disable()
-    
+
     if (this.IsCustomerView) {
       this.model.billtoid == this.defaultCustomerId
       if (!this.model.custSite) {

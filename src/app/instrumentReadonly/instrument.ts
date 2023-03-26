@@ -77,6 +77,7 @@ export class InstrumentRonlyComponent implements OnInit {
   contactList: any;
   hasCommercial: boolean;
   hasWarrenty: any;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -147,7 +148,7 @@ export class InstrumentRonlyComponent implements OnInit {
       currencyId: [""],
       instruEngineerId: ['', Validators.required]
     });
-    
+
     this.imageUrl = this.noimageData;
     this.instrumentform.get('warranty').valueChanges
       .subscribe(value => {
@@ -235,8 +236,8 @@ export class InstrumentRonlyComponent implements OnInit {
               this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
             }
 
-
-            this.instrumentform.patchValue(data.object);
+            this.formData = data.object;
+            this.instrumentform.patchValue(this.formData);
             this.sparePartDetails = data.object.spartParts;
             this.recomandFilter(this.sparePartDetails);
             this.instrumentform.setValue({

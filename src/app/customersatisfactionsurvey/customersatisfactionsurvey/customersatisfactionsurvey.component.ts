@@ -65,6 +65,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   role: string;
   servicereportid: any;
   serviceRequestId: any;
+  formData: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -166,7 +167,10 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
                 .pipe(first())
                 .subscribe((sreqData: any) => {
                   this.servicerequest = sreqData.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
-                  setTimeout(() => this.form.patchValue(data.object), 100);
+                  setTimeout(() => {
+                    this.formData = data.object;
+                    this.form.patchValue(this.formData);
+                  }, 100);
                 });
 
             });
@@ -250,6 +254,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.form.patchValue(this.formData);
+    else this.form.reset();
     this.form.disable()
     this.isEditMode = false;
     this.isNewMode = false;

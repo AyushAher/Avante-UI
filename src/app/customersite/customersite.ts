@@ -32,6 +32,7 @@ export class CustomerSiteComponent implements OnInit {
   hasAddAccess: boolean = false;
   isNewMode: boolean;
   isEditMode: boolean;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -126,7 +127,8 @@ export class CustomerSiteComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.customersiteform.patchValue(data.object);
+            this.formData = data.object;
+            this.customersiteform.patchValue(this.formData);
           },
         });
       this.customersiteform.disable()
@@ -156,6 +158,8 @@ export class CustomerSiteComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.csiteid != null) this.customersiteform.patchValue(this.formData);
+    else this.customersiteform.reset();
     this.customersiteform.disable()
     this.isEditMode = false;
     this.isNewMode = false;

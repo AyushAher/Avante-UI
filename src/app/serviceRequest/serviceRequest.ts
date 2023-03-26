@@ -135,6 +135,7 @@ export class ServiceRequestComponent implements OnInit {
   designationList: ListTypeItem[];
   datepipe = new DatePipe('en-US')
   lockRequest: boolean;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -507,6 +508,9 @@ export class ServiceRequestComponent implements OnInit {
                         this.serviceRequestform.patchValue({ "delayedReasons": data.object.delayedReasons });
                         this.serviceRequestform.get("assignedto").setValue(data.object.assignedto);
 
+                        this.formData = data.object;
+                        this.serviceRequestform.patchValue(this.formData);
+
                         if (data.object.isReportGenerated) {
                           this.serviceRequestform.disable()
                           this.isGenerateReport = true;
@@ -642,6 +646,8 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.serviceRequestId != null) this.serviceRequestform.patchValue(this.formData);
+    else this.serviceRequestform.reset();
     this.serviceRequestform.disable()
     this.columnDefs = this.createColumnDefsRO();
     this.actionDefs = this.createColumnActionDefsRO();

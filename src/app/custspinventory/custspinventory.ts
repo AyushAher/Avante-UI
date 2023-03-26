@@ -54,6 +54,7 @@ export class CustSPInventoryComponent implements OnInit {
   lstSpareParts: any[] = []
   isEditMode: boolean;
   isNewMode: boolean;
+  formData: { [key: string]: any; };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -129,7 +130,8 @@ export class CustSPInventoryComponent implements OnInit {
                 }
               });
             // this.form.get("SearchPartNo")
-            this.form.patchValue(data.object);
+            this.formData = data.object;
+            this.form.patchValue(this.formData);
             this.Service.getHistory(this.user.contactId, this.id).pipe(first()).subscribe(
               (data: any) => {
                 const datepipie = new DatePipe("en-US");
@@ -183,6 +185,8 @@ export class CustSPInventoryComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.form.patchValue(this.formData);
+    else this.form.reset();
     this.form.disable()
     this.isEditMode = false;
     this.isNewMode = false;

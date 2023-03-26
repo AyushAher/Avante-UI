@@ -52,6 +52,7 @@ export class ContactComponent implements OnInit {
   isNewMode: any;
   isUser: boolean;
   isNewSetup: boolean;
+  formData: { [key: string]: any; };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -204,7 +205,8 @@ export class ContactComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             this.isUser = data.object.isUser
-            this.contactform.patchValue(data.object);
+            this.formData = data.object;
+            this.contactform.patchValue(this.formData);
             //this.pcontactNumber = data.object.pcontactno;
             if (this.inputObj) {
               this.inputObj.setNumber(data.object.pcontactno);
@@ -240,6 +242,8 @@ export class ContactComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.contactform.patchValue(this.formData);
+    else this.contactform.reset();
     this.contactform.disable()
     this.isEditMode = false;
     this.isNewMode = false;

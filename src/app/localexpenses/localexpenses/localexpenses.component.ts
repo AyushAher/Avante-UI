@@ -85,6 +85,7 @@ export class LocalexpensesComponent implements OnInit {
   rowData: any;
   processFile: any;
   @ViewChild('stageFiles') stageFiles;
+  formData: any;
 
   constructor(
     private FileShareService: FileshareService,
@@ -264,7 +265,9 @@ export class LocalexpensesComponent implements OnInit {
                     this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerid && !x.isReportGenerated)
                     this.GetFileList(data.object.id)
                     data.object.servicerequestid = data.object.servicerequestid?.split(',').filter(x => x != "");
-                    this.form.patchValue(data.object)
+
+                    this.formData = data.object;
+                    this.form.patchValue(this.formData);
                   });
               });
           }

@@ -26,6 +26,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   public modalRef: BsModalRef;
   public onClose: Subject<any>;
   @Input("isDialog") isDialog: boolean = false;
+  formData: { [key: string]: any; };
 
   constructor(
     public activeModal: BsModalService,
@@ -55,7 +56,8 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
       this.Form.get('id').setValue(id);
 
       var getByIdRequest: any = await this.businessUnitService.GetById(id).toPromise();
-      this.Form.patchValue(getByIdRequest.object)
+      this.formData = getByIdRequest.object;
+      this.Form.patchValue(this.formData);
     }
 
     var request: any = await this.CompanyService.GetAllCompany().toPromise();
@@ -91,6 +93,8 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.Form.patchValue(this.formData);
+    else this.Form.reset();
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -138,7 +142,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   close(success) {
     this.onClose.next(success);
   }
-  
+
   get f() {
     return this.Form.controls;
   }

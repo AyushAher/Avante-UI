@@ -107,6 +107,7 @@ export class OfferrequestComponent implements OnInit {
   customerId: any;
   siteList: any[]
   totalStages = 0;
+  formData: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -341,7 +342,8 @@ export class OfferrequestComponent implements OnInit {
                     element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
                   });
 
-                  this.form.patchValue(data.object);
+                  this.formData = data.object;
+                  this.form.patchValue(this.formData);
 
                   setTimeout(() => {
                     var instrumentLst = []
@@ -350,7 +352,9 @@ export class OfferrequestComponent implements OnInit {
                       if (this.instrumentslst.find(x => x.id == ins) != null) instrumentLst.push(ins)
                     });
                     data.object.instrumentsList = instrumentLst;
-                    this.form.patchValue(data.object);
+
+                    this.formData = data.object;
+                    this.form.patchValue(this.formData);
                   }, 500);
 
                   this.rowData = stageData.object;
@@ -549,6 +553,8 @@ export class OfferrequestComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.form.patchValue(this.formData);
+    else this.form.reset();
     this.form.disable();
     this.columnDefs = this.createColumnDefsRO();
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();

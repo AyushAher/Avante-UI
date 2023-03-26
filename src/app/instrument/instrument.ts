@@ -111,6 +111,7 @@ export class InstrumentComponent implements OnInit {
   isAccessories: any;
   bsActionModalRef: BsModalRef;
   accessoriesData: any;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -361,7 +362,10 @@ export class InstrumentComponent implements OnInit {
               });
 
             this.hasWarrenty = data.object.warranty
-            setTimeout(() => this.instrumentform.patchValue(data.object), 700);
+            setTimeout(() => {
+              this.formData = data.object;
+              this.instrumentform.patchValue(this.formData);
+            }, 700);
 
             this.sparePartDetails = data.object.spartParts;
 
@@ -474,6 +478,8 @@ export class InstrumentComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.instrumentform.patchValue(this.formData);
+    else this.instrumentform.reset();
     this.instrumentform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -579,7 +585,8 @@ export class InstrumentComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           data = data.object[0];
-          this.instrumentform.patchValue(data);
+          this.formData = data.object;
+          this.instrumentform.patchValue(this.formData);
           this.sparePartDetails = data?.spartParts;
           this.recomandFilter(this.sparePartDetails);
           for (let i = 0; i < data.spartParts.length; i++) {

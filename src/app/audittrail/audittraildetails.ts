@@ -24,6 +24,7 @@ export class AudittrailDetailsComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   profilePermission: ProfileReadOnly;
+  formData: { [key: string]: any; };
   constructor(
     private router: Router,
     private accountService: AccountService,
@@ -70,7 +71,9 @@ export class AudittrailDetailsComponent implements OnInit {
             this.oValue = JSON.parse(String(oString))
 
             data.object.createdon = this.datepipie.transform(data.object.createdon, "MM-dd-yyyy HH:mm:ss")
-            this.form.patchValue(data.object);
+
+            this.formData = data.object;
+            this.form.patchValue(this.formData);
           }
         })
     }

@@ -61,6 +61,7 @@ export class StaydetailsComponent implements OnInit {
   isDist: boolean = false;
   isEng: boolean = false;
   distId: string;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,7 +77,7 @@ export class StaydetailsComponent implements OnInit {
     private listTypeService: ListTypeService,
     private currencyService: CurrencyService,
     private environment: EnvService,
-    ) {
+  ) {
   }
 
   get f() {
@@ -222,14 +223,15 @@ export class StaydetailsComponent implements OnInit {
               .subscribe((Engdata: any) => {
                 this.engineer = Engdata.object
                 this.distId = data.object.distId
-                
+
                 this.servicerequestservice
                   .GetServiceRequestByDist(data.object.distId)
                   .pipe(first())
                   .subscribe((Srqdata: any) => {
                     this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerid && !x.isReportGenerated)
                     data.object.servicerequestid = data.object.servicerequestid?.split(',').filter(x => x != "");
-                    this.form.patchValue(data.object)
+                    this.formData = data.object;
+                    this.form.patchValue(this.formData);
                   });
               });
           }

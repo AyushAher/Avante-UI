@@ -42,7 +42,8 @@ export class poComponent implements OnInit {
   private api: GridApi;
 
   instrumentList: instrumentList[] = [];
-  
+  formData: any;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,12 +56,12 @@ export class poComponent implements OnInit {
     private customerService: CustomerService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
-   // private ServiceReportService: ServiceReportService,
+    // private ServiceReportService: ServiceReportService,
     private fileshareService: FileshareService,
     private uploadService: UploadService,
     private poservice: POService
   ) { }
-  
+
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -108,7 +109,7 @@ export class poComponent implements OnInit {
       remarks: ['', Validators.required],
       issuedByCountry: [''],
       customerpaymentterm: [''],
-      expectedShipmentdate:['']
+      expectedShipmentdate: ['']
     });
 
     this.countryService.getAll()
@@ -118,8 +119,8 @@ export class poComponent implements OnInit {
           this.countries = data.object;
         },
         error: error => {
-        //  this.alertService.error(error);
-          
+          //  this.alertService.error(error);
+
           this.loading = false;
         }
       });
@@ -131,8 +132,8 @@ export class poComponent implements OnInit {
           this.defaultdistributors = data.object;
         },
         error: error => {
-         // this.alertService.error(error);
-          
+          // this.alertService.error(error);
+
           this.loading = false;
         }
       });
@@ -147,7 +148,8 @@ export class poComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.Poform.patchValue(data.object);
+            this.formData = data.object;
+            this.Poform.patchValue(this.formData);
           },
           error: error => {
             this.loading = false;
@@ -156,16 +158,16 @@ export class poComponent implements OnInit {
     }
 
     this.columnDefs = this.createColumnDefs();
-     
+
 
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.Poform.controls; }
   get a() { return this.Poform.controls.instrumentList; }
-   
+
   onSubmit() {
-   // //debugger;
+    // //debugger;
     this.submitted = true;
 
     // reset alerts on submit
@@ -188,10 +190,10 @@ export class poComponent implements OnInit {
               this.router.navigate(["polist"]);
             }
             else {
-              
+
             }
             this.loading = false;
-           
+
           },
           error: error => {
             this.loading = false;
@@ -210,10 +212,10 @@ export class poComponent implements OnInit {
               this.router.navigate(["polist"]);
             }
             else {
-              
+
             }
             this.loading = false;
-            
+
           },
           error: error => {
             this.loading = false;
@@ -225,46 +227,46 @@ export class poComponent implements OnInit {
 
 
   public onRowClicked(e) {
-  //  //debugger;
-  //  if (e.event.target !== undefined) {
-  //    let data = e.data;
-  //    let actionType = e.event.target.getAttribute("data-action-type");
-  //    this.id = this.route.snapshot.paramMap.get('id');
-  //    switch (actionType) {
-  //      case "remove":
-  //        if (confirm("Are you sure, you want to remove the config type?") == true) {
-  //          this.config = new instrumentConfig();
+    //  //debugger;
+    //  if (e.event.target !== undefined) {
+    //    let data = e.data;
+    //    let actionType = e.event.target.getAttribute("data-action-type");
+    //    this.id = this.route.snapshot.paramMap.get('id');
+    //    switch (actionType) {
+    //      case "remove":
+    //        if (confirm("Are you sure, you want to remove the config type?") == true) {
+    //          this.config = new instrumentConfig();
 
-  //          this.config.configtypeid = data.configTypeid;
-  //          this.config.configvalueid = data.configValueid;
-  //          this.config.instrumentid = this.id;
-  //          this.config.sparepartid = data.id;
+    //          this.config.configtypeid = data.configTypeid;
+    //          this.config.configvalueid = data.configValueid;
+    //          this.config.instrumentid = this.id;
+    //          this.config.sparepartid = data.id;
 
-  //          //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
-  //          this.instrumentService.deleteConfig(this.config)
-  //            .pipe(first())
-  //            .subscribe({
-  //              next: (d: any) => {
-  //                if (d.result) {
-  //                  this.notificationService.showSuccess(d.resultMessage, "Success");
-  //                  this.selectedConfigType = this.selectedConfigType.filter(x => !(x.id == data.configValueid && x.listTypeItemId == data.configTypeid && x.sparePartId == data.id));
-  //                  const selectedData = this.api.getSelectedRows();
-  //                  this.sparePartDetails = this.sparePartDetails.filter(x => !(x.configValueid == data.configValueid && x.configTypeid == data.configTypeid && x.id == data.id));
-  //                  //this.api.applyTransaction({ remove: selectedData });
-  //                  this.recomandFilter(this.sparePartDetails);
-  //                }
-  //                else {
-  //                  (d.resultMessage, "Error");
-  //                }
-  //              },
-  //              error: error => {
-  //                
-  //                this.loading = false;
-  //              }
-  //            });
-  //        }
-  //    }
-  //  }
+    //          //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
+    //          this.instrumentService.deleteConfig(this.config)
+    //            .pipe(first())
+    //            .subscribe({
+    //              next: (d: any) => {
+    //                if (d.result) {
+    //                  this.notificationService.showSuccess(d.resultMessage, "Success");
+    //                  this.selectedConfigType = this.selectedConfigType.filter(x => !(x.id == data.configValueid && x.listTypeItemId == data.configTypeid && x.sparePartId == data.id));
+    //                  const selectedData = this.api.getSelectedRows();
+    //                  this.sparePartDetails = this.sparePartDetails.filter(x => !(x.configValueid == data.configValueid && x.configTypeid == data.configTypeid && x.id == data.id));
+    //                  //this.api.applyTransaction({ remove: selectedData });
+    //                  this.recomandFilter(this.sparePartDetails);
+    //                }
+    //                else {
+    //                  (d.resultMessage, "Error");
+    //                }
+    //              },
+    //              error: error => {
+    //                
+    //                this.loading = false;
+    //              }
+    //            });
+    //        }
+    //    }
+    //  }
   }
 
   onCellValueChanged(event) {
@@ -279,7 +281,7 @@ export class poComponent implements OnInit {
     //}
   }
 
- 
+
   private createColumnDefs() {
     return [
       {

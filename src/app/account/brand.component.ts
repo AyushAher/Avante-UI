@@ -26,6 +26,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
   public modalRef: BsModalRef;
   public onClose: Subject<any>;
   @Input("isDialog") isDialog: boolean = false;
+  formData: any;
 
   constructor(
     public activeModal: BsModalService,
@@ -45,7 +46,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
       companyId: ['', [Validators.required]],
       id: [""]
     });
-    
+
     var id = this.activeRoute.snapshot.paramMap.get("id")
     this.isNewMode = id == null;
 
@@ -53,7 +54,8 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
       this.id = id;
       this.Form.get('id').setValue(id);
       var getByIdRequest: any = await this.brandService.GetById(id).toPromise();
-      this.Form.patchValue(getByIdRequest.object)
+      this.formData = getByIdRequest.object;
+      this.Form.patchValue(this.formData);
     }
 
     var request: any = await this.CompanyService.GetAllCompany().toPromise();
@@ -86,6 +88,8 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.Form.patchValue(this.formData);
+    else this.Form.reset();
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;

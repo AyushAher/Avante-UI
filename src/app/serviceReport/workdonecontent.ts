@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import {User, workDone} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { User, workDone } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -13,7 +13,7 @@ import {
   NotificationService,
   workdoneService
 } from '../_services';
-import {BsModalService} from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -34,6 +34,7 @@ export class WorkdoneContentComponent implements OnInit {
   closeResult: string;
   @Input() public itemId;
   @Input() public id;
+  formData: any;
 
 
   constructor(
@@ -59,8 +60,9 @@ export class WorkdoneContentComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.workdoneForm.patchValue(data.object);
-           // this.engineerCommentForm.patchValue({ "nextdate": new Date(data.object.nextdate) });
+            this.formData = data.object;
+            this.workdoneForm.patchValue(this.formData);
+            // this.engineerCommentForm.patchValue({ "nextdate": new Date(data.object.nextdate) });
           },
           error: error => {
             // this.alertService.error(error);
@@ -99,16 +101,16 @@ export class WorkdoneContentComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
               //this.configList = data.object;
-             // this.listvalue.get("configValue").setValue("");
+              // this.listvalue.get("configValue").setValue("");
             }
             else {
-              
+
               this.close();
             }
             this.loading = false;
           },
           error: () => {
-            
+
             this.loading = false;
           }
         });
@@ -127,13 +129,13 @@ export class WorkdoneContentComponent implements OnInit {
               //this.id = null;
             }
             else {
-              
+
               this.close();
             }
             this.loading = false;
           },
           error: () => {
-            
+
             this.loading = false;
           }
         });

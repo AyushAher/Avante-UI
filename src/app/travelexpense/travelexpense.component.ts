@@ -57,6 +57,7 @@ export class TravelexpenseComponent implements OnInit {
   grandEngineerTotalAmt: any;
   isEditMode: boolean;
   isNewMode: boolean;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -185,7 +186,8 @@ export class TravelexpenseComponent implements OnInit {
           this.getservicerequest(data.object.distributorId, data.object.engineerId);
           setTimeout(() => {
             this.GetFileList(data.object.id)
-            this.form.patchValue(data.object)
+            this.formData = data.object;
+            this.form.patchValue(this.formData);
             this.form.patchValue({ "grandEngineerTotal": this.numberPipe.transform(this.grandEngineerTotalAmt) })
             this.form.patchValue({ "grandCompanyTotal": this.numberPipe.transform(this.grandCompanyTotalAmt) })
           }, 400)
@@ -219,6 +221,8 @@ export class TravelexpenseComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.form.patchValue(this.formData);
+    else this.form.reset();
     this.form.disable()
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     this.isEditMode = false;
@@ -428,7 +432,7 @@ export class TravelexpenseComponent implements OnInit {
     this.model.grandCompanyTotal = parseInt(this.model.grandCompanyTotal)
     this.model.grandEngineerTotal = parseInt(this.model.grandEngineerTotal)
     this.form.disable();
-    
+
     if (isNaN(this.model.grandCompanyTotal)) {
       this.model.grandCompanyTotal = 0;
     }

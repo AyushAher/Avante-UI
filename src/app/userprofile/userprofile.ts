@@ -69,6 +69,7 @@ export class UserProfileComponent implements OnInit {
   brandDropdownSettings: any;
   brandList: any[];
   isNewSetup: boolean;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -274,7 +275,11 @@ export class UserProfileComponent implements OnInit {
 
         });
 
-      setTimeout(() => this.userprofileform.disable(), 100);
+      setTimeout(() => {
+        this.userprofileform.enable();
+        this.formData = this.userprofileform.value;
+        this.userprofileform.disable();
+      }, 100);
     }
     else {
       this.isNewMode = true
@@ -300,6 +305,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.userprofileform.patchValue(this.formData);
+    else this.userprofileform.reset();
     this.userprofileform.disable()
     this.isEditMode = false;
     this.isNewMode = false;

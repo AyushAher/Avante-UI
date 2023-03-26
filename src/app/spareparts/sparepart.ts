@@ -76,6 +76,7 @@ export class SparePartComponent implements OnInit {
   isNewMode: any;
   IsEngineerView: any;
   IsDistributorView: any;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -214,6 +215,8 @@ export class SparePartComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.sparepartform.patchValue(this.formData);
+    else this.sparepartform.reset();
     this.sparepartform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -253,7 +256,10 @@ export class SparePartComponent implements OnInit {
     this.configPartCombo.partNo = partNo;
 
     this.sparePartService.getByPartNo(this.configPartCombo).pipe(first())
-      .subscribe((data: any) => this.sparepartform.patchValue(data.object));
+      .subscribe((data: any) => {
+        this.formData = data.object;
+        this.sparepartform.patchValue(this.formData);
+      });
   }
 
   getfileImage(id) {

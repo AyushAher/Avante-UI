@@ -153,6 +153,7 @@ export class ServiceReportComponent implements OnInit {
   isEditMode: boolean;
   isNewMode: boolean;
   isCust: boolean;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -389,7 +390,9 @@ export class ServiceReportComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.ServiceReportform.patchValue(data.object);
+            this.formData = data.object;
+            this.ServiceReportform.patchValue(this.formData);
+
             this.ServiceReportform.patchValue({ 'workCompletedstr': data.object.workCompleted == true ? '0' : '1' });
             this.ServiceReportform.patchValue({ 'servicerequestno': data.object.serviceRequest.serreqno });
             this.ServiceReportform.patchValue({ 'workfinishedstr': data.object.workfinished == true ? '0' : '1' });
@@ -503,6 +506,8 @@ export class ServiceReportComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.ServiceReportId != null) this.ServiceReportform.patchValue(this.formData);
+    else this.ServiceReportform.reset();
     this.ServiceReportform.disable()
     this.isEditMode = false;
     this.isNewMode = false;

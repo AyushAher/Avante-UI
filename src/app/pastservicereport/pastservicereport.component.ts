@@ -47,6 +47,7 @@ export class PastservicereportComponent implements OnInit {
   public columnDefsAttachments: any[];
   private columnApi: ColumnApi;
   private api: GridApi;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -116,7 +117,8 @@ export class PastservicereportComponent implements OnInit {
       var data: any = await this.pastServiceReportService.getById(this.id).pipe(first())
         .toPromise();
 
-      this.form.patchValue(data.object);
+      this.formData = data.object;
+      this.form.patchValue(this.formData);
       this.GetFileList(data.object.id);
       this.form.disable();
 
@@ -175,6 +177,8 @@ export class PastservicereportComponent implements OnInit {
 
   CancelEdit() {
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
+    if (this.id != null) this.form.patchValue(this.formData);
+    else this.form.reset();
     this.form.disable()
     this.isEditMode = false;
     this.isNewMode = false;

@@ -42,6 +42,7 @@ export class CustomerComponent implements OnInit {
   isEditMode: any;
   isNewMode: any;
   regionCountry: any[] = [];
+  formData: any;
   //public defaultdistributors: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
 
   constructor(
@@ -120,7 +121,8 @@ export class CustomerComponent implements OnInit {
       this.customerService.getById(this.customerId)
         .pipe(first()).subscribe({
           next: (data: any) => {
-            this.customerform.patchValue(data.object);
+            this.formData = data.object;
+            this.customerform.patchValue(this.formData);
             this.onDefDistchanged(data.object.defdistid);
             this.onDistributorRegion(data.object.defdistregionid)
           },
@@ -152,6 +154,8 @@ export class CustomerComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.customerId != null) this.customerform.patchValue(this.formData);
+    else this.customerform.reset();
     this.customerform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -161,13 +165,12 @@ export class CustomerComponent implements OnInit {
     if (confirm("Are you sure you want to delete the record?")) {
       this.customerService.delete(this.customerId).pipe(first())
         .subscribe((data: any) => {
-          if (data.result){
+          if (data.result) {
             this.router.navigate(["customerlist"]);
           }
-          else
-            {
+          else {
             this.notificationService.showInfo(data.resultMessage, "Info");
-            }
+          }
         })
     }
   }
@@ -215,7 +218,7 @@ export class CustomerComponent implements OnInit {
       this.customerService.save(this.customerform.value)
         .pipe(first())
         .subscribe({
-          next: (data: ResultMsg) => {   
+          next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["customerlist"]);

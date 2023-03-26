@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import {EngineerCommentList, User} from '../_models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {ColDef, ColumnApi, GridApi} from 'ag-grid-community';
+import { EngineerCommentList, User } from '../_models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -13,7 +13,7 @@ import {
   ListTypeService,
   NotificationService
 } from '../_services';
-import {BsModalService} from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -36,6 +36,7 @@ export class ModelEngContentComponent implements OnInit {
   @Input() public itemId;
   @Input() public id;
   @Input() public engineerid;
+  formData: any;
 
 
   constructor(
@@ -67,8 +68,9 @@ export class ModelEngContentComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.engineerCommentForm.patchValue(data.object);
-            this.engineerCommentForm.patchValue({"nextdate": new Date(data.object.nextdate)});
+            this.formData = data.object;
+            this.engineerCommentForm.patchValue(this.formData);
+            this.engineerCommentForm.patchValue({ "nextdate": new Date(data.object.nextdate) });
           },
           error: error => {
             this.loading = false;
@@ -109,13 +111,13 @@ export class ModelEngContentComponent implements OnInit {
               //this.configList = data.object;
               // this.listvalue.get("configValue").setValue("");
             } else {
-              
+
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -132,13 +134,13 @@ export class ModelEngContentComponent implements OnInit {
               //this.listvalue.get("configValue").setValue("");
               //this.id = null;
             } else {
-              
+
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });

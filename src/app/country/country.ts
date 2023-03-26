@@ -32,6 +32,7 @@ export class CountryComponent implements OnInit {
   hasAddAccess: boolean = false;
   isNewMode: boolean;
   isEditMode: boolean;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -106,7 +107,8 @@ export class CountryComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.countryform.patchValue(data.object);
+            this.formData = data.object;
+            this.countryform.patchValue(this.formData);
           },
         });
       this.countryform.disable()
@@ -135,6 +137,8 @@ export class CountryComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.countryform.patchValue(this.formData);
+    else this.countryform.reset();
     this.countryform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -144,14 +148,12 @@ export class CountryComponent implements OnInit {
     if (confirm("Are you sure you want to delete the record?")) {
       this.countryService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
-          if (data.result)
-          {           
+          if (data.result) {
             this.router.navigate(["countrylist"]);
           }
-          else
-            {
+          else {
             this.notificationService.showInfo(data.resultMessage, "Info");
-            }
+          }
         })
     }
   }

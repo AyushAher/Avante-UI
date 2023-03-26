@@ -22,6 +22,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
   public modalRef: BsModalRef;
   public onClose: Subject<any>;
   @Input("isDialog") isDialog: boolean = false;
+  formData: { [key: string]: any; };
 
   constructor(
     private notificationService: NotificationService,
@@ -49,7 +50,8 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
       this.id = id;
       this.Form.get('id').setValue(id);
       var getByIdRequest: any = await this.companyService.GetCompanyById(id).toPromise();
-      this.Form.patchValue(getByIdRequest.object)
+      this.formData = getByIdRequest.object;
+      this.Form.patchValue(this.formData);
     }
   }
 
@@ -70,6 +72,8 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.Form.patchValue(this.formData);
+    else this.Form.reset();
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -91,7 +95,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
 
       if (success) {
         this.onClose.next({ result: success, object: saveRequest.object });
-        
+
         if (!this.isDialog) {
           this.notificationService.showSuccess("Company created successfully", "Success")
           this.router.navigate(["/companylist"])

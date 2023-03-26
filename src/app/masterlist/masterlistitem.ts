@@ -103,7 +103,7 @@ export class MasterListItemComponent implements OnInit {
           }
           else {
             this.listTypeService.GetListById(this.listid)
-              .subscribe((data: any) => {                
+              .subscribe((data: any) => {
                 this.masterlistitemform.get("listName").setValue(data.object.listname);
                 this.masterlistitemform.get("listTypeId").setValue(data.object.id);
               })
@@ -161,13 +161,12 @@ export class MasterListItemComponent implements OnInit {
 
       this.listTypeService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
-          if (data.result){
+          if (data.result) {
             this.router.navigate(["sparepartlist"])
           }
-            else
-        {
-          this.notificationService.showInfo(data.resultMessage, "Info");
-        }
+          else {
+            this.notificationService.showInfo(data.resultMessage, "Info");
+          }
         })
     }
   }

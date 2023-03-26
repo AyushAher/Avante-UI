@@ -32,6 +32,7 @@ export class DistributorComponent implements OnInit {
 
 
   isNewSetUp: boolean = false;
+  formData: { [key: string]: any; };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -106,7 +107,10 @@ export class DistributorComponent implements OnInit {
       }
 
       this.distributorService.getById(this.distributorId)
-        .pipe(first()).subscribe((data: any) => this.form.patchValue(data.object));
+        .pipe(first()).subscribe((data: any) => {
+          this.formData = data.object;
+          this.form.patchValue(this.formData);
+        });
 
       this.form.disable()
     }
@@ -146,6 +150,8 @@ export class DistributorComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.distributorId != null) this.form.patchValue(this.formData);
+    else this.form.reset();
     this.form.disable()
     this.isEditMode = false;
     this.isNewMode = false;

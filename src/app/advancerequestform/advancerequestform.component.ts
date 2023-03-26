@@ -58,6 +58,7 @@ export class AdvancerequestformComponent implements OnInit {
   bid: any;
   isEditMode: boolean;
   isNewMode: boolean;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -211,7 +212,8 @@ export class AdvancerequestformComponent implements OnInit {
                 this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
                 this.GetFileList(data.object.id)
                 this.getBankDetails(data.object.engineerId)
-                this.form.patchValue(data.object)
+                this.formData = data.object;
+                this.form.patchValue(this.formData);
               });
           }
         });
@@ -253,6 +255,8 @@ export class AdvancerequestformComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.form.patchValue(this.formData);
+    else this.form.reset();
     this.form.disable()
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     this.isEditMode = false;

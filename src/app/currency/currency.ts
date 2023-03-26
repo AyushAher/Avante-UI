@@ -32,6 +32,7 @@ export class CurrencyComponent implements OnInit {
   isEditMode: boolean;
   isNewMode: boolean;
   minorUnit_Length_Error: any;
+  formData: { [key: string]: any; };
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -83,7 +84,8 @@ export class CurrencyComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.currencyform.patchValue(data.object);
+            this.formData = data.object;
+            this.currencyform.patchValue(this.formData);
           },
         });
       this.currencyform.disable()
@@ -111,6 +113,8 @@ export class CurrencyComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.currencyform.patchValue(this.formData);
+    else this.currencyform.reset();
     this.currencyform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -120,14 +124,12 @@ export class CurrencyComponent implements OnInit {
     if (confirm("Are you sure you want to delete the record?")) {
       this.currencyService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
-          if (data.result)
-        {
-          this.router.navigate(["currencylist"]);
-        }
-        else
-        {
-          this.notificationService.showInfo(data.resultMessage, "Info");
-        }
+          if (data.result) {
+            this.router.navigate(["currencylist"]);
+          }
+          else {
+            this.notificationService.showInfo(data.resultMessage, "Info");
+          }
         })
     }
   }

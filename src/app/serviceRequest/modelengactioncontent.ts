@@ -39,6 +39,7 @@ export class ModelEngActionContentComponent implements OnInit {
   public message: string;
 
   @Output() public onUploadFinished = new EventEmitter();
+  formData: any;
 
 
   constructor(
@@ -85,7 +86,8 @@ export class ModelEngActionContentComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.actionForm.patchValue(data.object);
+            this.formData = data.object;
+            this.actionForm.patchValue(this.formData);
             this.actionForm.patchValue({ "actiondate": new Date(data.object.actiondate) });
           },
           error: error => {

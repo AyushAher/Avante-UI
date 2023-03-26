@@ -32,6 +32,7 @@ export class DistributorRegionComponent implements OnInit {
   isEditMode: boolean;
   isNewMode: boolean;
   isNewSetup: boolean;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -120,7 +121,8 @@ export class DistributorRegionComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.destributorRegionform.patchValue(data.object);
+            this.formData = data.object;
+            this.destributorRegionform.patchValue(this.formData);
             data.object.countries = data.object.countries?.split(',').filter(x => x != "");
             this.destributorRegionform.patchValue({ 'countries': data.object.countries })
           },
@@ -150,6 +152,8 @@ export class DistributorRegionComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.distributorRegionId != null) this.destributorRegionform.patchValue(this.formData);
+    else this.destributorRegionform.reset();
     this.destributorRegionform.disable()
     this.isEditMode = false;
     this.isNewMode = false;

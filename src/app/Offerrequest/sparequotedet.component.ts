@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {User} from "../_models";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ColDef, ColumnApi, GridApi} from "ag-grid-community";
-import {Sparequotedet} from "../_models/sparequotedet";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, Input, OnInit } from '@angular/core';
+import { User } from "../_models";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { Sparequotedet } from "../_models/sparequotedet";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
   AccountService,
   ConfigTypeValueService,
@@ -11,10 +11,10 @@ import {
   NotificationService,
   ProfileService
 } from "../_services";
-import {BsModalService} from "ngx-bootstrap/modal";
-import {first} from "rxjs/operators";
-import {SparequotedetService} from "../_services/sparequotedet.service";
-import {DatePipe} from "@angular/common";
+import { BsModalService } from "ngx-bootstrap/modal";
+import { first } from "rxjs/operators";
+import { SparequotedetService } from "../_services/sparequotedet.service";
+import { DatePipe } from "@angular/common";
 
 // import {moment} from "ngx-bootstrap/chronos/test/chain";
 
@@ -58,6 +58,7 @@ export class SparequotedetComponent implements OnInit {
   hasAddAccess: boolean = false;
 
   hasId: boolean = false;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -143,7 +144,8 @@ export class SparequotedetComponent implements OnInit {
               this.Form.get('custResponseDate').updateValueAndValidity()
 
             }
-            this.Form.patchValue(data.object);
+            this.formData = data.object;
+            this.Form.patchValue(this.formData);
 
             var raisedby = document.getElementById('raisedby') as HTMLInputElement
             raisedby.disabled = true
@@ -267,13 +269,13 @@ export class SparequotedetComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
             } else {
-              
+
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });
@@ -287,13 +289,13 @@ export class SparequotedetComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
             } else {
-              
+
               this.close();
             }
             this.loading = false;
           },
           error: error => {
-            
+
             this.loading = false;
           }
         });

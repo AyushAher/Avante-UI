@@ -52,6 +52,7 @@ export class TravelinvoiceComponent implements OnInit {
   distId: string;
   isEditMode: any;
   isNewMode: boolean;
+  formData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -174,7 +175,8 @@ export class TravelinvoiceComponent implements OnInit {
                   setTimeout(() => {
                     this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
                     this.GetFileList(data.object.id)
-                    this.form.patchValue(data.object)
+                    this.formData = data.object;
+                    this.form.patchValue(this.formData);
                   }, 1000);
                 });
             });
@@ -212,6 +214,8 @@ export class TravelinvoiceComponent implements OnInit {
   }
 
   CancelEdit() {
+    if (this.id != null) this.form.patchValue(this.formData);
+    else this.form.reset();
     this.form.disable()
     this.columnDefsAttachments = this.createColumnDefsAttachments()
     this.isEditMode = false;

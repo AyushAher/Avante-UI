@@ -34,6 +34,7 @@ export class WorkTimeContentComponent implements OnInit {
   closeResult: string;
   @Input() public itemId;
   @Input() public id;
+  formData: any;
 
 
   constructor(
@@ -62,7 +63,8 @@ export class WorkTimeContentComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.workTimeForm.patchValue(data.object);
+            this.formData = data.object;
+            this.workTimeForm.patchValue(this.formData);
             this.workTimeForm.patchValue({ "worktimedate": new Date(data.object.worktimedate) });
             this.PerDayHrs()
           },
