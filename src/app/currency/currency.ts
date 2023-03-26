@@ -117,11 +117,17 @@ export class CurrencyComponent implements OnInit {
   }
 
   DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to delete the record?")) {
       this.currencyService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["currencylist"]);
+        {
+          this.router.navigate(["currencylist"]);
+        }
+        else
+        {
+          this.notificationService.showInfo(data.resultMessage, "Info");
+        }
         })
     }
   }
@@ -156,7 +162,7 @@ export class CurrencyComponent implements OnInit {
               this.router.navigate(['currencylist']);
             }
             else {
-
+              this.notificationService.showInfo(data.resultMessage, "Info");
             }
             this.loading = false;
           },

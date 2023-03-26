@@ -158,11 +158,16 @@ export class CustomerComponent implements OnInit {
   }
 
   DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to delete the record?")) {
       this.customerService.delete(this.customerId).pipe(first())
         .subscribe((data: any) => {
-          if (data.result)
+          if (data.result){
             this.router.navigate(["customerlist"]);
+          }
+          else
+            {
+            this.notificationService.showInfo(data.resultMessage, "Info");
+            }
         })
     }
   }
@@ -210,14 +215,13 @@ export class CustomerComponent implements OnInit {
       this.customerService.save(this.customerform.value)
         .pipe(first())
         .subscribe({
-          next: (data: ResultMsg) => {
-            //debugger;
+          next: (data: ResultMsg) => {   
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["customerlist"]);
             }
             else {
-
+              this.notificationService.showInfo(data.resultMessage, "info");
             }
             this.loading = false;
 

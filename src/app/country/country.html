@@ -36,18 +36,10 @@
       <hr />
       <div class="col-md-12 col-sm-12 ">
         <form [formGroup]="countryform" (ngSubmit)="onSubmit()">
-          <div class="row">
-            <div class="col-sm-4">
-              <label for="name">Country Name <span class="text-danger">*</span></label>
-              <input type="text" formControlName="name" class="form-control"
-                [ngClass]="{ 'is-invalid': f.name.touched && f.name.errors }" />
-              <div *ngIf="f.name.touched && f.name.errors" class="invalid-feedback">
-                <div *ngIf="f.name.errors.required">Country Name is required</div>
-              </div>
-            </div>
+          <div class="row">            
             <div class="col-md-4 col-sm-4">
               <label for="iso_2">ISO Code 2<span class="text-danger">*</span></label>
-              <input type="text" formControlName="iso_2" class="form-control"
+              <input type="text" formControlName="iso_2" maxlength="2" class="form-control"
                 [ngClass]="{ 'is-invalid': f.iso_2.touched && f.iso_2.errors }" />
               <div *ngIf="f.iso_2.touched && f.iso_2.errors" class="invalid-feedback">
                 <div *ngIf="f.iso_2.errors.required">ISO Code 2 is required</div>
@@ -55,10 +47,18 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="iso_3">ISO Code 3<span class="text-danger">*</span></label>
-              <input type="text" formControlName="iso_3" class="form-control"
+              <input type="text" formControlName="iso_3" maxlength="3" class="form-control"
                 [ngClass]="{ 'is-invalid': f.iso_3.touched && f.iso_3.errors }" />
               <div *ngIf="f.iso_3.touched && f.iso_3.errors" class="invalid-feedback">
                 <div *ngIf="f.iso_3.errors.required">ISO Code 3 is required</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="name">Country Name <span class="text-danger">*</span></label>
+              <input type="text" formControlName="name" class="form-control"
+                [ngClass]="{ 'is-invalid': f.name.touched && f.name.errors }" />
+              <div *ngIf="f.name.touched && f.name.errors" class="invalid-feedback">
+                <div *ngIf="f.name.errors.required">Country Name is required</div>
               </div>
             </div>
           </div>
@@ -82,10 +82,6 @@
           </div>
           <div class="row">
             <div class="col-md-4 col-sm-4">
-              <label for="capital">Capital</label>
-              <input type="text" formControlName="capital" class="form-control" />
-            </div>
-            <div class="col-md-4 col-sm-4">
               <label for="continentid">Continent<span class="text-danger">*</span></label>
               <select formControlName="continentid" class="form-select"
                 [ngClass]="{ 'is-invalid': f.continentid.touched && f.continentid.errors }">
@@ -97,6 +93,10 @@
                 <div *ngIf="f.continentid.errors.required">Continent is required</div>
               </div>
             </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="capital">Capital</label>
+              <input type="text" formControlName="capital" class="form-control" />
+            </div>            
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Currency<span class="text-danger">*</span></label>
               <select formControlName="currencyid" class="form-select"

@@ -157,12 +157,17 @@ export class MasterListItemComponent implements OnInit {
   }
 
   DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to delete the record?")) {
 
       this.listTypeService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
-          if (data.result)
+          if (data.result){
             this.router.navigate(["sparepartlist"])
+          }
+            else
+        {
+          this.notificationService.showInfo(data.resultMessage, "Info");
+        }
         })
     }
   }

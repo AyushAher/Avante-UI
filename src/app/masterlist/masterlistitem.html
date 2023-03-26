@@ -51,7 +51,7 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="code">Code</label>
-              <input type="text" formControlName="code" class="form-control"
+              <input type="text" formControlName="code" maxlength="5" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.code.errors }" />
               <div *ngIf="submitted && f.code.errors" class="invalid-feedback">
                 <div *ngIf="f.code.errors.required">Code is required</div>

@@ -40,7 +40,7 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="code">Code<span class="text-danger">*</span></label>
-              <input type="text" formControlName="code" class="form-control"
+              <input type="text" formControlName="code" maxlength="10" class="form-control"
                 [ngClass]="{ 'is-invalid': f.code.touched && f.code.errors }" />
               <div *ngIf="f.code.touched && f.code.errors" class="invalid-feedback">
                 <div *ngIf="f.code.errors.required">Code is required</div>

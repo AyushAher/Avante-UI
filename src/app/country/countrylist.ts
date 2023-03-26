@@ -104,13 +104,6 @@ export class CountryListComponent implements OnInit {
         editable: false,
         sortable: true,
         tooltipField: 'iso_2',
-      }, {
-        headerName: 'ISO Code 3',
-        field: 'iso_3',
-        filter: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'iso_3',
       }
     ]
   }
