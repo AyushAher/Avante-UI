@@ -44,7 +44,8 @@
                 [ngClass]="{ 'is-invalid': f.code.touched && f.code.errors }" />
               <div *ngIf="f.code.touched && f.code.errors" class="invalid-feedback">
                 <div *ngIf="f.code.errors.required">Code is required</div>
-                <div *ngIf="f.code.errors?.maxlength">Max length is 3</div>
+                <div *ngIf="f.code.errors?.maxlength">Max length is 10</div>
+                <div *ngIf="f.code.errors?.pattern">Code should contain characters only</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
@@ -57,17 +58,21 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="n_Code">Numeric Code</label>
-              <input type="number" formControlName="n_Code" class="form-control" />
+              <input type="number" formControlName="n_Code" class="form-control"
+                [ngClass]="{ 'is-invalid': f.n_Code.touched && f.n_Code.errors }" />
+              <div *ngIf="f.n_Code.touched && f.n_Code.errors" class="invalid-feedback">
+                <div *ngIf="f.n_Code.errors.max">Max length is 5</div>
+              </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="minor_Unit">Minor Unit<span class="text-danger">*</span></label>
-              <input type="number" formControlName="minor_Unit" maxLength="10" class="form-control"
+              <input type="number" formControlName="minor_Unit" maxLength="5" class="form-control"
                 [ngClass]="{ 'is-invalid': f.minor_Unit.touched && f.minor_Unit.errors }" />
               <div *ngIf="f.minor_Unit.touched && f.minor_Unit.errors" class="invalid-feedback">
                 <div *ngIf="f.minor_Unit.errors.required">Minor Unit is required</div>
-                <div *ngIf="f.minor_Unit.errors?.maxlength">Max length is 5</div>
+                <div *ngIf="f.minor_Unit.errors.max">Max length is 5</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">

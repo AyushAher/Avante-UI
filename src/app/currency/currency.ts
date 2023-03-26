@@ -31,6 +31,7 @@ export class CurrencyComponent implements OnInit {
   user: User;
   isEditMode: boolean;
   isNewMode: boolean;
+  minorUnit_Length_Error: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -63,10 +64,10 @@ export class CurrencyComponent implements OnInit {
 
 
     this.currencyform = this.formBuilder.group({
-      code: ['', [Validators.required, Validators.maxLength(10)]],
+      code: ['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[a-zA-Z ]*$')]],
       name: ['', [Validators.required, Validators.maxLength(256)]],
-      minor_Unit: ['', [Validators.required, Validators.maxLength(5)]],
-      n_Code: [''],
+      minor_Unit: ['', [Validators.required, Validators.min(0), Validators.max(99999)]],
+      n_Code: ['', [Validators.min(0), Validators.max(99999)]],
       symbol: [''],
       isdeleted: [false],
     });
