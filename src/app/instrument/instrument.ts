@@ -196,7 +196,7 @@ export class InstrumentComponent implements OnInit {
       wrntyendt: [''],
       configtypeid: [''],
       configvalueid: [''],
-      installbyOther: ['', Validators.required],
+      installbyOther: [''],
       operatorId: ['', Validators.required],
       dateOfPurchase: [],
       cost: [0],
@@ -210,7 +210,8 @@ export class InstrumentComponent implements OnInit {
     this.imageUrl = this.noimageData;
 
     this.instrumentform.get('installby').valueChanges.subscribe((data) => {
-      if (data == 0) {
+      debugger;
+      if (data && data == 0) {
         this.instrumentform.get('installbyOther').setValidators(Validators.required)
         this.instrumentform.get('installbyOther').updateValueAndValidity()
       }
@@ -741,7 +742,7 @@ export class InstrumentComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+    debugger;
     this.alertService.clear();
     this.instrumentform.markAllAsTouched()
     // stop here if form is invalid
@@ -752,7 +753,6 @@ export class InstrumentComponent implements OnInit {
     this.loading = true;
     this.instrument = this.instrumentform.value;
     this.instrument.image = this.imagePath;
-    this.instrument.dateOfPurchase = this.datepipie.transform(GetParsedDate(this.instrument.dateOfPurchase), 'dd/MM/YYYY')
     this.instrument.engcontact = String(this.instrument.engcontact);
     this.instrument.configuration = [];
     this.instrument.baseCurrencyId = this.baseCurrId
@@ -773,10 +773,19 @@ export class InstrumentComponent implements OnInit {
     }
     this.instrument.custSiteId = this.instrumentform.get('custSiteId').value
     this.instrument.insmfgdt = this.datepipie.transform(GetParsedDate(this.instrument.insmfgdt), 'dd/MM/YYYY')
-    this.instrument.shipdt = this.datepipie.transform(GetParsedDate(this.instrument.shipdt), 'dd/MM/YYYY')
-    this.instrument.wrntyendt = this.datepipie.transform(GetParsedDate(this.instrument.wrntyendt), 'dd/MM/YYYY')
-    this.instrument.wrntystdt = this.datepipie.transform(GetParsedDate(this.instrument.wrntystdt), 'dd/MM/YYYY')
+
+    if (this.instrument.dateOfPurchase)
+      this.instrument.dateOfPurchase = this.datepipie.transform(GetParsedDate(this.instrument.dateOfPurchase), 'dd/MM/YYYY')
+
+    if (this.instrument.shipdt)
+      this.instrument.shipdt = this.datepipie.transform(GetParsedDate(this.instrument.shipdt), 'dd/MM/YYYY')
     this.instrument.installdt = this.datepipie.transform(GetParsedDate(this.instrument.installdt), 'dd/MM/YYYY')
+
+    if (this.instrument.wrntyendt)
+      this.instrument.wrntyendt = this.datepipie.transform(GetParsedDate(this.instrument.wrntyendt), 'dd/MM/YYYY')
+
+    if (this.instrument.wrntystdt)
+      this.instrument.wrntystdt = this.datepipie.transform(GetParsedDate(this.instrument.wrntystdt), 'dd/MM/YYYY')
 
     if (this.id == null) {
       this.instrumentService.save(this.instrument)
