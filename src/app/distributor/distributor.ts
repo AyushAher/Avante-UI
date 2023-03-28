@@ -196,6 +196,10 @@ export class DistributorComponent implements OnInit {
               })
               else this.router.navigate(["distributorlist"]);
             }
+            else
+            {
+              this.notificationService.showInfo(data.resultMessage, "Info");
+            }
             this.loading = false;
           }
         });

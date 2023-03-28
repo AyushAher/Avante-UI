@@ -185,7 +185,7 @@
             <div class="row">
               <div class="col-sm-4">
                 <label for="geolat">Latitude<span class="text-danger">*</span></label>
-                <input type="text" formControlName="geolat" class="form-control"
+                <input type="text" formControlName="geolat" class="form-control" value="0"
                   [ngClass]="{ 'is-invalid': a.geolat.touched && a.geolat.errors }" />
                 <div *ngIf="a.geolat.touched && a.geolat.errors" class="invalid-feedback">
                   <div *ngIf="a.geolat.errors.required">Latitude is required</div>
@@ -193,7 +193,7 @@
               </div>
               <div class="col-sm-4">
                 <label for="geolong">Longitude<span class="text-danger">*</span></label>
-                <input type="text" formControlName="geolong" class="form-control"
+                <input type="text" formControlName="geolong" class="form-control" value="0"
                   [ngClass]="{ 'is-invalid': a.geolong.touched && a.geolong.errors }" />
                 <div *ngIf="a.geolong.touched && a.geolong.errors" class="invalid-feedback">
                   <div *ngIf="a.geolong.errors.required">Longitude is required</div>

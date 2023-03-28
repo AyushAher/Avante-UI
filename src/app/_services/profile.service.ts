@@ -50,11 +50,14 @@ export class ProfileService {
     //debugger;
     this.http.get<Profile>(`${this.environment.apiUrl}/UserProfiles/${value}`).
       pipe(first()).subscribe((data: any) => {
-        this.getById(data.object.profileId)
-          .pipe(first()).subscribe((pdata: any) => {
-            localStorage.setItem('userprofile', JSON.stringify(pdata.object));
-            this.profileSubject.next(pdata.object);
+        if(data.object != null)
+        {
+          this.getById(data.object.profileId)
+            .pipe(first()).subscribe((pdata: any) => {
+              localStorage.setItem('userprofile', JSON.stringify(pdata.object));
+              this.profileSubject.next(pdata.object);
           });
+        }
       });
   }
 

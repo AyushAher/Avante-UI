@@ -236,13 +236,14 @@ export class SparePartComponent implements OnInit {
   }
 
   DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
-
-      this.sparePartService.delete(this.id).pipe(first())
-        .subscribe((data: any) => {
-          if (data.result)
-            this.router.navigate(["sparepartlist"])
-        })
+    if (confirm("Are you sure you want to delete the record?")) {
+      if(this.id != null){
+        this.sparePartService.delete(this.id).pipe(first())
+          .subscribe((data: any) => {
+            if (data.result)
+              this.router.navigate(["sparepartlist"])
+          })
+      }      
     }
   }
 

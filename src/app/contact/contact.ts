@@ -83,7 +83,7 @@ export class ContactComponent implements OnInit {
       pcontactno: [''],
       pemail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
       scontactno: [''],
-      semail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
+      semail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
       designationid: ['', [Validators.required, Validators.maxLength(512)]],
       isActive: [true],
       isdeleted: [false],
@@ -393,10 +393,14 @@ export class ContactComponent implements OnInit {
                 this.addUser();
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.contact.id = data.id;
+              this.loading = false;
+              this.back();
             }
-            this.contact.id = data.id;
-            this.loading = false;
-            this.back();
+            else
+            {
+              this.notificationService.showInfo(data.resultMessage, "Info");
+            }            
           },
         });
     }

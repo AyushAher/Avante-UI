@@ -118,11 +118,11 @@
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
-                <label for="semail">Secondory Email<span class="text-danger">*</span></label>
+                <label for="semail">Secondory Email</label>
                 <input type="email" formControlName="semail" class="form-control"
                   [ngClass]="{ 'is-invalid': f.semail.touched && f.semail.errors }" />
                 <div *ngIf="f.semail.touched && f.semail.errors" class="invalid-feedback">
-                  <div *ngIf="f.semail.errors?.required">Secondory Email is required</div>
+                  <!-- <div *ngIf="f.semail.errors?.required">Secondory Email is required</div> -->
                   <div *ngIf="f.semail.errors?.pattern">Please provide valid email</div>
                 </div>
               </div>
@@ -214,7 +214,7 @@
               <div class="row">
                 <div class="col-sm-4">
                   <label for="geolat">Latitude<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="geolat" class="form-control"
+                  <input type="text" formControlName="geolat" class="form-control" value="0"
                     [ngClass]="{ 'is-invalid': a.geolat.touched && a.geolat.errors }" />
                   <div *ngIf="a.geolat.touched && a.geolat.errors" class="invalid-feedback">
                     <div *ngIf="a.geolat.errors.required">Latitude is required</div>
@@ -222,7 +222,7 @@
                 </div>
                 <div class="col-sm-4">
                   <label for="geolong">Longitude<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="geolong" class="form-control"
+                  <input type="text" formControlName="geolong" class="form-control" value="0"
                     [ngClass]="{ 'is-invalid': a.geolong.touched && a.geolong.errors }" />
                   <div *ngIf="a.geolong.touched && a.geolong.errors" class="invalid-feedback">
                     <div *ngIf="a.geolong.errors.required">Longitude is required</div>
