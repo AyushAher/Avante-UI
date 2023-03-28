@@ -196,8 +196,8 @@
                   <label for="currencyid">Business Unit</label>
                   <select formControlName="businessUnit" (change)="onBusinessUnitChange()" class="form-select"
                     [ngClass]="{ 'is-invalid': f.businessUnit.touched && f.businessUnit.errors }">
-                    <option *ngFor="let c of businessUnitList" value={{c.listTypeItemId}}>
-                      {{c.itemname}}
+                    <option *ngFor="let c of businessUnitList" value={{c.id}}>
+                      {{c.businessUnitName}}
                     </option>
                   </select>
                   <div *ngIf="f.businessUnit.touched && f.businessUnit.errors" class="invalid-feedback">

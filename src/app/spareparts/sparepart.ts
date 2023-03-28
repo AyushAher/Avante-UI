@@ -31,6 +31,7 @@ import {
 import { DomSanitizer } from "@angular/platform-browser";
 import { HttpEventType } from "@angular/common/http";
 import { AnalyticalTechniqueService } from '../_services/analytical-technique.service';
+import { BusinessUnitService } from '../_services/businessunit.service';
 
 
 @Component({
@@ -68,7 +69,7 @@ export class SparePartComponent implements OnInit {
   hastransaction: boolean;
 
   img: any;
-  businessUnitList: ListTypeItem[];
+  businessUnitList: any[];
   instrumentList: any;
   analyticalDataList: any;
   analyticalList: any;
@@ -94,7 +95,8 @@ export class SparePartComponent implements OnInit {
     private fileshareService: FileshareService,
     private _sanitizer: DomSanitizer,
     private instrumentService: InstrumentService,
-    private analyticalService: AnalyticalTechniqueService
+    private analyticalService: AnalyticalTechniqueService,
+    private businessUnitService: BusinessUnitService
   ) { }
 
   ngOnInit() {
@@ -155,8 +157,8 @@ export class SparePartComponent implements OnInit {
     this.currencyService.getAll().pipe(first())
       .subscribe((data: any) => this.currency = data.object);
 
-    this.listTypeService.getById("BUSUT").pipe(first())
-      .subscribe((data: ListTypeItem[]) => this.businessUnitList = data);
+    this.businessUnitService.GetByCompanyId().pipe(first())
+      .subscribe((data: any) => this.businessUnitList = data.object);
 
     this.listTypeService.getById(this.code).pipe(first())
       .subscribe((data: ListTypeItem[]) => this.listTypeItems = data);
@@ -237,13 +239,13 @@ export class SparePartComponent implements OnInit {
 
   DeleteRecord() {
     if (confirm("Are you sure you want to delete the record?")) {
-      if(this.id != null){
+      if (this.id != null) {
         this.sparePartService.delete(this.id).pipe(first())
           .subscribe((data: any) => {
             if (data.result)
               this.router.navigate(["sparepartlist"])
           })
-      }      
+      }
     }
   }
 
