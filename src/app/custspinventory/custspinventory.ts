@@ -194,7 +194,7 @@ export class CustSPInventoryComponent implements OnInit {
   }
 
   DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to delete the record?")) {
       this.Service.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)

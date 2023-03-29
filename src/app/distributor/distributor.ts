@@ -139,12 +139,10 @@ export class DistributorComponent implements OnInit {
   }
 
   Back() {
-
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.router.navigate(["distributorlist"]);
     }
-
     else this.router.navigate(["distributorlist"]);
 
   }
@@ -159,11 +157,13 @@ export class DistributorComponent implements OnInit {
   }
 
   DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to delete the record?")) {
       this.distributorService.delete(this.distributorId).pipe(first())
         .subscribe((data: any) => {
-          if (data.result)
+          if (data.result) {
+            this.notificationService.showSuccess("Record deleted successfully", "Success");
             this.router.navigate(["distributorlist"]);
+          }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
           }

@@ -195,10 +195,13 @@ export class ProfileComponent implements OnInit {
   }
 
   DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to delete the record?")) {
       this.profileService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
-          if (data.result) this.router.navigate(["profilelist"])
+          if (data.result) {
+            this.notificationService.showSuccess("Record deleted successfully", "Success");
+            this.router.navigate(["profilelist"])
+          }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
           }

@@ -150,6 +150,7 @@ export class CountryComponent implements OnInit {
       this.countryService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result) {
+            this.notificationService.showSuccess("Record deleted successfully", "Success");
             this.router.navigate(["countrylist"]);
           }
           else {

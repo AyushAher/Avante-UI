@@ -161,11 +161,15 @@ export class DistributorRegionComponent implements OnInit {
   }
 
   DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to delete the record?")) {
       this.distributorRegionService.delete(this.distributorRegionId).pipe(first())
         .subscribe((data: any) => {
-          if (data.result)
+          if (data.result) {
+            this.notificationService.showSuccess("Record deleted successfully", "Success");
             this.router.navigate(["distregionlist", this.distributorId]);
+          }
+          else
+            this.notificationService.showInfo(data.resultMessage, "Info");
         })
     }
   }

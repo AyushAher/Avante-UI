@@ -167,6 +167,7 @@ export class CustomerComponent implements OnInit {
       this.customerService.delete(this.customerId).pipe(first())
         .subscribe((data: any) => {
           if (data.result) {
+            this.notificationService.showSuccess("Record deleted successfully", "Success");
             this.router.navigate(["customerlist"]);
           }
           else {

@@ -167,11 +167,13 @@ export class CustomerSiteComponent implements OnInit {
   }
 
   DeleteRecord() {
-    if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to delete the record?")) {
       this.customersiteService.delete(this.csiteid).pipe(first())
         .subscribe((data: any) => {
-          if (data.result)
+          if (data.result) {
+            this.notificationService.showSuccess("Record deleted successfully", "Success");
             this.router.navigate(["customersitelist", this.customerid]);
+          }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
           }
