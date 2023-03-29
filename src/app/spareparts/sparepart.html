@@ -192,33 +192,14 @@
                   </div>
                 </div>
 
-                <div class="col-md-6 col-sm-6">
-                  <label for="currencyid">Business Unit</label>
-                  <select formControlName="businessUnit" (change)="onBusinessUnitChange()" class="form-select"
-                    [ngClass]="{ 'is-invalid': f.businessUnit.touched && f.businessUnit.errors }">
-                    <option *ngFor="let c of businessUnitList" value={{c.id}}>
-                      {{c.businessUnitName}}
-                    </option>
-                  </select>
-                  <div *ngIf="f.businessUnit.touched && f.businessUnit.errors" class="invalid-feedback">
-                    <div *ngIf="f.businessUnit.errors.required">Business Unit is required</div>
+                <div class="col-md-4 col-sm-4">
+                  <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
+                  <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput
+                    (change)="uploadFile(fileInput.files,id)" />
+                  <div *ngIf="f.image.touched && f.image.errors" class="invalid-feedback">
+                    <div *ngIf="f.image.errors.required">Image is required</div>
                   </div>
                 </div>
-
-                <div class="col-md-6 col-sm-6">
-                  <label for="currencyid">Analytical Techniques</label>
-                  <select formControlName="analyticalTechnique" class="form-select"
-                    [ngClass]="{ 'is-invalid': f.analyticalTechnique.touched && f.analyticalTechnique.errors }">
-                    <option *ngFor="let c of analyticalList" value={{c.id}}>
-                      {{c.name}}
-                    </option>
-                  </select>
-                  <div *ngIf="f.analyticalTechnique.touched && f.analyticalTechnique.errors" class="invalid-feedback">
-                    <div *ngIf="f.analyticalTechnique.errors.required">Analytical Technique is required</div>
-                  </div>
-                </div>
-
-
               </div>
             </div>
             <div class="col-md-4 col-sm-4 sparePartImg d-flex justify-content-center"
@@ -226,33 +207,6 @@
               <img [src]=" imageUrl" style="width: 200px;height: 200px; padding:10px;">
             </div>
           </div>
-          <div class="row">
-
-            <div class="col-md-4 col-sm-4">
-              <label for="currencyid">Instrument Model</label>
-              <select formControlName="instrument" class="form-select"
-                [ngClass]="{ 'is-invalid': f.instrument.touched && f.instrument.errors }">
-                <option *ngFor="let c of instrumentList" value={{c.id}}>
-                  {{c.instypeName}} - {{c.serialnos}}
-                </option>
-              </select>
-              <div *ngIf="f.instrument.touched && f.instrument.errors" class="invalid-feedback">
-                <div *ngIf="f.instrument.errors.required">Instrument is required</div>
-              </div>
-            </div>
-
-            <div class="col-md-4 col-sm-4">
-              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
-              <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput
-                (change)="uploadFile(fileInput.files,id)" />
-              <div *ngIf="f.image.touched && f.image.errors" class="invalid-feedback">
-                <div *ngIf="f.image.errors.required">Image is required</div>
-              </div>
-            </div>
-
-
-          </div>
-
           <hr />
         </form>
       </div>

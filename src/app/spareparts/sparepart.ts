@@ -242,8 +242,11 @@ export class SparePartComponent implements OnInit {
       if (this.id != null) {
         this.sparePartService.delete(this.id).pipe(first())
           .subscribe((data: any) => {
-            if (data.result)
+            if (data.result) {
+              this.notificationService.showSuccess("Record deleted successfully", "Success");
               this.router.navigate(["sparepartlist"])
+            }
+            else this.notificationService.showInfo(data.resultMessage, "Info");
           })
       }
     }
