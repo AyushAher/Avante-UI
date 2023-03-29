@@ -172,6 +172,10 @@ export class CustomerSiteComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result)
             this.router.navigate(["customersitelist", this.customerid]);
+          else {
+            this.notificationService.showInfo(data.resultMessage, "Info");
+          }
+
         })
     }
   }
@@ -231,10 +235,9 @@ export class CustomerSiteComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["customersitelist", this.customerid]);              
+              this.router.navigate(["customersitelist", this.customerid]);
             }
-            else
-            {
+            else {
               this.notificationService.showInfo(data.resultMessage, "Info");
             }
             this.loading = false;

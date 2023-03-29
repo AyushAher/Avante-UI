@@ -199,6 +199,9 @@ export class ProfileComponent implements OnInit {
       this.profileService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result) this.router.navigate(["profilelist"])
+          else {
+            this.notificationService.showInfo(data.resultMessage, "Info");
+          }
         })
     }
   }

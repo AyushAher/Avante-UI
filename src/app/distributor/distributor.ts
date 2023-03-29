@@ -164,6 +164,9 @@ export class DistributorComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result)
             this.router.navigate(["distributorlist"]);
+          else {
+            this.notificationService.showInfo(data.resultMessage, "Info");
+          }
         })
     }
   }
@@ -196,8 +199,7 @@ export class DistributorComponent implements OnInit {
               })
               else this.router.navigate(["distributorlist"]);
             }
-            else
-            {
+            else {
               this.notificationService.showInfo(data.resultMessage, "Info");
             }
             this.loading = false;

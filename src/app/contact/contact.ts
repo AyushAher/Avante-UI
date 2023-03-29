@@ -256,6 +256,9 @@ export class ContactComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result)
             this.router.navigate(["distributorlist"]);
+          else {
+            this.notificationService.showInfo(data.resultMessage, "Info");
+          }
         })
     }
   }
@@ -397,10 +400,9 @@ export class ContactComponent implements OnInit {
               this.loading = false;
               this.back();
             }
-            else
-            {
+            else {
               this.notificationService.showInfo(data.resultMessage, "Info");
-            }            
+            }
           },
         });
     }
