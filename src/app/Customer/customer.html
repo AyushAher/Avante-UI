@@ -46,7 +46,7 @@
                 <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
               </a>
 
-              <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+              <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
                 <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
               </a>
             </div>
