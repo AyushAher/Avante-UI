@@ -6,7 +6,7 @@ import { DistributorComponent } from './distributor/distributor';
 import { DistributorListComponent } from './distributor/distributorlist';
 import { DistributorRegionComponent } from './distributorRegion/distributor-region';
 import { ContactComponent } from './contact/contact';
-import { AuthGuard, TextValidator } from './_helpers';
+import { AuthGuard, TextValidator, BrowserBack } from './_helpers';
 import { CustomerComponent } from './customer/customer';
 import { CustomerSiteComponent } from './customersite/customersite';
 import { SparePartComponent } from './spareparts/sparepart';
@@ -125,7 +125,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard, TextValidator] },
   { path: 'profilelist', component: ProfileListComponent, canActivate: [AuthGuard, TextValidator] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard, TextValidator] },
+  { path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard, TextValidator, BrowserBack] },
   { path: 'userprofilelist', component: UserProfileListComponent, canActivate: [AuthGuard, TextValidator] },
   { path: 'userprofile', component: UserProfileComponent, canActivate: [AuthGuard, TextValidator] },
   { path: 'userprofile/:id', component: UserProfileComponent, canActivate: [AuthGuard, TextValidator] },

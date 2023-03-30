@@ -3,7 +3,7 @@ import { Address } from "./distributor";
 export class Profile {
   id: string;
   profilename: string;
-  Permissions: ProfilePermission;
+  Permissions: ProfilePermission[];
 }
 
 export class ProfilePermission {

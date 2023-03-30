@@ -332,18 +332,28 @@ export class ProfileComponent implements OnInit {
     this.loading = true;
     this.profile = this.profileform.value;
 
-
     if (this.id == null) {
-      this.profileService.save(this.profile)
-        .pipe(first())
-        .subscribe((data: any) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            if (!this.isNewSetup) this.router.navigate(["profilelist"]);
-            else this.router.navigate(['userprofile'], { queryParams: { isNewSetUp: true } });
-          }
-          this.loading = false;
-        });
+      debugger;
+      if(this.profile.Permissions == undefined)
+      {
+        this.notificationService.showInfo("Please add screen with permissions to proceed further.", "Info");
+      }
+      else{
+        this.profileService.save(this.profile)
+          .pipe(first())
+          .subscribe((data: any) => {
+            if (data.result) {
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              if (!this.isNewSetup) this.router.navigate(["profilelist"]);
+              else this.router.navigate(['userprofile'], { queryParams: { isNewSetUp: true } });
+            }
+            else
+            {
+              this.notificationService.showInfo(data.resultMessage, "Info");
+            }
+            this.loading = false;
+          });
+      }
     }
     else {
       this.profile.id = this.id;
