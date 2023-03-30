@@ -50,6 +50,7 @@ export class ProfileComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
+  isCopy:boolean=false;
   isEditMode: boolean;
   isNewMode: boolean;
   privilagesList: any[];
@@ -183,7 +184,10 @@ export class ProfileComponent implements OnInit {
           this.profileform.get("delete").setValue(x.delete)
           this.profileform.get("commercial").setValue(x.commercial)
           this.profileform.get("privilages").setValue(x.privilages)
-          this.AddScreen(x.id)
+          if(!this.isCopy)
+          {
+            this.AddScreen(x.id)
+          }
         });
       });
   }
@@ -208,6 +212,13 @@ export class ProfileComponent implements OnInit {
         })
     }
   }
+
+  CopyRecord(){
+    this.isCopy=true;
+    this.GetById();    
+    this.id = null;
+  }
+
   onCategoryChange() {
     let categoryId = this.profileform.get("categoryId").value;
     this.lstScreens = this.screensList.filter(x => x.category == categoryId)
@@ -332,9 +343,9 @@ export class ProfileComponent implements OnInit {
     this.loading = true;
     this.profile = this.profileform.value;
 
-    if (this.id == null) {
-      debugger;
-      if(this.profile.Permissions == undefined)
+    if (this.id == null) {      
+      let ppermissions = this.profileform.get('permissions') as FormArray;
+      if(ppermissions.length <= 0)
       {
         this.notificationService.showInfo("Please add screen with permissions to proceed further.", "Info");
       }
@@ -352,11 +363,12 @@ export class ProfileComponent implements OnInit {
               this.notificationService.showInfo(data.resultMessage, "Info");
             }
             this.loading = false;
+            this.isCopy= false;
           });
       }
     }
     else {
-      this.profile.id = this.id;
+      this.profile.id = this.id;        
       this.profileService.update(this.id, this.profile)
         .pipe(first())
         .subscribe((data: ResultMsg) => {
@@ -364,6 +376,10 @@ export class ProfileComponent implements OnInit {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["profilelist"]);
           }
+          else
+            {
+              this.notificationService.showInfo(data.resultMessage, "Info");
+            }
           this.loading = false;
         });
     }

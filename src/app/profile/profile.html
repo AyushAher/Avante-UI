@@ -29,6 +29,10 @@
             <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode && !isNewSetup">
               <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
             </a>
+
+            <a class="nav-link" (click)="CopyRecord()" *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-copy" style="color: #5ba146;" title="Copy"></i>
+            </a>
           </div>
         </div>
       </div>
