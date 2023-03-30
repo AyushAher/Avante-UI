@@ -58,7 +58,7 @@ export class MRenderComponent implements AgRendererComponent {
                 params.api.applyTransaction({ remove: selectedData });
               }
               else {
-
+                this.notificationService.showInfo(data.resultMessage, "Info");
               }
             },
             error: () => {
@@ -78,7 +78,7 @@ export class MRenderComponent implements AgRendererComponent {
                 const selectedData = params.api.getSelectedRows();
                 params.api.applyTransaction({ remove: selectedData });
               } else {
-
+                this.notificationService.showInfo(data.resultMessage, "Info");
               }
             },
             error: () => {
@@ -98,7 +98,7 @@ export class MRenderComponent implements AgRendererComponent {
                 const selectedData = params.api.getSelectedRows();
                 params.api.applyTransaction({ remove: selectedData });
               } else {
-
+                this.notificationService.showInfo(data.resultMessage, "Info");
               }
             },
             error: () => {
@@ -117,7 +117,7 @@ export class MRenderComponent implements AgRendererComponent {
                 const selectedData = params.api.getSelectedRows();
                 params.api.applyTransaction({ remove: selectedData });
               } else {
-
+                this.notificationService.showInfo(data.resultMessage, "Info");
               }
             },
             error: () => {
