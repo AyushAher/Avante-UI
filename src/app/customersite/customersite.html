@@ -6,7 +6,7 @@
           <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" routerLink="/customersite/{{ customerid }}"
             routerLinkActive="active" role="tab" aria-controls="ex1-tabs-1" aria-selected="true">Site</a>
         </li>
-        <li class="nav-item" role="presentation">
+        <li class="nav-item" role="presentation" *ngIf="csiteid != null">
           <a class="nav-link" id="ex1-tab-1" data-mdb-toggle="tab"
             routerLink="/contactlist/CS/{{customerid}}/{{ csiteid }}" routerLinkActive="active" role="tab"
             aria-controls="ex1-tabs-1" aria-selected="true">Site Contact</a>
@@ -51,7 +51,7 @@
         <form [formGroup]="customersiteform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-4">
-              <label for="custid">Customer<span class="text-danger">*</span></label>
+              <label for="custid">Customer Name<span class="text-danger">*</span></label>
               <select formControlName="custid" disabled class="form-select"
                 [ngClass]="{ 'is-invalid': f.custid.touched && f.custid.errors }">
                 <!--<option value="0">--All--</option>-->
@@ -74,7 +74,7 @@
               <input type="text" formControlName="custregname" class="form-control"
                 [ngClass]="{ 'is-invalid': f.custregname.touched && f.custregname.errors }" />
               <div *ngIf="f.custregname.touched && f.custregname.errors" class="invalid-feedback">
-                <div *ngIf="f.custregname.errors.required">Site Name is required</div>                
+                <div *ngIf="f.custregname.errors.required">Site Name is required</div>
               </div>
             </div>
           </div>
@@ -143,16 +143,16 @@
                   <div *ngIf="a.street.errors.required">Street is required</div>
                 </div>
               </div>
-              <div class="col-sm-4">
+              <!-- <div class="col-sm-4">
                 <label for="area">Area<span class="text-danger">*</span></label>
                 <input type="text" formControlName="area" class="form-control"
                   [ngClass]="{ 'is-invalid': a.area.touched && a.area.errors }" />
                 <div *ngIf="a.area.touched && a.area.errors" class="invalid-feedback">
                   <div *ngIf="a.area.errors.required">Area is required</div>
                 </div>
-              </div>
+              </div> -->
               <div class="col-sm-4">
-                <label for="place">Place<span class="text-danger">*</span></label>
+                <label for="place">State<span class="text-danger">*</span></label>
                 <input type="text" formControlName="place" class="form-control"
                   [ngClass]="{ 'is-invalid': a.place.touched && a.place.errors }" />
                 <div *ngIf="a.place.touched && a.place.errors" class="invalid-feedback">
@@ -196,7 +196,7 @@
             </div>
             <div class="row">
               <div class="col-sm-4">
-                <label for="geolat">Latitude<span class="text-danger">*</span></label>
+                <label for="geolat">Latitude</label>
                 <input type="text" formControlName="geolat" class="form-control" value="0"
                   [ngClass]="{ 'is-invalid': a.geolat.touched && a.geolat.errors }" />
                 <div *ngIf="a.geolat.touched && a.geolat.errors" class="invalid-feedback">
@@ -204,7 +204,7 @@
                 </div>
               </div>
               <div class="col-sm-4">
-                <label for="geolong">Longitude<span class="text-danger">*</span></label>
+                <label for="geolong">Longitude</label>
                 <input type="text" formControlName="geolong" class="form-control" value="0"
                   [ngClass]="{ 'is-invalid': a.geolong.touched && a.geolong.errors }" />
                 <div *ngIf="a.geolong.touched && a.geolong.errors" class="invalid-feedback">

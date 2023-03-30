@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, NavigationStart, ActivatedRoute } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, NavigationStart, ActivatedRoute, Route } from '@angular/router';
 
 import { AccountService, NotificationService } from '../_services';
 
@@ -39,19 +39,20 @@ export class TextValidator implements CanActivate {
 
 @Injectable({ providedIn: 'root' })
 export class BrowserBack implements CanActivate {
-    
-constructor(router: Router,private notificationService: NotificationService, private currentRoute:ActivatedRoute ) {
-    
-    router.events
-      .subscribe((event: NavigationStart) => {
-        debugger;
-        if (event.navigationTrigger === 'popstate') {
-            if(!confirm("You are about to navigate away from the page. Your changes will be discarded. Please confrim."))
-            {                
-                router.navigateByUrl(window.location.pathname.toString(), { skipLocationChange: true });  
-            }
-        }
-      });}
+    // route: string;
+
+    // constructor(private router: Router, private currentRoute: ActivatedRoute) {
+        // this.route = currentRoute.snapshot.url.toString();
+        // console.log(this.route);
+        // router.events
+        //     .subscribe((event: NavigationStart) => {
+        //         if (event.navigationTrigger === 'popstate') {
+        //             if (!confirm("You are about to navigate away from the page. Your changes will be discarded. Please confrim.")) {
+        //                 router.navigateByUrl(this.route, { skipLocationChange: true });
+        //             }
+        //         }
+        //     });
+    // }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         // setTimeout(() => {

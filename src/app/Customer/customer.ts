@@ -95,8 +95,8 @@ export class CustomerComponent implements OnInit {
         city: ['', Validators.required],
         countryid: ['', Validators.required],
         zip: ['', [Validators.minLength(4), Validators.maxLength(15)]],
-        geolat: ['', Validators.required],
-        geolong: ['', Validators.required],
+        geolat: [''],
+        geolong: [''],
         isActive: true,
         isdeleted: [false],
       }),
@@ -220,10 +220,10 @@ export class CustomerComponent implements OnInit {
       this.customerService.save(this.customerform.value)
         .pipe(first())
         .subscribe({
-          next: (data: ResultMsg) => {
+          next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["customerlist"]);
+              this.router.navigate(["contact", "C", data.object.id]);
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "info");

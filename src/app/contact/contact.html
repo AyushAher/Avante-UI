@@ -29,7 +29,8 @@
                 <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
               </a>
 
-              <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode && !(isNewSetup && type=='D')">
+              <a class="nav-link" (click)="DeleteRecord()"
+                *ngIf="hasDeleteAccess && !isNewMode && !(isNewSetup && type=='D')">
                 <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
               </a>
               <button [disabled]="isUser" (click)="addUser()"
@@ -69,7 +70,7 @@
             </div>
             <div class="row">
               <div class="col-md-4 col-sm-4">
-                <label for="pcontactno">Primary Contact No</label><br />
+                <label for="pcontactno">Primary mobile phone number</label><br />
                 <input type="tel" ng2TelInput phoneInput formControlName="pcontactno" class="form-control"
                   maxlength="15" (ng2TelOutput)="getNumber($event)" (intlTelInputObject)="telInputObject($event)"
                   (countryChange)="countryChange($event)"
@@ -83,12 +84,12 @@
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
-                <label for="pemail">Primary Email<span class="text-danger">*</span></label>
+                <label for="pemail">Primary E-mail<span class="text-danger">*</span></label>
                 <input type="email" formControlName="pemail" class="form-control"
                   [ngClass]="{ 'is-invalid': f.pemail.touched && f.pemail.errors }" />
                 <div *ngIf="f.pemail.touched && f.pemail.errors" class="invalid-feedback">
-                  <div *ngIf="f.pemail.errors?.required">Primary Email is required</div>
-                  <div *ngIf="f.pemail.errors?.pattern">Please provide valid email</div>
+                  <div *ngIf="f.pemail.errors?.required">Primary E-mail is required</div>
+                  <div *ngIf="f.pemail.errors?.pattern">Please provide valid E-mail</div>
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
@@ -160,24 +161,14 @@
                     <div *ngIf="a.street.errors.required">Street is required</div>
                   </div>
                 </div>
-                <div class="col-sm-4">
+                <!-- <div class="col-sm-4">
                   <label for="area">Area<span class="text-danger">*</span></label>
                   <input type="text" formControlName="area" class="form-control"
                     [ngClass]="{ 'is-invalid': a.area.touched && a.area.errors }" />
                   <div *ngIf="a.area.touched && a.area.errors" class="invalid-feedback">
                     <div *ngIf="a.area.errors.required">Area is required</div>
                   </div>
-                </div>
-                <div class="col-sm-4">
-                  <label for="place">Place<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="place" class="form-control"
-                    [ngClass]="{ 'is-invalid': a.place.touched && a.place.errors }" />
-                  <div *ngIf="a.place.touched && a.place.errors" class="invalid-feedback">
-                    <div *ngIf="a.place.errors.required">Place is required</div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
+                </div> -->
                 <div class="col-sm-4">
                   <label for="city">City<span class="text-danger">*</span></label>
                   <input type="text" formControlName="city" class="form-control"
@@ -186,6 +177,15 @@
                     <div *ngIf="a.city.errors.required">City is required</div>
                   </div>
                 </div>
+                <div class="col-sm-4">
+                  <label for="place">State<span class="text-danger">*</span></label>
+                  <input type="text" formControlName="place" class="form-control"
+                    [ngClass]="{ 'is-invalid': a.place.touched && a.place.errors }" />
+                  <div *ngIf="a.place.touched && a.place.errors" class="invalid-feedback">
+                    <div *ngIf="a.place.errors.required">Place is required</div>
+                  </div>
+                </div>
+
                 <div class="col-sm-4">
                   <label for="countryid">Country<span class="text-danger">*</span></label>
                   <select formControlName="countryid" class="form-select"
@@ -210,10 +210,8 @@
                     <div *ngIf="a.zip.errors?.maxlength">Max length is 15</div>
                   </div>
                 </div>
-              </div>
-              <div class="row">
                 <div class="col-sm-4">
-                  <label for="geolat">Latitude<span class="text-danger">*</span></label>
+                  <label for="geolat">Latitude</label>
                   <input type="text" formControlName="geolat" class="form-control" value="0"
                     [ngClass]="{ 'is-invalid': a.geolat.touched && a.geolat.errors }" />
                   <div *ngIf="a.geolat.touched && a.geolat.errors" class="invalid-feedback">
@@ -221,7 +219,7 @@
                   </div>
                 </div>
                 <div class="col-sm-4">
-                  <label for="geolong">Longitude<span class="text-danger">*</span></label>
+                  <label for="geolong">Longitude</label>
                   <input type="text" formControlName="geolong" class="form-control" value="0"
                     [ngClass]="{ 'is-invalid': a.geolong.touched && a.geolong.errors }" />
                   <div *ngIf="a.geolong.touched && a.geolong.errors" class="invalid-feedback">

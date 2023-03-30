@@ -234,10 +234,10 @@ export class CustomerSiteComponent implements OnInit {
       this.customersiteService.save(this.customersiteform.value)
         .pipe(first())
         .subscribe({
-          next: (data: ResultMsg) => {
+          next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["customersitelist", this.customerid]);
+              this.router.navigate(['customersite', this.customerid, data.object.id])
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "Info");

@@ -90,6 +90,14 @@ export class CurrencyListComponent implements OnInit {
   private createColumnDefs() {
     return [
       {
+        headerName: 'Code',
+        field: 'code',
+        filter: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'code',
+      },
+      {
         headerName: 'Currency Name',
         field: 'name',
         filter: true,
@@ -97,21 +105,7 @@ export class CurrencyListComponent implements OnInit {
         editable: false,
         sortable: true,
         tooltipField: 'name',
-      }, {
-        headerName: 'Code',
-        field: 'code',
-        filter: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'code',
-      }, {
-        headerName: 'Minor Unit',
-        field: 'minor_Unit',
-        filter: true,
-        editable: false,
-        sortable: true,
-        tooltipField: 'minor_Unit',
-      }
+      },
     ]
   }
 

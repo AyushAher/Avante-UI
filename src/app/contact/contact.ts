@@ -77,6 +77,7 @@ export class ContactComponent implements OnInit {
     this.profilePermission = this.profileService.userProfileValue;
 
     this.contactform = this.formBuilder.group({
+      parentEntity: [""],
       fname: ['', [Validators.required, Validators.maxLength(512)]],
       lname: ['', [Validators.required, Validators.maxLength(512)]],
       mname: [''],
@@ -96,8 +97,8 @@ export class ContactComponent implements OnInit {
         city: ['', Validators.required],
         countryid: ['', Validators.required],
         zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
-        geolat: ['', Validators.required],
-        geolong: ['', Validators.required],
+        geolat: [''],
+        geolong: [''],
         isActive: [true],
       }),
       contactMapping: this.formBuilder.group({
@@ -105,6 +106,7 @@ export class ContactComponent implements OnInit {
         parentId: null,
       }),
     });
+
     this.id = this.route.snapshot.paramMap.get('cid');
     this.masterId = this.route.snapshot.paramMap.get('id');
     this.type = this.route.snapshot.paramMap.get('type');
@@ -141,6 +143,41 @@ export class ContactComponent implements OnInit {
       }
     }
 
+
+    switch (this.type) {
+      case "C":
+        this.customerService.getById(this.masterId)
+          .subscribe((data: any) => {
+            if (!data.result || data.object == null) return;
+            this.contactform.get('parentEntity').setValue(data.object.custname);
+          });
+        break;
+      case "CS":
+        this.customersiteService.getById(this.masterId)
+          .subscribe((data: any) => {
+            if (!data.result || data.object == null) return;
+            this.contactform.get('parentEntity').setValue(data.object.custregname);
+          });
+        break;
+      case "D":
+        this.distributorService.getById(this.masterId)
+          .subscribe((data: any) => {
+            console.log(data);
+            if (!data.result || data.object == null) return;
+            this.contactform.get('parentEntity').setValue(data.object.distname);
+          });
+        break;
+
+      case "DR":
+        this.distRegions.getById(this.masterId)
+          .subscribe((data: any) => {
+            console.log(data);
+            if (!data.result || data.object == null) return;
+            this.contactform.get('parentEntity').setValue(data.object.distregname);
+          });
+        break;
+
+    }
 
 
     if (this.user.username == "admin") {
@@ -278,13 +315,13 @@ export class ContactComponent implements OnInit {
     return controls.controls;
   }
 
-  addUser() {
+  addUser(id = this.id) {
     this.user = new User;
     this.contactmodel = this.contactform.value;
     this.user.firstName = this.contactmodel.fname,
       this.user.lastName = this.contactmodel.lname,
       this.user.email = this.contactmodel.pemail,
-      this.user.contactid = this.id
+      this.user.contactid = id
 
     this.user.username = this.contactmodel.fname + this.contactmodel.lname;
 

@@ -43,6 +43,7 @@
                 [ngClass]="{ 'is-invalid': f.iso_2.touched && f.iso_2.errors }" />
               <div *ngIf="f.iso_2.touched && f.iso_2.errors" class="invalid-feedback">
                 <div *ngIf="f.iso_2.errors.required">ISO Code 2 is required</div>
+                <div *ngIf="f.iso_2.errors.pattern">ISO Code must contain characters only</div>
               </div>
             </div>
 
@@ -52,6 +53,7 @@
                 [ngClass]="{ 'is-invalid': f.name.touched && f.name.errors }" />
               <div *ngIf="f.name.touched && f.name.errors" class="invalid-feedback">
                 <div *ngIf="f.name.errors.required">Country Name is required</div>
+                <div *ngIf="f.name.errors.pattern">Country Name must contain characters only</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
@@ -60,6 +62,7 @@
                 [ngClass]="{ 'is-invalid': f.formal.touched && f.name.errors }" />
               <div *ngIf="f.formal.touched && f.formal.errors" class="invalid-feedback">
                 <div *ngIf="f.formal.errors.required">Formal Name is required</div>
+                <div *ngIf="f.formal.errors.pattern">Formal Name must contain characters only</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
@@ -68,6 +71,7 @@
                 [ngClass]="{ 'is-invalid': f.sub_Region.touched && f.sub_Region.errors }" />
               <div *ngIf="f.sub_Region.touched && f.sub_Region.errors" class="invalid-feedback">
                 <div *ngIf="f.sub_Region.errors.required">Sub Region is required</div>
+                <div *ngIf="f.sub_Region.errors.pattern">Sub Region must contain characters only</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
@@ -76,6 +80,7 @@
                 [ngClass]="{ 'is-invalid': f.region.touched && f.region.errors }" />
               <div *ngIf="f.region.touched && f.region.errors" class="invalid-feedback">
                 <div *ngIf="f.region.errors.required">Region is required</div>
+                <div *ngIf="f.region.errors.pattern">Region must contain characters only</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
@@ -96,6 +101,7 @@
                 [ngClass]="{ 'is-invalid': f.capital.touched && f.name.errors }" />
               <div *ngIf="f.capital.touched && f.capital.errors" class="invalid-feedback">
                 <div *ngIf="f.capital.errors.required">Capital is required</div>
+                <div *ngIf="f.capital.errors.pattern">Capital must contain characters only</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">

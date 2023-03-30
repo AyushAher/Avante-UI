@@ -69,15 +69,15 @@ export class CountryComponent implements OnInit {
 
 
     this.countryform = this.formBuilder.group({
-      name: ['', Validators.required],
-      iso_2: ['', Validators.required],
-      iso_3: ['', Validators.required],
-      formal: ['', Validators.required],
-      region: ['', Validators.required],
-      sub_Region: ['', Validators.required],
-      capital: ['', Validators.required],
-      continentid: ['', Validators.required],
-      currencyid: ['', Validators.required],
+      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      iso_2: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      iso_3: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      formal: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      region: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      sub_Region: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      capital: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      continentid: ['', [Validators.required]],
+      currencyid: ['', [Validators.required]],
       isdeleted: [false],
     });
 

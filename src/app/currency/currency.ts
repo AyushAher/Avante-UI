@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Currency, ResultMsg, ProfileReadOnly, User } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import {
@@ -66,8 +66,8 @@ export class CurrencyComponent implements OnInit {
 
     this.currencyform = this.formBuilder.group({
       code: ['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[a-zA-Z ]*$')]],
-      name: ['', [Validators.required, Validators.maxLength(256)]],
-      minor_Unit: ['', [Validators.required, Validators.min(0), Validators.max(99999)]],
+      name: ['', [Validators.required, Validators.maxLength(256), Validators.pattern('^[a-zA-Z ]*$')]],
+      minor_Unit: ['', [Validators.required, Validators.min(0), Validators.max(99999), Validators.pattern('^[a-zA-Z ]*$')]],
       n_Code: ['', [Validators.min(0), Validators.max(99999)]],
       symbol: [''],
       isdeleted: [false],
@@ -98,7 +98,15 @@ export class CurrencyComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.currencyform.enable();
+      this.FormControlEnable();
     }
+  }
+
+  FormControlEnable() {
+    if (this.id == null) return;
+
+    this.currencyform.disable();
+    this.currencyform.get('symbol').enable();
   }
 
   Back() {
@@ -139,65 +147,38 @@ export class CurrencyComponent implements OnInit {
   get f() { return this.currencyform.controls; }
 
   onSubmit() {
-    //debugger;
     this.submitted = true;
     this.currencyform.markAllAsTouched();
-    // reset alerts on submit
-    this.alertService.clear();
 
     // stop here if form is invalid
     if (this.currencyform.invalid) {
       return;
     }
-    // this.isSave = true;
-    this.loading = true;
 
+    this.currencyform.enable();
     this.currency = this.currencyform.value;
+    this.currencyform.disable();
+
     if (this.id == null) {
       this.currencyService.save(this.currency)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            //debugger;
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-
-              this.router.navigate(['currencylist']);
-            }
-            else {
-              this.notificationService.showInfo(data.resultMessage, "Info");
-            }
-            this.loading = false;
-          },
-          error: error => {
-            // this.alertService.error(error);
-
-            this.loading = false;
+        .pipe(first()).subscribe((data: ResultMsg) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.CancelEdit();
+            // this.router.navigate(['currencylist']);
           }
+          else this.notificationService.showInfo(data.resultMessage, "Info");
         });
     }
     else {
-      this.currency = this.currencyform.value;
       this.currency.id = this.id;
       this.currencyService.update(this.id, this.currency)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(['currencylist']);
-
-            }
-            else {
-
-            }
-            this.loading = false;
-
-          },
-          error: error => {
-
-            this.loading = false;
+        .pipe(first()).subscribe((data: ResultMsg) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(['currencylist']);
           }
+          else this.notificationService.showInfo(data.resultMessage, "Info");
         });
     }
   }

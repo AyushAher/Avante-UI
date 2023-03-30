@@ -54,8 +54,20 @@
                 [ngClass]="{ 'is-invalid': f.name.touched && f.name.errors }" />
               <div *ngIf="f.name.touched && f.name.errors" class="invalid-feedback">
                 <div *ngIf="f.name.errors.required">Currency Name is required</div>
+                <div *ngIf="f.name.errors?.pattern">Currency Name should contain characters only</div>
               </div>
             </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="minor_Unit">Minor Unit<span class="text-danger">*</span></label>
+              <input type="number" formControlName="minor_Unit" maxLength="5" class="form-control"
+                [ngClass]="{ 'is-invalid': f.minor_Unit.touched && f.minor_Unit.errors }" />
+              <div *ngIf="f.minor_Unit.touched && f.minor_Unit.errors" class="invalid-feedback">
+                <div *ngIf="f.minor_Unit.errors.required">Minor Unit is required</div>
+                <div *ngIf="f.minor_Unit.errors.max">Max length is 5</div>
+                <div *ngIf="f.minor_Unit.errors.pattern">Minor Unit should contain characters only</div>
+              </div>
+            </div>
+
             <div class="col-md-4 col-sm-4">
               <label for="n_Code">Numeric Code</label>
               <input type="number" formControlName="n_Code" class="form-control"
@@ -64,17 +76,7 @@
                 <div *ngIf="f.n_Code.errors.max">Max length is 5</div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="minor_Unit">Minor Unit<span class="text-danger">*</span></label>
-              <input type="number" formControlName="minor_Unit" maxLength="5" class="form-control"
-                [ngClass]="{ 'is-invalid': f.minor_Unit.touched && f.minor_Unit.errors }" />
-              <div *ngIf="f.minor_Unit.touched && f.minor_Unit.errors" class="invalid-feedback">
-                <div *ngIf="f.minor_Unit.errors.required">Minor Unit is required</div>
-                <div *ngIf="f.minor_Unit.errors.max">Max length is 5</div>
-              </div>
-            </div>
+
             <div class="col-md-4 col-sm-4">
               <label for="symbol">Symbol</label>
               <input type="text" formControlName="symbol" class="form-control" />
