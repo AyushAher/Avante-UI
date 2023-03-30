@@ -710,7 +710,7 @@ export class AmcComponent implements OnInit {
 
     let d = this.instrumentAutoComplete.find(x => x.id == instrument)
 
-    if (this.instrumentList.find(x => x.serialnos == d.serialnos))
+    if (this.instrumentList?.find(x => x.serialnos == d.serialnos))
       return this.notificationService.showError("Instrument already exists", "Error")
 
     var data = new AmcInstrument();
@@ -888,11 +888,14 @@ export class AmcComponent implements OnInit {
     this.form.markAllAsTouched();
     this.alertService.clear();
 
-    if (this.instrumentList != null && this.instrumentList.length > 0) {
-      this.instrumentList.forEach(instrument => {
-        instrument.amcId = this.id;
-      })
+    if (this.instrumentList == null || this.instrumentList.length <= 0) {
+      return this.notificationService.showInfo("Please add at least 1 instrument!", "Info");
     }
+
+    this.instrumentList.forEach(instrument => {
+      instrument.amcId = this.id;
+    })
+
 
     if (this.form.invalid) return;
 
@@ -983,21 +986,21 @@ export class AmcComponent implements OnInit {
 
     if (!this.isOnCall) {
       if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value) {
-        this.model.secondVisitDateFrom = datepipe.transform(this.model.secondVisitDateFrom, 'dd/MM/YYYY');
-        this.model.secondVisitDateTo = datepipe.transform(this.model.secondVisitDateTo, 'dd/MM/YYYY');
+        this.model.secondVisitDateFrom = datepipe.transform(GetParsedDate(this.model.secondVisitDateFrom), 'dd/MM/YYYY');
+        this.model.secondVisitDateTo = datepipe.transform(GetParsedDate(this.model.secondVisitDateTo), 'dd/MM/YYYY');
         this.model.secondVisitDate = this.model.secondVisitDateFrom + "-" + this.model.secondVisitDateTo;
       }
     }
 
     if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value) {
-      this.model.firstVisitDateFrom = datepipe.transform(this.model.firstVisitDateFrom, 'dd/MM/YYYY');
-      this.model.firstVisitDateTo = datepipe.transform(this.model.firstVisitDateTo, 'dd/MM/YYYY');
+      this.model.firstVisitDateFrom = datepipe.transform(GetParsedDate(this.model.firstVisitDateFrom), 'dd/MM/YYYY');
+      this.model.firstVisitDateTo = datepipe.transform(GetParsedDate(this.model.firstVisitDateTo), 'dd/MM/YYYY');
       this.model.firstVisitDate = this.model.firstVisitDateFrom + "-" + this.model.firstVisitDateTo
     }
 
-    this.model.sdate = datepipe.transform(this.model.sdate, 'dd/MM/YYYY');
-    this.model.edate = datepipe.transform(this.model.edate, 'dd/MM/YYYY');
-    this.model.sqdate = datepipe.transform(this.model.sqdate, 'dd/MM/YYYY');
+    this.model.sdate = datepipe.transform(GetParsedDate(this.model.sdate), 'dd/MM/YYYY');
+    this.model.edate = datepipe.transform(GetParsedDate(this.model.edate), 'dd/MM/YYYY');
+    this.model.sqdate = datepipe.transform(GetParsedDate(this.model.sqdate), 'dd/MM/YYYY');
 
     this.model.baseCurrencyId = this.baseCurrId
 

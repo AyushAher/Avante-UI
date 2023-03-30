@@ -12,7 +12,7 @@ import { PrevchklocpartelementService } from '../_services/prevchklocpartelement
 @Component({
   template: `
     <button *ngIf="!isMaster" class="btn btn-link" data-action-type="remove" (click)="delete(params)"><i class="fas fa-trash-alt" title="Delete"></i></button>
-    <button class="btn btn-link" [disabled]="!params.addAccess" data-action-type="add"><i class="fas fa-plus-circle" title="Add Value"
+    <button class="btn btn-link" *ngIf="params.addAccess" [disabled]="!params.addAccess" data-action-type="add"><i class="fas fa-plus-circle" title="Add Value"
                                                                                          data-action-type="add"></i></button>
     <button *ngIf="!isMaster" class="btn btn-link" [disabled]="!params.hasUpdateAccess" data-action-type="edit"><i class="fas fas fa-pen" title="Edit Value"
                                                                                                 data-action-type="edit"></i></button>
@@ -20,7 +20,7 @@ import { PrevchklocpartelementService } from '../_services/prevchklocpartelement
 })
 export class MRenderComponent implements AgRendererComponent {
   params: any;
-  isMaster:boolean = false;
+  isMaster: boolean = false;
 
   constructor(private distributorService: DistributorService,
     private notificationService: NotificationService,
@@ -33,8 +33,8 @@ export class MRenderComponent implements AgRendererComponent {
   agInit(params: any): void {
     //debugger;
     this.params = params;
-    this.isMaster =  params.data.isMaster
-    
+    this.isMaster = params.data.isMaster
+
   }
 
   refresh(params: any): boolean {

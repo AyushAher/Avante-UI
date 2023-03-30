@@ -336,6 +336,7 @@ export class SparePartComponent implements OnInit {
 
             this.router.navigate(["sparepartlist"]);
           }
+          else this.notificationService.showInfo(data.resultMessage, "Info")
         });
     }
     else {
