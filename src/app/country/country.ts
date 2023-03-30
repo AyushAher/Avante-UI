@@ -72,14 +72,25 @@ export class CountryComponent implements OnInit {
       name: ['', Validators.required],
       iso_2: ['', Validators.required],
       iso_3: ['', Validators.required],
-      formal: [''],
+      formal: ['', Validators.required],
       region: ['', Validators.required],
-      sub_Region: [''],
-      capital: [''],
+      sub_Region: ['', Validators.required],
+      capital: ['', Validators.required],
       continentid: ['', Validators.required],
       currencyid: ['', Validators.required],
       isdeleted: [false],
     });
+
+    this.countryform.get('continentid').valueChanges
+      .subscribe((continent) => {
+        var data = this.continents.find(x => x.listTypeItemId == continent);
+        this.countryform.get('region').setValue(data.itemname);
+      })
+
+    this.countryform.get('iso_2').valueChanges
+      .subscribe((data) => {
+        this.countryform.get('iso_3').setValue(data);
+      })
 
     this.currencyService.getAll()
       .pipe(first())
@@ -122,6 +133,7 @@ export class CountryComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.countryform.enable();
+      this.FormControlsDisable();
     }
   }
 
@@ -135,6 +147,14 @@ export class CountryComponent implements OnInit {
     else this.router.navigate(["countrylist"]);
 
   }
+
+  FormControlsDisable() {
+    if (this.id == null) return;
+    this.countryform.disable();
+    this.countryform.get('sub_Region').enable();
+    this.countryform.get('formal').enable();
+  }
+
 
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
@@ -174,32 +194,28 @@ export class CountryComponent implements OnInit {
     if (this.countryform.invalid) {
       return;
     }
-    this.isSave = true;
-    this.loading = true;
-    if (this.id == null) {
+    this.countryform.enable();
+    this.country = this.countryform.value;
+    this.countryform.disable();
 
-      this.countryService.save(this.countryform.value)
+    if (this.id == null) {
+      this.countryService.save(this.country)
         .pipe(first())
         .subscribe({
           next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(['countrylist']);
+              this.CancelEdit();
+              // this.router.navigate(['countrylist']); 
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "Info");
             }
             this.loading = false;
-
-          },
-          error: error => {
-
-            this.loading = false;
           }
         });
     }
     else {
-      this.country = this.countryform.value;
       this.country.id = this.id;
       this.countryService.update(this.id, this.country)
         .pipe(first())
@@ -207,17 +223,12 @@ export class CountryComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.countryform.disable();
               this.router.navigate(['countrylist']);
             }
             else {
-
+              this.notificationService.showInfo(data.resultMessage, "Info");
             }
-            this.loading = false;
-
-          },
-          error: error => {
-
-            this.loading = false;
           }
         });
 
