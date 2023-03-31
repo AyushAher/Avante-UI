@@ -159,8 +159,7 @@
                   <div *ngIf="a.place.errors.required">Place is required</div>
                 </div>
               </div>
-            </div>
-            <div class="row">
+
               <div class="col-sm-4">
                 <label for="city">City<span class="text-danger">*</span></label>
                 <input type="text" formControlName="city" class="form-control"
@@ -193,8 +192,7 @@
                   <div *ngIf="a.zip.errors?.maxlength">Max length is 15</div>
                 </div>
               </div>
-            </div>
-            <div class="row">
+
               <div class="col-sm-4">
                 <label for="geolat">Latitude</label>
                 <input type="text" formControlName="geolat" class="form-control" value="0"
