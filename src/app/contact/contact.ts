@@ -293,7 +293,7 @@ export class ContactComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
-            this.router.navigate(["distributorlist"]);
+            this.back();
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
@@ -315,25 +315,24 @@ export class ContactComponent implements OnInit {
     return controls.controls;
   }
 
-  addUser(id = this.id) {
+  addUser(contactId = this.id) {
     this.user = new User;
     this.contactmodel = this.contactform.value;
     this.user.firstName = this.contactmodel.fname,
       this.user.lastName = this.contactmodel.lname,
       this.user.email = this.contactmodel.pemail,
-      this.user.contactid = id
+      this.user.contactid = this.id
+    this.user.contactid = this.id
 
     this.user.username = this.contactmodel.fname + this.contactmodel.lname;
 
-    this.accountService.register(this.user)
-      .pipe(first()).subscribe({
-        next: (data: any) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-          }
-        },
-      });
+    this.accountService.register(this.user).subscribe((data: any) => {
+      if (data.result) this.notificationService.showSuccess(data.resultMessage, "Success");
+      else this.notificationService.showInfo(data.resultMessage, "Info")
+    })
   }
+
+
   telInputObjectCo(obj) {
     this.inputObj2 = obj;
     if (this.pcontactNumber) {
@@ -370,8 +369,7 @@ export class ContactComponent implements OnInit {
   getNumber(e: any) {
   }
 
-  onSubmit() {
-    this.submitted = true;
+  async onSubmit(back = false, createUser = false) {
     this.contactform.markAllAsTouched()
     this.alertService.clear();
 
@@ -426,39 +424,33 @@ export class ContactComponent implements OnInit {
 
     if (this.id == null) {
       this.contactService.save(this.contact)
-        .pipe(first()).subscribe({
-          next: (data: any) => {
-            if (data.result) {
+        .subscribe((data: any) => {
+          if (data.result) {
+            this.id = data.object.id;
+            if (this.isNewSetup || createUser) this.addUser(data.object.id);
 
-              if (this.isNewSetup) {
-                this.id = data.object.id;
-                this.addUser();
-              }
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.contact.id = data.id;
-              this.loading = false;
-              this.back();
-            }
-            else {
-              this.notificationService.showInfo(data.resultMessage, "Info");
-            }
-          },
-        });
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.contact.id = data.id;
+            this.loading = false;
+            if (back) this.back();
+          }
+          else {
+            this.notificationService.showInfo(data.resultMessage, "Info");
+          }
+        })
     }
     else {
       this.contact.id = this.id;
-      this.contactService.update(this.id, this.contact)
-        .pipe(first()).subscribe({
-          next: (data: any) => {
-            //debugger;
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.back();
-            }
-            this.contact.id = data.id;
-            this.loading = false;
-          },
-        });
+      this.contactService.update(this.id, this.contact).subscribe((data: any) => {
+        if (data.result) {
+          if (createUser) this.addUser(this.id);
+          this.notificationService.showSuccess(data.resultMessage, "Success");
+          if (back) this.back();
+        }
+
+        this.contact.id = data.id;
+        this.loading = false;
+      })
     }
   }
 

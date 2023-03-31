@@ -33,6 +33,7 @@ export class CustomerSiteComponent implements OnInit {
   isNewMode: boolean;
   isEditMode: boolean;
   formData: any;
+  customerName: string
 
   constructor(
     private formBuilder: FormBuilder,
@@ -115,6 +116,7 @@ export class CustomerSiteComponent implements OnInit {
         next: (data: any) => {
           this.customers = data.object;
           this.customersiteform.get("custid").setValue(this.customerid)
+          this.customerName = this.customers.find(x => x.id == this.customerid)?.custname
         }
       });
 
