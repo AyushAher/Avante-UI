@@ -26,6 +26,7 @@ export class DistributorRegionListComponent implements OnInit {
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
+  distributorName: any;
 
   public columnDefs: ColDef[];
   private columnApi: ColumnApi;
@@ -61,6 +62,7 @@ export class DistributorRegionListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
+          this.distributorName = data.object.distname
           this.distributorModel = data.object.regions;
         },
         error: () => {

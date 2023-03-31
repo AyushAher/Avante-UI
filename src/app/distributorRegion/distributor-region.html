@@ -17,7 +17,7 @@
       <div class="page-title">
         <div class="title_left" style="display: flex; justify-content: space-between;">
           <div class="d-flex" style="align-items: center;">
-            <h3>Distributor Region</h3>
+            <h3> Distributor Region</h3>
           </div>
 
           <div class="controls" style="display: flex;">
@@ -51,7 +51,7 @@
         <form [formGroup]="destributorRegionform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-4">
-              <label for="distid">Distributor<span class="text-danger">*</span></label>
+              <label for="distid">Principal Distributor<span class="text-danger">*</span></label>
               <select formControlName="distid" class="form-select"
                 [ngClass]="{ 'is-invalid': f.distid.touched && f.distid.errors }">
                 <!--<option value="0">--All--</option>-->
@@ -131,30 +131,29 @@
                   <div *ngIf="a.street.errors.required">Street is required</div>
                 </div>
               </div>
-              <div class="col-sm-4">
+              <!-- <div class="col-sm-4">
                 <label for="area">Area<span class="text-danger">*</span></label>
                 <input type="text" formControlName="area" class="form-control"
                   [ngClass]="{ 'is-invalid': a.area.touched && a.area.errors }" />
                 <div *ngIf="a.area.touched && a.area.errors" class="invalid-feedback">
                   <div *ngIf="a.area.errors.required">Area is required</div>
                 </div>
-              </div>
-              <div class="col-sm-4">
-                <label for="place">Place<span class="text-danger">*</span></label>
-                <input type="text" formControlName="place" class="form-control"
-                  [ngClass]="{ 'is-invalid': a.place.touched && a.place.errors }" />
-                <div *ngIf="a.place.touched && a.place.errors" class="invalid-feedback">
-                  <div *ngIf="a.place.errors.required">Place is required</div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
+              </div> -->
+
               <div class="col-sm-4">
                 <label for="city">City<span class="text-danger">*</span></label>
                 <input type="text" formControlName="city" class="form-control"
                   [ngClass]="{ 'is-invalid': a.city.touched && a.city.errors }" />
                 <div *ngIf="a.city.touched && a.city.errors" class="invalid-feedback">
                   <div *ngIf="a.city.errors.required">City is required</div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="place">State<span class="text-danger">*</span></label>
+                <input type="text" formControlName="place" class="form-control"
+                  [ngClass]="{ 'is-invalid': a.place.touched && a.place.errors }" />
+                <div *ngIf="a.place.touched && a.place.errors" class="invalid-feedback">
+                  <div *ngIf="a.place.errors.required">State is required</div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -181,10 +180,9 @@
                   <div *ngIf="a.zip.errors?.maxlength">Max length is 15</div>
                 </div>
               </div>
-            </div>
-            <div class="row">
+
               <div class="col-sm-4">
-                <label for="geolat">Latitude<span class="text-danger">*</span></label>
+                <label for="geolat">Latitude</label>
                 <input type="text" formControlName="geolat" class="form-control" value="0"
                   [ngClass]="{ 'is-invalid': a.geolat.touched && a.geolat.errors }" />
                 <div *ngIf="a.geolat.touched && a.geolat.errors" class="invalid-feedback">
@@ -192,7 +190,7 @@
                 </div>
               </div>
               <div class="col-sm-4">
-                <label for="geolong">Longitude<span class="text-danger">*</span></label>
+                <label for="geolong">Longitude</label>
                 <input type="text" formControlName="geolong" class="form-control" value="0"
                   [ngClass]="{ 'is-invalid': a.geolong.touched && a.geolong.errors }" />
                 <div *ngIf="a.geolong.touched && a.geolong.errors" class="invalid-feedback">

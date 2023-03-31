@@ -74,7 +74,7 @@ export class DistributorComponent implements OnInit {
 
 
     this.form = this.formBuilder.group({
-      distname: ['', Validators.required],
+      distname: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       payterms: ['', Validators.required],
       isblocked: false,
       isactive: true,
@@ -86,8 +86,8 @@ export class DistributorComponent implements OnInit {
         city: ['', Validators.required],
         countryid: ['', Validators.required],
         zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
-        geolat: ['', Validators.required],
-        geolong: ['', Validators.required],
+        geolat: [''],
+        geolong: [''],
         isActive: true,
       }),
     });

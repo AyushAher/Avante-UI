@@ -33,6 +33,7 @@ export class DistributorRegionComponent implements OnInit {
   isNewMode: boolean;
   isNewSetup: boolean;
   formData: any;
+  distributorName: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -83,8 +84,8 @@ export class DistributorRegionComponent implements OnInit {
         city: ['', Validators.required],
         countryid: ['', Validators.required],
         zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
-        geolat: ['', Validators.required],
-        geolong: ['', Validators.required],
+        geolat: [''],
+        geolong: [''],
         isActive: false,
       }),
     });
@@ -112,14 +113,20 @@ export class DistributorRegionComponent implements OnInit {
 
     this.destributorRegionform.controls['distid'].setValue(this.distributorId, { onlySelf: true });
 
+    if (this.distributorId != null) {
+      this.distributorService.getById(this.distributorId)
+        .subscribe((data: any) => {
+          this.distributorName = data.object.distname;
+        })
+    }
+
     if (this.distributorRegionId != null) {
       this.hasAddAccess = false;
       if (this.user.username == "admin") {
         this.hasAddAccess = true;
       }
       this.distributorRegionService.getById(this.distributorRegionId)
-        .pipe(first())
-        .subscribe({
+        .pipe(first()).subscribe({
           next: (data: any) => {
             this.formData = data.object;
             this.destributorRegionform.patchValue(this.formData);
