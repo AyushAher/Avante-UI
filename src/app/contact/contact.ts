@@ -321,8 +321,8 @@ export class ContactComponent implements OnInit {
     this.user.firstName = this.contactmodel.fname,
       this.user.lastName = this.contactmodel.lname,
       this.user.email = this.contactmodel.pemail,
-      this.user.contactid = this.id
-    this.user.contactid = this.id
+      this.user.contactid = this.id,
+      this.user.userType = this.type
 
     this.user.username = this.contactmodel.fname + this.contactmodel.lname;
 
