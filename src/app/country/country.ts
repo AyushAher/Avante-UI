@@ -141,10 +141,17 @@ export class CountryComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["countrylist"]);
+        this.router.navigate(["countrylist"],{
+          queryParams: {
+            isNotSafeNavigation: true
+          }
+        });
     }
-
-    else this.router.navigate(["countrylist"]);
+    else this.router.navigate(["countrylist"],{
+      queryParams: {
+        isNotSafeNavigation: true
+      }
+    });
 
   }
 

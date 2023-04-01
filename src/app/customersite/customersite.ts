@@ -152,10 +152,18 @@ export class CustomerSiteComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["customersitelist", this.customerid]);
+        this.router.navigate(["customersitelist", this.customerid],{
+          queryParams: {
+            isNotSafeNavigation: true
+          }
+        });
     }
 
-    else this.router.navigate(["customersitelist", this.customerid]);
+    else this.router.navigate(["customersitelist", this.customerid],{
+      queryParams: {
+        isNotSafeNavigation: true
+      }
+    });
 
   }
 

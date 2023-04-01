@@ -142,9 +142,17 @@ export class DistributorComponent implements OnInit {
   Back() {
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["distributorlist"]);
+        this.router.navigate(["distributorlist"],{
+          queryParams: {
+            isNotSafeNavigation: true
+          }
+        });
     }
-    else this.router.navigate(["distributorlist"]);
+    else this.router.navigate(["distributorlist"],{
+      queryParams: {
+        isNotSafeNavigation: true
+      }
+    });
 
   }
 
