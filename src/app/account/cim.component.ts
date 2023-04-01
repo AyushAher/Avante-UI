@@ -73,7 +73,7 @@ export class CIMComponent implements OnInit {
       return this.notificationService.showError("Some Error Occurred. Please Refresh the page.", "Error")
 
     this.user = this.accountService.userValue;
-    this.isAdmin = this.user.username.toLowerCase() == "admin"
+    this.isAdmin = this.user.isAdmin
     this.lstBrand = data.brandList;
     this.companyList = data.companyList;
     this.lstBusinessUnit = data.businessUnitList;
@@ -112,7 +112,7 @@ export class CIMComponent implements OnInit {
     })
 
 
-    if (this.user.isAdmin) return;
+    if (this.user.isSuperAdmin) return;
 
     this.f.companyId.setValue(this.user.companyId)
     this.f.companyId.disable();
