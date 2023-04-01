@@ -164,7 +164,7 @@ export class InstrumentComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = false;
       this.hasDeleteAccess = false;
       this.hasUpdateAccess = false;

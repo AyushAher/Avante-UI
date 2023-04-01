@@ -29,7 +29,7 @@ export class CompanyListComponent implements OnInit {
     async ngOnInit() {
         this.user = this.accountService.userValue;
 
-        if (this.user.username == "admin") {
+        if (this.user.isAdmin) {
             this.hasAddAccess = true;
             this.hasDeleteAccess = true;
         }

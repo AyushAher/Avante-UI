@@ -97,7 +97,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
 
       if (success) {
         this.onClose.next({ result: success, object: saveRequest.object });
-
+        this.activeModal.hide();
         if (!this.isDialog) {
           this.notificationService.showSuccess("Company created successfully", "Success")
           this.router.navigate(["/companylist"])

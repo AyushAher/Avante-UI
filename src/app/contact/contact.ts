@@ -205,7 +205,7 @@ export class ContactComponent implements OnInit {
     }
 
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
@@ -263,7 +263,7 @@ export class ContactComponent implements OnInit {
 
     if (this.id != null) {
       this.hasAddAccess = false;
-      if (this.user.username == "admin") {
+      if (this.user.isAdmin) {
         this.hasAddAccess = true;
       }
 
@@ -302,8 +302,8 @@ export class ContactComponent implements OnInit {
   Back() {
     if ((this.isEditMode || this.isNewMode)) {
       if (this.isNewParentMode && confirm(`Are you sure want to go back? All unsaved changes as well as ${this.contactform.get("parentEntity").value} record will be lost!`))
-        this.back()
-      else if (!this.isNewParentMode && confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.back()    
+        else if (!this.isNewParentMode && confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.back()
     }
 
@@ -356,7 +356,7 @@ export class ContactComponent implements OnInit {
       this.user.contactid = this.id,
       this.user.userType = this.type
 
-    this.user.username = this.contactmodel.fname + this.contactmodel.lname;
+    this.user.username = this.contactmodel.fname + ' ' + this.contactmodel.lname;
 
     this.accountService.register(this.user).subscribe((data: any) => {
       if (data.result) this.notificationService.showSuccess(data.resultMessage, "Success");
@@ -489,11 +489,17 @@ export class ContactComponent implements OnInit {
   }
 
   back() {
-    if (this.isNewSetup) {
-      localStorage.removeItem('distributor');
-      localStorage.removeItem('distributorRegion');
-      localStorage.removeItem('site');
-      localStorage.removeItem('customer');
+      if (this.isNewSetup) {
+          localStorage.removeItem('distributor');
+          localStorage.removeItem('distributorRegion');
+          localStorage.removeItem('site');
+          localStorage.removeItem('customer');
+      // // this.router.navigate(['distributorregion', this.masterId], {
+      // //   queryParams: {
+      // //     isNewSetUp: true
+      // //   }
+      // // });
+      this.router.navigate(['/']);
       this.router.navigate(['/']);
     }
     else if (this.type == "D") {

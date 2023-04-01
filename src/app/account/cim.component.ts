@@ -112,7 +112,7 @@ export class CIMComponent implements OnInit {
     })
 
 
-    if (this.user.username == "admin") return;
+    if (this.user.isAdmin) return;
 
     this.f.companyId.setValue(this.user.companyId)
     this.f.companyId.disable();

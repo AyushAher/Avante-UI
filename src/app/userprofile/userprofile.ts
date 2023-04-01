@@ -121,7 +121,7 @@ export class UserProfileComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
@@ -151,7 +151,7 @@ export class UserProfileComponent implements OnInit {
       });
 
     this.listTypeService.getById("ROLES").pipe(first())
-      .subscribe((data: ListTypeItem[]) => this.roleList = data);
+      .subscribe((data: ListTypeItem[]) => this.roleList = data.filter(x=>x.itemCode != "RADM"));
 
     this.profileService.getAll().pipe(first())
       .subscribe((data: any) => this.profilelist = data.object);

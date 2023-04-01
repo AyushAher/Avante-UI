@@ -28,7 +28,7 @@ export class NavMenuComponent {
     private userNotificationService: UsernotificationService
   ) {
     this.accountService.userSubject.subscribe((data) => this.user = data);
-    this.isAdmin = this.user.username == "admin";
+    this.isAdmin = this.user.isAdmin;
 
     setTimeout(() => {
       this.userNotificationService.getAll().pipe(first())

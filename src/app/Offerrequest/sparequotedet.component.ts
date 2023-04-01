@@ -88,7 +88,7 @@ export class SparequotedetComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;

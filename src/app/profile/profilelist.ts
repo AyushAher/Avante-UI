@@ -57,7 +57,7 @@ export class ProfileListComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
     }

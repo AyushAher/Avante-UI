@@ -51,7 +51,7 @@ export class DistributordashboardsettingsComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
@@ -70,7 +70,7 @@ export class DistributordashboardsettingsComponent implements OnInit {
 
     this.id = this.user.userId;
 
-    this.hasAddAccess = this.user.username == "admin";
+    this.hasAddAccess = this.user.isAdmin;
 
     this.Service.getById(this.id)
       .pipe(first())

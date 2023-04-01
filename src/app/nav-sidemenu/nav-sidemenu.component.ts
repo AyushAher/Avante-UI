@@ -86,7 +86,7 @@ export class NavSideMenuComponent implements OnInit {
     this.profileService.getUserProfile(this.user.userProfileId);
     this.profile = JSON.parse(localStorage.getItem('userprofile'));
 
-    this.isAdmin = this.user.username == "admin";
+    this.isAdmin = this.user.isAdmin;
 
     if (this.profile != null) {
       if (this.profile.permissions.filter(x => x.screenCode == 'SDIST').length > 0) {
@@ -325,7 +325,7 @@ export class NavSideMenuComponent implements OnInit {
 
 
     }
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasDistributor = true;
       this.hasCustomer = true;
       this.hasCountry = true;

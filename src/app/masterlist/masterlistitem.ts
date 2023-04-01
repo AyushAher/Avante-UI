@@ -70,7 +70,7 @@ export class MasterListItemComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
@@ -89,7 +89,7 @@ export class MasterListItemComponent implements OnInit {
     this.listid = this.route.snapshot.paramMap.get('id');
     if (this.listid != null) {
 
-      this.hasAddAccess = this.user.username == "admin";
+      this.hasAddAccess = this.user.isAdmin;
     }
     this.listTypeService.getByListId(this.listid)
       .pipe(first())

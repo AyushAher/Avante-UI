@@ -121,12 +121,20 @@ export class AccountService {
       .pipe(first()).subscribe({
         next: () => {
           this.currentuser = this.userValue;
-          if (this.currentuser.username == "admin") {
+          if (this.currentuser.isSuperAdmin) {
             this.router.navigate(["/"],
               {
                 queryParams: { redirected: true }
               });
             return this.SetUpConfig(username, password)
+          }
+          else if (this.currentuser.isAdmin && !this.currentuser.isSuperAdmin)
+          {
+              this.router.navigate(["/"],
+                {
+                  queryParams: { redirected: true }
+                })
+              return this.CIMConfig(username, password, true)           
           }
           else {
             this.profileServicce.getUserProfile(this.currentuser.userProfileId);
@@ -146,8 +154,7 @@ export class AccountService {
                         })
                       this.CIMConfig(username, password, false)
                       break;
-
-                    case "Customer":
+                      case "Customer":
                       this.router.navigate(["custdashboard"]);
                       break;
 

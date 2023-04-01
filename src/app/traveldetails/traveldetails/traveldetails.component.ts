@@ -142,7 +142,7 @@ export class TraveldetailsComponent implements OnInit {
       }),
     });
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
@@ -258,7 +258,7 @@ export class TraveldetailsComponent implements OnInit {
     if (this.id != null) {
       this.hasAddAccess = false;
 
-      if (this.user.username == "admin") {
+      if (this.user.isAdmin) {
         this.hasAddAccess = true;
       }
 

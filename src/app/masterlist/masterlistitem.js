@@ -52,7 +52,7 @@ var MasterListItemComponent = /** @class */ (function () {
                 this.hasUpdateAccess = profilePermission[0].update;
             }
         }
-        if (this.user.username == "admin") {
+        if (this.user.isAdmin) {
             this.hasAddAccess = true;
             this.hasDeleteAccess = true;
             this.hasUpdateAccess = true;
@@ -68,7 +68,7 @@ var MasterListItemComponent = /** @class */ (function () {
         this.listid = this.route.snapshot.paramMap.get('id');
         if (this.listid != null) {
             this.hasAddAccess = false;
-            if (this.user.username == "admin") {
+            if (this.user.isAdmin) {
                 this.hasAddAccess = true;
             }
         }

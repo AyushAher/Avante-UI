@@ -120,7 +120,7 @@ export class TravelexpenseComponent implements OnInit {
       .subscribe(() => this.OnDateChange())
 
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = false;
       this.hasDeleteAccess = false;
       this.hasUpdateAccess = false;
@@ -163,7 +163,7 @@ export class TravelexpenseComponent implements OnInit {
 
     var data: any = await this.distributorservice.getByConId(this.user.contactId).toPromise();
 
-    if (this.user.username == "admin") return;
+    if (this.user.isAdmin) return;
     this.form.get('distributorId').setValue(data.object[0].id);
     var Engdata: any = await this.distributorservice.getDistributorRegionContacts(data.object[0].id).toPromise()
     this.distId = data.object[0].id

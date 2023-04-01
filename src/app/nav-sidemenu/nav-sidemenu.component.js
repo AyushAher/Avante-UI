@@ -97,7 +97,7 @@ var NavSideMenuComponent = /** @class */ (function () {
             }
             //this.hasDistributor = this.profile.Permissions
         }
-        if (this.user.username == "admin") {
+        if (this.user.isAdmin) {
             this.hasDistributor = true;
             this.hasCustomer = true;
             this.hasInstrument = true;

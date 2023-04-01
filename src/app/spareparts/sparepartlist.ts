@@ -60,7 +60,7 @@ export class SparePartListComponent implements OnInit {
         this.hasDeleteAccess = profilePermission[0].delete;
       }
     }
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
     }

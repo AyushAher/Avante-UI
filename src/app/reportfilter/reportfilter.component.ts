@@ -176,7 +176,7 @@ export class ReportfilterComponent implements OnInit {
           })
       })
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.customerService.getAll().pipe(first())
         .subscribe((data: any) => this.customerList = data.object)
     }

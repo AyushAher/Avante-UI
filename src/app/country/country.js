@@ -48,7 +48,7 @@ var CountryComponent = /** @class */ (function () {
                 this.hasUpdateAccess = profilePermission[0].update;
             }
         }
-        if (this.user.username == "admin") {
+        if (this.user.isAdmin) {
             this.hasAddAccess = true;
             this.hasDeleteAccess = true;
             this.hasUpdateAccess = true;
@@ -90,7 +90,7 @@ var CountryComponent = /** @class */ (function () {
         this.id = this.route.snapshot.paramMap.get('id');
         if (this.id != null) {
             this.hasAddAccess = false;
-            if (this.user.username == "admin") {
+            if (this.user.isAdmin) {
                 this.hasAddAccess = true;
             }
             this.countryService.getById(this.id)

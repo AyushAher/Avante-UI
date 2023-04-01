@@ -103,7 +103,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = false;
       this.hasDeleteAccess = false;
       this.hasUpdateAccess = false;
@@ -204,7 +204,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
   async GetDistAndEng() {
     var data: any = await this.distributorservice.getByConId(this.user.contactId).toPromise();
-    if (this.user.username == "admin") return;
+    if (this.user.isAdmin) return;
     if (data.object.length <= 0) return;
 
     this.distId = data.object[0].id;

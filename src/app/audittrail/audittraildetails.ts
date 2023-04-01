@@ -57,7 +57,7 @@ export class AudittrailDetailsComponent implements OnInit {
       screen: [{ value: '', disabled: true }],
     })
 
-    if (this.user.username == "admin" || this.hasReadAccess) {
+    if (this.user.isAdmin || this.hasReadAccess) {
       this.id = this.route.snapshot.paramMap.get("id");
       this.Service.getById(this.id)
         .pipe(first()).subscribe({

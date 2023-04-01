@@ -77,7 +77,7 @@ export class poComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
@@ -141,7 +141,7 @@ export class poComponent implements OnInit {
     this.poid = this.route.snapshot.paramMap.get('id');
     if (this.poid != null) {
       this.hasAddAccess = false;
-      if (this.user.username == "admin") {
+      if (this.user.isAdmin) {
         this.hasAddAccess = true;
       }
       this.customerService.getById(this.poid)

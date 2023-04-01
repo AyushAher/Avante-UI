@@ -102,7 +102,7 @@ export class PastservicereportComponent implements OnInit {
     await this.GetInstrument();
     await this.GetBrand();
 
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = false;
       this.hasDeleteAccess = false;
       this.hasUpdateAccess = false;

@@ -51,7 +51,7 @@ export class AudittrailComponent implements OnInit {
       }
     }
 
-    if (this.user.username == "admin" || this.hasReadAccess) {
+    if (this.user.isAdmin || this.hasReadAccess) {
       this.Service.getAll()
         .pipe(first())
         .subscribe({

@@ -73,7 +73,7 @@ export class ServiceRequestListComponent implements OnInit {
         this.hasDeleteAccess = profilePermission[0].delete;
       }
     }
-    if (this.user.username == "admin") {
+    if (this.user.isAdmin) {
       this.hasAddAccess = false;
       this.hasDeleteAccess = true;
       this.IsAdminView = true;
