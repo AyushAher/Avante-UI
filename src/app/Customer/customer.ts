@@ -15,6 +15,7 @@ import {
   NotificationService,
   ProfileService
 } from '../_services';
+import { Guid } from 'guid-typescript';
 
 
 @Component({
@@ -90,7 +91,7 @@ export class CustomerComponent implements OnInit {
       isdeleted: [true],
       address: this.formBuilder.group({
         street: ['', Validators.required],
-        area:[""],
+        area: [""],
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
@@ -204,61 +205,35 @@ export class CustomerComponent implements OnInit {
   }
 
   onSubmit() {
-    // //debugger;
-    this.submitted = true;
     this.customerform.markAllAsTouched()
-    // reset alerts on submit
-    this.alertService.clear();
 
-    // stop here if form is invalid
-    if (this.customerform.invalid) {
-      return
-    }
-    this.isSave = true;
-    this.loading = true;
+    if (this.customerform.invalid) return;
+
     if (this.customerId == null) {
-      this.customerService.save(this.customerform.value)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["contact", "C", data.object.id]);
-            }
-            else {
-              this.notificationService.showInfo(data.resultMessage, "info");
-            }
-            this.loading = false;
+      this.customerId = Guid.create().toString();
+      this.customer = this.customerform.value;
+      this.customer.id = this.customerId;
 
-          },
-          error: error => {
-            // this.alertService.error(error);
+      localStorage.setItem("customer", JSON.stringify(this.customer));
 
-            this.loading = false;
-          }
-        });
+      return this.router.navigate([`/contact/${this.type}/${this.customerId}`], {
+        queryParams: {
+          isNewMode: true
+        }
+      });
     }
     else {
       this.customer = this.customerform.value;
       this.customer.id = this.customerId;
+
       this.customerService.update(this.customerId, this.customer)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["customerlist"]);
-            }
-            else {
-
-            }
-            this.loading = false;
-
-          },
-          error: error => {
-            //  this.alertService.error(error);
-
-            this.loading = false;
+        .pipe(first()).subscribe((data: ResultMsg) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(["customerlist"]);
+          }
+          else {
+            this.notificationService.showInfo(data.resultMessage, "Info");
           }
         });
     }

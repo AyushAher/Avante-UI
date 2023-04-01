@@ -455,7 +455,23 @@ export class ContactComponent implements OnInit {
     this.contact.contactMapping.parentId = this.masterId;
 
     if (this.id == null) {
-      this.distributorService.SaveDistributor();
+      
+      if (this.isNewParentMode) {
+        switch (this.type) {
+          case "D":
+            this.distributorService.SaveDistributor();
+            break;
+          case "C":
+            this.customerService.SaveCustomer();
+            break;
+          case "DR":
+            this.distributorService.SaveDistributor();
+            break;
+          case "CS":
+            this.distributorService.SaveDistributor();
+            break;
+        }
+      }
 
       this.contactService.save(this.contact)
         .subscribe((data: any) => {

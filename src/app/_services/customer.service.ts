@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { Customer } from '../_models';
 import { EnvService } from './env/env.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
@@ -16,6 +17,7 @@ export class CustomerService {
     private router: Router,
     private http: HttpClient,
     private environment: EnvService,
+    private notificationService: NotificationService
   ) {
     //this.distrubutorSubject = new BehaviorSubject<Distributor>();
     //this.user = this.distrubutorSubject.asObservable();
@@ -49,6 +51,18 @@ export class CustomerService {
 
   importData(data: any) {
     return this.http.post(`${this.environment.apiUrl}/Customer/importdata/`, data);
+  }
+
+  SaveCustomer() {
+    var customerdata = JSON.parse(localStorage.getItem('customer'));
+
+    this.save(customerdata).subscribe((data: any) => {
+      if (data.result)
+        this.notificationService.showSuccess(data.resultMessage, "Success");
+      else
+        this.notificationService.showInfo(data.resultMessage, "info");
+
+    });
   }
 
   update(id, params) {
