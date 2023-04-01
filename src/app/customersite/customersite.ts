@@ -85,13 +85,13 @@ export class CustomerSiteComponent implements OnInit {
       isdeleted: [false],
       address: this.formBuilder.group({
         street: ['', Validators.required],
-        area:[""],
+        area: [""],
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
         zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
-        geolat: ['', Validators.required],
-        geolong: ['', Validators.required],
+        geolong: [''],
+        geolat: [''],
         isActive: true,
       }),
     });
@@ -219,18 +219,11 @@ export class CustomerSiteComponent implements OnInit {
   }
 
   onSubmit() {
-    //debugger;
-    this.submitted = true;
     this.customersiteform.markAllAsTouched()
-    // reset alerts on submit
-    this.alertService.clear();
 
-    // stop here if form is invalid
     if (this.customersiteform.invalid) {
       return;
     }
-    this.isSave = true;
-    this.loading = true;
 
     if (this.csiteid == null) {
       this.customersiteService.save(this.customersiteform.value)
@@ -239,7 +232,7 @@ export class CustomerSiteComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(['customersite', this.customerid, data.object.id])
+              this.router.navigate(['customersite', this.customerid, data.object.id], { queryParams: { isNotSafeNavigation: false } })
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "Info");
