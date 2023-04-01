@@ -427,7 +427,7 @@ export class ContactComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.id = data.object.id;
-            if (this.isNewSetup || createUser) this.addUser(data.object.id);
+            if (createUser) this.addUser(data.object.id);
 
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.contact.id = data.id;
@@ -456,11 +456,12 @@ export class ContactComponent implements OnInit {
 
   back() {
     if (this.isNewSetup) {
-      this.router.navigate(['distributorregion', this.masterId], {
-        queryParams: {
-          isNewSetUp: true
-        }
-      });
+      // this.router.navigate(['distributorregion', this.masterId], {
+      //   queryParams: {
+      //     isNewSetUp: true
+      //   }
+      // });
+      this.router.navigate(['/']);
     }
     else if (this.type == "D") {
       this.router.navigate(['contactlist', this.type, this.masterId]);

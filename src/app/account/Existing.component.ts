@@ -108,20 +108,20 @@ export default class ExistingCIM implements OnInit {
                 if (this.contactList && this.contactList.length > 0) this.f.contact.setValue(this.contactList[0].id);
                 else return this.Navigate(['contact', 'D', this.f.distributor.value]);
 
-                var distRegionReq: any = await this.distRegionService.getAll().toPromise();
-                this.distRegionList = distRegionReq.object;
-                if (this.distRegionList && this.distRegionList.length > 0) this.f.distRegion.setValue(this.distRegionList[0].id);
-                else return this.Navigate(['distributorregion', this.f.distributor.value]);
+                // var distRegionReq: any = await this.distRegionService.getAll().toPromise();
+                // this.distRegionList = distRegionReq.object;
+                // if (this.distRegionList && this.distRegionList.length > 0) this.f.distRegion.setValue(this.distRegionList[0].id);
+                // else return this.Navigate(['distributorregion', this.f.distributor.value]);
 
-                var profileReq: any = await this.profileService.getAll().toPromise();
-                this.profileList = profileReq.object;
-                if (this.profileList && this.profileList.length > 0) this.f.profile.setValue(this.profileList[0].id);
-                else return this.Navigate(['profile']);
+                // var profileReq: any = await this.profileService.getAll().toPromise();
+                // this.profileList = profileReq.object;
+                // if (this.profileList && this.profileList.length > 0) this.f.profile.setValue(this.profileList[0].id);
+                // else return this.Navigate(['profile']);
 
-                var userProfileReq: any = await this.userProfileService.getAll().toPromise();
-                this.userProfileList = userProfileReq.object;
-                if (this.userProfileList && this.userProfileList.length > 0) this.f.userProfile.setValue(this.userProfileList[0].id);
-                else return this.Navigate(['userprofile']);
+                // var userProfileReq: any = await this.userProfileService.getAll().toPromise();
+                // this.userProfileList = userProfileReq.object;
+                // if (this.userProfileList && this.userProfileList.length > 0) this.f.userProfile.setValue(this.userProfileList[0].id);
+                // else return this.Navigate(['userprofile']);
 
                 this.notificationService.showInfo("Setup is completed", "Setup");
             });
