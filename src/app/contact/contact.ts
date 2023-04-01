@@ -466,26 +466,28 @@ export class ContactComponent implements OnInit {
             this.distRegions.SaveRegion();
             break;
           case "CS":
-            this.distributorService.SaveDistributor();
+            this.customersiteService.SaveSite();
             break;
         }
       }
 
-      this.contactService.save(this.contact)
-        .subscribe((data: any) => {
-          if (data.result) {
-            this.id = data.object.id;
-            if (createUser) this.addUser(data.object.id);
+      setTimeout(() => {
+        this.contactService.save(this.contact)
+          .subscribe((data: any) => {
+            if (data.result) {
+              this.id = data.object.id;
+              if (createUser) this.addUser(data.object.id);
 
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.contact.id = data.id;
-            this.loading = false;
-            if (back) this.back();
-          }
-          else {
-            this.notificationService.showInfo(data.resultMessage, "Info");
-          }
-        })
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.contact.id = data.id;
+              this.loading = false;
+              if (back) this.back();
+            }
+            else {
+              this.notificationService.showInfo(data.resultMessage, "Info");
+            }
+          })
+      }, 500);
     }
     else {
       this.contact.id = this.id;

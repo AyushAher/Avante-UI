@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService, CountryService, CustomerService, ProfileService, DistributorRegionService, CustomerSiteService, NotificationService } from '../_services';
+import { Guid } from 'guid-typescript';
 
 
 @Component({
@@ -152,14 +153,14 @@ export class CustomerSiteComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["customersitelist", this.customerid],{
+        this.router.navigate(["customersitelist", this.customerid], {
           queryParams: {
             isNotSafeNavigation: false
           }
         });
     }
 
-    else this.router.navigate(["customersitelist", this.customerid],{
+    else this.router.navigate(["customersitelist", this.customerid], {
       queryParams: {
         isNotSafeNavigation: false
       }
@@ -229,25 +230,15 @@ export class CustomerSiteComponent implements OnInit {
   onSubmit() {
     this.customersiteform.markAllAsTouched()
 
-    if (this.customersiteform.invalid) {
-      return;
-    }
+    if (this.customersiteform.invalid) return;
 
     if (this.csiteid == null) {
-      this.customersiteService.save(this.customersiteform.value)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(['customersite', this.customerid, data.object.id], { queryParams: { isNotSafeNavigation: false } })
-            }
-            else {
-              this.notificationService.showInfo(data.resultMessage, "Info");
-            }
-            this.loading = false;
-          },
-        });
+      this.csiteid = Guid.create().toString();
+      this.custSite = this.customersiteform.value;
+      this.custSite.id = this.csiteid;
+
+      localStorage.setItem("site", JSON.stringify(this.custSite));
+      return this.router.navigate(['contact', this.type, this.customerid, this.csiteid], { queryParams: { isNewMode: true } });
     }
     else {
       this.custSite = this.customersiteform.value;

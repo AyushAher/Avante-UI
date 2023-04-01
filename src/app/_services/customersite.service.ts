@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CustomerSite } from '../_models';
 import { EnvService } from './env/env.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerSiteService {
@@ -12,13 +13,19 @@ export class CustomerSiteService {
   public distributor: Observable<CustomerSite>;
 
   constructor(
-    private router: Router,
+    private notificationService: NotificationService,
     private http: HttpClient,
     private environment: EnvService,
   ) {
   }
 
-
+  SaveSite() {
+    var formData = JSON.parse(localStorage.getItem('site'));
+    this.save(formData).subscribe((data: any) => {
+      if (data.result) this.notificationService.showSuccess(data.resultMessage, "Success")
+      else this.notificationService.showInfo(data.resultMessage, "Info")
+    })
+  }
 
   save(customerSite: CustomerSite) {
     return this.http.post(`${this.environment.apiUrl}/Site`, customerSite);
@@ -30,7 +37,7 @@ export class CustomerSiteService {
   getAllCustomerSites() {
     return this.http.get<CustomerSite[]>(`${this.environment.apiUrl}/Site/GetAllCustomerSites`);
   }
-  
+
   GetCustomerSiteContacts() {
     return this.http.get(`${this.environment.apiUrl}/Customer/GetCustomerSiteContacts/`);
   }

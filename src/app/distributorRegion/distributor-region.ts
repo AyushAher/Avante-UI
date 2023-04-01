@@ -223,7 +223,7 @@ export class DistributorRegionComponent implements OnInit {
       if (this.isNewSetup)
         return this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
 
-      else return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], { queryParams: { isNewMode: true } });
+      else return this.router.navigate(['contact', this.type, this.distributorId, this.distRegion.id], { queryParams: { isNewMode: true } });
 
     }
     else {
