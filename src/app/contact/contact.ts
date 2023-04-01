@@ -114,10 +114,8 @@ export class ContactComponent implements OnInit {
     this.type = this.route.snapshot.paramMap.get('type');
 
     this.route.queryParams.subscribe((data) => {
-      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined && data.isNewSetUp == true;
+      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined && data.isNewSetUp == "true";
       this.isNewParentMode = data.isNewMode != null && data.isNewMode != undefined && data.isNewMode == "true";
-      console.log(this.isNewParentMode);
-
     });
 
     if (this.type == "DR" || this.type == "CS") {
@@ -147,7 +145,7 @@ export class ContactComponent implements OnInit {
       }
     }
 
-    if (!this.isNewParentMode) {
+    if (!this.isNewParentMode && !this.isNewSetup) {
       switch (this.type) {
         case "C":
           this.customerService.getById(this.masterId)
@@ -229,7 +227,7 @@ export class ContactComponent implements OnInit {
         },
       });
 
-    if (!this.isNewParentMode) {
+    if (!this.isNewParentMode && !this.isNewSetup) {
       if (this.type == "CS") {
         this.customersiteService.getById(this.masterId)
           .pipe(first()).subscribe({
@@ -456,7 +454,7 @@ export class ContactComponent implements OnInit {
 
     if (this.id == null) {
       
-      if (this.isNewParentMode) {
+      if (this.isNewParentMode || this.isNewSetup) {
         switch (this.type) {
           case "D":
             this.distributorService.SaveDistributor();
