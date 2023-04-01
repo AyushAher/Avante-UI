@@ -96,65 +96,210 @@ const accountModule = () => import('./account/account.module').then(x => x.Accou
 
 //const usersModule = () => import('./users/users.module').then(x => x.UsersModule);
 
+
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'distributorlist', component: DistributorListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'distributor', component: DistributorComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'distributor/:id', component: DistributorComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'contact/:type/:id', component: ContactComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'contact/:type/:id/:cid', component: ContactComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'contact/:type/:id/:cid/:did', component: ContactComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'contactlist/:type/:id', component: ContactListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'contactlist/:type/:id/:cid', component: ContactListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'distregionlist/:id', component: DistributorRegionListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'distributorregion', component: DistributorRegionComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'distributorregion/:id', component: DistributorRegionComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'distributorregion/:id/:rid', component: DistributorRegionComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'customer', component: CustomerComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'customerlist', component: CustomerListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'customer/:id', component: CustomerComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'customersitelist/:id', component: CustomerSiteListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'customersite/:id/:cid', component: CustomerSiteComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'customersite/:id', component: CustomerSiteComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'instrument', component: InstrumentComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'instrumentlist', component: InstrumentListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'instrument/:id', component: InstrumentComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'sparepart', component: SparePartComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'sparepart/:id', component: SparePartComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'sparepartlist', component: SparePartListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'search', component: SearchComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'profilelist', component: ProfileListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard, TextValidator, BrowserBack] },
-  { path: 'userprofilelist', component: UserProfileListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'userprofile', component: UserProfileComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'userprofile/:id', component: UserProfileComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'currencylist', component: CurrencyListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'currency', component: CurrencyComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'currency/:id', component: CurrencyComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'instrumentRonly/:id', component: InstrumentRonlyComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'countrylist', component: CountryListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'country', component: CountryComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'country/:id', component: CountryComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'masterlist', component: MasterListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'masterlistitem', component: MasterListItemComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'masterlistitem/:id', component: MasterListItemComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'exportsparepart', component: ExportSparePartComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'servicerequest', component: ServiceRequestComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'servicerequest/:id', component: ServiceRequestComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'servicerequestlist', component: ServiceRequestListComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'servicereport', component: ServiceReportComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'servicereport/:id', component: ServiceReportComponent, canActivate: [AuthGuard, TextValidator] },
-  { path: 'servicereportlist', component: ServiceReportListComponent, canActivate: [AuthGuard, TextValidator] },
+  {
+    path: 'distributorlist', component: DistributorListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'distributor', component: DistributorComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'distributor/:id', component: DistributorComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'contact/:type/:id', component: ContactComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'contact/:type/:id/:cid', component: ContactComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'contact/:type/:id/:cid/:did', component: ContactComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'contactlist/:type/:id', component: ContactListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'contactlist/:type/:id/:cid', component: ContactListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'distregionlist/:id', component: DistributorRegionListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'distributorregion', component: DistributorRegionComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'distributorregion/:id', component: DistributorRegionComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'distributorregion/:id/:rid', component: DistributorRegionComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'customer', component: CustomerComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'customerlist', component: CustomerListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'customer/:id', component: CustomerComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'customersitelist/:id', component: CustomerSiteListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'customersite/:id/:cid', component: CustomerSiteComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'customersite/:id', component: CustomerSiteComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'instrument', component: InstrumentComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'instrumentlist', component: InstrumentListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'instrument/:id', component: InstrumentComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'sparepart', component: SparePartComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'sparepart/:id', component: SparePartComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'sparepartlist', component: SparePartListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'search', component: SearchComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'profilelist', component: ProfileListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'profile', component: ProfileComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'profile/:id', component: ProfileComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'userprofilelist', component: UserProfileListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'userprofile', component: UserProfileComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'userprofile/:id', component: UserProfileComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'currencylist', component: CurrencyListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'currency', component: CurrencyComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'currency/:id', component: CurrencyComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'instrumentRonly/:id', component: InstrumentRonlyComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'countrylist', component: CountryListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'country', component: CountryComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'country/:id', component: CountryComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'masterlist', component: MasterListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'masterlistitem', component: MasterListItemComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'masterlistitem/:id', component: MasterListItemComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'exportsparepart', component: ExportSparePartComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'servicerequest', component: ServiceRequestComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'servicerequest/:id', component: ServiceRequestComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'servicerequestlist', component: ServiceRequestListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'servicereport', component: ServiceReportComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'servicereport/:id', component: ServiceReportComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'servicereportlist', component: ServiceReportListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
   {
     path: "traveldetails",
     component: TraveldetailsComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "traveldetails/:id",
     component: TraveldetailsComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "traveldetailslist",
@@ -164,12 +309,12 @@ const routes: Routes = [
   {
     path: "staydetails",
     component: StaydetailsComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "staydetails/:id",
     component: StaydetailsComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "staydetailslist",
@@ -209,12 +354,12 @@ const routes: Routes = [
   {
     path: "customersatisfactionsurvey",
     component: CustomersatisfactionsurveyComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "customersatisfactionsurvey/:id",
     component: CustomersatisfactionsurveyComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "customersatisfactionsurveylist",
@@ -259,7 +404,7 @@ const routes: Routes = [
   {
     path: "amc",
     component: AmcComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
 
   {
@@ -270,12 +415,12 @@ const routes: Routes = [
   {
     path: "amc/:id",
     component: AmcComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "offerrequest",
     component: OfferrequestComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
 
   {
@@ -286,7 +431,7 @@ const routes: Routes = [
   {
     path: "offerrequest/:id",
     component: OfferrequestComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "custdashboard",
@@ -321,12 +466,12 @@ const routes: Routes = [
   {
     path: "customerspinventory",
     component: CustSPInventoryComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "customerspinventory/:id",
     component: CustSPInventoryComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "preventivemaintenancetable",
@@ -336,7 +481,7 @@ const routes: Routes = [
   {
     path: "preventivemaintenancetable/:id",
     component: PreventivemaintenancetableComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "schedule",
@@ -366,12 +511,12 @@ const routes: Routes = [
   {
     path: "travelexpense",
     component: TravelexpenseComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "travelexpense/:id",
     component: TravelexpenseComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "travelexpenselist",
@@ -381,12 +526,12 @@ const routes: Routes = [
   {
     path: "travelinvoice",
     component: TravelinvoiceComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "travelinvoice/:id",
     component: TravelinvoiceComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "travelinvoicelist",
@@ -396,12 +541,12 @@ const routes: Routes = [
   {
     path: "advancerequestform",
     component: AdvancerequestformComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "advancerequestform/:id",
     component: AdvancerequestformComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "advancerequestformlist",
@@ -411,12 +556,12 @@ const routes: Routes = [
   {
     path: "pastservicereport",
     component: PastservicereportComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "pastservicereport/:id",
     component: PastservicereportComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "pastservicereportlist",
@@ -457,12 +602,12 @@ const routes: Routes = [
   {
     path: "brand/:id",
     component: CreateBrandComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "brand",
     component: CreateBrandComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
 
   {
@@ -473,22 +618,22 @@ const routes: Routes = [
   {
     path: "businessunit/:id",
     component: CreateBusinessUnitComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "businessunit",
     component: CreateBusinessUnitComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "company/:id",
     component: CreateCompanyComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "company",
     component: CreateCompanyComponent,
-    canActivate: [AuthGuard, TextValidator],
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   {
     path: "companylist",
