@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
         private accountService: AccountService
     ) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const user = this.accountService.userValue;
         if (user) {
             // authorised so return true
@@ -29,7 +29,7 @@ export class TextValidator implements CanActivate {
         private notificationService: NotificationService
     ) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) {
         setTimeout(() => {
             this.notificationService.ValidateTextInputFields();
         }, 3000);
@@ -40,26 +40,22 @@ export class TextValidator implements CanActivate {
 @Injectable({ providedIn: 'root' })
 export class BrowserBack implements CanActivate {
 
-    constructor(router: Router, private notificationService: NotificationService, private currentRoute: ActivatedRoute) {
-
+    constructor(router: Router) {
         router.events
             .subscribe((event: NavigationStart) => {
                 if (event.navigationTrigger === 'popstate' || event.navigationTrigger === "imperative") {
                     const currentRoute = router.routerState;
-                    const isNotSafeNavigation = (<any>(currentRoute.snapshot.root))?.isNotSafeNavigation;
+                    const isNotSafeNavigation = event.url.includes('isNotSafeNavigation=false');
 
-                    if ((isNotSafeNavigation == true || isNotSafeNavigation == "true")
-                        && !confirm("You are about to navigate away from the page. Your changes will be discarded. Please confrim.")) {
-                        router.navigateByUrl(currentRoute.snapshot.url, { skipLocationChange: true });
-                    }
+                    // if (isNotSafeNavigation
+                    //     && !confirm("You are about to navigate away from the page. Your changes will be discarded. Please confrim.")) {
+                    //     router.navigateByUrl(currentRoute.snapshot.url, { skipLocationChange: true });
+                    // }
                 }
             });
     }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        // setTimeout(() => {
-        //     this.notificationService.ValidateTextInputFields();
-        // }, 3000);
+    canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) {
         return true;
     }
 }
