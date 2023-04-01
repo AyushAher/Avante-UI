@@ -114,8 +114,8 @@ export class ContactComponent implements OnInit {
     this.type = this.route.snapshot.paramMap.get('type');
 
     this.route.queryParams.subscribe((data) => {
-      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined && ;
-      this.isNewParentMode = data.isNewMode != null && data.isNewMode != undefined && ;
+      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined ;
+      this.isNewParentMode = data.isNewMode != null && data.isNewMode != undefined  ;
     });
 
     if (this.type == "DR" || this.type == "CS") {
