@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService, DistributorService, CountryService, NotificationService, ProfileService } from '../_services';
+import { Guid } from 'guid-typescript';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { AccountService, AlertService, DistributorService, CountryService, Notif
 export class DistributorComponent implements OnInit {
   user: User;
   form: FormGroup;
-  distributorModel: Distributor;
+  distributorModel: any;
   loading = false;
   submitted = false;
   isSave = false;
@@ -81,7 +82,7 @@ export class DistributorComponent implements OnInit {
       isdeleted: [false],
       address: this.formBuilder.group({
         street: ['', Validators.required],
-        area: ['', Validators.required],
+        area: [''],
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
@@ -178,33 +179,29 @@ export class DistributorComponent implements OnInit {
     // reset alerts on submit
     this.alertService.clear();
 
+    debugger;
     // stop here if form is invalid
     if (this.form.invalid) {
       return;
     }
-    this.isSave = true;
-    this.loading = true;
     if (this.distributorId == null) {
-      this.distributorService.save(this.form.value)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.distributorId = data.object.id;
-              if (this.isNewSetUp) return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
-                queryParams: {
-                  isNewSetUp: true
-                }
-              })
-              else this.router.navigate(["distributorlist"]);
-            }
-            else {
-              this.notificationService.showInfo(data.resultMessage, "Info");
-            }
-            this.loading = false;
+      this.distributorId = Guid.create().toString();
+      this.distributorModel = this.form.value;
+      this.distributorModel.id = this.distributorId;
+
+      localStorage.setItem("distributor", JSON.stringify(this.distributorModel));
+      if (this.isNewSetUp)
+        return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
+          queryParams: {
+            isNewSetUp: this.isNewSetUp,
           }
         });
+
+      else return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
+        queryParams: {
+          isNewMode: this.isNewMode
+        }
+      });
     }
     else {
       this.distributorModel = this.form.value;

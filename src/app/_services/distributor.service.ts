@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { Distributor } from '../_models';
 import { DistributorRegionContacts } from "../_models/distributorregioncontacts";
 import { EnvService } from './env/env.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({ providedIn: 'root' })
 export class DistributorService {
@@ -16,6 +17,7 @@ export class DistributorService {
   constructor(
     private router: Router,
     private environment: EnvService,
+    private notificationService: NotificationService,
     private http: HttpClient
   ) {
     //this.distrubutorSubject = new BehaviorSubject<Distributor>();
@@ -27,6 +29,17 @@ export class DistributorService {
   //}
 
 
+  SaveDistributor() {
+    var value = JSON.parse(localStorage.getItem('distributor'));
+    return this.save(value).subscribe((data: any) => {
+      if (data.result) {
+        this.notificationService.showSuccess(data.resultMessage, "Success");
+      }
+      else {
+        this.notificationService.showInfo(data.resultMessage, "Info");
+      }
+    });
+  }
 
   save(distributor: Distributor) {
     return this.http.post(`${this.environment.apiUrl}/Distributors`, distributor);

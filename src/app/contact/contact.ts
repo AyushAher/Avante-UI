@@ -53,6 +53,8 @@ export class ContactComponent implements OnInit {
   isUser: boolean;
   isNewSetup: boolean;
   formData: { [key: string]: any; };
+  isNewParentMode: boolean;
+  parentEntity: any
 
   constructor(
     private formBuilder: FormBuilder,
@@ -92,7 +94,7 @@ export class ContactComponent implements OnInit {
 
       address: this.formBuilder.group({
         street: ['', Validators.required],
-        area: ['', Validators.required],
+        area: [''],
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
@@ -112,9 +114,9 @@ export class ContactComponent implements OnInit {
     this.type = this.route.snapshot.paramMap.get('type');
 
     this.route.queryParams.subscribe((data) => {
-      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
+      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined && ;
+      this.isNewParentMode = data.isNewMode != null && data.isNewMode != undefined && ;
     });
-
 
     if (this.type == "DR" || this.type == "CS") {
       this.masterId = this.route.snapshot.paramMap.get('cid');
@@ -143,40 +145,61 @@ export class ContactComponent implements OnInit {
       }
     }
 
+    if (!this.isNewParentMode) {
+      switch (this.type) {
+        case "C":
+          this.customerService.getById(this.masterId)
+            .subscribe((data: any) => {
+              if (!data.result || data.object == null) return;
+              this.contactform.get('parentEntity').setValue(data.object.custname);
+            });
+          break;
+        case "CS":
+          this.customersiteService.getById(this.masterId)
+            .subscribe((data: any) => {
+              if (!data.result || data.object == null) return;
+              this.contactform.get('parentEntity').setValue(data.object.custregname);
+            });
+          break;
+        case "D":
+          this.distributorService.getById(this.masterId)
+            .subscribe((data: any) => {
+              if (!data.result || data.object == null) return;
+              this.contactform.get('parentEntity').setValue(data.object.distname);
+            });
+          break;
 
-    switch (this.type) {
-      case "C":
-        this.customerService.getById(this.masterId)
-          .subscribe((data: any) => {
-            if (!data.result || data.object == null) return;
-            this.contactform.get('parentEntity').setValue(data.object.custname);
-          });
-        break;
-      case "CS":
-        this.customersiteService.getById(this.masterId)
-          .subscribe((data: any) => {
-            if (!data.result || data.object == null) return;
-            this.contactform.get('parentEntity').setValue(data.object.custregname);
-          });
-        break;
-      case "D":
-        this.distributorService.getById(this.masterId)
-          .subscribe((data: any) => {
-            console.log(data);
-            if (!data.result || data.object == null) return;
-            this.contactform.get('parentEntity').setValue(data.object.distname);
-          });
-        break;
+        case "DR":
+          this.distRegions.getById(this.masterId)
+            .subscribe((data: any) => {
+              if (!data.result || data.object == null) return;
+              this.contactform.get('parentEntity').setValue(data.object.distregname);
+            });
+          break;
 
-      case "DR":
-        this.distRegions.getById(this.masterId)
-          .subscribe((data: any) => {
-            console.log(data);
-            if (!data.result || data.object == null) return;
-            this.contactform.get('parentEntity').setValue(data.object.distregname);
-          });
-        break;
+      }
+    }
+    else {
+      switch (this.type) {
+        case "C":
+          this.parentEntity = JSON.parse(localStorage.getItem('customer'))
+          this.contactform.get('parentEntity').setValue(this.parentEntity.custname);
+          break;
+        case "CS":
+          this.parentEntity = JSON.parse(localStorage.getItem('site'))
+          this.contactform.get('parentEntity').setValue(this.parentEntity.custregname);
+          break;
+        case "D":
+          this.parentEntity = JSON.parse(localStorage.getItem('distributor'));
+          this.contactform.get('parentEntity').setValue(this.parentEntity.distname);
+          break;
 
+        case "DR":
+          this.parentEntity = JSON.parse(localStorage.getItem('distributorRegion'))
+          this.contactform.get('parentEntity').setValue(this.parentEntity.distregname);
+          break;
+
+      }
     }
 
 
@@ -204,30 +227,36 @@ export class ContactComponent implements OnInit {
         },
       });
 
-    if (this.type == "CS") {
-      //debugger;
-      this.customersiteService.getById(this.masterId)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
+    if (!this.isNewParentMode) {
+      if (this.type == "CS") {
+        this.customersiteService.getById(this.masterId)
+          .pipe(first()).subscribe({
+            next: (data: any) => {
+              this.contactform.patchValue({ address: data.object.address });
+            },
+          });
+      }
+      else if (this.type === "D") {
+        this.distributorService.getById(this.masterId).pipe(first())
+          .subscribe((data: any) => {
             this.contactform.patchValue({ address: data.object.address });
-          },
-        });
-    } else if (this.type === "D") {
-      this.distributorService.getById(this.masterId).pipe(first())
-        .subscribe((data: any) => {
-          this.contactform.patchValue({ address: data.object.address });
-        })
-    } else if (this.type === "DR") {
-      this.distRegions.getById(this.masterId).pipe(first())
-        .subscribe((data: any) => {
-          this.contactform.patchValue({ address: data.object.address });
-        })
-    } else if (this.type === "C") {
-      this.customerService.getById(this.masterId).pipe(first())
-        .subscribe((data: any) => {
-          this.contactform.patchValue({ address: data.object.address });
-        })
+          })
+      }
+      else if (this.type === "DR") {
+        this.distRegions.getById(this.masterId).pipe(first())
+          .subscribe((data: any) => {
+            this.contactform.patchValue({ address: data.object.address });
+          })
+      }
+      else if (this.type === "C") {
+        this.customerService.getById(this.masterId).pipe(first())
+          .subscribe((data: any) => {
+            this.contactform.patchValue({ address: data.object.address });
+          })
+      }
+    }
+    else {
+      this.contactform.patchValue({ address: this.parentEntity.address });
     }
 
     if (this.id != null) {
@@ -269,9 +298,10 @@ export class ContactComponent implements OnInit {
   }
 
   Back() {
-
     if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+      if (this.isNewParentMode && confirm(`Are you sure want to go back? All unsaved changes as well as ${this.contactform.get("parentEntity").value} record will be lost!`))
+        this.back()
+      else if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.back()
     }
 
@@ -423,6 +453,8 @@ export class ContactComponent implements OnInit {
     this.contact.contactMapping.parentId = this.masterId;
 
     if (this.id == null) {
+      this.distributorService.SaveDistributor();
+
       this.contactService.save(this.contact)
         .subscribe((data: any) => {
           if (data.result) {
@@ -456,6 +488,12 @@ export class ContactComponent implements OnInit {
 
   back() {
     if (this.isNewSetup) {
+      localStorage.removeItem('distributor');
+      localStorage.removeItem('distributorRegion');
+      localStorage.removeItem('site');
+      localStorage.removeItem('customer');
+
+
       this.router.navigate(['distributorregion', this.masterId], {
         queryParams: {
           isNewSetUp: true
