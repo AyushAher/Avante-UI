@@ -141,14 +141,14 @@ export class MasterListItemComponent implements OnInit {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.router.navigate(["masterlist"],{
           queryParams: {
-            isNotSafeNavigation: true
+            isNotSafeNavigation: false
           }
         })
     }
 
     else this.router.navigate(["masterlist"],{
       queryParams: {
-        isNotSafeNavigation: true
+        isNotSafeNavigation: false
       }
     })
 

@@ -513,35 +513,35 @@ export class ContactComponent implements OnInit {
 
       this.router.navigate(['/'], {
         queryParams: {
-          isNotSafeNavigation: true
+          isNotSafeNavigation: false
         }
       });      
     }
     else if (this.type == "D") {
       this.router.navigate(['contactlist', this.type, this.masterId],{
         queryParams: {
-          isNotSafeNavigation: true
+          isNotSafeNavigation: false
         }
       });
     }
     else if (this.type == "DR") {
       this.router.navigate(['contactlist', this.type, this.detailId, this.masterId],{
         queryParams: {
-          isNotSafeNavigation: true
+          isNotSafeNavigation: false
         }
       });
     }
     else if (this.type == "C") {
       this.router.navigate(['contactlist', this.type, this.masterId],{
         queryParams: {
-          isNotSafeNavigation: true
+          isNotSafeNavigation: false
         }
       });
     }
     else if (this.type == "CS") {
       this.router.navigate(['contactlist', this.type, this.detailId, this.masterId],{
         queryParams: {
-          isNotSafeNavigation: true
+          isNotSafeNavigation: false
         }
       });
     }

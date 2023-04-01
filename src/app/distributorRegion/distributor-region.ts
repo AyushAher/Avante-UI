@@ -153,14 +153,14 @@ export class DistributorRegionComponent implements OnInit {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.router.navigate(["distregionlist", this.distributorId],{
           queryParams: {
-            isNotSafeNavigation: true
+            isNotSafeNavigation: false
           }
         });
     }
 
     else this.router.navigate(["distregionlist", this.distributorId],{
       queryParams: {
-        isNotSafeNavigation: true
+        isNotSafeNavigation: false
       }
     });
 

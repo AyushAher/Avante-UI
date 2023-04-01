@@ -163,13 +163,13 @@ export class ProfileComponent implements OnInit {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.router.navigate(["profilelist"],{
           queryParams: {
-            isNotSafeNavigation: true
+            isNotSafeNavigation: false
           }
         })
     }
     else this.router.navigate(["profilelist"],{
       queryParams: {
-        isNotSafeNavigation: true
+        isNotSafeNavigation: false
       }
     })
 

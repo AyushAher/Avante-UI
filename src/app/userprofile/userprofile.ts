@@ -299,13 +299,13 @@ export class UserProfileComponent implements OnInit {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.router.navigate(["userprofilelist"],{
           queryParams: {
-            isNotSafeNavigation: true
+            isNotSafeNavigation: false
           }
         })
     }
     else this.router.navigate(["userprofilelist"],{
       queryParams: {
-        isNotSafeNavigation: true
+        isNotSafeNavigation: false
       }
     })
 

@@ -149,13 +149,13 @@ export class CustomerComponent implements OnInit {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.router.navigate(["customerlist"],{
           queryParams: {
-            isNotSafeNavigation: true
+            isNotSafeNavigation: false
           }
         });
     }
     else this.router.navigate(["customerlist"],{
       queryParams: {
-        isNotSafeNavigation: true
+        isNotSafeNavigation: false
       }
     });
 
