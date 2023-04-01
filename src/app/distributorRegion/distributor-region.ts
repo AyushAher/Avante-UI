@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService, DistributorRegionService, ProfileService, CountryService, DistributorService, NotificationService } from '../_services';
+import { Guid } from 'guid-typescript';
 
 
 @Component({
@@ -79,7 +80,7 @@ export class DistributorRegionComponent implements OnInit {
       isdeleted: [false],
       address: this.formBuilder.group({
         street: ['', Validators.required],
-        area:[""],
+        area: [""],
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
@@ -151,14 +152,14 @@ export class DistributorRegionComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["distregionlist", this.distributorId],{
+        this.router.navigate(["distregionlist", this.distributorId], {
           queryParams: {
             isNotSafeNavigation: false
           }
         });
     }
 
-    else this.router.navigate(["distregionlist", this.distributorId],{
+    else this.router.navigate(["distregionlist", this.distributorId], {
       queryParams: {
         isNotSafeNavigation: false
       }
@@ -202,41 +203,28 @@ export class DistributorRegionComponent implements OnInit {
   }
 
   onSubmit() {
-    //debugger;
     this.destributorRegionform.markAllAsTouched()
-    this.submitted = true;
-
-    // reset alerts on submit
-    this.alertService.clear();
-
-    // stop here if form is invalid
-    if (this.destributorRegionform.invalid) {
-      return;
-    }
+    if (this.destributorRegionform.invalid) return;
 
     this.distRegion = this.destributorRegionform.value;
+
     if (this.distRegion.countries.length > 0)
       this.distRegion.countries = this.distRegion.countries.toString();
+
     else if (this.distRegion.countries.length == 0)
       this.distRegion.countries = "";
 
-    this.isSave = true;
-    this.loading = true;
     if (this.distributorRegionId == null) {
-      this.distributorRegionService.save(this.distRegion)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result && !this.isNewSetup) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["distregionlist", this.distributorId]);
-            }
-            else if (data.result && this.isNewSetup) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
-            }
-          }
-        });
+      this.distributorRegionId = Guid.create().toString()
+      this.distRegion.id = this.distributorRegionId
+
+      localStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));
+
+      if (this.isNewSetup)
+        return this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
+
+      else return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], { queryParams: { isNewMode: true } });
+
     }
     else {
       this.distRegion.id = this.distributorRegionId;

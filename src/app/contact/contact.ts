@@ -300,8 +300,8 @@ export class ContactComponent implements OnInit {
   Back() {
     if ((this.isEditMode || this.isNewMode)) {
       if (this.isNewParentMode && confirm(`Are you sure want to go back? All unsaved changes as well as ${this.contactform.get("parentEntity").value} record will be lost!`))
-        this.back()    
-        else if (!this.isNewParentMode && confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+        this.back()
+      else if (!this.isNewParentMode && confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.back()
     }
 
@@ -453,7 +453,7 @@ export class ContactComponent implements OnInit {
     this.contact.contactMapping.parentId = this.masterId;
 
     if (this.id == null) {
-      
+
       if (this.isNewParentMode || this.isNewSetup) {
         switch (this.type) {
           case "D":
@@ -463,7 +463,7 @@ export class ContactComponent implements OnInit {
             this.customerService.SaveCustomer();
             break;
           case "DR":
-            this.distributorService.SaveDistributor();
+            this.distRegions.SaveRegion();
             break;
           case "CS":
             this.distributorService.SaveDistributor();
@@ -503,41 +503,41 @@ export class ContactComponent implements OnInit {
   }
 
   back() {
-      if (this.isNewSetup) {
-          localStorage.removeItem('distributor');
-          localStorage.removeItem('distributorRegion');
-          localStorage.removeItem('site');
-          localStorage.removeItem('customer');
+    if (this.isNewSetup) {
+      localStorage.removeItem('distributor');
+      localStorage.removeItem('distributorRegion');
+      localStorage.removeItem('site');
+      localStorage.removeItem('customer');
 
       this.router.navigate(['/'], {
         queryParams: {
           isNotSafeNavigation: false
         }
-      });      
+      });
     }
     else if (this.type == "D") {
-      this.router.navigate(['contactlist', this.type, this.masterId],{
+      this.router.navigate(['contactlist', this.type, this.masterId], {
         queryParams: {
           isNotSafeNavigation: false
         }
       });
     }
     else if (this.type == "DR") {
-      this.router.navigate(['contactlist', this.type, this.detailId, this.masterId],{
+      this.router.navigate(['contactlist', this.type, this.detailId, this.masterId], {
         queryParams: {
           isNotSafeNavigation: false
         }
       });
     }
     else if (this.type == "C") {
-      this.router.navigate(['contactlist', this.type, this.masterId],{
+      this.router.navigate(['contactlist', this.type, this.masterId], {
         queryParams: {
           isNotSafeNavigation: false
         }
       });
     }
     else if (this.type == "CS") {
-      this.router.navigate(['contactlist', this.type, this.detailId, this.masterId],{
+      this.router.navigate(['contactlist', this.type, this.detailId, this.masterId], {
         queryParams: {
           isNotSafeNavigation: false
         }
