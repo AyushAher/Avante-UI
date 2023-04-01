@@ -209,10 +209,18 @@ export class SparePartComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["sparepartlist"])
+        this.router.navigate(["sparepartlist"],{
+          queryParams: {
+            isNotSafeNavigation: true
+          }
+        })
     }
 
-    else this.router.navigate(["sparepartlist"])
+    else this.router.navigate(["sparepartlist"],{
+      queryParams: {
+        isNotSafeNavigation: true
+      }
+    })
 
   }
 

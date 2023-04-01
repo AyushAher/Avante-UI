@@ -139,10 +139,18 @@ export class MasterListItemComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["masterlist"])
+        this.router.navigate(["masterlist"],{
+          queryParams: {
+            isNotSafeNavigation: true
+          }
+        })
     }
 
-    else this.router.navigate(["masterlist"])
+    else this.router.navigate(["masterlist"],{
+      queryParams: {
+        isNotSafeNavigation: true
+      }
+    })
 
   }
 

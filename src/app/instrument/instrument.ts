@@ -471,10 +471,17 @@ export class InstrumentComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["instrumentlist"])
+        this.router.navigate(["instrumentlist"],{
+          queryParams: {
+            isNotSafeNavigation: true
+          }
+        })
     }
-
-    else this.router.navigate(["instrumentlist"])
+    else this.router.navigate(["instrumentlist"],{
+      queryParams: {
+        isNotSafeNavigation: true
+      }
+    })
 
   }
 

@@ -113,10 +113,17 @@ export class CurrencyComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["currencylist"]);
+        this.router.navigate(["currencylist"],{
+          queryParams: {
+            isNotSafeNavigation: true
+          }
+        });
     }
-
-    else this.router.navigate(["currencylist"]);
+    else this.router.navigate(["currencylist"],{
+      queryParams: {
+        isNotSafeNavigation: true
+      }
+    });
 
   }
 
