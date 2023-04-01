@@ -114,8 +114,10 @@ export class ContactComponent implements OnInit {
     this.type = this.route.snapshot.paramMap.get('type');
 
     this.route.queryParams.subscribe((data) => {
-      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined ;
-      this.isNewParentMode = data.isNewMode != null && data.isNewMode != undefined  ;
+      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined && data.isNewSetUp == true;
+      this.isNewParentMode = data.isNewMode != null && data.isNewMode != undefined && data.isNewMode == "true";
+      console.log(this.isNewParentMode);
+
     });
 
     if (this.type == "DR" || this.type == "CS") {
@@ -301,7 +303,7 @@ export class ContactComponent implements OnInit {
     if ((this.isEditMode || this.isNewMode)) {
       if (this.isNewParentMode && confirm(`Are you sure want to go back? All unsaved changes as well as ${this.contactform.get("parentEntity").value} record will be lost!`))
         this.back()
-      else if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
+      else if (!this.isNewParentMode && confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.back()
     }
 
@@ -487,17 +489,11 @@ export class ContactComponent implements OnInit {
   }
 
   back() {
-      if (this.isNewSetup) {
-          localStorage.removeItem('distributor');
-          localStorage.removeItem('distributorRegion');
-          localStorage.removeItem('site');
-          localStorage.removeItem('customer');
-      // // this.router.navigate(['distributorregion', this.masterId], {
-      // //   queryParams: {
-      // //     isNewSetUp: true
-      // //   }
-      // // });
-      this.router.navigate(['/']);
+    if (this.isNewSetup) {
+      localStorage.removeItem('distributor');
+      localStorage.removeItem('distributorRegion');
+      localStorage.removeItem('site');
+      localStorage.removeItem('customer');
       this.router.navigate(['/']);
     }
     else if (this.type == "D") {

@@ -179,7 +179,6 @@ export class DistributorComponent implements OnInit {
     // reset alerts on submit
     this.alertService.clear();
 
-    debugger;
     // stop here if form is invalid
     if (this.form.invalid) {
       return;
@@ -190,6 +189,7 @@ export class DistributorComponent implements OnInit {
       this.distributorModel.id = this.distributorId;
 
       localStorage.setItem("distributor", JSON.stringify(this.distributorModel));
+
       if (this.isNewSetUp)
         return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
           queryParams: {
@@ -199,7 +199,7 @@ export class DistributorComponent implements OnInit {
 
       else return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
         queryParams: {
-          isNewMode: this.isNewMode
+          isNewMode: true
         }
       });
     }
@@ -207,26 +207,13 @@ export class DistributorComponent implements OnInit {
       this.distributorModel = this.form.value;
       this.distributorModel.id = this.distributorId;
       this.distributorService.update(this.distributorId, this.form.value)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            //debugger;
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["distributorlist"]);
-            }
-            else {
-
-            }
-
-            this.loading = false;
-
-          },
-          error: error => {
-
-            //this.alertService.error(error);
-            this.loading = false;
+        .pipe(first()).subscribe((data: ResultMsg) => {
+          if (data.result) {
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+            this.router.navigate(["distributorlist"]);
           }
+          else this.notificationService.showInfo(data.resultMessage, "Info");
+
         });
     }
 
