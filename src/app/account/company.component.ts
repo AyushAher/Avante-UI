@@ -40,6 +40,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     this.onClose = new Subject();
     this.Form = this.formBuilder.group({
       companyName: ['', [Validators.required]],
+      companyEmail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
       id: [""]
     });
 
