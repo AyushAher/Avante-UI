@@ -47,7 +47,15 @@ export class BrowserBack implements CanActivate {
                 debugger;
                 if (event.navigationTrigger === 'popstate') {
                     if (!confirm("You are about to navigate away from the page. Your changes will be discarded. Please confrim.")) {
-                        router.navigateByUrl(window.location.pathname.toString(), { skipLocationChange: true });
+
+                        const currentRoute = router.routerState;
+
+                        router.navigateByUrl(currentRoute.snapshot.url, { skipLocationChange: true });
+                        // this try to go to currentRoute.url but don't change the location.
+
+
+
+                        //router.navigateByUrl(window.location.pathname.toString(), { skipLocationChange: false });
                     }
                 }
             });
