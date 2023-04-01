@@ -79,7 +79,7 @@ export class DistributorRegionComponent implements OnInit {
       isdeleted: [false],
       address: this.formBuilder.group({
         street: ['', Validators.required],
-        area: ['', Validators.required],
+        area:[""],
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],

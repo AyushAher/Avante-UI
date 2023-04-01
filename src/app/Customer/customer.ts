@@ -90,7 +90,7 @@ export class CustomerComponent implements OnInit {
       isdeleted: [true],
       address: this.formBuilder.group({
         street: ['', Validators.required],
-        area: ['', Validators.required],
+        area:[""],
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
