@@ -103,6 +103,10 @@ export class CustomerComponent implements OnInit {
       }),
     });
 
+    this.customerform.get("countryid")
+      .valueChanges.subscribe((data) => {
+        this.a.countryid.setValue(data);
+      })
 
     this.countryService.getAll()
       .pipe(first()).subscribe({
@@ -141,19 +145,23 @@ export class CustomerComponent implements OnInit {
       this.isEditMode = true;
       this.customerform.enable();
       this.router.navigate(
-        ["."], 
+        ["."],
         {
           relativeTo: this.route,
           queryParams: {
             isNSNav: false
-          }, 
+          },
           queryParamsHandling: 'merge', // remove to replace all query params by provided
         });
+      this.FormControlDisable()
     }
+  }
+  
+  FormControlDisable() {
+    this.a.countryid.disable();
   }
 
   Back() {
-
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.router.navigate(["customerlist"]);

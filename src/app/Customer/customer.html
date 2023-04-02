@@ -172,7 +172,7 @@
                 <select formControlName="countryid" class="form-select"
                   [ngClass]="{ 'is-invalid': a.countryid.touched && a.countryid.errors }">
                   <!--<option value="0">--All--</option>-->
-                  <option *ngFor="let country of countries" value={{country.id}}>
+                  <option *ngFor="let country of regionCountry" value={{country.id}}>
                     {{country.name}}
                   </option>
                 </select>
