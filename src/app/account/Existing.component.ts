@@ -62,7 +62,7 @@ export default class ExistingCIM implements OnInit {
             initialState: {
                 isDialog: true,
                 username: (this.username || this.user.username),
-                password: (this.password || localStorage.getItem('password'))
+                password: (this.password || sessionStorage.getItem('password'))
             },
         }
 
@@ -170,7 +170,7 @@ export default class ExistingCIM implements OnInit {
 
             this.modalService.hide();
 
-            this.accountService.login((this.username || this.user.username), (this.password || localStorage.getItem('password')), this.f.company, this.f.bu, this.f.brand)
+            this.accountService.login((this.username || this.user.username), (this.password || sessionStorage.getItem('password')), this.f.company, this.f.bu, this.f.brand)
                 .pipe(first()).subscribe(() => this.Navigate(['distributor']))
 
         })

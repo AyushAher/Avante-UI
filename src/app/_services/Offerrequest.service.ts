@@ -42,7 +42,7 @@ export class OfferrequestService {
   }
 
   update(id, params) {
-    let tokn = JSON.parse(localStorage.getItem('zohotoken'));
+    let tokn = JSON.parse(sessionStorage.getItem('zohotoken'));
 
     return this.http
       .put(`${this.environment.apiUrl}/offerrequest/${id}/${tokn}`, params)

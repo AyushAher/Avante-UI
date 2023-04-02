@@ -247,8 +247,8 @@ export class DashboardComponent implements OnInit {
             pendingrequestBgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
           }
 
-          localStorage.setItem('servicerequesttype', JSON.stringify({ label, chartData }))
-          localStorage.setItem('pendingservicerequest', JSON.stringify({ chartData: pendingRequestValue, label: pendingRequestLabels }))
+          sessionStorage.setItem('servicerequesttype', JSON.stringify({ label, chartData }))
+          sessionStorage.setItem('pendingservicerequest', JSON.stringify({ chartData: pendingRequestValue, label: pendingRequestLabels }))
 
           this.srList = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate));
         }
@@ -293,7 +293,7 @@ export class DashboardComponent implements OnInit {
   GetPoCost(sdate, edate) {
     this.customerDashboardService.GetCostData({ sdate, edate })
       .pipe(first()).subscribe((data: any) => {
-        localStorage.setItem("costData", JSON.stringify(data.object))
+        sessionStorage.setItem("costData", JSON.stringify(data.object))
       })
   }
 

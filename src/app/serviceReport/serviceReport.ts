@@ -264,7 +264,7 @@ export class ServiceReportComponent implements OnInit {
 
     this.transaction = 0;
     this.user = this.accountService.userValue;
-    const role = JSON.parse(localStorage.getItem('roles'));
+    const role = JSON.parse(sessionStorage.getItem('roles'));
 
     if (this.user.username != "admin") {
       this.role = role[0]?.itemCode;

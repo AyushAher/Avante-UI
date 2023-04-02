@@ -63,7 +63,7 @@ export class UserProfileListComponent implements OnInit {
       this.hasDeleteAccess = true;
     } else {
 
-      let role = JSON.parse(localStorage.getItem('roles'));
+      let role = JSON.parse(sessionStorage.getItem('roles'));
       role = role[0]?.itemCode;
 
       if (role == this.environment.custRoleCode) {

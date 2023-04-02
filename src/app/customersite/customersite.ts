@@ -237,7 +237,7 @@ export class CustomerSiteComponent implements OnInit {
       this.custSite = this.customersiteform.value;
       this.custSite.id = this.csiteid;
 
-      localStorage.setItem("site", JSON.stringify(this.custSite));
+      sessionStorage.setItem("site", JSON.stringify(this.custSite));
       return this.router.navigate(['contact', this.type, this.customerid, this.csiteid], { queryParams: { isNewMode: true } });
     }
     else {

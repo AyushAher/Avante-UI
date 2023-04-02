@@ -150,7 +150,7 @@ export class InstrumentComponent implements OnInit {
   ngOnInit() {
     this.transaction = 0;
     this.user = this.accountService.userValue;
-    let role = JSON.parse(localStorage.getItem('roles'));
+    let role = JSON.parse(sessionStorage.getItem('roles'));
     this.profilePermission = this.profileService.userProfileValue;
 
     if (this.profilePermission != null) {

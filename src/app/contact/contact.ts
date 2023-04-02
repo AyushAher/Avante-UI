@@ -182,20 +182,20 @@ export class ContactComponent implements OnInit {
     else {
       switch (this.type) {
         case "C":
-          this.parentEntity = JSON.parse(localStorage.getItem('customer'))
+          this.parentEntity = JSON.parse(sessionStorage.getItem('customer'))
           this.contactform.get('parentEntity').setValue(this.parentEntity.custname);
           break;
         case "CS":
-          this.parentEntity = JSON.parse(localStorage.getItem('site'))
+          this.parentEntity = JSON.parse(sessionStorage.getItem('site'))
           this.contactform.get('parentEntity').setValue(this.parentEntity.custregname);
           break;
         case "D":
-          this.parentEntity = JSON.parse(localStorage.getItem('distributor'));
+          this.parentEntity = JSON.parse(sessionStorage.getItem('distributor'));
           this.contactform.get('parentEntity').setValue(this.parentEntity.distname);
           break;
 
         case "DR":
-          this.parentEntity = JSON.parse(localStorage.getItem('distributorRegion'))
+          this.parentEntity = JSON.parse(sessionStorage.getItem('distributorRegion'))
           this.contactform.get('parentEntity').setValue(this.parentEntity.distregname);
           break;
 
@@ -506,10 +506,10 @@ export class ContactComponent implements OnInit {
 
   back() {
     if (this.isNewSetup) {
-      localStorage.removeItem('distributor');
-      localStorage.removeItem('distributorRegion');
-      localStorage.removeItem('site');
-      localStorage.removeItem('customer');
+      sessionStorage.removeItem('distributor');
+      sessionStorage.removeItem('distributorRegion');
+      sessionStorage.removeItem('site');
+      sessionStorage.removeItem('customer');
 
       this.router.navigate(['distributorregion', this.masterId], {
         queryParams: {

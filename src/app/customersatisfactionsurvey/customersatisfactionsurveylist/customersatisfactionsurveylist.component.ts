@@ -50,7 +50,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
   ngOnInit() {
     this.user = this.accountService.userValue;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
-    let role = JSON.parse(localStorage.getItem('roles'));
+    let role = JSON.parse(sessionStorage.getItem('roles'));
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {

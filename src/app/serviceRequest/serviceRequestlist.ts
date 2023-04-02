@@ -82,7 +82,7 @@ export class ServiceRequestListComponent implements OnInit {
     } else {
       this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
 
-      let role = JSON.parse(localStorage.getItem('roles'));
+      let role = JSON.parse(sessionStorage.getItem('roles'));
       role = role[0]?.itemCode;
 
       if (role == this.environment.custRoleCode) {

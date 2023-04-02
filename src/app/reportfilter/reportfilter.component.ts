@@ -67,7 +67,7 @@ export class ReportfilterComponent implements OnInit {
 
 
     this.user = this.accountService.userValue;
-    var role = JSON.parse(localStorage.getItem('roles'));
+    var role = JSON.parse(sessionStorage.getItem('roles'));
 
     if (this.user.username != "admin") {
       role = role[0]?.itemCode;

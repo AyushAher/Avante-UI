@@ -218,7 +218,7 @@ export class DistributorRegionComponent implements OnInit {
       this.distributorRegionId = Guid.create().toString()
       this.distRegion.id = this.distributorRegionId
 
-      localStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));
+      sessionStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));
 
       if (this.isNewSetup){
        this.distributorRegionService.SaveRegion();

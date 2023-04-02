@@ -35,7 +35,7 @@ export class HomeComponent {
           .pipe(first()).subscribe((data: ListTypeItem[]) => {
             this.roles = data;
             let userrole = this.roles.find(x => x.listTypeItemId == this.user.roleId)
-            localStorage.setItem('roles', JSON.stringify([userrole]))
+            sessionStorage.setItem('roles', JSON.stringify([userrole]))
             if (userrole != null && !this.isRedirected) {
               switch (userrole.itemname) {
                 case "Distributor Support":

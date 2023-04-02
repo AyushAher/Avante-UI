@@ -67,7 +67,7 @@ export class ServiceRequestService {
         //if (id == this.distributor.id) {
         //      // update local storage
         //      const user = { ...this.userValue, ...params };
-        //      localStorage.setItem('user', JSON.stringify(user));
+        //      sessionStorage.setItem('user', JSON.stringify(user));
 
         //      // publish updated user to subscribers
         //      this.userSubject.next(user);
@@ -82,7 +82,7 @@ export class ServiceRequestService {
         //if (id == this.distributor.id) {
         //      // update local storage
         //      const user = { ...this.userValue, ...params };
-        //      localStorage.setItem('user', JSON.stringify(user));
+        //      sessionStorage.setItem('user', JSON.stringify(user));
 
         //      // publish updated user to subscribers
         //      this.userSubject.next(user);

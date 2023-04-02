@@ -50,7 +50,7 @@ export class SearchComponent implements OnInit {
   }
   ngOnInit() {
 
-    let role = JSON.parse(localStorage.getItem('roles'));
+    let role = JSON.parse(sessionStorage.getItem('roles'));
     this.user = this.accountService.userValue;
 
     this.customerSiteService.getAllCustomerSites()
@@ -72,12 +72,12 @@ export class SearchComponent implements OnInit {
 
     });
     this.columnDefs = this.createColumnDefs();
-    if (JSON.parse(localStorage.getItem('search')) != null) {
-      this.form.get('search').setValue(JSON.parse(localStorage.getItem('search')).search);
-      this.form.get('custSiteId').setValue(JSON.parse(localStorage.getItem('search')).custSiteId);
+    if (JSON.parse(sessionStorage.getItem('search')) != null) {
+      this.form.get('search').setValue(JSON.parse(sessionStorage.getItem('search')).search);
+      this.form.get('custSiteId').setValue(JSON.parse(sessionStorage.getItem('search')).custSiteId);
       this.searchKeyword = new search;
-      this.searchKeyword.search = JSON.parse(localStorage.getItem('search')).search;
-      this.searchKeyword.custSiteId = JSON.parse(localStorage.getItem('search')).custSiteId;
+      this.searchKeyword.search = JSON.parse(sessionStorage.getItem('search')).search;
+      this.searchKeyword.custSiteId = JSON.parse(sessionStorage.getItem('search')).custSiteId;
     }
   }
 
@@ -174,7 +174,7 @@ export class SearchComponent implements OnInit {
           //debugger;
           this.visible = true;
           this.instrumentList = data.object;
-          localStorage.setItem('search', JSON.stringify(this.searchKeyword));
+          sessionStorage.setItem('search', JSON.stringify(this.searchKeyword));
         }
       });
   }

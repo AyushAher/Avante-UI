@@ -54,7 +54,7 @@ export class CustomerService {
   }
 
   SaveCustomer() {
-    var customerdata = JSON.parse(localStorage.getItem('customer'));
+    var customerdata = JSON.parse(sessionStorage.getItem('customer'));
 
     this.save(customerdata).subscribe((data: any) => {
       if (data.result)
@@ -72,7 +72,7 @@ export class CustomerService {
         //if (id == this.distributor.id) {
         //      // update local storage
         //      const user = { ...this.userValue, ...params };
-        //      localStorage.setItem('user', JSON.stringify(user));
+        //      sessionStorage.setItem('user', JSON.stringify(user));
 
         //      // publish updated user to subscribers
         //      this.userSubject.next(user);

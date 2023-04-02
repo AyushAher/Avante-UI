@@ -48,7 +48,7 @@ export class CustspinventorylistComponent implements OnInit {
 
   ngOnInit() {
 
-    let role = JSON.parse(localStorage.getItem('roles'));
+    let role = JSON.parse(sessionStorage.getItem('roles'));
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {

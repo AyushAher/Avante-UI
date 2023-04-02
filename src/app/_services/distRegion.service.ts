@@ -21,7 +21,7 @@ export class DistributorRegionService {
   ) { }
 
   SaveRegion() {
-    var formData = JSON.parse(localStorage.getItem('distributorRegion'))
+    var formData = JSON.parse(sessionStorage.getItem('distributorRegion'))
     this.save(formData).subscribe((data: any) => {
       if (data.result) this.notificationService.showSuccess(data.resultMessage, "Success")
       else this.notificationService.showInfo(data.resultMessage, "Info")

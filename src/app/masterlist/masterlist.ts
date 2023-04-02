@@ -84,7 +84,7 @@ export class MasterListComponent implements OnInit {
                 next: (data1: any) => {
 
                   data1.object.forEach((value) => {
-                    localStorage.setItem(value.listTypeId, JSON.stringify(data1.object));
+                    sessionStorage.setItem(value.listTypeId, JSON.stringify(data1.object));
                   })
 
                 }

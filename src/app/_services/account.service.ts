@@ -41,8 +41,8 @@ export class AccountService {
     private notificationService: NotificationService,
     private companyService: CompanyService
   ) {
-    this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
-    this.zohoSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('zohotoken')));
+    this.userSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('user')));
+    this.zohoSubject = new BehaviorSubject<string>(JSON.parse(sessionStorage.getItem('zohotoken')));
     this.user = this.userSubject.asObservable();
     this.notificationService.listen().subscribe((data: any) => {
 
@@ -58,7 +58,7 @@ export class AccountService {
       setTimeout(() => {
         switch (data) {
           case "cim":
-            this.CIMConfig(this.userValue.username, this.password)
+            this.CIMConfig(this.userValue.username, this.password, this.userValue.isAdmin, this.userValue.isSuperAdmin)
             break;
 
           case "company":
@@ -96,7 +96,7 @@ export class AccountService {
 
 
   clear() {
-    localStorage.removeItem('zohotoken');
+    sessionStorage.removeItem('zohotoken');
     this.zohoSubject.next(null);
   }
 
@@ -105,7 +105,7 @@ export class AccountService {
     password = window.btoa(password);
     return this.http.post<User>(`${this.environment.apiUrl}/user/authenticate`, { username, password, companyId, businessUnitId, brandId })
       .pipe(map(user => {
-        localStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('user', JSON.stringify(user));
         this.userSubject.next(user);
         return user;
       }));
@@ -128,13 +128,12 @@ export class AccountService {
               });
             return this.SetUpConfig(username, password)
           }
-          else if (this.currentuser.isAdmin && !this.currentuser.isSuperAdmin)
-          {
-              this.router.navigate(["/"],
-                {
-                  queryParams: { redirected: true }
-                })
-              return this.CIMConfig(username, password, true)           
+          else if (this.currentuser.isAdmin && !this.currentuser.isSuperAdmin) {
+            this.router.navigate(["/"],
+              {
+                queryParams: { redirected: true }
+              })
+            return this.CIMConfig(username, password, true, false)
           }
           else {
             this.profileServicce.getUserProfile(this.currentuser.userProfileId);
@@ -144,7 +143,7 @@ export class AccountService {
                   this.roles = data;
                   let userrole = this.roles.find(x => x.listTypeItemId == this.currentuser.roleId)
                   if (userrole == null) return;
-                  localStorage.setItem('roles', JSON.stringify([userrole]))
+                  sessionStorage.setItem('roles', JSON.stringify([userrole]))
 
                   switch (userrole.itemname) {
                     case "Distributor Support":
@@ -152,9 +151,9 @@ export class AccountService {
                         {
                           queryParams: { redirected: true }
                         })
-                      this.CIMConfig(username, password, false)
+                      this.CIMConfig(username, password, false, false)
                       break;
-                      case "Customer":
+                    case "Customer":
                       this.router.navigate(["custdashboard"]);
                       break;
 
@@ -187,7 +186,7 @@ export class AccountService {
     this.modalRef = this.modalService.show(SetUp, modalOptions);
 
     this.modalRef.content.onClose.subscribe(result => {
-      if (!result.newSetUp && !result.isExisting) return this.CIMConfig(username, this.password);
+      if (!result.newSetUp && !result.isExisting) return this.CIMConfig(username, this.password, true, true);
       else if (!result.newSetUp && result.isExisting) {
         return this.modalService.show(ExistingCIM, modalOptions)
       }
@@ -230,7 +229,7 @@ export class AccountService {
     })
   }
 
-  CIMConfig(username, password, isAdmin = true) {
+  CIMConfig(username, password, isAdmin = true, isSuperAdmin) {
     this.password = password
     this.companyService.GetAllModelData()
       .pipe(first()).subscribe({
@@ -249,28 +248,43 @@ export class AccountService {
               cimData: data
             },
           }
-          this.modalRef = this.modalService.show(CIMComponent, modalOptions);
-          this.modalRef.content.onClose.subscribe(result => {
-            if (!result.result) {
-              this.companyId = result.companyId;
-              return;
-            }
 
-            this.login(username, password, result.form.companyId, result.form.businessUnitId, result.form.brandId)
-              .pipe(first()).subscribe(() => {
+          if (isSuperAdmin || (!isAdmin && !isSuperAdmin)) {
+            this.modalRef = this.modalService.show(CIMComponent, modalOptions);
+            this.modalRef.content.onClose.subscribe(result => {
+              if (!result.result) {
+                this.companyId = result.companyId;
+                return;
+              }
+
+              this.login(username, password, result.form.companyId, isAdmin ? "" : result.form.businessUnitId, isAdmin ? "" : result.form.brandId)
+                .pipe(first()).subscribe(() => {
+                  if (isAdmin) this.router.navigate(['/']);
+                  else {
+                    this.router.navigate(['/distdashboard'])
+                    this.notificationService.filter('loggedin');
+                    setTimeout(() => {
+                      this.router.navigate(['/']);
+                    }, 200);
+                  }
+                })
+            })
+          }
+          else if (!isSuperAdmin && isAdmin) {
+            this.login(username, password, this.userValue.companyId, "", "")
+              .subscribe(() => {
                 this.currentuser = this.userValue;
-
-                if (isAdmin) this.router.navigate(["/"]);
+                if (isAdmin) this.router.navigate(['/']);
                 else {
-                  this.notificationService.filter('loggedin');
                   this.router.navigate(['/distdashboard'])
+                  this.notificationService.filter('loggedin');
                   setTimeout(() => {
                     this.router.navigate(['/']);
                   }, 200);
                 }
               })
+          }
 
-          })
         },
         error: () => this.notificationService.showError("Some Error Occurred. Please Refresh the page.", "Error")
       })
@@ -279,7 +293,7 @@ export class AccountService {
 
   logout() {
     // remove user from local storage and set current user to null
-    localStorage.clear();
+    sessionStorage.clear();
     this.clear();
     this.userSubject.next(null);
     this.router.navigate(['/account/login']);
@@ -312,7 +326,7 @@ export class AccountService {
         if (id == this.userValue.id) {
           // update local storage
           const user = { ...this.userValue, ...params };
-          localStorage.setItem('user', JSON.stringify(user));
+          sessionStorage.setItem('user', JSON.stringify(user));
 
           // publish updated user to subscribers
           this.userSubject.next(user);

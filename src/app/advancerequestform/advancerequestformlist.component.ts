@@ -54,7 +54,7 @@ export class AdvancerequestlistformComponent implements OnInit {
             this.hasUpdateAccess = true;
             this.hasReadAccess = true;
         } else {
-            role = JSON.parse(localStorage.getItem('roles'));
+            role = JSON.parse(sessionStorage.getItem('roles'));
             role = role[0].itemCode;
         }
 

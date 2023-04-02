@@ -58,7 +58,7 @@ export class EngschedulerComponent implements OnInit {
   id: string;
   link: string;
   DistData: any[];
-  public ownerDataSource: Object[] = JSON.parse(localStorage.getItem('ownerDataSrc'))
+  public ownerDataSource: Object[] = JSON.parse(sessionStorage.getItem('ownerDataSrc'))
   public eventSettings: EventSettingsModel
   public views: Array<string> = ['Week', 'Month'];
   public group: GroupModel = {
@@ -88,7 +88,7 @@ export class EngschedulerComponent implements OnInit {
     // alert("1")
     this.id = this.route.snapshot.paramMap.get('id');
     this.isRemoteDesktop = this.route.snapshot.queryParams?.action == "RMD"
-    let role = JSON.parse(localStorage.getItem('roles'));
+    let role = JSON.parse(sessionStorage.getItem('roles'));
     this.link = `/servicerequest/${this.id}`
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
@@ -208,8 +208,8 @@ export class EngschedulerComponent implements OnInit {
                     owerner.push({ OwnerText: x.fname + " " + x.lname, Id: x.id })
                   })
 
-                  let owner = localStorage.getItem('ownerDataSrc')
-                  localStorage.setItem('ownerDataSrc', JSON.stringify(owerner))
+                  let owner = sessionStorage.getItem('ownerDataSrc')
+                  sessionStorage.setItem('ownerDataSrc', JSON.stringify(owerner))
 
                   if (owner == null) {
                     this.router.navigate(["/"], { queryParams: { redirected: true } }).then((data: any) => {

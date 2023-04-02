@@ -114,7 +114,7 @@ export class MasterListItemComponent implements OnInit {
           }, 0);
         }
       });
-    this.list2 = JSON.parse(localStorage.getItem(this.listid))
+    this.list2 = JSON.parse(sessionStorage.getItem(this.listid))
     if (this.list2 != null) {
       if (this.list2[0].listCode == this.environment.configTypeCode || this.list2[0].listCode == this.environment.location) {
         this.addAccess = true;

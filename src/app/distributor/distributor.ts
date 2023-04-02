@@ -196,7 +196,7 @@ export class DistributorComponent implements OnInit {
       this.distributorModel = this.form.value;
       this.distributorModel.id = this.distributorId;
 
-      localStorage.setItem("distributor", JSON.stringify(this.distributorModel));
+      sessionStorage.setItem("distributor", JSON.stringify(this.distributorModel));
 
       if (this.isNewSetUp)
         return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {

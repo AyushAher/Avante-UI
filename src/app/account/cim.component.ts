@@ -62,10 +62,22 @@ export class CIMComponent implements OnInit {
     this.onClose = new Subject();
 
     this.Form = this.formBuilder.group({
-      brandId: ["", Validators.required],
-      businessUnitId: ["", Validators.required],
+      brandId: [""],
+      businessUnitId: [""],
       companyId: ["", Validators.required]
-    })
+    });
+
+    setTimeout(() => {
+      if (!this.user.isAdmin) {
+        this.Form.get('brandId').setValidators([Validators.required])
+        this.Form.get('brandId').updateValueAndValidity();
+
+        this.Form.get('businessUnitId').setValidators([Validators.required])
+        this.Form.get('businessUnitId').updateValueAndValidity();
+      }
+    }, 500);
+
+
 
     let data = this.cimData;
 

@@ -78,7 +78,7 @@ export class StaydetailsListComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           if (this.user.username != 'admin') {
-            role = JSON.parse(localStorage.getItem('roles'));
+            role = JSON.parse(sessionStorage.getItem('roles'));
             role = role[0]?.itemCode;
             this.distributorService.getByConId(this.user.contactId)
               .pipe(first())

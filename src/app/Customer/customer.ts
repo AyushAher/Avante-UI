@@ -221,7 +221,7 @@ export class CustomerComponent implements OnInit {
       this.customer = this.customerform.value;
       this.customer.id = this.customerId;
 
-      localStorage.setItem("customer", JSON.stringify(this.customer));
+      sessionStorage.setItem("customer", JSON.stringify(this.customer));
 
       return this.router.navigate([`/contact/${this.type}/${this.customerId}`], {
         queryParams: {

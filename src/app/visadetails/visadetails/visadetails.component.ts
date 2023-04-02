@@ -105,7 +105,7 @@ export class VisadetailsComponent implements OnInit {
 
   ngOnInit() {
 
-    let role = JSON.parse(localStorage.getItem('roles'));
+    let role = JSON.parse(sessionStorage.getItem('roles'));
 
     this.transaction = 0;
     this.user = this.accountService.userValue;

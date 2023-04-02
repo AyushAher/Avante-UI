@@ -85,7 +85,7 @@ export class NavSideMenuComponent implements OnInit {
 
     this.user = this.accountService.userValue;
     this.profileService.getUserProfile(this.user.userProfileId);
-    this.profile = JSON.parse(localStorage.getItem('userprofile'));
+    this.profile = JSON.parse(sessionStorage.getItem('userprofile'));
 
     this.isAdmin = this.user.isAdmin;
     this.isSuperAdmin = this.user.isSuperAdmin;

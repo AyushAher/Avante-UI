@@ -82,7 +82,7 @@ export class sostatusComponent implements OnInit {
       else {
         this.zohoservice.authwithcode(this.zohocode, "sostatus").subscribe({
           next: (data: any) => {
-            localStorage.setItem('zohotoken', JSON.stringify(data.object));
+            sessionStorage.setItem('zohotoken', JSON.stringify(data.object));
             this.accountService.zohoauthSet(data.object);
             this.getquotation("", 1);
           },

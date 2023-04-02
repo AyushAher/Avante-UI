@@ -16,7 +16,7 @@ export class ProfileService {
     private environment: EnvService,
     private http: HttpClient
   ) {
-    this.profileSubject = new BehaviorSubject<ProfileReadOnly>(JSON.parse(localStorage.getItem('userprofile')));
+    this.profileSubject = new BehaviorSubject<ProfileReadOnly>(JSON.parse(sessionStorage.getItem('userprofile')));
     //this.user = this.distrubutorSubject.asObservable();
     this.userprofile = this.profileSubject.asObservable();
   }
@@ -54,7 +54,7 @@ export class ProfileService {
         {
           this.getById(data.object.profileId)
             .pipe(first()).subscribe((pdata: any) => {
-              localStorage.setItem('userprofile', JSON.stringify(pdata.object));
+              sessionStorage.setItem('userprofile', JSON.stringify(pdata.object));
               this.profileSubject.next(pdata.object);
           });
         }
@@ -68,7 +68,7 @@ export class ProfileService {
         //if (id == this.distributor.id) {
         //      // update local storage
         //      const user = { ...this.userValue, ...params };
-        //      localStorage.setItem('user', JSON.stringify(user));
+        //      sessionStorage.setItem('user', JSON.stringify(user));
 
         //      // publish updated user to subscribers
         //      this.userSubject.next(user);

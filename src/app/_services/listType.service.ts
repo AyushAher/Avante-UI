@@ -17,7 +17,7 @@ export class ListTypeService {
     private environment: EnvService,
     private http: HttpClient
   ) {
-    this.roleSubject = new BehaviorSubject<ListTypeItem>(JSON.parse(localStorage.getItem('roles')));
+    this.roleSubject = new BehaviorSubject<ListTypeItem>(JSON.parse(sessionStorage.getItem('roles')));
     this.role = this.roleSubject.asObservable();
   }
 
@@ -62,7 +62,7 @@ export class ListTypeService {
         //if (id == this.distributor.id) {
         //      // update local storage
         //      const user = { ...this.userValue, ...params };
-        //      localStorage.setItem('user', JSON.stringify(user));
+        //      sessionStorage.setItem('user', JSON.stringify(user));
 
         //      // publish updated user to subscribers
         //      this.userSubject.next(user);

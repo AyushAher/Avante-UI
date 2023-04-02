@@ -90,11 +90,11 @@ export class NavMenuComponent {
   }
 
   ChangeCIM() {
-    this.accountService.CIMConfig(this.user.username, localStorage.getItem('password'));
+    this.accountService.CIMConfig(this.user.username, sessionStorage.getItem('password'));
   }
 
   NewCIMSetup() {
-    this.accountService.Authenticate(this.user.username, localStorage.getItem('password'), this.user.companyId);
+    this.accountService.Authenticate(this.user.username, sessionStorage.getItem('password'), this.user.companyId);
   }
 
   logout() {

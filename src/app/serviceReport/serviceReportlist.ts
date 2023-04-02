@@ -69,7 +69,7 @@ export class ServiceReportListComponent implements OnInit {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
     } else {
-      this.role = JSON.parse(localStorage.getItem('roles'));
+      this.role = JSON.parse(sessionStorage.getItem('roles'));
       this.role = this.role[0]?.itemCode;
     }
 

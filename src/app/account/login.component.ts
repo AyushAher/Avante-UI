@@ -24,9 +24,9 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     //debugger;
 
-    if (localStorage.getItem('user') !== null) {
-      localStorage.removeItem('user');
-      localStorage.removeItem('userprofile');
+    if (sessionStorage.getItem('user') !== null) {
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('userprofile');
     }
 
     this.form = this.formBuilder.group({
@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    localStorage.setItem('password', this.f.password.value);
+    sessionStorage.setItem('password', this.f.password.value);
     this.accountService.Authenticate(this.f.username.value, this.f.password.value, "", "", "")
     setTimeout(() => this.loading = false, 5000);
   }

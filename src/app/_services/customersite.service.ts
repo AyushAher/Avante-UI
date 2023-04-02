@@ -20,7 +20,7 @@ export class CustomerSiteService {
   }
 
   SaveSite() {
-    var formData = JSON.parse(localStorage.getItem('site'));
+    var formData = JSON.parse(sessionStorage.getItem('site'));
     this.save(formData).subscribe((data: any) => {
       if (data.result) this.notificationService.showSuccess(data.resultMessage, "Success")
       else this.notificationService.showInfo(data.resultMessage, "Info")
@@ -53,7 +53,7 @@ export class CustomerSiteService {
         //if (id == this.distributor.id) {
         //      // update local storage
         //      const user = { ...this.userValue, ...params };
-        //      localStorage.setItem('user', JSON.stringify(user));
+        //      sessionStorage.setItem('user', JSON.stringify(user));
 
         //      // publish updated user to subscribers
         //      this.userSubject.next(user);

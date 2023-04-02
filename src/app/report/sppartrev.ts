@@ -89,7 +89,7 @@ export class sppartrevComponent implements OnInit {
           next: (data: any) => {
             debugger;
             //alert(data.access_token);
-            localStorage.setItem('zohotoken', JSON.stringify(data.object));
+            sessionStorage.setItem('zohotoken', JSON.stringify(data.object));
             this.accountService.zohoauthSet(data.object);
             this.getsrcontrev("",1);
           },

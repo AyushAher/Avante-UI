@@ -103,7 +103,7 @@ export class TraveldetailsComponent implements OnInit {
 
     this.user = this.accountService.userValue;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
-    let role = JSON.parse(localStorage.getItem('roles'));
+    let role = JSON.parse(sessionStorage.getItem('roles'));
     this.id = this.route.snapshot.paramMap.get("id");
 
     this.profilePermission = this.profileService.userProfileValue;

@@ -30,7 +30,7 @@ export class DistributorService {
 
 
   SaveDistributor() {
-    var value = JSON.parse(localStorage.getItem('distributor'));
+    var value = JSON.parse(sessionStorage.getItem('distributor'));
     this.save(value).subscribe((data: any) => {
       if (data.result) {
         this.notificationService.showSuccess(data.resultMessage, "Success");

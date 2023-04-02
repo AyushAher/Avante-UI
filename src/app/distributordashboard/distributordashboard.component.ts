@@ -118,7 +118,7 @@ export class DistributordashboardComponent implements OnInit {
           instrumnetInstalled: data.object.instrumentInstalled,
           instrumnetUnderService: data.object.instrumentUnderService
         }
-        localStorage.setItem('instrumentData', JSON.stringify(obj))
+        sessionStorage.setItem('instrumentData', JSON.stringify(obj))
       })
   }
 
@@ -127,7 +127,7 @@ export class DistributordashboardComponent implements OnInit {
       .pipe(first()).subscribe((data: any) => {
         this.customerRevenueList = data.object
         this.totalRevenue = data.object.map(x => x.total).reduce((a, b) => a + b, 0);
-        localStorage.setItem('customerrevenue', JSON.stringify(data.object))
+        sessionStorage.setItem('customerrevenue', JSON.stringify(data.object))
       })
   }
 
@@ -185,7 +185,7 @@ export class DistributordashboardComponent implements OnInit {
         }, Object.create(null));
 
         var lines = { AMC: amcGrp, PREV: prevGrp, ONCAL: oncallGrp, BRKDW: brkdwGrp, PLAN: planGrp }
-        localStorage.setItem('lines', JSON.stringify(lines));
+        sessionStorage.setItem('lines', JSON.stringify(lines));
 
       })
   }
@@ -204,7 +204,7 @@ export class DistributordashboardComponent implements OnInit {
               chartData.push(x.count);
             })
 
-            localStorage.setItem('instrumentWithHighestServiceRequest', JSON.stringify({ label: label, data: chartData }))
+            sessionStorage.setItem('instrumentWithHighestServiceRequest', JSON.stringify({ label: label, data: chartData }))
             this.sRRaised = sreq.serviceRequestRaised
             this.insHighestSReq = sreq.instrumentWithHighestServiceRequest.length
             this.engHandlingReq = sreq.engHandlingReq

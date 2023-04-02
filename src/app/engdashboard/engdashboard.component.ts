@@ -56,8 +56,8 @@ export class EngdashboardComponent implements OnInit {
 
         compReqLabels.forEach(x => compReqValues.push(this.compSerReq.filter(y => y.serviceType == x).length))
 
-        localStorage.setItem("pendingSerReq", JSON.stringify({ pendingReqLabels, pendingReqValues }))
-        localStorage.setItem("compSerReq", JSON.stringify({ compReqLabels, compReqValues }))
+        sessionStorage.setItem("pendingSerReq", JSON.stringify({ pendingReqLabels, pendingReqValues }))
+        sessionStorage.setItem("compSerReq", JSON.stringify({ compReqLabels, compReqValues }))
       })
 
     this.EngDashboardService.GetSPCon(this.currentCalender).pipe(first())
