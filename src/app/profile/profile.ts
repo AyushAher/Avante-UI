@@ -154,6 +154,17 @@ export class ProfileComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.profileform.enable();
+
+      this.router.navigate(
+        ["."], 
+        {
+          relativeTo: this.route,
+          queryParams: {
+            isNSNav: false
+          }, 
+          queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
+      
     }
   }
 
@@ -161,17 +172,9 @@ export class ProfileComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["profilelist"],{
-          queryParams: {
-            isNotSafeNavigation: false
-          }
-        })
+        this.router.navigate(["profilelist"])
     }
-    else this.router.navigate(["profilelist"],{
-      queryParams: {
-        isNotSafeNavigation: false
-      }
-    })
+    else this.router.navigate(["profilelist"])
 
   }
   GetById() {
