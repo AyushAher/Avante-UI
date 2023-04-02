@@ -134,6 +134,16 @@ export class CountryComponent implements OnInit {
       this.isEditMode = true;
       this.countryform.enable();
       this.FormControlsDisable();
+
+      this.router.navigate(
+        ["."], 
+        {
+          relativeTo: this.route,
+          queryParams: {
+            isNSNav: false
+          }, 
+          queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
     }
   }
 
@@ -141,17 +151,9 @@ export class CountryComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["countrylist"],{
-          queryParams: {
-            isNotSafeNavigation: false
-          }
-        });
+        this.router.navigate(["countrylist"]);
     }
-    else this.router.navigate(["countrylist"],{
-      queryParams: {
-        isNotSafeNavigation: false
-      }
-    });
+    else this.router.navigate(["countrylist"]);
 
   }
 
