@@ -799,6 +799,7 @@ export class InstrumentComponent implements OnInit {
       this.instrument.wrntystdt = this.datepipie.transform(GetParsedDate(this.instrument.wrntystdt), 'dd/MM/YYYY')
 
     if (this.id == null) {
+      //debugger;
       this.instrumentService.save(this.instrument)
         .pipe(first())
         .subscribe({

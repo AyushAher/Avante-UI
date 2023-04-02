@@ -31,7 +31,7 @@ export class MRenderComponent implements AgRendererComponent {
 
   }
   agInit(params: any): void {
-    //debugger;
+    debugger;
     this.params = params;
     this.isMaster = params.data.isMaster
 

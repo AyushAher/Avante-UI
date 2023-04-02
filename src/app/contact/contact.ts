@@ -511,9 +511,9 @@ export class ContactComponent implements OnInit {
       localStorage.removeItem('site');
       localStorage.removeItem('customer');
 
-      this.router.navigate(['/'], {
+      this.router.navigate(['distributorregion', this.masterId], {
         queryParams: {
-          isNotSafeNavigation: false
+          isNotSafeNavigation: false, isNewSetup:true
         }
       });
     }

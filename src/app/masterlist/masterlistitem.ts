@@ -70,7 +70,7 @@ export class MasterListItemComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
-    if (this.user.isAdmin) {
+    if (this.user.isAdmin) {      
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;

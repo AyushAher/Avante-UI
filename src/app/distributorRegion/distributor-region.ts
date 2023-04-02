@@ -220,9 +220,11 @@ export class DistributorRegionComponent implements OnInit {
 
       localStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));
 
-      if (this.isNewSetup)
-        return this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
-
+      if (this.isNewSetup){
+       this.distributorRegionService.SaveRegion();
+        //return this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
+        return true;
+      }
       else return this.router.navigate(['contact', this.type, this.distributorId, this.distRegion.id], { queryParams: { isNewMode: true } });
 
     }

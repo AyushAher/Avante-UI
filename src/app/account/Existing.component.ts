@@ -108,10 +108,10 @@ export default class ExistingCIM implements OnInit {
                 if (this.contactList && this.contactList.length > 0) this.f.contact.setValue(this.contactList[0].id);
                 else return this.Navigate(['contact', 'D', this.f.distributor.value]);
 
-                // var distRegionReq: any = await this.distRegionService.getAll().toPromise();
-                // this.distRegionList = distRegionReq.object;
-                // if (this.distRegionList && this.distRegionList.length > 0) this.f.distRegion.setValue(this.distRegionList[0].id);
-                // else return this.Navigate(['distributorregion', this.f.distributor.value]);
+                var distRegionReq: any = await this.distRegionService.getAll().toPromise();
+                this.distRegionList = distRegionReq.object;
+                if (this.distRegionList && this.distRegionList.length > 0) this.f.distRegion.setValue(this.distRegionList[0].id);
+                else return this.Navigate(['distributorregion', this.f.distributor.value]);
 
                 // var profileReq: any = await this.profileService.getAll().toPromise();
                 // this.profileList = profileReq.object;
