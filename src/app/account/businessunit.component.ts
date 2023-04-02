@@ -51,6 +51,10 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     var id = this.activeRoute.snapshot.paramMap.get("id")
     this.isNewMode = id == null;
 
+    let user = this.AccountService.userValue;
+    this.Form.get('companyId').setValue(user.companyId);
+    this.Form.get('companyId').disable();
+
     if (id) {
       this.id = id;
       this.Form.get('id').setValue(id);
@@ -66,8 +70,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
 
 
     if (this.companyId) this.f.companyId.setValue(this.companyId)
-    else {
-      let user = this.AccountService.userValue;
+    else {      
       this.companyId = user.companyId;
     }
   }
@@ -111,14 +114,14 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     this.Form.enable();
     let formData = this.Form.value;
     if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
-    if (!this.isDialog) this.CancelEdit();
+    //if (!this.isDialog) this.CancelEdit();
 
 
     if (!this.id) {
       var saveRequest: any = await this.businessUnitService.Save(this.Form.value).toPromise();
       let success = saveRequest.httpResponceCode == 200;
       if (success) {
-        this.onClose.next({ result: success, object: saveRequest.object });
+        //this.onClose.next({ result: success, object: saveRequest.object });
         if (!this.isDialog) {
           this.notificationService.showSuccess("Business Unit created successfully!", "Success")
           this.router.navigate(["/businessunitlist"])

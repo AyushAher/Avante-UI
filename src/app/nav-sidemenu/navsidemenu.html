@@ -38,12 +38,12 @@
                       </a>
                     </li>
                     <li>
-                      <a class="collapse-item" (click)="navigate('/businessunitlist')" *ngIf="isSuperAdmin">
+                      <a class="collapse-item" (click)="navigate('/businessunitlist')" *ngIf="isAdmin">
                         <i class="bx bx-right-arrow-alt"></i>Business Unit
                       </a>
                     </li>
                     <li>
-                      <a class="collapse-item" (click)="navigate('/brandlist')" *ngIf="isSuperAdmin">
+                      <a class="collapse-item" (click)="navigate('/brandlist')" *ngIf="isAdmin">
                         <i class="bx bx-right-arrow-alt"></i> Brand
                       </a>
                     </li>
