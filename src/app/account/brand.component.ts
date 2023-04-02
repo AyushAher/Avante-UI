@@ -47,6 +47,9 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
       id: [""]
     });
 
+    let user = this.AccountService.userValue;
+    this.Form.get('companyId').setValue(user.companyId);
+    this.Form.get('companyId').disable();
     var id = this.activeRoute.snapshot.paramMap.get("id")
     this.isNewMode = id == null;
 
@@ -63,8 +66,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     this.companyList = request.object;
 
     if (this.companyId) this.f.companyId.setValue(this.companyId)
-    else {
-      let user = this.AccountService.userValue;
+    else {      
       this.companyId = user.companyId;
     }
 
@@ -110,13 +112,13 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     this.Form.enable();
     let formData = this.Form.value;
     if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
-    if (!this.isDialog) this.CancelEdit();
+    //if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
       var saveRequest: any = await this.brandService.Save(this.Form.value).toPromise();
       let success = saveRequest.httpResponceCode == 200;
       if (success) {
-        this.onClose.next({ result: success, object: saveRequest.object });
+        //this.onClose.next({ result: success, object: saveRequest.object });
         if (!this.isDialog) {
           this.notificationService.showSuccess("Brand created successfully!", "Success")
           this.router.navigate(["/brandlist"])
