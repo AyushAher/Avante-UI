@@ -259,7 +259,7 @@ export class AccountService {
                 return;
               }
 
-              this.login(username, password, result.form.companyId, isAdmin ? "" : result.form.businessUnitId, isAdmin ? "" : result.form.brandId)
+              this.login(username, password, result.form.companyId, (isAdmin || isSuperAdmin) ? "" : result.form.businessUnitId, (isAdmin || isSuperAdmin) ? "" : result.form.brandId)
                 .pipe(first()).subscribe(() => {
                   if (isAdmin) this.router.navigate(['/']);
                   else {
