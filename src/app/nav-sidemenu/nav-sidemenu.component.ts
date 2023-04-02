@@ -65,6 +65,7 @@ export class NavSideMenuComponent implements OnInit {
   hasServiceCompletionReport: boolean;
   pendingQuoteRequestReport: boolean;
   isAdmin: boolean;
+  isSuperAdmin: boolean;
 
   constructor(
     private accountService: AccountService,
@@ -87,6 +88,7 @@ export class NavSideMenuComponent implements OnInit {
     this.profile = JSON.parse(localStorage.getItem('userprofile'));
 
     this.isAdmin = this.user.isAdmin;
+    this.isSuperAdmin = this.user.isSuperAdmin;
 
     if (this.profile != null) {
       if (this.profile.permissions.filter(x => x.screenCode == 'SDIST').length > 0) {

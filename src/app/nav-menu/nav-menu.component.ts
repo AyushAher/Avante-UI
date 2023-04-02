@@ -17,6 +17,7 @@ export class NavMenuComponent {
   bsModalRef: BsModalRef;
   notifications: any = 0;
   isAdmin: boolean = false;
+  isSuperAdmin: boolean = false;
   @Output() showNotifications = new EventEmitter<boolean>()
   @Input() isClosed = false;
   notificationList: any[];
@@ -29,6 +30,7 @@ export class NavMenuComponent {
   ) {
     this.accountService.userSubject.subscribe((data) => this.user = data);
     this.isAdmin = this.user.isAdmin;
+    this.isSuperAdmin = this.user.isSuperAdmin;
 
     setTimeout(() => {
       this.userNotificationService.getAll().pipe(first())
