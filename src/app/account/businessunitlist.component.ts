@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { Amc, User } from "../_models";
 import { AccountService } from "../_services";
@@ -24,6 +24,7 @@ export class BusinessUnitListComponent implements OnInit {
         private router: Router,
         private accountService: AccountService,
         private BusinessUnitService: BusinessUnitService,
+        private route: ActivatedRoute
     ) { }
 
     async ngOnInit() {
@@ -41,7 +42,13 @@ export class BusinessUnitListComponent implements OnInit {
     }
 
     Add() {
-        this.router.navigate(['businessunit']);
+        this.router.navigate(['businessunit'],
+            {
+        
+      queryParams: {
+        isNSNav: false
+      },// remove to replace all query params by provided
+            });
     }
 
 

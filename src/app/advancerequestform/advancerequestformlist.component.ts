@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { BsModalRef } from "ngx-bootstrap/modal";
 import { first } from "rxjs/operators";
@@ -31,6 +31,7 @@ export class AdvancerequestlistformComponent implements OnInit {
         private accountService: AccountService,
         private Service: AdvancerequestformService,
         private profileService: ProfileService,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
@@ -65,7 +66,12 @@ export class AdvancerequestlistformComponent implements OnInit {
     }
 
     Add() {
-        this.router.navigate(["advancerequestform"]);
+        this.router.navigate(["advancerequestform"],
+            {
+                queryParams: {
+                    isNSNav: false
+                },// remove to replace all query params by provided
+            });
     }
 
     EditRecord() {

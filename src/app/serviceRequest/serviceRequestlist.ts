@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Country, ProfileReadOnly, ServiceRequest, User } from '../_models';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
@@ -60,7 +60,7 @@ export class ServiceRequestListComponent implements OnInit {
     private serviceRequestService: ServiceRequestService,
     private listTypeService: ListTypeService,
     private environment: EnvService,
-
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -154,7 +154,12 @@ export class ServiceRequestListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['servicerequest']);
+    this.router.navigate(['servicerequest'],
+      {
+        queryParams: {
+          isNSNav: false
+        },
+      });
   }
 
   ShowData(event) {

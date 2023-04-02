@@ -103,7 +103,7 @@ export class LocalexpenseslistComponent implements OnInit {
           }
         },
         error: (error) => {
-          
+
           this.loading = false;
         },
       });
@@ -111,7 +111,12 @@ export class LocalexpenseslistComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(["localexpenses"]);
+    this.router.navigate(["localexpenses"],
+      {
+        queryParams: {
+          isNSNav: false
+        },
+      });
   }
 
   private createColumnDefs() {

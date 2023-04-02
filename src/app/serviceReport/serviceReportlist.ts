@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Country, ProfileReadOnly, ServiceReport, User } from '../_models';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
@@ -50,7 +50,9 @@ export class ServiceReportListComponent implements OnInit {
     private profileService: ProfileService,
     private preventivemaintenancesService: PreventivemaintenancesService,
     private ServiceReportService: ServiceReportService,
-    private serviceRequestService: ServiceRequestService
+    private serviceRequestService: ServiceRequestService,
+    private route: ActivatedRoute
+
   ) {
 
   }
@@ -74,14 +76,19 @@ export class ServiceReportListComponent implements OnInit {
     }
 
     if (this.role == this.environment.distRoleCode) this.isDist = true;
-    
+
     this.getAllRecords();
 
     this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
-    this.router.navigate(['servicereport']);
+    this.router.navigate(['servicereport'],
+      {
+        queryParams: {
+          isNSNav: false
+        },
+      });
   }
 
   ShowData(event) {

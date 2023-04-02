@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from "@angular/forms";
 import { ProfileReadOnly, User } from "../_models";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AccountService, ProfileService, SrRecomandService } from "../_services";
 import { first } from "rxjs/operators";
 import { DatePipe } from "@angular/common";
@@ -38,6 +38,8 @@ export class SparepartsrecommendedComponent implements OnInit {
     private Service: SrRecomandService,
     private profileService: ProfileService,
     private environment: EnvService,
+    private route: ActivatedRoute
+
   ) {
   }
 
@@ -65,14 +67,19 @@ export class SparepartsrecommendedComponent implements OnInit {
     }
     else role = role[0]?.itemCode;
     if (role == this.environment.distRoleCode) this.isDist = true
-   
+
     this.Service.getByGrid(this.user.contactId).pipe(first())
       .subscribe((data: any) => this.List = data.object)
     this.columnDefs = this.createColumnDefs();
   }
 
   Add() {
-    this.router.navigate(["localexpenses"]);
+    this.router.navigate(["localexpenses"],
+      {
+        queryParams: {
+          isNSNav: false
+        },
+      });
   }
 
   DataFilter(event) {

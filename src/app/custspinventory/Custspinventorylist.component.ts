@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AccountService, NotificationService, ProfileService } from "../_services";
 import { CustspinventoryService } from "../_services/custspinventory.service";
 import { RenderComponent } from "../distributor/rendercomponent";
@@ -42,7 +42,9 @@ export class CustspinventorylistComponent implements OnInit {
     private accountService: AccountService,
     private Service: CustspinventoryService,
     private profileService: ProfileService,
-    private environment: EnvService
+    private environment: EnvService,
+    private route: ActivatedRoute
+
   ) {
   }
 
@@ -80,7 +82,12 @@ export class CustspinventorylistComponent implements OnInit {
 
 
   Add() {
-    this.router.navigate(["customerspinventory"]);
+    this.router.navigate(["customerspinventory"],
+      {
+        queryParams: {
+          isNSNav: false
+        },
+      });
   }
 
   EditRecord() {

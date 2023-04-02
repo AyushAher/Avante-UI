@@ -94,7 +94,11 @@ export class OfferrequestlistComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(["offerrequest"]);
+    this.router.navigate(["offerrequest"], {
+      queryParams: {
+        isNSNav: false
+      }
+    });
   }
 
   EditRecord() {

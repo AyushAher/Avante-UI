@@ -92,7 +92,11 @@ export class SparePartListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['sparepart']);
+    this.router.navigate(['sparepart'], {
+      queryParams: {
+        isNSNav: false
+      }
+    });
   }
   export() {
     this.router.navigate(['exportsparepart']);

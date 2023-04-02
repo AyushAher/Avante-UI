@@ -1,7 +1,7 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { ColDef, GridApi } from 'ag-grid-community';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -47,6 +47,8 @@ export class PastservicereportlistComponent implements OnInit {
         private environment: EnvService,
         private Service: PastservicereportService,
         private profileService: ProfileService,
+        private route: ActivatedRoute
+
     ) {
     }
 
@@ -92,13 +94,18 @@ export class PastservicereportlistComponent implements OnInit {
     }
 
     Add() {
-        this.router.navigate(["pastservicereport"]);
+        this.router.navigate(["pastservicereport"],
+            {
+                queryParams: {
+                    isNSNav: false
+                },// remove to replace all query params by provided
+            });
     }
 
     EditRecord(e) {
         var data = this.api.getSelectedRows()[0]
         var colIndex = e.event.target.ariaColIndex
-        
+
         if (colIndex && colIndex != 6)
             this.router.navigate([`pastservicereport/${data.id}`])
     }
@@ -191,8 +198,8 @@ export class DownloadReportFile implements AgRendererComponent {
         return false;
     }
 
-    download() {        
-        this.fileService.download(this.params.value).subscribe((event) => {           
+    download() {
+        this.fileService.download(this.params.value).subscribe((event) => {
             if (event.type === HttpEventType.Response) {
                 this.downloadFile(event);
             }

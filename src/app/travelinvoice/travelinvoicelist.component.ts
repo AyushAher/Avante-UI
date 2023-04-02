@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { first } from "rxjs/operators";
 import { RenderComponent } from "../distributor/rendercomponent";
@@ -30,6 +30,7 @@ export class TravelInvoiceListComponent implements OnInit {
         private accountService: AccountService,
         private Service: TravelinvoiceService,
         private profileService: ProfileService,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
@@ -64,7 +65,11 @@ export class TravelInvoiceListComponent implements OnInit {
     }
 
     Add() {
-        this.router.navigate(["travelinvoice"]);
+        this.router.navigate(["travelinvoice"], {
+            queryParams: {
+                isNSNav: false
+            },// remove to replace all query params by provided
+        });
     }
 
     EditRecord() {

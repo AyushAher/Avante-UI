@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Amc, Country, ProfileReadOnly, User } from '../_models';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
@@ -45,7 +45,9 @@ export class AmcListComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private AmcService: AmcService,
-    private environment: EnvService
+    private environment: EnvService,
+    private route: ActivatedRoute
+
   ) {
 
   }
@@ -81,7 +83,11 @@ export class AmcListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['amc']);
+    this.router.navigate(['amc'], {
+      queryParams: {
+        isNSNav: false
+      },
+    });
   }
 
 

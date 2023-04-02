@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { first } from "rxjs/operators";
@@ -36,6 +36,8 @@ export class TravelexpenseListComponent implements OnInit {
         private profileService: ProfileService,
         private modalService: BsModalService,
         private listTypeService: ListTypeService,
+        private route: ActivatedRoute
+
     ) { }
 
     ngOnInit(): void {
@@ -70,14 +72,18 @@ export class TravelexpenseListComponent implements OnInit {
     }
 
     Add() {
-        this.router.navigate(["travelexpense"]);
+        this.router.navigate(["travelexpense"], {
+            queryParams: {
+                isNSNav: false
+            },// remove to replace all query params by provided
+        });
     }
 
     EditRecord() {
         var data = this.api.getSelectedRows()[0]
         this.router.navigate([`travelexpense/${data.id}`])
     }
-    
+
     private createColumnDefs() {
         return [
             {

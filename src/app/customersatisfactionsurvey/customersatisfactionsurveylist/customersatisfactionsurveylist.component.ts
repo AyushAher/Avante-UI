@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { EnvService } from 'src/app/_services/env/env.service';
@@ -44,7 +44,8 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
     private profileService: ProfileService,
     private distributorService: DistributorService,
     private listTypeService: ListTypeService,
-    private environment: EnvService
+    private environment: EnvService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -107,7 +108,12 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(["/customersatisfactionsurvey"]);
+    this.router.navigate(["/customersatisfactionsurvey"],
+      {
+        queryParams: {
+          isNSNav: false
+        },
+      });
   }
 
   EditRecord() {
