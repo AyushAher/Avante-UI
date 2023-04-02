@@ -128,8 +128,18 @@ export class MasterListItemComponent implements OnInit {
   }
 
   EditMode() {
-    if (confirm("Are you sure you want to edit the record?")) {
+       if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
+
+      this.router.navigate(
+        ["."],
+        {
+          relativeTo: this.route,
+          queryParams: {
+            isNSNav: false
+          },
+          queryParamsHandling: 'merge',});
+
       this.masterlistitemform.enable();
       this.FormControlDisable();
     }
