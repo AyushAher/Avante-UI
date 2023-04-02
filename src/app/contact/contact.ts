@@ -291,7 +291,7 @@ export class ContactComponent implements OnInit {
   }
 
   EditMode() {
-       if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
 
       this.router.navigate(
@@ -301,7 +301,8 @@ export class ContactComponent implements OnInit {
           queryParams: {
             isNSNav: false
           },
-          queryParamsHandling: 'merge',});
+          queryParamsHandling: 'merge',
+        });
 
       this.contactform.enable();
     }
@@ -355,7 +356,11 @@ export class ContactComponent implements OnInit {
     return controls.controls;
   }
 
-  addUser(contactId = this.id) {
+  addUser() {
+    if (this.id == null) {
+      return this.notificationService.showInfo("Save contact before creating user.", "Info");
+    }
+
     this.user = new User;
     this.contactmodel = this.contactform.value;
     this.user.firstName = this.contactmodel.fname,
@@ -367,7 +372,10 @@ export class ContactComponent implements OnInit {
     this.user.username = this.contactmodel.fname + ' ' + this.contactmodel.lname;
 
     this.accountService.register(this.user).subscribe((data: any) => {
-      if (data.result) this.notificationService.showSuccess(data.resultMessage, "Success");
+      if (data.result) {
+        this.isUser = true;
+        this.notificationService.showSuccess(data.resultMessage, "Success");
+      }
       else this.notificationService.showInfo(data.resultMessage, "Info")
     })
   }
@@ -486,11 +494,12 @@ export class ContactComponent implements OnInit {
           .subscribe((data: any) => {
             if (data.result) {
               this.id = data.object.id;
-              if (createUser) this.addUser(data.object.id);
-
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.contact.id = data.id;
               this.loading = false;
+              this.contactform.disable()
+              this.isEditMode = false;
+              this.isNewMode = false;
               if (back) this.back();
             }
             else {
@@ -503,8 +512,10 @@ export class ContactComponent implements OnInit {
       this.contact.id = this.id;
       this.contactService.update(this.id, this.contact).subscribe((data: any) => {
         if (data.result) {
-          if (createUser) this.addUser(this.id);
           this.notificationService.showSuccess(data.resultMessage, "Success");
+          this.contactform.disable()
+          this.isEditMode = false;
+          this.isNewMode = false;
           if (back) this.back();
         }
 
@@ -523,7 +534,7 @@ export class ContactComponent implements OnInit {
 
       this.router.navigate(['distributorregion', this.masterId], {
         queryParams: {
-          isNotSafeNavigation: false, isNewSetup:true
+          isNotSafeNavigation: false, isNewSetup: true
         }
       });
     }

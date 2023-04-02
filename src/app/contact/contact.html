@@ -24,7 +24,7 @@
                 <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
               </a>
 
-              <a class="nav-link" (click)="onSubmit(true)"
+              <a class="nav-link" (click)="onSubmit(false)"
                 *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
                 <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
               </a>
@@ -33,8 +33,8 @@
                 *ngIf="hasDeleteAccess && !isNewMode && !(isNewSetup && type=='D')">
                 <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
               </a>
-              <button [disabled]="isUser" (click)="onSubmit(false, true)"
-                *ngIf="(hasUpdateAccess || hasAddAccess) && (!isEditMode)" class="nav-link btn">
+              <button [disabled]="isUser" (click)="addUser()"
+                *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode" class="nav-link btn">
                 <i class="fas fa-user" style="color: #5ba146;" title="Add User"></i>
               </button>
             </div>
