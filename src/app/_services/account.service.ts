@@ -195,34 +195,36 @@ export class AccountService {
 
       this.modalRef.content.onClose.subscribe((companySuccess) => {
         if (!companySuccess.result) return;
-        modalOptions.initialState.companyId = companySuccess.object.id;
+        this.modalService.hide();
+        this.router.navigate(['/']);
+        // modalOptions.initialState.companyId = companySuccess.object.id;
 
-        this.modalRef = this.modalService.show(CreateBusinessUnitComponent, modalOptions)
+        // this.modalRef = this.modalService.show(CreateBusinessUnitComponent, modalOptions)
 
-        this.modalRef.content.onClose.subscribe((businessUnitData) => {
-          if (!businessUnitData.result) return;
-          modalOptions.initialState.businessUnitId = businessUnitData.object.id;
+        // this.modalRef.content.onClose.subscribe((businessUnitData) => {
+        //   if (!businessUnitData.result) return;
+        //   modalOptions.initialState.businessUnitId = businessUnitData.object.id;
 
-          this.modalRef = this.modalService.show(CreateBrandComponent, modalOptions)
-          this.modalRef.content.onClose.subscribe((brandData) => {
-            if (!brandData.result) return;
-            modalOptions.initialState.brandId = brandData.object.id;
+        //   this.modalRef = this.modalService.show(CreateBrandComponent, modalOptions)
+        //   this.modalRef.content.onClose.subscribe((brandData) => {
+        //     if (!brandData.result) return;
+        //     modalOptions.initialState.brandId = brandData.object.id;
 
-            this.modalService.hide();
+        //     this.modalService.hide();
 
-            this.login(modalOptions.initialState.username, this.password, modalOptions.initialState.companyId, modalOptions.initialState.businessUnitId, modalOptions.initialState.brandId)
-              .pipe(first()).subscribe(() => {
-                this.router.navigate(["/distributor"], {
-                  queryParams: {
-                    isNewSetUp: true
-                  }
-                })
-                this.notificationService.filter('newSetup');
-              })
+        this.login(modalOptions.initialState.username, this.password, companySuccess.object.id, "", "")
+          .pipe(first()).subscribe();
+        //     this.router.navigate(["/distributor"], {
+        //       queryParams: {
+        //         isNewSetUp: true
+        //       }
+        //     })
+        //     this.notificationService.filter('newSetup');
+        //   })
 
 
-          })
-        })
+        //   })
+        // })
 
       })
 
