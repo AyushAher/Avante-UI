@@ -136,24 +136,24 @@ export class DistributorComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.form.enable();
+      this.router.navigate(
+        ["."], 
+        {
+          relativeTo: this.route,
+          queryParams: {
+            isNSNav: false
+          }, 
+          queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
     }
   }
 
   Back() {
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["distributorlist"],{
-          queryParams: {
-            isNotSafeNavigation: false
-          }
-        });
+        this.router.navigate(["distributorlist"]);
     }
-    else this.router.navigate(["distributorlist"],{
-      queryParams: {
-        isNotSafeNavigation: false
-      }
-    });
-
+    else this.router.navigate(["distributorlist"]);
   }
 
   CancelEdit() {

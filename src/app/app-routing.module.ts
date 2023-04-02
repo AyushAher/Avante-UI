@@ -205,7 +205,7 @@ const routes: Routes = [
   },
   {
     path: 'profile', component: ProfileComponent,
-    canActivate: [AuthGuard, TextValidator, BrowserBack]
+    canActivate: [AuthGuard, TextValidator]
   },
   {
     path: 'profile/:id', component: ProfileComponent,
@@ -217,7 +217,7 @@ const routes: Routes = [
   },
   {
     path: 'userprofile', component: UserProfileComponent,
-    canActivate: [AuthGuard, TextValidator, BrowserBack]
+    canActivate: [AuthGuard, TextValidator]
   },
   {
     path: 'userprofile/:id', component: UserProfileComponent,

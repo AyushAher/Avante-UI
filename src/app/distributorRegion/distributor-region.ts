@@ -145,6 +145,15 @@ export class DistributorRegionComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.destributorRegionform.enable();
+      this.router.navigate(
+        ["."], 
+        {
+          relativeTo: this.route,
+          queryParams: {
+            isNSNav: false
+          }, 
+          queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
     }
   }
 
@@ -152,18 +161,10 @@ export class DistributorRegionComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["distregionlist", this.distributorId], {
-          queryParams: {
-            isNotSafeNavigation: false
-          }
-        });
+        this.router.navigate(["distregionlist", this.distributorId]);
     }
 
-    else this.router.navigate(["distregionlist", this.distributorId], {
-      queryParams: {
-        isNotSafeNavigation: false
-      }
-    });
+    else this.router.navigate(["distregionlist", this.distributorId]);
 
   }
 

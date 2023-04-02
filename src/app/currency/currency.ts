@@ -99,6 +99,16 @@ export class CurrencyComponent implements OnInit {
       this.isEditMode = true;
       this.currencyform.enable();
       this.FormControlEnable();
+
+      this.router.navigate(
+        ["."], 
+        {
+          relativeTo: this.route,
+          queryParams: {
+            isNSNav: false
+          }, 
+          queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
     }
   }
 
@@ -113,17 +123,9 @@ export class CurrencyComponent implements OnInit {
 
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["currencylist"],{
-          queryParams: {
-            isNotSafeNavigation: false
-          }
-        });
+        this.router.navigate(["currencylist"]);
     }
-    else this.router.navigate(["currencylist"],{
-      queryParams: {
-        isNotSafeNavigation: false
-      }
-    });
+    else this.router.navigate(["currencylist"]);
 
   }
 
