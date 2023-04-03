@@ -122,7 +122,7 @@ export class CurrencyComponent implements OnInit {
   Back() {
     this.router.navigate(["currencylist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

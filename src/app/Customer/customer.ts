@@ -164,7 +164,7 @@ export class CustomerComponent implements OnInit {
   Back() {
     this.router.navigate(["customerlist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

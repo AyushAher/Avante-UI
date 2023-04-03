@@ -173,7 +173,7 @@ export class DistributorRegionComponent implements OnInit {
   Back() {
     this.router.navigate(["distregionlist", this.distributorId], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

@@ -226,7 +226,7 @@ export class TravelexpenseComponent implements OnInit {
   Back() {
     this.router.navigate(["travelexpenselist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
   }

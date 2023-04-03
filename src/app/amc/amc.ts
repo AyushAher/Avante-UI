@@ -450,7 +450,7 @@ export class AmcComponent implements OnInit {
   Back() {
     this.router.navigate(["amclist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

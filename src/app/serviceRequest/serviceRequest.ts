@@ -649,7 +649,7 @@ export class ServiceRequestComponent implements OnInit {
 
     this.router.navigate(["servicerequestlist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

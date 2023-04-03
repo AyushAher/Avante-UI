@@ -503,7 +503,7 @@ export class ServiceReportComponent implements OnInit {
   Back() {
     this.router.navigate(["servicereportlist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

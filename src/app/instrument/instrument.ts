@@ -482,7 +482,7 @@ export class InstrumentComponent implements OnInit {
 
     this.router.navigate(["instrumentlist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

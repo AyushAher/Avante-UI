@@ -257,7 +257,7 @@ export class AdvancerequestformComponent implements OnInit {
   Back() {
     this.router.navigate(["advancerequestformlist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

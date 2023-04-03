@@ -162,7 +162,7 @@ export class PastservicereportComponent implements OnInit {
   Back() {
     this.router.navigate(["pastservicereportlist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
   }

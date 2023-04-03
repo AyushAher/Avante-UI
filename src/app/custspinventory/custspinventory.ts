@@ -187,7 +187,7 @@ export class CustSPInventoryComponent implements OnInit {
   Back() {
     this.router.navigate(["customerspinventorylist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

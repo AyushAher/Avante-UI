@@ -219,7 +219,7 @@ export class SparePartComponent implements OnInit {
   Back() {
     this.router.navigate(["sparepartlist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

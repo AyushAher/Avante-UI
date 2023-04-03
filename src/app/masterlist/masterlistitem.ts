@@ -150,7 +150,7 @@ export class MasterListItemComponent implements OnInit {
     this.router.navigate(["masterlist"], {
       queryParams: {
         isNotSafeNavigation: false,
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     })
 

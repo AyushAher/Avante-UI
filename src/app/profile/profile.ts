@@ -172,7 +172,7 @@ export class ProfileComponent implements OnInit {
 
     this.router.navigate(["profilelist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
 

@@ -257,7 +257,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   Back() {
     this.router.navigate(["customersatisfactionsurveylist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
   }

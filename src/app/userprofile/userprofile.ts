@@ -306,7 +306,7 @@ export class UserProfileComponent implements OnInit {
   Back() {
     this.router.navigate(["userprofilelist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
   }

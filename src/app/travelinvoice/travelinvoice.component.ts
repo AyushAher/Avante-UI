@@ -216,7 +216,7 @@ export class TravelinvoiceComponent implements OnInit {
   Back() {
     this.router.navigate(["travelinvoicelist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
   }

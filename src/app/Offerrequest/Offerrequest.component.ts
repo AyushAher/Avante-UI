@@ -555,7 +555,7 @@ export class OfferrequestComponent implements OnInit {
   Back() {
     this.router.navigate(["offerrequestlist"], {
       queryParams: {
-        isNSNav: !(this.isEditMode || this.isNewMode)
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
       }
     });
   }
