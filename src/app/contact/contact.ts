@@ -57,6 +57,7 @@ export class ContactComponent implements OnInit {
   parentEntity: any
   label;
   creatingNewDistributor: boolean;
+  distCustName;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,6 +83,7 @@ export class ContactComponent implements OnInit {
 
     this.contactform = this.formBuilder.group({
       parentEntity: [""],
+      distCustName: [""],
       fname: ['', [Validators.required, Validators.maxLength(512)]],
       lname: ['', [Validators.required, Validators.maxLength(512)]],
       mname: ['', [Validators.required]],
@@ -164,6 +166,13 @@ export class ContactComponent implements OnInit {
             .subscribe((data: any) => {
               if (!data.result || data.object == null) return;
               this.contactform.get('parentEntity').setValue(data.object.custregname);
+
+              this.distCustName = "Customer";
+              this.customerService.getById(data.object.custid)
+                .subscribe((data: any) => {
+                  if (!data.result || data.object == null) return;
+                  this.contactform.get('distCustName').setValue(data.object.custname);
+                });
             });
           break;
         case "D":
@@ -181,6 +190,13 @@ export class ContactComponent implements OnInit {
             .subscribe((data: any) => {
               if (!data.result || data.object == null) return;
               this.contactform.get('parentEntity').setValue(data.object.distregname);
+
+              this.distributorService.getById(data.object.distid)
+                .subscribe((data: any) => {
+                  if (!data.result || data.object == null) return;
+                  this.distCustName = "Principal Distributor";
+                  this.contactform.get('distCustName').setValue(data.object.distname);
+                })
             });
           break;
 
@@ -193,6 +209,11 @@ export class ContactComponent implements OnInit {
           this.contactform.get('parentEntity').setValue(this.parentEntity.custname);
           break;
         case "CS":
+
+          this.parentEntity = JSON.parse(sessionStorage.getItem('customer'))
+          this.contactform.get('distCustName').setValue(this.parentEntity.custname);
+          this.distCustName = "Customer";
+
           this.parentEntity = JSON.parse(sessionStorage.getItem('site'))
           this.contactform.get('parentEntity').setValue(this.parentEntity.custregname);
           break;
@@ -202,6 +223,10 @@ export class ContactComponent implements OnInit {
           break;
 
         case "DR":
+          this.parentEntity = JSON.parse(sessionStorage.getItem('distributor'));
+          this.distCustName = "Principal Distributor";
+          this.contactform.get('distCustName').setValue(this.parentEntity.distname);
+
           this.parentEntity = JSON.parse(sessionStorage.getItem('distributorRegion'))
           this.contactform.get('parentEntity').setValue(this.parentEntity.distregname);
           break;

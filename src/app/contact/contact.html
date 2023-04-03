@@ -44,13 +44,15 @@
           <hr />
           <form [formGroup]="contactform" (ngSubmit)="onSubmit()">
             <div class="row">
+
+              <div class="col-sm-4" *ngIf="type == 'DR' || type == 'CS'">
+                <label for="distCustName">{{distCustName}}</label>
+                <input type="text" disabled formControlName="distCustName" class="form-control" />
+              </div>
+
               <div class="col-sm-4">
                 <label for="parentEntity">{{label}}</label>
-                <input type="text" disabled formControlName="parentEntity" class="form-control"
-                  [ngClass]="{ 'is-invalid': f.parentEntity.touched && f.parentEntity.errors }" />
-                <div *ngIf="f.parentEntity.touched && f.parentEntity.errors" class="invalid-feedback">
-                  <div *ngIf="f.parentEntity.errors.required">First Name is required</div>
-                </div>
+                <input type="text" disabled formControlName="parentEntity" class="form-control" />
               </div>
             </div>
             <div class="row">
