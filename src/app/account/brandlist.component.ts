@@ -44,10 +44,9 @@ export class BrandListComponent implements OnInit {
     Add() {
         this.router.navigate(['brand'],
             {
-        
-      queryParams: {
-        isNSNav: false
-      },// remove to replace all query params by provided
+                queryParams: {
+                    isNSNav: false
+                },// remove to replace all query params by provided
             });
 
     }
@@ -55,7 +54,11 @@ export class BrandListComponent implements OnInit {
 
     EditRecord() {
         var data = this.api.getSelectedRows()[0]
-        this.router.navigate([`brand/${data.id}`])
+        this.router.navigate([`brand/${data.id}`], {
+            queryParams: {
+                isNSNav: true
+            }
+        });
     }
 
     private createColumnDefs() {

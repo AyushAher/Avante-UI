@@ -44,17 +44,20 @@ export class BusinessUnitListComponent implements OnInit {
     Add() {
         this.router.navigate(['businessunit'],
             {
-        
-      queryParams: {
-        isNSNav: false
-      },// remove to replace all query params by provided
+                queryParams: {
+                    isNSNav: false
+                },// remove to replace all query params by provided
             });
     }
 
 
     EditRecord() {
         var data = this.api.getSelectedRows()[0]
-        this.router.navigate([`businessunit/${data.id}`])
+        this.router.navigate([`businessunit/${data.id}`], {
+            queryParams: {
+                isNSNav: true
+            }
+        });
     }
 
     private createColumnDefs() {

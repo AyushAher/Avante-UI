@@ -66,7 +66,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     this.companyList = request.object;
 
     if (this.companyId) this.f.companyId.setValue(this.companyId)
-    else {      
+    else {
       this.companyId = user.companyId;
     }
 
@@ -102,7 +102,11 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
   }
 
   Back() {
-    this.router.navigate(["/brandlist"])
+    this.router.navigate(["/brandlist"], {
+      queryParams: {
+        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
+      }
+    });
   }
 
   async onSubmit() {
@@ -121,7 +125,11 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
         //this.onClose.next({ result: success, object: saveRequest.object });
         if (!this.isDialog) {
           this.notificationService.showSuccess("Brand created successfully!", "Success")
-          this.router.navigate(["/brandlist"])
+          this.router.navigate(["/brandlist"], {
+            queryParams: {
+              isNSNav: (this.isEditMode || this.isNewMode) ? false : true
+            }
+          });
           return;
         }
       }
@@ -135,7 +143,11 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
 
         if (!this.isDialog) {
           this.notificationService.showSuccess("Brand updated successfully!", "Success")
-          this.router.navigate(["/brandlist"])
+          this.router.navigate(["/brandlist"], {
+            queryParams: {
+              isNSNav: (this.isEditMode || this.isNewMode) ? false : true
+            }
+          });
         }
       }
     }
