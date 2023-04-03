@@ -70,7 +70,11 @@ export class DistributorListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['distributor']);
+    this.router.navigate(['distributor'], {
+      queryParams: {
+        isNSNav: false
+      },
+    });
   }
 
   EditRecord() {

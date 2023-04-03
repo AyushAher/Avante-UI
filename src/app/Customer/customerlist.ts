@@ -80,7 +80,11 @@ export class CustomerListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['customer']);
+    this.router.navigate(['customer'], {
+      queryParams: {
+        isNSNav: false
+      },
+    });
   }
 
 

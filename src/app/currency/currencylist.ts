@@ -78,7 +78,11 @@ export class CurrencyListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['currency']);
+    this.router.navigate(['currency'], {
+      queryParams: {
+        isNSNav: false
+      },
+    });
   }
 
 

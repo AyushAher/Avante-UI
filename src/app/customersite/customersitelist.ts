@@ -96,7 +96,11 @@ export class CustomerSiteListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['customersite', this.customerId]);
+    this.router.navigate(['customersite', this.customerId], {
+      queryParams: {
+        isNSNav: false
+      },
+    });
   }
 
 

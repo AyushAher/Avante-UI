@@ -78,7 +78,11 @@ export class CountryListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['country']);
+    this.router.navigate(['country'], {
+      queryParams: {
+        isNSNav: false
+      },
+    });
   }
 
 

@@ -75,7 +75,11 @@ export class DistributorRegionListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['distributorregion', this.distributorId]);
+    this.router.navigate(['distributorregion', this.distributorId], {
+      queryParams: {
+        isNSNav: false
+      },
+    });
   }
 
   EditRecord() {

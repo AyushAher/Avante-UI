@@ -78,7 +78,11 @@ export class ProfileListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['profile']);
+    this.router.navigate(['profile'], {
+      queryParams: {
+        isNSNav: false
+      },
+    });
   }
 
 

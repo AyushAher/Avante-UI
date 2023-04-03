@@ -79,7 +79,11 @@ export class InstrumentListComponent implements OnInit {
   }
 
   Add() {
-    this.router.navigate(['instrument']);
+    this.router.navigate(['instrument'], {
+      queryParams: {
+        isNSNav: false
+      },
+    });
   }
 
   EditRecord() {
