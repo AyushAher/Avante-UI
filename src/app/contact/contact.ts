@@ -56,6 +56,7 @@ export class ContactComponent implements OnInit {
   isNewParentMode: boolean;
   parentEntity: any
   label;
+  creatingNewDistributor: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -117,6 +118,7 @@ export class ContactComponent implements OnInit {
     this.route.queryParams.subscribe((data) => {
       this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined && data.isNewSetUp == "true";
       this.isNewParentMode = data.isNewMode != null && data.isNewMode != undefined && data.isNewMode == "true";
+      this.creatingNewDistributor = data.creatingNewDistributor != null && data.creatingNewDistributor != undefined && data.creatingNewDistributor == "true";
     });
 
     if (this.type == "DR" || this.type == "CS") {
@@ -494,7 +496,7 @@ export class ContactComponent implements OnInit {
       if (this.isNewParentMode || this.isNewSetup) {
         switch (this.type) {
           case "D":
-            this.distributorService.SaveDistributor();
+            // this.distributorService.SaveDistributor();
             break;
           case "C":
             this.customerService.SaveCustomer();

@@ -72,7 +72,8 @@ export class DistributorListComponent implements OnInit {
   Add() {
     this.router.navigate(['distributor'], {
       queryParams: {
-        isNSNav: false
+        isNSNav: false,
+        creatingNewDistributor: true
       },
     });
   }

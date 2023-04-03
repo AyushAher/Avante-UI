@@ -30,7 +30,8 @@
               <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
             </a>
 
-            <a class="nav-link" (click)="CopyRecord()" *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+            <a class="nav-link" (click)="CopyRecord()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
               <i class="fas fa-copy" style="color: #5ba146;" title="Copy"></i>
             </a>
           </div>
@@ -81,7 +82,7 @@
                         (change)="SelectAll('delete')"></th>
                     <th>Commercial<br> <input type="checkbox" id="selectallcommercial"
                         [disabled]="!isEditMode && !isNewMode" (change)="SelectAll('commercial')"></th>
-                    <th>Privilages <br></th>
+                    <th>Privileges <br></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -164,7 +165,7 @@
 
                     </td>
                     <td>
-                      <select type="text" formControlName="privilages" class="form-select">
+                      <select type="text" formControlName="privilages" (focusout)="AddScreen()" class="form-select">
                         <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of privilagesList">
                           {{listtypeitem.itemname}}</option>
                       </select>
