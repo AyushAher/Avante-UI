@@ -156,10 +156,17 @@ export class DistributorComponent implements OnInit {
 
   Back() {
     if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["distributorlist"]);
+      this.router.navigate(["distributorlist"], {
+        queryParams: {
+          isNSNav: false
+        }
+      });
     }
-    else this.router.navigate(["distributorlist"]);
+    else this.router.navigate(["distributorlist"], {
+      queryParams: {
+        isNSNav: true
+      }
+    });;
   }
 
   CancelEdit() {
@@ -208,12 +215,14 @@ export class DistributorComponent implements OnInit {
         return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
           queryParams: {
             isNewSetUp: this.isNewSetUp,
+            isNSNav: true
           }
         });
 
       else return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
         queryParams: {
-          isNewMode: true
+          isNewMode: true,
+          isNSNav: true
         }
       });
     }
@@ -224,7 +233,12 @@ export class DistributorComponent implements OnInit {
         .pipe(first()).subscribe((data: ResultMsg) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["distributorlist"]);
+            this.router.navigate(["distributorlist"], {
+              queryParams: {
+                isNewMode: true,
+                isNSNav: true
+              }
+            });
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
 

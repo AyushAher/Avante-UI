@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService, DistributorRegionService, ProfileService, CountryService, DistributorService, NotificationService } from '../_services';
+import { AccountService, AlertService, DistributorRegionService, ProfileService, CountryService, DistributorService, NotificationService, ListTypeService } from '../_services';
 import { Guid } from 'guid-typescript';
 
 
@@ -36,6 +36,7 @@ export class DistributorRegionComponent implements OnInit {
   formData: any;
   distributorName: any;
   isNewParentMode: boolean;
+  PaymentTermsList: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,7 +48,8 @@ export class DistributorRegionComponent implements OnInit {
     private distributorService: DistributorService,
     private distributorRegionService: DistributorRegionService,
     private notificationService: NotificationService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private listTypeService: ListTypeService
   ) { }
 
   ngOnInit() {
@@ -72,12 +74,13 @@ export class DistributorRegionComponent implements OnInit {
 
     this.destributorRegionform = this.formBuilder.group({
       distid: ['', Validators.required],
+      distName: ['', Validators.required],
       region: ['', Validators.required],
       distregname: ['', Validators.required],
       payterms: ['', Validators.required],
       isblocked: false,
       isActive: true,
-      countries: [],
+      countries: ["", Validators.required],
       isdeleted: [false],
       address: this.formBuilder.group({
         street: ['', Validators.required],
@@ -101,18 +104,29 @@ export class DistributorRegionComponent implements OnInit {
     this.distributorId = this.route.snapshot.paramMap.get('id');
     this.distributorRegionId = this.route.snapshot.paramMap.get('rid');
 
+    this.listTypeService.getById("GPAYT")
+      .subscribe((data: any) => this.PaymentTermsList = data);
+
     this.route.queryParams.subscribe((data) => {
       this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
-      this.isNewParentMode = data.isNewMode != null && data.isNewMode != undefined;
+      this.isNewParentMode = data.isNewParentMode != null && data.isNewParentMode != undefined && data.isNewParentMode == "true";
     });
 
     this.destributorRegionform.controls['distid'].setValue(this.distributorId, { onlySelf: true });
 
-    if (this.distributorId != null) {
+
+    if (!this.isNewParentMode && this.distributorId != null) {
       this.distributorService.getById(this.distributorId)
         .subscribe((data: any) => {
           this.distributorName = data.object.distname;
+          this.destributorRegionform.controls['distName'].setValue(this.distributorName, { onlySelf: true });
         })
+    }
+    else if (this.isNewParentMode && this.distributorId != null) {
+      var data = JSON.parse(sessionStorage.getItem('distributor'))
+      this.distributorName = data.distname;
+      this.destributorRegionform.controls['distName'].setValue(this.distributorName, { onlySelf: true });
+
     }
 
     if (this.distributorRegionId != null) {
@@ -130,6 +144,12 @@ export class DistributorRegionComponent implements OnInit {
       this.destributorRegionform.disable();
     }
     else this.isNewMode = true;
+
+
+    this.destributorRegionform.get("countries").valueChanges
+      .subscribe((data: any) => {
+        this.destributorRegionform.get("address").get("countryid").setValue(data);
+      })
   }
 
 
@@ -137,6 +157,7 @@ export class DistributorRegionComponent implements OnInit {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
       this.destributorRegionform.enable();
+      this.destributorRegionform.get("distName").disable();
       this.router.navigate(
         ["."],
         {
@@ -150,7 +171,6 @@ export class DistributorRegionComponent implements OnInit {
   }
 
   Back() {
-
     if ((this.isEditMode || this.isNewMode)) {
       if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
         this.router.navigate(["distregionlist", this.distributorId]);
@@ -212,7 +232,12 @@ export class DistributorRegionComponent implements OnInit {
         //return this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
         return true;
       }
-      else return this.router.navigate(['contact', this.type, this.distributorId, this.distRegion.id], { queryParams: { isNewMode: true } });
+      else return this.router.navigate(['contact', this.type, this.distributorId, this.distRegion.id], {
+        queryParams: {
+          isNewMode: true,
+          isNSNav: true
+        }
+      });
 
     }
     else {

@@ -1,4 +1,4 @@
-<layout [isNewSetUp]="isNewSetup" [showNavs]="!isNewSetup">
+<layout>
   <div class="right_col" role="main">
     <div class="container">
       <!-- Tabs navs -->
@@ -52,16 +52,7 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="distid">Principal Distributor<span class="text-danger">*</span></label>
-              <select formControlName="distid" class="form-select"
-                [ngClass]="{ 'is-invalid': f.distid.touched && f.distid.errors }">
-                <!--<option value="0">--All--</option>-->
-                <option *ngFor="let distributor of distributors" value={{distributor.id}}>
-                  {{distributor.distname}}
-                </option>
-              </select>
-              <div *ngIf="f.distid.touched && f.distid.errors" class="invalid-feedback">
-                <div *ngIf="f.distid.errors.required">Distributor is required</div>
-              </div>
+              <input formControlName="distName" disabled class="form-control" />
             </div>
             <div class="col-md-4 col-sm-4">
               <label for="regionName">Region Name<span class="text-danger">*</span></label>
@@ -81,7 +72,7 @@
             </div>
 
             <div class="col-md-4 col-sm-4">
-              <label for="countries">Country</label>
+              <label for="countries">Country<span class="text-danger">*</span></label>
               <select [data]="countries" formControlName="countries" class="form-select"
                 [ngClass]="{ 'is-invalid': f.countries.touched && f.countries.errors }">
                 <option *ngFor="let i of countries" value="{{i.id}}">{{i.iso_3}}-{{i.name}}</option>
@@ -95,8 +86,10 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="payterms">Payment Term<span class="text-danger">*</span></label>
-              <input type="text" formControlName="payterms" class="form-control"
-                [ngClass]="{ 'is-invalid': f.payterms.touched && f.payterms.errors }" />
+              <select type="text" formControlName="payterms" class="form-select"
+                [ngClass]="{ 'is-invalid': f.payterms.touched && f.payterms.errors }">
+                <option *ngFor="let i of PaymentTermsList;" [value]=" i.listTypeItemId">{{i.itemname}}</option>
+              </select>
               <div *ngIf="f.payterms.touched && f.payterms.errors" class="invalid-feedback">
                 <div *ngIf="f.payterms.errors.required">Payment Term is required</div>
               </div>
@@ -151,7 +144,6 @@
                 <label for="countryid">Country<span class="text-danger">*</span></label>
                 <select formControlName="countryid" class="form-select"
                   [ngClass]="{ 'is-invalid': a.countryid.touched && a.countryid.errors }">
-                  <!--<option value="0">--All--</option>-->
                   <option *ngFor="let i of countries" value="{{i.id}}">{{i.iso_3}}-{{i.name}}</option>
 
                 </select>
@@ -160,7 +152,7 @@
                 </div>
               </div>
               <div class="col-sm-4">
-                <label for="zip">Zip</label>
+                <label for="zip">Zip<span class="text-danger">*</span></label>
                 <input type="tel" maxlength="10" formControlName="zip" class="form-control"
                   [ngClass]="{ 'is-invalid': a.zip.touched && a.zip.errors }" />
 

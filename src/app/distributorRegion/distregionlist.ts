@@ -99,11 +99,11 @@ export class DistributorRegionListComponent implements OnInit {
         tooltipField: 'region',
       }, {
         headerName: 'Pay Term',
-        field: 'payterms',
+        field: 'paytermsValue',
         filter: true,
         editable: false,
         sortable: true,
-        tooltipField: 'payterms',
+        tooltipField: 'paytermsValue',
       }, {
         headerName: 'Dist Region Name',
         field: 'distregname',

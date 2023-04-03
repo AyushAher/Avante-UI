@@ -298,6 +298,16 @@ export class ContactComponent implements OnInit {
 
     this.contactform.get('pcontactno').valueChanges
       .subscribe((data: any) => {
+        if (this.inputObj) {
+          this.inputObj.setNumber(data);
+        }
+        if (this.inputObj2) {
+          this.inputObj2.setNumber(data);
+        }
+        if (this.inputObj2w) {
+          this.inputObj2w.setNumber(data);
+        }
+
         this.contactform.get('scontactno').setValue(data);
         this.contactform.get('whatsappNo').setValue(data);
       });
@@ -497,27 +507,15 @@ export class ContactComponent implements OnInit {
         switch (this.type) {
           case "D":
             sessionStorage.setItem('distributorContact', JSON.stringify(this.contact));
-            this.router.navigate([' distributorregion', this.masterId], {
+            this.router.navigate(['distributorregion', this.masterId], {
               queryParams: {
-                isNSNav: false,
-                isNewParentMode: true
+                isNSNav: true,
+                isNewParentMode: true,
               }
             })
-            // this.distributorService.SaveDistributor();
-            sessionStorage.setItem('distributorContact', JSON.stringify(this.contact));
-            this.router.navigate([' distributorregion', this.masterId], {
-              queryParams: {
-                isNSNav: false,
-                isNewParentMode: true
-              }
-            })
-            // this.distributorService.SaveDistributor();
             break;
           case "C":
-            sessionStorage.setItem('distributorContact', JSON.stringify(this.contact));
-            // this.customerService.SaveCustomer();
-            sessionStorage.setItem('distributorContact', JSON.stringify(this.contact));
-            // this.customerService.SaveCustomer();
+            this.customerService.SaveCustomer();
             break;
           case "DR":
             sessionStorage.setItem('distributorRegionContact', JSON.stringify(this.contact));
@@ -531,9 +529,7 @@ export class ContactComponent implements OnInit {
               this.contactService.SaveDistributorTree(requestObject)
                 .subscribe((data: any) => {
                   if (data.result) {
-                    this.id = data.object.id;
                     this.notificationService.showSuccess(data.resultMessage, "Success");
-                    this.contact.id = data.id;
                     this.loading = false;
                     this.contactform.disable()
                     this.isEditMode = false;
@@ -545,38 +541,29 @@ export class ContactComponent implements OnInit {
                   }
                 })
             }, 500);
-            // this.distRegions.SaveRegion();
-            sessionStorage.setItem('distributorRegionContact', JSON.stringify(this.contact));
-            var requestObject = {
-              distributor: JSON.parse(sessionStorage.getItem('distributor')),
-              distributorContact: JSON.parse(sessionStorage.getItem('distributorContact')),
-              distributorRegion: JSON.parse(sessionStorage.getItem('distributorRegion')),
-              distributorRegionContact: JSON.parse(sessionStorage.getItem('distributorRegionContact')),
-            };
-            setTimeout(() => {
-              this.contactService.SaveDistributorTree(requestObject)
-                .subscribe((data: any) => {
-                  if (data.result) {
-                    this.id = data.object.id;
-                    this.notificationService.showSuccess(data.resultMessage, "Success");
-                    this.contact.id = data.id;
-                    this.loading = false;
-                    this.contactform.disable()
-                    this.isEditMode = false;
-                    this.isNewMode = false;
-                    this.back();
-                  }
-                  else {
-                    this.notificationService.showInfo(data.resultMessage, "Info");
-                  }
-                })
-            }, 500);
-            // this.distRegions.SaveRegion();
             break;
           case "CS":
             this.customersiteService.SaveSite();
             break;
         }
+      }
+      else if (!this.isNewParentMode && !this.isNewSetup) {
+        this.contactService.save(this.contact)
+          .subscribe((data: any) => {
+            if (data.result) {
+              this.id = data.object.id;
+              this.notificationService.showSuccess(data.resultMessage, "Success");
+              this.contact.id = data.id;
+              this.loading = false;
+              this.contactform.disable()
+              this.isEditMode = false;
+              this.isNewMode = false;
+              this.back();
+            }
+            else {
+              this.notificationService.showInfo(data.resultMessage, "Info");
+            }
+          })
       }
     }
     else {
@@ -605,35 +592,36 @@ export class ContactComponent implements OnInit {
 
       this.router.navigate(['distributorregion', this.masterId], {
         queryParams: {
-          isNotSafeNavigation: false, isNewSetup: true
+          isNSNav: true,
+          isNewSetup: true
         }
       });
     }
     else if (this.type == "D") {
       this.router.navigate(['contactlist', this.type, this.masterId], {
         queryParams: {
-          isNotSafeNavigation: false
+          isNSNav: true,
         }
       });
     }
     else if (this.type == "DR") {
       this.router.navigate(['contactlist', this.type, this.detailId, this.masterId], {
         queryParams: {
-          isNotSafeNavigation: false
+          isNSNav: true,
         }
       });
     }
     else if (this.type == "C") {
       this.router.navigate(['contactlist', this.type, this.masterId], {
         queryParams: {
-          isNotSafeNavigation: false
+          isNSNav: true,
         }
       });
     }
     else if (this.type == "CS") {
       this.router.navigate(['contactlist', this.type, this.detailId, this.masterId], {
         queryParams: {
-          isNotSafeNavigation: false
+          isNSNav: true,
         }
       });
     }
