@@ -35,6 +35,7 @@ export class DistributorRegionComponent implements OnInit {
   isNewSetup: boolean;
   formData: any;
   distributorName: any;
+  isNewParentMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -102,6 +103,7 @@ export class DistributorRegionComponent implements OnInit {
 
     this.route.queryParams.subscribe((data) => {
       this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
+      this.isNewParentMode = data.isNewMode != null && data.isNewMode != undefined;
     });
 
     this.destributorRegionform.controls['distid'].setValue(this.distributorId, { onlySelf: true });
