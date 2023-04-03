@@ -205,10 +205,12 @@ export class ContactComponent implements OnInit {
     else {
       switch (this.type) {
         case "C":
+          this.label = "Customer"
           this.parentEntity = JSON.parse(sessionStorage.getItem('customer'))
           this.contactform.get('parentEntity').setValue(this.parentEntity.custname);
           break;
         case "CS":
+          this.label = "Customer Site"
 
           this.parentEntity = JSON.parse(sessionStorage.getItem('customer'))
           this.contactform.get('distCustName').setValue(this.parentEntity.custname);
@@ -218,11 +220,13 @@ export class ContactComponent implements OnInit {
           this.contactform.get('parentEntity').setValue(this.parentEntity.custregname);
           break;
         case "D":
+          this.label = "Principal Distributor"
           this.parentEntity = JSON.parse(sessionStorage.getItem('distributor'));
           this.contactform.get('parentEntity').setValue(this.parentEntity.distname);
           break;
 
         case "DR":
+          this.label = "Distributor Region"
           this.parentEntity = JSON.parse(sessionStorage.getItem('distributor'));
           this.distCustName = "Principal Distributor";
           this.contactform.get('distCustName').setValue(this.parentEntity.distname);
