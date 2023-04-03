@@ -103,7 +103,7 @@
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
-                <label for="scontactno">Secondory Contact No</label><br />
+                <label for="scontactno">Secondory Contact No<span class="text-danger">*</span></label><br />
                 <input type="tel" ng2TelInput formControlName="scontactno" (ng2TelOutput)="getNumber($event)"
                   (intlTelInputObject)="telInputObjectCo($event)" (countryChange)="countryChange2($event)"
                   class="form-control" maxlength="15"
@@ -117,7 +117,7 @@
             </div>
             <div class="row">
               <div class="col-md-4 col-sm-4">
-                <label for="whatsappNo">WhatsApp No</label><br />
+                <label for="whatsappNo">WhatsApp No<span class="text-danger">*</span></label><br />
                 <input type="tel" ng2TelInput formControlName="whatsappNo" (ng2TelOutput)="getNumber($event)"
                   (intlTelInputObject)="telInputObjectCow($event)" (countryChange)="countryChange2w($event)"
                   class="form-control" maxlength="15"
@@ -129,7 +129,7 @@
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
-                <label for="semail">Secondory Email</label>
+                <label for="semail">Secondory Email<span class="text-danger">*</span></label>
                 <input type="email" formControlName="semail" class="form-control"
                   [ngClass]="{ 'is-invalid': f.semail.touched && f.semail.errors }" />
                 <div *ngIf="f.semail.touched && f.semail.errors" class="invalid-feedback">
@@ -210,7 +210,7 @@
                   </div>
                 </div>
                 <div class="col-sm-4">
-                  <label for="zip">Zip</label>
+                  <label for="zip">Zip<span class="text-danger">*</span></label>
                   <input type="tel" maxlength="10" formControlName="zip" class="form-control"
                     [ngClass]="{ 'is-invalid': a.zip.touched && a.zip.errors }" />
 

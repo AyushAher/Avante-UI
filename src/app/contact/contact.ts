@@ -519,7 +519,7 @@ export class ContactComponent implements OnInit {
               this.contactform.disable()
               this.isEditMode = false;
               this.isNewMode = false;
-              if (back) this.back();
+              this.back();
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "Info");
@@ -535,7 +535,7 @@ export class ContactComponent implements OnInit {
           this.contactform.disable()
           this.isEditMode = false;
           this.isNewMode = false;
-          if (back) this.back();
+          this.back();
         }
 
         this.contact.id = data.id;

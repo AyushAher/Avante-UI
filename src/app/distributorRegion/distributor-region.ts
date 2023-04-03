@@ -92,18 +92,10 @@ export class DistributorRegionComponent implements OnInit {
     });
 
     this.countryService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => this.countries = data.object
-      });
+      .pipe(first()).subscribe((data: any) => this.countries = data.object);
 
     this.distributorService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.distributors = data.object;
-        },
-      });
+      .pipe(first()).subscribe((data: any) => this.distributors = data.object);
 
     this.distributorId = this.route.snapshot.paramMap.get('id');
     this.distributorRegionId = this.route.snapshot.paramMap.get('rid');
@@ -131,8 +123,6 @@ export class DistributorRegionComponent implements OnInit {
           next: (data: any) => {
             this.formData = data.object;
             this.destributorRegionform.patchValue(this.formData);
-            data.object.countries = data.object.countries?.split(',').filter(x => x != "");
-            this.destributorRegionform.patchValue({ 'countries': data.object.countries })
           },
         });
       this.destributorRegionform.disable();
@@ -146,12 +136,12 @@ export class DistributorRegionComponent implements OnInit {
       this.isEditMode = true;
       this.destributorRegionform.enable();
       this.router.navigate(
-        ["."], 
+        ["."],
         {
           relativeTo: this.route,
           queryParams: {
             isNSNav: false
-          }, 
+          },
           queryParamsHandling: 'merge', // remove to replace all query params by provided
         });
     }
@@ -209,20 +199,14 @@ export class DistributorRegionComponent implements OnInit {
 
     this.distRegion = this.destributorRegionform.value;
 
-    if (this.distRegion.countries.length > 0)
-      this.distRegion.countries = this.distRegion.countries.toString();
-
-    else if (this.distRegion.countries.length == 0)
-      this.distRegion.countries = "";
-
     if (this.distributorRegionId == null) {
       this.distributorRegionId = Guid.create().toString()
       this.distRegion.id = this.distributorRegionId
 
       sessionStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));
 
-      if (this.isNewSetup){
-       this.distributorRegionService.SaveRegion();
+      if (this.isNewSetup) {
+        this.distributorRegionService.SaveRegion();
         //return this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
         return true;
       }
