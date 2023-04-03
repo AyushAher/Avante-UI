@@ -202,7 +202,7 @@
                     [ngClass]="{ 'is-invalid': a.countryid.touched && a.countryid.errors }">
                     <!--<option value="0">--All--</option>-->
                     <option *ngFor="let country of countries" value={{country.id}}>
-                      {{country.iso_3}}-{{country.name}}
+                      {{country.iso_3}} - {{country.name}}
                     </option>
                   </select>
                   <div *ngIf="a.countryid.touched && a.countryid.errors" class="invalid-feedback">

@@ -75,7 +75,7 @@
               <label for="countries">Country<span class="text-danger">*</span></label>
               <select [data]="countries" formControlName="countries" class="form-select"
                 [ngClass]="{ 'is-invalid': f.countries.touched && f.countries.errors }">
-                <option *ngFor="let i of countries" value="{{i.id}}">{{i.iso_3}}-{{i.name}}</option>
+                <option *ngFor="let i of countries" value="{{i.id}}">{{i.iso_3}} - {{i.name}}</option>
               </select>
               <div Style="display: block" *ngIf="f.countries.touched && f.countries.errors" class="invalid-feedback">
                 <div *ngIf="f.countries.errors.required">
@@ -140,7 +140,7 @@
                   <div *ngIf="a.place.errors.required">State is required</div>
                 </div>
               </div>
-              <div class="col-sm-4">
+              <!-- <div class="col-sm-4">
                 <label for="countryid">Country<span class="text-danger">*</span></label>
                 <select formControlName="countryid" class="form-select"
                   [ngClass]="{ 'is-invalid': a.countryid.touched && a.countryid.errors }">
@@ -150,7 +150,7 @@
                 <div *ngIf="a.countryid.touched && a.countryid.errors" class="invalid-feedback">
                   <div *ngIf="a.countryid.errors.required">Country is required</div>
                 </div>
-              </div>
+              </div> -->
               <div class="col-sm-4">
                 <label for="zip">Zip<span class="text-danger">*</span></label>
                 <input type="tel" maxlength="10" formControlName="zip" class="form-control"
