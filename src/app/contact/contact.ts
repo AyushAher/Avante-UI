@@ -534,6 +534,22 @@ export class ContactComponent implements OnInit {
             break;
           case "C":
             this.customerService.SaveCustomer();
+            this.contactService.save(this.contact)
+              .subscribe((data: any) => {
+                if (data.result) {
+                  this.id = data.object.id;
+                  this.notificationService.showSuccess(data.resultMessage, "Success");
+                  this.contact.id = data.id;
+                  this.loading = false;
+                  this.contactform.disable()
+                  this.isEditMode = false;
+                  this.isNewMode = false;
+                  this.back(true);
+                }
+                else {
+                  this.notificationService.showInfo(data.resultMessage, "Info");
+                }
+              })
             break;
           case "DR":
             sessionStorage.setItem('distributorRegionContact', JSON.stringify(this.contact));
@@ -562,6 +578,23 @@ export class ContactComponent implements OnInit {
             break;
           case "CS":
             this.customersiteService.SaveSite();
+
+            this.contactService.save(this.contact)
+              .subscribe((data: any) => {
+                if (data.result) {
+                  this.id = data.object.id;
+                  this.notificationService.showSuccess(data.resultMessage, "Success");
+                  this.contact.id = data.id;
+                  this.loading = false;
+                  this.contactform.disable()
+                  this.isEditMode = false;
+                  this.isNewMode = false;
+                  this.back(true);
+                }
+                else {
+                  this.notificationService.showInfo(data.resultMessage, "Info");
+                }
+              })
             break;
         }
       }

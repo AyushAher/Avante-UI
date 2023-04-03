@@ -224,10 +224,12 @@ export class CustomerComponent implements OnInit {
     this.customerform.markAllAsTouched()
 
     if (this.customerform.invalid) return;
+    this.customerform.enable();
+    this.customer = this.customerform.value;
+    this.FormControlDisable();
 
     if (this.customerId == null) {
       this.customerId = Guid.create().toString();
-      this.customer = this.customerform.value;
       this.customer.id = this.customerId;
 
       sessionStorage.setItem("customer", JSON.stringify(this.customer));
@@ -239,14 +241,16 @@ export class CustomerComponent implements OnInit {
       });
     }
     else {
-      this.customer = this.customerform.value;
       this.customer.id = this.customerId;
-
       this.customerService.update(this.customerId, this.customer)
         .pipe(first()).subscribe((data: ResultMsg) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["customerlist"]);
+            this.router.navigate(["customerlist"], {
+              queryParams: {
+                isNSNav: true
+              }
+            });
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
