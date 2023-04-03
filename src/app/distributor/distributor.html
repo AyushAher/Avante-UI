@@ -66,8 +66,10 @@
             </div>
             <div class="col-md-6 col-sm-6">
               <label for="payterms">Payment Term<span class="text-danger">*</span></label>
-              <input type="text" formControlName="payterms" class="form-control"
-                [ngClass]="{ 'is-invalid': f.payterms.touched && f.payterms.errors }" />
+              <select type="text" formControlName="payterms" class="form-select"
+                [ngClass]="{ 'is-invalid': f.payterms.touched && f.payterms.errors }">
+                <option *ngFor="let i of PaymentTermsList;" [value]=" i.listTypeItemId">{{i.itemname}}</option>
+              </select>
               <div *ngIf="f.payterms.touched && f.payterms.errors" class="invalid-feedback">
                 <div *ngIf="f.payterms.errors.required">Payment Term is required</div>
               </div>
@@ -143,7 +145,7 @@
                 </div>
               </div>
               <div class="col-sm-4">
-                <label for="zip">Zip</label>
+                <label for="zip">Zip <span class="text-danger">*</span></label>
                 <input type="tel" maxlength="10" formControlName="zip" class="form-control"
                   [ngClass]="{ 'is-invalid': a.zip.touched && a.zip.errors }" />
 

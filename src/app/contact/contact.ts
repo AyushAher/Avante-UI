@@ -55,6 +55,7 @@ export class ContactComponent implements OnInit {
   formData: { [key: string]: any; };
   isNewParentMode: boolean;
   parentEntity: any
+  label;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,7 +83,7 @@ export class ContactComponent implements OnInit {
       parentEntity: [""],
       fname: ['', [Validators.required, Validators.maxLength(512)]],
       lname: ['', [Validators.required, Validators.maxLength(512)]],
-      mname: [''],
+      mname: ['', [Validators.required]],
       pcontactno: [''],
       pemail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
       scontactno: [''],
@@ -148,6 +149,7 @@ export class ContactComponent implements OnInit {
     if (!this.isNewParentMode && !this.isNewSetup) {
       switch (this.type) {
         case "C":
+          this.label = "Customer"
           this.customerService.getById(this.masterId)
             .subscribe((data: any) => {
               if (!data.result || data.object == null) return;
@@ -155,6 +157,7 @@ export class ContactComponent implements OnInit {
             });
           break;
         case "CS":
+          this.label = "Customer Site"
           this.customersiteService.getById(this.masterId)
             .subscribe((data: any) => {
               if (!data.result || data.object == null) return;
@@ -162,6 +165,7 @@ export class ContactComponent implements OnInit {
             });
           break;
         case "D":
+          this.label = "Distributor"
           this.distributorService.getById(this.masterId)
             .subscribe((data: any) => {
               if (!data.result || data.object == null) return;
@@ -170,6 +174,7 @@ export class ContactComponent implements OnInit {
           break;
 
         case "DR":
+          this.label = "Distributor Region"
           this.distRegions.getById(this.masterId)
             .subscribe((data: any) => {
               if (!data.result || data.object == null) return;
@@ -288,6 +293,20 @@ export class ContactComponent implements OnInit {
         });
       this.contactform.disable()
     } else this.isNewMode = true
+
+    this.contactform.get('pcontactno').valueChanges
+      .subscribe((data: any) => {
+        this.contactform.get('scontactno').setValue(data);
+        this.contactform.get('whatsappNo').setValue(data);
+      });
+
+    this.contactform.get('pemail').valueChanges
+      .subscribe((data: any) => {
+        this.contactform.get('semail').setValue(data);
+      });
+
+
+
   }
 
   EditMode() {

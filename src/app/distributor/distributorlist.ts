@@ -95,11 +95,11 @@ export class DistributorListComponent implements OnInit {
       },
       {
         headerName: 'Pay Term',
-        field: 'payterms',
+        field: 'paytermsValue',
         filter: true,
         editable: false,
         sortable: true,
-        tooltipField: 'payterms',
+        tooltipField: 'paytermsValue',
       }
     ]
   }

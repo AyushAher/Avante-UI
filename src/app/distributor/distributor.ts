@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService, DistributorService, CountryService, NotificationService, ProfileService } from '../_services';
+import { AccountService, AlertService, DistributorService, CountryService, NotificationService, ProfileService, ListTypeService } from '../_services';
 import { Guid } from 'guid-typescript';
 
 
@@ -34,6 +34,7 @@ export class DistributorComponent implements OnInit {
 
   isNewSetUp: boolean = false;
   formData: { [key: string]: any; };
+  PaymentTermsList: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,7 +45,8 @@ export class DistributorComponent implements OnInit {
     private distributorService: DistributorService,
     private countryService: CountryService,
     private notificationService: NotificationService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private listTypeService: ListTypeService
   ) { }
 
   ngOnInit() {
@@ -86,12 +88,17 @@ export class DistributorComponent implements OnInit {
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
-        zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
+        zip: ['', [Validators.required, Validators.compose([Validators.minLength(4), Validators.maxLength(15)])]],
         geolat: [''],
         geolong: [''],
         isActive: true,
       }),
     });
+
+
+    this.listTypeService.getById("GPAYT")
+      .subscribe((data: any) => this.PaymentTermsList = data);
+
     this.countryService.getAll()
       .pipe(first()).subscribe({
         next: (data: any) => {
@@ -100,7 +107,6 @@ export class DistributorComponent implements OnInit {
       });
 
     if (this.distributorId != null) {
-
       this.hasAddAccess = false;
 
       if (this.user.isAdmin) {
@@ -137,12 +143,12 @@ export class DistributorComponent implements OnInit {
       this.isEditMode = true;
       this.form.enable();
       this.router.navigate(
-        ["."], 
+        ["."],
         {
           relativeTo: this.route,
           queryParams: {
             isNSNav: false
-          }, 
+          },
           queryParamsHandling: 'merge', // remove to replace all query params by provided
         });
     }

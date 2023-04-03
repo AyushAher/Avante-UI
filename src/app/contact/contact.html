@@ -8,7 +8,7 @@
         <div class="page-title">
           <div class="title_left" style="display: flex; justify-content: space-between;">
             <div class="d-flex" style="align-items: center;">
-              <h3>{{f.parentEntity.value}} / Contact Details </h3>
+              <h3>Contact Details </h3>
             </div>
 
             <div class="controls" style="display: flex;">
@@ -45,6 +45,16 @@
           <form [formGroup]="contactform" (ngSubmit)="onSubmit()">
             <div class="row">
               <div class="col-sm-4">
+                <label for="parentEntity">{{label}}</label>
+                <input type="text" disabled formControlName="parentEntity" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.parentEntity.touched && f.parentEntity.errors }" />
+                <div *ngIf="f.parentEntity.touched && f.parentEntity.errors" class="invalid-feedback">
+                  <div *ngIf="f.parentEntity.errors.required">First Name is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
                 <label for="fname">First Name<span class="text-danger">*</span></label>
                 <input type="text" formControlName="fname" class="form-control"
                   [ngClass]="{ 'is-invalid': f.fname.touched && f.fname.errors }" />
@@ -53,11 +63,11 @@
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
-                <label for="mname">Middle Name</label>
+                <label for="mname">Middle Name <span class="text-danger">*</span></label>
                 <input type="text" formControlName="mname" class="form-control" />
-                <!--<div *ngIf="f.place.touched && f.mname.errors" class="invalid-feedback">
-                <div *ngIf="f.mname.errors.required">Middle Name is required</div>
-              </div>-->
+                <div *ngIf="f.mname.touched && f.mname.errors" class="invalid-feedback">
+                  <div *ngIf="f.mname.errors.required">Middle Name is required</div>
+                </div>
               </div>
               <div class="col-md-4 col-sm-4">
                 <label for="lname">Last Name<span class="text-danger">*</span></label>
