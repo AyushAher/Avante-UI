@@ -237,7 +237,12 @@ export class CustomerSiteComponent implements OnInit {
       this.custSite.id = this.csiteid;
 
       sessionStorage.setItem("site", JSON.stringify(this.custSite));
-      return this.router.navigate(['contact', this.type, this.customerid, this.csiteid], { queryParams: { isNewMode: true } });
+      return this.router.navigate(['contact', this.type, this.customerid, this.csiteid], {
+        queryParams: {
+          isNewMode: true,
+          isNSNav: true
+        }
+      });
     }
     else {
       this.custSite = this.customersiteform.value;
@@ -248,7 +253,11 @@ export class CustomerSiteComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["customersitelist", this.customerid]);
+              this.router.navigate(["customersitelist", this.customerid], {
+                queryParams: {
+                  isNSNav: true
+                }
+              })
             }
             this.loading = false;
 

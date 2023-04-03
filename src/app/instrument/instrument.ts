@@ -514,7 +514,11 @@ export class InstrumentComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
-            this.router.navigate(["instrumentlist"])
+            this.router.navigate(["instrumentlist"], {
+              queryParams: {
+                isNSNav: true
+              }
+            })
           }
           else
             this.notificationService.showInfo(data.resultMessage, "Info");
@@ -756,7 +760,6 @@ export class InstrumentComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    debugger;
     this.alertService.clear();
     this.instrumentform.markAllAsTouched()
     // stop here if form is invalid
@@ -809,7 +812,11 @@ export class InstrumentComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["instrumentlist"]);
+              this.router.navigate(["instrumentlist"], {
+                queryParams: {
+                  isNSNav: true
+                }
+              });
               if (this.file != null) {
                 this.saveFileShare(this.file, data.object.id)
               }
@@ -834,7 +841,11 @@ export class InstrumentComponent implements OnInit {
               if (this.img != null && this.img != "") this.uploadFile(this.img, this.id)
 
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["instrumentlist"]);
+              this.router.navigate(["instrumentlist"], {
+                queryParams: {
+                  isNSNav: true
+                }
+              });
             }
 
             else this.notificationService.showError(data.resultMessage, "Error")

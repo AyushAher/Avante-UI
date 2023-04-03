@@ -253,7 +253,11 @@ export class SparePartComponent implements OnInit {
           .subscribe((data: any) => {
             if (data.result) {
               this.notificationService.showSuccess("Record deleted successfully", "Success");
-              this.router.navigate(["sparepartlist"])
+              this.router.navigate(["sparepartlist"], {
+                queryParams: {
+                  isNSNav: true
+                }
+              })
             }
             else this.notificationService.showInfo(data.resultMessage, "Info");
           })
@@ -343,7 +347,11 @@ export class SparePartComponent implements OnInit {
             if (this.img != undefined && this.img.length > 0)
               this.uploadFile(this.img, data.object.id)
 
-            this.router.navigate(["sparepartlist"]);
+            this.router.navigate(["sparepartlist"], {
+              queryParams: {
+                isNSNav: true
+              }
+            });
           }
           else this.notificationService.showInfo(data.resultMessage, "Info")
         });
@@ -355,7 +363,11 @@ export class SparePartComponent implements OnInit {
         .subscribe((data: ResultMsg) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["sparepartlist"]);
+            this.router.navigate(["sparepartlist"], {
+              queryParams: {
+                isNSNav: true
+              }
+            });
 
             if (this.img != undefined && this.img.length > 0)
               this.uploadFile(this.img, this.id)

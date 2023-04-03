@@ -236,7 +236,8 @@ export class CustomerComponent implements OnInit {
 
       return this.router.navigate([`/contact/${this.type}/${this.customerId}`], {
         queryParams: {
-          isNewMode: true
+          isNewMode: true,
+          isNSNav: true
         }
       });
     }
