@@ -43,11 +43,13 @@ export class BrowserBack implements CanActivate {
     constructor(router: Router) {
         router.events
             .subscribe((event: NavigationStart) => {
-                debugger;
+                //debugger;
                 if (event.navigationTrigger === 'popstate' || event.navigationTrigger === "imperative") {
                     const currentRoute = router.routerState;
-                    const isNotSafeNavigation = currentRoute.snapshot.url.includes('isNSNav=false');
-                    if(isNotSafeNavigation)
+                    const isSafeNavigation = event.url.includes('isNSNav=true');
+                    let isNotSafeNavigation = currentRoute.snapshot.url.includes('isNSNav=false');
+                    if(isSafeNavigation) {isNotSafeNavigation = false;}
+                    if(isNotSafeNavigation )
                     {
                         if (!confirm("You are about to navigate away from the page. Your changes will be discarded. Please confirm.")) {
                             router.navigateByUrl(currentRoute.snapshot.url, { skipLocationChange: true });
