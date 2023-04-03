@@ -11,30 +11,34 @@ export class ContactService {
   private ContactSubject: BehaviorSubject<Contact>;
   public contact: Observable<Contact>;
 
-    constructor(
-        private router: Router,
-        private environment: EnvService,
-        private http: HttpClient
-    ) {
-      //this.distrubutorSubject = new BehaviorSubject<Distributor>();
-      //this.user = this.distrubutorSubject.asObservable();
-    }
+  constructor(
+    private router: Router,
+    private environment: EnvService,
+    private http: HttpClient
+  ) {
+    //this.distrubutorSubject = new BehaviorSubject<Distributor>();
+    //this.user = this.distrubutorSubject.asObservable();
+  }
 
-    //public get userValue(): User {
-    //    return this.userSubject.value;
-    //}
+  //public get userValue(): User {
+  //    return this.userSubject.value;
+  //}
 
-  
+
 
   save(contact: Contact) {
     return this.http.post(`${this.environment.apiUrl}/Contacts`, contact);
   }
 
-  getAll() {
-      return this.http.get<Contact[]>(`${this.environment.apiUrl}/Contacts`);
+  SaveDistributorTree(treeObj: any) {
+    return this.http.post(`${this.environment.apiUrl}/Distributors/SaveTree`, treeObj);
   }
 
-  
+  getAll() {
+    return this.http.get<Contact[]>(`${this.environment.apiUrl}/Contacts`);
+  }
+
+
   getCustomerSiteByContact(id: string) {
     return this.http.get<Contact[]>(`${this.environment.apiUrl}/Contacts/GetCustomerSiteByContact/${id}`);
   }
@@ -46,30 +50,30 @@ export class ContactService {
     return this.http.get<Contact>(`${this.environment.apiUrl}/Contacts/${id}`);
   }
 
-    update(id, params) {
-      return this.http.put(`${this.environment.apiUrl}/Contacts/`, params)
-            .pipe(map(x => {
-              // update stored user if the logged in user updated their own record
-              //if (id == this.distributor.id) {
-              //      // update local storage
-              //      const user = { ...this.userValue, ...params };
-              //      sessionStorage.setItem('user', JSON.stringify(user));
+  update(id, params) {
+    return this.http.put(`${this.environment.apiUrl}/Contacts/`, params)
+      .pipe(map(x => {
+        // update stored user if the logged in user updated their own record
+        //if (id == this.distributor.id) {
+        //      // update local storage
+        //      const user = { ...this.userValue, ...params };
+        //      sessionStorage.setItem('user', JSON.stringify(user));
 
-              //      // publish updated user to subscribers
-              //      this.userSubject.next(user);
-              //  }
-                return x;
-            }));
-    }
+        //      // publish updated user to subscribers
+        //      this.userSubject.next(user);
+        //  }
+        return x;
+      }));
+  }
 
-    delete(id: string) {
-      return this.http.delete(`${this.environment.apiUrl}/Contacts/${id}`)
-            .pipe(map(x => {
-                //// auto logout if the logged in user deleted their own record
-                //if (id == this.userValue.id) {
-                //    this.logout();
-                //}
-                return x;
-            }));
-    }
+  delete(id: string) {
+    return this.http.delete(`${this.environment.apiUrl}/Contacts/${id}`)
+      .pipe(map(x => {
+        //// auto logout if the logged in user deleted their own record
+        //if (id == this.userValue.id) {
+        //    this.logout();
+        //}
+        return x;
+      }));
+  }
 }

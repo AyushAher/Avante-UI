@@ -55,6 +55,7 @@ export class ContactComponent implements OnInit {
   formData: { [key: string]: any; };
   isNewParentMode: boolean;
   parentEntity: any
+  label;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -457,37 +458,52 @@ export class ContactComponent implements OnInit {
       if (this.isNewParentMode || this.isNewSetup) {
         switch (this.type) {
           case "D":
-            this.distributorService.SaveDistributor();
+            sessionStorage.setItem('distributorContact', JSON.stringify(this.contact));
+            this.router.navigate([' distributorregion', this.masterId], {
+              queryParams: {
+                isNSNav: false,
+                isNewParentMode: true
+              }
+            })
+            // this.distributorService.SaveDistributor();
             break;
           case "C":
-            this.customerService.SaveCustomer();
+            sessionStorage.setItem('distributorContact', JSON.stringify(this.contact));
+            // this.customerService.SaveCustomer();
             break;
           case "DR":
-            this.distRegions.SaveRegion();
+            sessionStorage.setItem('distributorRegionContact', JSON.stringify(this.contact));
+            var requestObject = {
+              distributor: JSON.parse(sessionStorage.getItem('distributor')),
+              distributorContact: JSON.parse(sessionStorage.getItem('distributorContact')),
+              distributorRegion: JSON.parse(sessionStorage.getItem('distributorRegion')),
+              distributorRegionContact: JSON.parse(sessionStorage.getItem('distributorRegionContact')),
+            };
+            setTimeout(() => {
+              this.contactService.SaveDistributorTree(requestObject)
+                .subscribe((data: any) => {
+                  if (data.result) {
+                    this.id = data.object.id;
+                    this.notificationService.showSuccess(data.resultMessage, "Success");
+                    this.contact.id = data.id;
+                    this.loading = false;
+                    this.contactform.disable()
+                    this.isEditMode = false;
+                    this.isNewMode = false;
+                    this.back();
+                  }
+                  else {
+                    this.notificationService.showInfo(data.resultMessage, "Info");
+                  }
+                })
+            }, 500);
+            // this.distRegions.SaveRegion();
             break;
           case "CS":
             this.customersiteService.SaveSite();
             break;
         }
       }
-
-      setTimeout(() => {
-        this.contactService.save(this.contact)
-          .subscribe((data: any) => {
-            if (data.result) {
-              this.id = data.object.id;
-              if (createUser) this.addUser(data.object.id);
-
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.contact.id = data.id;
-              this.loading = false;
-              if (back) this.back();
-            }
-            else {
-              this.notificationService.showInfo(data.resultMessage, "Info");
-            }
-          })
-      }, 500);
     }
     else {
       this.contact.id = this.id;
