@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService, CountryService, CustomerService, ProfileService, DistributorRegionService, CustomerSiteService, NotificationService } from '../_services';
+import { AccountService, AlertService, CountryService, CustomerService, ProfileService, DistributorRegionService, CustomerSiteService, NotificationService, ListTypeService } from '../_services';
 import { Guid } from 'guid-typescript';
 
 
@@ -35,6 +35,7 @@ export class CustomerSiteComponent implements OnInit {
   isEditMode: boolean;
   formData: any;
   customerName: string
+  PaymentTermsList: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,6 +49,7 @@ export class CustomerSiteComponent implements OnInit {
     private customerService: CustomerService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
+    private listTypeService: ListTypeService
   ) { }
 
   ngOnInit() {
@@ -96,6 +98,12 @@ export class CustomerSiteComponent implements OnInit {
         isActive: true,
       }),
     });
+
+
+
+    this.listTypeService.getById("GPAYT")
+      .subscribe((data: any) => this.PaymentTermsList = data);
+
     this.countryService.getAll()
       .pipe(first())
       .subscribe({
