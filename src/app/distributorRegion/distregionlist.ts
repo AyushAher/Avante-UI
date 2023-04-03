@@ -84,7 +84,12 @@ export class DistributorRegionListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`distributorregion/${this.distributorId}/${data.id}`])
+    this.router.navigate([`distributorregion/${this.distributorId}/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   private createColumnDefs() {

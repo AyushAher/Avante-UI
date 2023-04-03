@@ -88,7 +88,12 @@ export class InstrumentListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`instrument/${data.id}`])
+    this.router.navigate([`instrument/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   DataFilter(event) {

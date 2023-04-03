@@ -106,7 +106,12 @@ export class CustomerSiteListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate(['/customersite/' + this.customerId + `/${data.id}`])
+    this.router.navigate(['/customersite/' + this.customerId + `/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   private createColumnDefs() {

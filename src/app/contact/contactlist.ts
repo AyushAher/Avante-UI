@@ -174,10 +174,20 @@ export class ContactListComponent implements OnInit {
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
     if (this.type == "DR" || this.type == "CS") {
-      this.router.navigate(['contact', this.type, this.masterId, this.detailId, data.id]);
+      this.router.navigate(['contact', this.type, this.masterId, this.detailId, data.id], {
+        queryParams: {
+          isNSNav: true,
+          creatingNewDistributor: true
+        },
+      });
     }
     else {
-      this.router.navigate(['contact', this.type, this.masterId, data.id]);
+      this.router.navigate(['contact', this.type, this.masterId, data.id], {
+        queryParams: {
+          isNSNav: true,
+          creatingNewDistributor: true
+        },
+      });
     }
   }
 

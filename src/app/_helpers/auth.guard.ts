@@ -51,7 +51,7 @@ export class BrowserBack implements CanActivate {
                     if(isSafeNavigation) {isNotSafeNavigation = false;}
                     if(isNotSafeNavigation )
                     {
-                        if (!confirm("You are about to navigate away from the page. Your changes will be discarded. Please confirm.")) {
+                        if (!confirm("You are about to navigate away from the page. Your changes will be discarded.")) {
                             router.navigateByUrl(currentRoute.snapshot.url, { skipLocationChange: true });
                         }
                     }
