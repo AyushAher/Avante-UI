@@ -604,8 +604,15 @@ export class ContactComponent implements OnInit {
         }
       });
     }
-    else if (this.type == "DR") {
+    else if (this.type == "DR" && !this.isNewParentMode) {
       this.router.navigate(['contactlist', this.type, this.detailId, this.masterId], {
+        queryParams: {
+          isNSNav: true,
+        }
+      });
+    }
+    else if (this.type == "DR" && this.isNewParentMode) {
+      this.router.navigate(['distributorlist'], {
         queryParams: {
           isNSNav: true,
         }
