@@ -74,7 +74,12 @@ export class TravelInvoiceListComponent implements OnInit {
 
     EditRecord() {
         var data = this.api.getSelectedRows()[0]
-        this.router.navigate([`travelinvoice/${data.id}`])
+        this.router.navigate([`travelinvoice/${data.id}`], {
+            queryParams: {
+              isNSNav: true,
+              creatingNewDistributor: true
+            },
+          })
     }
 
     private createColumnDefs() {

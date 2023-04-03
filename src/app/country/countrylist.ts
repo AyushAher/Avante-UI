@@ -88,7 +88,12 @@ export class CountryListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`country/${data.id}`])
+    this.router.navigate([`country/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   private createColumnDefs() {

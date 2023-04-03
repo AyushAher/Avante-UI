@@ -103,7 +103,12 @@ export class OfferrequestlistComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`offerrequest/${data.id}`])
+    this.router.navigate([`offerrequest/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   private createColumnDefs() {

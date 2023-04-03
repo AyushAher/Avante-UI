@@ -92,7 +92,12 @@ export class CustspinventorylistComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`customerspinventory/${data.id}`])
+    this.router.navigate([`customerspinventory/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   ShowData(event) {

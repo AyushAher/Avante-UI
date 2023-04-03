@@ -110,7 +110,12 @@ export class UserProfileListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`userprofile/${data.id}`])
+    this.router.navigate([`userprofile/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   private createColumnDefs() {

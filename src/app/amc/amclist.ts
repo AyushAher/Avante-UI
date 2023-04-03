@@ -105,7 +105,12 @@ export class AmcListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`amc/${data.id}`])
+    this.router.navigate([`amc/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   private createColumnDefs() {

@@ -118,7 +118,12 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`customersatisfactionsurvey/${data.id}`])
+    this.router.navigate([`customersatisfactionsurvey/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   private createColumnDefs() {

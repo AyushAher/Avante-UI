@@ -141,7 +141,12 @@ export class ServiceRequestListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`servicerequest/${data.id}`])
+    this.router.navigate([`servicerequest/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   GetAllRecord() {

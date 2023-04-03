@@ -102,7 +102,12 @@ export class MasterListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`masterlistitem/${data.id}`])
+    this.router.navigate([`masterlistitem/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   private createColumnDefs() {

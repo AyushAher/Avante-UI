@@ -135,7 +135,12 @@ export class ServiceReportListComponent implements OnInit {
 
   EditRecord() {
     var data = this.api.getSelectedRows()[0]
-    this.router.navigate([`servicereport/${data.id}`])
+    this.router.navigate([`servicereport/${data.id}`], {
+      queryParams: {
+        isNSNav: true,
+        creatingNewDistributor: true
+      },
+    })
   }
 
   private createColumnDefs() {
