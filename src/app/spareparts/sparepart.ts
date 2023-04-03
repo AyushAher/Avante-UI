@@ -198,7 +198,7 @@ export class SparePartComponent implements OnInit {
   }
 
   EditMode() {
-       if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
 
       this.router.navigate(
@@ -208,7 +208,8 @@ export class SparePartComponent implements OnInit {
           queryParams: {
             isNSNav: false
           },
-          queryParamsHandling: 'merge',});
+          queryParamsHandling: 'merge',
+        });
 
       this.sparepartform.enable();
       this.FormControlDisable();
@@ -216,21 +217,11 @@ export class SparePartComponent implements OnInit {
   }
 
   Back() {
-
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["sparepartlist"],{
-          queryParams: {
-            isNotSafeNavigation: false
-          }
-        })
-    }
-
-    else this.router.navigate(["sparepartlist"],{
+    this.router.navigate(["sparepartlist"], {
       queryParams: {
-        isNotSafeNavigation: false
+        isNSNav: !(this.isEditMode || this.isNewMode)
       }
-    })
+    });
 
   }
 

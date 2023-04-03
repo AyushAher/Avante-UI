@@ -340,14 +340,7 @@ export class ContactComponent implements OnInit {
   }
 
   Back() {
-    if ((this.isEditMode || this.isNewMode)) {
-      if (this.isNewParentMode && confirm(`Are you sure want to go back? All unsaved changes as well as ${this.contactform.get("parentEntity").value} record will be lost!`))
-        this.back()
-      else if (!this.isNewParentMode && confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.back()
-    }
-
-    else this.back()
+    this.back(!(this.isEditMode || this.isNewMode))
   }
 
   CancelEdit() {
@@ -365,7 +358,7 @@ export class ContactComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
-            this.back();
+            this.back(true);
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
@@ -534,7 +527,7 @@ export class ContactComponent implements OnInit {
                     this.contactform.disable()
                     this.isEditMode = false;
                     this.isNewMode = false;
-                    this.back();
+                    this.back(true);
                   }
                   else {
                     this.notificationService.showInfo(data.resultMessage, "Info");
@@ -558,7 +551,7 @@ export class ContactComponent implements OnInit {
               this.contactform.disable()
               this.isEditMode = false;
               this.isNewMode = false;
-              this.back();
+              this.back(true);
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "Info");
@@ -574,7 +567,7 @@ export class ContactComponent implements OnInit {
           this.contactform.disable()
           this.isEditMode = false;
           this.isNewMode = false;
-          this.back();
+          this.back(true);
         }
 
         this.contact.id = data.id;
@@ -583,7 +576,7 @@ export class ContactComponent implements OnInit {
     }
   }
 
-  back() {
+  back(isNSNav) {
     if (this.isNewSetup) {
       sessionStorage.removeItem('distributor');
       sessionStorage.removeItem('distributorRegion');
@@ -592,7 +585,7 @@ export class ContactComponent implements OnInit {
 
       this.router.navigate(['distributorregion', this.masterId], {
         queryParams: {
-          isNSNav: true,
+          isNSNav,
           isNewSetup: true
         }
       });
@@ -600,35 +593,35 @@ export class ContactComponent implements OnInit {
     else if (this.type == "D") {
       this.router.navigate(['contactlist', this.type, this.masterId], {
         queryParams: {
-          isNSNav: true,
+          isNSNav,
         }
       });
     }
     else if (this.type == "DR" && !this.isNewParentMode) {
       this.router.navigate(['contactlist', this.type, this.detailId, this.masterId], {
         queryParams: {
-          isNSNav: true,
+          isNSNav
         }
       });
     }
     else if (this.type == "DR" && this.isNewParentMode) {
       this.router.navigate(['distributorlist'], {
         queryParams: {
-          isNSNav: true,
+          isNSNav
         }
       });
     }
     else if (this.type == "C") {
       this.router.navigate(['contactlist', this.type, this.masterId], {
         queryParams: {
-          isNSNav: true,
+          isNSNav
         }
       });
     }
     else if (this.type == "CS") {
       this.router.navigate(['contactlist', this.type, this.detailId, this.masterId], {
         queryParams: {
-          isNSNav: true,
+          isNSNav
         }
       });
     }

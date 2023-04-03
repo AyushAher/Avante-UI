@@ -156,17 +156,17 @@ export class CustomerComponent implements OnInit {
       this.FormControlDisable()
     }
   }
-  
+
   FormControlDisable() {
     this.a.countryid.disable();
   }
 
   Back() {
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["customerlist"]);
-    }
-    else this.router.navigate(["customerlist"]);
+    this.router.navigate(["customerlist"], {
+      queryParams: {
+        isNSNav: !(this.isEditMode || this.isNewMode)
+      }
+    });
 
   }
 

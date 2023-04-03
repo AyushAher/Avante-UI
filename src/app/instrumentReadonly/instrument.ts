@@ -280,7 +280,11 @@ export class InstrumentRonlyComponent implements OnInit {
   get c() { return this.instrumentform.controls.configuration; }
 
   Back() {
-    this.router.navigate(["/search"])
+    this.router.navigate(["/search"], {
+      queryParams: {
+        isNSNav: true
+      }
+    });
   }
 
 

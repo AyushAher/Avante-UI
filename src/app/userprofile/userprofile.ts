@@ -151,7 +151,7 @@ export class UserProfileComponent implements OnInit {
       });
 
     this.listTypeService.getById("ROLES").pipe(first())
-      .subscribe((data: ListTypeItem[]) => this.roleList = data.filter(x=>x.itemCode != "RADM"));
+      .subscribe((data: ListTypeItem[]) => this.roleList = data.filter(x => x.itemCode != "RADM"));
 
     this.profileService.getAll().pipe(first())
       .subscribe((data: any) => this.profilelist = data.object);
@@ -292,24 +292,23 @@ export class UserProfileComponent implements OnInit {
       this.userprofileform.enable();
 
       this.router.navigate(
-        ["."], 
+        ["."],
         {
           relativeTo: this.route,
           queryParams: {
             isNSNav: false
-          }, 
+          },
           queryParamsHandling: 'merge', // remove to replace all query params by provided
         });
     }
   }
 
   Back() {
-
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["userprofilelist"])
-    }
-    else this.router.navigate(["userprofilelist"])
+    this.router.navigate(["userprofilelist"], {
+      queryParams: {
+        isNSNav: !(this.isEditMode || this.isNewMode)
+      }
+    });
   }
 
   CancelEdit() {

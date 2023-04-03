@@ -171,12 +171,11 @@ export class DistributorRegionComponent implements OnInit {
   }
 
   Back() {
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["distregionlist", this.distributorId]);
-    }
-
-    else this.router.navigate(["distregionlist", this.distributorId]);
+    this.router.navigate(["distregionlist", this.distributorId], {
+      queryParams: {
+        isNSNav: !(this.isEditMode || this.isNewMode)
+      }
+    });
 
   }
 

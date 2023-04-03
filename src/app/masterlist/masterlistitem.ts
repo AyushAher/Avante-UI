@@ -70,7 +70,7 @@ export class MasterListItemComponent implements OnInit {
         this.hasUpdateAccess = profilePermission[0].update;
       }
     }
-    if (this.user.isAdmin) {      
+    if (this.user.isAdmin) {
       this.hasAddAccess = true;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
@@ -128,7 +128,7 @@ export class MasterListItemComponent implements OnInit {
   }
 
   EditMode() {
-       if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
 
       this.router.navigate(
@@ -138,7 +138,8 @@ export class MasterListItemComponent implements OnInit {
           queryParams: {
             isNSNav: false
           },
-          queryParamsHandling: 'merge',});
+          queryParamsHandling: 'merge',
+        });
 
       this.masterlistitemform.enable();
       this.FormControlDisable();
@@ -146,19 +147,10 @@ export class MasterListItemComponent implements OnInit {
   }
 
   Back() {
-
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["masterlist"],{
-          queryParams: {
-            isNotSafeNavigation: false
-          }
-        })
-    }
-
-    else this.router.navigate(["masterlist"],{
+    this.router.navigate(["masterlist"], {
       queryParams: {
-        isNotSafeNavigation: false
+        isNotSafeNavigation: false,
+        isNSNav: !(this.isEditMode || this.isNewMode)
       }
     })
 

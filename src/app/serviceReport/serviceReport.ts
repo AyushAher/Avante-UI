@@ -474,7 +474,7 @@ export class ServiceReportComponent implements OnInit {
 
 
   EditMode() {
-       if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
 
       this.router.navigate(
@@ -484,7 +484,8 @@ export class ServiceReportComponent implements OnInit {
           queryParams: {
             isNSNav: false
           },
-          queryParamsHandling: 'merge',});
+          queryParamsHandling: 'merge',
+        });
 
       if (!this.isCust) {
         this.ServiceReportform.enable();
@@ -500,13 +501,11 @@ export class ServiceReportComponent implements OnInit {
   }
 
   Back() {
-
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["servicereportlist"])
-    }
-
-    else this.router.navigate(["servicereportlist"])
+    this.router.navigate(["servicereportlist"], {
+      queryParams: {
+        isNSNav: !(this.isEditMode || this.isNewMode)
+      }
+    });
 
   }
 

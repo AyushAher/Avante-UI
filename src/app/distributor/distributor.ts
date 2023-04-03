@@ -155,18 +155,11 @@ export class DistributorComponent implements OnInit {
   }
 
   Back() {
-    if ((this.isEditMode || this.isNewMode)) {
-      this.router.navigate(["distributorlist"], {
-        queryParams: {
-          isNSNav: false
-        }
-      });
-    }
-    else this.router.navigate(["distributorlist"], {
+    this.router.navigate(["distributorlist"], {
       queryParams: {
-        isNSNav: true
+        isNSNav: !(this.isEditMode || this.isNewMode)
       }
-    });;
+    });
   }
 
   CancelEdit() {

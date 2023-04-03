@@ -194,7 +194,7 @@ export class TravelinvoiceComponent implements OnInit {
   }
 
   EditMode() {
-       if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
 
       this.router.navigate(
@@ -204,7 +204,8 @@ export class TravelinvoiceComponent implements OnInit {
           queryParams: {
             isNSNav: false
           },
-          queryParamsHandling: 'merge',});
+          queryParamsHandling: 'merge',
+        });
 
       this.form.enable();
       this.columnDefsAttachments = this.createColumnDefsAttachments()
@@ -213,14 +214,11 @@ export class TravelinvoiceComponent implements OnInit {
   }
 
   Back() {
-
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["travelinvoicelist"])
-    }
-
-    else this.router.navigate(["travelinvoicelist"])
-
+    this.router.navigate(["travelinvoicelist"], {
+      queryParams: {
+        isNSNav: !(this.isEditMode || this.isNewMode)
+      }
+    });
   }
 
   CancelEdit() {

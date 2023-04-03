@@ -236,7 +236,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   }
 
   EditMode() {
-       if (confirm("Are you sure you want to edit the record?")) {
+    if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
 
       this.router.navigate(
@@ -246,7 +246,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
           queryParams: {
             isNSNav: false
           },
-          queryParamsHandling: 'merge',});
+          queryParamsHandling: 'merge',
+        });
 
       this.form.enable();
       this.FormControlsDisable()
@@ -254,13 +255,11 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   }
 
   Back() {
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["customersatisfactionsurveylist"]);
-    }
-
-    else this.router.navigate(["customersatisfactionsurveylist"]);
-
+    this.router.navigate(["customersatisfactionsurveylist"], {
+      queryParams: {
+        isNSNav: !(this.isEditMode || this.isNewMode)
+      }
+    });
   }
 
   CancelEdit() {

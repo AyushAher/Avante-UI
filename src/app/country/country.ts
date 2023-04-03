@@ -136,24 +136,23 @@ export class CountryComponent implements OnInit {
       this.FormControlsDisable();
 
       this.router.navigate(
-        ["."], 
+        ["."],
         {
           relativeTo: this.route,
           queryParams: {
             isNSNav: false
-          }, 
+          },
           queryParamsHandling: 'merge', // remove to replace all query params by provided
         });
     }
   }
 
   Back() {
-
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["countrylist"]);
-    }
-    else this.router.navigate(["countrylist"]);
+    this.router.navigate(["countrylist"], {
+      queryParams: {
+        isNSNav: !(this.isEditMode || this.isNewMode)
+      }
+    });
 
   }
 

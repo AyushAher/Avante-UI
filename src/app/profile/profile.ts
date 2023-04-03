@@ -170,11 +170,11 @@ export class ProfileComponent implements OnInit {
 
   Back() {
 
-    if ((this.isEditMode || this.isNewMode)) {
-      if (confirm("Are you sure want to go back? All unsaved changes will be lost!"))
-        this.router.navigate(["profilelist"])
-    }
-    else this.router.navigate(["profilelist"])
+    this.router.navigate(["profilelist"], {
+      queryParams: {
+        isNSNav: !(this.isEditMode || this.isNewMode)
+      }
+    });
 
   }
   GetById() {
