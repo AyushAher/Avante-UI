@@ -310,7 +310,7 @@ export class ProfileComponent implements OnInit {
     fdelete.reset();
     fupdate.reset();
     fcommercial.reset();
-
+    this.lstScreens = [];
     this.listTypeItems = obj
     this.addItem()
   }
