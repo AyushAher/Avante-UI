@@ -97,6 +97,15 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     this.isEditMode = true;
     this.Form.enable();
     this.FormControlDisable();
+    this.router.navigate(
+      ["."],
+      {
+        relativeTo: this.activeRoute,
+        queryParams: {
+          isNSNav: false
+        },
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
   }
 
   CancelEdit() {
