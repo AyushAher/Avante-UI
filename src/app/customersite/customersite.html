@@ -93,7 +93,7 @@
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <label for="payterms">Payment Term<span class="text-danger">*</span></label>
+              <label for="payterms">Payment Terms<span class="text-danger">*</span></label>
               <select type="text" formControlName="payterms" class="form-select"
                 [ngClass]="{ 'is-invalid': f.payterms.touched && f.payterms.errors }">
                 <option *ngFor="let i of PaymentTermsList;" [value]=" i.listTypeItemId">{{i.itemname}}</option>

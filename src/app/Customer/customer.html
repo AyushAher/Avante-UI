@@ -82,7 +82,7 @@
 
 
             <div class="col-sm-4">
-              <label for="defdistid">Distributor Regions<span class="text-danger">*</span></label>
+              <label for="defdistid">Regional Distributors<span class="text-danger">*</span></label>
               <select formControlName="defdistregionid" class="form-select"
                 (change)="onDistributorRegion($event.target.value)"
                 [ngClass]="{ 'is-invalid': f.defdistregionid.touched && f.defdistregionid.errors }">
@@ -92,7 +92,7 @@
                 </option>
               </select>
               <div *ngIf="f.defdistregionid.touched && f.defdistregionid.errors" class="invalid-feedback">
-                <div *ngIf="f.defdistregionid.errors.required">Distributor Region is required</div>
+                <div *ngIf="f.defdistregionid.errors.required">Regional Distributor is required</div>
               </div>
             </div>
             <div class="col-sm-4">

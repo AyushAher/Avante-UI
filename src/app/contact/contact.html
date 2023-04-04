@@ -82,7 +82,7 @@
             </div>
             <div class="row">
               <div class="col-md-4 col-sm-4">
-                <label for="pcontactno">Primary mobile phone number</label><br />
+                <label for="pcontactno">Primary Mobile Phone Number</label><br />
                 <input type="tel" ng2TelInput phoneInput formControlName="pcontactno" class="form-control"
                   maxlength="15" (ng2TelOutput)="getNumber($event)" (intlTelInputObject)="telInputObject($event)"
                   (countryChange)="countryChange($event)"
@@ -105,7 +105,7 @@
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
-                <label for="scontactno">Secondory Contact No<span class="text-danger">*</span></label><br />
+                <label for="scontactno">Secondory Phone Number<span class="text-danger">*</span></label><br />
                 <input type="tel" ng2TelInput formControlName="scontactno" (ng2TelOutput)="getNumber($event)"
                   (intlTelInputObject)="telInputObjectCo($event)" (countryChange)="countryChange2($event)"
                   class="form-control" maxlength="15"
@@ -131,7 +131,7 @@
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
-                <label for="semail">Secondory Email<span class="text-danger">*</span></label>
+                <label for="semail">Secondory E-Mail<span class="text-danger">*</span></label>
                 <input type="email" formControlName="semail" class="form-control"
                   [ngClass]="{ 'is-invalid': f.semail.touched && f.semail.errors }" />
                 <div *ngIf="f.semail.touched && f.semail.errors" class="invalid-feedback">
