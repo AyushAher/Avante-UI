@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { Customer } from '../_models';
 import { EnvService } from './env/env.service';
 import { NotificationService } from './notification.service';
+import { ContactService } from './contact.service';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
@@ -17,7 +18,8 @@ export class CustomerService {
     private router: Router,
     private http: HttpClient,
     private environment: EnvService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private contactService: ContactService
   ) {
     //this.distrubutorSubject = new BehaviorSubject<Distributor>();
     //this.user = this.distrubutorSubject.asObservable();
@@ -55,10 +57,18 @@ export class CustomerService {
 
   SaveCustomer() {
     var customerdata = JSON.parse(sessionStorage.getItem('customer'));
+    var customerContactdata = JSON.parse(sessionStorage.getItem('customerContact'));
 
     this.save(customerdata).subscribe((data: any) => {
-      if (data.result)
+      if (data.result) {
+        this.contactService.save(customerContactdata)
+          .subscribe((data: any) => {
+            if (data.result) this.notificationService.showSuccess(data.resultMessage, "Success");
+            else this.notificationService.showInfo(data.resultMessage, "Info");
+          })
+
         this.notificationService.showSuccess(data.resultMessage, "Success");
+      }
       else
         this.notificationService.showInfo(data.resultMessage, "info");
 

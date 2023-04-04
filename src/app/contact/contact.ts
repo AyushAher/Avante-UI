@@ -213,7 +213,17 @@ export class ContactComponent implements OnInit {
           this.label = "Customer Site"
 
           this.parentEntity = JSON.parse(sessionStorage.getItem('customer'))
-          this.contactform.get('distCustName').setValue(this.parentEntity.custname);
+          if (!this.parentEntity) {
+            this.customerService.getById(this.detailId).subscribe((data: any) => {
+              if (data.result && data.object) {
+                this.parentEntity = data.object;
+                this.contactform.get('distCustName').setValue(this.parentEntity?.custname);
+                this.distCustName = "Customer";
+              }
+            })
+          }
+
+          this.contactform.get('distCustName').setValue(this.parentEntity?.custname);
           this.distCustName = "Customer";
 
           this.parentEntity = JSON.parse(sessionStorage.getItem('site'))
@@ -228,6 +238,15 @@ export class ContactComponent implements OnInit {
         case "DR":
           this.label = "Distributor Region"
           this.parentEntity = JSON.parse(sessionStorage.getItem('distributor'));
+          if (!this.parentEntity) {
+            this.distributorService.getById(this.detailId).subscribe((data: any) => {
+              if (data.result && data.object) {
+                this.parentEntity = data.object;
+                this.distCustName = "Principal Distributor";
+                this.contactform.get('distCustName').setValue(this.parentEntity.distname);
+              }
+            })
+          }
           this.distCustName = "Principal Distributor";
           this.contactform.get('distCustName').setValue(this.parentEntity.distname);
 
@@ -537,23 +556,30 @@ export class ContactComponent implements OnInit {
             })
             break;
           case "C":
-            this.customerService.SaveCustomer();
-            this.contactService.save(this.contact)
-              .subscribe((data: any) => {
-                if (data.result) {
-                  this.id = data.object.id;
-                  this.notificationService.showSuccess(data.resultMessage, "Success");
-                  this.contact.id = data.id;
-                  this.loading = false;
-                  this.contactform.disable()
-                  this.isEditMode = false;
-                  this.isNewMode = false;
-                  this.back(true);
-                }
-                else {
-                  this.notificationService.showInfo(data.resultMessage, "Info");
-                }
-              })
+            sessionStorage.setItem('customerContact', JSON.stringify(this.contact));
+            this.router.navigate(['customersite', this.masterId], {
+              queryParams: {
+                isNSNav: true,
+                isNewParentMode: true,
+              }
+            });
+            // this.customerService.SaveCustomer();
+            // this.contactService.save(this.contact)
+            //   .subscribe((data: any) => {
+            //     if (data.result) {
+            //       this.id = data.object.id;
+            //       this.notificationService.showSuccess(data.resultMessage, "Success");
+            //       this.contact.id = data.id;
+            //       this.loading = false;
+            //       this.contactform.disable()
+            //       this.isEditMode = false;
+            //       this.isNewMode = false;
+            //       this.back(true);
+            //     }
+            //     else {
+            //       this.notificationService.showInfo(data.resultMessage, "Info");
+            //     }
+            //   })
             break;
           case "DR":
             sessionStorage.setItem('distributorRegionContact', JSON.stringify(this.contact));
@@ -581,24 +607,30 @@ export class ContactComponent implements OnInit {
             }, 500);
             break;
           case "CS":
-            this.customersiteService.SaveSite();
-
-            this.contactService.save(this.contact)
-              .subscribe((data: any) => {
-                if (data.result) {
-                  this.id = data.object.id;
-                  this.notificationService.showSuccess(data.resultMessage, "Success");
-                  this.contact.id = data.id;
-                  this.loading = false;
-                  this.contactform.disable()
-                  this.isEditMode = false;
-                  this.isNewMode = false;
-                  this.back(true);
-                }
-                else {
-                  this.notificationService.showInfo(data.resultMessage, "Info");
-                }
-              })
+            if (sessionStorage.getItem("customer")) this.customerService.SaveCustomer();
+            sessionStorage.setItem('customerSiteContact', JSON.stringify(this.contact));
+            var requestObjectCust = {
+              customer: JSON.parse(sessionStorage.getItem('customer')),
+              customerContact: JSON.parse(sessionStorage.getItem('customerContact')),
+              customerSite: JSON.parse(sessionStorage.getItem('customerSite')),
+              customerSiteContact: JSON.parse(sessionStorage.getItem('customerSiteContact')),
+            };
+            setTimeout(() => {
+              this.contactService.SaveCustomerTree(requestObjectCust)
+                .subscribe((data: any) => {
+                  if (data.result) {
+                    this.notificationService.showSuccess(data.resultMessage, "Success");
+                    this.loading = false;
+                    this.contactform.disable()
+                    this.isEditMode = false;
+                    this.isNewMode = false;
+                    this.back(true);
+                  }
+                  else {
+                    this.notificationService.showInfo(data.resultMessage, "Info");
+                  }
+                })
+            }, 500);
             break;
         }
       }
@@ -680,7 +712,14 @@ export class ContactComponent implements OnInit {
         }
       });
     }
-    else if (this.type == "CS") {
+    else if (this.type == "CS" && this.isNewParentMode) {
+      this.router.navigate(['customerlist'], {
+        queryParams: {
+          isNSNav
+        }
+      });
+    }
+    else if (this.type == "CS" && !this.isNewParentMode) {
       this.router.navigate(['contactlist', this.type, this.detailId, this.masterId], {
         queryParams: {
           isNSNav

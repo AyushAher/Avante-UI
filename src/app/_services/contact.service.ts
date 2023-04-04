@@ -33,6 +33,9 @@ export class ContactService {
   SaveDistributorTree(treeObj: any) {
     return this.http.post(`${this.environment.apiUrl}/Distributors/SaveTree`, treeObj);
   }
+  SaveCustomerTree(treeObj: any) {
+    return this.http.post(`${this.environment.apiUrl}/Customer/SaveTree`, treeObj);
+  }
 
   getAll() {
     return this.http.get<Contact[]>(`${this.environment.apiUrl}/Contacts`);

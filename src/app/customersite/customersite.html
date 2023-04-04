@@ -51,17 +51,8 @@
         <form [formGroup]="customersiteform" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-sm-4">
-              <label for="custid">Customer Name<span class="text-danger">*</span></label>
-              <select formControlName="custid" disabled class="form-select"
-                [ngClass]="{ 'is-invalid': f.custid.touched && f.custid.errors }">
-                <!--<option value="0">--All--</option>-->
-                <option *ngFor="let customer of customers" value={{customer.id}}>
-                  {{customer.custname}}
-                </option>
-              </select>
-              <div *ngIf="f.custid.touched && f.custid.errors" class="invalid-feedback">
-                <div *ngIf="f.custid.errors.required">Customer is required</div>
-              </div>
+              <label for="custname">Customer Name<span class="text-danger">*</span></label>
+              <input formControlName="custname" disabled class="form-control">
             </div>
 
             <div class="col-md-4 col-sm-4">

@@ -10,6 +10,7 @@ import {
   AlertService,
   CountryService,
   CustomerService,
+  DistributorRegionService,
   DistributorService,
   ListTypeService,
   NotificationService,
@@ -51,13 +52,13 @@ export class CustomerComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
     private distributorService: DistributorService,
     private countryService: CountryService,
     private customerService: CustomerService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private listtypeService: ListTypeService,
+    private distRegionService: DistributorRegionService,
   ) { }
 
   ngOnInit() {
@@ -95,7 +96,7 @@ export class CustomerComponent implements OnInit {
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
-        zip: ['', [Validators.minLength(4), Validators.maxLength(15)]],
+        zip: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],
         geolat: [''],
         geolong: [''],
         isActive: true,
@@ -118,8 +119,14 @@ export class CustomerComponent implements OnInit {
 
     this.distributorService.getAll()
       .pipe(first()).subscribe((data: any) => {
-        this.defaultdistributors = data.object
+        this.defaultdistributors = data.object;
       });
+
+    this.distRegionService.getAll()
+      .subscribe((data: any) => {
+        this.distRegionsList = data
+      })
+
 
     this.customerId = this.route.snapshot.paramMap.get('id');
     if (this.customerId != null) {
@@ -128,7 +135,6 @@ export class CustomerComponent implements OnInit {
           next: (data: any) => {
             this.formData = data.object;
             this.customerform.patchValue(this.formData);
-            this.onDefDistchanged(data.object.defdistid);
             this.onDistributorRegion(data.object.defdistregionid)
           },
         });
@@ -136,6 +142,7 @@ export class CustomerComponent implements OnInit {
     }
     else {
       this.isNewMode = true;
+      this.FormControlDisable();
     }
 
   }
@@ -159,6 +166,8 @@ export class CustomerComponent implements OnInit {
 
   FormControlDisable() {
     this.a.countryid.disable();
+    this.f.defdistid.disable();
+    this.f.countryid.disable();
   }
 
   Back() {
@@ -204,20 +213,12 @@ export class CustomerComponent implements OnInit {
     return controls.controls;
   }
 
-  onDefDistchanged(distId) {
-    this.distributorService.getAll()
-      .pipe(first()).subscribe((data: any) => this.distRegionsList = data.object.find(x => x.id === distId)?.regions);
-  }
-
   onDistributorRegion(e) {
-    setTimeout(() => {
-      var country = this.distRegionsList.find(x => x.id == e)?.countries.split(",")
-      this.regionCountry = []
-      country.forEach(element => {
-        this.regionCountry.push(this.countries.find(x => x.id == element))
-      });
-
-    }, 500);
+    var region = this.distRegionsList.find(x => x.id == e);
+    this.regionCountry = [];
+    this.regionCountry.push(this.countries.find(x => x.id == region?.countries))
+    this.customerform.get("defdistid").setValue(region?.distid);
+    this.customerform.get("countryid").setValue(region?.countries);
   }
 
   onSubmit() {

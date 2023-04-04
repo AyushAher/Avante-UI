@@ -43,6 +43,15 @@
                                 <div *ngIf="f.companyName.errors.required">Company is required</div>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <label>Company Email</label>
+                            <input formControlName="companyEmail" class="form-control"
+                                [ngClass]="{ 'is-invalid': f.companyEmail.touched  && f.companyEmail.errors }" />
+
+                            <div *ngIf=" f.companyEmail.touched && f.companyEmail.errors" class="invalid-feedback">
+                                <div *ngIf="f.companyEmail.errors.required">Company Email is required</div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

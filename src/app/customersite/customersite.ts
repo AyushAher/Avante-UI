@@ -36,6 +36,7 @@ export class CustomerSiteComponent implements OnInit {
   formData: any;
   customerName: string
   PaymentTermsList: any;
+  isNewParentMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -79,6 +80,7 @@ export class CustomerSiteComponent implements OnInit {
 
     this.customersiteform = this.formBuilder.group({
       custid: ['', Validators.required],
+      custname: ['', Validators.required],
       regname: [''],
       custregname: ['', Validators.required],
       distid: ['', Validators.required],
@@ -100,32 +102,56 @@ export class CustomerSiteComponent implements OnInit {
     });
 
 
+    this.route.queryParams.subscribe((data) => {
+      this.isNewParentMode = data.isNewParentMode != null && data.isNewParentMode != undefined && data.isNewParentMode == "true";
+    });
 
     this.listTypeService.getById("GPAYT")
       .subscribe((data: any) => this.PaymentTermsList = data);
+    if (!this.isNewParentMode) {
+      this.distributorRegionservice.getDistByCustomerId(this.customerid)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            this.distRegions = data.object;
+          },
+        });
 
-    this.countryService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.countries = data.object;
-        },
-      });
-    this.distributorRegionservice.getDistByCustomerId(this.customerid)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.distRegions = data.object;
-        },
-      });
+    }
+    else {
+      let customer = JSON.parse(sessionStorage.getItem('customer'));
 
+      this.distributorRegionservice.getById(customer.defdistregionid)
+        .subscribe({
+          next: (data: any) => {
+            if (data.result && data.object) {
+              this.distRegions = [data.object];
+              this.customersiteform.get('regname').setValue(data.object.region)
+            }
+          },
+        });
+    }
     this.customerService.getAll()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.customers = data.object;
-          this.customersiteform.get("custid").setValue(this.customerid)
-          this.customerName = this.customers.find(x => x.id == this.customerid)?.custname
+      .subscribe((data: any) => {
+        this.customers = data.object;
+        var customer: any = this.customers.find(x => x.id == this.customerid);
+        if (!customer && this.isNewParentMode) {
+          customer = JSON.parse(sessionStorage.getItem('customer'));
+        }
+        this.customersiteform.get("custid").setValue(this.customerid)
+
+        if (customer) {
+          this.customerName = customer.custname
+          if (customer.defDistRegion) this.customersiteform.get('regname').setValue(customer.defDistRegion)
+          if (customer.custname) this.customersiteform.get('custname').setValue(customer.custname)
+          if (customer.defdistregionid) this.customersiteform.get('distid').setValue(customer.defdistregionid)
+
+          this.countryService.getAll()
+            .subscribe((data: any) => {
+              this.countries = data.object;
+              var siteName = this.countries.find(x => x.id == customer.address.countryid)?.name
+              this.customersiteform.get('custregname').setValue(siteName)
+            });
         }
       });
 
