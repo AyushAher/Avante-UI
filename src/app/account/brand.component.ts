@@ -134,11 +134,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
         //this.onClose.next({ result: success, object: saveRequest.object });
         if (!this.isDialog) {
           this.notificationService.showSuccess("Brand created successfully!", "Success")
-          this.router.navigate(["/brandlist"], {
-            queryParams: {
-              isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-            }
-          });
+          this.router.navigate(["/brandlist"]);
           return;
         }
       }
@@ -152,11 +148,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
 
         if (!this.isDialog) {
           this.notificationService.showSuccess("Brand updated successfully!", "Success")
-          this.router.navigate(["/brandlist"], {
-            queryParams: {
-              isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-            }
-          });
+          this.router.navigate(["/brandlist"]);
         }
       }
     }

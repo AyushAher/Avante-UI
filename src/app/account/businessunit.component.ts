@@ -137,11 +137,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
         //this.onClose.next({ result: success, object: saveRequest.object });
         if (!this.isDialog) {
           this.notificationService.showSuccess("Business Unit created successfully!", "Success")
-          this.router.navigate(["/businessunitlist"], {
-            queryParams: {
-              isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-            }
-          });
+          this.router.navigate(["/businessunitlist"]);
         }
       }
     }
@@ -153,11 +149,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
         this.onClose.next({ result: success, object: updateRequest.object });
         if (!this.isDialog) {
           this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
-          this.router.navigate(["/businessunitlist"], {
-            queryParams: {
-              isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-            }
-          });
+          this.router.navigate(["/businessunitlist"]);
         }
       }
     }
