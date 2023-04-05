@@ -32,7 +32,10 @@ export class ErrorInterceptor implements HttpInterceptor {
         return this.handler(next, request);
     }
 
-    handler(next, request) {
+    handler(next, request: HttpRequest<any>) {
+        if (request.method == "POST" || request.method == "PUT") {
+            this.notificationService.SetNavParam();
+        }
         return next.handle(request).pipe(tap((event) => {
             if (event instanceof HttpResponse) {
                 //stop spinner
