@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
 
@@ -11,7 +12,8 @@ export class NotificationService {
   private invalidCharactersArray = ["*", "'", '"', ":"];
   private _listeners = new Subject<any>();
 
-  constructor(private toastr: ToastrService) { }
+  constructor(private toastr: ToastrService,    private activeRoute: ActivatedRoute,
+    private router: Router) { }
 
   showSuccess(message, title) {
     this.toastr.success(message, title)
@@ -40,6 +42,17 @@ export class NotificationService {
   RestrictAdmin() {
     this.showWarning("Admin cannot create records.", "Warning")
   }
+
+  SetNavParam()
+ {
+  this.router.navigate(
+    ["."], 
+    {
+      relativeTo: this.activeRoute,
+      queryParams: { isNSNav:true },
+      //queryParamsHandling: 'merge'
+    });
+ }
 
 
   ValidateTextInputFields() {

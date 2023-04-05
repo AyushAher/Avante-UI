@@ -553,11 +553,7 @@ export class OfferrequestComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["offerrequestlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["offerrequestlist"]);
   }
 
   CancelEdit() {
@@ -569,7 +565,8 @@ export class OfferrequestComponent implements OnInit {
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();
     this.isEditMode = false;
     this.isNewMode = false;
-    this.api.redrawRows()
+    this.api.redrawRows();
+    this.notificationService.SetNavParam();
   }
 
   FormControlDisable() {

@@ -398,6 +398,7 @@ export class ContactComponent implements OnInit {
     this.contactform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {
@@ -679,7 +680,7 @@ export class ContactComponent implements OnInit {
 
       this.router.navigate(['distributorregion', this.masterId], {
         queryParams: {
-          isNSNav,
+        //  isNSNav,
           isNewSetup: true
         }
       });

@@ -217,11 +217,7 @@ export class SparePartComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["sparepartlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["sparepartlist"]);
 
   }
 
@@ -232,6 +228,7 @@ export class SparePartComponent implements OnInit {
     this.sparepartform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   FormControlDisable() {

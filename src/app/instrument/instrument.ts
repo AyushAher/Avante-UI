@@ -480,11 +480,7 @@ export class InstrumentComponent implements OnInit {
 
   Back() {
 
-    this.router.navigate(["instrumentlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["instrumentlist"]);
 
   }
 
@@ -497,7 +493,7 @@ export class InstrumentComponent implements OnInit {
     this.isNewMode = false;
     this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
     this.columnDefs = this.createColumnDefsRO();
-
+    this.notificationService.SetNavParam();
   }
 
   FormControlDisable() {

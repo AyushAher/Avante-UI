@@ -255,11 +255,7 @@ export class AdvancerequestformComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["advancerequestformlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["advancerequestformlist"]);
 
   }
 
@@ -271,6 +267,7 @@ export class AdvancerequestformComponent implements OnInit {
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {

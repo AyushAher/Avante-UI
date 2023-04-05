@@ -255,11 +255,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["customersatisfactionsurveylist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["customersatisfactionsurveylist"]);
   }
 
   CancelEdit() {
@@ -269,6 +265,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {

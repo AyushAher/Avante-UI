@@ -647,11 +647,7 @@ export class ServiceRequestComponent implements OnInit {
 
   Back() {
 
-    this.router.navigate(["servicerequestlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["servicerequestlist"]);
 
   }
 
@@ -666,6 +662,7 @@ export class ServiceRequestComponent implements OnInit {
 
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   FormControlDisable() {

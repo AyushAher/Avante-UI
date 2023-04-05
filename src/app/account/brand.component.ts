@@ -105,17 +105,14 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
   FormControlDisable() {
     // this.Form.get('companyId').disable();
   }
 
   Back() {
-    this.router.navigate(["/brandlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["/brandlist"]);
   }
 
   async onSubmit() {

@@ -304,11 +304,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["userprofilelist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["userprofilelist"]);
   }
 
   CancelEdit() {
@@ -318,6 +314,7 @@ export class UserProfileComponent implements OnInit {
     this.userprofileform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {

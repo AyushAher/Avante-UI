@@ -169,16 +169,10 @@ export class ProfileComponent implements OnInit {
   }
 
   Back() {
-
-    this.router.navigate(["profilelist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
-
+    this.router.navigate(["profilelist"]);
   }
-  GetById() {
 
+  GetById() {
     this.profileService.getById(this.id)
       .pipe(first())
       .subscribe((profileData: any) => {
@@ -205,6 +199,7 @@ export class ProfileComponent implements OnInit {
     this.profileform.disable();
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {

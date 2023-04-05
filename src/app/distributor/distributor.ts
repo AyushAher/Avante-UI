@@ -155,11 +155,7 @@ export class DistributorComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["distributorlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["distributorlist"]);
   }
 
   CancelEdit() {
@@ -169,6 +165,7 @@ export class DistributorComponent implements OnInit {
     this.form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {

@@ -120,11 +120,7 @@ export class CurrencyComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["currencylist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["currencylist"]);
 
   }
 
@@ -135,6 +131,7 @@ export class CurrencyComponent implements OnInit {
     this.currencyform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {

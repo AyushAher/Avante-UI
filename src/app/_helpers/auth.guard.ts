@@ -43,7 +43,7 @@ export class BrowserBack implements CanActivate {
     constructor(router: Router) {
         router.events
             .subscribe((event: NavigationStart) => {
-                //debugger;
+                debugger;
                 if (event.navigationTrigger === 'popstate' || event.navigationTrigger === "imperative") {
                     const currentRoute = router.routerState;
                     const isSafeNavigation = event.url.includes('isNSNav=true');

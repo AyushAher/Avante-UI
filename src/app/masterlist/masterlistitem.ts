@@ -147,12 +147,7 @@ export class MasterListItemComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["masterlist"], {
-      queryParams: {
-        isNotSafeNavigation: false,
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    })
+    this.router.navigate(["masterlist"])
 
   }
 
@@ -161,6 +156,7 @@ export class MasterListItemComponent implements OnInit {
     this.masterlistitemform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   FormControlDisable() {

@@ -148,11 +148,7 @@ export class CountryComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["countrylist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["countrylist"]);
 
   }
 
@@ -171,6 +167,7 @@ export class CountryComponent implements OnInit {
     this.countryform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {

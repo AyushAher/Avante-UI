@@ -83,11 +83,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   }
 
   Back() {
-    this.router.navigate(["/businessunitlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["/businessunitlist"]);
   }
 
 
@@ -114,8 +110,11 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     else this.Form.reset();
     this.Form.disable()
     this.isEditMode = false;
-    this.isNewMode = false;
+    this.isNewMode = false;    
+
+    this.notificationService.SetNavParam();
   }
+ 
   FormControlDisable() {
     // this.Form.get('companyId').disable();
   }
@@ -123,12 +122,11 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   async onSubmit() {
     this.submitted = true;
     this.Form.markAllAsTouched();
-
+    
     this.Form.enable();
     let formData = this.Form.value;
     if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
     //if (!this.isDialog) this.CancelEdit();
-
 
     if (!this.id) {
       var saveRequest: any = await this.businessUnitService.Save(this.Form.value).toPromise();

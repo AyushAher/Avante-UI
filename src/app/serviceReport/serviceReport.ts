@@ -501,12 +501,7 @@ export class ServiceReportComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["servicereportlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
-
+    this.router.navigate(["servicereportlist"]);
   }
 
 
@@ -527,6 +522,7 @@ export class ServiceReportComponent implements OnInit {
     this.spcolumnDefs = this.createColumnspDefsRO();
     this.spRecomandDefs = this.createColumnspreDefsRO();
     this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
+    this.notificationService.SetNavParam();
   }
 
   FormControlDisable() {

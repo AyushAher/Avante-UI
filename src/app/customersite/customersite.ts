@@ -193,11 +193,7 @@ export class CustomerSiteComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["customersitelist", this.customerid], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["customersitelist", this.customerid]);
 
   }
 
@@ -208,6 +204,7 @@ export class CustomerSiteComponent implements OnInit {
     this.customersiteform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {

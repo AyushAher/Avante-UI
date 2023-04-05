@@ -160,11 +160,7 @@ export class PastservicereportComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["pastservicereportlist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["pastservicereportlist"]);
   }
 
 
@@ -180,6 +176,7 @@ export class PastservicereportComponent implements OnInit {
     this.form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {

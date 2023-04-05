@@ -79,6 +79,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    
   }
 
   async onSubmit() {

@@ -214,11 +214,7 @@ export class TravelinvoiceComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["travelinvoicelist"], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["travelinvoicelist"]);
   }
 
   CancelEdit() {
@@ -229,6 +225,7 @@ export class TravelinvoiceComponent implements OnInit {
     this.columnDefsAttachments = this.createColumnDefsAttachments()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   FormControlDisable() {

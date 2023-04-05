@@ -171,11 +171,7 @@ export class DistributorRegionComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(["distregionlist", this.distributorId], {
-      queryParams: {
-        isNSNav: (this.isEditMode || this.isNewMode) ? false : true
-      }
-    });
+    this.router.navigate(["distregionlist", this.distributorId]);
 
   }
 
@@ -186,6 +182,7 @@ export class DistributorRegionComponent implements OnInit {
     this.destributorRegionform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+    this.notificationService.SetNavParam();
   }
 
   DeleteRecord() {
