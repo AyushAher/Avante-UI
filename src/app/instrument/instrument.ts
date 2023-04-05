@@ -324,8 +324,11 @@ export class InstrumentComponent implements OnInit {
     this.businessUnitService.GetByCompanyId()
       .pipe(first()).subscribe((data: any) => this.businessUnitList = data.object)
 
-    this.brandService.GetByCompanyId()
-      .pipe(first()).subscribe((data: any) => this.brandList = data.object)
+    this.instrumentform.get("businessUnitId").valueChanges
+      .subscribe((value: any) =>
+        this.brandService.GetByBU(value)
+          .pipe(first()).subscribe((data: any) => this.brandList = data.object)
+      )
 
     this.distributorService.getAll().pipe(first())
       .subscribe((data: any) => this.distibutorList = data.object);

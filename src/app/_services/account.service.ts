@@ -121,14 +121,7 @@ export class AccountService {
       .pipe(first()).subscribe({
         next: () => {
           this.currentuser = this.userValue;
-          if (this.currentuser.isSuperAdmin) {
-            this.router.navigate(["/"],
-              {
-                queryParams: { redirected: true }
-              });
-            return this.SetUpConfig(username, password)
-          }
-          else if (this.currentuser.isAdmin && !this.currentuser.isSuperAdmin) {
+          if (this.currentuser.isAdmin) {
             this.router.navigate(["/"],
               {
                 queryParams: { redirected: true }

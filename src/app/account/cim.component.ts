@@ -74,9 +74,15 @@ export class CIMComponent implements OnInit {
 
         this.Form.get('businessUnitId').setValidators([Validators.required])
         this.Form.get('businessUnitId').updateValueAndValidity();
+
       }
     }, 500);
 
+    this.Form.get('businessUnitId').valueChanges
+      .subscribe((value: any) =>
+        this.brandService.GetByBU(value)
+          .subscribe((data: any) => this.brandList = data.object)
+      );
 
 
     let data = this.cimData;
@@ -86,7 +92,7 @@ export class CIMComponent implements OnInit {
 
     this.user = this.accountService.userValue;
     this.isAdmin = this.user.isAdmin
-    this.lstBrand = data.brandList;
+    // this.lstBrand = data.brandList;
     this.companyList = data.companyList;
     this.lstBusinessUnit = data.businessUnitList;
 

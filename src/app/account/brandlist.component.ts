@@ -73,12 +73,21 @@ export class BrandListComponent implements OnInit {
                 tooltipField: 'companyName',
             },
             {
+                headerName: 'Business Unit',
+                field: 'businessUnit',
+                filter: true,
+                enableSorting: true,
+                editable: false,
+                sortable: true,
+                tooltipField: 'businessUnit',
+            },
+            {
                 headerName: 'Brand Name',
                 field: 'brandName',
                 filter: true,
                 sortable: true,
                 tooltipField: "brandName",
-                width: "1000"
+                width: "800"
             },
         ]
     }

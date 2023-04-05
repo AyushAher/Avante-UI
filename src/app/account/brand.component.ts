@@ -6,6 +6,7 @@ import { Subject } from "rxjs";
 import { AccountService, NotificationService } from "../_services";
 import { BrandService } from "../_services/brand.service";
 import { CompanyService } from "../_services/company.service";
+import { BusinessUnitService } from "../_services/businessunit.service";
 
 @Component({
   selector: "CreateBrand",
@@ -27,12 +28,14 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
   public onClose: Subject<any>;
   @Input("isDialog") isDialog: boolean = false;
   formData: any;
+  buList: any;
 
   constructor(
     public activeModal: BsModalService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private brandService: BrandService,
+    private businessUnitService: BusinessUnitService,
     private AccountService: AccountService,
     private CompanyService: CompanyService,
     private activeRoute: ActivatedRoute,
@@ -43,6 +46,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     this.onClose = new Subject();
     this.Form = this.formBuilder.group({
       brandName: ['', [Validators.required]],
+      businessUnitId: ['', [Validators.required]],
       companyId: ['', [Validators.required]],
       id: [""]
     });
@@ -61,7 +65,11 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
       this.Form.patchValue(this.formData);
     }
 
-    var request: any = await this.CompanyService.GetAllCompany().toPromise();
+    var request: any = await this.businessUnitService.GetByCompanyId().toPromise();
+
+    this.buList = request.object;
+
+    request = await this.CompanyService.GetAllCompany().toPromise();
 
     this.companyList = request.object;
 
@@ -108,7 +116,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     this.notificationService.SetNavParam();
   }
   FormControlDisable() {
-    // this.Form.get('companyId').disable();
+    this.Form.get('companyId').disable();
   }
 
   Back() {

@@ -116,7 +116,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   }
  
   FormControlDisable() {
-    // this.Form.get('companyId').disable();
+    this.Form.get('companyId').disable();
   }
 
   async onSubmit() {

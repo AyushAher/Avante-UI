@@ -5,6 +5,7 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Subject } from "rxjs";
 import { NotificationService, AccountService } from "../_services";
 import { CompanyService } from "../_services/company.service";
+import { User } from "../_models";
 
 @Component({
   selector: "CreateBrand",
@@ -23,20 +24,21 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
   public onClose: Subject<any>;
   @Input("isDialog") isDialog: boolean = false;
   formData: { [key: string]: any; };
+  user: User;
 
   constructor(
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
-    private AccountService: AccountService,
+    private accountService: AccountService,
     private companyService: CompanyService,
     private activeRoute: ActivatedRoute,
     private router: Router,
     public activeModal: BsModalService,
-
   ) {
   }
 
   async ngOnInit() {
+    this.user = this.accountService.userValue
     this.onClose = new Subject();
     this.Form = this.formBuilder.group({
       companyName: ['', [Validators.required]],
@@ -72,6 +74,20 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     this.Form.enable();
   }
 
+  DeleteRecord() {
+    this.companyService.DeleteCompany(this.id)
+      .subscribe((data: any) => {
+        if (data.result) {
+          this.notificationService.showSuccess("Company deleted", "Success");
+          this.Back();
+        }
+        else {
+          this.notificationService.showInfo(data.resultMessage, "Info");
+        }
+      })
+  }
+
+
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.Form.patchValue(this.formData);
@@ -79,7 +95,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
-    
+
   }
 
   async onSubmit() {
@@ -93,19 +109,20 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
-      var saveRequest: any = await this.companyService.Save(this.Form.value).toPromise();
-      let success = saveRequest.httpResponceCode == 200;
-
-      if (success) {
-        this.onClose.next({ result: success, object: saveRequest.object });
-        //this.activeModal.hide();
-        if (!this.isDialog) {
-          this.notificationService.showSuccess("Company created successfully", "Success")
-          this.router.navigate(["/companylist"])
-          return;
+      this.companyService.Save(this.Form.value).subscribe((data: any) => {
+        if (data.result) {
+          this.onClose.next({ result: data.result, object: data.object });
+          //this.activeModal.hide();
+          if (!this.isDialog) {
+            this.notificationService.showSuccess("Company created successfully", "Success")
+            this.router.navigate(["/companylist"])
+            return;
+          }
+        } else {
+          this.notificationService.showInfo(data.resultMessage, "Info");
         }
+      })
 
-      }
     }
 
     else {

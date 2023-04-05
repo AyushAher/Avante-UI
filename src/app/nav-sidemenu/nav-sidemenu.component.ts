@@ -327,7 +327,7 @@ export class NavSideMenuComponent implements OnInit {
 
 
     }
-    if (this.user.isAdmin) {
+    if (this.user.isAdmin && !this.user.isSuperAdmin) {
       this.hasDistributor = true;
       this.hasCustomer = true;
       this.hasCountry = true;
@@ -366,7 +366,7 @@ export class NavSideMenuComponent implements OnInit {
       this.haspastservicereport = true;
     }
 
-    if (this.hasMaster || this.hasProfile || this.hasUserProfile) {
+    if (this.hasMaster || this.hasProfile || this.hasUserProfile || this.user.isSuperAdmin) {
       this.hasAdministrator = true;
     }
 
