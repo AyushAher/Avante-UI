@@ -184,7 +184,11 @@ export class PastservicereportComponent implements OnInit {
 
     this.pastServiceReportService.delete(this.id)
       .pipe(first()).subscribe((data: any) => {
-        if (data.result) this.router.navigate(["pastservicereportlist"])
+        if (data.result) this.router.navigate(["pastservicereportlist"], {
+          //relativeTo: this.activeRoute,
+          queryParams: { isNSNav: true },
+          //queryParamsHandling: 'merge'
+        })
       })
   }
 
@@ -211,7 +215,11 @@ export class PastservicereportComponent implements OnInit {
             this.notificationService.filter("itemadded");
             document.getElementById('selectedfiles').style.display = 'none';
             this.notificationService.showSuccess(data.resultMessage, 'Success');
-            this.router.navigate(["/pastservicereportlist"])
+            this.router.navigate(["/pastservicereportlist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
           }
         });
     } else {
@@ -227,7 +235,11 @@ export class PastservicereportComponent implements OnInit {
           this.notificationService.filter("itemadded");
           document.getElementById('selectedfiles').style.display = 'none';
           this.notificationService.showSuccess(data.resultMessage, 'Success');
-          this.router.navigate(["/pastservicereportlist"])
+          this.router.navigate(["/pastservicereportlist"], {
+            //relativeTo: this.activeRoute,
+            queryParams: { isNSNav: true },
+            //queryParamsHandling: 'merge'
+          })
         });
     }
   }

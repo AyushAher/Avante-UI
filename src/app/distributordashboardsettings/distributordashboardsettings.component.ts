@@ -139,7 +139,11 @@ export class DistributordashboardsettingsComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: () => {
-            this.router.navigate(["/"])
+            this.router.navigate(["/"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
           },
         });
     } else {

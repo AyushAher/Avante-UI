@@ -275,7 +275,11 @@ export class AdvancerequestformComponent implements OnInit {
       this.service.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["advancerequestformlist"]);
+            this.router.navigate(["advancerequestformlist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
         })
     }
   }
@@ -468,7 +472,11 @@ export class AdvancerequestformComponent implements OnInit {
           if (this.file != null) this.uploadFile(this.file, data.object.id);
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["advancerequestformlist"]);
+            this.router.navigate(["advancerequestformlist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           this.loading = false;
         });
@@ -489,7 +497,11 @@ export class AdvancerequestformComponent implements OnInit {
               data.resultMessage,
               "Success"
             );
-            this.router.navigate(["advancerequestformlist"]);
+            this.router.navigate(["advancerequestformlist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           this.loading = false;
         });

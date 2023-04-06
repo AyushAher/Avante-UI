@@ -729,7 +729,11 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestService.delete(this.serviceRequestId).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["servicerequestlist"])
+            this.router.navigate(["servicerequestlist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
         })
     }
   }
@@ -876,7 +880,11 @@ export class ServiceRequestComponent implements OnInit {
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
               if (redirect)
-                this.router.navigate(["servicerequestlist"]);
+                this.router.navigate(["servicerequestlist"], {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
             }
           },
         });
@@ -911,7 +919,11 @@ export class ServiceRequestComponent implements OnInit {
               }
               this.notificationService.showSuccess(data.resultMessage, "Success");
               if (redirect)
-                this.router.navigate(["servicerequestlist"]);
+                this.router.navigate(["servicerequestlist"], {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
             }
           }
         });
@@ -1062,7 +1074,11 @@ export class ServiceRequestComponent implements OnInit {
 
                       this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
 
-                      this.router.navigate(["servicereport", data.object.id]);
+                      this.router.navigate(["servicereport", data.object.id], {
+                        //relativeTo: this.activeRoute,
+                        queryParams: { isNSNav: true },
+                        //queryParamsHandling: 'merge'
+                      });
                     }
 
                   }
@@ -1087,7 +1103,11 @@ export class ServiceRequestComponent implements OnInit {
 
                 this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
 
-                this.router.navigate(["servicereport", data.object.id]);
+                this.router.navigate(["servicereport", data.object.id], {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
               }
 
 
@@ -1113,7 +1133,11 @@ export class ServiceRequestComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            if (data.result) this.router.navigate(["servicerequestlist"])
+            if (data.result) this.router.navigate(["servicerequestlist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
           }
         });
     }
@@ -1142,7 +1166,11 @@ export class ServiceRequestComponent implements OnInit {
             next: (data: ResultMsg) => {
               if (data.result) {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
-                this.router.navigate(["servicerequestlist"]);
+                this.router.navigate(["servicerequestlist"], {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
               }
             }
           });

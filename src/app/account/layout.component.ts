@@ -9,10 +9,14 @@ export class LayoutComponent {
         private router: Router,
         private accountService: AccountService
     ) {
-      //debugger;
+        //debugger;
         // redirect to home if already logged in
         if (this.accountService.userValue) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/'], {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+            });
         }
     }
 }

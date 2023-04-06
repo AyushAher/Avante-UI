@@ -251,7 +251,11 @@ export class TravelexpenseComponent implements OnInit {
       this.profileService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["travelexpenselist"])
+            this.router.navigate(["travelexpenselist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
         })
     }
   }
@@ -457,7 +461,11 @@ export class TravelexpenseComponent implements OnInit {
           if (this.file != null) this.uploadFile(this.file, data.object.id);
           if (data.result) {
             this.notificationService.showSuccess("Saved Successfully", "Success");
-            this.router.navigate(["travelexpenselist"]);
+            this.router.navigate(["travelexpenselist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
         });
     }
@@ -472,7 +480,11 @@ export class TravelexpenseComponent implements OnInit {
 
           if (data.result) {
             this.notificationService.showSuccess("Saved Successfully", "Success");
-            this.router.navigate(["travelexpenselist"]);
+            this.router.navigate(["travelexpenselist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
         });
     }

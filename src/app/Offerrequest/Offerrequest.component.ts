@@ -590,7 +590,11 @@ export class OfferrequestComponent implements OnInit {
       this.Service.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["offerrequestlist"])
+            this.router.navigate(["offerrequestlist"],{
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
         })
     }
   }
@@ -1198,7 +1202,11 @@ export class OfferrequestComponent implements OnInit {
           next: (data: any) => {
             if (this.file != null) this.uploadFile(this.file, data.object.id);
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["offerrequestlist"]);
+            this.router.navigate(["offerrequestlist"],{
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
 
             if (this.sparePartsList != null)
               this.SparePartsService.SaveSpareParts(this.sparePartsList)
@@ -1215,7 +1223,11 @@ export class OfferrequestComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (this.file != null) this.uploadFile(this.file, this.id);
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["offerrequestlist"]);
+            this.router.navigate(["offerrequestlist"],{
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
 
             this.rowData?.forEach((x) => {
               x.createdOn = new Date()

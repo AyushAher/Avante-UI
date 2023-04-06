@@ -400,6 +400,10 @@ export class NavSideMenuComponent implements OnInit {
   }
 
   navigate(url) {
-    this.router.navigate([url]);
+    this.router.navigate([url, , {
+      //relativeTo: this.activeRoute,
+      queryParams: { isNSNav: true },
+      //queryParamsHandling: 'merge'
+    }]);
   }
 }

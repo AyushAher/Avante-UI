@@ -246,7 +246,11 @@ export class TravelinvoiceComponent implements OnInit {
       this.TravelInvoicesService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["travelinvoicelist"])
+            this.router.navigate(["travelinvoicelist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
         })
     }
   }
@@ -400,7 +404,11 @@ export class TravelinvoiceComponent implements OnInit {
           if (this.file != null) this.uploadFile(this.file, data.object.id);
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["travelinvoicelist"]);
+            this.router.navigate(["travelinvoicelist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           this.loading = false;
         });
@@ -419,7 +427,11 @@ export class TravelinvoiceComponent implements OnInit {
               data.resultMessage,
               "Success"
             );
-            this.router.navigate(["travelinvoicelist"]);
+            this.router.navigate(["travelinvoicelist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           this.loading = false;
         });

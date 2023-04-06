@@ -507,7 +507,11 @@ export class LocalexpensesComponent implements OnInit {
                 data.resultMessage,
                 "Success"
               );
-              this.router.navigate(["/localexpenseslist"]);
+              this.router.navigate(["/localexpenseslist"],{
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
             }
             this.loading = false;
           },
@@ -534,7 +538,11 @@ export class LocalexpensesComponent implements OnInit {
                 data.resultMessage,
                 "Success"
               );
-              this.router.navigate(["/localexpenseslist"]);
+              this.router.navigate(["/localexpenseslist"],{
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
             }
             this.loading = false;
           },

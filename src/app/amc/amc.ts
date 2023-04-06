@@ -469,7 +469,11 @@ export class AmcComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess('Record deleted successfully!', "Success")
-            this.router.navigate(["amclist"]);
+            this.router.navigate(["amclist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           else this.notificationService.showInfo(data.result, "Info")
         })
@@ -1023,7 +1027,11 @@ export class AmcComponent implements OnInit {
             if (data.result) {
               {
                 this.notificationService.showSuccess(data.resultMessage, "Success");
-                if (this.instrumentList == null || this.instrumentList.length <= 0) this.router.navigate(["amclist"]);
+                if (this.instrumentList == null || this.instrumentList.length <= 0) this.router.navigate(["amclist"], {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
 
                 if (this.instrumentList != null && this.instrumentList.length > 0) {
                   this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
@@ -1032,7 +1040,11 @@ export class AmcComponent implements OnInit {
                       next: (data: ResultMsg) => {
                         if (data.result) {
                           this.notificationService.showSuccess(data.resultMessage, "Success");
-                          this.router.navigate(["amclist"]);
+                          this.router.navigate(["amclist"], {
+                            //relativeTo: this.activeRoute,
+                            queryParams: { isNSNav: true },
+                            //queryParamsHandling: 'merge'
+                          });
                         }
                         else this.notificationService.showError(data.resultMessage, "Error");
                       },
@@ -1059,13 +1071,21 @@ export class AmcComponent implements OnInit {
 
               this.notificationService.showSuccess(data.resultMessage, "Success");
               if (this.instrumentList == null || this.instrumentList.length <= 0) {
-                this.router.navigate(["amclist"]);
+                this.router.navigate(["amclist"], {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
               }
               if (this.instrumentList != null && this.instrumentList.length > 0) {
                 this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
                   .pipe(first()).subscribe({
                     next: (data: ResultMsg) => {
-                      this.router.navigate(["amclist"]);
+                      this.router.navigate(["amclist"], {
+                        //relativeTo: this.activeRoute,
+                        queryParams: { isNSNav: true },
+                        //queryParamsHandling: 'merge'
+                      });
                     },
                   });
               }

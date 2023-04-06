@@ -96,7 +96,11 @@ export class DistributordashboardComponent implements OnInit {
   }
 
   CriticalSerReq() {
-    this.router.navigate(["/servicerequestlist"])
+    this.router.navigate(["/servicerequestlist"], {
+      //relativeTo: this.activeRoute,
+      queryParams: { isNSNav: true },
+      //queryParamsHandling: 'merge'
+    })
   }
 
   toggle = () => this.isHidden = !this.isHidden

@@ -332,7 +332,11 @@ export class UserProfileComponent implements OnInit {
       this.userprofileService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["userprofilelist"])
+            this.router.navigate(["userprofilelist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
         })
     }
   }
@@ -499,11 +503,11 @@ export class UserProfileComponent implements OnInit {
             // }
             // else
             this.router.navigate(["userprofilelist"],
-            {
-              //relativeTo: this.activeRoute,
-              queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
-            });
+              {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
           }
         });
     }
@@ -515,11 +519,11 @@ export class UserProfileComponent implements OnInit {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["userprofilelist"],
-            {
-              //relativeTo: this.activeRoute,
-              queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
-            });
+              {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
           }
         });
     }

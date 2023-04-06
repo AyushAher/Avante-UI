@@ -204,7 +204,11 @@ export class CustSPInventoryComponent implements OnInit {
       this.Service.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["customerspinventorylist"]);
+            this.router.navigate(["customerspinventorylist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
         })
     }
   }
@@ -331,7 +335,11 @@ export class CustSPInventoryComponent implements OnInit {
                 data.resultMessage,
                 "Success"
               );
-              this.router.navigate(["customerspinventorylist"]);
+              this.router.navigate(["customerspinventorylist"], {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
             }
             this.loading = false;
           },
@@ -350,7 +358,11 @@ export class CustSPInventoryComponent implements OnInit {
                 data.resultMessage,
                 "Success"
               );
-              this.router.navigate(["customerspinventorylist"]);
+              this.router.navigate(["customerspinventorylist"], {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
             }
             this.loading = false;
           },

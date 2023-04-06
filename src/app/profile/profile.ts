@@ -208,7 +208,11 @@ export class ProfileComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
-            this.router.navigate(["profilelist"])
+            this.router.navigate(["profilelist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
@@ -361,13 +365,13 @@ export class ProfileComponent implements OnInit {
           .subscribe((data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-               this.router.navigate(["profilelist"],
-               {
-                 //relativeTo: this.activeRoute,
-                 queryParams: { isNSNav: true },
-                 //queryParamsHandling: 'merge'
-               });
-              
+              this.router.navigate(["profilelist"],
+                {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
+
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "Info");
@@ -385,11 +389,11 @@ export class ProfileComponent implements OnInit {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["profilelist"],
-            {
-              //relativeTo: this.activeRoute,
-              queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
-            });
+              {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");

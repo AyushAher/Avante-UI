@@ -164,7 +164,7 @@ export class ModelEngActionContentComponent implements OnInit {
                 this.uploadFile(this.file, data.object.id);
               }
 
-              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode } })
+              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode, isNSNav: true } })
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
             }
@@ -192,7 +192,7 @@ export class ModelEngActionContentComponent implements OnInit {
           next: (data: any) => {
             if (data.result) {
 
-              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode } })
+              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode, isNSNav: true } })
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.close();
             } else {

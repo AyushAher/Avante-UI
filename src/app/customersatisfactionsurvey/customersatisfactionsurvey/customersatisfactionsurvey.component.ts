@@ -329,7 +329,11 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["/customersatisfactionsurveylist"]);
+              this.router.navigate(["/customersatisfactionsurveylist"], {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
             }
             this.loading = false;
           },
@@ -342,7 +346,11 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
         .subscribe((data: ResultMsg) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["/customersatisfactionsurveylist"]);
+            this.router.navigate(["/customersatisfactionsurveylist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           this.loading = false;
 

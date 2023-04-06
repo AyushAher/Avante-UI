@@ -426,7 +426,11 @@ export class InstrumentRonlyComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["instrumentlist"]);
+              this.router.navigate(["instrumentlist"],{
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
             }
             else {
 
@@ -447,7 +451,11 @@ export class InstrumentRonlyComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["instrumentlist"]);
+              this.router.navigate(["instrumentlist"],{
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
             }
             else {
 

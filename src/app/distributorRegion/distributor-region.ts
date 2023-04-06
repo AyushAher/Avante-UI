@@ -191,7 +191,11 @@ export class DistributorRegionComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
-            this.router.navigate(["distregionlist", this.distributorId]);
+            this.router.navigate(["distregionlist", this.distributorId], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           else
             this.notificationService.showInfo(data.resultMessage, "Info");
@@ -245,9 +249,9 @@ export class DistributorRegionComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.router.navigate(["distregionlist", this.distributorId],
-              {
-                queryParams: { isNSNav: true },
-              });
+                {
+                  queryParams: { isNSNav: true },
+                });
             }
             this.loading = false;
           },

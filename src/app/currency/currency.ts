@@ -139,7 +139,11 @@ export class CurrencyComponent implements OnInit {
       this.currencyService.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result) {
-            this.router.navigate(["currencylist"]);
+            this.router.navigate(["currencylist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
@@ -170,7 +174,11 @@ export class CurrencyComponent implements OnInit {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.CancelEdit();
-            // this.router.navigate(['currencylist']);
+            // this.router.navigate(['currencylist'],{
+            //relativeTo: this.activeRoute,
+            //   queryParams: { isNSNav: true },
+            //   //queryParamsHandling: 'merge'
+            // });
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
         });
@@ -181,7 +189,11 @@ export class CurrencyComponent implements OnInit {
         .pipe(first()).subscribe((data: ResultMsg) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(['currencylist']);
+            this.router.navigate(['currencylist'], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
         });

@@ -184,7 +184,7 @@ export class EngineerschedulerComponent implements OnInit {
                                   Id: y.id,
                                   Subject: y.displayName,
                                   Location: y.location,
-                                  StartTime:new Date((y.startTime)),
+                                  StartTime: new Date((y.startTime)),
                                   EndTime: new Date((y.endTime)),
                                   IsAllDay: y.isAllDay,
                                   IsBlock: false,
@@ -686,7 +686,11 @@ export class EngineerschedulerComponent implements OnInit {
 
   onBackclick() {
     this.notificationService.filter("itemadded");
-    this.router.navigate([this.link])
+    this.router.navigate([this.link, {
+      //relativeTo: this.activeRoute,
+      queryParams: { isNSNav: true },
+      //queryParamsHandling: 'merge'
+    }])
   }
 
   //  Dist code

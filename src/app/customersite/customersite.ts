@@ -213,7 +213,11 @@ export class CustomerSiteComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
-            this.router.navigate(["customersitelist", this.customerid]);
+            this.router.navigate(["customersitelist", this.customerid], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");

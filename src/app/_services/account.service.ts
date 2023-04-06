@@ -124,7 +124,7 @@ export class AccountService {
           if (this.currentuser.isAdmin) {
             this.router.navigate(["/"],
               {
-                queryParams: { redirected: true }
+                queryParams: { redirected: true, isNSNav: true }
               })
             return this.CIMConfig(username, password, true, false)
           }
@@ -142,16 +142,24 @@ export class AccountService {
                     case "Distributor Support":
                       this.router.navigate(["/"],
                         {
-                          queryParams: { redirected: true }
+                          queryParams: { redirected: true, isNSNav: true }
                         })
                       this.CIMConfig(username, password, false, false)
                       break;
                     case "Customer":
-                      this.router.navigate(["custdashboard"]);
+                      this.router.navigate(["custdashboard"], {
+                        //relativeTo: this.activeRoute,
+                        queryParams: { isNSNav: true },
+                        //queryParamsHandling: 'merge'
+                      });
                       break;
 
                     case "Engineer":
-                      this.router.navigate(["engdashboard"]);
+                      this.router.navigate(["engdashboard"], {
+                        //relativeTo: this.activeRoute,
+                        queryParams: { isNSNav: true },
+                        //queryParamsHandling: 'merge'
+                      });
                       break;
                   }
                 });
@@ -189,7 +197,11 @@ export class AccountService {
       this.modalRef.content.onClose.subscribe((companySuccess) => {
         if (!companySuccess.result) return;
         this.modalService.hide();
-        this.router.navigate(['/']);
+        this.router.navigate(['/'], {
+          //relativeTo: this.activeRoute,
+          queryParams: { isNSNav: true },
+          //queryParamsHandling: 'merge'
+        });
         // modalOptions.initialState.companyId = companySuccess.object.id;
 
         // this.modalRef = this.modalService.show(CreateBusinessUnitComponent, modalOptions)
@@ -254,12 +266,24 @@ export class AccountService {
 
               this.login(username, password, result.form.companyId, (isAdmin || isSuperAdmin) ? "" : result.form.businessUnitId, (isAdmin || isSuperAdmin) ? "" : result.form.brandId)
                 .pipe(first()).subscribe(() => {
-                  if (isAdmin) this.router.navigate(['/']);
+                  if (isAdmin) this.router.navigate(['/'], {
+                    //relativeTo: this.activeRoute,
+                    queryParams: { isNSNav: true },
+                    //queryParamsHandling: 'merge'
+                  });
                   else {
-                    this.router.navigate(['/distdashboard'])
+                    this.router.navigate(['/distdashboard'], {
+                      //relativeTo: this.activeRoute,
+                      queryParams: { isNSNav: true },
+                      //queryParamsHandling: 'merge'
+                    })
                     this.notificationService.filter('loggedin');
                     setTimeout(() => {
-                      this.router.navigate(['/']);
+                      this.router.navigate(['/'], {
+                        //relativeTo: this.activeRoute,
+                        queryParams: { isNSNav: true },
+                        //queryParamsHandling: 'merge'
+                      });
                     }, 200);
                   }
                 })
@@ -269,12 +293,24 @@ export class AccountService {
             this.login(username, password, this.userValue.companyId, "", "")
               .subscribe(() => {
                 this.currentuser = this.userValue;
-                if (isAdmin) this.router.navigate(['/']);
+                if (isAdmin) this.router.navigate(['/'], {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
                 else {
-                  this.router.navigate(['/distdashboard'])
+                  this.router.navigate(['/distdashboard'], {
+                    //relativeTo: this.activeRoute,
+                    queryParams: { isNSNav: true },
+                    //queryParamsHandling: 'merge'
+                  })
                   this.notificationService.filter('loggedin');
                   setTimeout(() => {
-                    this.router.navigate(['/']);
+                    this.router.navigate(['/'], {
+                      //relativeTo: this.activeRoute,
+                      queryParams: { isNSNav: true },
+                      //queryParamsHandling: 'merge'
+                    });
                   }, 200);
                 }
               })
@@ -291,7 +327,11 @@ export class AccountService {
     sessionStorage.clear();
     this.clear();
     this.userSubject.next(null);
-    this.router.navigate(['/account/login']);
+    this.router.navigate(['/account/login'], {
+      //relativeTo: this.activeRoute,
+      queryParams: { isNSNav: true },
+      //queryParamsHandling: 'merge'
+    });
   }
 
   register(user: User) {

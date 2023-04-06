@@ -39,15 +39,27 @@ export class HomeComponent {
             if (userrole != null && !this.isRedirected) {
               switch (userrole.itemname) {
                 case "Distributor Support":
-                  this.router.navigate(["distdashboard"]);
+                  this.router.navigate(["distdashboard"], {
+                    //relativeTo: this.activeRoute,
+                    queryParams: { isNSNav: true },
+                    //queryParamsHandling: 'merge'
+                  });
                   break;
 
                 case "Customer":
-                  this.router.navigate(["custdashboard"]);
+                  this.router.navigate(["custdashboard"], {
+                    //relativeTo: this.activeRoute,
+                    queryParams: { isNSNav: true },
+                    //queryParamsHandling: 'merge'
+                  });
                   break;
 
                 case "Engineer":
-                  this.router.navigate(["engdashboard"]);
+                  this.router.navigate(["engdashboard"], {
+                    //relativeTo: this.activeRoute,
+                    queryParams: { isNSNav: true },
+                    //queryParamsHandling: 'merge'
+                  });
                   break;
               }
             }

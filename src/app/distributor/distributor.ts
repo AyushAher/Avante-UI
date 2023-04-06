@@ -174,7 +174,11 @@ export class DistributorComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
-            this.router.navigate(["distributorlist"]);
+            this.router.navigate(["distributorlist"],{
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
