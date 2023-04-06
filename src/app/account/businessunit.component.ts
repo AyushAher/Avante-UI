@@ -138,27 +138,33 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     //if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
-      var saveRequest: any = await this.businessUnitService.Save(formData).toPromise();
-      let success = saveRequest.httpResponceCode == 200;
-      if (success) {
-        //this.onClose.next({ result: success, object: saveRequest.object });
-        if (!this.isDialog) {
-          this.notificationService.showSuccess("Business Unit created successfully!", "Success")
-          this.router.navigate(["/businessunitlist"]);
-        }
-      }
+      this.businessUnitService.Save(formData)
+        .subscribe((data: any) => {
+          var success = data.result;
+          if (success) {
+            //this.onClose.next({ result: success, object: saveRequest.object });
+            if (!this.isDialog) {
+              this.notificationService.showSuccess("Business Unit created successfully!", "Success")
+              this.router.navigate(["/businessunitlist"]);
+            }
+          }
+          else this.notificationService.showInfo(data.resultMessage, "Info");
+        })
     }
 
     else {
-      var updateRequest: any = await this.businessUnitService.Update(this.id, formData).toPromise();
-      let success = updateRequest.httpResponceCode == 200;
-      if (success) {
-        this.onClose.next({ result: success, object: updateRequest.object });
-        if (!this.isDialog) {
-          this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
-          this.router.navigate(["/businessunitlist"]);
-        }
-      }
+      this.businessUnitService.Update(this.id, formData)
+        .subscribe((data: any) => {
+          var success = data.result;
+          if (success) {
+            this.onClose.next({ result: success, object: data.object });
+            if (!this.isDialog) {
+              this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
+              this.router.navigate(["/businessunitlist"]);
+            }
+          }
+          else this.notificationService.showInfo(data.resultMessage, "Info");
+        })
     }
   }
 

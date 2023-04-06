@@ -140,29 +140,34 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     //if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
-      var saveRequest: any = await this.brandService.Save(formData).toPromise();
-      let success = saveRequest.httpResponceCode == 200;
-      if (success) {
-        //this.onClose.next({ result: success, object: saveRequest.object });
-        if (!this.isDialog) {
-          this.notificationService.showSuccess("Brand created successfully!", "Success")
-          this.router.navigate(["/brandlist"]);
-          return;
-        }
-      }
+      this.brandService.Save(formData)
+        .subscribe((data: any) => {
+          var success = data.result;
+          if (success) {
+            this.onClose.next({ result: success, object: data.object });
+            if (!this.isDialog) {
+              this.notificationService.showSuccess("Brand saved successfully!", "Success")
+              this.router.navigate(["/brandlist"]);
+            }
+          }
+          else this.notificationService.showInfo(data.resultMessage, "Info");
+        })
     }
 
     else {
-      var updateRequest: any = await this.brandService.Update(this.id, formData).toPromise();
-      let success = updateRequest.httpResponceCode == 200;
-      if (success) {
-        this.onClose.next({ result: success, object: updateRequest.object });
+      this.brandService.Update(this.id, formData)
+        .subscribe((data: any) => {
+          var success = data.result;
+          if (success) {
+            this.onClose.next({ result: success, object: data.object });
+            if (!this.isDialog) {
+              this.notificationService.showSuccess("Brand updated successfully!", "Success")
+              this.router.navigate(["/brandlist"]);
+            }
+          }
+          else this.notificationService.showInfo(data.resultMessage, "Info");
+        })
 
-        if (!this.isDialog) {
-          this.notificationService.showSuccess("Brand updated successfully!", "Success")
-          this.router.navigate(["/brandlist"]);
-        }
-      }
     }
   }
 
