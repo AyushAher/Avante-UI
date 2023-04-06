@@ -118,7 +118,9 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
+   
     this.notificationService.SetNavParam();
+    
   }
   FormControlDisable() {
     this.Form.get('companyId').disable();
@@ -147,7 +149,12 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
             this.onClose.next({ result: success, object: data.object });
             if (!this.isDialog) {
               this.notificationService.showSuccess("Brand saved successfully!", "Success")
-              this.router.navigate(["/brandlist"]);
+              this.router.navigate(["/brandlist"],
+              {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
             }
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
@@ -162,7 +169,12 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
             this.onClose.next({ result: success, object: data.object });
             if (!this.isDialog) {
               this.notificationService.showSuccess("Brand updated successfully!", "Success")
-              this.router.navigate(["/brandlist"]);
+              this.router.navigate(["/brandlist"],
+              {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
             }
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");

@@ -361,8 +361,13 @@ export class ProfileComponent implements OnInit {
           .subscribe((data: any) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              if (!this.isNewSetup) this.router.navigate(["profilelist"]);
-              else this.router.navigate(['userprofile'], { queryParams: { isNewSetUp: true } });
+               this.router.navigate(["profilelist"],
+               {
+                 //relativeTo: this.activeRoute,
+                 queryParams: { isNSNav: true },
+                 //queryParamsHandling: 'merge'
+               });
+              
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "Info");
@@ -379,7 +384,12 @@ export class ProfileComponent implements OnInit {
         .subscribe((data: ResultMsg) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["profilelist"]);
+            this.router.navigate(["profilelist"],
+            {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");

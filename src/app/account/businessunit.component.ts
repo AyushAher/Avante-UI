@@ -145,7 +145,12 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
             //this.onClose.next({ result: success, object: saveRequest.object });
             if (!this.isDialog) {
               this.notificationService.showSuccess("Business Unit created successfully!", "Success")
-              this.router.navigate(["/businessunitlist"]);
+              this.router.navigate(["/businessunitlist"],
+              {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
             }
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
@@ -160,7 +165,12 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
             this.onClose.next({ result: success, object: data.object });
             if (!this.isDialog) {
               this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
-              this.router.navigate(["/businessunitlist"]);
+              this.router.navigate(["/businessunitlist"],
+              {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              });
             }
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");

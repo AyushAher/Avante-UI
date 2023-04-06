@@ -498,7 +498,12 @@ export class UserProfileComponent implements OnInit {
             //   this.router.navigate(['/']);
             // }
             // else
-            this.router.navigate(["userprofilelist"]);
+            this.router.navigate(["userprofilelist"],
+            {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
         });
     }
@@ -509,7 +514,12 @@ export class UserProfileComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["userprofilelist"]);
+            this.router.navigate(["userprofilelist"],
+            {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
           }
         });
     }

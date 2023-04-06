@@ -244,7 +244,10 @@ export class DistributorRegionComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["distregionlist", this.distributorId]);
+              this.router.navigate(["distregionlist", this.distributorId],
+              {
+                queryParams: { isNSNav: true },
+              });
             }
             this.loading = false;
           },

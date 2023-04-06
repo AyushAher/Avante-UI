@@ -47,7 +47,7 @@ export class NotificationService {
     this.router.navigate(
       [],
       {
-        relativeTo: this.activeRoute,
+        //relativeTo: this.activeRoute,
         queryParams: { isNSNav: true },
         //queryParamsHandling: 'merge'
       });
