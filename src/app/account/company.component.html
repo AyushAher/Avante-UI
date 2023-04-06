@@ -50,8 +50,8 @@
 
                             <div *ngIf=" f.companyEmail.touched && f.companyEmail.errors" class="invalid-feedback">
                                 <div *ngIf="f.companyEmail.errors.required">Company Email is required</div>
-                                <div *ngIf="f.companyEmail.errors.email">Not a valid E-Mail Id</div>
-                                <div *ngIf="f.companyEmail.errors.pattern">Not a valid E-Mail Id</div>
+                                <div *ngIf="f.companyEmail.errors.email || f.companyEmail.errors.pattern">Not a valid
+                                    E-Mail Id</div>
                             </div>
                         </div>
                     </div>
