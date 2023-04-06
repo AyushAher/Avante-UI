@@ -81,11 +81,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     }
 
     this.Form.get("company")
-      .valueChanges.subscribe(x => {
-
-      })
-
-
+      .setValue(this.companyList?.find(comp => comp.id == this.companyId)?.companyName);
 
   }
 
@@ -126,6 +122,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
   }
   FormControlDisable() {
     this.Form.get('companyId').disable();
+    this.Form.get('company').disable();
   }
 
   Back() {

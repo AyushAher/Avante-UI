@@ -46,6 +46,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     this.Form = this.formBuilder.group({
       businessUnitName: ['', [Validators.required]],
       companyId: ['', [Validators.required]],
+      company: ['', [Validators.required]],
       id: [""]
     });
     var id = this.activeRoute.snapshot.paramMap.get("id")
@@ -73,6 +74,10 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     else {
       this.companyId = user.companyId;
     }
+
+    this.Form.get("company")
+      .setValue(this.companyList?.find(comp => comp.id == this.companyId)?.companyName)
+
   }
 
   ngAfterViewInit(): void {
@@ -117,6 +122,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
 
   FormControlDisable() {
     this.Form.get('companyId').disable();
+    this.Form.get('company').disable();
   }
 
   async onSubmit() {
