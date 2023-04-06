@@ -56,6 +56,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
       this.formData = getByIdRequest.object;
       this.Form.patchValue(this.formData);
     }
+    this.FormControlDisable()
   }
 
   ngAfterViewInit(): void {
@@ -67,11 +68,17 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
   }
 
 
+  FormControlDisable() {
+    if (this.isEditMode) this.Form.get('companyName').disable();
+    else this.Form.get('companyName').enable();
+  }
+
   EditMode() {
     if (!confirm("Are you sure you want to edit the record?")) return;
 
     this.isEditMode = true;
     this.Form.enable();
+    this.FormControlDisable()
   }
 
   DeleteRecord() {
@@ -106,10 +113,10 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     let formData = this.Form.value;
     if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
 
-    if (!this.isDialog) this.CancelEdit();
+    // if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
-      this.companyService.Save(this.Form.value).subscribe((data: any) => {
+      this.companyService.Save(formData).subscribe((data: any) => {
         if (data.result) {
           this.onClose.next({ result: data.result, object: data.object });
           //this.activeModal.hide();

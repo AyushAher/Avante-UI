@@ -125,11 +125,13 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     
     this.Form.enable();
     let formData = this.Form.value;
+    this.FormControlDisable();
+
     if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
     //if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
-      var saveRequest: any = await this.businessUnitService.Save(this.Form.value).toPromise();
+      var saveRequest: any = await this.businessUnitService.Save(formData).toPromise();
       let success = saveRequest.httpResponceCode == 200;
       if (success) {
         //this.onClose.next({ result: success, object: saveRequest.object });
