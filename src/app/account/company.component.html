@@ -45,11 +45,12 @@
                         </div>
                         <div class="col-md-12">
                             <label>Company Email</label>
-                            <input formControlName="companyEmail" class="form-control"
+                            <input formControlName="companyEmail" class="form-control" type="email"
                                 [ngClass]="{ 'is-invalid': f.companyEmail.touched  && f.companyEmail.errors }" />
 
                             <div *ngIf=" f.companyEmail.touched && f.companyEmail.errors" class="invalid-feedback">
                                 <div *ngIf="f.companyEmail.errors.required">Company Email is required</div>
+                                <div *ngIf="f.companyEmail.errors.email">Not a valid E-Mail Id</div>
                             </div>
                         </div>
                     </div>
