@@ -110,11 +110,11 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     else this.Form.reset();
     this.Form.disable()
     this.isEditMode = false;
-    this.isNewMode = false;    
+    this.isNewMode = false;
 
     this.notificationService.SetNavParam();
   }
- 
+
   FormControlDisable() {
     this.Form.get('companyId').disable();
   }
@@ -122,12 +122,13 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   async onSubmit() {
     this.submitted = true;
     this.Form.markAllAsTouched();
-    
+
     this.Form.enable();
     let formData = this.Form.value;
     this.FormControlDisable();
 
-    if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
+    if (this.Form.invalid && this.isDialog) return this.notificationService.showError("Form Invalid", "Error");
+    if (this.Form.invalid) return;
     //if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {

@@ -48,8 +48,10 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
       brandName: ['', [Validators.required]],
       businessUnitId: ['', [Validators.required]],
       companyId: ['', [Validators.required]],
+      company: ['', [Validators.required]],
       id: [""]
     });
+
 
     let user = this.AccountService.userValue;
     this.Form.get('companyId').setValue(user.companyId);
@@ -77,6 +79,13 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     else {
       this.companyId = user.companyId;
     }
+
+    this.Form.get("company")
+      .valueChanges.subscribe(x => {
+
+      })
+
+
 
   }
 
@@ -129,7 +138,8 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     this.Form.enable();
     let formData = this.Form.value;
     this.FormControlDisable();
-    if (this.Form.invalid) return this.notificationService.showError("Form Invalid", "Error");
+    if (this.Form.invalid && this.isDialog) return this.notificationService.showError("Form Invalid", "Error");
+    if (this.Form.invalid) return;
     //if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
