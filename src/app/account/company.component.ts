@@ -56,7 +56,9 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
       this.formData = getByIdRequest.object;
       this.Form.patchValue(this.formData);
     }
-    this.FormControlDisable()
+
+    if (this.isNewMode) this.FormControlDisable()
+    else this.Form.disable();
   }
 
   ngAfterViewInit(): void {
@@ -122,7 +124,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
           //this.activeModal.hide();
           if (!this.isDialog) {
             this.notificationService.showSuccess("Company created successfully", "Success")
-            this.router.navigate(["/companylist"])
+            setTimeout(() => this.router.navigate(["/companylist"]), 100);
             return;
           }
         } else {

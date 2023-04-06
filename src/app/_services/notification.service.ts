@@ -12,7 +12,7 @@ export class NotificationService {
   private invalidCharactersArray = ["*", "'", '"', ":"];
   private _listeners = new Subject<any>();
 
-  constructor(private toastr: ToastrService,    private activeRoute: ActivatedRoute,
+  constructor(private toastr: ToastrService, private activeRoute: ActivatedRoute,
     private router: Router) { }
 
   showSuccess(message, title) {
@@ -43,16 +43,15 @@ export class NotificationService {
     this.showWarning("Admin cannot create records.", "Warning")
   }
 
-  SetNavParam()
- {
-  this.router.navigate(
-    ["."], 
-    {
-      relativeTo: this.activeRoute,
-      queryParams: { isNSNav:true },
-      //queryParamsHandling: 'merge'
-    });
- }
+  SetNavParam() {
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.activeRoute,
+        queryParams: { isNSNav: true },
+        //queryParamsHandling: 'merge'
+      });
+  }
 
 
   ValidateTextInputFields() {
