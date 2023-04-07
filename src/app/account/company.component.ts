@@ -43,6 +43,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     this.Form = this.formBuilder.group({
       companyName: ['', [Validators.required]],
       companyEmail: ['', [Validators.required, Validators.email, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
+      secondaryCompanyEmail: ['', [Validators.email, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
       id: [""]
     });
 
@@ -114,7 +115,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     this.isEditMode = false;
     this.isNewMode = false;
     this.notificationService.SetNavParam();
-    
+
 
   }
 
@@ -124,7 +125,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
 
     this.Form.enable();
     let formData = this.Form.value;
-//    if (this.Form.invalid && !this.isDialog) return this.notificationService.showError("Form Invalid", "Error");
+    //    if (this.Form.invalid && !this.isDialog) return this.notificationService.showError("Form Invalid", "Error");
     if (this.Form.invalid) return;
 
     // if (!this.isDialog) this.CancelEdit();
@@ -137,11 +138,11 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
           if (!this.isDialog) {
             this.notificationService.showSuccess("Company created successfully", "Success")
             setTimeout(() => this.router.navigate(["/companylist"],
-            {
-              //relativeTo: this.activeRoute,
-              queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
-            }), 100);
+              {
+                //relativeTo: this.activeRoute,
+                queryParams: { isNSNav: true },
+                //queryParamsHandling: 'merge'
+              }), 100);
             return;
           }
         } else {
@@ -160,11 +161,11 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
         if (!this.isDialog) {
           this.notificationService.showSuccess("Company Updated successfully", "Success")
           this.router.navigate(["/companylist"],
-          {
-            //relativeTo: this.activeRoute,
-            queryParams: { isNSNav: true },
-            //queryParamsHandling: 'merge'
-          })
+            {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            })
           return;
         }
       }

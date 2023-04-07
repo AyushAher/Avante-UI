@@ -44,10 +44,10 @@ export class CompanyListComponent implements OnInit {
     Add() {
         this.router.navigate(['company'],
             {
-        
-      queryParams: {
-        isNSNav: false
-      },// remove to replace all query params by provided
+
+                queryParams: {
+                    isNSNav: false
+                },// remove to replace all query params by provided
             });
     }
 
@@ -69,7 +69,23 @@ export class CompanyListComponent implements OnInit {
                 filter: true,
                 sortable: true,
                 tooltipField: "companyName",
-                width: "1000"
+                // width: "1000"
+            },
+            {
+                headerName: 'Primary Email',
+                field: 'companyEmail',
+                filter: true,
+                sortable: true,
+                tooltipField: "companyEmail",
+                // width: "1000"
+            },
+            {
+                headerName: 'Secondary Email',
+                field: 'secondaryCompanyEmail',
+                filter: true,
+                sortable: true,
+                tooltipField: "secondaryCompanyEmail",
+                // width: "1000"
             },
         ]
     }
@@ -77,6 +93,7 @@ export class CompanyListComponent implements OnInit {
     onGridReady(params): void {
         this.api = params.api;
         this.columnApi = params.columnApi;
+        this.api.sizeColumnsToFit();
     }
 
 }
