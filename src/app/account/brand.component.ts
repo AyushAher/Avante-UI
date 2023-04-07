@@ -44,6 +44,7 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     this.onClose = new Subject();
+    this.hasDeleteAccess = this.AccountService.userValue.isAdmin;
     this.Form = this.formBuilder.group({
       brandName: ['', [Validators.required]],
       businessUnitId: ['', [Validators.required]],
@@ -65,6 +66,8 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
       var getByIdRequest: any = await this.brandService.GetById(id).toPromise();
       this.formData = getByIdRequest.object;
       this.Form.patchValue(this.formData);
+      console.log(this.formData);
+
     }
 
     var request: any = await this.businessUnitService.GetByCompanyId().toPromise();
@@ -93,6 +96,17 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
   }
 
 
+  DeleteRecord() {
+    this.brandService.Delete(this.id)
+      .subscribe((data: any) => {
+        if (data.result) {
+          this.notificationService.showSuccess("Deleted Successfully", "Success")
+          this.router.navigate(["/brandlist"], { queryParams: { isNSNav: true } })
+        }
+        else this.notificationService.showInfo(data.resultMessage, "Error")
+      })
+  }
+
 
   EditMode() {
     if (!confirm("Are you sure you want to edit the record?")) return;
@@ -118,9 +132,9 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
-   
+
     this.notificationService.SetNavParam();
-    
+
   }
   FormControlDisable() {
     this.Form.get('companyId').disable();
@@ -150,11 +164,11 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
             if (!this.isDialog) {
               this.notificationService.showSuccess("Brand saved successfully!", "Success")
               this.router.navigate(["/brandlist"],
-              {
-                //relativeTo: this.activeRoute,
-                queryParams: { isNSNav: true },
-                //queryParamsHandling: 'merge'
-              });
+                {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
             }
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
@@ -170,11 +184,11 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
             if (!this.isDialog) {
               this.notificationService.showSuccess("Brand updated successfully!", "Success")
               this.router.navigate(["/brandlist"],
-              {
-                //relativeTo: this.activeRoute,
-                queryParams: { isNSNav: true },
-                //queryParamsHandling: 'merge'
-              });
+                {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
             }
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");

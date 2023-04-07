@@ -3,9 +3,19 @@
         <div class="container">
 
             <div class="page-title">
-                <div class="title_left" style="display: flex; justify-content: space-between;">
+                <div class="title_left" style="display: flex; justify-content: space-between; align-items: end;">
                     <div class="d-flex" style="align-items: center;">
-                        <h3>Brand</h3>
+                        <div [ngClass]="{'mt-3':formData?.isInUse}">
+                            <div *ngIf="formData?.isInUse"
+                                class="alert alert-primary d-flex align-items-center justify-content-between"
+                                role="alert" style="width: 50vw;">
+                                You cannot edit this record as some User Profile and/or Instruments are dependent on
+                                this Brand
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                            <h3>Brand</h3>
+                        </div>
                     </div>
 
 
@@ -13,7 +23,8 @@
                         <a (click)="Back()" class="nav-link">
                             <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
                         </a>
-                        <a class="nav-link" (click)="EditMode()" *ngIf="!isEditMode && !isNewMode">
+                        <a class="nav-link" (click)="EditMode()"
+                            *ngIf="!isEditMode && !isNewMode && !formData?.isInUse">
                             <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
                         </a>
 
@@ -25,7 +36,7 @@
                             <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
                         </a>
 
-                        <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
+                        <a class="nav-link" (click)="DeleteRecord()" *ngIf="(id != null) && hasDeleteAccess">
                             <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
                         </a>
                     </div>

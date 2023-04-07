@@ -42,6 +42,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     this.onClose = new Subject();
+    this.hasDeleteAccess = this.AccountService.userValue.isAdmin;
 
     this.Form = this.formBuilder.group({
       businessUnitName: ['', [Validators.required]],
@@ -84,6 +85,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     if (!this.isNewMode) {
       this.Form.disable();
     }
+
     this.FormControlDisable()
   }
 
@@ -107,6 +109,17 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
         },
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });
+  }
+
+  DeleteRecord() {
+    this.businessUnitService.Delete(this.id)
+      .subscribe((data: any) => {
+        if (data.result) {
+          this.notificationService.showSuccess("Deleted Successfully", "Success")
+          this.router.navigate(["/businessunitlist"], { queryParams: { isNSNav: true } })
+        }
+        else this.notificationService.showInfo(data.resultMessage, "Error")
+      })
   }
 
   CancelEdit() {
@@ -146,11 +159,11 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
             if (!this.isDialog) {
               this.notificationService.showSuccess("Business Unit created successfully!", "Success")
               this.router.navigate(["/businessunitlist"],
-              {
-                //relativeTo: this.activeRoute,
-                queryParams: { isNSNav: true },
-                //queryParamsHandling: 'merge'
-              });
+                {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
             }
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
@@ -166,11 +179,11 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
             if (!this.isDialog) {
               this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
               this.router.navigate(["/businessunitlist"],
-              {
-                //relativeTo: this.activeRoute,
-                queryParams: { isNSNav: true },
-                //queryParamsHandling: 'merge'
-              });
+                {
+                  //relativeTo: this.activeRoute,
+                  queryParams: { isNSNav: true },
+                  //queryParamsHandling: 'merge'
+                });
             }
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
