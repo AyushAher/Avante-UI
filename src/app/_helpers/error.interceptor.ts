@@ -36,9 +36,9 @@ export class ErrorInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(tap((event) => {
             if (event instanceof HttpResponse) {
 
-                if ((request.method == "POST" || request.method == "PUT") && event.body?.result) {
-                    this.notificationService.SetNavParam();
-                }
+                // if ((request.method == "POST" || request.method == "PUT") && event.body?.result) {
+                //     this.notificationService.SetNavParam();
+                // }
                 //stop spinner
                 this.loaderService.requestEnded()
             }
