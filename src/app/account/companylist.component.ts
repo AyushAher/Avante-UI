@@ -54,7 +54,11 @@ export class CompanyListComponent implements OnInit {
 
     EditRecord() {
         var data = this.api.getSelectedRows()[0]
-        this.router.navigate([`company/${data.id}`])
+        this.router.navigate([`company/${data.id}`], {
+            queryParams: {
+                isNSNav: true
+            }
+        })
     }
 
     private createColumnDefs() {
