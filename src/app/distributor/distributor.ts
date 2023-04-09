@@ -79,6 +79,7 @@ export class DistributorComponent implements OnInit {
     this.form = this.formBuilder.group({
       distname: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       payterms: ['', Validators.required],
+      code: [''],
       isblocked: false,
       isactive: true,
       isdeleted: [false],
@@ -174,7 +175,7 @@ export class DistributorComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
-            this.router.navigate(["distributorlist"],{
+            this.router.navigate(["distributorlist"], {
               //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
               //queryParamsHandling: 'merge'

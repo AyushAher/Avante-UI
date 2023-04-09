@@ -9,10 +9,12 @@
       <li class="nav-item dropdown dropdown-center dropdown-large mt-3" [ngClass]="{'mx-3': !isAdmin}">
         <nav *ngIf="(!isNewSetUp || showNavs) && !hideBreadCrumbs" (click)="ChangeCIM()" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li *ngIf="user.company" class="breadcrumb-item" [title]="'Company: ' + user.company">
-              <a>{{user.company}}</a></li>
-            <li *ngIf="user.bu" class="breadcrumb-item" [title]="'Business Unit: ' + user.bu"><a>{{user.bu}}</a></li>
-            <li *ngIf="user.brand" class="breadcrumb-item" [title]="'Brand: ' + user.brand"><a>{{user.brand}}</a></li>
+            <li *ngIf="user?.company" class="breadcrumb-item" [title]="'Company: ' + user?.company">
+              <a>{{user?.company}}</a>
+            </li>
+            <li *ngIf="user?.bu" class="breadcrumb-item" [title]="'Business Unit: ' + user?.bu"><a>{{user?.bu}}</a></li>
+            <li *ngIf="user?.brand" class="breadcrumb-item" [title]="'Brand: ' + user?.brand"><a>{{user?.brand}}</a>
+            </li>
           </ol>
         </nav>
       </li>

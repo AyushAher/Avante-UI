@@ -74,7 +74,7 @@ export class DistributorRegionComponent implements OnInit {
 
     this.destributorRegionform = this.formBuilder.group({
       distid: ['', Validators.required],
-      distName: ['', Validators.required],
+      distName: ['', [Validators.required, this.notificationService.noWhitespaceValidator]],
       region: ['', Validators.required],
       distregname: ['', Validators.required],
       payterms: ['', Validators.required],
@@ -222,22 +222,28 @@ export class DistributorRegionComponent implements OnInit {
     this.distRegion = this.destributorRegionform.value;
 
     if (this.distributorRegionId == null) {
-      this.distributorRegionId = Guid.create().toString()
-      this.distRegion.id = this.distributorRegionId
+      this.distributorRegionService.CheckIsExisting(this.distRegion)
+        .subscribe((data: any) => {
+          this.distributorRegionId = Guid.create().toString()
+          this.distRegion.id = this.distributorRegionId
+          if (data) {
+            this.notificationService.showInfo("Region in the with same country exists.", "Info")
+            return;
+          }
+          sessionStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));
 
-      sessionStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));
-
-      if (this.isNewSetup) {
-        this.distributorRegionService.SaveRegion();
-        //return this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
-        return true;
-      }
-      else return this.router.navigate(['contact', this.type, this.distributorId, this.distRegion.id], {
-        queryParams: {
-          isNewMode: true,
-          isNSNav: true
-        }
-      });
+          if (this.isNewSetup) {
+            this.distributorRegionService.SaveRegion();
+            //return this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
+            return true;
+          }
+          else return this.router.navigate(['contact', this.type, this.distributorId, this.distRegion.id], {
+            queryParams: {
+              isNewMode: true,
+              isNSNav: true
+            }
+          });
+        })
 
     }
     else {

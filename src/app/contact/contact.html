@@ -66,7 +66,8 @@
               </div>
               <div class="col-md-4 col-sm-4">
                 <label for="mname">Middle Name <span class="text-danger">*</span></label>
-                <input type="text" formControlName="mname" class="form-control" />
+                <input type="text" formControlName="mname" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.mname.touched && f.mname.errors }" />
                 <div *ngIf="f.mname.touched && f.mname.errors" class="invalid-feedback">
                   <div *ngIf="f.mname.errors.required">Middle Name is required</div>
                 </div>
@@ -82,14 +83,14 @@
             </div>
             <div class="row">
               <div class="col-md-4 col-sm-4">
-                <label for="pcontactno">Primary Mobile Phone Number</label><br />
+                <label for="pcontactno">Primary Mobile Phone Number<span class="text-danger">*</span></label><br />
                 <input type="tel" ng2TelInput phoneInput formControlName="pcontactno" class="form-control"
                   maxlength="15" (ng2TelOutput)="getNumber($event)" (intlTelInputObject)="telInputObject($event)"
                   (countryChange)="countryChange($event)"
                   [ngClass]="{ 'is-invalid': f.pcontactno.touched && f.pcontactno.errors }" />
                 <!--<input type="tel" formControlName="pcontactno" class="form-control"
                      maxlength="10" [ngClass]="{ 'is-invalid': f.place.touched && f.pcontactno.errors }" />-->
-                <div *ngIf="f.pcontactno.touched && f.pcontactno.errors" class="invalid-feedback">
+                <div *ngIf="f.pcontactno.pcontactno && f.pcontactno.errors" class="invalid-feedback">
                   <div *ngIf="f.pcontactno.errors?.required">Primary Contact No is required</div>
                   <div *ngIf="f.pcontactno.errors?.maxlength">Max length is 13</div>
                   <!--<div *ngIf="f.pcontactno.errors?.minlength">Min length is 10</div>-->

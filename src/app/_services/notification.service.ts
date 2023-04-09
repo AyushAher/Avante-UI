@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
@@ -86,6 +87,20 @@ export class NotificationService {
       });
     }, false);
 
+
+    x.addEventListener('focusout', (e) => {
+      var value = e.target.value
+      value = value.trim();
+      x.value = value;
+    }, false);
+
+  }
+
+
+
+  noWhitespaceValidator(control: FormControl) {
+    const isSpace = (control.value || '').match(/\s/g);
+    return isSpace ? { 'required': true } : null;
   }
 }
 

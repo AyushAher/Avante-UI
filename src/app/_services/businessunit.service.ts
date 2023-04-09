@@ -28,7 +28,7 @@ export class BusinessUnitService {
         return this.http.get(`${this.environment.apiUrl}/BusinessUnits/GetByCompanyId`)
     }
     GetByCustomCompanyId(id) {
-        return this.http.get(`${this.environment.apiUrl}/Brands/GetByCompanyId/${id}`)
+        return this.http.get(`${this.environment.apiUrl}/BusinessUnits/GetByCompanyId/${id}`)
     }
 
 

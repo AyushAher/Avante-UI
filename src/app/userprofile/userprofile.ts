@@ -185,6 +185,8 @@ export class UserProfileComponent implements OnInit {
       this.userprofileService.getById(this.id)
         .pipe(first())
         .subscribe((data: any) => {
+          console.log(data);
+
           this.contactId = data.object.contactid;
           let role = data.object.roleId;
           this.isCustomer = data.object.userType.toLowerCase() == "customer";
@@ -196,7 +198,7 @@ export class UserProfileComponent implements OnInit {
 
           this.customerService.getAllByConId(data.object.contactid)
             .pipe(first()).subscribe((data: any) => {
-              this.siteList = data.object[0].sites
+              this.siteList = data.object[0]?.sites
             })
 
           this.listTypeService.getById("ROLES")
@@ -274,6 +276,7 @@ export class UserProfileComponent implements OnInit {
           this.userprofileform.patchValue({ "distributorName": data.object.distributorName });
           this.userprofileform.patchValue({ "roleId": data.object.roleId });
           this.userprofileform.patchValue({ "isdeleted": data.object.isdeleted });
+          this.userprofileform.patchValue({ "description": data.object.description });
 
           if (data.object.profileRegions != null) {
             this.userprofileform.patchValue({ "profileRegions": data.object.profileRegions });

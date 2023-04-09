@@ -171,70 +171,6 @@ export class AccountService {
       });
   }
 
-  private SetUpConfig(username, password) {
-    this.password = password
-
-    const modalOptions: any = {
-      backdrop: 'static',
-      ignoreBackdropClick: true,
-      keyboard: false,
-      initialState: {
-        isDialog: true,
-        username,
-        password
-      },
-    }
-    this.modalRef = this.modalService.show(SetUp, modalOptions);
-
-    this.modalRef.content.onClose.subscribe(result => {
-      if (!result.newSetUp && !result.isExisting) return this.CIMConfig(username, this.password, true, true);
-      else if (!result.newSetUp && result.isExisting) {
-        return this.modalService.show(ExistingCIM, modalOptions)
-      }
-
-      this.modalRef = this.modalService.show(CreateCompanyComponent, modalOptions)
-
-      this.modalRef.content.onClose.subscribe((companySuccess) => {
-        if (!companySuccess.result) return;
-        this.modalService.hide();
-        this.router.navigate(['/'], {
-          //relativeTo: this.activeRoute,
-          queryParams: { isNSNav: true },
-          //queryParamsHandling: 'merge'
-        });
-        // modalOptions.initialState.companyId = companySuccess.object.id;
-
-        // this.modalRef = this.modalService.show(CreateBusinessUnitComponent, modalOptions)
-
-        // this.modalRef.content.onClose.subscribe((businessUnitData) => {
-        //   if (!businessUnitData.result) return;
-        //   modalOptions.initialState.businessUnitId = businessUnitData.object.id;
-
-        //   this.modalRef = this.modalService.show(CreateBrandComponent, modalOptions)
-        //   this.modalRef.content.onClose.subscribe((brandData) => {
-        //     if (!brandData.result) return;
-        //     modalOptions.initialState.brandId = brandData.object.id;
-
-        //     this.modalService.hide();
-
-        this.login(modalOptions.initialState.username, this.password, companySuccess.object.id, "", "")
-          .pipe(first()).subscribe();
-        //     this.router.navigate(["/distributor"], {
-        //       queryParams: {
-        //         isNewSetUp: true
-        //       }
-        //     })
-        //     this.notificationService.filter('newSetup');
-        //   })
-
-
-        //   })
-        // })
-
-      })
-
-    })
-  }
 
   CIMConfig(username, password, isAdmin = true, isSuperAdmin) {
     this.password = password
@@ -257,37 +193,41 @@ export class AccountService {
           }
 
           if (isSuperAdmin || (!isAdmin && !isSuperAdmin)) {
-            this.modalRef = this.modalService.show(CIMComponent, modalOptions);
-            this.modalRef.content.onClose.subscribe(result => {
-              if (!result.result) {
-                this.companyId = result.companyId;
-                return;
-              }
 
-              this.login(username, password, result.form.companyId, (isAdmin || isSuperAdmin) ? "" : result.form.businessUnitId, (isAdmin || isSuperAdmin) ? "" : result.form.brandId)
-                .pipe(first()).subscribe(() => {
-                  if (isAdmin) this.router.navigate(['/'], {
-                    //relativeTo: this.activeRoute,
-                    queryParams: { isNSNav: true },
-                    //queryParamsHandling: 'merge'
-                  });
-                  else {
-                    this.router.navigate(['/distdashboard'], {
-                      //relativeTo: this.activeRoute,
-                      queryParams: { isNSNav: true },
-                      //queryParamsHandling: 'merge'
-                    })
-                    this.notificationService.filter('loggedin');
-                    setTimeout(() => {
-                      this.router.navigate(['/'], {
+            this.login(username, password, this.userValue.companyId, "", "")
+              .pipe(first()).subscribe(() => {
+                this.modalRef = this.modalService.show(CIMComponent, modalOptions);
+                this.modalRef.content.onClose.subscribe(result => {
+                  if (!result.result) {
+                    this.companyId = result.companyId;
+                    return;
+                  }
+
+                  this.login(username, password, result.form.companyId, (isAdmin || isSuperAdmin) ? "" : result.form.businessUnitId, (isAdmin || isSuperAdmin) ? "" : result.form.brandId)
+                    .pipe(first()).subscribe(() => {
+                      if (isAdmin) this.router.navigate(['/'], {
                         //relativeTo: this.activeRoute,
                         queryParams: { isNSNav: true },
                         //queryParamsHandling: 'merge'
                       });
-                    }, 200);
-                  }
+                      else {
+                        this.router.navigate(['/distdashboard'], {
+                          //relativeTo: this.activeRoute,
+                          queryParams: { isNSNav: true },
+                          //queryParamsHandling: 'merge'
+                        })
+                        this.notificationService.filter('loggedin');
+                        setTimeout(() => {
+                          this.router.navigate(['/'], {
+                            //relativeTo: this.activeRoute,
+                            queryParams: { isNSNav: true },
+                            //queryParamsHandling: 'merge'
+                          });
+                        }, 200);
+                      }
+                    })
                 })
-            })
+              })
           }
           else if (!isSuperAdmin && isAdmin) {
             this.login(username, password, this.userValue.companyId, "", "")

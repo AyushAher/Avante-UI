@@ -18,6 +18,8 @@ export class User {
   companyId: string
   brand: string
   bu: string
+  brandId: string
+  buId: string
   company: string
   isAdmin:boolean
   isSuperAdmin:boolean

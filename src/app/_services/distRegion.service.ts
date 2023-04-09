@@ -32,6 +32,10 @@ export class DistributorRegionService {
     return this.http.post(`${this.environment.apiUrl}/DistRegions`, distributor);
   }
 
+  CheckIsExisting(distributor: DistributorRegion) {
+    return this.http.post(`${this.environment.apiUrl}/DistRegions/exists`, distributor);
+  }
+
   getAll() {
     return this.http.get<DistributorRegion[]>(`${this.environment.apiUrl}/DistRegions`);
   }

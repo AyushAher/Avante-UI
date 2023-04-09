@@ -87,14 +87,14 @@ export class ContactComponent implements OnInit {
       fname: ['', [Validators.required, Validators.maxLength(512)]],
       lname: ['', [Validators.required, Validators.maxLength(512)]],
       mname: ['', [Validators.required]],
-      pcontactno: [''],
+      pcontactno: ['', Validators.required],
       pemail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
-      scontactno: [''],
-      semail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
+      scontactno: ['', Validators.required],
+      semail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$"), Validators.required]],
       designationid: ['', [Validators.required, Validators.maxLength(512)]],
       isActive: [true],
       isdeleted: [false],
-      whatsappNo: [''],
+      whatsappNo: ['', Validators.required],
 
       address: this.formBuilder.group({
         street: ['', Validators.required],
@@ -247,8 +247,10 @@ export class ContactComponent implements OnInit {
               }
             })
           }
-          this.distCustName = "Principal Distributor";
-          this.contactform.get('distCustName').setValue(this.parentEntity.distname);
+          else {
+            this.distCustName = "Principal Distributor";
+            this.contactform.get('distCustName').setValue(this.parentEntity.distname);
+          }
 
           this.parentEntity = JSON.parse(sessionStorage.getItem('distributorRegion'))
           this.contactform.get('parentEntity').setValue(this.parentEntity.distregname);
@@ -680,7 +682,7 @@ export class ContactComponent implements OnInit {
 
       this.router.navigate(['distributorregion', this.masterId], {
         queryParams: {
-        //  isNSNav,
+          //  isNSNav,
           isNewSetup: true
         }
       });

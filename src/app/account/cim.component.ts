@@ -10,6 +10,7 @@ import { first } from 'rxjs/operators';
 import { CreateBrandComponent } from './brand.component';
 import { CreateBusinessUnitComponent } from './businessunit.component';
 import { CreateCompanyComponent } from './company.component';
+import { BusinessUnitService } from '../_services/businessunit.service';
 
 @Component({
   selector: 'app-CIM',
@@ -22,7 +23,7 @@ export class CIMComponent implements OnInit {
   Form: FormGroup;
   loading: boolean = false;
   submitted: boolean = false;
-  businessUnitList: any = []
+  businessUnitList: any[] = []
   brandList: any = []
   cimList: any = []
   companyList: any = []
@@ -43,6 +44,7 @@ export class CIMComponent implements OnInit {
     public activeModal: BsModalService,
     public CompanyService: CompanyService,
     public brandService: BrandService,
+    public businessUnitService: BusinessUnitService,
     private accountService: AccountService
   ) {
     this.notificationService.listen().subscribe((m: any) => {
@@ -50,8 +52,9 @@ export class CIMComponent implements OnInit {
       this.CompanyService.GetAllModelData()
         .pipe(first()).subscribe((data: any) => {
           this.lstBrand = data.object.brandList
-          this.lstBusinessUnit = data.object.businessUnitList
+          // this.lstBusinessUnit = data.object.businessUnitList
           this.companyList = data.object.companyList
+
         })
     })
 
@@ -81,7 +84,15 @@ export class CIMComponent implements OnInit {
     this.Form.get('businessUnitId').valueChanges
       .subscribe((value: any) =>
         this.brandService.GetByBU(value)
-          .subscribe((data: any) => this.brandList = data.object)
+          .subscribe((data: any) => {
+            this.brandList = [];
+            this.user.brandId?.split(',').forEach(e => {
+              if (data.object && data.object.length > 0) {
+                var obj = data.object.find(x => x.id == e);
+                if (obj) this.brandList.push(obj);
+              }
+            });
+          })
       );
 
 
@@ -94,7 +105,20 @@ export class CIMComponent implements OnInit {
     this.isAdmin = this.user.isAdmin
     // this.lstBrand = data.brandList;
     this.companyList = data.companyList;
-    this.lstBusinessUnit = data.businessUnitList;
+    // this.lstBusinessUnit = data.businessUnitList;
+
+    this.businessUnitService.GetByCustomCompanyId(this.user.companyId)
+      .subscribe((data: any) => {
+        this.businessUnitList = [];
+        this.user.buId?.split(',').forEach(e => {
+          if (data.object && data.object.length > 0) {
+            var obj = data.object.find(x => x.id == e);
+            if (obj) this.businessUnitList.push(obj);
+          }
+        });
+
+      })
+
 
     this.f.brandId.valueChanges.subscribe((data: any) => {
       let companyId = this.f.companyId.value

@@ -55,6 +55,10 @@
       <div class="col-md-12 col-sm-12">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
+            <div class="col-sm-6" *ngIf="distributorId != null">
+              <label for="distname">Distributor Code</label>
+              <input type="text" formControlName="code" disabled class="form-control" />
+            </div>
             <div class="col-sm-6">
               <label for="distname">Distributor Name<span class="text-danger">*</span></label>
               <input type="text" formControlName="distname" class="form-control"
