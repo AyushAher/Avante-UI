@@ -127,6 +127,7 @@ export class CustomerSiteComponent implements OnInit {
             if (data.result && data.object) {
               this.distRegions = [data.object];
               this.customersiteform.get('regname').setValue(data.object.region)
+              this.customersiteform.get('payterms').setValue(data.object.payterms)
             }
           },
         });
@@ -135,9 +136,11 @@ export class CustomerSiteComponent implements OnInit {
       .subscribe((data: any) => {
         this.customers = data.object;
         var customer: any = this.customers.find(x => x.id == this.customerid);
+        
         if (!customer && this.isNewParentMode) {
           customer = JSON.parse(sessionStorage.getItem('customer'));
         }
+
         this.customersiteform.get("custid").setValue(this.customerid)
 
         if (customer) {

@@ -615,7 +615,7 @@ export class ContactComponent implements OnInit {
             var requestObjectCust = {
               customer: JSON.parse(sessionStorage.getItem('customer')),
               customerContact: JSON.parse(sessionStorage.getItem('customerContact')),
-              customerSite: JSON.parse(sessionStorage.getItem('customerSite')),
+              customerSite: JSON.parse(sessionStorage.getItem('site')),
               customerSiteContact: JSON.parse(sessionStorage.getItem('customerSiteContact')),
             };
             setTimeout(() => {

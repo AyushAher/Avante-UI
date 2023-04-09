@@ -57,6 +57,10 @@
         <hr />
         <form [formGroup]="customerform" (ngSubmit)="onSubmit()">
           <div class="row">
+            <div class="col-md-4 col-sm-4" *ngIf="customerId != null">
+              <label for="code">Code<span class="text-danger">*</span></label>
+              <input type="text" formControlName="code" class="form-control" />
+            </div>
             <div class="col-md-4 col-sm-4">
               <label for="custname">Name<span class="text-danger">*</span></label>
               <input type="text" formControlName="custname" class="form-control"
