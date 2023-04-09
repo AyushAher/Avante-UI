@@ -95,7 +95,7 @@ export class DistributorRegionListComponent implements OnInit {
   private createColumnDefs() {
     return [
       {
-        headerName: 'Distributor Region',
+        headerName: 'Region Name',
         field: 'region',
         filter: true,
         enableSorting: true,
@@ -110,7 +110,7 @@ export class DistributorRegionListComponent implements OnInit {
         sortable: true,
         tooltipField: 'paytermsValue',
       }, {
-        headerName: 'Dist Region Name',
+        headerName: 'Regional Distributor',
         field: 'distregname',
         filter: true,
         editable: false,

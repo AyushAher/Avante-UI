@@ -165,12 +165,20 @@ export class UserProfileComponent implements OnInit {
     this.userprofileform.get("businessUnitId")
       .valueChanges
       .subscribe((values: any) => {
-        console.log(values);
         if (!values) return;
         this.brandList = []
         values.map(x => {
           this.brandService.GetByBU(x.id)
-            .pipe(first()).subscribe((data: any) => this.brandList = data.object)
+            .pipe(first()).subscribe((data: any) => {
+              var nBrand = [];
+              var lstBrand: any[] = this.userprofileform.get("brandId").value
+              this.brandList = data.object
+              this.brandList.forEach(element => {
+                var obj = lstBrand.find(x => x.id == element.id);
+                if (obj) nBrand.push(obj);
+              })
+              this.userprofileform.get("brandId").setValue(nBrand);
+            })
         })
 
       })
@@ -257,6 +265,7 @@ export class UserProfileComponent implements OnInit {
               items.push(t);
             }
             this.userprofileform.patchValue({ "brandId": items });
+            // this.formData.brandId = items;
           }
 
           subreq = data.object.custSites?.split(',');

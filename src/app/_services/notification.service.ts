@@ -79,6 +79,11 @@ export class NotificationService {
         return;
       }
 
+      if ((!event.target.value.trim() && event.code == "Space")) {
+        this.showInfo(`Please enter letters.`, "Invalid character");
+        event.preventDefault();
+      }
+
       this.invalidCharactersArray.map((y) => {
         if (event.key.includes(y)) {
           this.showError(`The text cannot contain characters like ${y}`, "Invalid character");
@@ -87,20 +92,6 @@ export class NotificationService {
       });
     }, false);
 
-
-    x.addEventListener('focusout', (e) => {
-      var value = e.target.value
-      value = value.trim();
-      x.value = value;
-    }, false);
-
-  }
-
-
-
-  noWhitespaceValidator(control: FormControl) {
-    const isSpace = (control.value || '').match(/\s/g);
-    return isSpace ? { 'required': true } : null;
   }
 }
 

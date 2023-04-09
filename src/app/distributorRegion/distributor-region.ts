@@ -74,7 +74,7 @@ export class DistributorRegionComponent implements OnInit {
 
     this.destributorRegionform = this.formBuilder.group({
       distid: ['', Validators.required],
-      distName: ['', [Validators.required, this.notificationService.noWhitespaceValidator]],
+      distName: ['', [Validators.required]],
       region: ['', Validators.required],
       distregname: ['', Validators.required],
       payterms: ['', Validators.required],
@@ -124,8 +124,18 @@ export class DistributorRegionComponent implements OnInit {
     }
     else if (this.isNewParentMode && this.distributorId != null) {
       var data = JSON.parse(sessionStorage.getItem('distributor'))
-      this.distributorName = data.distname;
-      this.destributorRegionform.controls['distName'].setValue(this.distributorName, { onlySelf: true });
+      console.log(data);
+
+      setTimeout(() => {
+        this.distributorName = data.distname;
+        this.destributorRegionform.controls['distName'].setValue(this.distributorName, { onlySelf: true });
+        this.destributorRegionform.controls['distregname'].setValue(data.distname, { onlySelf: true });
+        this.destributorRegionform.controls['region'].setValue(this.countries.find(x => x.id == data.address.countryid)?.formal, { onlySelf: true });
+        this.destributorRegionform.controls['countries'].setValue(data.address.countryid, { onlySelf: true });
+        this.destributorRegionform.controls['payterms'].setValue(data.payterms, { onlySelf: true });
+        this.destributorRegionform.get("address").patchValue(data.address)
+      }, 300);
+
 
     }
 
@@ -216,6 +226,8 @@ export class DistributorRegionComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.destributorRegionform);
+
     this.destributorRegionform.markAllAsTouched()
     if (this.destributorRegionform.invalid) return;
 

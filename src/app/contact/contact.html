@@ -90,8 +90,9 @@
                   [ngClass]="{ 'is-invalid': f.pcontactno.touched && f.pcontactno.errors }" />
                 <!--<input type="tel" formControlName="pcontactno" class="form-control"
                      maxlength="10" [ngClass]="{ 'is-invalid': f.place.touched && f.pcontactno.errors }" />-->
-                <div *ngIf="f.pcontactno.pcontactno && f.pcontactno.errors" class="invalid-feedback">
-                  <div *ngIf="f.pcontactno.errors?.required">Primary Contact No is required</div>
+                <div *ngIf="f.pcontactno.touched && f.pcontactno.errors" style="display: block;"
+                  class="invalid-feedback">
+                  <div *ngIf="f.pcontactno.errors?.required">Primary Contact No. is required</div>
                   <div *ngIf="f.pcontactno.errors?.maxlength">Max length is 13</div>
                   <!--<div *ngIf="f.pcontactno.errors?.minlength">Min length is 10</div>-->
                 </div>
@@ -111,8 +112,9 @@
                   (intlTelInputObject)="telInputObjectCo($event)" (countryChange)="countryChange2($event)"
                   class="form-control" maxlength="15"
                   [ngClass]="{ 'is-invalid': f.scontactno.touched && f.scontactno.errors }" />
-                <div *ngIf="f.scontactno.touched && f.scontactno.errors" class="invalid-feedback">
-                  <div *ngIf="f.scontactno.errors.required">Secondory Contact No is required</div>
+                <div *ngIf="f.scontactno.touched && f.scontactno.errors" style="display: block;"
+                  class="invalid-feedback">
+                  <div *ngIf="f.scontactno.errors.required">Secondory Contact No. is required</div>
                   <div *ngIf="f.scontactno.errors?.maxlength">Max length is 13</div>
                   <!--<div *ngIf="f.scontactno.errors?.minlength">Min length is 10</div>-->
                 </div>
@@ -125,18 +127,18 @@
                   (intlTelInputObject)="telInputObjectCow($event)" (countryChange)="countryChange2w($event)"
                   class="form-control" maxlength="15"
                   [ngClass]="{ 'is-invalid': f.whatsappNo.touched && f.scontactno.errors }" />
-                <div *ngIf="f.whatsappNo.touched && f.whatsappNo.errors" class="invalid-feedback">
-                  <div *ngIf="f.whatsappNo.errors.required">WhatsApp No is required</div>
+                <div *ngIf="f.whatsappNo.touched && f.whatsappNo.errors" style="display: block;"
+                  class="invalid-feedback">
+                  <div *ngIf="f.whatsappNo.errors.required">WhatsApp No. is required</div>
                   <div *ngIf="f.whatsappNo.errors?.maxlength">Max length is 13</div>
-                  <!--<div *ngIf="f.scontactno.errors?.minlength">Min length is 10</div>-->
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
                 <label for="semail">Secondory E-Mail<span class="text-danger">*</span></label>
                 <input type="email" formControlName="semail" class="form-control"
                   [ngClass]="{ 'is-invalid': f.semail.touched && f.semail.errors }" />
-                <div *ngIf="f.semail.touched && f.semail.errors" class="invalid-feedback">
-                  <!-- <div *ngIf="f.semail.errors?.required">Secondory Email is required</div> -->
+                <div *ngIf="f.semail.touched && f.semail.errors" style="display: block;" class="invalid-feedback">
+                  <div *ngIf="f.semail.errors?.required">Secondory Email is required</div>
                   <div *ngIf="f.semail.errors?.pattern">Please provide valid email</div>
                 </div>
               </div>
