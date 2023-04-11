@@ -52,8 +52,8 @@
             <div class="col-md-4 col-sm-4">
               <label for="code">Code</label>
               <input type="text" formControlName="code" maxlength="5" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.code.errors }" />
-              <div *ngIf="submitted && f.code.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.code.touched && f.code.errors }" />
+              <div *ngIf="f.code.touched && f.code.errors" class="invalid-feedback">
                 <div *ngIf="f.code.errors.required">Code is required</div>
                 <div *ngIf="f.code.errors?.minlength">Min length is 2</div>
                 <div *ngIf="f.code.errors?.maxlength">Max length is 5</div>
@@ -62,8 +62,8 @@
             <div class="col-md-4 col-sm-4">
               <label for="iso_2">Item Name</label>
               <input type="text" formControlName="itemname" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.itemname.errors }" />
-              <div *ngIf="submitted && f.itemname.errors" class="invalid-feedback">
+                [ngClass]="{ 'is-invalid': f.itemname.touched && f.itemname.errors }" />
+              <div *ngIf="f.itemname.touched && f.itemname.errors" class="invalid-feedback">
                 <div *ngIf="f.itemname.errors.required">Item Name is required</div>
               </div>
             </div>

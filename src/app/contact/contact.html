@@ -93,6 +93,7 @@
                 <div *ngIf="f.pcontactno.touched && f.pcontactno.errors" style="display: block;"
                   class="invalid-feedback">
                   <div *ngIf="f.pcontactno.errors?.required">Primary Contact No. is required</div>
+                  <div *ngIf="f.pcontactno.errors?.pattern">Primary Contact No. is invalid</div>
                   <div *ngIf="f.pcontactno.errors?.maxlength">Max length is 13</div>
                   <!--<div *ngIf="f.pcontactno.errors?.minlength">Min length is 10</div>-->
                 </div>
@@ -115,6 +116,7 @@
                 <div *ngIf="f.scontactno.touched && f.scontactno.errors" style="display: block;"
                   class="invalid-feedback">
                   <div *ngIf="f.scontactno.errors.required">Secondory Contact No. is required</div>
+                  <div *ngIf="f.scontactno.errors.pattern">Secondory Contact No. is invalid</div>
                   <div *ngIf="f.scontactno.errors?.maxlength">Max length is 13</div>
                   <!--<div *ngIf="f.scontactno.errors?.minlength">Min length is 10</div>-->
                 </div>
@@ -130,7 +132,9 @@
                 <div *ngIf="f.whatsappNo.touched && f.whatsappNo.errors" style="display: block;"
                   class="invalid-feedback">
                   <div *ngIf="f.whatsappNo.errors.required">WhatsApp No. is required</div>
-                  <div *ngIf="f.whatsappNo.errors?.maxlength">Max length is 13</div>
+                  <div *ngIf="f.whatsappNo.errors.rpattern">WhatsApp No. is required invaliddiv>
+                    <div *ngIf="f.whatsappNo.errors?.maxlength">Max length is 13</div>
+                  </div>
                 </div>
               </div>
               <div class="col-md-4 col-sm-4">
@@ -216,18 +220,19 @@
                 </div>
                 <div class="col-sm-4">
                   <label for="zip">Zip<span class="text-danger">*</span></label>
-                  <input type="tel" maxlength="10" formControlName="zip" class="form-control"
+                  <input type="number" maxlength="10" formControlName="zip" class="form-control"
                     [ngClass]="{ 'is-invalid': a.zip.touched && a.zip.errors }" />
 
                   <div *ngIf="a.zip.touched && a.zip.errors" class="invalid-feedback">
                     <div *ngIf="a.zip.errors.required">Zip is required</div>
                     <div *ngIf="a.zip.errors?.minlength">Min length is 4</div>
                     <div *ngIf="a.zip.errors?.maxlength">Max length is 15</div>
+                    <div *ngIf="a.zip.errors?.pattern">Invalid Pin Code.</div>
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <label for="geolat">Latitude</label>
-                  <input type="text" formControlName="geolat" class="form-control" value="0"
+                  <input type="number" formControlName="geolat" class="form-control" value="0"
                     [ngClass]="{ 'is-invalid': a.geolat.touched && a.geolat.errors }" />
                   <div *ngIf="a.geolat.touched && a.geolat.errors" class="invalid-feedback">
                     <div *ngIf="a.geolat.errors.required">Latitude is required</div>
@@ -235,12 +240,13 @@
                 </div>
                 <div class="col-sm-4">
                   <label for="geolong">Longitude</label>
-                  <input type="text" formControlName="geolong" class="form-control" value="0"
+                  <input type="number" formControlName="geolong" class="form-control" value="0"
                     [ngClass]="{ 'is-invalid': a.geolong.touched && a.geolong.errors }" />
                   <div *ngIf="a.geolong.touched && a.geolong.errors" class="invalid-feedback">
                     <div *ngIf="a.geolong.errors.required">Longitude is required</div>
                   </div>
                 </div>
+
               </div>
             </div>
           </form>

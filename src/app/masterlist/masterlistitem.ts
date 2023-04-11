@@ -82,6 +82,7 @@ export class MasterListItemComponent implements OnInit {
       code: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(5)])],
       listName: [''],
       listTypeId: [''],
+      listCode: [''],
       id: [''],
       isEscalationSupervisor: false,
     });
@@ -100,12 +101,18 @@ export class MasterListItemComponent implements OnInit {
             this.designation = this.itemList[0].listCode == "DESIG";
             this.masterlistitemform.get("listName").setValue(this.itemList[0].listName);
             this.masterlistitemform.get("listTypeId").setValue(this.itemList[0].listTypeId);
+            this.masterlistitemform.get("listCode").setValue(this.itemList[0].listCode);
+            console.log(data);
+
           }
           else {
             this.listTypeService.GetListById(this.listid)
               .subscribe((data: any) => {
                 this.masterlistitemform.get("listName").setValue(data.object.listname);
                 this.masterlistitemform.get("listTypeId").setValue(data.object.id);
+                this.masterlistitemform.get("listCode").setValue(data.object.listCode);
+                console.log(data);
+
               })
           }
           setTimeout(() => {
@@ -114,17 +121,14 @@ export class MasterListItemComponent implements OnInit {
           }, 0);
         }
       });
-    this.list2 = JSON.parse(sessionStorage.getItem(this.listid))
-    if (this.list2 != null) {
-      if (this.list2[0].listCode == this.environment.configTypeCode || this.list2[0].listCode == this.environment.location) {
-        this.addAccess = true;
-      }
-    }
+
     this.columnDefs = this.createColumnDefs();
     this.colReadOnlyDefs = this.columnReadOnlyDefs();
+
     if (!this.id) {
       this.masterlistitemform.disable()
     }
+
   }
 
   EditMode() {
@@ -300,40 +304,28 @@ export class MasterListItemComponent implements OnInit {
   get f() { return this.masterlistitemform.controls; }
 
   onSubmit() {
-    //debugger;
-    this.submitted = true;
-
-    // reset alerts on submit
-    this.alertService.clear();
-
+    this.masterlistitemform.markAllAsTouched();
     // stop here if form is invalid
     if (this.masterlistitemform.invalid) {
       return;
     }
+    
     this.isSave = true;
     this.loading = true;
 
     if (this.id == null) {
       this.listTypeService.save(this.masterlistitemform.value)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.itemList = data.object;
+        .pipe(first()).subscribe((data: any) => {
+          if (!data.result) return;
 
-              this.masterlistitemform.get("itemname").reset();
-              this.masterlistitemform.get("code").reset();
-            }
-            else {
+          this.notificationService.showSuccess(data.resultMessage, "Success");
+          this.itemList = data.object;
 
-            }
-            this.loading = false;
-          },
-          error: error => {
+          this.masterlistitemform.get("itemname").markAsUntouched();
+          this.masterlistitemform.get("itemname").setValue("");
 
-            this.loading = false;
-          }
+          this.masterlistitemform.get("code").markAsUntouched();
+          this.masterlistitemform.get("code").setValue("");
         });
 
     }
@@ -341,20 +333,14 @@ export class MasterListItemComponent implements OnInit {
       this.ItemData = this.masterlistitemform.value;
       this.ItemData.code = this.code;
       this.listTypeService.update(this.id, this.ItemData)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.masterlistitemform.get("itemname").reset();
-              this.masterlistitemform.get("code").reset();
-              this.masterlistitemform.get("isEscalationSupervisor").reset();
-              this.id = null;
-              this.itemList = data.object;
-              this.submitted = false
-            }
-            this.loading = false;
-          },
+        .pipe(first()).subscribe((data: any) => {
+          if (!data.result) return;
+          this.notificationService.showSuccess(data.resultMessage, "Success");
+          this.masterlistitemform.get("itemname").reset();
+          this.masterlistitemform.get("code").reset();
+          this.masterlistitemform.get("isEscalationSupervisor").reset();
+          this.id = null;
+          this.itemList = data.object;
         });
 
     }

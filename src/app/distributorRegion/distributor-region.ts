@@ -88,7 +88,7 @@ export class DistributorRegionComponent implements OnInit {
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
-        zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
+        zip: ['', Validators.compose([Validators.pattern("^[0-9]{4,15}$"), Validators.minLength(4), Validators.maxLength(15)])],
         geolat: [''],
         geolong: [''],
         isActive: false,
@@ -240,7 +240,7 @@ export class DistributorRegionComponent implements OnInit {
             this.notificationService.showInfo("Region with the same country exists.", "Info")
             return;
           }
-          
+
           this.distributorRegionId = Guid.create().toString()
           this.distRegion.id = this.distributorRegionId
           sessionStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));

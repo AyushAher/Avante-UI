@@ -94,9 +94,9 @@ export class CustomerSiteComponent implements OnInit {
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
-        zip: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(15)])],
-        geolong: [''],
+        zip: ['', Validators.compose([Validators.pattern("^[0-9]{4,15}$"), Validators.minLength(4), Validators.maxLength(15)])],
         geolat: [''],
+        geolong: [''],
         isActive: true,
       }),
     });
