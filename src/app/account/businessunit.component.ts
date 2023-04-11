@@ -54,6 +54,8 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     this.isNewMode = id == null;
 
     let user = this.AccountService.userValue;
+    console.log(user);
+    
     this.Form.get('companyId').setValue(user.companyId);
     this.Form.get('companyId').disable();
 

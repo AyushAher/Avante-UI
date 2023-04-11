@@ -57,12 +57,21 @@
                         <div class="col-md-12">
                             <label>Secondary Company Email</label>
                             <input formControlName="secondaryCompanyEmail" class="form-control" type="email"
-                                [ngClass]="{ 'is-invalid': f.secondaryCompanyEmail.touched  && f.companyEmail.errors }" />
+                                [ngClass]="{ 'is-invalid': f.secondaryCompanyEmail.touched  && (f.secondaryCompanyEmail.errors || isSameEmail) }" />
 
-                            <div *ngIf=" f.companyEmail.touched && f.secondaryCompanyEmail.errors" class="invalid-feedback">
-                                <div *ngIf="f.secondaryCompanyEmail.errors.required">Secondary Company Email is required</div>
-                                <div *ngIf="f.secondaryCompanyEmail.errors.email || f.secondaryCompanyEmail.errors.pattern">Not a valid
+                            <div *ngIf=" f.secondaryCompanyEmail.touched && (f.secondaryCompanyEmail.errors || isSameEmail)"
+                                class="invalid-feedback">
+                                <div *ngIf="f.secondaryCompanyEmail.errors.required">Secondary Company Email is required
+                                </div>
+                                <div
+                                    *ngIf="f.secondaryCompanyEmail.errors.email || f.secondaryCompanyEmail.errors.pattern">
+                                    Not a valid
                                     E-Mail Id</div>
+                            </div>
+                            <div *ngIf="isSameEmail" class="invalid-feedback">
+                                <div>
+                                    Secondary E-Mail should not be same as Primary E-Mail Id
+                                </div>
                             </div>
                         </div>
                     </div>

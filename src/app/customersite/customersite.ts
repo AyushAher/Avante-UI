@@ -136,7 +136,7 @@ export class CustomerSiteComponent implements OnInit {
       .subscribe((data: any) => {
         this.customers = data.object;
         var customer: any = this.customers.find(x => x.id == this.customerid);
-        
+
         if (!customer && this.isNewParentMode) {
           customer = JSON.parse(sessionStorage.getItem('customer'));
         }
@@ -270,17 +270,22 @@ export class CustomerSiteComponent implements OnInit {
     if (this.customersiteform.invalid) return;
 
     if (this.csiteid == null) {
-      this.csiteid = Guid.create().toString();
       this.custSite = this.customersiteform.value;
-      this.custSite.id = this.csiteid;
+      
+      this.customersiteService.CheckSite(this.custSite)
+        .subscribe((data: any) => {
+          if (data.result) return this.notificationService.showInfo("The Site for this Customer exists.", "Duplicate Record")
+          this.csiteid = Guid.create().toString();
+          this.custSite.id = this.csiteid;
 
-      sessionStorage.setItem("site", JSON.stringify(this.custSite));
-      return this.router.navigate(['contact', this.type, this.customerid, this.csiteid], {
-        queryParams: {
-          isNewMode: true,
-          isNSNav: true
-        }
-      });
+          sessionStorage.setItem("site", JSON.stringify(this.custSite));
+          return this.router.navigate(['contact', this.type, this.customerid, this.csiteid], {
+            queryParams: {
+              isNewMode: true,
+              isNSNav: true
+            }
+          })
+        });
     }
     else {
       this.custSite = this.customersiteform.value;

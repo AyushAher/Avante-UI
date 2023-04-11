@@ -35,6 +35,10 @@ export class CustomerService {
     return this.http.post(`${this.environment.apiUrl}/Customer`, customer);
   }
 
+  CheckCustomer(customer: Customer) {
+    return this.http.post(`${this.environment.apiUrl}/Customer/CheckCustomer`, customer);
+  }
+
   getAll() {
     return this.http.get<Customer[]>(`${this.environment.apiUrl}/Customer`);
   }

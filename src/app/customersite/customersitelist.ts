@@ -117,7 +117,7 @@ export class CustomerSiteListComponent implements OnInit {
   private createColumnDefs() {
     return [
       {
-        headerName: 'Customer Region',
+        headerName: 'Customer Site',
         field: 'custregname',
         filter: true,
         enableSorting: true,

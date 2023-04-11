@@ -69,7 +69,7 @@ export class CompanyListComponent implements OnInit {
                 filter: true,
                 sortable: true,
                 tooltipField: "companyName",
-                // width: "1000"
+                width: "400"
             },
             {
                 headerName: 'Primary Email',
@@ -77,7 +77,7 @@ export class CompanyListComponent implements OnInit {
                 filter: true,
                 sortable: true,
                 tooltipField: "companyEmail",
-                // width: "1000"
+                width: "450"
             },
             {
                 headerName: 'Secondary Email',
@@ -85,7 +85,7 @@ export class CompanyListComponent implements OnInit {
                 filter: true,
                 sortable: true,
                 tooltipField: "secondaryCompanyEmail",
-                // width: "1000"
+                width: "440"
             },
         ]
     }

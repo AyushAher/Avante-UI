@@ -610,7 +610,6 @@ export class ContactComponent implements OnInit {
             }, 500);
             break;
           case "CS":
-            if (sessionStorage.getItem("customer")) this.customerService.SaveCustomer();
             sessionStorage.setItem('customerSiteContact', JSON.stringify(this.contact));
             var requestObjectCust = {
               customer: JSON.parse(sessionStorage.getItem('customer')),

@@ -25,6 +25,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
   @Input("isDialog") isDialog: boolean = false;
   formData: { [key: string]: any; };
   user: User;
+  isSameEmail = false
 
   constructor(
     private notificationService: NotificationService,
@@ -58,6 +59,13 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
       this.Form.patchValue(this.formData);
     }
 
+    this.f.companyEmail.valueChanges.subscribe(x => {
+      this.isSameEmail = this.f.secondaryCompanyEmail.value == x;
+    })
+    this.f.secondaryCompanyEmail.valueChanges.subscribe(x => {
+      this.isSameEmail = this.f.companyEmail.value == x;
+    })
+
     if (this.isNewMode) this.FormControlDisable()
     else this.Form.disable();
   }
@@ -72,7 +80,10 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
 
 
   FormControlDisable() {
-    if (this.isEditMode) this.Form.get('companyName').disable();
+    if (this.isEditMode) {
+      this.Form.get('companyName').disable();
+      this.Form.get('companyEmail').disable();
+    }
     else this.Form.get('companyName').enable();
   }
 
@@ -126,7 +137,7 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     this.Form.enable();
     let formData = this.Form.value;
     //    if (this.Form.invalid && !this.isDialog) return this.notificationService.showError("Form Invalid", "Error");
-    if (this.Form.invalid) return;
+    if (this.Form.invalid || this.isSameEmail) return;
 
     // if (!this.isDialog) this.CancelEdit();
 

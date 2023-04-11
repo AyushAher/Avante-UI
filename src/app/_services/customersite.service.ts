@@ -31,6 +31,11 @@ export class CustomerSiteService {
     return this.http.post(`${this.environment.apiUrl}/Site`, customerSite);
   }
 
+
+  CheckSite(site: any) {
+    return this.http.post(`${this.environment.apiUrl}/Site/CheckSite`, site);
+  }
+
   getAll() {
     return this.http.get<CustomerSite[]>(`${this.environment.apiUrl}/Site`);
   }

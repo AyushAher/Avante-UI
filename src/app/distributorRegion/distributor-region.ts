@@ -236,12 +236,13 @@ export class DistributorRegionComponent implements OnInit {
     if (this.distributorRegionId == null) {
       this.distributorRegionService.CheckIsExisting(this.distRegion)
         .subscribe((data: any) => {
-          this.distributorRegionId = Guid.create().toString()
-          this.distRegion.id = this.distributorRegionId
           if (data) {
-            this.notificationService.showInfo("Region in the with same country exists.", "Info")
+            this.notificationService.showInfo("Region with the same country exists.", "Info")
             return;
           }
+          
+          this.distributorRegionId = Guid.create().toString()
+          this.distRegion.id = this.distributorRegionId
           sessionStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));
 
           if (this.isNewSetup) {

@@ -322,8 +322,8 @@ export class MasterListItemComponent implements OnInit {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.itemList = data.object;
 
-              this.masterlistitemform.get("itemname").setValue('');
-              this.masterlistitemform.get("code").setValue('');
+              this.masterlistitemform.get("itemname").reset();
+              this.masterlistitemform.get("code").reset();
             }
             else {
 

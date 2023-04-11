@@ -43,13 +43,14 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.loaderService.requestEnded()
             }
         }, (err: HttpErrorResponse) => {
+            debugger;
             if ([401, 403].includes(err.status) && this.accountService.userValue) {
                 // auto logout if 401 or 403 response returned from api
                 this.accountService.logout();
 
                 //stop spinner
                 this.loaderService.requestEnded()
-                this.notificationService.showError("Some Error Occured. Please Login again.", "Error")
+                this.notificationService.showError(err.error?.ResultMessage || "Some error ocurred. Please contact system administrator.", "Error")
             }
 
             //stop spinner
@@ -57,7 +58,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
             const error = err.error?.message || err.statusText;
             console.error(err);
-            this.notificationService.showError("Some error ocurred. Please contact system administrator.", "Error")
+            this.notificationService.showError(err.error?.ResultMessage || "Some error ocurred. Please contact system administrator.", "Error")
         }
         ))
 

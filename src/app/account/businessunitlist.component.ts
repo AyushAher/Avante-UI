@@ -70,6 +70,7 @@ export class BusinessUnitListComponent implements OnInit {
                 editable: false,
                 sortable: true,
                 tooltipField: 'companyName',
+                width: "650"
             },
             {
                 headerName: 'Business Unit',
@@ -77,7 +78,7 @@ export class BusinessUnitListComponent implements OnInit {
                 filter: true,
                 sortable: true,
                 tooltipField: "businessUnitName",
-                // width: "1000"
+                width: "640"
             },
         ]
     }
@@ -85,7 +86,7 @@ export class BusinessUnitListComponent implements OnInit {
     onGridReady(params): void {
         this.api = params.api;
         this.columnApi = params.columnApi;
-        this.api.sizeColumnsToFit();
+        // this.api.sizeColumnsToFit();
     }
 
 }

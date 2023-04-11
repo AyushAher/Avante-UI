@@ -62,8 +62,8 @@ export class DistributorRegionListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          this.distributorName = data.object.distname
-          this.distributorModel = data.object.regions;
+          this.distributorName = data.object?.distname
+          this.distributorModel = data.object?.regions || [];
         },
         error: () => {
           //this.alertService.error(error);

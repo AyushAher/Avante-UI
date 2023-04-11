@@ -71,6 +71,7 @@ export class BrandListComponent implements OnInit {
                 editable: false,
                 sortable: true,
                 tooltipField: 'companyName',
+                width: "450"
             },
             {
                 headerName: 'Business Unit',
@@ -80,6 +81,7 @@ export class BrandListComponent implements OnInit {
                 editable: false,
                 sortable: true,
                 tooltipField: 'businessUnit',
+                width: "440"
             },
             {
                 headerName: 'Brand Name',
@@ -87,7 +89,7 @@ export class BrandListComponent implements OnInit {
                 filter: true,
                 sortable: true,
                 tooltipField: "brandName",
-                width: "800"
+                width: "400"
             },
         ]
     }

@@ -120,6 +120,7 @@ export class AccountService {
     this.login(username, password, companyId, businessUnitId, brandId)
       .pipe(first()).subscribe({
         next: () => {
+          debugger;
           this.currentuser = this.userValue;
           if (this.currentuser.isAdmin) {
             this.router.navigate(["/"],
@@ -177,6 +178,7 @@ export class AccountService {
     this.companyService.GetAllModelData()
       .pipe(first()).subscribe({
         next: (data: any) => {
+          debugger;
           data = data.object;
           if (data == null)
             return this.notificationService.showError("Some Error Occurred. Please Refresh the page.", "Error")

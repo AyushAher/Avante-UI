@@ -74,7 +74,7 @@ export class ContactListComponent implements OnInit {
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
       if (this.type == "DR" || this.type == "D") {
-        let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode  == "SDIST");
+        let profilePermission = this.profilePermission.permissions.filter(x => x.screenCode == "SDIST");
         if (profilePermission.length > 0) {
           this.hasReadAccess = profilePermission[0].read;
           this.hasAddAccess = profilePermission[0].create;
@@ -112,7 +112,7 @@ export class ContactListComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.contactList = data.object.contacts;
+            this.contactList = data.object?.contacts || [];
           },
           error: error => {
             this.loading = false;
@@ -124,7 +124,7 @@ export class ContactListComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.contactList = data.object.contacts;
+            this.contactList = data.object?.contacts || [];
           },
           error: error => {
             this.loading = false;
@@ -137,7 +137,7 @@ export class ContactListComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.contactList = data.object.contacts;
+            this.contactList = data.object?.contacts || [];
           },
           error: error => {
             this.loading = false;
@@ -150,7 +150,7 @@ export class ContactListComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            this.contactList = data.object.contacts;
+            this.contactList = data.object?.contacts || [];
           },
           error: error => {
             this.loading = false;
