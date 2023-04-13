@@ -89,8 +89,6 @@ export class CustomerComponent implements OnInit {
       defdistid: ['', Validators.required],
       industrySegment: ['', Validators.required],
       defdistregionid: ['', Validators.required],
-      isactive: [true],
-      isdeleted: [true],
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: [""],
@@ -100,8 +98,6 @@ export class CustomerComponent implements OnInit {
         zip: ['', Validators.compose([Validators.pattern("^[0-9]{4,15}$"), Validators.minLength(4), Validators.maxLength(15)])],
         geolat: [''],
         geolong: [''],
-        isActive: true,
-        isdeleted: [false],
       }),
     });
 

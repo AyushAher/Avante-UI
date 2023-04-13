@@ -88,14 +88,14 @@ export class ContactComponent implements OnInit {
       fname: ['', [Validators.required, Validators.maxLength(512)]],
       lname: ['', [Validators.required, Validators.maxLength(512)]],
       mname: ['', [Validators.required]],
-      pcontactno: ['', [Validators.required, this.phoneValidator()]],
+      pcontactno: ['', [Validators.required, Validators.pattern("[^a-zA-Z]*")]],
       pemail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
-      scontactno: ['', [Validators.required, this.phoneValidator()]],
+      scontactno: ['', [Validators.required, Validators.pattern("[^a-zA-Z]*")]],
       semail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$"), Validators.required]],
       designationid: ['', [Validators.required, Validators.maxLength(512)]],
       isActive: [true],
       isdeleted: [false],
-      whatsappNo: ['', [Validators.required, this.phoneValidator()]],
+      whatsappNo: ['', [Validators.required, Validators.pattern("[^a-zA-Z]*")]],
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: [''],
@@ -210,23 +210,15 @@ export class ContactComponent implements OnInit {
       switch (this.type) {
         case "CS":
           this.label = "Customer Site"
+          this.customerService.getById(this.detailId).subscribe((data: any) => {
+            if (data.result && data.object) {
+              this.parentEntity = data.object;
+              this.contactform.get('distCustName').setValue(this.parentEntity?.custname);
+              this.distCustName = "Customer";
+              this.contactform.get('parentEntity').setValue(this.parentEntity.custregname);
+            }
+          })
 
-          this.parentEntity = JSON.parse(sessionStorage.getItem('customer'))
-          if (!this.parentEntity) {
-            this.customerService.getById(this.detailId).subscribe((data: any) => {
-              if (data.result && data.object) {
-                this.parentEntity = data.object;
-                this.contactform.get('distCustName').setValue(this.parentEntity?.custname);
-                this.distCustName = "Customer";
-              }
-            })
-          }
-
-          this.contactform.get('distCustName').setValue(this.parentEntity?.custname);
-          this.distCustName = "Customer";
-
-          this.parentEntity = JSON.parse(sessionStorage.getItem('site'))
-          this.contactform.get('parentEntity').setValue(this.parentEntity.custregname);
           break;
         case "DR":
           this.label = "Distributor Region"

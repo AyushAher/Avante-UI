@@ -37,13 +37,14 @@ export class CustomerSiteComponent implements OnInit {
   customerName: string
   PaymentTermsList: any;
   isNewParentMode: boolean;
+  distRegion: any;
+  customer: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
     private countryService: CountryService,
     private distributorRegionservice: DistributorRegionService,
     private customersiteService: CustomerSiteService,
@@ -86,8 +87,6 @@ export class CustomerSiteComponent implements OnInit {
       distid: ['', Validators.required],
       payterms: ['', Validators.required],
       isblocked: false,
-      isactive: true,
-      isdeleted: [false],
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: [""],
@@ -108,10 +107,10 @@ export class CustomerSiteComponent implements OnInit {
 
     this.listTypeService.getById("GPAYT")
       .subscribe((data: any) => this.PaymentTermsList = data);
+
     if (!this.isNewParentMode) {
       this.distributorRegionservice.getDistByCustomerId(this.customerid)
-        .pipe(first())
-        .subscribe({
+        .pipe(first()).subscribe({
           next: (data: any) => {
             this.distRegions = data.object;
           },
@@ -122,21 +121,20 @@ export class CustomerSiteComponent implements OnInit {
       let customer = JSON.parse(sessionStorage.getItem('customer'));
 
       this.distributorRegionservice.getById(customer.defdistregionid)
-        .subscribe({
-          next: (data: any) => {
-            if (data.result && data.object) {
-              this.distRegions = [data.object];
-              this.customersiteform.get('regname').setValue(data.object.region)
-              this.customersiteform.get('payterms').setValue(data.object.payterms)
-            }
-          },
+        .subscribe((data: any) => {
+          if (data.result && data.object) {
+            this.distRegions = [data.object];
+            this.distRegion = data.object;
+            this.customersiteform.get('regname').setValue(data.object.region)
+            this.customersiteform.get('payterms').setValue(data.object.payterms)
+          }
         });
     }
     this.customerService.getAll()
       .subscribe((data: any) => {
         this.customers = data.object;
-        var customer: any = this.customers.find(x => x.id == this.customerid);
-
+        this.customer = this.customers.find(x => x.id == this.customerid);
+        var customer: any = this.customer;
         if (!customer && this.isNewParentMode) {
           customer = JSON.parse(sessionStorage.getItem('customer'));
         }
@@ -203,7 +201,17 @@ export class CustomerSiteComponent implements OnInit {
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.csiteid != null) this.customersiteform.patchValue(this.formData);
-    else this.customersiteform.reset();
+    else {
+      this.customersiteform.reset();
+      setTimeout(() => {
+        this.customersiteform.get('regname').setValue(this.distRegion.region);
+        this.customersiteform.get('payterms').setValue(this.distRegion.payterms);
+
+        if (this.customer.defDistRegion) this.customersiteform.get('regname').setValue(this.customer.defDistRegion)
+        if (this.customer.custname) this.customersiteform.get('custname').setValue(this.customer.custname)
+        if (this.customer.defdistregionid) this.customersiteform.get('distid').setValue(this.customer.defdistregionid)
+      }, 500);
+    }
     this.customersiteform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
