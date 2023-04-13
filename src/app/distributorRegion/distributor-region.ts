@@ -109,7 +109,7 @@ export class DistributorRegionComponent implements OnInit {
 
     this.route.queryParams.subscribe((data) => {
       this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
-      this.isNewParentMode = data.isNewParentMode != null && data.isNewParentMode != undefined && data.isNewParentMode == "true";
+      this.isNewParentMode = data.isNewDist != null && data.isNewDist != undefined && data.isNewDist == "true";
     });
 
     this.destributorRegionform.controls['distid'].setValue(this.distributorId, { onlySelf: true });
@@ -123,18 +123,20 @@ export class DistributorRegionComponent implements OnInit {
         })
     }
     else if (this.isNewParentMode && this.distributorId != null) {
-      var data = JSON.parse(sessionStorage.getItem('distributor'))
-      console.log(data);
-
-      setTimeout(() => {
-        this.distributorName = data.distname;
-        this.destributorRegionform.controls['distName'].setValue(this.distributorName, { onlySelf: true });
-        this.destributorRegionform.controls['distregname'].setValue(data.distname, { onlySelf: true });
-        this.destributorRegionform.controls['region'].setValue(this.countries.find(x => x.id == data.address.countryid)?.formal, { onlySelf: true });
-        this.destributorRegionform.controls['countries'].setValue(data.address.countryid, { onlySelf: true });
-        this.destributorRegionform.controls['payterms'].setValue(data.payterms, { onlySelf: true });
-        this.destributorRegionform.get("address").patchValue(data.address)
-      }, 300);
+      this.distributorService.getById(this.distributorId)
+        .subscribe((data: any) => {
+          if (!data.result) return;
+          data = data.object;
+          setTimeout(() => {
+            this.distributorName = data.distname;
+            this.destributorRegionform.controls['distName'].setValue(this.distributorName, { onlySelf: true });
+            this.destributorRegionform.controls['distregname'].setValue(data.distname, { onlySelf: true });
+            this.destributorRegionform.controls['region'].setValue(this.countries.find(x => x.id == data.address.countryid)?.formal, { onlySelf: true });
+            this.destributorRegionform.controls['countries'].setValue(data.address.countryid, { onlySelf: true });
+            this.destributorRegionform.controls['payterms'].setValue(data.payterms, { onlySelf: true });
+            this.destributorRegionform.get("address").patchValue(data.address)
+          }, 300);
+        })
 
 
     }

@@ -208,7 +208,7 @@ export class DistributorComponent implements OnInit {
           // sessionStorage.setItem("distributor", JSON.stringify(this.distributorModel));
           this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
             queryParams: {
-              isNewSetUp: this.isNewSetUp,
+              isNewDistSetUp: true,
               isNSNav: true
             }
           })

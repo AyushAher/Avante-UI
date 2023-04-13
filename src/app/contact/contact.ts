@@ -59,6 +59,7 @@ export class ContactComponent implements OnInit {
   distCustName;
   distCustNameValue;
   address: any;
+  isNewSetup: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -118,6 +119,7 @@ export class ContactComponent implements OnInit {
 
     this.route.queryParams.subscribe((data) => {
       this.creatingNewDistributor = data.creatingNewDistributor != null && data.creatingNewDistributor != undefined && data.creatingNewDistributor == "true";
+      this.isNewSetup = data.isNewDistSetUp != null && data.isNewDistSetUp != undefined && data.isNewDistSetUp == "true";
     });
 
     if (this.type == "DR" || this.type == "CS") {
@@ -146,7 +148,6 @@ export class ContactComponent implements OnInit {
         }
       }
     }
-
     switch (this.type) {
       case "C":
         this.label = "Customer"
@@ -203,6 +204,52 @@ export class ContactComponent implements OnInit {
           });
         break;
 
+    }
+
+    if (this.isNewSetup) {
+      switch (this.type) {
+        case "CS":
+          this.label = "Customer Site"
+
+          this.parentEntity = JSON.parse(sessionStorage.getItem('customer'))
+          if (!this.parentEntity) {
+            this.customerService.getById(this.detailId).subscribe((data: any) => {
+              if (data.result && data.object) {
+                this.parentEntity = data.object;
+                this.contactform.get('distCustName').setValue(this.parentEntity?.custname);
+                this.distCustName = "Customer";
+              }
+            })
+          }
+
+          this.contactform.get('distCustName').setValue(this.parentEntity?.custname);
+          this.distCustName = "Customer";
+
+          this.parentEntity = JSON.parse(sessionStorage.getItem('site'))
+          this.contactform.get('parentEntity').setValue(this.parentEntity.custregname);
+          break;
+        case "DR":
+          this.label = "Distributor Region"
+          this.parentEntity = JSON.parse(sessionStorage.getItem('distributor'));
+          if (!this.parentEntity) {
+            this.distributorService.getById(this.detailId).subscribe((data: any) => {
+              if (data.result && data.object) {
+                this.parentEntity = data.object;
+                this.distCustName = "Principal Distributor";
+                this.contactform.get('distCustName').setValue(this.parentEntity.distname);
+              }
+            })
+          }
+          else {
+            this.distCustName = "Principal Distributor";
+            this.contactform.get('distCustName').setValue(this.parentEntity.distname);
+          }
+
+          this.parentEntity = JSON.parse(sessionStorage.getItem('distributorRegion'))
+          this.contactform.get('parentEntity').setValue(this.parentEntity.distregname);
+          break;
+
+      }
     }
 
 
@@ -545,7 +592,15 @@ export class ContactComponent implements OnInit {
   }
 
   back(isNSNav) {
-    if (this.type == "D") {
+    if (this.type == "D" && this.isNewSetup) {
+      this.router.navigate(['distributorregion', this.masterId], {
+        queryParams: {
+          isNSNav,
+          isNewDist: true
+        }
+      });
+    }
+    else if (this.type == "D") {
       this.router.navigate(['contactlist', this.type, this.masterId], {
         queryParams: {
           isNSNav,
