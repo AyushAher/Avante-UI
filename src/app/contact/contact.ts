@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { User, Contact, Country, ListTypeItem, ProfileReadOnly, CustomerSite } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import {
@@ -75,7 +75,6 @@ export class ContactComponent implements OnInit {
     private distRegions: DistributorRegionService,
     private customerService: CustomerService
   ) { }
-
   ngOnInit() {
 
     this.user = this.accountService.userValue;
@@ -87,14 +86,14 @@ export class ContactComponent implements OnInit {
       fname: ['', [Validators.required, Validators.maxLength(512)]],
       lname: ['', [Validators.required, Validators.maxLength(512)]],
       mname: ['', [Validators.required]],
-      pcontactno: ['', [Validators.required, Validators.pattern("^[0-9-()+]$")]],
+      pcontactno: ['', [Validators.required, this.phoneValidator()]],
       pemail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
-      scontactno: ['', [Validators.required, Validators.pattern("^[0-9-()+]$")]],
+      scontactno: ['', [Validators.required, this.phoneValidator()]],
       semail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$"), Validators.required]],
       designationid: ['', [Validators.required, Validators.maxLength(512)]],
       isActive: [true],
       isdeleted: [false],
-      whatsappNo: ['', [Validators.required, Validators.pattern("^[0-9-()+]$")]],
+      whatsappNo: ['', [Validators.required, this.phoneValidator()]],
       address: this.formBuilder.group({
         street: ['', Validators.required],
         area: [''],
@@ -370,6 +369,14 @@ export class ContactComponent implements OnInit {
 
   }
 
+  phoneValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const phonePattern = /^\+?\d{1,3}[- ]?\d{3}[- ]?\d{4}$/;
+      const valid = phonePattern.test(control.value);
+      return valid ? null : { 'invalidPhone': { value: control.value } };
+    };
+  }
+  
   EditMode() {
     if (confirm("Are you sure you want to edit the record?")) {
       this.isEditMode = true;
