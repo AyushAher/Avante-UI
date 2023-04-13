@@ -148,28 +148,23 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
   async onSubmit() {
     this.submitted = true;
     this.Form.markAllAsTouched();
+    if (this.Form.invalid) return;
+
     this.Form.enable();
     let formData = this.Form.value;
     this.FormControlDisable();
-    if (this.Form.invalid && this.isDialog) return this.notificationService.showError("Form Invalid", "Error");
-    if (this.Form.invalid) return;
-    //if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
       this.brandService.Save(formData)
         .subscribe((data: any) => {
           var success = data.result;
           if (success) {
-            this.onClose.next({ result: success, object: data.object });
-            if (!this.isDialog) {
-              this.notificationService.showSuccess("Brand saved successfully!", "Success")
-              this.router.navigate(["/brandlist"],
-                {
-                  //relativeTo: this.activeRoute,
-                  queryParams: { isNSNav: true },
-                  //queryParamsHandling: 'merge'
-                });
-            }
+            this.notificationService.showSuccess("Brand saved successfully!", "Success")
+            this.router.navigate(["/brandlist"],
+              {
+                queryParams: { isNSNav: true },
+              });
+
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
         })
@@ -180,16 +175,12 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
         .subscribe((data: any) => {
           var success = data.result;
           if (success) {
-            this.onClose.next({ result: success, object: data.object });
-            if (!this.isDialog) {
-              this.notificationService.showSuccess("Brand updated successfully!", "Success")
-              this.router.navigate(["/brandlist"],
-                {
-                  //relativeTo: this.activeRoute,
-                  queryParams: { isNSNav: true },
-                  //queryParamsHandling: 'merge'
-                });
-            }
+            this.notificationService.showSuccess("Brand updated successfully!", "Success")
+            this.router.navigate(["/brandlist"],
+              {
+                queryParams: { isNSNav: true },
+              });
+
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
         })

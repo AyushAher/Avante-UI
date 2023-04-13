@@ -145,29 +145,23 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     this.submitted = true;
     this.Form.markAllAsTouched();
 
+    if (this.Form.invalid) return;
+
     this.Form.enable();
     let formData = this.Form.value;
     this.FormControlDisable();
-
-    if (this.Form.invalid && this.isDialog) return this.notificationService.showError("Form Invalid", "Error");
-    if (this.Form.invalid) return;
-    //if (!this.isDialog) this.CancelEdit();
 
     if (!this.id) {
       this.businessUnitService.Save(formData)
         .subscribe((data: any) => {
           var success = data.result;
           if (success) {
-            //this.onClose.next({ result: success, object: saveRequest.object });
-            if (!this.isDialog) {
-              this.notificationService.showSuccess("Business Unit created successfully!", "Success")
-              this.router.navigate(["/businessunitlist"],
-                {
-                  //relativeTo: this.activeRoute,
-                  queryParams: { isNSNav: true },
-                  //queryParamsHandling: 'merge'
-                });
-            }
+            this.notificationService.showSuccess("Business Unit created successfully!", "Success")
+            this.router.navigate(["/businessunitlist"],
+              {
+                queryParams: { isNSNav: true },
+              });
+
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
         })
@@ -179,16 +173,13 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
           var success = data.result;
           if (success) {
             this.onClose.next({ result: success, object: data.object });
-            if (!this.isDialog) {
-              this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
-              this.router.navigate(["/businessunitlist"],
-                {
-                  //relativeTo: this.activeRoute,
-                  queryParams: { isNSNav: true },
-                  //queryParamsHandling: 'merge'
-                });
-            }
+            this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
+            this.router.navigate(["/businessunitlist"],
+              {
+                queryParams: { isNSNav: true },
+              });
           }
+
           else this.notificationService.showInfo(data.resultMessage, "Info");
         })
     }
