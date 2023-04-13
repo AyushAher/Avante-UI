@@ -271,14 +271,13 @@ export class CustomerSiteComponent implements OnInit {
 
     if (this.csiteid == null) {
       this.custSite = this.customersiteform.value;
-      
-      this.customersiteService.CheckSite(this.custSite)
-        .subscribe((data: any) => {
-          if (data.result) return this.notificationService.showInfo("The Site for this Customer exists.", "Duplicate Record")
-          this.csiteid = Guid.create().toString();
-          this.custSite.id = this.csiteid;
+      this.csiteid = Guid.create().toString();
+      this.custSite.id = this.csiteid;
 
-          sessionStorage.setItem("site", JSON.stringify(this.custSite));
+      this.customersiteService.save(this.custSite)
+        .subscribe((data: any) => {
+          if (!data.result) return;
+          // sessionStorage.setItem("site", JSON.stringify(this.custSite));
           return this.router.navigate(['contact', this.type, this.customerid, this.csiteid], {
             queryParams: {
               isNewMode: true,

@@ -228,18 +228,13 @@ export class CustomerComponent implements OnInit {
     this.FormControlDisable();
 
     if (this.customerId == null) {
-      this.customerService.CheckCustomer(this.customer)
+      this.customer.id = Guid.create().toString();
+      this.customerService.save(this.customer)
         .subscribe((data: any) => {
-          if (data.result) return this.notificationService.showInfo("The customer for this Principal distributor exists.", "Duplicate Record");
-
-          this.customerId = Guid.create().toString();
-          this.customer.id = this.customerId;
-
-          sessionStorage.setItem("customer", JSON.stringify(this.customer));
-
-          return this.router.navigate([`/contact/${this.type}/${this.customerId}`], {
+          if (!data.result) return;
+          this.router.navigate([`/contact/${this.type}/${this.customer.id}`], {
             queryParams: {
-              isNewMode: true,
+              isNewDistSetUp: true,
               isNSNav: true
             }
           })

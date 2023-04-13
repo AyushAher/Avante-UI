@@ -77,8 +77,8 @@ export class ContactComponent implements OnInit {
     private distRegions: DistributorRegionService,
     private customerService: CustomerService
   ) { }
-  ngOnInit() {
 
+  ngOnInit() {
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
 
@@ -594,6 +594,14 @@ export class ContactComponent implements OnInit {
   back(isNSNav) {
     if (this.type == "D" && this.isNewSetup) {
       this.router.navigate(['distributorregion', this.masterId], {
+        queryParams: {
+          isNSNav,
+          isNewDist: true
+        }
+      });
+    }
+    else if (this.type == "C" && this.isNewSetup) {
+      this.router.navigate(['customersite', this.masterId], {
         queryParams: {
           isNSNav,
           isNewDist: true
