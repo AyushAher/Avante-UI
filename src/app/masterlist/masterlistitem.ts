@@ -284,7 +284,7 @@ export class MasterListItemComponent implements OnInit {
 
       switch (actionType) {
         case "add":
-          this.open(data.listTypeItemId, this.list2[0].listCode);
+          this.open(data.listTypeItemId, this.masterlistitemform.get("listCode").value);
 
         case "edit":
           if (data.isMaster) this.masterlistitemform.get("isEscalationSupervisor").disable()

@@ -55,7 +55,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
 
     let user = this.AccountService.userValue;
     console.log(user);
-    
+
     this.Form.get('companyId').setValue(user.companyId);
     this.Form.get('companyId').disable();
 
@@ -127,7 +127,8 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.Form.patchValue(this.formData);
-    else this.Form.reset();
+    else this.Form.get("businessUnitName").reset();
+
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
