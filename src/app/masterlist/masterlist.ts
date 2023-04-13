@@ -38,13 +38,9 @@ export class MasterListComponent implements OnInit {
   hasAddAccess: boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService,
     private masterlistService: MasterListService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
     private listTypeService: ListTypeService,
   ) {
