@@ -189,7 +189,8 @@ export class DistributorRegionComponent implements OnInit {
     if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.distributorRegionId != null) this.destributorRegionform.patchValue(this.formData);
     else {
-      this.ngOnInit()
+      this.destributorRegionform.get("distid").setValue(this.distributorId)
+      this.destributorRegionform.get("distName").setValue(this.distributorName)
     }
     this.destributorRegionform.disable()
     this.isEditMode = false;
@@ -235,7 +236,8 @@ export class DistributorRegionComponent implements OnInit {
 
     this.distRegion = this.destributorRegionform.value;
 
-    if (this.distributorRegionId == null) {   ``
+    if (this.distributorRegionId == null) {
+      ``
       this.distributorRegionId = Guid.create().toString()
       this.distRegion.id = this.distributorRegionId
       this.distributorRegionService.save(this.distRegion)
