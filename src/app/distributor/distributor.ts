@@ -176,9 +176,7 @@ export class DistributorComponent implements OnInit {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
             this.router.navigate(["distributorlist"], {
-              //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
             });
           }
           else {
@@ -204,22 +202,17 @@ export class DistributorComponent implements OnInit {
       this.distributorModel = this.form.value;
       this.distributorModel.id = this.distributorId;
 
-      sessionStorage.setItem("distributor", JSON.stringify(this.distributorModel));
-
-      if (this.isNewSetUp)
-        return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
-          queryParams: {
-            isNewSetUp: this.isNewSetUp,
-            isNSNav: true
-          }
+      this.distributorService.save(this.distributorModel)
+        .subscribe((data: any) => {
+          if (!data.result) return;
+          // sessionStorage.setItem("distributor", JSON.stringify(this.distributorModel));
+          this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
+            queryParams: {
+              isNewSetUp: this.isNewSetUp,
+              isNSNav: true
+            }
+          })
         });
-
-      else return this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
-        queryParams: {
-          isNewMode: true,
-          isNSNav: true
-        }
-      });
     }
     else {
       this.distributorModel = this.form.value;

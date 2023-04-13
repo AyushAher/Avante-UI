@@ -188,7 +188,9 @@ export class DistributorRegionComponent implements OnInit {
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.distributorRegionId != null) this.destributorRegionform.patchValue(this.formData);
-    else this.destributorRegionform.reset();
+    else {
+      this.ngOnInit()
+    }
     this.destributorRegionform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -233,24 +235,15 @@ export class DistributorRegionComponent implements OnInit {
 
     this.distRegion = this.destributorRegionform.value;
 
-    if (this.distributorRegionId == null) {
-      this.distributorRegionService.CheckIsExisting(this.distRegion)
+    if (this.distributorRegionId == null) {   ``
+      this.distributorRegionId = Guid.create().toString()
+      this.distRegion.id = this.distributorRegionId
+      this.distributorRegionService.save(this.distRegion)
         .subscribe((data: any) => {
-          if (data) {
-            this.notificationService.showInfo("Region with the same country exists.", "Info")
+          if (!data.result) {
             return;
           }
-
-          this.distributorRegionId = Guid.create().toString()
-          this.distRegion.id = this.distributorRegionId
-          sessionStorage.setItem("distributorRegion", JSON.stringify(this.distRegion));
-
-          if (this.isNewSetup) {
-            this.distributorRegionService.SaveRegion();
-            //return this.router.navigate(['profile'], { queryParams: { isNewSetUp: true } });
-            return true;
-          }
-          else return this.router.navigate(['contact', this.type, this.distributorId, this.distRegion.id], {
+          this.router.navigate(['contact', this.type, this.distributorId, this.distRegion.id], {
             queryParams: {
               isNewMode: true,
               isNSNav: true
