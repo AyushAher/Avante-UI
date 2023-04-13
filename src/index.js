@@ -95,7 +95,7 @@ function DistributorDashboardCharts() {
     var oncallLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     var brkdwLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    if (lines.AMC) {
+    if (lines?.AMC) {
       var amcmonths = Object.keys(lines.AMC)?.map(x => Number.parseInt(x));
       amcmonths?.forEach((x) => AMCLineValues[x] = lines.AMC[x])
     }
