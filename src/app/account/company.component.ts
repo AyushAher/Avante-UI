@@ -134,10 +134,11 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     this.submitted = true;
     this.Form.markAllAsTouched();
 
+    if (this.Form.invalid || this.isSameEmail) return;
     this.Form.enable();
     let formData = this.Form.value;
+    this.FormControlDisable()
     //    if (this.Form.invalid && !this.isDialog) return this.notificationService.showError("Form Invalid", "Error");
-    if (this.Form.invalid || this.isSameEmail) return;
 
     // if (!this.isDialog) this.CancelEdit();
 
@@ -145,17 +146,13 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
       this.companyService.Save(formData).subscribe((data: any) => {
         if (data.result) {
           this.onClose.next({ result: data.result, object: data.object });
-          //this.activeModal.hide();
-          if (!this.isDialog) {
-            this.notificationService.showSuccess("Company created successfully", "Success")
-            setTimeout(() => this.router.navigate(["/companylist"],
-              {
-                //relativeTo: this.activeRoute,
-                queryParams: { isNSNav: true },
-                //queryParamsHandling: 'merge'
-              }), 100);
-            return;
-          }
+          this.notificationService.showSuccess("Company created successfully", "Success")
+          setTimeout(() => this.router.navigate(["/companylist"],
+            {
+              queryParams: { isNSNav: true },
+            }), 100);
+          return;
+
         } else {
           this.notificationService.showInfo(data.resultMessage, "Info");
         }
@@ -169,16 +166,12 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
 
       if (success) {
         this.onClose.next({ result: success, object: updateRequest.object });
-        if (!this.isDialog) {
-          this.notificationService.showSuccess("Company Updated successfully", "Success")
-          this.router.navigate(["/companylist"],
-            {
-              //relativeTo: this.activeRoute,
-              queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
-            })
-          return;
-        }
+        this.notificationService.showSuccess("Company Updated successfully", "Success")
+        this.router.navigate(["/companylist"],
+          {
+            queryParams: { isNSNav: true },
+          })
+        return;
       }
 
     }
