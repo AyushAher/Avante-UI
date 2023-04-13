@@ -104,7 +104,7 @@ export class InstrumentComponent implements OnInit {
   isNewMode: boolean;
   siteId: any;
   hasWarrenty: boolean;
-  @ViewChild('baseAmt') baseAmt
+  @ViewChild('baseAmt') baseAmt: any
   baseCurrId: any;
   businessUnitList: any[]
   brandList: any[];
@@ -272,6 +272,7 @@ export class InstrumentComponent implements OnInit {
 
     this.instrumentform.get('currencyId').valueChanges
       .subscribe(value => {
+        if (this.baseAmt == null || this.baseAmt == undefined || this.baseAmt.nativeElement == null || this.baseAmt.nativeElement == undefined) return;
         if (value == this.instrumentform.get('baseCurrencyId').value) {
           this.instrumentform.get('baseCurrencyAmt').setValue(1.00)
           this.baseAmt.nativeElement.disabled = true

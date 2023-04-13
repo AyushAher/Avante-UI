@@ -147,6 +147,7 @@
                 [ngClass]="{ 'is-invalid': f.engcontact.touched && f.engcontact.errors }" />
               <div *ngIf="f.engcontact.touched && f.engcontact.errors" class="invalid-feedback">
                 <div *ngIf="f.engcontact.errors.required">Engineer Contact No is required</div>
+                <div *ngIf="f.engcontact.errors.pattern">Engineer Contact No is required</div>
                 <div *ngIf="f.engcontact.errors?.maxlength">Max length is 10</div>
                 <div *ngIf="f.engcontact.errors?.minlength">Min length is 10</div>
               </div>
