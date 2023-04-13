@@ -39,7 +39,7 @@ export class Accessories implements OnInit {
 
 
     onValueSubmit() {
-        this.submitted = true;
+        this.form.markAllAsTouched();
         if (this.form.invalid) return;
         this.loading = true;
         this.instrumentAccessoryModel = this.form.value;

@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #589b44;color: #fff !important">
-                <h6 class="modal-title" id="modal-basic-title">Cost Of Instrument Ownership</h6>
+                <h6 class="modal-title" id="modal-basic-title">Instrument Accessories</h6>
                 <button type="button" class="close btn" aria-label="Close" data-dismiss="modal" (click)="close()">
                     <i class="fas fa-times" style="color: #fff !important" title="Close"></i>
                 </button>
@@ -14,43 +14,43 @@
                             <div class="col-sm-6 form-group">
                                 <label for="engineername">Accessory Name</label>
                                 <input formControlName="accessoryName" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.accessoryName.errors }" />
+                                    [ngClass]="{ 'is-invalid': f.accessoryName.touched && f.accessoryName.errors }" />
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label for="engineername">Brand Name</label>
                                 <input formControlName="brandName" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.brandName.errors }" />
+                                    [ngClass]="{ 'is-invalid': f.brandName.touched && f.brandName.errors }" />
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label for="engineername">Model Name</label>
                                 <input formControlName="modelName" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.modelName.errors }" />
+                                    [ngClass]="{ 'is-invalid': f.modelName.touched && f.modelName.errors }" />
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label for="engineername">Model Number</label>
                                 <input formControlName="modelNumber" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.modalNumber.errors }" />
+                                    [ngClass]="{ 'is-invalid': f.modelNumber.touched && f.modelNumber.errors }" />
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label for="engineername">Serial Number</label>
                                 <input formControlName="serialNumber" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.serialNumber.errors }" />
+                                    [ngClass]="{ 'is-invalid': f.serialNumber.touched && f.serialNumber.errors }" />
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label for="engineername">Year Of Purchase</label>
                                 <input formControlName="yearOfPurchase" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.yearOfPurchase.errors }" />
+                                    [ngClass]="{ 'is-invalid': f.yearOfPurchase.touched && f.yearOfPurchase.errors }" />
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label for="engineername">Quantity</label>
                                 <input formControlName="quantity" type="number" min="0" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }" />
+                                    [ngClass]="{ 'is-invalid': f.quantity.touched && f.quantity.errors }" />
                             </div>
 
                             <div class="col-sm-6 form-group">
                                 <label for="engineername">Accessory Description</label>
                                 <textarea formControlName="accessoryDescription" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.accessoryDescription.errors }"></textarea>
+                                    [ngClass]="{ 'is-invalid': f.accessoryDescription.touched && f.accessoryDescription.errors }"></textarea>
                             </div>
                         </div>
                     </div>
