@@ -191,8 +191,11 @@ export class DistributorRegionComponent implements OnInit {
     if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.distributorRegionId != null) this.destributorRegionform.patchValue(this.formData);
     else {
-      this.destributorRegionform.get("distid").setValue(this.distributorId)
-      this.destributorRegionform.get("distName").setValue(this.distributorName)
+      this.destributorRegionform.reset();
+      setTimeout(() => {
+        this.destributorRegionform.get("distid").setValue(this.distributorId)
+        this.destributorRegionform.get("distName").setValue(this.distributorName)
+      }, 200);
     }
     this.destributorRegionform.disable()
     this.isEditMode = false;
