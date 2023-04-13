@@ -128,7 +128,11 @@ export class CreateBrandComponent implements OnInit, AfterViewInit {
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.Form.patchValue(this.formData);
-    else this.Form.reset();
+    else {
+      this.Form.get("brandName").reset()
+      this.Form.get("businessUnitId").reset()
+
+    };
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
