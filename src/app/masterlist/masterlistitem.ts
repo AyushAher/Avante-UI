@@ -54,7 +54,6 @@ export class MasterListItemComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private modalService: BsModalService,
-    private environment: EnvService,
   ) { }
 
   ngOnInit() {
@@ -182,18 +181,9 @@ export class MasterListItemComponent implements OnInit {
   //   }
   // }
 
-  open(param: string, code: string) {
-    const initialState = {
-      itemId: param
-    };
-    switch (code) {
-      case "CONTY":
-        this.bsModalRef = this.modalService.show(ModelContentComponent, { initialState });
-        break;
-      case "PMCL":
-        this.bsModalRef = this.modalService.show(PrevchklocpartelementvalueComponent, { initialState });
-        break;
-    }
+  open(param: string) {
+    const initialState = { itemId: param };
+    this.bsModalRef = this.modalService.show(ModelContentComponent, { initialState });
   }
 
   close() {
@@ -284,7 +274,8 @@ export class MasterListItemComponent implements OnInit {
 
       switch (actionType) {
         case "add":
-          this.open(data.listTypeItemId, this.masterlistitemform.get("listCode").value);
+          this.open(data.listTypeItemId);
+          break
 
         case "edit":
           if (data.isMaster) this.masterlistitemform.get("isEscalationSupervisor").disable()
@@ -296,6 +287,7 @@ export class MasterListItemComponent implements OnInit {
           this.masterlistitemform.get("listTypeId").setValue(data.listTypeId);
           this.id = data.listTypeItemId;
           this.code = data.itemCode
+          break;
       }
     }
   };
@@ -309,7 +301,7 @@ export class MasterListItemComponent implements OnInit {
     if (this.masterlistitemform.invalid) {
       return;
     }
-    
+
     this.isSave = true;
     this.loading = true;
 
