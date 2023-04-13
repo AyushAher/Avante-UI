@@ -137,15 +137,11 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
     if (this.Form.invalid || this.isSameEmail) return;
     this.Form.enable();
     let formData = this.Form.value;
-    this.FormControlDisable()
-    //    if (this.Form.invalid && !this.isDialog) return this.notificationService.showError("Form Invalid", "Error");
-
-    // if (!this.isDialog) this.CancelEdit();
+    this.FormControlDisable();
 
     if (!this.id) {
       this.companyService.Save(formData).subscribe((data: any) => {
         if (data.result) {
-          this.onClose.next({ result: data.result, object: data.object });
           this.notificationService.showSuccess("Company created successfully", "Success")
           setTimeout(() => this.router.navigate(["/companylist"],
             {
@@ -165,7 +161,6 @@ export class CreateCompanyComponent implements OnInit, AfterViewInit {
       let success = updateRequest.httpResponceCode == 200;
 
       if (success) {
-        this.onClose.next({ result: success, object: updateRequest.object });
         this.notificationService.showSuccess("Company Updated successfully", "Success")
         this.router.navigate(["/companylist"],
           {
