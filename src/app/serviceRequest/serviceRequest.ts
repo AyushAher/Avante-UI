@@ -806,7 +806,7 @@ export class ServiceRequestComponent implements OnInit {
     this.alertService.clear();
 
     if (this.serviceRequestform.invalid || !this.serviceRequestform.get('subrequesttypeid').value) {
-      return this.notificationService.showError("Please Check Form again", "Error");
+      return;// this.notificationService.showError("Please Check Form again", "Error");
     }
 
     if (this.isGenerateReport != false) return
