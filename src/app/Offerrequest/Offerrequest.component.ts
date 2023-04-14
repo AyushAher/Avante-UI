@@ -590,7 +590,7 @@ export class OfferrequestComponent implements OnInit {
       this.Service.delete(this.id).pipe(first())
         .subscribe((data: any) => {
           if (data.result)
-            this.router.navigate(["offerrequestlist"],{
+            this.router.navigate(["offerrequestlist"], {
               //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
               //queryParamsHandling: 'merge'
@@ -625,9 +625,9 @@ export class OfferrequestComponent implements OnInit {
       if (this.f.payAmt.errors || !this.f.payAmtCurrencyId.value) return this.notificationService.showInfo("Payment Amount is required", "Info")
     }
 
-    if (this.f.stageName.errors) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
+    if (this.f.stageName.errors || !this.f.stageName.value) return this.notificationService.showInfo("Stage Name cannot be empty", "Info")
 
-    if (this.f.stageComments.errors) return this.notificationService.showInfo("Comments cannot be empty", "Info")
+    if (this.f.stageComments.errors || !this.f.stageComments.value) return this.notificationService.showInfo("Comments cannot be empty", "Info")
 
     let hasNoAttachment = false;
 
@@ -1202,7 +1202,7 @@ export class OfferrequestComponent implements OnInit {
           next: (data: any) => {
             if (this.file != null) this.uploadFile(this.file, data.object.id);
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["offerrequestlist"],{
+            this.router.navigate(["offerrequestlist"], {
               //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
               //queryParamsHandling: 'merge'
@@ -1223,7 +1223,7 @@ export class OfferrequestComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (this.file != null) this.uploadFile(this.file, this.id);
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["offerrequestlist"],{
+            this.router.navigate(["offerrequestlist"], {
               //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
               //queryParamsHandling: 'merge'
