@@ -100,22 +100,22 @@ function DistributorDashboardCharts() {
       amcmonths?.forEach((x) => AMCLineValues[x] = lines.AMC[x])
     }
 
-    if (lines.PLAN) {
+    if (lines?.PLAN) {
       var planmonths = Object.keys(lines.PLAN)?.map(x => Number.parseInt(x));
       planmonths?.forEach((x) => PlanLineValues[x] = lines.PLAN[x])
     }
 
-    if (lines.PREV) {
+    if (lines?.PREV) {
       var prevmonths = Object.keys(lines.PREV)?.map(x => Number.parseInt(x));
       prevmonths?.forEach((x) => prevLineValues[x] = lines.PREV[x])
     }
 
-    if (lines.ONCAL) {
+    if (lines?.ONCAL) {
       var oncalmonths = Object.keys(lines.ONCAL)?.map(x => Number.parseInt(x));
       oncalmonths?.forEach((x) => oncallLineValues[x] = lines?.ONCAL[x]);
     }
 
-    if (lines.BRKDW) {
+    if (lines?.BRKDW) {
       var brkdwmonths = Object.keys(lines.BRKDW)?.map(x => Number.parseInt(x));
       brkdwmonths?.forEach((x) => brkdwLineValues[x] = lines?.BRKDW[x]);
     }
