@@ -414,7 +414,7 @@ export class InstrumentComponent implements OnInit {
             setTimeout(() => {
               var brand = this.brandList.find(x => x.brandName == this.user.brand);
               if (brand && this.role == this.enviroment.distRoleCode) this.instrumentform.get("brandId").setValue(brand.id)
-            }, 500);
+            }, 300);
 
 
           })
