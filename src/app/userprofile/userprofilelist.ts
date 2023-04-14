@@ -87,8 +87,9 @@ export class UserProfileListComponent implements OnInit {
     this.userprofileService.getAll().pipe(first())
       .subscribe((data: any) => {
         if (this.role == this.environment.custRoleCode) {
-          var role = JSON.parse(sessionStorage.getItem('roles'))
-          data.object = data.object.filter(x => x.roleId == role[0]?.listTypeItemId);
+          console.log(this.user);
+          console.log(data);
+          data.object = data.object.filter(x => x.entityParentId == this.user.parentId);
         }
         this.userprofileList = data.object
 

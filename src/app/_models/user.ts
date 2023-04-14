@@ -21,8 +21,10 @@ export class User {
   brandId: string
   buId: string
   company: string
-  isAdmin:boolean
-  isSuperAdmin:boolean
+  parentId: string
+  childId: string
+  isAdmin: boolean
+  isSuperAdmin: boolean
 }
 
 export class AuthenticateModel {
