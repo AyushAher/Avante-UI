@@ -87,7 +87,6 @@ export class srcontrevComponent implements OnInit {
       else {
         this.zohoservice.authwithcode(this.zohocode).subscribe({
           next: (data: any) => {
-            debugger;
             //alert(data.access_token);
             sessionStorage.setItem('zohotoken', JSON.stringify(data.object));
             this.accountService.zohoauthSet(data.object);

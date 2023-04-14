@@ -43,7 +43,6 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.loaderService.requestEnded()
             }
         }, (err: HttpErrorResponse) => {
-            debugger;
             if ([401, 403].includes(err.status) && this.accountService.userValue) {
                 // auto logout if 401 or 403 response returned from api
                 this.accountService.logout();

@@ -83,7 +83,6 @@ export class qtsentComponent implements OnInit {
       else {
         this.zohoservice.authwithcode(this.zohocode, "qtsent").subscribe({
           next: (data: any) => {
-            debugger;
             //alert(data.access_token);
             sessionStorage.setItem('zohotoken', JSON.stringify(data.object));
             this.accountService.zohoauthSet(data.object);

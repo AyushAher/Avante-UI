@@ -113,6 +113,13 @@ export class InstrumentComponent implements OnInit {
   accessoriesData: any;
   formData: any;
 
+  purchaseDateGreaterThanManudate: boolean;
+  shipmentDateGreaterThanManudate: boolean;
+  shipmentDateGreaterThanPurchaseDate: boolean;
+  instrumentInsDateGreaterThanManufacturingDate: boolean;
+  instrumentInsDateGreaterThanPurchaseDate: boolean;
+  instrumentInsDateGreaterThanShipmentDate: boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -209,8 +216,67 @@ export class InstrumentComponent implements OnInit {
     });
     this.imageUrl = this.noimageData;
 
+    this.instrumentform.get('dateOfPurchase').valueChanges.subscribe((data) => {
+      var manufDate = this.instrumentform.get('insmfgdt').value;
+      if (manufDate && data)
+        this.purchaseDateGreaterThanManudate = new Date(data) < new Date(manufDate)
+
+      var shipdt = this.instrumentform.get('shipdt').value;
+      if (shipdt && data)
+        this.shipmentDateGreaterThanPurchaseDate = new Date(shipdt) < new Date(data);
+
+      var InstrumentInstDate = this.instrumentform.get('installdt').value;
+      if (InstrumentInstDate && data)
+        this.instrumentInsDateGreaterThanPurchaseDate = new Date(InstrumentInstDate) < new Date(data);
+
+    })
+
+    this.instrumentform.get('insmfgdt').valueChanges.subscribe((data) => {
+      var purchaseDate = this.instrumentform.get('dateOfPurchase').value;
+      if (purchaseDate && data)
+        this.purchaseDateGreaterThanManudate = new Date(data) > new Date(purchaseDate)
+
+      var shipmentDate = this.instrumentform.get('shipdt').value;
+      if (shipmentDate && data)
+        this.shipmentDateGreaterThanManudate = new Date(shipmentDate) > new Date(data)
+
+
+      var InstrumentInstDate = this.instrumentform.get('installdt').value;
+      if (InstrumentInstDate && data)
+        this.instrumentInsDateGreaterThanManufacturingDate = new Date(InstrumentInstDate) < new Date(data);
+
+    })
+
+    this.instrumentform.get('shipdt').valueChanges.subscribe((data) => {
+      var manufDate = this.instrumentform.get('insmfgdt').value;
+      var purchaseDate = this.instrumentform.get('dateOfPurchase').value;
+
+      if (purchaseDate && data)
+        this.shipmentDateGreaterThanPurchaseDate = new Date(purchaseDate) > new Date(data)
+
+      if (!purchaseDate && manufDate && data) {
+        this.shipmentDateGreaterThanManudate = new Date(manufDate) > new Date(data)
+      }
+    })
+
+    this.instrumentform.get("installdt").valueChanges
+      .subscribe((data: any) => {
+
+        var shipmentDate = this.instrumentform.get('shipdt').value;
+        if (shipmentDate && data)
+          this.instrumentInsDateGreaterThanShipmentDate = new Date(shipmentDate) > new Date(data);
+
+        var manufDate = this.instrumentform.get('insmfgdt').value;
+        if (manufDate && data)
+          this.instrumentInsDateGreaterThanManufacturingDate = new Date(manufDate) > new Date(data);
+
+        var purchaseDate = this.instrumentform.get('dateOfPurchase').value;
+        if (purchaseDate && data)
+          this.instrumentInsDateGreaterThanPurchaseDate = new Date(purchaseDate) > new Date(data);
+
+      })
+
     this.instrumentform.get('installby').valueChanges.subscribe((data) => {
-      debugger;
       if (data && data == 0) {
         this.instrumentform.get('installbyOther').setValidators(Validators.required)
         this.instrumentform.get('installbyOther').updateValueAndValidity()
@@ -732,18 +798,12 @@ export class InstrumentComponent implements OnInit {
     //debugger;
     let file = event.target.files;
     if (event.target.files && event.target.files[0]) {
-      //  this.uploadService.upload(file).subscribe(event => { //debugger; });;
       this.uploadService.uploadPdf(file)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            //debugger;
             this.notificationService.showSuccess("File Upload Successfully", "Success");
             this.pdfPath = data.path;
-            //this.pdfFileName = file.name;
-          },
-          error: error => {
-
           }
         });
     }
@@ -769,11 +829,17 @@ export class InstrumentComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     this.alertService.clear();
-    this.instrumentform.markAllAsTouched()
-    // stop here if form is invalid
-    if (this.instrumentform.invalid) {
-      return;
-    }
+    this.instrumentform.markAllAsTouched();
+
+    if (this.instrumentform.invalid ||
+      this.purchaseDateGreaterThanManudate ||
+      this.shipmentDateGreaterThanManudate ||
+      this.shipmentDateGreaterThanPurchaseDate ||
+      this.instrumentInsDateGreaterThanManufacturingDate ||
+      this.instrumentInsDateGreaterThanPurchaseDate ||
+      this.instrumentInsDateGreaterThanShipmentDate
+    ) return;
+
     this.isSave = true;
     this.loading = true;
     this.instrument = this.instrumentform.value;
@@ -813,7 +879,6 @@ export class InstrumentComponent implements OnInit {
       this.instrument.wrntystdt = this.datepipie.transform(GetParsedDate(this.instrument.wrntystdt), 'dd/MM/YYYY')
 
     if (this.id == null) {
-      //debugger;
       this.instrumentService.save(this.instrument)
         .pipe(first())
         .subscribe({
@@ -1216,7 +1281,6 @@ export class InstrumentComponent implements OnInit {
             this.config.configvalueid = data.configValueid;
             this.config.instrumentid = this.id;
             this.config.sparepartid = data.id;
-            debugger;
             if (this.id != null) {
               this.instrumentService.deleteConfig(this.config)
                 .pipe(first())
@@ -1316,7 +1380,6 @@ export class InstrumentComponent implements OnInit {
       switch (actionType) {
         case "remove":
           if (confirm("Are you sure, you want to remove the config type?") == true) {
-            //this.instrumentService.deleteConfig(data.configTypeid, data.configValueid)
             this.fileshareService.delete(data.id)
               .pipe(first())
               .subscribe({
@@ -1328,7 +1391,6 @@ export class InstrumentComponent implements OnInit {
                       .subscribe({
                         next: (data: any) => {
                           this.PdffileData = data.object;
-                          //this.getPdffile(data.object.filePath);
                         },
                       });
                   }

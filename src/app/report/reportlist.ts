@@ -72,8 +72,7 @@ export class ReportListComponent implements OnInit {
       }
       else {
         this.zohoservice.authwithcode(this.zohocode,"reportlist").subscribe({
-          next: (data: any) => {
-            debugger;
+          next: (data: any) => {         
             //alert(data.access_token);
             sessionStorage.setItem('zohotoken', JSON.stringify(data.object));
             this.accountService.zohoauthSet(data.object);

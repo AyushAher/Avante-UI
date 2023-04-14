@@ -87,10 +87,8 @@ export class CustPayComponent implements OnInit {
       else {
         this.zohoservice.authwithcode(this.zohocode).subscribe({
           next: (data: any) => {
-            debugger;
             //alert(data.access_token);
             sessionStorage.setItem('zohotoken', JSON.stringify(data.object));
-            debugger;
             this.accountService.zohoauthSet(data.object);
             this.getinvoice("",1);
           },
@@ -116,7 +114,6 @@ export class CustPayComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          debugger;
           this.AmcList = data.object;
           this.pageData = data.extraObject;
           this.currentpage = this.pageData.page;

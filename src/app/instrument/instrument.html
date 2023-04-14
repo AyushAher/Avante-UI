@@ -101,9 +101,15 @@
               <label for="shipdt">Shipment Date</label>
               <!--<input type="text" formControlName="shipdt" class="form-control" [ngClass]="{ 'is-invalid': f.custid.touched && f.shipdt.errors shipdt}" />-->
               <input formControlName="shipdt" class="form-control" bsDatepicker
-                [ngClass]="{ 'is-invalid': f.shipdt.touched && f.shipdt.errors }">
+                [ngClass]="{ 'is-invalid': f.shipdt.touched && (f.shipdt.errors || shipmentDateGreaterThanPurchaseDate || shipmentDateGreaterThanManudate) }">
               <div *ngIf="f.shipdt.touched && f.shipdt.errors" class="invalid-feedback">
                 <div *ngIf="f.shipdt.errors.required">Shipment Date is required</div>
+              </div>
+              <div class="text-danger" *ngIf="shipmentDateGreaterThanPurchaseDate">
+                The Shipment Date cannot be before than Purchase Date
+              </div>
+              <div class="text-danger" *ngIf="shipmentDateGreaterThanManudate">
+                The Shipment Date cannot be before than Manufacturing Date
               </div>
             </div>
           </div>
@@ -259,6 +265,17 @@
                   <label for="installdt">Instrument Installation<span class="text-danger">*</span></label>
                   <input formControlName="installdt" bsDatepicker class="form-control"
                     [ngClass]="{ 'is-invalid': f.installdt.touched && f.installdt.errors }" />
+                  <div class="text-danger">
+                    <div class="" *ngIf="instrumentInsDateGreaterThanManufacturingDate">
+                      instrument Installation Date cannot be before Manufacturing Date
+                    </div>
+                    <div class="" *ngIf="instrumentInsDateGreaterThanPurchaseDate">
+                      instrument Installation Date cannot be before Purchase Date
+                    </div>
+                    <div class="" *ngIf="instrumentInsDateGreaterThanShipmentDate">
+                      instrument Installation Date cannot be before Shipment Date
+                    </div>
+                  </div>
                   <div *ngIf="f.installdt.touched && f.installdt.errors" class="invalid-feedback">
                     <div *ngIf="f.installdt.errors.required">Instrument Installation is required</div>
                   </div>
@@ -267,6 +284,9 @@
                 <div class="col-md-6 col-sm-6">
                   <label for="dateOfPurchase">Date Of Purchase</label>
                   <input formControlName="dateOfPurchase" bsDatepicker class="form-control" />
+                  <div class="text-danger" *ngIf="purchaseDateGreaterThanManudate">
+                    The purchase date cannot be before manufactured date
+                  </div>
                 </div>
 
               </div>
@@ -277,7 +297,7 @@
             </div>
           </div>
           <div class="row">
-          
+
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Business Unit<span class="text-danger">*</span></label>
               <select formControlName="businessUnitId" class="form-select"
