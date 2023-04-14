@@ -208,7 +208,7 @@ export class AmcComponent implements OnInit {
       edate: ["", Validators.required],
       project: ["", Validators.required],
       servicetype: ["", Validators.required],
-      brand: ["", Validators.required],
+      brand: [""],
       currency: [""],
       zerorate: [0],
       tnc: ["", Validators.required],
