@@ -248,7 +248,7 @@ function DistributorDashboardCharts() {
         labels: ["Installed", "Under Service"],
         datasets: [{
           backgroundColor: barColors,
-          data: [data.instrumnetInstalled, data.instrumnetUnderService]
+          data: [data?.instrumnetInstalled, data?.instrumnetUnderService]
         }]
       },
       options: {

@@ -119,6 +119,7 @@ export class InstrumentComponent implements OnInit {
   instrumentInsDateGreaterThanManufacturingDate: boolean;
   instrumentInsDateGreaterThanPurchaseDate: boolean;
   instrumentInsDateGreaterThanShipmentDate: boolean;
+  role: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -180,7 +181,7 @@ export class InstrumentComponent implements OnInit {
       return;
     }
     else {
-      role = role[0]?.itemCode;
+      this.role = role[0]?.itemCode;
     }
 
     this.instrumentform = this.formBuilder.group({
@@ -389,19 +390,33 @@ export class InstrumentComponent implements OnInit {
       })
 
     this.businessUnitService.GetByCompanyId()
-      .pipe(first()).subscribe((data: any) => this.businessUnitList = data.object)
+      .pipe(first()).subscribe((data: any) => {
+        this.businessUnitList = data.object
+        var businessUnit = this.businessUnitList?.find(x => x.businessUnitName == this.user.bu);
+        if (this.role != this.enviroment.distRoleCode || !businessUnit) return;
+
+        this.instrumentform.get("businessUnitId").setValue(businessUnit.id)
+      })
 
     this.instrumentform.get("businessUnitId").valueChanges
       .subscribe((value: any) =>
         this.brandService.GetByBU(value)
           .pipe(first()).subscribe((data: any) => {
-            this.brandList = [];
+            var brandLst = []
             this.user.brandId?.split(',').forEach(e => {
               if (data.object && data.object.length > 0) {
                 var obj = data.object.find(x => x.id == e);
-                if (obj) this.brandList.push(obj);
+                if (obj) brandLst.push(obj);
               }
             });
+            this.brandList = brandLst;
+
+            setTimeout(() => {
+              var brand = this.brandList.find(x => x.brandName == this.user.brand);
+              if (brand && this.role == this.enviroment.distRoleCode) this.instrumentform.get("brandId").setValue(brand.id)
+            }, 500);
+
+
           })
       )
 
@@ -578,7 +593,16 @@ export class InstrumentComponent implements OnInit {
     if (this.siteId != null || this.siteId != undefined) {
       this.instrumentform.get('custSiteId').disable()
     }
+
     this.instrumentform.get('baseCurrencyId').disable()
+    this.instrumentform.get('baseCurrencyId').disable()
+
+    if (this.role == this.enviroment.distRoleCode) {
+      this.instrumentform.get('businessUnitId').disable()
+      this.instrumentform.get('brandId').disable()
+    }
+
+
 
   }
 
@@ -842,7 +866,9 @@ export class InstrumentComponent implements OnInit {
 
     this.isSave = true;
     this.loading = true;
+    this.instrumentform.enable();
     this.instrument = this.instrumentform.value;
+    this.FormControlDisable();
     this.instrument.image = this.imagePath;
     this.instrument.engcontact = String(this.instrument.engcontact);
     this.instrument.configuration = [];
