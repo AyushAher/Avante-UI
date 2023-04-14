@@ -108,6 +108,7 @@ export class OfferrequestComponent implements OnInit {
   siteList: any[]
   totalStages = 0;
   formData: any;
+  distributorId: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -301,6 +302,7 @@ export class OfferrequestComponent implements OnInit {
     if (this.role == this.environment.distRoleCode) {
       this.DistributorService.getByConId(this.user.contactId).pipe(first())
         .subscribe((data: any) => {
+          this.distributorId = data.object[0]?.id;
           this.form.get('distributorid').setValue(data.object[0]?.id)
           this.form.get('distributorid').clearValidators()
           this.form.get('distributorid').updateValueAndValidity()
@@ -311,11 +313,9 @@ export class OfferrequestComponent implements OnInit {
 
     if (this.id != null) {
       this.Service.getById(this.id)
-        .pipe(first())
-        .subscribe((data: any) => {
+        .pipe(first()).subscribe((data: any) => {
           this.listTypeService.getById("ORQPT")
-            .pipe(first())
-            .subscribe((mstData: any) => {
+            .pipe(first()).subscribe((mstData: any) => {
               this.f.mainCurrencyId.setValue(data.object.airFreightChargesCurr)
 
               this.isCompleted = data.object.isCompleted
@@ -445,31 +445,24 @@ export class OfferrequestComponent implements OnInit {
 
     if (this.hasId) {
       this.SpareQuoteDetService.getPrev(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.listTypeService.getById("SQDTS")
-              .pipe(first())
-              .subscribe({
-                next: (stat: any) => {
-                  this.statusList = stat;
-                  let compStatus = this.statusList.filter(x => x.listTypeItemId == data.object.status)[0]?.itemCode;
-                  if (compStatus != null) {
-                    this.prevNotCompleted = compStatus != this.CompletedId && compStatus != null;
-                  } else {
-                    this.prevNotCompleted = false
-                  }
-                }
-              });
-          }
+        .pipe(first()).subscribe((data: any) => {
+          this.listTypeService.getById("SQDTS")
+            .pipe(first()).subscribe((stat: any) => {
+              this.statusList = stat;
+              let compStatus = this.statusList.filter(x => x.listTypeItemId == data.object.status)[0]?.itemCode;
+              if (compStatus != null) this.prevNotCompleted = compStatus != this.CompletedId && compStatus != null;
+              else this.prevNotCompleted = false
+
+            });
         })
     }
-    this.GetFileList(this.id);
 
+    this.GetFileList(this.id);
 
     if (this.isCompleted) {
       setInterval(() => this.form.disable(), 10);
     }
+
     this.GetSparePartTotal()
 
   }
@@ -510,6 +503,10 @@ export class OfferrequestComponent implements OnInit {
     }
 
     if (setCustomer) this.customerList = data.object;
+
+    setTimeout(() => {
+      this.form.get("customerSiteId").setValue('');
+    }, 200);
   }
 
   GetSparePartTotal() {
@@ -558,8 +555,19 @@ export class OfferrequestComponent implements OnInit {
 
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
-    if (this.id != null) this.form.patchValue(this.formData);
-    else this.form.reset();
+    if (this.id != null && this.hasId) this.form.patchValue(this.formData);
+    else {
+      this.form.reset();
+      this.SetCustomer(true)
+      setTimeout(() => {
+        this.form.get("podate").setValue(this.datepipe.transform(new Date, "dd/MM/YYYY"));
+        this.form.get('distributorid').setValue(this.distributorId)
+        this.form.get('distributorid').clearValidators()
+        this.form.get('distributorid').updateValueAndValidity()
+        this.form.get("baseCurrencyId").setValue(this.baseCurrId)
+        this.form.get("basePCurrencyAmt").setValue(1)
+      }, 350);
+    }
     this.form.disable();
     this.columnDefs = this.createColumnDefsRO();
     this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();

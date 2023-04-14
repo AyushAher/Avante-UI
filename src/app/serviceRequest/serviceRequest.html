@@ -103,10 +103,10 @@
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
-              <label for="serreqdate">Date</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.serreqdate.errors }" readonly class="form-control"
-                formControlName="serreqdate" type="text" />
-              <div *ngIf="submitted && f.serreqdate.errors" class="invalid-feedback">
+              <label for="serreqdate">Date<span class="text-danger">*</span></label>
+              <input [ngClass]="{ 'is-invalid':  f.serreqdate.touched && f.serreqdate.errors }" readonly
+                class="form-control" formControlName="serreqdate" type="text" />
+              <div *ngIf=" f.serreqdate.touched && f.serreqdate.errors" class="invalid-feedback">
                 <div *ngIf="f.serreqdate.errors.required">Date is required</div>
               </div>
             </div>
@@ -142,9 +142,9 @@
             </div>
             <div class="col-md-3 col-sm-3" hidden>
               <label for="sitename">Site Name</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.sitename.errors }" class="form-control"
+              <input [ngClass]="{ 'is-invalid':  f.sitename.touched && f.sitename.errors }" class="form-control"
                 formControlName="sitename" readonly type="text" />
-              <div *ngIf="submitted && f.sitename.errors" class="invalid-feedback">
+              <div *ngIf=" f.sitename.touched && f.sitename.errors" class="invalid-feedback">
                 <div *ngIf="f.sitename.errors.required">siteName is required</div>
               </div>
             </div>
@@ -196,60 +196,60 @@
 
             <div class="col-sm-3">
               <label for="operatorname">Operator Name</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.operatorname.errors }" class="form-control"
+              <input [ngClass]="{ 'is-invalid': f.operatorname.touched && f.operatorname.errors }" class="form-control"
                 formControlName="operatorname" readonly type="text" />
-              <div *ngIf="submitted && f.operatorname.errors" class="invalid-feedback">
+              <div *ngIf="f.operatorname.touched && f.operatorname.errors" class="invalid-feedback">
                 <div *ngIf="f.operatorname.errors.required">operatorName is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="operatornumber">Operator Number</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.operatornumber.errors }" class="form-control"
-                formControlName="operatornumber" readonly type="text" />
-              <div *ngIf="submitted && f.operatornumber.errors" class="invalid-feedback">
+              <input [ngClass]="{ 'is-invalid': f.operatornumber.errors && f.operatornumber.errors }"
+                class="form-control" formControlName="operatornumber" readonly type="text" />
+              <div *ngIf="f.operatornumber.touched && f.operatornumber.errors" class="invalid-feedback">
                 <div *ngIf="f.operatornumber.errors.required">operatorNumber is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="operatoremail">Operator Email</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.operatoremail.errors }" class="form-control"
-                formControlName="operatoremail" readonly type="text" />
-              <div *ngIf="submitted && f.operatoremail.errors" class="invalid-feedback">
+              <input [ngClass]="{ 'is-invalid': f.operatoremail.touched && f.operatoremail.errors }"
+                class="form-control" formControlName="operatoremail" readonly type="text" />
+              <div *ngIf="f.operatoremail.touched && f.operatoremail.errors" class="invalid-feedback">
                 <div *ngIf="f.operatoremail.errors.required">operatoremail is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="machmodelname">Machine Model Name</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.machmodelname.errors }" class="form-control"
-                formControlName="machmodelname" readonly type="text" />
-              <div *ngIf="submitted && f.machmodelname.errors" class="invalid-feedback">
+              <input [ngClass]="{ 'is-invalid':  f.machmodelname.touched && f.machmodelname.errors }"
+                class="form-control" formControlName="machmodelname" readonly type="text" />
+              <div *ngIf="f.machmodelname.touched && f.machmodelname.errors" class="invalid-feedback">
                 <div *ngIf="f.machmodelname.errors.required">machineModelName is required</div>
               </div>
             </div>
 
             <div class="col-md-3 col-sm-3">
               <label for="xraygenerator">xRayGenerator</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.xraygenerator.errors }" class="form-control"
-                formControlName="xraygenerator" readonly type="text" />
-              <div *ngIf="submitted && f.xraygenerator.errors" class="invalid-feedback">
+              <input [ngClass]="{ 'is-invalid': f.xraygenerator.touched && f.xraygenerator.errors }"
+                class="form-control" formControlName="xraygenerator" readonly type="text" />
+              <div *ngIf="f.xraygenerator.touched &&f.xraygenerator.errors" class="invalid-feedback">
                 <div *ngIf="f.xraygenerator.errors?.required">xRayGenerator is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="machengineer">Machine Engineer</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.machengineer.errors }" class="form-control"
+              <input [ngClass]="{ 'is-invalid': f.machengineer.touched && f.machengineer.errors }" class="form-control"
                 formControlName="machengineer" readonly type="text" />
-              <div *ngIf="submitted && f.machengineer.errors" class="invalid-feedback">
+              <div *ngIf="f.machengineer.touched && f.machengineer.errors" class="invalid-feedback">
                 <div *ngIf="f.machengineer.errors?.required">machineengineer is required</div>
               </div>
             </div>
 
 
             <div class="col-md-3 col-sm-3" *ngIf="isAmc">
-              <label for="sdate">Start Date</label>
+              <label for="sdate">Start Date<span class="text-danger" *ngIf="isAmc">*</span></label>
               <input id="sdate" bsDatepicker type="text" formControlName="sdate" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.sdate.errors}" />
-              <div Style="display: block" *ngIf="submitted && f.sdate.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid':f.sdate.touched && f.sdate.errors}" />
+              <div Style="display: block" *ngIf="f.sdate.touched &&f.sdate.errors" class="invalid-feedback">
                 <div *ngIf="f.sdate.errors.required">
                   Start Date is required
                 </div>
@@ -257,10 +257,10 @@
             </div>
 
             <div class="col-md-3 col-sm-3" *ngIf="isAmc">
-              <label for="edate">End Date</label>
+              <label for="edate">End Date<span class="text-danger" *ngIf="isAmc">*</span></label>
               <input id="edate" bsDatepicker type="text" formControlName="edate" class="form-control"
-                [ngClass]="{ ' is -invalid': submitted && f.edate.errors}" />
-              <div Style="display: block" *ngIf="submitted && f.edate.errors" class="invalid-feedback">
+                [ngClass]="{ ' is -invalid': f.edate.touched && f.edate.errors}" />
+              <div Style="display: block" *ngIf="f.edate.touched && f.edate.errors" class="invalid-feedback">
                 <div *ngIf="f.edate.errors.required">
                   End Date is required
                 </div>
@@ -268,7 +268,7 @@
             </div>
 
             <div class="col-sm-3" *ngIf="!isAmc">
-              <label for="breakdowntype">Breakdown Type<span class="text-danger">*</span></label>
+              <label for="breakdowntype">Breakdown Type<span class="text-danger" *ngIf="!isAmc">*</span></label>
               <input [ngClass]="{ 'is-invalid': f.breakdowntype.touched && f.breakdowntype.errors }"
                 class="form-control" formControlName="breakdowntype" type="text" />
               <div *ngIf="f.breakdowntype.touched && f.breakdowntype.errors" class="invalid-feedback">
@@ -283,7 +283,7 @@
                   Is Recurring
                 </label>
               </div>
-              <div *ngIf="submitted && f.isrecurring.errors" class="invalid-feedback">
+              <div *ngIf="f.isrecurring.touched && f.isrecurring.errors" class="invalid-feedback">
                 <div *ngIf="f.isrecurring.errors?.required">isRecurring is required</div>
               </div>
             </div>
@@ -294,7 +294,8 @@
             </div>
 
             <div class="col-sm-3" *ngIf="!isAmc">
-              <label for="breakoccurdetailsid">Breakdown Occurance Details<span class="text-danger">*</span></label>
+              <label for="breakoccurdetailsid">Breakdown Occurance Details<span class="text-danger"
+                  *ngIf="!isAmc">*</span></label>
               <select [ngClass]="{ 'is-invalid': f.breakoccurdetailsid.touched && f.breakoccurdetailsid.errors }"
                 class="form-select" formControlName="breakoccurdetailsid">
                 <!--<option value="0">--All--</option>-->
@@ -307,10 +308,10 @@
               </div>
             </div>
             <div class="col-sm-3" *ngIf="!isAmc">
-              <label for="alarmdetails">Alarm No & Details</label>
-              <textarea [ngClass]="{ 'is-invalid': submitted && f.alarmdetails.errors }" class="form-control"
-                formControlName="alarmdetails" type="text" maxlength="500"></textarea>
-              <div *ngIf="submitted && f.alarmdetails.errors" class="invalid-feedback">
+              <label for="alarmdetails">Alarm No & Details<span class="text-danger" *ngIf="!isAmc">*</span></label>
+              <textarea [ngClass]="{ 'is-invalid': f.alarmdetails.touched && f.alarmdetails.errors }"
+                class="form-control" formControlName="alarmdetails" type="text" maxlength="500"></textarea>
+              <div *ngIf="f.alarmdetails.touched && f.alarmdetails.errors" class="invalid-feedback">
                 <div *ngIf="f.alarmdetails.errors.required">Alarm No & Details is required</div>
               </div>
             </div>
@@ -327,28 +328,28 @@
                 <option value="true">Accepted</option>
               </select>
 
-              <div *ngIf="submitted && f.accepted.errors" class="invalid-feedback">
+              <div *ngIf="f.accepted.touched && f.accepted.errors" class="invalid-feedback">
                 <div *ngIf="f.accepted.errors.required">accepted is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3" *ngIf="!IsEngineerView">
               <label for="serresolutiondate">Resolution Date</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.serresolutiondate.errors }" bsDatepicker
-                class="form-control" formControlName="serresolutiondate" type="text" />
-              <div *ngIf="submitted && f.serresolutiondate.errors" class="invalid-feedback">
+              <input [ngClass]="{ 'is-invalid': f.serresolutiondate.touched && f.serresolutiondate.errors }"
+                bsDatepicker class="form-control" formControlName="serresolutiondate" type="text" />
+              <div *ngIf="f.serresolutiondate.touched && f.serresolutiondate.errors" class="invalid-feedback">
                 <div *ngIf="f.serresolutiondate.errors.required">Resolution is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3" [hidden]="IsCustomerView">
               <label for="requesttypeid">Request Type</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.requesttypeid.errors }" class="form-select"
+              <select [ngClass]="{ 'is-invalid':f.requesttypeid.touched && f.requesttypeid.errors }" class="form-select"
                 formControlName="requesttypeid">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let req of reqtypelist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.requesttypeid.errors" class="invalid-feedback">
+              <div *ngIf="f.requesttypeid.touched && f.requesttypeid.errors" class="invalid-feedback">
                 <div *ngIf="f.requesttypeid.errors.required">reqtype is required</div>
               </div>
             </div>
@@ -366,14 +367,14 @@
 
             <div class="col-sm-3">
               <label for="remarks">Remarks</label>
-              <input [ngClass]="{ 'is-invalid': submitted && f.remarks.errors }" class="form-control"
+              <input [ngClass]="{ 'is-invalid': f.remarks.touched && f.remarks.errors }" class="form-control"
                 formControlName="remarks" type="text" />
-              <div *ngIf="submitted && f.remarks.errors" class="invalid-feedback">
+              <div *ngIf="f.remarks.touched && f.remarks.errors" class="invalid-feedback">
                 <div *ngIf="f.remarks.errors.required">remarks is required</div>
               </div>
             </div>
             <div class="col-sm-3">
-              <label for="currentinstrustatus">Current Instrument Status</label>
+              <label for="currentinstrustatus">Current Instrument Status<span class="text-danger">*</span></label>
               <select [ngClass]="{ 'is-invalid': f.currentinstrustatus.touched && f.currentinstrustatus.errors }"
                 class="form-select" formControlName="currentinstrustatus" type="text">
                 <option *ngFor="let req of instrumentStatus" value={{req.listTypeItemId}}>
@@ -387,26 +388,26 @@
 
             <div class="col-sm-3" *ngIf="!IsCustomerView">
               <label for="stageid">Stage</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.stageid.errors }" class="form-select"
+              <select [ngClass]="{ 'is-invalid':  f.stageid.touched &&  f.stageid.errors }" class="form-select"
                 formControlName="stageid" type="text">
                 <option *ngFor="let req of stagelist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.stageid.errors" class="invalid-feedback">
+              <div *ngIf="f.stageid.touched && f.stageid.errors" class="invalid-feedback">
                 <div *ngIf="f.stageid.errors.required">Stage is required</div>
               </div>
             </div>
 
             <div class="col-sm-3" *ngIf="!IsCustomerView">
-              <label for="currentinstrustatus">Status</label>
-              <select [ngClass]="{ 'is-invalid': submitted && f.statusid.errors }" (change)="Accepted()"
+              <label for="currentinstrustatus">Status<span class="text-danger">*</span></label>
+              <select [ngClass]="{ 'is-invalid': f.statusid.touched  && f.statusid.errors }" (change)="Accepted()"
                 class="form-select" formControlName="statusid" type="text">
                 <option *ngFor="let req of statuslist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
                 </option>
               </select>
-              <div *ngIf="submitted && f.statusid.errors" class="invalid-feedback">
+              <div *ngIf=" f.statusid.touched && f.statusid.errors" class="invalid-feedback">
                 <div *ngIf="f.statusid.errors.required">Status is required</div>
               </div>
             </div>
