@@ -35,6 +35,7 @@ export class UserProfileListComponent implements OnInit {
   IsCustomerView: boolean;
   IsDistributorView: boolean;
   IsEngineerView: boolean;
+  role: any;
 
   constructor(
     private router: Router,
@@ -64,13 +65,13 @@ export class UserProfileListComponent implements OnInit {
     } else {
 
       let role = JSON.parse(sessionStorage.getItem('roles'));
-      role = role[0]?.itemCode;
+      this.role = role[0]?.itemCode;
 
-      if (role == this.environment.custRoleCode) {
+      if (this.role == this.environment.custRoleCode) {
         this.IsCustomerView = true;
         this.IsDistributorView = false;
         this.IsEngineerView = false;
-      } else if (role == this.environment.distRoleCode) {
+      } else if (this.role == this.environment.distRoleCode) {
         this.IsCustomerView = false;
         this.IsDistributorView = true;
         this.IsEngineerView = false;
@@ -85,7 +86,12 @@ export class UserProfileListComponent implements OnInit {
 
     this.userprofileService.getAll().pipe(first())
       .subscribe((data: any) => {
+        if (this.role == this.environment.custRoleCode) {
+          var role = JSON.parse(sessionStorage.getItem('roles'))
+          data.object = data.object.filter(x => x.roleId == role[0]?.listTypeItemId);
+        }
         this.userprofileList = data.object
+
       });
 
     this.columnDefs = this.createColumnDefs();
