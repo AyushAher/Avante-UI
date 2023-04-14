@@ -243,8 +243,11 @@
                 <div class="col-md-6 col-sm-6" *ngIf="hasWarrenty">
                   <label for="wrntystdt">Warranty Start Date</label>
                   <input formControlName="wrntystdt"
-                    [ngClass]="{ 'is-invalid': f.wrntystdt.touched && instrumentform.controls['wrntystdt'].errors}"
+                    [ngClass]="{ 'is-invalid': f.wrntystdt.touched && (instrumentform.controls['wrntystdt'].errors || warrantyStartDateGreaterThanInstallationDate)}"
                     bsDatepicker class="form-control" />
+                  <div class="text-danger" *ngIf="warrantyStartDateGreaterThanInstallationDate">
+                    Start Date should not be before Installation Date
+                  </div>
                   <div class="invalid-feedback">
                     <div *ngIf="instrumentform.controls['wrntystdt'].errors?.required">Warranty Start Date is required
                     </div>

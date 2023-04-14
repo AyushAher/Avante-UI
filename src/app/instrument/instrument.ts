@@ -112,6 +112,7 @@ export class InstrumentComponent implements OnInit {
   bsActionModalRef: BsModalRef;
   accessoriesData: any;
   formData: any;
+  role: any;
 
   purchaseDateGreaterThanManudate: boolean;
   shipmentDateGreaterThanManudate: boolean;
@@ -119,7 +120,8 @@ export class InstrumentComponent implements OnInit {
   instrumentInsDateGreaterThanManufacturingDate: boolean;
   instrumentInsDateGreaterThanPurchaseDate: boolean;
   instrumentInsDateGreaterThanShipmentDate: boolean;
-  role: any;
+  warrantyStartDateGreaterThanInstallationDate: boolean;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -146,13 +148,10 @@ export class InstrumentComponent implements OnInit {
     private brandService: BrandService,
     private instrumentAccessoryService: InstrumentAccessoryService,
   ) {
-
     notificationService.listen().subscribe((data) => {
-
-      this.instrumentAccessoryService.GetByInsId(this.id).subscribe((data: any) => this.accessoriesData = data.object)
-
+      this.instrumentAccessoryService.GetByInsId(this.id)
+        .subscribe((data: any) => this.accessoriesData = data.object)
     })
-
   }
 
   ngOnInit() {
@@ -263,6 +262,10 @@ export class InstrumentComponent implements OnInit {
     this.instrumentform.get("installdt").valueChanges
       .subscribe((data: any) => {
 
+        var wStartDate = this.instrumentform.get("wrntystdt").value;
+        if (wStartDate && data)
+          this.warrantyStartDateGreaterThanInstallationDate = new Date(wStartDate) < new Date(data);
+
         var shipmentDate = this.instrumentform.get('shipdt').value;
         if (shipmentDate && data)
           this.instrumentInsDateGreaterThanShipmentDate = new Date(shipmentDate) > new Date(data);
@@ -288,6 +291,14 @@ export class InstrumentComponent implements OnInit {
       }
 
     })
+
+
+    this.instrumentform.get('wrntystdt').valueChanges
+      .subscribe((data: any) => {
+        var installationDate = this.instrumentform.get("installdt").value;
+        if (installationDate && data)
+          this.warrantyStartDateGreaterThanInstallationDate = new Date(installationDate) > new Date(data);
+      })
 
 
     this.instrumentform.get('warranty').valueChanges
@@ -861,6 +872,7 @@ export class InstrumentComponent implements OnInit {
       this.shipmentDateGreaterThanPurchaseDate ||
       this.instrumentInsDateGreaterThanManufacturingDate ||
       this.instrumentInsDateGreaterThanPurchaseDate ||
+      this.warrantyStartDateGreaterThanInstallationDate ||
       this.instrumentInsDateGreaterThanShipmentDate
     ) return;
 
