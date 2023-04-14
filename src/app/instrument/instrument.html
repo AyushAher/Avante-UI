@@ -277,14 +277,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-4 col-sm-4">
-              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
-              <input type='file' [disabled]="!isEditMode && !isNewMode" id="imageUpload" accept=".png, .jpg, .jpeg"
-                #fileInput (change)="uploadFile(fileInput.files,id)" />
-              <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
-                (click)="removeUploadedFile()"></label>
-            </div>
-
+          
             <div class="col-md-4 col-sm-4">
               <label for="currencyid">Business Unit<span class="text-danger">*</span></label>
               <select formControlName="businessUnitId" class="form-select"
@@ -309,6 +302,13 @@
               <div *ngIf="f.brandId.touched && f.brandId.errors" class="invalid-feedback">
                 <div *ngIf="f.brandId.errors.required">Brand is required</div>
               </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
+              <input type='file' [disabled]="!isEditMode && !isNewMode" id="imageUpload" accept=".png, .jpg, .jpeg"
+                #fileInput (change)="uploadFile(fileInput.files,id)" />
+              <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
+                (click)="removeUploadedFile()"></label>
             </div>
 
           </div>
