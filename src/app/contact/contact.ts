@@ -102,7 +102,7 @@ export class ContactComponent implements OnInit {
         place: ['', Validators.required],
         city: ['', Validators.required],
         countryid: ['', Validators.required],
-        zip: ['', Validators.compose([Validators.pattern("^[0-9]{4,15}$"), Validators.minLength(4), Validators.maxLength(15)])],
+        zip: ['', Validators.compose([Validators.required, Validators.pattern("^[0-9]{4,15}$"), Validators.minLength(4), Validators.maxLength(15)])],
         geolat: [''],
         geolong: [''],
         isActive: [true],
