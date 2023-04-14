@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {
   ConfigPartCombo,
@@ -29,7 +29,6 @@ import {
   SparePartService
 } from '../_services';
 import { DomSanitizer } from "@angular/platform-browser";
-import { HttpEventType } from "@angular/common/http";
 import { AnalyticalTechniqueService } from '../_services/analytical-technique.service';
 import { BusinessUnitService } from '../_services/businessunit.service';
 
@@ -267,6 +266,7 @@ export class SparePartComponent implements OnInit {
 
   getSpareByNo(partNo: string, configType: string, configValue: string) {
     if (!configType || !configValue) return this.notificationService.showInfo("Please select config type and config value to get Spare Part", "Error");
+    if (!partNo) return this.notificationService.showInfo("Please enter Part No.", "Info");
     this.configPartCombo = new ConfigPartCombo;
     this.configPartCombo.configTypeId = configType;
     this.configPartCombo.configValueId = configValue;

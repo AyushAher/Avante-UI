@@ -766,6 +766,7 @@ export class OfferrequestComponent implements OnInit {
   }
 
   AddSpareParts(instrument: any) {
+    if (!instrument) return this.notificationService.showInfo("Please enter Part No.", "Info");
     this.Service.searchByKeyword(instrument, this.form.get("instrumentsList").value.toString())
       .pipe(first()).subscribe({
         next: (data: any) => {

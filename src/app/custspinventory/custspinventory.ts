@@ -252,6 +252,7 @@ export class CustSPInventoryComponent implements OnInit {
 
   onSeearchByPartNo() {
     var partno = this.form.get("SearchPartNo").value
+    if (!partno) return this.notificationService.showInfo("Please enter Part No.", "Info");
     partno = partno.partNo;
     this.getSparePartByPartNo(partno)
   }
@@ -266,7 +267,7 @@ export class CustSPInventoryComponent implements OnInit {
           this.form.get("sparePartId").setValue(data.object.id)
           this.form.get("partNo").setValue(data.object.partno)
           this.form.get("hscCode").setValue(data.object.hscode)
-          this.form.get("SearchPartNo").setValue("")
+          // this.form.get("SearchPartNo").setValue("")
         },
       })
   }
@@ -321,7 +322,8 @@ export class CustSPInventoryComponent implements OnInit {
     // reset alerts on submit
     this.alertService.clear();
     // stop here if form is invalid
-    if (this.form.invalid) return
+    if (!this.form.get("partNo").value) return this.notificationService.showInfo("Please search and select a Spare Part", "Info")
+    if (this.form.invalid) return;
     this.model = this.form.value
     this.model.customerId = this.user.contactId;
 
