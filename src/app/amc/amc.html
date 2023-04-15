@@ -107,6 +107,9 @@
               <div style="display: block" *ngIf="f.edate.touched && f.edate.errors" class="invalid-feedback">
                 <div *ngIf="f.edate.errors.required">End Date is required</div>
               </div>
+              <div class="text-danger" *ngIf="seDateError">
+                End Date should be a date after Start Date
+              </div>
             </div>
 
             <div class="col-md-4 col-sm-4">
@@ -133,8 +136,21 @@
                 </div>
               </div>
             </div>
-
-            <!-- <div class="col-md-4 col-sm-4">
+            <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView && hasId">
+              <label for="PaymentTerms">Payment Terms</label>
+              <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
+                formControlName="paymentTerms">
+                <ng-option *ngFor="let i of payTypes" value="{{i.listTypeItemId}}">{{i.itemname}}</ng-option>
+              </ng-select>
+              <div style="display: block" *ngIf="f.paymentTerms.touched && f.paymentTerms.errors"
+                class="invalid-feedback">
+                <div *ngIf="f.paymentTerms.errors.required">
+                  Payment Terms is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-md-4 col-sm-4">
               <label for="brand">Brand<span class="text-danger">*</span></label>
               <select id="brand" type="text" formControlName="brand" class="form-select"
                 [ngClass]="{ ' is -invalid': f.brand.touched && f.brand.errors}">
@@ -146,7 +162,7 @@
                 <div *ngIf="f.brand.errors.required">Brand is required</div>
               </div>
             </div> -->
-
+          <div class="row">
             <div class="col-md-4 col-sm-4 mt-2">
               <label for="tnc">First Visit Date<span class="text-danger">*</span></label><br />
 
@@ -162,7 +178,8 @@
                 <small style="margin: 0" id="emailHelp" class="form-text text-muted">To</small>
                 <!-- <label style="font-weight: 300;" for="tnc">To<span class="text-danger">*</span></label><br> -->
                 <input type="text" formControlName="firstVisitDateTo" placeholder="To" class="form-control"
-                  [ngClass]="{ ' is -invalid': f.firstVisitDateTo.touched && f.firstVisitDateTo.errors}" bsDatepicker />
+                  [ngClass]="{ ' is -invalid': f.firstVisitDateTo.touched && (f.firstVisitDateTo.errors || ffsDateError || ftsDateError||  ffeDateError || fteDateError )}"
+                  bsDatepicker />
               </div>
 
               <div style="display: block"
@@ -172,7 +189,20 @@
                   First Visit Date is required
                 </div>
               </div>
+              <div class="text-danger" *ngIf="ffsDateError">
+                First Visit From Date should be a date after Start Date
+              </div>
+              <div class="text-danger" *ngIf="ftsDateError">
+                First Visit To Date should be a date after Start Date
+              </div>
+              <div class="text-danger" *ngIf="ffeDateError">
+                First Visit From Date should be a date before End Date
+              </div>
+              <div class="text-danger" *ngIf="fteDateError">
+                First Visit To Date should be a date before End Date
+              </div>
             </div>
+
 
             <div *ngIf="!isOnCall" class="col-md-4 col-sm-4 mt-2">
               <label for="tnc">Second Visit Date<span class="text-danger">*</span></label><br />
@@ -188,7 +218,7 @@
               <div class="mr-2" style="width: 47%; display: inline-block">
                 <small style="margin: 0" id="emailHelp" class="form-text text-muted">To</small>
                 <input type="text" formControlName="secondVisitDateTo" placeholder="To" class="form-control ml-2"
-                  [ngClass]="{ ' is -invalid': f.secondVisitDateTo.touched && f.secondVisitDateTo.errors}"
+                  [ngClass]="{ ' is -invalid': f.secondVisitDateTo.touched && (f.secondVisitDateTo.errors || sfsDateError || stsDateError || steDateError || sfeDateError)}"
                   bsDatepicker />
 
               </div>
@@ -198,6 +228,19 @@
                 <div *ngIf=" (f.secondVisitDateTo.errors.required || f.secondVisitDateFrom.errors.required)">
                   Second Visit Date is required
                 </div>
+              </div>
+
+              <div class="text-danger" *ngIf="sfsDateError">
+                Second Visit From Date should be a date after Start Date
+              </div>
+              <div class="text-danger" *ngIf="stsDateError">
+                Second Visit To Date should be a date after Start Date
+              </div>
+              <div class="text-danger" *ngIf="steDateError">
+                Second Visit From Date should be a date before End Date
+              </div>
+              <div class="text-danger" *ngIf="sfeDateError">
+                Second Visit To Date should be a date before End Date
               </div>
             </div>
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
@@ -236,20 +279,6 @@
                 [ngClass]="{ ' is -invalid': f.tnc.touched && f.tnc.errors}"></textarea>
               <div style="display: block" *ngIf="f.tnc.touched && f.tnc.errors" class="invalid-feedback">
                 <div *ngIf="f.tnc.errors.required">Comments is required</div>
-              </div>
-            </div>
-
-            <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView && hasId">
-              <label for="PaymentTerms">Payment Terms</label>
-              <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
-                formControlName="paymentTerms">
-                <ng-option *ngFor="let i of payTypes" value="{{i.listTypeItemId}}">{{i.itemname}}</ng-option>
-              </ng-select>
-              <div style="display: block" *ngIf="f.paymentTerms.touched && f.paymentTerms.errors"
-                class="invalid-feedback">
-                <div *ngIf="f.paymentTerms.errors.required">
-                  Payment Terms is required
-                </div>
               </div>
             </div>
           </div>
@@ -352,8 +381,7 @@
 
                   <td>
                     <div class="d-flex justify-content-center">
-                      <button type="button" *ngIf="hasUpdateAccess" [disabled]="submitted"
-                        (click)="submitStageData()"
+                      <button type="button" *ngIf="hasUpdateAccess" [disabled]="submitted" (click)="submitStageData()"
                         style="background-color: transparent; color: #5ba146; border: none;">
                         <i class="fas fa-save" style="font-size: 20px;"></i>
                       </button>
@@ -361,11 +389,11 @@
                   </td>
 
                   <td style="width: 250px">
-                    <ng-select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
-                      [virtualScroll]="true" [ngClass]="{'is-invalid':f.stageName.touched && f.stageName.errors }">
-                      <ng-option *ngFor="let i of stagesList" value="{{i.listTypeItemId}}">{{i.itemname}}
-                      </ng-option>
-                    </ng-select>
+                    <select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
+                      class="form-select" [ngClass]="{'is-invalid':f.stageName.touched && f.stageName.errors }">
+                      <option *ngFor="let i of stagesList" value="{{i.listTypeItemId}}">{{i.itemname}}
+                      </option>
+                    </select>
 
                     <div *ngIf="f.stageName.touched && f.stageName.errors" class="invalid-feedback">
                       <div *ngIf="f.stageName.errors.required">
@@ -410,7 +438,7 @@
 
                   <td></td>
                   <td>
-                    <input multiple #stageFiles class="stageFilesList_class" type="file"
+                    <input multiple #stageFiles class="stageFilesList_class" id="fileList" type="file"
                       accept=".pdf, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/pdf"
                       (change)="
                       getfil(stageFiles.files);

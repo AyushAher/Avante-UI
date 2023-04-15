@@ -109,6 +109,7 @@ export class OfferrequestComponent implements OnInit {
   totalStages = 0;
   formData: any;
   distributorId: any;
+  spareOGObj: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -376,6 +377,7 @@ export class OfferrequestComponent implements OnInit {
       this.SparePartsService.getSparePartsByOfferRequestId(this.id)
         .pipe(first())
         .subscribe((data: any) => {
+          this.spareOGObj = data.object
           this.sparePartsList = data.object;
           this.GetSparePartTotal()
           this.api.setRowData(this.sparePartsList);
@@ -555,9 +557,21 @@ export class OfferrequestComponent implements OnInit {
 
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
-    if (this.id != null && this.hasId) this.form.patchValue(this.formData);
+    if (this.id != null && this.hasId) {
+      this.totalStages = this.rowData?.length | 0;
+      this.form.get('stageName').setValue("")
+      this.form.get('stageComments').setValue("")
+      this.form.get('payterms').setValue("")
+      this.form.get('payAmt').setValue(0)
+      this.isPaymentAmt = false;
+      let fileInp = <HTMLInputElement>document.getElementById("fileList")
+      fileInp.value = "";
+      this.sparePartsList = this.spareOGObj;
+      this.form.patchValue(this.formData);
+    }
     else {
       this.form.reset();
+      this.sparePartsList = []
       this.SetCustomer(true)
       setTimeout(() => {
         this.form.get("podate").setValue(this.datepipe.transform(new Date, "dd/MM/YYYY"));

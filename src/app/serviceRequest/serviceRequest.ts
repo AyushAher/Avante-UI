@@ -898,10 +898,12 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequest.engAction = [];
 
       if (this.IsEngineerView && this.serviceRequest.isCritical) this.serviceRequest.isCritical = false;
-
       if (this.serviceRequestform.get('subrequesttypeid').value.length > 0) {
         var selectarray = this.serviceRequestform.get('subrequesttypeid').value;
-        this.serviceRequest.subrequesttypeid = selectarray.map(x => x.itemCode).join(',');
+        this.serviceRequest.subrequesttypeid = selectarray;
+        if (typeof (selectarray) != "string") {
+          this.serviceRequest.subrequesttypeid = selectarray.map(x => x.itemCode).join(',');
+        }
       }
 
       this.serviceRequestService.update(this.serviceRequestId, this.serviceRequest)
@@ -1044,11 +1046,11 @@ export class ServiceRequestComponent implements OnInit {
 
       if (this.isAmc) this.servicereport.problem = 'AMC';
 
-      this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.INS)).length > 0;
-      this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.ANAS)).length > 0;
-      this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.PRMN1)).length > 0;
-      this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.REWK)).length > 0;
-      this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value.filter(x => x.itemCode == this.environment.CRMA)).length > 0;
+      this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.INS)).length > 0;
+      this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.ANAS)).length > 0;
+      this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.PRMN1)).length > 0;
+      this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.REWK)).length > 0;
+      this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.CRMA)).length > 0;
       if (this.customerId != null) {
         this.customerService.getById(this.customerId)
           .pipe(first())

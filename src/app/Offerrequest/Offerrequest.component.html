@@ -364,11 +364,11 @@
                   </td>
 
                   <td style="width: 250px;">
-                    <ng-select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
-                      [virtualScroll]="true" [ngClass]="{'is-invalid':f.stageName.touched && f.stageName.errors }">
-                      <ng-option *ngFor="let i of stagesList" value="{{i.listTypeItemId}}">{{i.itemname}}
-                      </ng-option>
-                    </ng-select>
+                    <select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
+                      class="form-select" [ngClass]="{'is-invalid':f.stageName.touched && f.stageName.errors }">
+                      <option *ngFor="let i of stagesList" value="{{i.listTypeItemId}}">{{i.itemname}}
+                      </option>
+                    </select>
 
                     <div *ngIf="f.stageName.touched && f.stageName.errors" class="invalid-feedback">
                       <div *ngIf="f.stageName.errors.required">Stage Name is required</div>
@@ -420,7 +420,7 @@
 
                   <td></td>
                   <td>
-                    <input multiple #stageFiles class="stageFilesList_class" type="file"
+                    <input multiple #stageFiles id="fileList" class="stageFilesList_class" type="file"
                       accept=".pdf, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/pdf"
                       (change)="
                       getfil(stageFiles.files);

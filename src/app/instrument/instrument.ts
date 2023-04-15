@@ -262,7 +262,7 @@ export class InstrumentComponent implements OnInit {
 
         var purchaseDate = this.instrumentform.get('dateOfPurchase').value;
         this.instrumentInsDateGreaterThanPurchaseDate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) > new Date(data);
-        
+
       })
 
     this.instrumentform.get('installby').valueChanges.subscribe((data) => {
@@ -718,12 +718,10 @@ export class InstrumentComponent implements OnInit {
   }
 
   onDropdownChange(value: string, configvalue: string) {
-    // debugger;
-    if (configvalue == "0") {
-      configvalue = "";
-    }
+    if (!value || !configvalue || configvalue == "0")
+      return this.notificationService.showInfo("Please select Config Type and Config Value", "Info");
+
     if (this.selectedConfigType.length > 0 && this.selectedConfigType.filter(x => x.id == configvalue && x.listTypeItemId == value).length == 0) {
-      // for (let i = 0; i < this.selectedConfigType.length; i++) {
       this.sparePartService.getByConfignValueId(value, configvalue)
         .pipe(first()).subscribe((data: any) => {
           if (data.object.length > 0) {
@@ -742,39 +740,31 @@ export class InstrumentComponent implements OnInit {
             this.instrumentform.get("configvalueid").reset();
           }
         });
-      // }
     }
     else {
       if (this.selectedConfigType.filter(x => x.id == configvalue && x.listTypeItemId == value).length == 0) {
         this.sparePartService.getByConfignValueId(value, configvalue)
-          .pipe(first())
-          .subscribe({
-            next: (data: any) => {
-              if (data.object.length > 0) {
-                if (this.sparePartDetails != null) {
-                  this.sparePartDetails = this.sparePartDetails.concat(data.object);
-                  this.recomandFilter(this.sparePartDetails);
-                }
-                else {
-                  this.sparePartDetails = data.object;
-                  this.recomandFilter(this.sparePartDetails);
-                }
-                for (let i = 0; i < data.object.length; i++) {
-                  let cnfig: ConfigTypeValue;
-                  cnfig = new ConfigTypeValue;
-                  cnfig.id = configvalue;
-                  cnfig.listTypeItemId = value;
-                  cnfig.sparePartId = data.object[i].id;
-                  this.selectedConfigType.push(cnfig);
-                }
-                this.notificationService.showInfo("Spare Parts Added", "Parts Added")
-                this.instrumentform.get("configtypeid").reset();
-                this.instrumentform.get("configvalueid").reset();
+          .pipe(first()).subscribe((data: any) => {
+            if (data.object.length > 0) {
+              if (this.sparePartDetails != null) {
+                this.sparePartDetails = this.sparePartDetails.concat(data.object);
+                this.recomandFilter(this.sparePartDetails);
               }
-            },
-            error: error => {
-
-              this.loading = false;
+              else {
+                this.sparePartDetails = data.object;
+                this.recomandFilter(this.sparePartDetails);
+              }
+              for (let i = 0; i < data.object.length; i++) {
+                let cnfig: ConfigTypeValue;
+                cnfig = new ConfigTypeValue;
+                cnfig.id = configvalue;
+                cnfig.listTypeItemId = value;
+                cnfig.sparePartId = data.object[i].id;
+                this.selectedConfigType.push(cnfig);
+              }
+              this.notificationService.showInfo("Spare Parts Added", "Parts Added")
+              this.instrumentform.get("configtypeid").reset();
+              this.instrumentform.get("configvalueid").reset();
             }
           });
       }

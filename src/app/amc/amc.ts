@@ -98,6 +98,15 @@ export class AmcComponent implements OnInit {
   isOnCall: any = false;
   totalStages = 0;
   formData: any;
+  ffsDateError: boolean;
+  sfsDateError: boolean;
+  stsDateError: boolean;
+  steDateError: boolean;
+  sfeDateError: boolean;
+  ftsDateError: any;
+  fteDateError: any;
+  ffeDateError: any;
+  seDateError: boolean;
 
 
   constructor(
@@ -230,6 +239,26 @@ export class AmcComponent implements OnInit {
     })
 
     this.id = this.route.snapshot.paramMap.get("id");
+
+    this.form.get("secondVisitDateFrom").valueChanges
+      .subscribe(() => this.CheckDates())
+
+    this.form.get("secondVisitDateTo").valueChanges
+      .subscribe(() => this.CheckDates())
+
+    this.form.get("firstVisitDateFrom").valueChanges
+      .subscribe(() => this.CheckDates())
+
+    this.form.get("firstVisitDateTo").valueChanges
+      .subscribe(() => this.CheckDates())
+
+    this.form.get("edate").valueChanges
+      .subscribe(() => this.CheckDates())
+
+    this.form.get("sdate").valueChanges
+      .subscribe(() => this.CheckDates())
+
+
     this.form.get("servicetype").valueChanges
       .subscribe((data: any) => {
         if (this.serviceType == null) return;
@@ -454,8 +483,23 @@ export class AmcComponent implements OnInit {
 
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
-    if (this.id != null) this.form.patchValue(this.formData);
-    else this.form.reset();
+    if (this.hasId) {
+
+      this.totalStages = this.rowData?.length | 0;
+      this.form.get('stageName').setValue("")
+      this.form.get('stageComments').setValue("")
+      this.form.get('payterms').setValue("")
+      this.form.get('payAmt').setValue(0)
+      this.isPaymentAmt = false;
+      this.form.patchValue(this.formData);
+
+      let fileInp = <HTMLInputElement>document.getElementById("fileList")
+      fileInp.value = "";
+    }
+    else {
+      this.instrumentList = []
+      this.form.reset();
+    }
     this.form.disable()
     this.columnDefs = this.createColumnDefsRO();
     this.isEditMode = false;
@@ -497,12 +541,10 @@ export class AmcComponent implements OnInit {
 
     if (!this.f.stageComments.value) return this.notificationService.showInfo("Comments cannot be empty", "Info")
 
-
     let hasNoAttachment = false;
 
     let Attachment = <HTMLInputElement>document.getElementById("stageFilesList_Attachment")
     if (Attachment) hasNoAttachment = Attachment.checked
-
 
     let comments = this.form.get('stageComments').value;
 
@@ -542,7 +584,7 @@ export class AmcComponent implements OnInit {
 
         this.processFile = null;
         this.notificationService.filter("itemadded");
-
+        debugger;
         data.object.forEach(element => {
           element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
         });
@@ -582,6 +624,34 @@ export class AmcComponent implements OnInit {
     this.rowData.sort((a, b) => a.stageIndex - b.stageIndex);
 
   }
+
+  CheckDates() {
+    let seDate = this.DateDiff(this.f.sdate.value, this.f.edate.value)
+    let ffsDate = this.DateDiff(this.f.sdate.value, this.f.firstVisitDateFrom.value)
+    let ftsDate = this.DateDiff(this.f.sdate.value, this.f.firstVisitDateTo.value)
+
+    let ffeDate = this.DateDiff(this.f.firstVisitDateFrom.value, this.f.edate.value)
+    let fteDate = this.DateDiff(this.f.firstVisitDateTo.value, this.f.edate.value)
+
+    let stsDate = this.DateDiff(this.f.sdate.value, this.f.secondVisitDateTo.value)
+    let sfsDate = this.DateDiff(this.f.sdate.value, this.f.secondVisitDateFrom.value)
+
+    let sfeDate = this.DateDiff(this.f.secondVisitDateFrom.value, this.f.edate.value)
+    let steDate = this.DateDiff(this.f.secondVisitDateTo.value, this.f.edate.value)
+
+    this.seDateError = seDate < 0
+    this.ffsDateError = ffsDate < 0
+    this.ftsDateError = ftsDate < 0
+    this.fteDateError = fteDate < 0
+    this.ffeDateError = ffeDate < 0
+
+    this.sfsDateError = !this.isOnCall && sfsDate < 0
+    this.stsDateError = !this.isOnCall && stsDate < 0
+    this.steDateError = !this.isOnCall && steDate < 0
+    this.sfeDateError = !this.isOnCall && sfeDate < 0
+
+  }
+
 
   onstageNameChanged(stage) {
     stage = this.stagesList.find(x => x.listTypeItemId == stage)?.itemCode
