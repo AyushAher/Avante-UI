@@ -153,7 +153,7 @@
                 [ngClass]="{ 'is-invalid': f.engcontact.touched && f.engcontact.errors }" />
               <div *ngIf="f.engcontact.touched && f.engcontact.errors" class="invalid-feedback">
                 <div *ngIf="f.engcontact.errors.required">Engineer Contact No is required</div>
-                <div *ngIf="f.engcontact.errors.pattern">Engineer Contact No is required</div>
+                <div *ngIf="f.engcontact.errors.pattern">Engineer Contact No is invalid</div>
                 <div *ngIf="f.engcontact.errors?.maxlength">Max length is 10</div>
                 <div *ngIf="f.engcontact.errors?.minlength">Min length is 10</div>
               </div>
@@ -270,13 +270,13 @@
                     [ngClass]="{ 'is-invalid': f.installdt.touched && f.installdt.errors }" />
                   <div class="text-danger">
                     <div class="" *ngIf="instrumentInsDateGreaterThanManufacturingDate">
-                      instrument Installation Date cannot be before Manufacturing Date
+                      Instrument Installation Date cannot be before Manufacturing Date
                     </div>
                     <div class="" *ngIf="instrumentInsDateGreaterThanPurchaseDate">
-                      instrument Installation Date cannot be before Purchase Date
+                      Instrument Installation Date cannot be before Purchase Date
                     </div>
                     <div class="" *ngIf="instrumentInsDateGreaterThanShipmentDate">
-                      instrument Installation Date cannot be before Shipment Date
+                      Instrument Installation Date cannot be before Shipment Date
                     </div>
                   </div>
                   <div *ngIf="f.installdt.touched && f.installdt.errors" class="invalid-feedback">

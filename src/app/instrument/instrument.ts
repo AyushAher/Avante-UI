@@ -218,66 +218,51 @@ export class InstrumentComponent implements OnInit {
 
     this.instrumentform.get('dateOfPurchase').valueChanges.subscribe((data) => {
       var manufDate = this.instrumentform.get('insmfgdt').value;
-      if (manufDate && data)
-        this.purchaseDateGreaterThanManudate = new Date(data) < new Date(manufDate)
-
       var shipdt = this.instrumentform.get('shipdt').value;
-      if (shipdt && data)
-        this.shipmentDateGreaterThanPurchaseDate = new Date(shipdt) < new Date(data);
-
       var InstrumentInstDate = this.instrumentform.get('installdt').value;
-      if (InstrumentInstDate && data)
-        this.instrumentInsDateGreaterThanPurchaseDate = new Date(InstrumentInstDate) < new Date(data);
+
+      this.purchaseDateGreaterThanManudate = (manufDate && data) && new Date(data) < new Date(GetParsedDate(manufDate))
+      this.shipmentDateGreaterThanPurchaseDate = (shipdt && data) && new Date(GetParsedDate(shipdt)) < new Date(data);
+      this.instrumentInsDateGreaterThanPurchaseDate = (InstrumentInstDate && data) && new Date(GetParsedDate(InstrumentInstDate)) < new Date(data);
 
     })
 
     this.instrumentform.get('insmfgdt').valueChanges.subscribe((data) => {
       var purchaseDate = this.instrumentform.get('dateOfPurchase').value;
-      if (purchaseDate && data)
-        this.purchaseDateGreaterThanManudate = new Date(data) > new Date(purchaseDate)
-
       var shipmentDate = this.instrumentform.get('shipdt').value;
-      if (shipmentDate && data)
-        this.shipmentDateGreaterThanManudate = new Date(shipmentDate) > new Date(data)
-
-
       var InstrumentInstDate = this.instrumentform.get('installdt').value;
-      if (InstrumentInstDate && data)
-        this.instrumentInsDateGreaterThanManufacturingDate = new Date(InstrumentInstDate) < new Date(data);
+
+      this.purchaseDateGreaterThanManudate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) < new Date(data)
+      this.shipmentDateGreaterThanManudate = (shipmentDate && data) && new Date(GetParsedDate(shipmentDate)) < new Date(data)
+      this.instrumentInsDateGreaterThanManufacturingDate = (InstrumentInstDate && data) && new Date(GetParsedDate(InstrumentInstDate)) < new Date(data);
 
     })
 
     this.instrumentform.get('shipdt').valueChanges.subscribe((data) => {
       var manufDate = this.instrumentform.get('insmfgdt').value;
       var purchaseDate = this.instrumentform.get('dateOfPurchase').value;
+      var installDate = this.instrumentform.get('installdt').value;
 
-      if (purchaseDate && data)
-        this.shipmentDateGreaterThanPurchaseDate = new Date(purchaseDate) > new Date(data)
-
-      if (!purchaseDate && manufDate && data) {
-        this.shipmentDateGreaterThanManudate = new Date(manufDate) > new Date(data)
-      }
+      this.shipmentDateGreaterThanPurchaseDate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) > new Date(data)
+      this.shipmentDateGreaterThanManudate = (manufDate && data) && new Date(GetParsedDate(manufDate)) > new Date(data)
+      this.instrumentInsDateGreaterThanShipmentDate = (installDate && data) && new Date(GetParsedDate(installDate)) < new Date(data)
     })
 
     this.instrumentform.get("installdt").valueChanges
       .subscribe((data: any) => {
 
         var wStartDate = this.instrumentform.get("wrntystdt").value;
-        if (wStartDate && data)
-          this.warrantyStartDateGreaterThanInstallationDate = new Date(wStartDate) < new Date(data);
+        this.warrantyStartDateGreaterThanInstallationDate = (wStartDate && data) && new Date(GetParsedDate(wStartDate)) < new Date(data);
 
         var shipmentDate = this.instrumentform.get('shipdt').value;
-        if (shipmentDate && data)
-          this.instrumentInsDateGreaterThanShipmentDate = new Date(shipmentDate) > new Date(data);
+        this.instrumentInsDateGreaterThanShipmentDate = (shipmentDate && data) && new Date(GetParsedDate(shipmentDate)) > new Date(data);
 
         var manufDate = this.instrumentform.get('insmfgdt').value;
-        if (manufDate && data)
-          this.instrumentInsDateGreaterThanManufacturingDate = new Date(manufDate) > new Date(data);
+        this.instrumentInsDateGreaterThanManufacturingDate = (manufDate && data) && new Date(GetParsedDate(manufDate)) > new Date(data);
 
         var purchaseDate = this.instrumentform.get('dateOfPurchase').value;
-        if (purchaseDate && data)
-          this.instrumentInsDateGreaterThanPurchaseDate = new Date(purchaseDate) > new Date(data);
-
+        this.instrumentInsDateGreaterThanPurchaseDate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) > new Date(data);
+        
       })
 
     this.instrumentform.get('installby').valueChanges.subscribe((data) => {
@@ -296,8 +281,7 @@ export class InstrumentComponent implements OnInit {
     this.instrumentform.get('wrntystdt').valueChanges
       .subscribe((data: any) => {
         var installationDate = this.instrumentform.get("installdt").value;
-        if (installationDate && data)
-          this.warrantyStartDateGreaterThanInstallationDate = new Date(installationDate) > new Date(data);
+        this.warrantyStartDateGreaterThanInstallationDate = (installationDate && data) && new Date(GetParsedDate(installationDate)) > new Date(data);
       })
 
 
@@ -312,6 +296,7 @@ export class InstrumentComponent implements OnInit {
           }
           this.instrumentform.get('wrntystdt').setValidators([Validators.required]);
           this.instrumentform.get('wrntystdt').updateValueAndValidity();
+          this.instrumentform.get('wrntystdt').setValue(this.f.installdt.value);
           this.instrumentform.get('wrntyendt').setValidators([Validators.required]);
           this.instrumentform.get('wrntyendt').updateValueAndValidity();
           this.instrumentform.get('shipdt').setValidators([Validators.required]);
@@ -322,6 +307,7 @@ export class InstrumentComponent implements OnInit {
           this.instrumentform.get('engcontact').updateValueAndValidity();
         } else {
           this.instrumentform.get('wrntystdt').disable();
+          this.instrumentform.get('wrntystdt').reset();
           this.instrumentform.get('wrntyendt').disable();
           this.instrumentform.get('wrntystdt').clearValidators();
           this.instrumentform.get('wrntystdt').updateValueAndValidity();
@@ -442,59 +428,52 @@ export class InstrumentComponent implements OnInit {
 
     if (this.id != null) {
       this.instrumentService.getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.customerSiteService.getById(data.object.custSiteId)
-              .pipe(first())
-              .subscribe((dataa: any) => {
-                this.contactList = dataa.object.contacts;
-              });
-
-            if (data.object.image == null) this.imageUrl = this.noimageData;
-            else {
-              this.imageUrl = "data:image/jpeg;base64, " + data.object.image;
-              this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
-            }
-
-
-            this.fileshareService.list(data.object.id)
-              .pipe(first())
-              .subscribe({
-                next: (data: any) => {
-                  this.attachments = data.object;
-                },
-              });
-
-            this.hasWarrenty = data.object.warranty
-            setTimeout(() => {
-              this.formData = data.object;
-              this.instrumentform.patchValue(this.formData);
-            }, 700);
-
-            this.sparePartDetails = data.object.spartParts;
-
-            this.recomandFilter(this.sparePartDetails);
-            for (let i = 0; i < data.object.spartParts.length; i++) {
-
-              if (this.selectedConfigType.filter(x =>
-                x.id == data.object.spartParts[i].configValueid
-                && x.listTypeItemId == data.object.spartParts[i].configTypeid
-                && x.sparePartId == data.object.spartParts[i].id).length == 0
-              ) {
-                let cnfig: ConfigTypeValue;
-                cnfig = new ConfigTypeValue;
-                cnfig.id = data.object.spartParts[i].configValueid;
-                cnfig.listTypeItemId = data.object.spartParts[i].configTypeid;
-                cnfig.sparePartId = data.object.spartParts[i].id;
-                cnfig.insqty = data.object.spartParts[i].insQty;
-                this.selectedConfigType.push(cnfig);
-              }
-            }
-            this.instrumentform.setValue({
-              shipdt: new Date(data.object?.shipdt)
+        .pipe(first()).subscribe((data: any) => {
+          this.customerSiteService.getById(data.object.custSiteId)
+            .pipe(first())
+            .subscribe((dataa: any) => {
+              this.contactList = dataa.object.contacts;
             });
 
+          if (data.object.image == null) this.imageUrl = this.noimageData;
+          else {
+            this.imageUrl = "data:image/jpeg;base64, " + data.object.image;
+            this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
+          }
+
+
+          this.fileshareService.list(data.object.id)
+            .pipe(first())
+            .subscribe({
+              next: (data: any) => {
+                this.attachments = data.object;
+              },
+            });
+
+          this.hasWarrenty = data.object.warranty
+          setTimeout(() => {
+            this.formData = data.object;
+            this.instrumentform.patchValue(this.formData);
+          }, 700);
+
+          this.sparePartDetails = data.object.spartParts;
+
+          this.recomandFilter(this.sparePartDetails);
+          for (let i = 0; i < data.object.spartParts.length; i++) {
+
+            if (this.selectedConfigType.filter(x =>
+              x.id == data.object.spartParts[i].configValueid
+              && x.listTypeItemId == data.object.spartParts[i].configTypeid
+              && x.sparePartId == data.object.spartParts[i].id).length == 0
+            ) {
+              let cnfig: ConfigTypeValue;
+              cnfig = new ConfigTypeValue;
+              cnfig.id = data.object.spartParts[i].configValueid;
+              cnfig.listTypeItemId = data.object.spartParts[i].configTypeid;
+              cnfig.sparePartId = data.object.spartParts[i].id;
+              cnfig.insqty = data.object.spartParts[i].insQty;
+              this.selectedConfigType.push(cnfig);
+            }
           }
         });
 
@@ -709,35 +688,32 @@ export class InstrumentComponent implements OnInit {
 
   getInstrBySerialNo(serialNo: string) {
     //debugger;
-    this.instrumentService.searchByKeyword(serialNo, this.instrumentform.get('custSiteId').value)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          data = data.object[0];
-          this.formData = data.object;
-          this.instrumentform.patchValue(this.formData);
-          this.sparePartDetails = data?.spartParts;
-          this.recomandFilter(this.sparePartDetails);
-          for (let i = 0; i < data.spartParts.length; i++) {
-            if (this.selectedConfigType?.filter(x => x.id == data.spartParts[i].configValueid && x.listTypeItemId == data.spartParts[i].configTypeid
-              && x.sparePartId == data.spartParts[i].id).length == 0) {
-              let cnfig: ConfigTypeValue;
-              cnfig = new ConfigTypeValue;
-              cnfig.id = data.spartParts[i].configValueid;
-              cnfig.listTypeItemId = data.spartParts[i].configTypeid;
-              cnfig.sparePartId = data.spartParts[i].id;
-              cnfig.insqty = data.spartParts[i].insQty;
-              this.selectedConfigType.push(cnfig);
-            }
-          }
-          this.instrumentform.setValue({
-            shipdt: new Date(data.object.shipdt)
-          });
-        },
-        error: error => {
 
-          this.loading = false;
+    if (!serialNo || !this.instrumentform.get('custSiteId').value)
+      return this.notificationService.showInfo("Please select Site and enter Serial No.", "Info");
+
+    this.instrumentService.searchByKeyword(serialNo, this.instrumentform.get('custSiteId').value)
+      .pipe(first()).subscribe((data: any) => {
+        data = data.object[0];
+        this.formData = data;
+        this.instrumentform.patchValue(this.formData);
+        this.sparePartDetails = data?.spartParts;
+        this.recomandFilter(this.sparePartDetails);
+        for (let i = 0; i < data.spartParts.length; i++) {
+          if (this.selectedConfigType?.filter(x => x.id == data.spartParts[i].configValueid && x.listTypeItemId == data.spartParts[i].configTypeid
+            && x.sparePartId == data.spartParts[i].id).length == 0) {
+            let cnfig: ConfigTypeValue;
+            cnfig = new ConfigTypeValue;
+            cnfig.id = data.spartParts[i].configValueid;
+            cnfig.listTypeItemId = data.spartParts[i].configTypeid;
+            cnfig.sparePartId = data.spartParts[i].id;
+            cnfig.insqty = data.spartParts[i].insQty;
+            this.selectedConfigType.push(cnfig);
+          }
         }
+        this.instrumentform.setValue({
+          shipdt: new Date(data.object?.shipdt)
+        })
       });
   }
 
