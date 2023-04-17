@@ -13,9 +13,9 @@ function CustomerDashboardCharts() {
     $('#pendingSerReqContainer').append('<canvas id="pendingSerReq" style="width:100%;max-width:600px;height: 236px !important;"></canvas>');
 
 
-    let sReqType = JSON.parse(localStorage.getItem("servicerequesttype"));
-    let pendingServiceRequest = JSON.parse(localStorage.getItem("pendingservicerequest"));
-    let poCost = JSON.parse(localStorage.getItem("costData"))
+    let sReqType = JSON.parse(sessionStorage.getItem("servicerequesttype"));
+    let pendingServiceRequest = JSON.parse(sessionStorage.getItem("pendingservicerequest"));
+    let poCost = JSON.parse(sessionStorage.getItem("costData"))
 
     new Chart(document.getElementById('poCharts').getContext("2d"), {
       type: "bar",
@@ -86,7 +86,7 @@ function CustomerDashboardCharts() {
 // distdashboard
 function DistributorDashboardCharts() {
   setTimeout(() => {
-    var lines = JSON.parse(localStorage.getItem('lines'));
+    var lines = JSON.parse(sessionStorage.getItem('lines'));
     var xLineValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     var prevLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -193,7 +193,7 @@ function DistributorDashboardCharts() {
     $('#serviceRequestRaised').remove(); // this is my <canvas> element
     $('#serviceRequestRaisedContainer').append('<canvas id="serviceRequestRaised" class="engineerChart"></canvas>');
     let instrumentWithHighestServiceRequest = JSON.parse(
-      localStorage.getItem("instrumentWithHighestServiceRequest")
+      sessionStorage.getItem("instrumentWithHighestServiceRequest")
     );
 
     var ctx = document.getElementById("serviceRequestRaised").getContext("2d");
@@ -241,7 +241,7 @@ function DistributorDashboardCharts() {
 
     var ctx = document.getElementById("instrumentsChart").getContext("2d");
 
-    var data = JSON.parse(localStorage.getItem('instrumentData'))
+    var data = JSON.parse(sessionStorage.getItem('instrumentData'))
     var myChart = new Chart(ctx, {
       type: "bar",
       data: {
@@ -278,7 +278,7 @@ function DistributorDashboardCharts() {
 
     });
 
-    var customerData = JSON.parse(localStorage.getItem('customerrevenue'))
+    var customerData = JSON.parse(sessionStorage.getItem('customerrevenue'))
     // Donut Chart
     var datapie = {
       labels: [...customerData?.map(x => x.customer.custname)],
@@ -332,8 +332,8 @@ function EngDashboardCharts() {
   $('#pendingSerReq').remove(); // this is my <canvas> element
   $('#pendingSerReqContainer').append('<canvas id="pendingSerReq" class="chart-canvas" height="170"><canvas>');
 
-  var pendingSerReq = JSON.parse(localStorage.getItem("pendingSerReq"))
-  var compSerReq = JSON.parse(localStorage.getItem("compSerReq"))
+  var pendingSerReq = JSON.parse(sessionStorage.getItem("pendingSerReq"))
+  var compSerReq = JSON.parse(sessionStorage.getItem("compSerReq"))
 
   new Chart("compSerReq", {
     type: "doughnut",
