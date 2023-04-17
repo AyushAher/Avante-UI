@@ -424,8 +424,10 @@ export class DashboardComponent implements OnInit {
           .subscribe({
             next: (data: any) => {
               if (data.result) {
-                this.ngOnInit()
-                this.notificationService.showSuccess(data.resultMessage, "Success")
+                setTimeout(() => {
+                  this.ngOnInit();
+                  this.notificationService.showSuccess(data.resultMessage, "Success")
+                }, 2000);
               }
             }
           })
