@@ -210,8 +210,12 @@ export class CountryComponent implements OnInit {
           next: (data: ResultMsg) => {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.CancelEdit();
-              // this.router.navigate(['countrylist']); 
+              //this.CancelEdit();
+               this.router.navigate(['countrylist'], {
+                queryParams: {
+                  isNSNav: true
+                }
+              }); 
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "Info");
@@ -229,7 +233,11 @@ export class CountryComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.countryform.disable();
-              this.router.navigate(['countrylist']);
+              this.router.navigate(['countrylist'], {
+                queryParams: {
+                  isNSNav: true
+                }
+              });
             }
             else {
               this.notificationService.showInfo(data.resultMessage, "Info");

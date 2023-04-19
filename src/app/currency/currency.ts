@@ -67,7 +67,7 @@ export class CurrencyComponent implements OnInit {
     this.currencyform = this.formBuilder.group({
       code: ['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[a-zA-Z ]*$')]],
       name: ['', [Validators.required, Validators.maxLength(256), Validators.pattern('^[a-zA-Z ]*$')]],
-      minor_Unit: ['', [Validators.required, Validators.min(0), Validators.max(99999), Validators.pattern('^[a-zA-Z ]*$')]],
+      minor_Unit: ['', [Validators.required, Validators.min(0), Validators.max(99999)]],
       n_Code: ['', [Validators.min(0), Validators.max(99999)]],
       symbol: [''],
       isdeleted: [false],
@@ -173,12 +173,12 @@ export class CurrencyComponent implements OnInit {
         .pipe(first()).subscribe((data: ResultMsg) => {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.CancelEdit();
-            // this.router.navigate(['currencylist'],{
-            //relativeTo: this.activeRoute,
-            //   queryParams: { isNSNav: true },
-            //   //queryParamsHandling: 'merge'
-            // });
+            //this.CancelEdit();
+             this.router.navigate(['currencylist'], {
+              queryParams: {
+                isNSNav: true
+              }
+            });            
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
         });
@@ -190,9 +190,9 @@ export class CurrencyComponent implements OnInit {
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(['currencylist'], {
-              //relativeTo: this.activeRoute,
-              queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
+              queryParams: {
+                isNSNav: true
+              }
             });
           }
           else this.notificationService.showInfo(data.resultMessage, "Info");
