@@ -97,9 +97,7 @@ export class DistributordashboardComponent implements OnInit {
 
   CriticalSerReq() {
     this.router.navigate(["/servicerequestlist"], {
-      //relativeTo: this.activeRoute,
       queryParams: { isNSNav: true },
-      //queryParamsHandling: 'merge'
     })
   }
 
@@ -196,13 +194,13 @@ export class DistributordashboardComponent implements OnInit {
 
   GetDistDashboardData(sdate, edate) {
     this.distributorService.getByConId(this.user.contactId)
-      .pipe(first())
       .subscribe((data: any) => {
-        this.serviceRequestService.getDistDashboardData({ distId: data.object[0].id, sdate, edate })
-          .pipe(first()).subscribe((sreq: any) => {
+        this.distributorDashboardService.GetDistDashboardData({ distId: data.object[0].id, sdate, edate })
+          .subscribe((sreq: any) => {
             sreq = sreq.object
             let label = []
             let chartData = []
+
             sreq.instrumentWithHighestServiceRequest.forEach(x => {
               label.push(x.key);
               chartData.push(x.count);

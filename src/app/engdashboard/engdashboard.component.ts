@@ -31,7 +31,7 @@ export class EngdashboardComponent implements OnInit {
   }
 
   GetData() {
-    this.EngDashboardService.GetCompSerReq(this.currentCalender).pipe(first())
+    this.EngDashboardService.GetCompSerReq(this.currentCalender)
       .subscribe((data: any) => {
         var pendingReqLabels = []
         var pendingReqValues = []
@@ -84,7 +84,7 @@ export class EngdashboardComponent implements OnInit {
 
       })
 
-    setTimeout(() => EngDashboardCharts(), 1500);
+    setTimeout(() => EngDashboardCharts(), 2500);
   }
 
   async CalenderChange(date) {

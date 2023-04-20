@@ -30,4 +30,27 @@ export class CustomerdashboardService {
     return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetCostOfOwnerShip/${insId}`);
   }
 
+  GetAllServiceRequest() {
+    return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetAllServiceRequest`)
+  }
+
+  GetAllAmc() {
+    return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetAllAmc`)
+  }
+
+  GetSparePartsRecommended() {
+    return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetSparePartsRecommended`)
+  }
+
+  GetCustomerDetails() {
+    return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetCustomerDetails`)
+  }
+  GetSiteInstrument(siteId) {
+    return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetSiteInstrument/${siteId}`)
+  }
+
+  GetSerReqInstrument(insId) {
+    return this.http.get(`${this.environment.apiUrl}/CustomerDashboard/GetSerReqInstrument/${insId}`)
+  }
+
 }

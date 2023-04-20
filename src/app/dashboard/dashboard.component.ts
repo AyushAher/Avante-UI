@@ -77,10 +77,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private instrumentService: InstrumentService,
-    private customerService: CustomerService,
     private distributorService: DistributorService,
-    private spareRecomService: SrRecomandService,
     private serviceRequestService: ServiceRequestService,
     private notificationService: NotificationService,
     private formbuilder: FormBuilder,
@@ -101,26 +98,22 @@ export class DashboardComponent implements OnInit {
       this.CalenderChange(365)
     }, 500);
 
-    this.customerService.getAllByConId(this.user.contactId)
-      .pipe(first()).subscribe((data: any) => {
-
-        let cust = data.object[0]
-
+    this.customerDashboardService.GetCustomerDetails()
+      .subscribe((data: any) => {
+        let cust = data.object
         this.custSite = cust.sites;
 
         this.siteName = this.custSite[this.currentIndex].custregname;
         this.siteRegion = this.custSite[this.currentIndex].regname;
         this.currentSiteId = this.custSite[this.currentIndex].id;
-        this.GetInstrumentsByCurrentSiteId()
         this.customerName = cust?.custname;
+        this.GetInstrumentsByCurrentSiteId()
         this.customerCountry = cust?.address.countryName
         this.custDefDistName = cust.defdist
         this.custDefDistId = cust.defdistid
 
-        data.object.forEach(x => {
-          this.totalCustContacts += x.contacts.length
-          x.sites.forEach(y => this.totalCustContacts += y.contacts.length)
-        })
+        this.totalCustContacts += cust.contacts.length
+        cust.sites.forEach(y => this.totalCustContacts += y.contacts.length)
 
         this.distributorService.getById(cust.defdistid)
           .pipe(first()).subscribe((dist: any) => this.defDistCountryName = dist.object.address.countryName)
@@ -192,72 +185,65 @@ export class DashboardComponent implements OnInit {
 
 
   GetSparePartsRecommended(sdate, edate) {
-    this.spareRecomService.getByGrid(this.user.contactId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.spRecomList = [];
-
-          data.object.forEach((value) => {
-            if (this.GetDiffDate(new Date(value.createdOn), edate, sdate)) {
-              value.assignedTofName = value.assignedTofName + " " + value.assignedTolName
-              this.spRecomList.push(value)
-            }
-          })
-        },
+    this.customerDashboardService.GetSparePartsRecommended()
+      .subscribe((data: any) => {
+        this.spRecomList = [];
+        data.object.forEach((value) => {
+          if (this.GetDiffDate(new Date(value.createdOn), edate, sdate)) {
+            value.assignedTofName = value.assignedTofName + " " + value.assignedTolName
+            this.spRecomList.push(value)
+          }
+        })
       });
 
   }
 
   getServiceRequestData(sdate, edate) {
-    this.serviceRequestService.getAll(this.user.userId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
+    this.customerDashboardService.GetAllServiceRequest()
+      .pipe(first()).subscribe((data: any) => {
 
-          let label = []
-          var pendingRequestLabels = []
-          var pendingRequestValue = []
-          let chartData = []
-          let bgColor = []
-          let pendingrequestBgColor = []
-          // data.object = data.object.filter(x => !x.isReportGenerated)
-          data.object.forEach(x => {
-            if (this.GetDiffDate(new Date(x.createdon), edate, sdate)) {
+        let label = []
+        var pendingRequestLabels = []
+        var pendingRequestValue = []
+        let chartData = []
+        let bgColor = []
+        let pendingrequestBgColor = []
+        // data.object = data.object.filter(x => !x.isReportGenerated)
+        data.object.forEach(x => {
+          if (this.GetDiffDate(new Date(x.createdon), edate, sdate)) {
 
-              if (x.isReportGenerated == false)
-                pendingRequestLabels.push(x.visittypeName)
-              else
-                label.push(x.visittypeName)
-            }
-          })
-
-          label = [... new Set(label)]
-          pendingRequestLabels = [... new Set(pendingRequestLabels)]
-
-          for (let i = 0; i < label.length; i++) {
-            const element = label[i];
-            chartData.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == true && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
-            bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
+            if (x.isReportGenerated == false)
+              pendingRequestLabels.push(x.visittypeName)
+            else
+              label.push(x.visittypeName)
           }
+        })
 
-          for (let i = 0; i < pendingRequestLabels.length; i++) {
-            const element = pendingRequestLabels[i];
-            pendingRequestValue.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == false && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
-            pendingrequestBgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
-          }
+        label = [... new Set(label)]
+        pendingRequestLabels = [... new Set(pendingRequestLabels)]
 
-          sessionStorage.setItem('servicerequesttype', JSON.stringify({ label, chartData }))
-          sessionStorage.setItem('pendingservicerequest', JSON.stringify({ chartData: pendingRequestValue, label: pendingRequestLabels }))
-
-          this.srList = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate));
+        for (let i = 0; i < label.length; i++) {
+          const element = label[i];
+          chartData.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == true && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
+          bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
         }
+
+        for (let i = 0; i < pendingRequestLabels.length; i++) {
+          const element = pendingRequestLabels[i];
+          pendingRequestValue.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == false && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
+          pendingrequestBgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
+        }
+
+        sessionStorage.setItem('servicerequesttype', JSON.stringify({ label, chartData }))
+        sessionStorage.setItem('pendingservicerequest', JSON.stringify({ chartData: pendingRequestValue, label: pendingRequestLabels }))
+
+        this.srList = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate));
       });
 
   }
 
   GetAllAMC(sdate, edate) {
-    this.offerRequestService.getAll().pipe(first())
+    this.customerDashboardService.GetAllAmc()
       .subscribe((data: any) => {
         this.amcData = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate) && !x.isCompleted);
       })
@@ -305,8 +291,8 @@ export class DashboardComponent implements OnInit {
 
 
   GetInstrumentsByCurrentSiteId() {
-    this.instrumentService.getinstubysiteIds(this.currentSiteId)
-      .pipe(first()).subscribe((data: any) => {
+    this.customerDashboardService.GetSiteInstrument(this.currentSiteId)
+      .subscribe((data: any) => {
         this.lstInstrument = data.object;
         this.instruemntLength = this.lstInstrument.length;
       })
@@ -323,7 +309,6 @@ export class DashboardComponent implements OnInit {
 
 
   criticalServiceRequest(insId) {
-
     this.serviceRequestform = this.formbuilder.group({
       sdate: [""],
       edate: [""],
@@ -384,12 +369,9 @@ export class DashboardComponent implements OnInit {
     });
 
     this.serviceRequestService.getSerReqNo()
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          let srno = data.object;
-          this.serviceRequestform.patchValue({ "serreqno": srno });
-        },
+      .subscribe((data: any) => {
+        let srno = data.object;
+        this.serviceRequestform.patchValue({ "serreqno": srno });
       });
     this.listTypeItemService.getById('SERTY').pipe(first())
       .subscribe({
@@ -437,19 +419,16 @@ export class DashboardComponent implements OnInit {
   }
 
   public oninstuchange(id: string) {
-    this.instrumentService.getSerReqInstrument(id)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          var instument = data.object;
-          this.siteId = data.object.custSiteId;
-          this.serviceRequestform.patchValue({ "machmodelname": instument.instype });
-          this.serviceRequestform.patchValue({ "operatorname": instument.operatorEng.fname + '' + instument.operatorEng.lname });
-          this.serviceRequestform.patchValue({ "operatornumber": instument.operatorEng.pcontactno });
-          this.serviceRequestform.patchValue({ "operatoremail": instument.operatorEng.pemail });
-          this.serviceRequestform.patchValue({ "machengineer": instument.machineEng.fname + ' ' + instument.machineEng.lname });
-          this.serviceRequestform.patchValue({ "xraygenerator": instument.insversion });
-        },
+    this.customerDashboardService.GetSerReqInstrument(id)
+      .subscribe((data: any) => {
+        var instument = data.object;
+        this.siteId = data.object.custSiteId;
+        this.serviceRequestform.patchValue({ "machmodelname": instument.instype });
+        this.serviceRequestform.patchValue({ "operatorname": instument.operatorEng.fname + '' + instument.operatorEng.lname });
+        this.serviceRequestform.patchValue({ "operatornumber": instument.operatorEng.pcontactno });
+        this.serviceRequestform.patchValue({ "operatoremail": instument.operatorEng.pemail });
+        this.serviceRequestform.patchValue({ "machengineer": instument.machineEng.fname + ' ' + instument.machineEng.lname });
+        this.serviceRequestform.patchValue({ "xraygenerator": instument.insversion });
       });
 
   }

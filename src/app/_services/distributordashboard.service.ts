@@ -22,5 +22,9 @@ export class DistributordashboardService {
     return this.http.post(`${this.environment.apiUrl}/DistributorDashboard/ServiceContractRevenue`, { distId, sdate, edate })
   }
 
+  GetDistDashboardData({ distId, sdate, edate }) {
+    return this.http.post(`${this.environment.apiUrl}/DistributorDashboard/GetDistDashboardData`, { sdate, edate, distId })
+  }
+
 
 }
