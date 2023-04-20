@@ -202,6 +202,7 @@
                   [ngClass]="{ 'is-invalid': a.geolat.touched && a.geolat.errors }" />
                 <div *ngIf="a.geolat.touched && a.geolat.errors" class="invalid-feedback">
                   <div *ngIf="a.geolat.errors.required">Latitude is required</div>
+                  <div *ngIf="a.geolat.errors.max || a.geolat.errors.min">Invalid Latitude</div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -210,6 +211,7 @@
                   [ngClass]="{ 'is-invalid': a.geolong.touched && a.geolong.errors }" />
                 <div *ngIf="a.geolong.touched && a.geolong.errors" class="invalid-feedback">
                   <div *ngIf="a.geolong.errors.required">Longitude is required</div>
+                  <div *ngIf="a.geolong.errors.max || a.geolong.errors.min">Invalid Longitude</div>
                 </div>
               </div>
             </div>

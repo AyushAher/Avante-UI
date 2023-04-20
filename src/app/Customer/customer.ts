@@ -96,8 +96,8 @@ export class CustomerComponent implements OnInit {
         city: ['', Validators.required],
         countryid: ['', Validators.required],
         zip: ['', Validators.compose([Validators.pattern("^[0-9]{4,15}$"), Validators.minLength(4), Validators.maxLength(15)])],
-        geolat: [''],
-        geolong: [''],
+        geolat: ['', [Validators.min(-90), Validators.max(90)]],
+        geolong: ['', [Validators.min(-180), Validators.max(180)]],
       }),
     });
 
