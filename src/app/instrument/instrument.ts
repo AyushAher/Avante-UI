@@ -221,9 +221,9 @@ export class InstrumentComponent implements OnInit {
       var shipdt = this.instrumentform.get('shipdt').value;
       var InstrumentInstDate = this.instrumentform.get('installdt').value;
 
-      this.purchaseDateGreaterThanManudate = (manufDate && data) && new Date(data) < new Date(GetParsedDate(manufDate))
-      this.shipmentDateGreaterThanPurchaseDate = (shipdt && data) && new Date(GetParsedDate(shipdt)) < new Date(data);
-      this.instrumentInsDateGreaterThanPurchaseDate = (InstrumentInstDate && data) && new Date(GetParsedDate(InstrumentInstDate)) < new Date(data);
+      this.purchaseDateGreaterThanManudate = (manufDate && data) && new Date(GetParsedDate(data)) < new Date(GetParsedDate(manufDate))
+      this.shipmentDateGreaterThanPurchaseDate = (shipdt && data) && new Date(GetParsedDate(shipdt)) < new Date(GetParsedDate(data));
+      this.instrumentInsDateGreaterThanPurchaseDate = (InstrumentInstDate && data) && new Date(GetParsedDate(InstrumentInstDate)) < new Date(GetParsedDate(data));
 
     })
 
@@ -232,9 +232,9 @@ export class InstrumentComponent implements OnInit {
       var shipmentDate = this.instrumentform.get('shipdt').value;
       var InstrumentInstDate = this.instrumentform.get('installdt').value;
 
-      this.purchaseDateGreaterThanManudate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) < new Date(data)
-      this.shipmentDateGreaterThanManudate = (shipmentDate && data) && new Date(GetParsedDate(shipmentDate)) < new Date(data)
-      this.instrumentInsDateGreaterThanManufacturingDate = (InstrumentInstDate && data) && new Date(GetParsedDate(InstrumentInstDate)) < new Date(data);
+      this.purchaseDateGreaterThanManudate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) < new Date(GetParsedDate(data))
+      this.shipmentDateGreaterThanManudate = (shipmentDate && data) && new Date(GetParsedDate(shipmentDate)) < new Date(GetParsedDate(data))
+      this.instrumentInsDateGreaterThanManufacturingDate = (InstrumentInstDate && data) && new Date(GetParsedDate(InstrumentInstDate)) < new Date(GetParsedDate(data));
 
     })
 
@@ -243,25 +243,25 @@ export class InstrumentComponent implements OnInit {
       var purchaseDate = this.instrumentform.get('dateOfPurchase').value;
       var installDate = this.instrumentform.get('installdt').value;
 
-      this.shipmentDateGreaterThanPurchaseDate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) > new Date(data)
-      this.shipmentDateGreaterThanManudate = (manufDate && data) && new Date(GetParsedDate(manufDate)) > new Date(data)
-      this.instrumentInsDateGreaterThanShipmentDate = (installDate && data) && new Date(GetParsedDate(installDate)) < new Date(data)
+      this.shipmentDateGreaterThanPurchaseDate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) > new Date(GetParsedDate(data))
+      this.shipmentDateGreaterThanManudate = (manufDate && data) && new Date(GetParsedDate(manufDate)) > new Date(GetParsedDate(data))
+      this.instrumentInsDateGreaterThanShipmentDate = (installDate && data) && new Date(GetParsedDate(installDate)) < new Date(GetParsedDate(data))
     })
 
     this.instrumentform.get("installdt").valueChanges
       .subscribe((data: any) => {
 
         var wStartDate = this.instrumentform.get("wrntystdt").value;
-        this.warrantyStartDateGreaterThanInstallationDate = (wStartDate && data) && new Date(GetParsedDate(wStartDate)) < new Date(data);
+        this.warrantyStartDateGreaterThanInstallationDate = (wStartDate && data) && new Date(GetParsedDate(wStartDate)) < new Date(GetParsedDate(data));
 
         var shipmentDate = this.instrumentform.get('shipdt').value;
-        this.instrumentInsDateGreaterThanShipmentDate = (shipmentDate && data) && new Date(GetParsedDate(shipmentDate)) > new Date(data);
+        this.instrumentInsDateGreaterThanShipmentDate = (shipmentDate && data) && new Date(GetParsedDate(shipmentDate)) > new Date(GetParsedDate(data));
 
         var manufDate = this.instrumentform.get('insmfgdt').value;
-        this.instrumentInsDateGreaterThanManufacturingDate = (manufDate && data) && new Date(GetParsedDate(manufDate)) > new Date(data);
+        this.instrumentInsDateGreaterThanManufacturingDate = (manufDate && data) && new Date(GetParsedDate(manufDate)) > new Date(GetParsedDate(data));
 
         var purchaseDate = this.instrumentform.get('dateOfPurchase').value;
-        this.instrumentInsDateGreaterThanPurchaseDate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) > new Date(data);
+        this.instrumentInsDateGreaterThanPurchaseDate = (purchaseDate && data) && new Date(GetParsedDate(purchaseDate)) > new Date(GetParsedDate(data));
 
       })
 
