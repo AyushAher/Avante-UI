@@ -152,6 +152,7 @@ export class DistributorComponent implements OnInit {
           },
           queryParamsHandling: 'merge', // remove to replace all query params by provided
         });
+        this.form.get("code").disable()
     }
   }
 

@@ -165,6 +165,7 @@ export class CustomerComponent implements OnInit {
     this.a.countryid.disable();
     this.f.defdistid.disable();
     this.f.countryid.disable();
+    this.f.code.disable();
   }
 
   Back() {
@@ -188,7 +189,11 @@ export class CustomerComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.result) {
             this.notificationService.showSuccess("Record deleted successfully", "Success");
-            this.router.navigate(["customerlist"]);
+            this.router.navigate(["customerlist"], {
+              queryParams: {
+                isNSNav: true
+              }
+            });
           }
           else {
             this.notificationService.showInfo(data.resultMessage, "Info");
@@ -208,7 +213,7 @@ export class CustomerComponent implements OnInit {
   }
 
   onDistributorRegion(e) {
-    var region = this.distRegionsList.find(x => x.id == e);
+    var region = this.distRegionsList?.find(x => x.id == e);
     this.regionCountry = [];
     this.regionCountry.push(this.countries.find(x => x.id == region?.countries))
     this.customerform.get("defdistid").setValue(region?.distid);
