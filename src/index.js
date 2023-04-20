@@ -204,7 +204,7 @@ function DistributorDashboardCharts() {
       data: {
         labels: instrumentWithHighestServiceRequest?.label,
         datasets: [{
-          backgroundColor: barColors,
+          backgroundColor: ["#661691", "#0b518e"],
           data: instrumentWithHighestServiceRequest?.data,
 
         }]
@@ -247,7 +247,7 @@ function DistributorDashboardCharts() {
       data: {
         labels: ["Installed", "Under Service"],
         datasets: [{
-          backgroundColor: barColors,
+          backgroundColor: ["#2f8b59", "#f44336"],
           data: [data?.instrumnetInstalled, data?.instrumnetUnderService]
         }]
       },
