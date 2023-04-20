@@ -1,12 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { first } from "rxjs/operators";
-import { RenderComponent } from "../distributor/rendercomponent";
 import { ImportDataComponent } from "../importdata/import.component";
 import { ProfileReadOnly, User } from "../_models";
-import { AccountService, TravelDetailService, NotificationService, ProfileService, DistributorService, ListTypeService } from "../_services";
+import { AccountService, ProfileService } from "../_services";
 import { TravelExpenseService } from "../_services/travel-expense.service";
 
 @Component({
@@ -32,12 +31,8 @@ export class TravelexpenseListComponent implements OnInit {
         private router: Router,
         private accountService: AccountService,
         private Service: TravelExpenseService,
-        private notificationService: NotificationService,
         private profileService: ProfileService,
         private modalService: BsModalService,
-        private listTypeService: ListTypeService,
-        private route: ActivatedRoute
-
     ) { }
 
     ngOnInit(): void {
@@ -56,7 +51,7 @@ export class TravelexpenseListComponent implements OnInit {
             }
         }
         if (this.user.isAdmin) {
-            this.hasAddAccess = true;
+            this.hasAddAccess = false;
             this.hasDeleteAccess = true;
             this.hasUpdateAccess = true;
             this.hasReadAccess = true;
@@ -83,10 +78,10 @@ export class TravelexpenseListComponent implements OnInit {
         var data = this.api.getSelectedRows()[0]
         this.router.navigate([`travelexpense/${data.id}`], {
             queryParams: {
-              isNSNav: true,
-              creatingNewDistributor: true
+                isNSNav: true,
+                creatingNewDistributor: true
             },
-          })
+        })
     }
 
     private createColumnDefs() {

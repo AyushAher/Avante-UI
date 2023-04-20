@@ -62,7 +62,7 @@ export class CustomerListComponent implements OnInit {
       }
     }
     if (this.user.isAdmin) {
-      this.hasAddAccess = true;
+      this.hasAddAccess = false;
       this.hasDeleteAccess = true;
       this.showGrid = true;
       this.IsDist = false

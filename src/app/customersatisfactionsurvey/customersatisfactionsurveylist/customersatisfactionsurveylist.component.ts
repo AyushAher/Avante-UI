@@ -40,12 +40,10 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private Service: CustomersatisfactionsurveyService,
-    private notificationService: NotificationService,
     private profileService: ProfileService,
     private distributorService: DistributorService,
     private listTypeService: ListTypeService,
     private environment: EnvService,
-    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -66,7 +64,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
       }
     }
     if (this.user.isAdmin) {
-      this.hasAddAccess = true;
+      this.hasAddAccess = false;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;

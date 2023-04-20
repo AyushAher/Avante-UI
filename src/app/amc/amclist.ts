@@ -64,7 +64,7 @@ export class AmcListComponent implements OnInit {
       }
     }
     if (this.user.isAdmin) {
-      this.hasAddAccess = true;
+      this.hasAddAccess = false;
       this.hasDeleteAccess = true;
     }
     else role = role[0]?.itemCode;

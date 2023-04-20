@@ -10,7 +10,7 @@
           <a *ngIf="showGrid && isDist" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
             <i class="fas fa-search" title="Search"></i>
           </a>
-          <button routerLink="/offerrequest" data-action-type="offerrequest" class="btn btn-primary"
+          <button routerLink="/offerrequest" *ngIf="!user.isAdmin" data-action-type="offerrequest" class="btn btn-primary"
             style="margin-left: 10px;">Raise PO
           </button>
         </div>

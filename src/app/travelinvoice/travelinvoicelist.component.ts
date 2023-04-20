@@ -49,7 +49,7 @@ export class TravelInvoiceListComponent implements OnInit {
             }
         }
         if (this.user.isAdmin) {
-            this.hasAddAccess = true;
+            this.hasAddAccess = false;
             this.hasDeleteAccess = true;
             this.hasUpdateAccess = true;
             this.hasReadAccess = true;

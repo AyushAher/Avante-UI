@@ -67,7 +67,7 @@ export class OfferrequestlistComponent implements OnInit {
     }
 
     if (this.user.username == 'admin') {
-      this.hasAddAccess = true;
+      this.hasAddAccess = false;
       this.hasDeleteAccess = true;
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;

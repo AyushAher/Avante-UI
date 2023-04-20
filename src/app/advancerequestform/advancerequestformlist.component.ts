@@ -50,7 +50,7 @@ export class AdvancerequestlistformComponent implements OnInit {
             }
         }
         if (this.user.isAdmin) {
-            this.hasAddAccess = true;
+            this.hasAddAccess = false;
             this.hasDeleteAccess = true;
             this.hasUpdateAccess = true;
             this.hasReadAccess = true;
@@ -78,10 +78,10 @@ export class AdvancerequestlistformComponent implements OnInit {
         var data = this.api.getSelectedRows()[0]
         this.router.navigate([`advancerequestform/${data.id}`], {
             queryParams: {
-              isNSNav: true,
-              creatingNewDistributor: true
+                isNSNav: true,
+                creatingNewDistributor: true
             },
-          })
+        })
     }
 
     private createColumnDefs() {
