@@ -163,24 +163,20 @@ export class UserProfileComponent implements OnInit {
       .pipe(first()).subscribe((data: any) => this.businessUnitList = data.object)
 
     this.userprofileform.get("businessUnitId")
-      .valueChanges
-      .subscribe((values: any) => {
+      .valueChanges.subscribe((values: any) => {
         if (!values) return;
-        this.brandList = []
-        values.map(x => {
-          this.brandService.GetByBU(x.id)
-            .pipe(first()).subscribe((data: any) => {
-              var nBrand = [];
-              var lstBrand: any[] = this.userprofileform.get("brandId").value
-              this.brandList = data.object
-              this.brandList.forEach(element => {
-                var obj = lstBrand.find(x => x.id == element.id);
-                if (obj) nBrand.push(obj);
-              })
-              this.userprofileform.get("brandId").setValue(nBrand);
+        var buIds = values.map(x => x.id).toString();
+        this.brandService.GetByBU(buIds)
+          .pipe(first()).subscribe((data: any) => {
+            var nBrand = [];
+            var lstBrand: any[] = this.userprofileform.get("brandId").value
+            this.brandList = data.object;
+            this.brandList.forEach(element => {
+              var obj = lstBrand.find(x => x.id == element.id);
+              if (obj) nBrand.push(obj);
             })
-        })
-
+            this.userprofileform.get("brandId").setValue(nBrand);
+          })
       })
 
     this.id = this.route.snapshot.paramMap.get('id');
