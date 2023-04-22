@@ -686,11 +686,9 @@ export class EngineerschedulerComponent implements OnInit {
 
   onBackclick() {
     this.notificationService.filter("itemadded");
-    this.router.navigate([this.link, {
-      //relativeTo: this.activeRoute,
+    this.router.navigate([this.link], {
       queryParams: { isNSNav: true },
-      //queryParamsHandling: 'merge'
-    }])
+    })
   }
 
   //  Dist code
