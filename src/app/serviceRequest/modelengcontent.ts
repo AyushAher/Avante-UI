@@ -14,6 +14,7 @@ import {
   NotificationService
 } from '../_services';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { GetParsedDate } from '../_helpers/Providers';
 
 
 @Component({
@@ -24,33 +25,23 @@ export class ModelEngContentComponent implements OnInit {
   user: User;
   engineerCommentForm: FormGroup;
   engcomment: EngineerCommentList;
-  loading = false;
-  submitted = false;
-  isSave = false;
   //id: string;
   listid: string;
-  public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
-  private api: GridApi;
   closeResult: string;
-  @Input() public itemId;
-  @Input() public id;
-  @Input() public engineerid;
+  @Input() itemId;
+  @Input() item;
+  @Input() id;
+  @Input() engineerid;
   formData: any;
 
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
-    private configTypeService: ConfigTypeValueService,
-    private listTypeService: ListTypeService,
     private notificationService: NotificationService,
     private engcommentService: EngCommentService,
     public activeModal: BsModalService
-  ) {
-  }
+  ) { }
 
 
   ngOnInit() {
@@ -63,86 +54,61 @@ export class ModelEngContentComponent implements OnInit {
       isdeleted: [false],
 
     });
-    if (this.id != undefined) {
-      this.engcommentService.getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.formData = data.object;
-            this.engineerCommentForm.patchValue(this.formData);
-            this.engineerCommentForm.patchValue({ "nextdate": new Date(data.object.nextdate) });
-          },
-          error: error => {
-            this.loading = false;
-          }
-        });
-    }
+
+    this.engineerCommentForm.get("nextdate").valueChanges
+      .subscribe(value => {
+        if (value < GetParsedDate(this.item.serreqdate)) {
+          this.notificationService.showError("The Next Date should be after Service Request Date", "Invalid Date")
+        }
+      })
+
+    if (this.id == undefined) return;
+    this.engcommentService.getById(this.id)
+      .subscribe((data: any) => {
+        this.formData = data.object;
+        this.engineerCommentForm.patchValue(this.formData);
+        this.engineerCommentForm.patchValue({ "nextdate": new Date(data.object.nextdate) });
+      });
   }
 
   close() {
-    //alert('test cholde');
     this.activeModal.hide();
     this.notificationService.filter("itemadded");
   }
 
+  get f() {
+    return this.engineerCommentForm.controls
+  }
+
   onValueSubmit() {
-    //debugger;
-
-    this.submitted = true;
-
-    this.isSave = true;
-    this.loading = true;
-
+    this.engineerCommentForm.markAllAsTouched();
     if (this.engineerCommentForm.invalid) {
       return;
     }
+
+    if (this.f.nextdate.value < GetParsedDate(this.item.serreqdate)) {
+      return this.notificationService.showError("The Next Date should be after Service Request Date", "Invalid Date")
+    }
+
     this.engcomment = this.engineerCommentForm.value;
     this.engcomment.servicerequestid = this.itemId;
     this.engcomment.engineerid = this.engineerid;
 
     if (this.id == null) {
       this.engcommentService.save(this.engcomment)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.close();
-              //this.configList = data.object;
-              // this.listvalue.get("configValue").setValue("");
-            } else {
-
-              this.close();
-            }
-            this.loading = false;
-          },
-          error: error => {
-
-            this.loading = false;
-          }
+        .subscribe((data: any) => {
+          if (data.result)
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+          this.close();
         });
-    } else {
+    }
+    else {
       this.engcomment.id = this.id;
       this.engcommentService.update(this.id, this.engcomment)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.close();
-              //this.configList = data.object;
-              //this.listvalue.get("configValue").setValue("");
-              //this.id = null;
-            } else {
-
-              this.close();
-            }
-            this.loading = false;
-          },
-          error: error => {
-
-            this.loading = false;
-          }
+        .subscribe((data: any) => {
+          if (data.result)
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+          this.close();
         });
     }
   }

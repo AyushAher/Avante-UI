@@ -1613,7 +1613,8 @@ export class ServiceRequestComponent implements OnInit {
       const initialState = {
         itemId: param,
         id: param1,
-        engineerid: this.engineerid
+        engineerid: this.engineerid,
+        item: this.serviceRequestform.value
       };
       this.bsModalRef = this.modalService.show(ModelEngContentComponent, { initialState });
     }
@@ -1629,7 +1630,8 @@ export class ServiceRequestComponent implements OnInit {
           itemId: param,
           id: param1,
           engineerid: this.engineerid,
-          engineerlist: this.appendList
+          engineerlist: this.appendList,
+          item: this.serviceRequestform.value
         },
       }
       this.bsActionModalRef = this.modalService.show(ModelEngActionContentComponent, modalOptions);

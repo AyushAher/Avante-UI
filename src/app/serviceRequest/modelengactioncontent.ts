@@ -9,6 +9,7 @@ import { AccountService, EngActionService, FileshareService, ListTypeService, No
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { HttpEventType } from "@angular/common/http";
 import { Router } from '@angular/router';
+import { GetParsedDate, GetParsedDatePipe } from '../_helpers/Providers';
 
 @Component({
   selector: 'app-modelcomponent',
@@ -18,18 +19,14 @@ export class ModelEngActionContentComponent implements OnInit {
   user: User;
   actionForm: FormGroup;
   action: actionList;
-  loading = false;
-  submitted = false;
-  isSave = false;
-  //id: string;
   listid: string;
-  public columnDefs: ColDef[];
   closeResult: string;
   actiontakenlist: ListTypeItem[];
-  @Input() public itemId;
-  @Input() public id;
-  @Input() public engineerlist;
-  @Input() public engineerid;
+  @Input() itemId;
+  @Input() item;
+  @Input() id;
+  @Input() engineerlist;
+  @Input() engineerid;
   hasRemote: boolean = false;
 
 
@@ -49,52 +46,46 @@ export class ModelEngActionContentComponent implements OnInit {
     private listTypeService: ListTypeService,
     private notificationService: NotificationService,
     private actionService: EngActionService,
-    public activeModal: BsModalService,
+    private activeModal: BsModalService,
     private router: Router
   ) { }
 
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+    console.log(this.item);
 
     this.actionForm = this.formBuilder.group({
       engineerid: ['', Validators.required],
       comments: ['', Validators.required],
       actiondate: [new Date(), Validators.required],
-      actiontaken: [''],
+      actiontaken: ['', Validators.required],
       isactive: [true],
       isdeleted: [false],
       teamviewrecording: ['']
     });
 
 
-    this.listTypeService.getById("ACTKN")
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          //debugger;
-          this.actiontakenlist = data;
-        },
-        error: error => {
-
-          this.loading = false;
+    this.actionForm.get("actiondate").valueChanges
+      .subscribe(value => {
+        if (value < GetParsedDate(this.item.serreqdate)) {
+          this.notificationService.showError("The Action Date should be after Service Request Date", "Invalid Date")
         }
-      });
+      })
+
+    this.listTypeService.getById("ACTKN")
+      .subscribe((data: ListTypeItem[]) => this.actiontakenlist = data);
+
     this.actionForm.patchValue({ "engineerid": this.engineerid });
-    if (this.id != undefined) {
-      this.actionService.getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.formData = data.object;
-            this.actionForm.patchValue(this.formData);
-            this.actionForm.patchValue({ "actiondate": new Date(data.object.actiondate) });
-          },
-          error: error => {
-            this.loading = false;
-          }
-        });
-    }
+
+    if (this.id == undefined) return;
+
+    this.actionService.getById(this.id)
+      .subscribe((data: any) => {
+        this.formData = data.object;
+        this.actionForm.patchValue(this.formData);
+        this.actionForm.patchValue({ "actiondate": new Date(data.object.actiondate) });
+      });
   }
 
   close() {
@@ -105,12 +96,9 @@ export class ModelEngActionContentComponent implements OnInit {
 
   getActiontaken(e) {
     this.listTypeService.getById('ACTKN')
-      .pipe(first())
-      .subscribe({
-        next: (data: ListTypeItem[]) => {
-          data = data.filter(x => x.itemCode == "RMD")
-          e.value == data[0].listTypeItemId ? this.hasRemote = true : this.hasRemote = false;
-        }
+      .subscribe((data: ListTypeItem[]) => {
+        data = data.filter(x => x.itemCode == "RMD")
+        e.value == data[0].listTypeItemId ? this.hasRemote = true : this.hasRemote = false;
       })
   }
 
@@ -127,6 +115,7 @@ export class ModelEngActionContentComponent implements OnInit {
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
+
     this.FileShareService.upload(formData, id, "SRREQ-TV", "VIDEO").subscribe((event) => {
       if (event.type === HttpEventType.UploadProgress)
         this.progress = Math.round((100 * event.loaded) / event.total);
@@ -142,12 +131,13 @@ export class ModelEngActionContentComponent implements OnInit {
   }
 
   onValueSubmit() {
-    this.submitted = true;
+    this.actionForm.markAllAsTouched();
     if (this.hasRemote && this.file == null) return this.notificationService.showInfo("Upload Recording", "Info")
     if (this.actionForm.invalid) return
 
-    this.isSave = true;
-    this.loading = true;
+    if (this.f.actiondate.value < GetParsedDate(this.item.serreqdate))
+      return this.notificationService.showError("The Action Date should be after Service Request Date", "Invalid Date")
+
     this.action = this.actionForm.value;
     this.action.servicerequestid = this.itemId;
     this.action.engineerid = this.engineerid;
@@ -155,56 +145,29 @@ export class ModelEngActionContentComponent implements OnInit {
 
     if (this.id == null) {
       this.actionService.save(this.action)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-
-              if (this.file != null) {
-                this.uploadFile(this.file, data.object.id);
-              }
-
-              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode, isNSNav: true } })
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.close();
-            }
-            else {
-
-              this.close();
-            }
-            this.loading = false;
-          },
-          error: error => {
-
-            this.loading = false;
+        .subscribe((data: any) => {
+          if (data.result) {
+            if (this.file != null) this.uploadFile(this.file, data.object.id);
+            this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode, isNSNav: true } })
+            this.notificationService.showSuccess(data.resultMessage, "Success");
           }
+
+          this.close();
         });
     }
     else {
 
-      if (this.file != null) {
+      if (this.file != null)
         this.uploadFile(this.file, this.id);
-      }
+
       this.action.id = this.id;
       this.actionService.update(this.id, this.action)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-
-              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode, isNSNav: true } })
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.close();
-            } else {
-
-              this.close();
-            }
-            this.loading = false;
-          },
-          error: error => {
-
-            this.loading = false;
+        .subscribe((data: any) => {
+          if (data.result) {
+            this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actiontaken)?.itemCode, isNSNav: true } })
+            this.notificationService.showSuccess(data.resultMessage, "Success");
           }
+          this.close();
         });
     }
   }
