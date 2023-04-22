@@ -319,6 +319,14 @@ export class ServiceRequestComponent implements OnInit {
     this.serviceRequestform.get("machinesno").valueChanges.subscribe((data: any) => {
       if (data) this.oninstuchange(data)
     })
+    this.serviceRequestform.get("serresolutiondate").valueChanges
+      .subscribe((data: any) => {
+        if (data < GetParsedDate(this.serviceRequestform.get("serreqdate").value)) {
+          this.notificationService.showError("The Resolution Date should be after Service Request Date", "Invalid Date")
+        }
+      })
+
+
     if (this.IsEngineerView == true) {
       this.serviceRequestform.get('requesttypeid').setValidators([Validators.required]);
       this.serviceRequestform.get('requesttypeid').updateValueAndValidity();
@@ -801,6 +809,11 @@ export class ServiceRequestComponent implements OnInit {
         return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")
       }
     }
+
+    if (this.serviceRequestform.get("serresolutiondate").value < GetParsedDate(this.serviceRequestform.get("serreqdate").value)) {
+      this.notificationService.showError("The Resolution Date should be after Service Request Date", "Invalid Date")
+    }
+
     // reset alerts on submit
     this.alertService.clear();
 
@@ -1046,11 +1059,11 @@ export class ServiceRequestComponent implements OnInit {
 
       if (this.isAmc) this.servicereport.problem = 'AMC';
 
-      this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.INS)).length > 0;
-      this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.ANAS)).length > 0;
-      this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.PRMN1)).length > 0;
-      this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.REWK)).length > 0;
-      this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x.itemCode == this.environment.CRMA)).length > 0;
+      this.servicereport.installation = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x == this.environment.INS)).length > 0;
+      this.servicereport.analyticalassit = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x == this.environment.ANAS)).length > 0;
+      this.servicereport.prevmaintenance = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x == this.environment.PRMN1)).length > 0;
+      this.servicereport.rework = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x == this.environment.REWK)).length > 0;
+      this.servicereport.corrmaintenance = (this.serviceRequestform.get('subrequesttypeid').value?.split(",").filter(x => x == this.environment.CRMA)).length > 0;
       if (this.customerId != null) {
         this.customerService.getById(this.customerId)
           .pipe(first())

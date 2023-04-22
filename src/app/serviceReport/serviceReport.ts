@@ -37,8 +37,6 @@ import {
   CustomerService,
   DistributorService,
   FileshareService,
-  InstrumentService,
-  InventoryService,
   ListTypeService,
   NotificationService,
   ProfileService,
@@ -60,10 +58,10 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { CustspinventoryService } from '../_services/custspinventory.service';
 import { PreventivemaintenancetableComponent } from '../preventivemaintenancetable/preventivemaintenancetable.component';
-import { environment } from '../../environments/environment';
 import { PreventivemaintenancesService } from '../_services/preventivemaintenances.service';
 import { EnvService } from '../_services/env/env.service';
 import { GetParsedDate } from '../_helpers/Providers';
+import { BrandService } from '../_services/brand.service';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -180,7 +178,8 @@ export class ServiceReportComponent implements OnInit {
     private srConsumedservice: SrConsumedService,
     private environment: EnvService,
     private preventivemaintenancesService: PreventivemaintenancesService,
-    private CustSPInventoryService: CustspinventoryService
+    private CustSPInventoryService: CustspinventoryService,
+    private brandService: BrandService
   ) {
     this.notificationService.listen().subscribe(() => {
       if (this.ServiceReportId != null) {
@@ -347,6 +346,9 @@ export class ServiceReportComponent implements OnInit {
         }
       });
 
+    this.brandService.GetByCompanyId()
+      .subscribe((data: any) => this.brandlist = data.object)
+
     this.sparePartService.getAll()
       .pipe(first())
       .subscribe((data: any) =>
@@ -370,12 +372,6 @@ export class ServiceReportComponent implements OnInit {
       .pipe(first())
       .subscribe((data: ListTypeItem[]) =>
         this.departmentList = data
-      );
-
-    this.listTypeService.getById('SUPPL')
-      .pipe(first())
-      .subscribe((data: ListTypeItem[]) =>
-        this.brandlist = data
       );
 
     this.listTypeService.getById('CONTY')
@@ -513,6 +509,10 @@ export class ServiceReportComponent implements OnInit {
     if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.ServiceReportId != null) this.ServiceReportform.patchValue(this.formData);
     else this.ServiceReportform.reset();
+    this.DisableScreen()
+  }
+
+  DisableScreen() {
     this.ServiceReportform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -523,7 +523,9 @@ export class ServiceReportComponent implements OnInit {
     this.spRecomandDefs = this.createColumnspreDefsRO();
     this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
     this.notificationService.SetNavParam();
+
   }
+
 
   FormControlDisable() {
     this.ServiceReportform.get('instrument').disable()
@@ -600,62 +602,43 @@ export class ServiceReportComponent implements OnInit {
     if (this.ServiceReportId == null) {
 
       this.ServiceReportService.save(this.ServiceReport)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.CancelEdit()
-              this.saveFileShare(data.object.id);
-              if (this.file != null) {
-                this.uploadPdfFile(this.file, data.object.id);
-                this.notificationService.filter("itemadded");
-                document.getElementById('selectedfiles').style.display = 'none';
+        .subscribe((data: any) => {
+          if (!data.result) return;
 
-                this.fileshareService.list(this.ServiceReportId)
-                  .pipe(first())
-                  .subscribe({
-                    next: (data: any) => {
-                      this.PdffileData = data.object;
-                    },
-                  });
-              }
-              this.notificationService.showSuccess(data.resultMessage, 'Success');
-            }
-            this.loading = false;
-          }
+          this.DisableScreen()
+          this.saveFileShare(data.object.id);
+          this.notificationService.showSuccess(data.resultMessage, 'Success');
+
+          if (this.file == null) return;
+
+          this.uploadPdfFile(this.file, data.object.id);
+          this.notificationService.filter("itemadded");
+          document.getElementById('selectedfiles').style.display = 'none';
+
+          this.fileshareService.list(this.ServiceReportId)
+            .subscribe((data: any) => this.PdffileData = data.object);
         });
-    } else {
+    }
+    else {
       this.ServiceReport = this.ServiceReportform.value;
       this.ServiceReport.id = this.ServiceReportId;
       this.ServiceReportService.update(this.ServiceReportId, this.ServiceReport)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.CancelEdit()
-              this.saveFileShare(this.ServiceReportId);
+        .subscribe((data: any) => {
+          if (!data.result) return;
+          this.DisableScreen()
+          this.saveFileShare(this.ServiceReportId);
+          this.notificationService.showSuccess(data.resultMessage, 'Success');
 
-              if (this.file != null) {
-                this.uploadPdfFile(this.file, this.ServiceReportId);
-                this.notificationService.filter("itemadded");
-                document.getElementById('selectedfiles').style.display = 'none';
-                setTimeout(() => {
+          if (this.file == null) return;
 
-                  this.fileshareService.list(this.ServiceReportId)
-                    .pipe(first())
-                    .subscribe({
-                      next: (data: any) => {
-                        this.PdffileData = data.object;
-                      },
-                    });
+          this.uploadPdfFile(this.file, this.ServiceReportId);
+          this.notificationService.filter("itemadded");
+          document.getElementById('selectedfiles').style.display = 'none';
 
-                }, 3000);
-              }
-
-              this.notificationService.showSuccess(data.resultMessage, 'Success');
-            }
-            this.loading = false;
-          }
+          setTimeout(() => {
+            this.fileshareService.list(this.ServiceReportId)
+              .subscribe((data: any) => this.PdffileData = data.object);
+          }, 3000);
         });
     }
   }

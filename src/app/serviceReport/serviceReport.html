@@ -161,8 +161,8 @@
               <select formControlName="brandName" class="form-select"
                 [ngClass]="{ 'is-invalid': f.brandName.touched && f.brandName.errors }">
                 <option value="">Select</option>
-                <option *ngFor="let d of brandlist" value={{d.listTypeItemId}}>
-                  {{d.itemname}}
+                <option *ngFor="let d of brandlist" value={{d.id}}>
+                  {{d.brandName}}
                 </option>
               </select>
               <div *ngIf="f.brandName.touched && f.brandName.errors" class="invalid-feedback">
