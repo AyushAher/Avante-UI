@@ -5,7 +5,8 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { ChangepasswoardComponent } from "../account/changepasswoard.component";
 import { UsernotificationService } from '../_services/usernotification.service';
 import { first } from 'rxjs/operators';
-import ChangeCIM from '../account/ChangeCIM.component';
+import { Environment } from 'ag-grid-community';
+import { EnvService } from '../_services/env/env.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -21,16 +22,26 @@ export class NavMenuComponent {
   @Output() showNotifications = new EventEmitter<boolean>()
   @Input() isClosed = false;
   notificationList: any[];
+  Role: any;
+  isDistributor: boolean;
 
   constructor(
     private accountService: AccountService,
     private modalService: BsModalService,
     private userNotification: UsernotificationService,
-    private userNotificationService: UsernotificationService
+    private userNotificationService: UsernotificationService,
+    private environmentService: EnvService
   ) {
     this.accountService.userSubject.subscribe((data) => this.user = data);
     this.isAdmin = this.user.isAdmin;
     this.isSuperAdmin = this.user.isSuperAdmin;
+    let role = JSON.parse(sessionStorage.getItem('roles'));
+
+    if (!this.user.isAdmin) {
+      this.Role = role[0]?.itemCode;
+    }
+
+    this.isDistributor = this.Role == environmentService.distRoleCode;
 
     setTimeout(() => {
       this.userNotificationService.getAll().pipe(first())

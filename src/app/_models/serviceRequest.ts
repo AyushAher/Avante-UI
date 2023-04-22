@@ -44,6 +44,7 @@ export class ServiceRequest {
   machinemodelname: string;
   isCritical: boolean;
   statusid: string;
+  stageid: string;
 }
 
 export class EngineerCommentList {

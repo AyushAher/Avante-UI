@@ -996,7 +996,7 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
 
-  Accepted(isAccepted?) {
+  Accepted() {
     if (this.isGenerateReport == false) {
       this.accepted = true
       this.hasCallScheduled = false;
@@ -1007,16 +1007,16 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestform.get('statusid').disable();
       let assignedStat = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId
       this.serviceRequestform.get('statusid').setValue(assignedStat);
+      let inPrgStage = this.stagelist.find(x => x.itemCode == "INPGS")?.listTypeItemId
+      this.serviceRequestform.get('stageid').setValue(inPrgStage);
       serviceRequest.statusid = assignedStat
+      serviceRequest.stageid = inPrgStage
 
       this.serviceRequestService.updateIsAccepted(this.serviceRequestId, serviceRequest)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.serviceRequestform.get('accepted').disable();
-            this.serviceRequestform.get('accepted').setValue(true)
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-          }
+        .subscribe((data: any) => {
+          this.serviceRequestform.get('accepted').disable();
+          this.serviceRequestform.get('accepted').setValue(true)
+          this.notificationService.showSuccess(data.resultMessage, "Success");
         })
     }
   }
