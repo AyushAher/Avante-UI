@@ -383,9 +383,10 @@ export class ServiceReportComponent implements OnInit {
 
     if (this.ServiceReportId != null) {
       this.ServiceReportService.getById(this.ServiceReportId)
-        .pipe(first())
         .subscribe({
           next: (data: any) => {
+            console.log(data.object);
+
             this.formData = data.object;
             this.ServiceReportform.patchValue(this.formData);
 
@@ -529,6 +530,7 @@ export class ServiceReportComponent implements OnInit {
 
   FormControlDisable() {
     this.ServiceReportform.get('instrument').disable()
+    this.ServiceReportform.get('brandName').disable()
     if (!this.isEng && this.user.username != "admin") {
       this.ServiceReportform.get('analyticalassit').disable()
       this.ServiceReportform.get('prevmaintenance').disable()
