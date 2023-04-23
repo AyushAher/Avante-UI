@@ -321,6 +321,8 @@ export class ServiceRequestComponent implements OnInit {
     })
     this.serviceRequestform.get("serresolutiondate").valueChanges
       .subscribe((data: any) => {
+        debugger;
+        if (!data) return;
         if (data < GetParsedDate(this.serviceRequestform.get("serreqdate").value)) {
           this.notificationService.showError("The Resolution Date should be after Service Request Date", "Invalid Date")
         }
@@ -408,7 +410,6 @@ export class ServiceRequestComponent implements OnInit {
     this.listTypeService.getById("TRRQT").pipe(first())
       .subscribe((data: ListTypeItem[]) => {
         this.reqtypelist = data;
-
         if (this.IsCustomerView)
           this.serviceRequestform.get('requesttypeid').setValue(data.find(x => x.itemCode == 'CUSTR')?.listTypeItemId);
       });
@@ -478,10 +479,9 @@ export class ServiceRequestComponent implements OnInit {
                         this.serviceRequestform.patchValue({ "edate": data.object.edate });
                         this.serviceRequestform.patchValue({ "serreqno": data.object.serreqno });
                         this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(GetParsedDate(data.object.serreqdate), 'dd/MM/YYYY') });
-                        this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
                         this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
                         this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(GetParsedDate(data.object.serreqdate), 'dd/MM/YYYY') });
-                        this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
+                        this.serviceRequestform.patchValue({ "serresolutiondate": GetParsedDate(data.object.serresolutiondate) });
                         this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
                         this.serviceRequestform.patchValue({ "distid": data.object.distid });
                         this.serviceRequestform.patchValue({ "custid": data.object.custid });
