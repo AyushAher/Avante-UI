@@ -802,29 +802,43 @@ export class AmcComponent implements OnInit {
     if (!instrument || instrument == "")
       return this.notificationService.showError("Value Cannot be Empty. Select an option", "Error");
 
-    let d = this.instrumentAutoComplete.find(x => x.id == instrument)
+    if (!this.f.sdate.value || !this.f.edate.value)
+      return this.notificationService.showError("Please enter Start Date and End Date", "Invalid Dates")
 
-    if (this.instrumentList?.find(x => x.serialnos == d.serialnos))
-      return this.notificationService.showError("Instrument already exists", "Error")
+    this.model = this.form.value;
+    this.model.instrumentIds = instrument;
+    this.model.paymentTerms = ""
 
-    var data = new AmcInstrument();
-    data = {
-      id: Guid.create().toString(),
-      serialnos: d.serialnos,
-      insTypeId: d.instype,
-      insType: d.instypeName,
-      insversion: d.insversion,
-      qty: 0,
-      rate: 0,
-      amount: 0,
-      instrumentId: d.id,
-      modified: false,
-      amcId: this.id,
-    };
+    this.Service.InsInAMCExists(this.model)
+      .subscribe((existsData: any) => {
+        if (existsData.result)
+          return this.notificationService.showError("AMC For the instrument exists for the given dates", "");
 
-    this.instrumentList = this.instrumentList || [];
-    this.instrumentList.push(data);
-    this.api.setRowData(this.instrumentList)
+        let d = this.instrumentAutoComplete.find(x => x.id == instrument)
+
+        if (this.instrumentList?.find(x => x.serialnos == d.serialnos))
+          return this.notificationService.showError("Instrument already exists", "Error")
+
+        var data = new AmcInstrument();
+        data = {
+          id: Guid.create().toString(),
+          serialnos: d.serialnos,
+          insTypeId: d.instype,
+          insType: d.instypeName,
+          insversion: d.insversion,
+          qty: 0,
+          rate: 0,
+          amount: 0,
+          instrumentId: d.id,
+          modified: false,
+          amcId: this.id,
+        };
+
+        this.instrumentList = this.instrumentList || [];
+        this.instrumentList.push(data);
+        this.api.setRowData(this.instrumentList)
+      })
+
   }
 
   private createColumnDefs() {
@@ -986,9 +1000,12 @@ export class AmcComponent implements OnInit {
       return this.notificationService.showInfo("Please add at least 1 instrument!", "Info");
     }
 
+    var instrumentIds = "";
+
     this.instrumentList.forEach(instrument => {
       instrument.amcId = this.id;
-    })
+      instrumentIds += instrument.instrumentId + ",";
+    });
 
 
     if (this.form.invalid) return;
@@ -1097,7 +1114,7 @@ export class AmcComponent implements OnInit {
     this.model.sqdate = datepipe.transform(GetParsedDate(this.model.sqdate), 'dd/MM/YYYY');
 
     this.model.baseCurrencyId = this.baseCurrId
-
+    this.model.instrumentIds = instrumentIds;
     if (!this.hasId && this.hasAddAccess) {
       this.model.id = this.id;
 

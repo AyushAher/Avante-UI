@@ -43,4 +43,8 @@ export class AmcService {
         return x;
       }));
   }
+
+  InsInAMCExists(amc) {
+    return this.http.post(`${this.environment.apiUrl}/Amc/InsInAMCExists`, amc);
+  }
 }
