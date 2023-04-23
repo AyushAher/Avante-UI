@@ -14,6 +14,7 @@ import {
   worktimeService
 } from '../_services';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { GetParsedDate } from '../_helpers/Providers';
 
 
 @Component({
@@ -28,11 +29,11 @@ export class WorkTimeContentComponent implements OnInit {
   submitted = false;
   isSave = false;
   servicereportId: string;
-  //id: string;
   listid: string;
   public columnDefs: ColDef[];
   closeResult: string;
   @Input() public itemId;
+  @Input() public item;
   @Input() public id;
   formData: any;
 
@@ -58,25 +59,27 @@ export class WorkTimeContentComponent implements OnInit {
       isdeleted: [false],
 
     });
-    if (this.id != undefined) {
-      this.worktimeservice.getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.formData = data.object;
-            this.workTimeForm.patchValue(this.formData);
-            this.workTimeForm.patchValue({ "worktimedate": new Date(data.object.worktimedate) });
-            this.PerDayHrs()
-          },
-          error: error => {
-            this.loading = false;
-          }
-        });
-    }
+
+
+    this.workTimeForm.get("worktimedate").valueChanges
+      .subscribe(value => {
+        if (value < GetParsedDate(this.item.serreqdate)) {
+          this.notificationService.showError("The Date should be after Service Request Date", "Invalid Date")
+        }
+      })
+
+    if (this.id == undefined) return;
+
+    this.worktimeservice.getById(this.id)
+      .subscribe((data: any) => {
+        this.formData = data.object;
+        this.workTimeForm.patchValue(this.formData);
+        this.workTimeForm.patchValue({ "worktimedate": new Date(data.object.worktimedate) });
+        this.PerDayHrs()
+      });
   }
 
   close() {
-    //alert('test cholde');
     this.activeModal.hide();
     this.notificationService.filter("itemadded");
   }
@@ -100,72 +103,34 @@ export class WorkTimeContentComponent implements OnInit {
       } else {
         diff = 0;
         this.workTimeForm.get('perdayhrs').setValue(diff.toString());
-        this.notificationService.showError("End Time cannot be more than start time", "Error")
+        this.notificationService.showError("End Time should not be earlier than Start Time.", "Invalid Time Range")
       }
 
     }
   }
 
   onValueSubmit() {
-    //debugger;
+    if (this.workTimeForm.get("actiondate").value < GetParsedDate(this.item.serreqdate))
+      return this.notificationService.showError("The Action Date should be after Service Request Date", "Invalid Date")
 
-    this.submitted = true;
+    if (this.workTimeForm.invalid) return;
 
-    this.isSave = true;
-    this.loading = true;
-
-    if (this.workTimeForm.invalid) {
-      return;
-    }
     this.workTime = this.workTimeForm.value;
     this.workTime.servicereportid = this.itemId;
 
     if (this.id == null) {
       this.worktimeservice.save(this.workTime)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.close();
-              //this.configList = data.object;
-              // this.listvalue.get("configValue").setValue("");
-            }
-            else {
-
-              this.close();
-            }
-            this.loading = false;
-          },
-          error: () => {
-
-            this.loading = false;
-          }
+        .subscribe((data: any) => {
+          if (data.result) this.notificationService.showSuccess(data.resultMessage, "Success");
+          this.close();
         });
     }
     else {
       this.workTime.id = this.id;
       this.worktimeservice.update(this.id, this.workTime)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.close();
-              //this.configList = data.object;
-              //this.listvalue.get("configValue").setValue("");
-              //this.id = null;
-            }
-            else {
-
-              this.close();
-            }
-            this.loading = false;
-          },
-          error: () => {
-
-            this.loading = false;
-          }
+        .subscribe((data: any) => {
+          if (data.result) this.notificationService.showSuccess(data.resultMessage, "Success");
+          this.close();
         });
     }
   }

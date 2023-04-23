@@ -27,6 +27,7 @@ import { AmcinstrumentService } from "../_services/amcinstrument.service";
 import { AmcstagesService } from "../_services/amcstages.service";
 import { EnvService } from "../_services/env/env.service";
 import { AmcInstrumentRendererComponent } from "./amc-instrument-renderer.component";
+import { BrandService } from "../_services/brand.service";
 
 @Component({
   selector: "app-Amc",
@@ -56,7 +57,7 @@ export class AmcComponent implements OnInit {
   instrumentserialno: any;
   instrumentAutoComplete: any[];
   instrumentList: AmcInstrument[] = []
-  supplierList: ListTypeItem[];
+  supplierList: any[];
   custSiteList: any;
 
   public columnDefs: any;
@@ -126,7 +127,8 @@ export class AmcComponent implements OnInit {
     private amcStagesService: AmcstagesService,
     private FileShareService: FileshareService,
     private environment: EnvService,
-    private instrumentService: InstrumentService
+    private instrumentService: InstrumentService,
+    private brandService: BrandService
   ) {
 
     this.notificationService.listen().subscribe((m: any) => {
@@ -343,9 +345,15 @@ export class AmcComponent implements OnInit {
         this.serviceType = data;
       });
 
-    this.listTypeService.getById("SUPPL")
+    this.brandService.GetByCompanyId()
       .pipe(first()).subscribe((data: any) => {
-        this.supplierList = data;
+        this.supplierList = data.object;
+
+        if (role != this.environment.distRoleCode) return;
+        var brand = this.supplierList.find(x => x.brandName == this.user.brand);
+        if (!brand) return;
+
+        setTimeout(() => this.form.get("brand").setValue(brand.id), 1500);
       });
 
 
@@ -468,12 +476,15 @@ export class AmcComponent implements OnInit {
 
   FormControlDisable() {
     this.form.get('baseCurrencyId').disable()
-    if (this.isDisableSite) {
+
+    if (this.isDisableSite)
       this.form.get('custSite').disable()
-    }
-    if (this.IsCustomerView) {
+
+    if (this.IsCustomerView)
       this.form.get('billtoid').disable()
-    }
+
+    if (this.IsDistributorView)
+      this.form.get("brand").disable()
   }
 
   Back() {

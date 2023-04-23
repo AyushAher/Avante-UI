@@ -930,7 +930,7 @@ export class ServiceReportComponent implements OnInit {
   addPartrecmm() {
     if (!this.isCompleted) {
       const v = this.ServiceReportform.get('recondad').value;
-      if (v == "" || v == null) return;
+      if (v == "" || v == null) return this.notificationService.showError("Please select a Spare Part", "Invalid value");
       this.srRecomndModel = new sparePartRecomanded();
       this.srRecomndModel.partno = v.partNo;
       this.srRecomndModel.hsccode = v.hsCode;
@@ -1171,7 +1171,8 @@ export class ServiceReportComponent implements OnInit {
     if (!this.isCompleted) {
       const initialState = {
         itemId: param,
-        id: param1
+        id: param1,
+        item: this.servicerequest
       };
       this.bsModalRef = this.modalService.show(WorkTimeContentComponent, { initialState });
     }
@@ -1181,7 +1182,7 @@ export class ServiceReportComponent implements OnInit {
   addPartcons() {
     if (!this.isCompleted) {
       const v = this.ServiceReportform.get('consumed').value;
-      if (v == null || v == "") return;
+      if (v == null || v == "") return this.notificationService.showError("Please select a Spare Part", "Invalid value");;
       this.srConsumedModel = new sparePartsConsume();
       this.srConsumedModel.partno = v.partNo;
       this.srConsumedModel.hsccode = v.hscCode;
