@@ -805,7 +805,10 @@ export class AmcComponent implements OnInit {
     if (!this.f.sdate.value || !this.f.edate.value)
       return this.notificationService.showError("Please enter Start Date and End Date", "Invalid Dates")
 
+    let datepipe = new DatePipe('en-US')
     this.model = this.form.value;
+    this.model.sdate = datepipe.transform(GetParsedDate(this.model.sdate), 'dd/MM/YYYY');
+    this.model.edate = datepipe.transform(GetParsedDate(this.model.edate), 'dd/MM/YYYY');
     this.model.instrumentIds = instrument;
     this.model.paymentTerms = ""
 

@@ -145,7 +145,7 @@ export class CustomerSiteComponent implements OnInit {
           this.customerName = customer.custname
           if (customer.defDistRegion && !this.csiteid) this.customersiteform.get('regname').setValue(customer.defDistRegion)
           if (customer.custname) this.customersiteform.get('custname').setValue(customer.custname)
-          if (customer.defdistregionid) this.customersiteform.get('distid').setValue(customer.defdistregionid)
+          if (customer.defdistregionid && !this.csiteid) this.customersiteform.get('distid').setValue(customer.defdistregionid)
 
           this.countryService.getAll()
             .subscribe((data: any) => {
