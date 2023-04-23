@@ -201,7 +201,7 @@ export class DashboardComponent implements OnInit {
   getServiceRequestData(sdate, edate) {
     this.customerDashboardService.GetAllServiceRequest()
       .pipe(first()).subscribe((data: any) => {
-
+        debugger;
         let label = []
         var pendingRequestLabels = []
         var pendingRequestValue = []
@@ -210,13 +210,11 @@ export class DashboardComponent implements OnInit {
         let pendingrequestBgColor = []
         // data.object = data.object.filter(x => !x.isReportGenerated)
         data.object.forEach(x => {
-          if (this.GetDiffDate(new Date(x.createdon), edate, sdate)) {
+          if (!this.GetDiffDate(new Date(x.createdon), edate, sdate)) return;
+          console.log(x);
 
-            if (x.isReportGenerated == false)
-              pendingRequestLabels.push(x.visittypeName)
-            else
-              label.push(x.visittypeName)
-          }
+          if (x.isCompleted == false) pendingRequestLabels.push(x.visittypeName)
+          else label.push(x.visittypeName)
         })
 
         label = [... new Set(label)]
@@ -224,13 +222,13 @@ export class DashboardComponent implements OnInit {
 
         for (let i = 0; i < label.length; i++) {
           const element = label[i];
-          chartData.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == true && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
+          chartData.push(data.object.filter(x => x.visittypeName == element && x.isCompleted == true && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
           bgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
         }
 
         for (let i = 0; i < pendingRequestLabels.length; i++) {
           const element = pendingRequestLabels[i];
-          pendingRequestValue.push(data.object.filter(x => x.visittypeName == element && x.isReportGenerated == false && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
+          pendingRequestValue.push(data.object.filter(x => x.visittypeName == element && x.isCompleted == false && this.GetDiffDate(new Date(x.createdon), edate, sdate)).length)
           pendingrequestBgColor.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
         }
 
