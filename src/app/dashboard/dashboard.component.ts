@@ -419,6 +419,7 @@ export class DashboardComponent implements OnInit {
   public oninstuchange(id: string) {
     this.customerDashboardService.GetSerReqInstrument(id)
       .subscribe((data: any) => {
+        console.log(data);
         var instument = data.object;
         this.siteId = data.object.custSiteId;
         this.serviceRequestform.patchValue({ "machmodelname": instument.instype });
@@ -427,6 +428,7 @@ export class DashboardComponent implements OnInit {
         this.serviceRequestform.patchValue({ "operatoremail": instument.operatorEng.pemail });
         this.serviceRequestform.patchValue({ "machengineer": instument.machineEng.fname + ' ' + instument.machineEng.lname });
         this.serviceRequestform.patchValue({ "xraygenerator": instument.insversion });
+        this.serviceRequestform.patchValue({ "siteid": data.object.custSiteId });
       });
 
   }
@@ -443,11 +445,11 @@ export class DashboardComponent implements OnInit {
     this.serviceRequestform.patchValue({ "contactperson": this.user?.username });
     this.serviceRequestform.patchValue({ "email": this.user?.email });
 
-    if (this.logindata.sites != null) {
-      this.siteId = this.currentSiteId
-      this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
-      this.serviceRequestform.patchValue({ "siteid": this.logindata.sites[0].id });
-    }
+    // if (this.logindata.sites != null) {
+    // this.siteId = this.currentSiteId
+    // this.serviceRequestform.patchValue({ "sitename": this.logindata.sites[0].custregname });
+    // this.serviceRequestform.patchValue({ "siteid": this.logindata.sites[0].id });
+    // }
   }
 
 }
