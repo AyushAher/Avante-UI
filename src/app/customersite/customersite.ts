@@ -143,7 +143,7 @@ export class CustomerSiteComponent implements OnInit {
 
         if (customer) {
           this.customerName = customer.custname
-          if (customer.defDistRegion) this.customersiteform.get('regname').setValue(customer.defDistRegion)
+          if (customer.defDistRegion && !this.csiteid) this.customersiteform.get('regname').setValue(customer.defDistRegion)
           if (customer.custname) this.customersiteform.get('custname').setValue(customer.custname)
           if (customer.defdistregionid) this.customersiteform.get('distid').setValue(customer.defdistregionid)
 
@@ -151,7 +151,7 @@ export class CustomerSiteComponent implements OnInit {
             .subscribe((data: any) => {
               this.countries = data.object;
               var siteName = this.countries.find(x => x.id == customer.address.countryid)?.name
-              this.customersiteform.get('custregname').setValue(siteName)
+              if (!this.csiteid) this.customersiteform.get('custregname').setValue(siteName)
             });
         }
       });
