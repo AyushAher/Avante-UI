@@ -346,6 +346,15 @@ export class ServiceReportComponent implements OnInit {
         }
       });
 
+    this.ServiceReportform.get("nextvisitscheduled").valueChanges
+      .subscribe(data => {
+        if (!data) return;
+        if (data < new Date()) {
+          this.notificationService.showError("The Visit Date should be after Today's Date", "Invalid Date")
+        }
+
+      })
+
     this.brandService.GetByCompanyId()
       .subscribe((data: any) => this.brandlist = data.object)
 
@@ -385,8 +394,6 @@ export class ServiceReportComponent implements OnInit {
       this.ServiceReportService.getById(this.ServiceReportId)
         .subscribe({
           next: (data: any) => {
-            console.log(data.object);
-
             this.formData = data.object;
             this.ServiceReportform.patchValue(this.formData);
 
