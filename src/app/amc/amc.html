@@ -154,7 +154,7 @@
               <label for="brand">Brand<span class="text-danger">*</span></label>
               <select id="brand" type="text" formControlName="brand" class="form-select"
                 [ngClass]="{ ' is -invalid': f.brand.touched && f.brand.errors}">
-                <option *ngFor="let d of supplierList" value={{d.id}}>
+                <option *ngFor="let d of supplierList" value="{{d.id}}">
                   {{d.brandName}}
                 </option>
               </select>
