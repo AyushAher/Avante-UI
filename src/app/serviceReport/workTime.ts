@@ -84,6 +84,10 @@ export class WorkTimeContentComponent implements OnInit {
     this.notificationService.filter("itemadded");
   }
 
+  get f() {
+    return this.workTimeForm.controls
+  }
+
   PerDayHrs() {
     let startTime: Date;
     let endTime: Date;
@@ -110,10 +114,11 @@ export class WorkTimeContentComponent implements OnInit {
   }
 
   onValueSubmit() {
-    if (this.workTimeForm.get("actiondate").value < GetParsedDate(this.item.serreqdate))
-      return this.notificationService.showError("The Action Date should be after Service Request Date", "Invalid Date")
+    this.workTimeForm.markAllAsTouched();
+    if (this.workTimeForm.get("worktimedate").value < GetParsedDate(this.item.serreqdate))
+      return this.notificationService.showError("The Work Time Date should be after Service Request Date", "Invalid Date")
 
-    if (this.workTimeForm.invalid) return;
+    if (this.workTimeForm.invalid) return this.notificationService.showError("Please fill all required fields", "Invalid Form");
 
     this.workTime = this.workTimeForm.value;
     this.workTime.servicereportid = this.itemId;
