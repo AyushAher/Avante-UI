@@ -321,7 +321,6 @@ export class ServiceRequestComponent implements OnInit {
     })
     this.serviceRequestform.get("serresolutiondate").valueChanges
       .subscribe((data: any) => {
-        debugger;
         if (!data) return;
         if (data < GetParsedDate(this.serviceRequestform.get("serreqdate").value)) {
           this.notificationService.showError("The Resolution Date should be after Service Request Date", "Invalid Date")
@@ -436,7 +435,6 @@ export class ServiceRequestComponent implements OnInit {
 
     if (this.serviceRequestId != null) {
       this.serviceRequestService.getById(this.serviceRequestId)
-        .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.lockRequest = data.object.lockRequest
@@ -463,14 +461,13 @@ export class ServiceRequestComponent implements OnInit {
 
             this.customerId = data.object.custid
 
-            this.customerService.getAll().pipe(first())
+            this.customerService.getAll()
               .subscribe((custData: any) => {
 
                 this.customerlist = custData.object
                 this.onCustomerChanged()
 
                 this.distributorService.getDistributorRegionContacts(data.object.distid)
-                  .pipe(first())
                   .subscribe({
                     next: (engData: any) => {
                       this.appendList = engData.object;
@@ -481,7 +478,7 @@ export class ServiceRequestComponent implements OnInit {
                         this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(GetParsedDate(data.object.serreqdate), 'dd/MM/YYYY') });
                         this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
                         this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(GetParsedDate(data.object.serreqdate), 'dd/MM/YYYY') });
-                        this.serviceRequestform.patchValue({ "serresolutiondate": GetParsedDate(data.object.serresolutiondate) });
+                        this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
                         this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
                         this.serviceRequestform.patchValue({ "distid": data.object.distid });
                         this.serviceRequestform.patchValue({ "custid": data.object.custid });
@@ -828,6 +825,7 @@ export class ServiceRequestComponent implements OnInit {
 
     let sDate = this.serviceRequestform.get('sdate').value
     let eDate = this.serviceRequestform.get('edate').value
+    let serresolutiondate = this.serviceRequestform.get('serresolutiondate').value
 
     if ((sDate != "" && sDate != null) && (eDate != "" && eDate != null)) {
       let dateSent = GetParsedDate(sDate);
@@ -851,7 +849,9 @@ export class ServiceRequestComponent implements OnInit {
 
       this.serviceRequestform.get('sdate').setValue(datepipie.transform(dateSent, 'dd/MM/YYYY'));
       this.serviceRequestform.get('edate').setValue(datepipie.transform(currentDate, 'dd/MM/YYYY'));
+
     }
+
 
 
     if (this.serviceRequestId == null) {
@@ -860,6 +860,7 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequest.engComments = [];
       this.serviceRequest.assignedHistory = [];
       this.serviceRequest.engAction = [];
+      this.serviceRequest.serresolutiondate = datepipie.transform(serresolutiondate, 'dd/MM/YYYY');
 
       this.serviceRequest.siteid = this.siteId;
       this.serviceRequest.custid = this.customerId;
@@ -909,6 +910,8 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequest.engComments = [];
       this.serviceRequest.assignedHistory = [];
       this.serviceRequest.engAction = [];
+      this.serviceRequest.serresolutiondate = datepipie.transform(GetParsedDate(serresolutiondate), 'dd/MM/YYYY');
+
 
       if (this.IsEngineerView && this.serviceRequest.isCritical) this.serviceRequest.isCritical = false;
       if (this.serviceRequestform.get('subrequesttypeid').value.length > 0) {
@@ -1009,7 +1012,8 @@ export class ServiceRequestComponent implements OnInit {
     }
   }
 
-  Accepted() {
+  Accepted(value) {
+    if (!value || value == "false") return;
     if (this.isGenerateReport == false) {
       this.accepted = true
       this.hasCallScheduled = false;
