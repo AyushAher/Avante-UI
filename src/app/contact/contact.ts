@@ -87,7 +87,7 @@ export class ContactComponent implements OnInit {
       distCustName: [""],
       fname: ['', [Validators.required, Validators.maxLength(512)]],
       lname: ['', [Validators.required, Validators.maxLength(512)]],
-      mname: ['', [Validators.required]],
+      mname: [''],
       pcontactno: ['', [Validators.required, Validators.pattern("[^a-zA-Z]*")]],
       pemail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
       scontactno: ['', [Validators.required, Validators.pattern("[^a-zA-Z]*")]],
