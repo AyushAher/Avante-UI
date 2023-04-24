@@ -24,6 +24,7 @@ export class NavMenuComponent {
   notificationList: any[];
   Role: any;
   isDistributor: boolean;
+  cimData: any;
 
   constructor(
     private accountService: AccountService,
@@ -33,6 +34,9 @@ export class NavMenuComponent {
     private environmentService: EnvService
   ) {
     this.accountService.userSubject.subscribe((data) => this.user = data);
+    this.accountService.cimSubject.subscribe((data) => this.cimData = data);
+    // console.log(accountService.cimValue);
+
     this.isAdmin = this.user.isAdmin;
     this.isSuperAdmin = this.user.isSuperAdmin;
     let role = JSON.parse(sessionStorage.getItem('roles'));

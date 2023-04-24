@@ -9,13 +9,13 @@
       <li class="nav-item dropdown dropdown-center dropdown-large mt-3" [ngClass]="{'mx-3': !isAdmin}">
         <nav class="link" (click)="ChangeCIM()" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li *ngIf="user?.company" class="breadcrumb-item" [title]="'Company: ' + user?.company">
-              <a>{{user?.company}}</a>
+            <li *ngIf="cimData?.company" class="breadcrumb-item" [title]="'Company: ' + cimData?.company">
+              <a>{{cimData?.company}}</a>
             </li>
-            <li *ngIf="(isDistributor || user.isAdmin) && user?.bu" class="breadcrumb-item"
-              [title]="'Business Unit: ' + user?.bu"><a>{{user?.bu}}</a></li>
-            <li *ngIf="(isDistributor || user.isAdmin) && user?.brand" class="breadcrumb-item"
-              [title]="'Brand: ' + user?.brand"><a>{{user?.brand}}</a>
+            <li *ngIf="(isDistributor || user.isAdmin) && cimData?.bu" class="breadcrumb-item"
+              [title]="'Business Unit: ' + cimData?.bu"><a>{{cimData?.bu}}</a></li>
+            <li *ngIf="(isDistributor || user.isAdmin) && cimData?.brand" class="breadcrumb-item"
+              [title]="'Brand: ' + cimData?.brand"><a>{{cimData?.brand}}</a>
             </li>
           </ol>
         </nav>

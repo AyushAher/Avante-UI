@@ -67,7 +67,10 @@ export class CIMComponent implements OnInit {
     this.Form = this.formBuilder.group({
       brandId: [""],
       businessUnitId: [""],
-      companyId: ["", Validators.required]
+      companyId: ["", Validators.required],
+      company: [],
+      brand: [],
+      bu: []
     });
 
     setTimeout(() => {
@@ -82,7 +85,8 @@ export class CIMComponent implements OnInit {
     }, 500);
 
     this.Form.get('businessUnitId').valueChanges
-      .subscribe((value: any) =>
+      .subscribe((value: any) => {
+        this.Form.get("bu").setValue(this.businessUnitList.find(x => x.id == value)?.businessUnitName)
         this.brandService.GetByBU(value)
           .subscribe((data: any) => {
             this.brandList = [];
@@ -93,8 +97,13 @@ export class CIMComponent implements OnInit {
               }
             });
           })
-      );
+      });
 
+    this.Form.get("brandId").valueChanges
+      .subscribe(value => this.Form.get("brand").setValue(this.brandList.find(x => x.id == value)?.brandName))
+
+    this.Form.get("companyId").valueChanges
+      .subscribe(value => this.Form.get("company").setValue(this.companyList.find(x => x.id == value)?.companyName))
 
     let data = this.cimData;
 

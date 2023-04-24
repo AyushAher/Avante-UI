@@ -22,6 +22,7 @@ import ExistingCIM from '../account/Existing.component';
 @Injectable({ providedIn: 'root' })
 export class AccountService {
   public userSubject: BehaviorSubject<User>;
+  public cimSubject: BehaviorSubject<any>;
   private zohoSubject: BehaviorSubject<string>;
   public user: Observable<User>;
 
@@ -43,6 +44,7 @@ export class AccountService {
   ) {
     this.userSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('user')));
     this.zohoSubject = new BehaviorSubject<string>(JSON.parse(sessionStorage.getItem('zohotoken')));
+    this.cimSubject = new BehaviorSubject<any>(JSON.parse(sessionStorage.getItem("cimdata")));
     this.user = this.userSubject.asObservable();
     this.notificationService.listen().subscribe((data: any) => {
 
@@ -80,6 +82,10 @@ export class AccountService {
 
   public get userValue(): User {
     return this.userSubject.value;
+  }
+
+  public get cimValue(): any {
+    return this.cimSubject.value;
   }
 
   public get zohoauthValue(): string {
@@ -202,7 +208,8 @@ export class AccountService {
                     this.companyId = result.companyId;
                     return;
                   }
-
+                  this.cimSubject.next(result.form);
+                  sessionStorage.setItem("cimdata", JSON.stringify(result.form))
                   this.login(username, password, result.form.companyId, (isAdmin || isSuperAdmin) ? "" : result.form.businessUnitId, (isAdmin || isSuperAdmin) ? "" : result.form.brandId)
                     .pipe(first()).subscribe(() => {
                       if (isAdmin) this.router.navigate(['/'], {
@@ -267,6 +274,7 @@ export class AccountService {
     sessionStorage.clear();
     this.clear();
     this.userSubject.next(null);
+    this.cimSubject.next(null);
     this.router.navigate(['/account/login'], {
       //relativeTo: this.activeRoute,
       queryParams: { isNSNav: true },
