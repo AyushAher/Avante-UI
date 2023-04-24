@@ -343,7 +343,7 @@ export class DashboardComponent implements OnInit {
       serresolutiondate: [''],
       escalation: [''],
       requesttypeid: [''],
-      subrequesttypeid: [""],
+      subrequesttypeid: ["PRMN1"],
       remarks: [''],
       delayedReasons: [''],
       isCritical: [true],

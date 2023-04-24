@@ -92,10 +92,14 @@
               <input type="text" disabled class="form-control" formControlName="email" id="">
             </div>
 
+            <div class="col-md-12 col-sm-12">
+              <p class="text-danger">Fields marked with <span class="text-danger">*</span> are mandatory.</p>
+            </div>
+
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                1. Was your work request completed in a prompt and timely manner?
-              </label>
+                1. Was your work request completed in a prompt and timely manner?<span
+                  class="text-danger">*</span></label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="onTime" type="radio" value="1" id="onTime-true">
                 <label class="form-check-label" for="onTime-true">Yes</label>
@@ -113,8 +117,7 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                2. Was the Avantgarde employee courteous and professional?
-              </label>
+                2. Was the Avantgarde employee courteous and professional?<span class="text-danger">*</span></label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="isProfessional" type="radio" value="1"
                   id="isProfessional-true">
@@ -135,8 +138,8 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                3. Were you notified of any changes in the progress of the work (if applicable)?
-              </label>
+                3. Were you notified of any changes in the progress of the work (if applicable)?<span
+                  class="text-danger">*</span></label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="isNotified" type="radio" value="1"
                   id="isNotified-true">
@@ -156,8 +159,7 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                4. Were you satisfied with the work done?
-              </label>
+                4. Were you satisfied with the work done?<span class="text-danger">*</span></label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="isSatisfied" type="radio" value="1"
                   id="isSatisfied-true">
@@ -177,8 +179,7 @@
 
             <div class="col-md-12 col-sm-12 mb-3">
               <label>
-                5. Was the work area cleaned up after completion of the job?
-              </label>
+                5. Was the work area cleaned up after completion of the job?<span class="text-danger">*</span></label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="isAreaClean" type="radio" value="1"
                   id="isAreaClean-true">
@@ -201,8 +202,7 @@
               <label>
                 6. If you were not present when the work was done, did the engineer leave a note indicating that
                 he/she had
-                been there, describing what was done?
-              </label>
+                been there, describing what was done?<span class="text-danger">*</span></label>
               <div class="form-check">
                 <input class="form-check-input" formControlName="isNote" type="radio" value="1" id="isNote-true">
                 <label class="form-check-label" for="isNote-true">Yes</label>

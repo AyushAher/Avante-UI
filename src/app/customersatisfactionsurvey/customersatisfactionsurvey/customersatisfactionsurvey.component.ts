@@ -128,12 +128,12 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
       name: ["", [Validators.required]],
       email: ["", [Validators.required]],
-      onTime: [false],
-      isProfessional: [false],
-      isNotified: [false],
-      isSatisfied: [false],
-      isAreaClean: [false],
-      isNote: [false],
+      onTime: ["", Validators.required],
+      isProfessional: ["", Validators.required],
+      isNotified: ["", Validators.required],
+      isSatisfied: ["", Validators.required],
+      isAreaClean: ["", Validators.required],
+      isNote: ["", Validators.required],
       comments: [""],
     });
 
@@ -312,7 +312,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.form.invalid) {
-      return;
+      return this.notificationService.showError("Please select mandatory fields", "Invalid Data");
     }
 
     this.loading = true;
