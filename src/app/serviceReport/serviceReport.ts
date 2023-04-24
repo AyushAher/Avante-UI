@@ -599,7 +599,8 @@ export class ServiceReportComponent implements OnInit {
       }
       else {
         this.ServiceReport.custsignature = this.signaturePad?.toDataURL();
-        this.router.navigate(["customersatisfactionsurvey"], { queryParams: { servicereportid: this.ServiceReportId, isNSNav: true } })
+        setTimeout(() =>
+          this.router.navigate(["customersatisfactionsurvey"], { queryParams: { servicereportid: this.ServiceReportId, isNSNav: true } }), 500);
       }
     }
 
