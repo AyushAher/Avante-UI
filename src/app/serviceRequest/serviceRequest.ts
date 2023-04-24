@@ -383,6 +383,8 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.statuslist = data;
+          console.log(this.statuslist);
+
           if (this.serviceRequestId == null) {
             this.serviceRequestform.get('statusid').setValue(data.find(x => x.itemCode == "NTACP")?.listTypeItemId);
 
@@ -1013,30 +1015,32 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   Accepted(value) {
-    debugger;
-    if (!value || value == "false") return;
-    if (this.isGenerateReport == false) {
-      this.accepted = true
-      this.hasCallScheduled = false;
-      let serviceRequest = new ServiceRequest();
-      serviceRequest.id = this.serviceRequestId;
-      serviceRequest.accepted = true
+    if (!value) return;
+    let currentStatus = this.statuslist.find(x => x.listTypeItemId == value)?.itemCode
+    if (currentStatus != "ACPTD") return;
+    if (this.isGenerateReport) return;
 
-      this.serviceRequestform.get('statusid').disable();
-      let assignedStat = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId
-      this.serviceRequestform.get('statusid').setValue(assignedStat);
-      let inPrgStage = this.stagelist.find(x => x.itemCode == "INPGS")?.listTypeItemId
-      this.serviceRequestform.get('stageid').setValue(inPrgStage);
-      serviceRequest.statusid = assignedStat
-      serviceRequest.stageid = inPrgStage
+    this.accepted = true
+    this.hasCallScheduled = false;
+    let serviceRequest = new ServiceRequest();
+    serviceRequest.id = this.serviceRequestId;
+    serviceRequest.accepted = true
 
-      this.serviceRequestService.updateIsAccepted(this.serviceRequestId, serviceRequest)
-        .subscribe((data: any) => {
-          this.serviceRequestform.get('accepted').disable();
-          this.serviceRequestform.get('accepted').setValue(true)
-          this.notificationService.showSuccess(data.resultMessage, "Success");
-        })
-    }
+    this.serviceRequestform.get('statusid').disable();
+    let assignedStat = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId
+    // this.serviceRequestform.get('statusid').setValue(assignedStat);
+    let inPrgStage = this.stagelist.find(x => x.itemCode == "INPGS")?.listTypeItemId
+    this.serviceRequestform.get('stageid').setValue(inPrgStage);
+    serviceRequest.statusid = assignedStat
+    serviceRequest.stageid = inPrgStage
+
+    this.serviceRequestService.updateIsAccepted(this.serviceRequestId, serviceRequest)
+      .subscribe((data: any) => {
+        this.serviceRequestform.get('accepted').disable();
+        this.serviceRequestform.get('accepted').setValue(true)
+        this.notificationService.showSuccess(data.resultMessage, "Success");
+      })
+
   }
 
   generatereport() {
