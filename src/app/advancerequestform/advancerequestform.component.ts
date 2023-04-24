@@ -18,8 +18,6 @@ import { EnvService } from '../_services/env/env.service';
 export class AdvancerequestformComponent implements OnInit {
 
   id: string;
-  loading = false;
-  submitted = false;
   form: FormGroup;
   model: any;
   profilePermission: ProfileReadOnly;
@@ -172,50 +170,41 @@ export class AdvancerequestformComponent implements OnInit {
     this.countrtyService.getAll().pipe(first()).subscribe((data: any) => this.country = data.object)
 
     this.distributorservice.getByConId(this.user.contactId)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          if (this.user.username != "admin") {
-            this.form.get('distributorId').setValue(data.object[0].id);
-            this.distributorservice.getDistributorRegionContacts(data.object[0].id).pipe(first())
-              .subscribe((Engdata: any) => {
-                this.distId = data.object[0].id
-                this.engineer = Engdata.object;
+      .subscribe((data: any) => {
+        if (this.user.username == "admin") return;
+        this.form.get('distributorId').setValue(data.object[0].id);
+        this.distributorservice.getDistributorRegionContacts(data.object[0].id)
+          .subscribe((Engdata: any) => {
+            this.distId = data.object[0].id
+            this.engineer = Engdata.object;
 
-                if (this.IsEngineerView) {
-                  this.form.get('engineerId').setValue(this.user.contactId)
+            if (!this.IsEngineerView) return;
 
-                  this.servicerequestservice
-                    .GetServiceRequestByDist(this.distId)
-                    .pipe(first())
-                    .subscribe((Srqdata: any) => {
-                      this.servicerequest = Srqdata.object.filter(x => x.assignedto == this.user.contactId && !x.isReportGenerated)
-                    });
-                }
+
+            this.form.get('engineerId').setValue(this.user.contactId)
+            this.servicerequestservice.GetServiceRequestByDist(this.distId)
+              .subscribe((Srqdata: any) => {
+                this.servicerequest = Srqdata.object.filter(x => x.assignedto == this.user.contactId && !x.isReportGenerated)
               });
+          });
 
-          }
-        }
       })
 
+    this.getBankDetails(this.user.contactId)
 
     if (this.id != null) {
-      this.service
-        .getById(this.id)
-        .pipe(first())
-        .subscribe({
-          next: (data: any) => {
-            this.servicerequestservice
-              .GetServiceRequestByDist(data.object.distributorId)
-              .pipe(first())
-              .subscribe((Srqdata: any) => {
-                this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
-                this.GetFileList(data.object.id)
+      this.service.getById(this.id)
+        .subscribe((data: any) => {
+          this.servicerequestservice.GetServiceRequestByDist(data.object.distributorId)
+            .subscribe((Srqdata: any) => {
+              this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
+              this.GetFileList(data.object.id)
+              setTimeout(() => {
                 this.getBankDetails(data.object.engineerId)
-                this.formData = data.object;
-                this.form.patchValue(this.formData);
-              });
-          }
+              }, 500);
+              this.formData = data.object;
+              this.form.patchValue(this.formData);
+            });
         });
       this.form.disable()
       this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
@@ -272,13 +261,11 @@ export class AdvancerequestformComponent implements OnInit {
 
   DeleteRecord() {
     if (confirm("Are you sure you want to delete the record?")) {
-      this.service.delete(this.id).pipe(first())
+      this.service.delete(this.id)
         .subscribe((data: any) => {
           if (data.result)
             this.router.navigate(["advancerequestformlist"], {
-              //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
             });
         })
     }
@@ -292,31 +279,28 @@ export class AdvancerequestformComponent implements OnInit {
   get b() {
     let fg: any = this.form.get('bankDetails')
     return fg.controls;
-    // return <FormGroup>(this.form.get('bankDetails')).controls
   }
+
   getBankDetails(engId) {
-    if (engId != null) {
-      this.form.get('bankDetails').get('contactId').setValue(engId);
+    if (engId == null) return;
 
-      this.bankDetails.getByContactId(engId).pipe(first())
-        .subscribe((data: any) => {
-          if (data.object == null) {
-            this.bid = null;
-            this.form.get('bankDetails').reset()
-          }
-          else {
-            this.form.get('bankDetails').patchValue(data.object)
-            this.bid = data.object.id;
-          }
-        })
+    this.form.get('bankDetails').get('contactId').setValue(engId);
+    this.bankDetails.getByContactId(engId)
+      .subscribe((data: any) => {
+        if (data.object == null) {
+          this.bid = null;
+          this.form.get('bankDetails').reset()
+        }
+        else {
+          this.form.get('bankDetails').patchValue(data.object)
+          this.bid = data.object.id;
+        }
+      })
 
-    }
   }
   getservicerequest(id: string, engId = null) {
     this.getBankDetails(engId)
-    this.servicerequestservice
-      .GetServiceRequestByDist(id)
-      .pipe(first())
+    this.servicerequestservice.GetServiceRequestByDist(id)
       .subscribe((Srqdata: any) => {
         this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
       });
@@ -324,7 +308,6 @@ export class AdvancerequestformComponent implements OnInit {
 
   getengineers(id: string) {
     this.distributorservice.getDistributorRegionContacts(id)
-      .pipe(first())
       .subscribe((Engdata: any) => {
         this.distId = id
         this.engineer = Engdata.object;
@@ -344,7 +327,6 @@ export class AdvancerequestformComponent implements OnInit {
 
   listfile = (x) => {
     document.getElementById("selectedfiles").style.display = "block";
-
     var selectedfiles = document.getElementById("selectedfiles");
     var ulist = document.createElement("ul");
     ulist.id = "demo";
@@ -408,9 +390,8 @@ export class AdvancerequestformComponent implements OnInit {
   }
 
   public uploadFile = (files, id) => {
-    if (files.length === 0) {
-      return;
-    }
+    if (files.length === 0) return;
+
     let filesToUpload: File[] = files;
     const formData = new FormData();
 
@@ -428,12 +409,7 @@ export class AdvancerequestformComponent implements OnInit {
 
   GetFileList(id: string) {
     this.FileShareService.list(id)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.attachments = data.object;
-        },
-      });
+      .subscribe((data: any) => this.attachments = data.object);
   }
 
   onGridReadyAttachments(params): void {
@@ -444,7 +420,6 @@ export class AdvancerequestformComponent implements OnInit {
 
 
   onSubmit() {
-    this.submitted = true;
     if (this.form.get('underTaking').value == "0") {
       return this.notificationService.showInfo("Please sign the undertaking to procced", "Info")
     }
@@ -457,7 +432,7 @@ export class AdvancerequestformComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
+
 
     this.model = this.form.value;
     this.model.distId = this.distId
@@ -465,28 +440,21 @@ export class AdvancerequestformComponent implements OnInit {
     if (this.IsEngineerView) this.model.engineerId = this.user.contactId;
 
     if (this.id == null) {
-      this.service
-        .save(this.model)
-        .pipe(first())
+      this.service.save(this.model)
         .subscribe((data: any) => {
           if (this.file != null) this.uploadFile(this.file, data.object.id);
           if (data.result) {
             this.notificationService.showSuccess(data.resultMessage, "Success");
             this.router.navigate(["advancerequestformlist"], {
-              //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
             });
           }
-          this.loading = false;
         });
     }
 
     else {
       this.model.id = this.id
-      this.service
-        .update(this.id, this.model)
-        .pipe(first())
+      this.service.update(this.id, this.model)
         .subscribe((data: any) => {
           if (this.file != null) {
             this.uploadFile(this.file, this.id);
@@ -498,44 +466,22 @@ export class AdvancerequestformComponent implements OnInit {
               "Success"
             );
             this.router.navigate(["advancerequestformlist"], {
-              //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
             });
           }
-          this.loading = false;
         });
     }
 
     this.model = this.form.get('bankDetails').value
     if (this.bid == null) {
-      this.bankDetails
-        .save(this.model)
-        .pipe(first())
-        .subscribe((data: any) => {
-          // if (data.result) {
-          // this.notificationService.showSuccess(data.resultMessage, "Success");
-          // this.router.navigate(["travelexpenselist"]);
-          // }
-          this.loading = false;
-        });
+      this.bankDetails.save(this.model)
+        .subscribe();
     }
 
     else {
       this.model.id = this.bid
-      this.bankDetails
-        .update(this.bid, this.model)
-        .pipe(first())
-        .subscribe((data: any) => {
-          // if (data.result) {
-          // this.notificationService.showSuccess(
-          //   data.resultMessage,
-          //   "Success"
-          // );
-          // this.router.navigate(["travelexpenselist"]);
-          // }
-          this.loading = false;
-        });
+      this.bankDetails.update(this.bid, this.model)
+        .subscribe();
     }
 
 
