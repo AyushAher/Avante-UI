@@ -478,7 +478,7 @@ export class ServiceRequestComponent implements OnInit {
                         this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(GetParsedDate(data.object.serreqdate), 'dd/MM/YYYY') });
                         this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
                         this.serviceRequestform.patchValue({ "serreqdate": this.datepipe.transform(GetParsedDate(data.object.serreqdate), 'dd/MM/YYYY') });
-                        this.serviceRequestform.patchValue({ "serresolutiondate": new Date(data.object.serresolutiondate) });
+                        this.serviceRequestform.patchValue({ "serresolutiondate": GetParsedDate(data.object.serresolutiondate) });
                         this.serviceRequestform.patchValue({ "machmodelname": data.object.machmodelnametext });
                         this.serviceRequestform.patchValue({ "distid": data.object.distid });
                         this.serviceRequestform.patchValue({ "custid": data.object.custid });
@@ -807,7 +807,7 @@ export class ServiceRequestComponent implements OnInit {
       }
     }
 
-    if (this.serviceRequestform.get("serresolutiondate").value < GetParsedDate(this.serviceRequestform.get("serreqdate").value)) {
+    if (this.serviceRequestform.get("serresolutiondate").value && this.serviceRequestform.get("serresolutiondate").value < GetParsedDate(this.serviceRequestform.get("serreqdate").value)) {
       this.notificationService.showError("The Resolution Date should be after Service Request Date", "Invalid Date")
     }
 
