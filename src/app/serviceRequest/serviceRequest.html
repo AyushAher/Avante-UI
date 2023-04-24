@@ -320,18 +320,6 @@
               <input class="form-control" formControlName="resolveaction" type="text" />
             </div>
 
-            <div class="col-sm-3" hidden>
-              <label for="accepted">Accepted</label>
-
-              <select class="form-select" (input)="Accepted($event.target.value)" #accp formControlName="accepted">
-                <option value="false">Not Accepted</option>
-                <option value="true">Accepted</option>
-              </select>
-
-              <div *ngIf="f.accepted.touched && f.accepted.errors" class="invalid-feedback">
-                <div *ngIf="f.accepted.errors.required">accepted is required</div>
-              </div>
-            </div>
             <div class="col-md-3 col-sm-3" *ngIf="!IsEngineerView">
               <label for="serresolutiondate">Resolution Date</label>
               <input [ngClass]="{ 'is-invalid': f.serresolutiondate.touched && f.serresolutiondate.errors }"
@@ -401,8 +389,8 @@
 
             <div class="col-sm-3" *ngIf="!IsCustomerView">
               <label for="currentinstrustatus">Status<span class="text-danger">*</span></label>
-              <select [ngClass]="{ 'is-invalid': f.statusid.touched  && f.statusid.errors }" (change)="Accepted()"
-                class="form-select" formControlName="statusid" type="text">
+              <select [ngClass]="{ 'is-invalid': f.statusid.touched  && f.statusid.errors }"
+                (change)="Accepted($event.target.value)" class="form-select" formControlName="statusid" type="text">
                 <option *ngFor="let req of statuslist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
                 </option>

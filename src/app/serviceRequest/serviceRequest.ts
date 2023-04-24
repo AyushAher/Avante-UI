@@ -1013,6 +1013,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   Accepted(value) {
+    debugger;
     if (!value || value == "false") return;
     if (this.isGenerateReport == false) {
       this.accepted = true
