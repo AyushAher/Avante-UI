@@ -16,7 +16,7 @@
                 <input bsDatepicker formControlName="worktimedate" class="form-control"
                   [ngClass]="{'is-invalid':f.worktimedate.touched && f.worktimedate.errors}" />
                 <div class="invalid-feedback" f="f.worktimedate.errors">
-                  <div *ngIf="f.worktimedate.errors.required">
+                  <div *ngIf="f.worktimedate.errors?.required">
                     Work Time Date is required
                   </div>
                 </div>
@@ -27,8 +27,8 @@
                 <label for="starttime">Start time<span class="text-danger">*</span></label>
                 <input type="time" formControlName="starttime" (input)="PerDayHrs()" class="form-control"
                   [ngClass]="{'is-invalid':f.starttime.touched && f.starttime.errors}" />
-                <div classclass="invalid-feedback" *ngIf="f.starttime.errors">
-                  <div *ngIf="f.starttime.errors.required">
+                <div class="invalid-feedback" *ngIf="f.starttime.errors">
+                  <div *ngIf="f.starttime.errors?.required">
                     Start Time is required
                   </div>
                 </div>
@@ -40,7 +40,7 @@
                 <input type="time" formControlName="endtime" (input)="PerDayHrs()" class="form-control"
                   [ngClass]="{'is-invalid':f.endtime.touched && f.endtime.errors}" />
                 <div class="invalid-feedback" *ngIf="f.endtime.errors">
-                  <div *ngIf="f.endtime.errors.required">
+                  <div *ngIf="f.endtime.errors?.required">
                     End Time is required
                   </div>
                 </div>
@@ -52,7 +52,7 @@
                 <input type="text" formControlName="perdayhrs" readonly class="form-control"
                   [ngClass]="{'is-invalid':f.perdayhrs.touched && f.perdayhrs.errors}" />
                 <div class="invalid-feedback" *ngIf="f.perdayhrs.errors">
-                  <div *ngIf="f.perdayhrs.errors.required">
+                  <div *ngIf="f.perdayhrs.errors?.required">
                     Per Day Hrs is required
                   </div>
                 </div>

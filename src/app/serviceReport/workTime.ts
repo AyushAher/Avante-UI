@@ -63,6 +63,8 @@ export class WorkTimeContentComponent implements OnInit {
 
     this.workTimeForm.get("worktimedate").valueChanges
       .subscribe(value => {
+        console.log(this.item);
+        
         if (value < GetParsedDate(this.item.serreqdate)) {
           this.notificationService.showError("The Date should be after Service Request Date", "Invalid Date")
         }

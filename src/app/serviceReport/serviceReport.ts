@@ -1570,10 +1570,9 @@ export class ServiceReportComponent implements OnInit {
 
   GeneratePDF(preview: boolean) {
     if (!preview) {
-      if (!this.isCompleted) {
-        if (confirm(`Do you really want to send the service report to below customer emails:\n \t${this.ServiceRequest.operatoremail} \n\t ${this.ServiceRequest.email}`)) {
-          this.pdf(preview);
-        }
+      if (!this.isCompleted &&
+        confirm(`Do you really want to send the service report to below customer emails:\n \t${this.ServiceRequest.operatoremail} \n\t ${this.ServiceRequest.email}`)) {
+        this.pdf(preview);
       }
     } else {
       this.pdf(preview);
@@ -1634,6 +1633,8 @@ export class ServiceReportComponent implements OnInit {
                       })
 
                     }
+                    console.log(data);
+
 
                     const docDefinition = {
                       footer: (currentPage, pageCount) => {
