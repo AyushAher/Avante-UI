@@ -273,10 +273,12 @@ export class TravelexpenseComponent implements OnInit {
 
   onGrandEngineerTotal = (e) => {
     this.grandEngineerTotalAmt = e
+    this.form.get("grandEngineerTotal").setValue(e);
   }
 
   onGrandCompanyTotal = (e) => {
     this.grandCompanyTotalAmt = e
+    this.form.get("grandCompanyTotal").setValue(e);
   }
 
 

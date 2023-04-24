@@ -74,6 +74,21 @@ export class TravelexpenseItemComponent implements OnInit {
                     var selectedfiles = document.getElementById("expFilesList");
                     selectedfiles.innerHTML = '';
                     this.form.get('travelExpenseId').value = this.ParentId
+
+                    var EngTotal = 0
+                    var CompTotal = 0
+
+                    var CompExp = this.lstExpenseBy.find((x: ListTypeItem) => x.itemCode == "COMPN")
+                    var EngExp = this.lstExpenseBy.find((x: ListTypeItem) => x.itemCode == "ENGNR")
+                    stageData.object.forEach((element: any) => {
+                        if (element.expenseBy == CompExp.listTypeItemId) CompTotal += element.usdAmt
+                        else if (element.expenseBy == EngExp.listTypeItemId) EngTotal += element.usdAmt
+
+                        element.bcyAmt = this.numberPipe.transform(element.bcyAmt)
+                        element.usdAmt = this.numberPipe.transform(element.usdAmt)
+                    });
+                    this.GrandCompanyTotal.emit(CompTotal)
+                    this.GrandEngineerTotal.emit(EngTotal)
                 })
         })
 
@@ -120,21 +135,23 @@ export class TravelexpenseItemComponent implements OnInit {
         if (this.ParentId != null) {
             this.TravelExpenseItemService.getById(this.ParentId).pipe(first())
                 .subscribe((data: any) => {
-                    this.itemList = data.object
-                    var EngTotal = 0
-                    var CompTotal = 0
+                    setTimeout(() => {
+                        this.itemList = data.object
+                        var EngTotal = 0
+                        var CompTotal = 0
 
-                    var CompExp = this.lstExpenseBy.find((x: ListTypeItem) => x.itemCode == "COMPN")
-                    var EngExp = this.lstExpenseBy.find((x: ListTypeItem) => x.itemCode == "ENGNR")
-                    data.object.forEach((element: any) => {
-                        if (element.expenseBy == CompExp.listTypeItemId) CompTotal += element.usdAmt
-                        else if (element.expenseBy == EngExp.listTypeItemId) EngTotal += element.usdAmt
+                        var CompExp = this.lstExpenseBy.find((x: ListTypeItem) => x.itemCode == "COMPN")
+                        var EngExp = this.lstExpenseBy.find((x: ListTypeItem) => x.itemCode == "ENGNR")
+                        data.object.forEach((element: any) => {
+                            if (element.expenseBy == CompExp.listTypeItemId) CompTotal += element.usdAmt
+                            else if (element.expenseBy == EngExp.listTypeItemId) EngTotal += element.usdAmt
 
-                        element.bcyAmt = this.numberPipe.transform(element.bcyAmt)
-                        element.usdAmt = this.numberPipe.transform(element.usdAmt)
-                    });
-                    this.GrandCompanyTotal.emit(CompTotal)
-                    this.GrandEngineerTotal.emit(EngTotal)
+                            element.bcyAmt = this.numberPipe.transform(element.bcyAmt)
+                            element.usdAmt = this.numberPipe.transform(element.usdAmt)
+                        });
+                        this.GrandCompanyTotal.emit(CompTotal)
+                        this.GrandEngineerTotal.emit(EngTotal)
+                    }, 500);
                 })
 
             this.form.get('travelExpenseId').value = this.ParentId
@@ -192,6 +209,7 @@ export class TravelexpenseItemComponent implements OnInit {
     save(hasNoAttachment) {
         this.TravelExpenseItemService.save(this.form.value).pipe(first())
             .subscribe((data: any) => {
+                this.DisableChoseFile()
                 if (this.processFile != null && !hasNoAttachment)
                     this.uploadFile(this.processFile, data.extraObject);
 
@@ -201,7 +219,6 @@ export class TravelexpenseItemComponent implements OnInit {
                 data.object.forEach(element => {
                     element.createdOn = this.datepipe.transform(element.createdOn, 'MM/dd/yyyy')
                 });
-
                 this.itemList = data.object
             })
 
