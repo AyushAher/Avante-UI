@@ -178,7 +178,14 @@ export class TravelexpenseComponent implements OnInit {
       await this.getservicerequest(this.distId, this.user.contactId)
     }
 
-
+    this.form.get("startDate").valueChanges
+      .subscribe(value => {
+        var serreqVal = this.form.get("serviceRequestId").value;
+        let serreq = this.servicerequest.find(x => x.id == serreqVal);
+        if (value < GetParsedDate(serreq?.serreqdate)) {
+          this.notificationService.showError("Start date should be after Service Request date", "Invalid Date")
+        }
+      });
 
     if (this.id != null) {
       this.TravelExpenseService.getById(this.id)
@@ -421,7 +428,6 @@ export class TravelexpenseComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submitted = true;
     this.form.markAllAsTouched()
     // reset alerts on submit
     this.alertService.clear();
@@ -431,20 +437,24 @@ export class TravelexpenseComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.form.enable();
     this.OnDateChange()
 
     if (this.form.get('totalDays').value != null && this.form.get('totalDays').value < 1)
       return this.notificationService.showError("The difference between Start Date and End Date should be more than 1 day !", "Error");
 
-    this.form.value.startDate = this.datepipe.transform(GetParsedDate(this.form.value.startDate), 'dd/MM/YYYY');
-    this.form.value.endDate = this.datepipe.transform(GetParsedDate(this.form.value.endDate), 'dd/MM/YYYY');
+    this.model = this.form.getRawValue();
+    var value = this.model.startDate
+    var serreqVal = this.form.get("serviceRequestId").value;
+    let serreq = this.servicerequest.find(x => x.id == serreqVal);
+    if (value < GetParsedDate(serreq.serreqdate)) {
+      this.notificationService.showError("Start date should be after Service Request date", "Invalid Date")
+    }
 
-    this.model = this.form.value;
-    this.model.distId = this.distId
-    this.model.grandCompanyTotal = parseInt(this.model.grandCompanyTotal)
-    this.model.grandEngineerTotal = parseInt(this.model.grandEngineerTotal)
-    this.form.disable();
+    this.model.startDate = this.datepipe.transform(GetParsedDate(this.model.startDate), 'dd/MM/YYYY');
+    this.model.endDate = this.datepipe.transform(GetParsedDate(this.model.endDate), 'dd/MM/YYYY');
+    this.model.distId = this.distId;
+    this.model.grandCompanyTotal = parseInt(this.model.grandCompanyTotal);
+    this.model.grandEngineerTotal = parseInt(this.model.grandEngineerTotal);
 
     if (isNaN(this.model.grandCompanyTotal)) {
       this.model.grandCompanyTotal = 0;
@@ -457,14 +467,12 @@ export class TravelexpenseComponent implements OnInit {
 
     if (this.id == null) {
       this.TravelExpenseService.save(this.model)
-        .pipe(first()).subscribe((data: any) => {
+        .subscribe((data: any) => {
           if (this.file != null) this.uploadFile(this.file, data.object.id);
           if (data.result) {
             this.notificationService.showSuccess("Saved Successfully", "Success");
             this.router.navigate(["travelexpenselist"], {
-              //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
             });
           }
         });
@@ -473,7 +481,7 @@ export class TravelexpenseComponent implements OnInit {
     else {
       this.model.id = this.id
       this.TravelExpenseService.update(this.id, this.model)
-        .pipe(first()).subscribe((data: any) => {
+        .subscribe((data: any) => {
           if (this.file != null) {
             this.uploadFile(this.file, this.id);
           }
@@ -481,9 +489,7 @@ export class TravelexpenseComponent implements OnInit {
           if (data.result) {
             this.notificationService.showSuccess("Saved Successfully", "Success");
             this.router.navigate(["travelexpenselist"], {
-              //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
             });
           }
         });

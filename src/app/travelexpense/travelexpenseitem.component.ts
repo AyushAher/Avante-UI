@@ -115,7 +115,7 @@ export class TravelexpenseItemComponent implements OnInit {
             remarks: [""],
             travelExpenseId: "",
             expenseBy: ''
-        })
+        });
 
         if (this.ParentId != null) {
             this.TravelExpenseItemService.getById(this.ParentId).pipe(first())
@@ -167,10 +167,15 @@ export class TravelexpenseItemComponent implements OnInit {
         if (!hasNoAttachment && this.processFile == null) return this.notificationService.showInfo("No Attachments Selected.", "Error")
         this.form.get('expDate').setValue(this.datepipe.transform(GetParsedDate(this.form.get('expDate').value), 'dd/MM/YYYY'))
 
-        let StartCalc = this.CalculateDateDiff(this.StartDate, this.form.get('expDate').value)
-        let EndCalc = this.CalculateDateDiff(this.form.get('expDate').value, this.EndDate)
 
-        if (StartCalc < 0 || EndCalc < 0) return this.notificationService.showInfo("Expense Date should be between Start Date and End Date", "Error")
+
+        if (GetParsedDate(this.form.get('expDate').value) < GetParsedDate(this.StartDate)) {
+            return this.notificationService.showInfo("Expense Date should be between Start Date and End Date", "Error")
+        }
+
+        if (GetParsedDate(this.form.get('expDate').value) > GetParsedDate(this.EndDate)) {
+            return this.notificationService.showInfo("Expense Date should be between Start Date and End Date", "Error")
+        }
 
         if (!isNaN(this.form.get('bcyAmt').value) && this.form.get('bcyAmt').value > 0 && this.form.get('usdAmt').value == "") {
             var cur = this.currencyList.find(x => x.id == this.form.get('currency').value)?.code
