@@ -202,7 +202,7 @@ export class ServiceRequestComponent implements OnInit {
     })
   }
 
-  async ngOnInit() {
+  async ngOnInit(isReset = false) {
 
     this.transaction = 0;
     this.user = this.accountService.userValue;
@@ -383,7 +383,6 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.statuslist = data;
-          console.log(this.statuslist);
 
           if (this.serviceRequestId == null) {
             this.serviceRequestform.get('statusid').setValue(data.find(x => x.itemCode == "NTACP")?.listTypeItemId);
@@ -615,12 +614,20 @@ export class ServiceRequestComponent implements OnInit {
           },
         });
 
-      this.FormControlDisable()
-      this.isNewMode = true
-      this.columnDefs = this.createColumnDefs();
-      this.actionDefs = this.createColumnActionDefs();
-      this.pdfcolumnDefs = this.pdfcreateColumnDefs();
-
+      if (!isReset) {
+        this.FormControlDisable()
+        this.isNewMode = true
+        this.columnDefs = this.createColumnDefs();
+        this.actionDefs = this.createColumnActionDefs();
+        this.pdfcolumnDefs = this.pdfcreateColumnDefs();
+      }
+      else {
+        this.serviceRequestform.disable();
+        this.columnDefs = this.createColumnDefsRO();
+        this.actionDefs = this.createColumnActionDefsRO();
+        this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
+        this.serviceRequestform.disable();
+      }
     }
 
     if (this.user.userType == "site") {
@@ -659,9 +666,7 @@ export class ServiceRequestComponent implements OnInit {
 
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
-    if (this.serviceRequestId != null) this.serviceRequestform.patchValue(this.formData);
-    else this.serviceRequestform.reset();
-    this.serviceRequestform.disable()
+    setTimeout(() => this.serviceRequestform.disable(), 400);
     this.columnDefs = this.createColumnDefsRO();
     this.actionDefs = this.createColumnActionDefsRO();
     this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
@@ -669,6 +674,13 @@ export class ServiceRequestComponent implements OnInit {
     this.isEditMode = false;
     this.isNewMode = false;
     this.notificationService.SetNavParam();
+
+    if (this.serviceRequestId != null) this.serviceRequestform.patchValue(this.formData);
+    else {
+      this.serviceRequestform.reset();
+      this.ngOnInit(true);
+      setTimeout(() => this.serviceRequestform.disable(), 4000);
+    }
   }
 
   FormControlDisable() {
