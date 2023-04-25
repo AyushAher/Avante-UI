@@ -281,6 +281,7 @@ export class OfferrequestComponent implements OnInit {
 
     this.form.get("mainCurrencyId").valueChanges
       .subscribe((data) => {
+
         this.mainCurrencyId = data
         this.f.totalCurr.setValue(data)
         this.f.inspectionChargesCurr.setValue(data)
@@ -288,6 +289,16 @@ export class OfferrequestComponent implements OnInit {
         this.f.airFreightChargesCurr.setValue(data)
         this.f.payAmtCurrencyId.setValue(data)
         this.f.currencyId.setValue(data)
+
+        if (data == this.form.get('baseCurrencyId').value) {
+          setTimeout(() => {
+            console.log(data, this.form.get('baseCurrencyId').value);
+            this.form.get('basePCurrencyAmt').setValue(1.00)
+            this.form.get("basePCurrencyAmt").disable();
+          }, 500);
+        }
+        else this.form.get("basePCurrencyAmt").enable();
+
       })
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -313,59 +324,57 @@ export class OfferrequestComponent implements OnInit {
     if (this.role == this.environment.distRoleCode) this.isDist = true
 
     if (this.id != null) {
-      this.Service.getById(this.id)
-        .pipe(first()).subscribe((data: any) => {
-          this.listTypeService.getById("ORQPT")
-            .pipe(first()).subscribe((mstData: any) => {
-              this.f.mainCurrencyId.setValue(data.object.airFreightChargesCurr)
+      this.Service.getById(this.id).subscribe((data: any) => {
+        this.listTypeService.getById("ORQPT").subscribe((mstData: any) => {
+          this.f.mainCurrencyId.setValue(data.object.airFreightChargesCurr)
 
-              this.isCompleted = data.object.isCompleted
-              data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
+          this.isCompleted = data.object.isCompleted
+          data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
 
-              this.paymentTypes = []
-              this.payTypes = mstData;
+          this.paymentTypes = []
+          this.payTypes = mstData;
 
 
-              data.object.paymentTerms?.forEach(y => {
-                mstData.forEach(x => {
-                  if (y == x.listTypeItemId) {
-                    this.paymentTypes.push(x)
-                  }
-                });
+          data.object.paymentTerms?.forEach(y => {
+            mstData.forEach(x => {
+              if (y == x.listTypeItemId) {
+                this.paymentTypes.push(x)
+              }
+            });
+          });
+
+          this.customerId = data.object.customerId;
+          this.siteList = this.customerList.find(x => x.id == this.customerId)?.sites;
+
+          this.offerRequestProcess.getAll(this.id).pipe(first())
+            .subscribe((stageData: any) => {
+              stageData.object.forEach(element => {
+                element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
               });
 
-              this.customerId = data.object.customerId;
-              this.siteList = this.customerList.find(x => x.id == this.customerId)?.sites;
+              this.formData = data.object;
+              this.form.patchValue(this.formData);
 
-              this.offerRequestProcess.getAll(this.id).pipe(first())
-                .subscribe((stageData: any) => {
-                  stageData.object.forEach(element => {
-                    element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
-                  });
+              setTimeout(() => {
+                var instrumentLst = []
+                data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
+                data.object.instrumentsList.forEach(ins => {
+                  if (this.instrumentslst.find(x => x.id == ins) != null) instrumentLst.push(ins)
+                });
+                data.object.instrumentsList = instrumentLst;
 
-                  this.formData = data.object;
-                  this.form.patchValue(this.formData);
+                this.formData = data.object;
+                this.form.patchValue(this.formData);
+              }, 500);
 
-                  setTimeout(() => {
-                    var instrumentLst = []
-                    data.object.instrumentsList = data.object.instrumentsList.split(',').filter(x => x != "")
-                    data.object.instrumentsList.forEach(ins => {
-                      if (this.instrumentslst.find(x => x.id == ins) != null) instrumentLst.push(ins)
-                    });
-                    data.object.instrumentsList = instrumentLst;
-
-                    this.formData = data.object;
-                    this.form.patchValue(this.formData);
-                  }, 500);
-
-                  this.rowData = stageData.object;
-                  this.rowData?.sort((a, b) => a.stageIndex - b.stageIndex);
-                  this.totalStages = this.rowData?.length | 0;
-                  this.GetSparePartTotal()
-                  setTimeout(() => this.form.get('stageName').reset(), 200);
-                })
+              this.rowData = stageData.object;
+              this.rowData?.sort((a, b) => a.stageIndex - b.stageIndex);
+              this.totalStages = this.rowData?.length | 0;
+              this.GetSparePartTotal()
+              setTimeout(() => this.form.get('stageName').reset(), 200);
             })
-        });
+        })
+      });
 
       this.Service.GetSpareQuoteDetailsByParentId(this.id)
         .pipe(first())
@@ -415,17 +424,6 @@ export class OfferrequestComponent implements OnInit {
     this.form.get('baseCurrencyAmt').valueChanges
       .subscribe(value => {
         if (value >= 1000) this.form.get('baseCurrencyAmt').setValue(1.0)
-      });
-
-    this.form.get('payAmtCurrencyId').valueChanges
-      .subscribe(value => {
-        if (this.isPaymentAmt) {
-          if (value == this.form.get('baseCurrencyId').value) {
-            this.form.get('baseCurrencyAmt').setValue(1.00)
-            this.baseAmt.nativeElement.disabled = true
-          }
-          else this.baseAmt.nativeElement.disabled = false
-        }
       });
 
     this.DistributorService.getAll().pipe(first())
@@ -1191,7 +1189,7 @@ export class OfferrequestComponent implements OnInit {
 
     }
 
-    this.model = this.form.value;
+    this.model = this.form.getRawValue();
     this.model.customerId = this.form.get('customerId').value
     this.model.distributorid = this.form.get('distributorid').value
     const datepipie = new DatePipe("en-US");

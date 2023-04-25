@@ -306,53 +306,37 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submitted = true;
-    // reset alerts on submit
-    this.alertService.clear();
-
-    // stop here if form is invalid
     if (this.form.invalid) {
       return this.notificationService.showError("Please select mandatory fields", "Invalid Data");
     }
 
-    this.loading = true;
-    this.customersatisfactionsurvey = this.form.value;
+    this.customersatisfactionsurvey = this.form.getRawValue();
 
     if (this.servicereportid) this.customersatisfactionsurvey.serviceRequestId = this.serviceRequestId
-    this.customersatisfactionsurvey.engineerId = this.engId
-    this.customersatisfactionsurvey.distId = this.distId
 
     if (this.id == null) {
       this.CustomersatisfactionsurveyService.save(this.form.value)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess(data.resultMessage, "Success");
-              this.router.navigate(["/customersatisfactionsurveylist"], {
-                //relativeTo: this.activeRoute,
-                queryParams: { isNSNav: true },
-                //queryParamsHandling: 'merge'
-              });
-            }
-            this.loading = false;
-          },
+        .subscribe((data: ResultMsg) => {
+          if (!data.result) return;
+          this.notificationService.showSuccess(data.resultMessage, "Success");
+          this.router.navigate(["/customersatisfactionsurveylist"], {
+            //relativeTo: this.activeRoute,
+            queryParams: { isNSNav: true },
+            //queryParamsHandling: 'merge'
+          });
         });
     }
     else {
       this.customersatisfactionsurvey.id = this.id;
       this.CustomersatisfactionsurveyService.update(this.id, this.customersatisfactionsurvey)
-        .pipe(first())
         .subscribe((data: ResultMsg) => {
-          if (data.result) {
-            this.notificationService.showSuccess(data.resultMessage, "Success");
-            this.router.navigate(["/customersatisfactionsurveylist"], {
-              //relativeTo: this.activeRoute,
-              queryParams: { isNSNav: true },
-              //queryParamsHandling: 'merge'
-            });
-          }
-          this.loading = false;
+          if (!data.result) return;
+          this.notificationService.showSuccess(data.resultMessage, "Success");
+          this.router.navigate(["/customersatisfactionsurveylist"], {
+            //relativeTo: this.activeRoute,
+            queryParams: { isNSNav: true },
+            //queryParamsHandling: 'merge'
+          });
 
         });
     }

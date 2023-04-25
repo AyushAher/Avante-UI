@@ -38,7 +38,7 @@
               <ul class="dropdown-menu" id="dropdownMenuButton1">
 
                 <li><a class="dropdown-item" (click)="GeneratePDF(false)"
-                    *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !this.isCompleted">
+                    *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !this.isCompleted && custsign != null">
                     Generate Service Report</a></li>
 
                 <li><a class="dropdown-item" (click)="GeneratePDF(true)">Preview</a></li>
@@ -267,8 +267,8 @@
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
 
-              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode && isEng" class="btn" style="margin: 10px;"
-                (click)="open(ServiceReportId)">
+              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode && isEng" class="btn"
+                style="margin: 10px;" (click)="open(ServiceReportId)">
                 <i class="fas fa-plus" title="Add"></i>
               </button>
 
@@ -281,8 +281,8 @@
             </div>
             <div class="tab-pane fade" id="worktime" role="tabpanel" aria-labelledby="worktime-tab">
 
-              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode && isEng" class="btn" style="margin: 10px;"
-                (click)="opentime(ServiceReportId)">
+              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode && isEng" class="btn"
+                style="margin: 10px;" (click)="opentime(ServiceReportId)">
                 <i class="fas fa-plus" title="Add"></i>
               </button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
