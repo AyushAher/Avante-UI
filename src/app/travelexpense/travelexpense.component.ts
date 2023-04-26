@@ -290,7 +290,7 @@ export class TravelexpenseComponent implements OnInit {
     }
 
     var Srqdata: any = await this.servicerequestservice.GetServiceRequestByDist(id).toPromise();
-    this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
+    this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId)
   }
 
   getengineers(id: string) {

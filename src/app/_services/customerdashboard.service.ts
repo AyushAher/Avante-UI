@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Amc } from '../_models';
 import { VW_Contacts } from '../_models/customerdashboard';
 import { EnvService } from './env/env.service';
+import { Offerrequest } from '../_models/Offerrequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,11 @@ export class CustomerdashboardService {
     private environment: EnvService,
 
   ) { }
+
+  AllOfferRequest() {
+    return this.http.get<Offerrequest[]>(`${this.environment.apiUrl}/CustomerDashboard/AllOfferRequest`);
+  }
+
 
   GetCostData({ sdate, edate }) {
     return this.http.post(`${this.environment.apiUrl}/CustomerDashboard/GetCostData`, { sdate, edate });

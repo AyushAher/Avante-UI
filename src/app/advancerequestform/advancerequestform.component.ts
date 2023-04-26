@@ -184,7 +184,7 @@ export class AdvancerequestformComponent implements OnInit {
             this.form.get('engineerId').setValue(this.user.contactId)
             this.servicerequestservice.GetServiceRequestByDist(this.distId)
               .subscribe((Srqdata: any) => {
-                this.servicerequest = Srqdata.object.filter(x => x.assignedto == this.user.contactId && !x.isReportGenerated)
+                this.servicerequest = Srqdata.object.filter(x => x.assignedto == this.user.contactId)
               });
           });
 
@@ -197,7 +197,7 @@ export class AdvancerequestformComponent implements OnInit {
         .subscribe((data: any) => {
           this.servicerequestservice.GetServiceRequestByDist(data.object.distributorId)
             .subscribe((Srqdata: any) => {
-              this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
+              this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId)
               this.GetFileList(data.object.id)
               setTimeout(() => {
                 this.getBankDetails(data.object.engineerId)
@@ -302,7 +302,7 @@ export class AdvancerequestformComponent implements OnInit {
     this.getBankDetails(engId)
     this.servicerequestservice.GetServiceRequestByDist(id)
       .subscribe((Srqdata: any) => {
-        this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
+        this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId)
       });
   }
 

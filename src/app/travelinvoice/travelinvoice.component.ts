@@ -145,7 +145,7 @@ export class TravelinvoiceComponent implements OnInit {
                 this.engineer = Engdata.object;
                 this.servicerequestservice.GetServiceRequestByDist(data.object[0].id).pipe(first())
                   .subscribe((Srqdata: any) =>
-                    this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object[0].id && !x.isReportGenerated)
+                    this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object[0].id)
                   );
 
                 if (this.IsEngineerView) {
@@ -173,7 +173,7 @@ export class TravelinvoiceComponent implements OnInit {
                 .pipe(first())
                 .subscribe((Srqdata: any) => {
                   setTimeout(() => {
-                    this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
+                    this.servicerequest = Srqdata.object.filter(x => x.assignedto == data.object.engineerId)
                     this.GetFileList(data.object.id)
                     this.formData = data.object;
                     this.form.patchValue(this.formData);
@@ -264,7 +264,7 @@ export class TravelinvoiceComponent implements OnInit {
       .GetServiceRequestByDist(id)
       .pipe(first())
       .subscribe((Srqdata: any) => {
-        this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId && !x.isReportGenerated)
+        this.servicerequest = Srqdata.object.filter(x => x.assignedto == engId)
       });
   }
 

@@ -241,9 +241,9 @@ export class DashboardComponent implements OnInit {
   }
 
   GetAllAMC(sdate, edate) {
-    this.customerDashboardService.GetAllAmc()
+    this.customerDashboardService.AllOfferRequest()
       .subscribe((data: any) => {
-        this.amcData = data.object.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate) && !x.isCompleted);
+        this.amcData = data.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate) && !x.isCompleted);
       })
   }
 

@@ -88,7 +88,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.user = this.accountService.userValue;
 
     let role = JSON.parse(sessionStorage.getItem('roles'));
-    this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
+    this.listTypeService.getItemById(this.user.roleId).subscribe();
     this.profilePermission = this.profileService.userProfileValue;
 
     if (this.profilePermission != null) {
@@ -138,7 +138,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     });
 
     this.distributorservice.getAll()
-      .pipe(first())
+
       .subscribe((data: any) => this.DistributorList = data.object)
 
     await this.GetDistAndEng();
@@ -155,16 +155,11 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
     if (this.id != null) {
       this.CustomersatisfactionsurveyService.getById(this.id)
-        .pipe(first())
         .subscribe((data: any) => {
           this.distributorservice.getDistributorRegionContacts(data.object.distId)
-            .pipe(first())
             .subscribe((engData: any) => {
               this.engineer = engData.object;
-
-              this.servicerequestservice
-                .GetServiceRequestByDist(data.object.distId)
-                .pipe(first())
+              this.servicerequestservice.GetServiceRequestByDist(data.object.distId)
                 .subscribe((sreqData: any) => {
                   this.servicerequest = sreqData.object.filter(x => x.assignedto == data.object.engineerId && !x.isReportGenerated)
                   setTimeout(() => {
@@ -270,7 +265,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
   DeleteRecord() {
     if (confirm("Are you sure you want to delete the record?")) {
-      this.CustomersatisfactionsurveyService.delete(this.id).pipe(first())
+      this.CustomersatisfactionsurveyService.delete(this.id)
         .subscribe((data: any) => {
           if (data.result)
             this.router.navigate(["customersatisfactionsurveylist"]);
@@ -311,9 +306,9 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     }
 
     this.customersatisfactionsurvey = this.form.getRawValue();
-
     if (this.servicereportid) this.customersatisfactionsurvey.serviceRequestId = this.serviceRequestId
-
+    console.log(this.customersatisfactionsurvey);
+    // return;
     if (this.id == null) {
       this.CustomersatisfactionsurveyService.save(this.form.value)
         .subscribe((data: ResultMsg) => {

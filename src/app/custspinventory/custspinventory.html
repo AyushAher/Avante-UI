@@ -44,12 +44,12 @@
               <select formControlName="instrument" [disabled]="id != null" class="form-select"
                 [ngClass]="{ 'is-invalid': f.instrument.touched && f.instrument.errors }"
                 (change)="onInstrumentChange()">
-                <option *ngFor="let config of instruments" value={{config.id}}>
+                <option *ngFor="let config of instruments" value="{{config.id}}">
                   {{config.instypeName}} - {{config.serialnos}}
                 </option>
               </select>
               <div *ngIf="f.instrument.touched && f.instrument.errors" class="invalid-feedback">
-                <div *ngIf="f.instrument.errors.required">Instrument is required</div>
+                <div *ngIf="f.instrument.errors?.required">Instrument is required</div>
               </div>
             </div>
 

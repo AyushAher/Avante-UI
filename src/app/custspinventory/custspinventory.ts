@@ -50,7 +50,7 @@ export class CustSPInventoryComponent implements OnInit {
   private api: GridApi;
   historyModel
   sparepartlist: any[] = []
-  instruments: any[] = []
+  instruments;
   lstSpareParts: any[] = []
   isEditMode: boolean;
   isNewMode: boolean;
@@ -252,6 +252,8 @@ export class CustSPInventoryComponent implements OnInit {
 
   onSeearchByPartNo() {
     var partno = this.form.get("SearchPartNo").value
+    console.log(partno);
+
     if (!partno) return this.notificationService.showInfo("Please enter Part No.", "Info");
     partno = partno.partNo;
     this.getSparePartByPartNo(partno)
