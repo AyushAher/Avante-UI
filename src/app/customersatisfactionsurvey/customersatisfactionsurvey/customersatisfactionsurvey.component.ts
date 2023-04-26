@@ -307,14 +307,14 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
     this.customersatisfactionsurvey = this.form.getRawValue();
     if (this.servicereportid) this.customersatisfactionsurvey.serviceRequestId = this.serviceRequestId
-    console.log(this.customersatisfactionsurvey);
+    // console.log(this.customersatisfactionsurvey);
     // return;
     if (this.id == null) {
-      this.CustomersatisfactionsurveyService.save(this.form.value)
+      this.CustomersatisfactionsurveyService.save(this.customersatisfactionsurvey)
         .subscribe((data: ResultMsg) => {
           if (!data.result) return;
           this.notificationService.showSuccess(data.resultMessage, "Success");
-          this.router.navigate(["/customersatisfactionsurveylist"], {
+          this.router.navigate([(!this.servicereportid ? "/customersatisfactionsurveylist" : "/servicereportlist")], {
             //relativeTo: this.activeRoute,
             queryParams: { isNSNav: true },
             //queryParamsHandling: 'merge'

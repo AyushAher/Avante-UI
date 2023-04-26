@@ -177,7 +177,7 @@ export class DashboardComponent implements OnInit {
 
   onCalenderFilter(sdate, edate) {
     this.getServiceRequestData(sdate, edate);
-    this.GetAllAMC(sdate, edate);
+    this.GetAllSpareQuote(sdate, edate);
     this.GetPoCost(sdate, edate);
     this.GetSparePartsRecommended(sdate, edate);
     setTimeout(() => CustomerDashboardCharts(), 2000)
@@ -240,11 +240,10 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  GetAllAMC(sdate, edate) {
+  GetAllSpareQuote(sdate, edate) {
     this.customerDashboardService.AllOfferRequest()
-      .subscribe((data: any) => {
-        this.amcData = data.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate) && !x.isCompleted);
-      })
+      .subscribe((data: any) =>
+        this.amcData = data.filter(x => this.GetDiffDate(new Date(x.createdon), edate, sdate) && !x.isCompleted))
   }
 
   GetDiffDate(createdOn: Date, edate: Date, sdate: Date) {

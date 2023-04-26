@@ -185,8 +185,8 @@
                   <tr [ngClass]="{'showHideRows-PO d-none':i > 3}" *ngFor="let item of amcData;let i = index">
                     <td><a [routerLink]="'/offerrequest/'+item.id">{{item.podate}}</a></td>
                     <td>{{item.offReqNo}}</td>
-                    <td>{{item.totalamount}}</td>
-                    <td>{{item.stageName }}</td>
+                    <td>{{item.totalAmt}}</td>
+                    <td>{{item.stageName}}</td>
                   </tr>
                 </tbody>
               </table>
