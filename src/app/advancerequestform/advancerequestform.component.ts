@@ -420,6 +420,9 @@ export class AdvancerequestformComponent implements OnInit {
 
 
   onSubmit() {
+    this.form.markAllAsTouched()
+    console.log(this.form);
+    
     if (this.form.get('underTaking').value == "0") {
       return this.notificationService.showInfo("Please sign the undertaking to procced", "Info")
     }
@@ -434,7 +437,7 @@ export class AdvancerequestformComponent implements OnInit {
 
 
 
-    this.model = this.form.value;
+    this.model = this.form.getRawValue();
     this.model.distId = this.distId
 
     if (this.IsEngineerView) this.model.engineerId = this.user.contactId;

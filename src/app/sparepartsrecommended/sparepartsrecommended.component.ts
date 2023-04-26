@@ -30,6 +30,7 @@ export class SparepartsrecommendedComponent implements OnInit {
   user: User;
   showGrid: any = true;
   isDist: boolean;
+  isCust: boolean;
 
 
   constructor(
@@ -67,6 +68,7 @@ export class SparepartsrecommendedComponent implements OnInit {
     }
     else role = role[0]?.itemCode;
     if (role == this.environment.distRoleCode) this.isDist = true
+    if (role == this.environment.custRoleCode) this.isCust = true
 
     this.Service.getByGrid(this.user.contactId).pipe(first())
       .subscribe((data: any) => this.List = data.object)

@@ -39,39 +39,40 @@
                     <div class="row">
 
                         <div class="col-sm-4" hidden>
-                            <label>Distributor</label>
+                            <label>Distributor <span class="text-danger">*</span> </label>
                             <select formControlName="distributorId" class="form-select"
                                 (input)="getengineers($event.target.value)"
-                                [ngClass]="{'is-invalid':submitted && f.distributorId.errors }">
+                                [ngClass]="{'is-invalid':f.distributorId.touched && f.distributorId.errors }">
                                 <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.distributorId.errors" class="invalid-feedback">
+                            <div *ngIf="f.distributorId.touched && f.distributorId.errors" class="invalid-feedback">
                                 <div *ngIf="f.distributorId.errors.required">Distributor is required</div>
                             </div>
                         </div>
 
                         <div class="col-md-12 col-sm-12 mb-3">
-                            <label>Full Name of Employee</label>
+                            <label>Full Name of Employee<span class="text-danger">*</span> </label>
                             <select formControlName="engineerId" class="form-select"
                                 (change)="getservicerequest(distId ,$event.target.value);"
-                                [ngClass]="{'is-invalid':submitted && f.engineerId.errors }">
+                                [ngClass]="{'is-invalid':f.engineerId.touched && f.engineerId.errors }">
                                 <option *ngFor="let i of engineer" value="{{i.id}}">{{i.fname + " " + i.lname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.engineerId.errors" class="invalid-feedback">
+                            <div *ngIf="f.engineerId.touched && f.engineerId.errors" class="invalid-feedback">
                                 <div *ngIf="f.engineerId.errors.required">Engineer Name is required</div>
                             </div>
                         </div>
 
                         <div class="col-md-12 col-sm-12 mb-3">
-                            <label for="serviceRequestId">Service Request No. in CIM (If applicable)</label>
+                            <label for="serviceRequestId">Service Request No. in CIM (If applicable)<span
+                                    class="text-danger">*</span> </label>
                             <select formControlName="serviceRequestId" class="form-select"
                                 (change)="onServiceRequestChange()"
-                                [ngClass]="{'is-invalid':submitted && f.serviceRequestId.errors }">
+                                [ngClass]="{'is-invalid':f.serviceRequestId.touched && f.serviceRequestId.errors }">
                                 <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serreqno}}</option>
                             </select>
-                            <div Style="display: block" *ngIf="submitted && f.serviceRequestId.errors"
+                            <div Style="display: block" *ngIf="f.serviceRequestId.touched && f.serviceRequestId.errors"
                                 class="invalid-feedback">
                                 <div *ngIf="f.serviceRequestId.errors.required">
                                     Service Request is required
@@ -80,58 +81,59 @@
                         </div>
 
                         <div class="col-md-12 col-sm-12 mb-3" hidden>
-                            <label>Customer</label>
+                            <label>Customer<span class="text-danger">*</span> </label>
                             <select disabled formControlName="customerId" class="form-select"
-                                [ngClass]="{ 'is-invalid': submitted && f.customerId.errors}">
+                                [ngClass]="{ 'is-invalid': f.customerId.touched && f.customerId.errors}">
 
                                 <option *ngFor="let i of customerList" value="{{i.id}}">{{i.custname}}</option>
                             </select>
 
-                            <div *ngIf="submitted && f.customerId.errors" class="invalid-feedback">
+                            <div *ngIf="f.customerId.touched && f.customerId.errors" class="invalid-feedback">
                                 <div *ngIf="f.customerId.errors.required">Customer is required</div>
                             </div>
 
                         </div>
 
                         <div class="col-md-12 col-sm-12 mb-3">
-                            <label>Employee's Office Location</label>
+                            <label>Employee's Office Location<span class="text-danger">*</span> </label>
                             <select id="country" formControlName="officeLocationId" class="form-select"
-                                [ngClass]="{ ' is -invalid': submitted && f.officeLocationId.errors}">
+                                [ngClass]="{ ' is -invalid': f.officeLocationId.touched && f.officeLocationId.errors}">
                                 <option *ngFor="let i of country" value="{{i.id}}">{{i.name}}
                                 </option>
                             </select>
-                            <div *ngIf="submitted && f.officeLocationId.errors" class="invalid-feedback">
+                            <div *ngIf="f.officeLocationId.touched && f.officeLocationId.errors"
+                                class="invalid-feedback">
                                 <div *ngIf="f.officeLocationId.errors.required">Office Location is required</div>
                             </div>
 
                         </div>
 
                         <div class="col-md-12 col-sm-12 mb-3">
-                            <label>Advance Amount in USD / Local Currency</label>
+                            <label>Advance Amount in USD / Local Currency<span class="text-danger">*</span> </label>
                             <br>
                             <select id="currency" style="display:inline-block; width:15%;"
                                 formControlName="advanceCurrency" class="form-select"
-                                [ngClass]="{ ' is -invalid': submitted && f.advanceCurrency.errors}">
+                                [ngClass]="{ ' is -invalid': f.advanceCurrency.touched && f.advanceCurrency.errors}">
                                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                                 </option>
                             </select>
 
                             <input id="totalamount" type="number" formControlName="advanceAmount" class="form-control"
                                 style="display:inline-block; width:84%; margin-left: 5px;"
-                                [ngClass]="{ ' is -invalid': submitted && f.advanceAmount.errors}" />
+                                [ngClass]="{ ' is -invalid': f.advanceAmount.touched && f.advanceAmount.errors}" />
 
-                            <div *ngIf="submitted && f.advanceAmount.errors" class="invalid-feedback">
+                            <div *ngIf="f.advanceAmount.touched && f.advanceAmount.errors" class="invalid-feedback">
                                 <div *ngIf="f.advanceAmount.errors.required">Advance Amount is required</div>
                             </div>
 
                         </div>
 
                         <div class="col-md-12 col-sm-12 mb-3">
-                            <label>Wheather its billable to client or not?</label>
+                            <label>Wheather its billable to client or not?<span class="text-danger">*</span> </label>
                             <div class="form-check">
                                 <input class="form-check-input" formControlName="isBillable" type="radio"
                                     name="isBillable" id="isBillable-true" value="1">
-                                <label class="form-check-label" for="isBillable-true">Yes</label>
+                                <label class="form-check-label" for="isBillable-true">Yes </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" formControlName="isBillable" type="radio"
@@ -141,7 +143,8 @@
                         </div>
 
                         <div class="col-md-12 col-sm-12 mb-3">
-                            <label>Client Name, Location to be visited and period of visit</label>
+                            <label>Client Name, Location to be visited and period of visit<span
+                                    class="text-danger">*</span> </label>
                             <input formControlName="clientNameLocation" type="text" class="form-control" />
                         </div>
 
@@ -165,15 +168,21 @@
                         </div>
 
                         <div class="col-md-12 col-sm-12 mb-3">
-                            <label>Approved by reporting manager (Name)</label>
-                            <input formControlName="reportingManager" class="form-control" />
+                            <label>Approved by reporting manager (Name)<span class="text-danger">*</span> </label>
+                            <input formControlName="reportingManager" class="form-control"
+                                [ngClass]="{ ' is -invalid': f.reportingManager.touched && f.reportingManager.errors}" />
+
+                            <div *ngIf="f.reportingManager.touched && f.reportingManager.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.reportingManager.errors.required">Manager Name is required</div>
+                            </div>
                         </div>
 
                         <div>
                             <br />
                             <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
                                 <div class="col-md-12">
-                                    <label>Budgeted expenses in excel (as per company format)</label>
+                                    <label>Budgeted expenses in excel (as per company format) </label>
                                     <br>
                                     <input type="file" id="myFile" [disabled]="!isEditMode" #file
                                         placeholder="Choose file" (change)="getfil(file.files); listfile(file.files) ;"
@@ -216,63 +225,63 @@
                         <div class="row">
 
                             <div class="col-md-6 col-sm-6 mb-3">
-                                <label>Bank Name</label>
-                                <input [ngClass]="{'is-invalid':submitted && b.bankName.errors }"
+                                <label>Bank Name<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.bankName.touched && b.bankName.errors }"
                                     formControlName="bankName" type="text" class="form-control" />
 
-                                <div *ngIf="submitted && b.bankName.errors" class="invalid-feedback">
+                                <div *ngIf="b.bankName.touched && b.bankName.errors" class="invalid-feedback">
                                     <div *ngIf="b.bankName.errors.required">Bank Name is required</div>
                                 </div>
                             </div>
 
 
                             <div class="col-md-6 col-sm-6 mb-3">
-                                <label>Branch</label>
-                                <input [ngClass]="{'is-invalid':submitted && b.branch.errors }" formControlName="branch"
-                                    type="text" class="form-control" />
+                                <label>Branch<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.branch.touched && b.branch.errors }"
+                                    formControlName="branch" type="text" class="form-control" />
 
-                                <div *ngIf="submitted && b.branch.errors" class="invalid-feedback">
+                                <div *ngIf="b.branch.touched && b.branch.errors" class="invalid-feedback">
                                     <div *ngIf="b.branch.errors.required">branch is required</div>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-sm-6 mb-3">
-                                <label>Name in Branch</label>
-                                <input [ngClass]="{'is-invalid':submitted && b.nameInBank.errors }"
+                                <label>Name in Branch<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.nameInBank.touched && b.nameInBank.errors }"
                                     formControlName="nameInBank" type="text" class="form-control" />
 
-                                <div *ngIf="submitted && b.nameInBank.errors" class="invalid-feedback">
+                                <div *ngIf="b.nameInBank.touched && b.nameInBank.errors" class="invalid-feedback">
                                     <div *ngIf="b.nameInBank.errors.required">Name In Bank is required</div>
                                 </div>
                             </div>
 
 
                             <div class="col-md-6 col-sm-6 mb-3">
-                                <label>Banks Swift code</label>
-                                <input [ngClass]="{'is-invalid':submitted && b.bankSwiftCode.errors }"
+                                <label>Banks Swift code<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.bankSwiftCode.touched && b.bankSwiftCode.errors }"
                                     formControlName="bankSwiftCode" type="text" class="form-control" />
 
-                                <div *ngIf="submitted && b.bankSwiftCode.errors" class="invalid-feedback">
+                                <div *ngIf="b.bankSwiftCode.touched && b.bankSwiftCode.errors" class="invalid-feedback">
                                     <div *ngIf="b.bankSwiftCode.errors.required">Bank Swift Code is required</div>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-sm-6 mb-3">
-                                <label>Bank Account No.</label>
-                                <input [ngClass]="{'is-invalid':submitted && b.bankAccountNo.errors }"
+                                <label>Bank Account No.<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.bankAccountNo.touched && b.bankAccountNo.errors }"
                                     formControlName="bankAccountNo" type="text" class="form-control" />
 
-                                <div *ngIf="submitted && b.bankAccountNo.errors" class="invalid-feedback">
+                                <div *ngIf="b.bankAccountNo.touched && b.bankAccountNo.errors" class="invalid-feedback">
                                     <div *ngIf="b.bankAccountNo.errors.required">Bank Account No. is required</div>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-sm-6 mb-3">
-                                <label>IBAN No.</label>
-                                <input [ngClass]="{'is-invalid':submitted && b.ibanNo.errors }" formControlName="ibanNo"
-                                    type="text" class="form-control" />
+                                <label>IBAN No.<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.ibanNo.touched && b.ibanNo.errors }"
+                                    formControlName="ibanNo" type="text" class="form-control" />
 
-                                <div *ngIf="submitted && b.ibanNo.errors" class="invalid-feedback">
+                                <div *ngIf="b.ibanNo.touched && b.ibanNo.errors" class="invalid-feedback">
                                     <div *ngIf="b.ibanNo.errors.required">IBAN No. is required</div>
                                 </div>
                             </div>
@@ -284,3 +293,10 @@
     </div>
 
 </layout>
+
+
+<style>
+    .invalid-feedback {
+        display: block;
+    }
+</style>

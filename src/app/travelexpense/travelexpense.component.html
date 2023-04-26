@@ -144,6 +144,11 @@
                             <input formControlName="grandEngineerTotal" type="text" disabled class="form-control" />
                         </div>
                     </div>
+                    <app-travelexpenseitem *ngIf="id!=null" [isDisabled]="!isEditMode"
+                        [StartDate]="form.get('startDate').value" [EndDate]="form.get('endDate').value" [ParentId]="id"
+                        (GrandCompanyTotal)="onGrandCompanyTotal($event)"
+                        (GrandEngineerTotal)="onGrandEngineerTotal($event)">
+                    </app-travelexpenseitem>
 
                     <div>
                         <br />
@@ -177,11 +182,6 @@
 
                         </div>
                     </div>
-                    <app-travelexpenseitem *ngIf="id!=null" [isDisabled]="!isEditMode"
-                        [StartDate]="form.get('startDate').value" [EndDate]="form.get('endDate').value" [ParentId]="id"
-                        (GrandCompanyTotal)="onGrandCompanyTotal($event)"
-                        (GrandEngineerTotal)="onGrandEngineerTotal($event)">
-                    </app-travelexpenseitem>
                 </form>
             </div>
         </div>
