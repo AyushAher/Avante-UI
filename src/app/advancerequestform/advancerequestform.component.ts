@@ -108,9 +108,9 @@ export class AdvancerequestformComponent implements OnInit {
       officeLocationId: ["", Validators.required],
       advanceAmount: ["", Validators.required],
       advanceCurrency: ["", Validators.required],
-      isBillable: false,
+      isBillable: ["0", Validators.required],
       clientNameLocation: ["", Validators.required],
-      underTaking: false,
+      underTaking: ["0", Validators.required],
       reportingManager: ["", Validators.required],
 
       bankDetails: this.formBuilder.group({
@@ -422,7 +422,7 @@ export class AdvancerequestformComponent implements OnInit {
   onSubmit() {
     this.form.markAllAsTouched()
     console.log(this.form);
-    
+
     if (this.form.get('underTaking').value == "0") {
       return this.notificationService.showInfo("Please sign the undertaking to procced", "Info")
     }

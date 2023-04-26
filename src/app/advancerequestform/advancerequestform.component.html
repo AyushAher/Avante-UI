@@ -97,7 +97,7 @@
                         <div class="col-md-12 col-sm-12 mb-3">
                             <label>Employee's Office Location<span class="text-danger">*</span> </label>
                             <select id="country" formControlName="officeLocationId" class="form-select"
-                                [ngClass]="{ ' is -invalid': f.officeLocationId.touched && f.officeLocationId.errors}">
+                                [ngClass]="{ 'is-invalid': f.officeLocationId.touched && f.officeLocationId.errors}">
                                 <option *ngFor="let i of country" value="{{i.id}}">{{i.name}}
                                 </option>
                             </select>
@@ -113,14 +113,14 @@
                             <br>
                             <select id="currency" style="display:inline-block; width:15%;"
                                 formControlName="advanceCurrency" class="form-select"
-                                [ngClass]="{ ' is -invalid': f.advanceCurrency.touched && f.advanceCurrency.errors}">
+                                [ngClass]="{ 'is-invalid': f.advanceCurrency.touched && f.advanceCurrency.errors}">
                                 <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
                                 </option>
                             </select>
 
                             <input id="totalamount" type="number" formControlName="advanceAmount" class="form-control"
                                 style="display:inline-block; width:84%; margin-left: 5px;"
-                                [ngClass]="{ ' is -invalid': f.advanceAmount.touched && f.advanceAmount.errors}" />
+                                [ngClass]="{ 'is-invalid': f.advanceAmount.touched && f.advanceAmount.errors}" />
 
                             <div *ngIf="f.advanceAmount.touched && f.advanceAmount.errors" class="invalid-feedback">
                                 <div *ngIf="f.advanceAmount.errors.required">Advance Amount is required</div>
@@ -145,7 +145,13 @@
                         <div class="col-md-12 col-sm-12 mb-3">
                             <label>Client Name, Location to be visited and period of visit<span
                                     class="text-danger">*</span> </label>
-                            <input formControlName="clientNameLocation" type="text" class="form-control" />
+                            <input formControlName="clientNameLocation" type="text" class="form-control"
+                                [ngClass]="{ 'is-invalid': f.clientNameLocation.touched && f.clientNameLocation.errors}" />
+
+                            <div *ngIf="f.clientNameLocation.touched && f.clientNameLocation.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.clientNameLocation.errors.required">Client Location is required</div>
+                            </div>
                         </div>
 
                         <div class="col-md-12 col-sm-12 mb-3">
@@ -170,7 +176,7 @@
                         <div class="col-md-12 col-sm-12 mb-3">
                             <label>Approved by reporting manager (Name)<span class="text-danger">*</span> </label>
                             <input formControlName="reportingManager" class="form-control"
-                                [ngClass]="{ ' is -invalid': f.reportingManager.touched && f.reportingManager.errors}" />
+                                [ngClass]="{ 'is-invalid': f.reportingManager.touched && f.reportingManager.errors}" />
 
                             <div *ngIf="f.reportingManager.touched && f.reportingManager.errors"
                                 class="invalid-feedback">
@@ -293,10 +299,3 @@
     </div>
 
 </layout>
-
-
-<style>
-    .invalid-feedback {
-        display: block;
-    }
-</style>
