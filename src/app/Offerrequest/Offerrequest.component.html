@@ -258,40 +258,6 @@
           </div>
           <br />
 
-          <div class="attachment my-4">
-            <div class="page-title">
-              <div class="title_left">
-                <h3 style="padding: 15px 0 5px 0">Attachments</h3>
-              </div>
-            </div>
-            <div class="clearfix"></div>
-            <hr />
-
-            <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin: 15px">
-              <div class="col-md-3">
-                <input type="file" id="myFile" [disabled]="isCompleted || (!isEditMode && !isNewMode)" #file
-                  placeholder="Choose file" (change)="getfil(file.files, true); listfile(file.files)" multiple
-                  accept="text/plain, application/pdf, image/*" />
-              </div>
-              <div id="selectedfiles" class="hidden col-md-4"
-                style="max-height: 200px; overflow-y: auto; display: none">
-                <section style="
-                    margin: 30px 0 0 50px;
-                    max-width: 600px;
-                    min-width: 300px;
-                  ">
-                  <h5>Selected Files:</h5>
-                  <hr />
-                </section>
-              </div>
-            </div>
-
-            <ag-grid-angular *ngIf="hasId" style="width: 100%; height: 250px" class="my-4 ag-theme-alpine"
-              (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments" [rowData]="attachments"
-              rowSelection="single" pagination="true" paginationPageSize="10">
-            </ag-grid-angular>
-          </div>
-
           <div class="offerRequestProccess" *ngIf="hasId">
             <div class="page-title">
               <div class="title_left">
@@ -440,6 +406,41 @@
             </table>
 
           </div>
+
+          <div class="attachment my-4">
+            <div class="page-title">
+              <div class="title_left">
+                <h3 style="padding: 15px 0 5px 0">Attachments</h3>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+            <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin: 15px">
+              <div class="col-md-3">
+                <input type="file" id="myFile" [disabled]="isCompleted || (!isEditMode && !isNewMode)" #file
+                  placeholder="Choose file" (change)="getfil(file.files, true); listfile(file.files)" multiple
+                  accept="text/plain, application/pdf, image/*" />
+              </div>
+              <div id="selectedfiles" class="hidden col-md-4"
+                style="max-height: 200px; overflow-y: auto; display: none">
+                <section style="
+                    margin: 30px 0 0 50px;
+                    max-width: 600px;
+                    min-width: 300px;
+                  ">
+                  <h5>Selected Files:</h5>
+                  <hr />
+                </section>
+              </div>
+            </div>
+
+            <ag-grid-angular *ngIf="hasId" style="width: 100%; height: 250px" class="my-4 ag-theme-alpine"
+              (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments" [rowData]="attachments"
+              rowSelection="single" pagination="true" paginationPageSize="10">
+            </ag-grid-angular>
+          </div>
+
         </form>
       </div>
     </div>

@@ -388,17 +388,19 @@ export class AmcComponent implements OnInit {
               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
               this.paymentTypes = []
               this.payTypes = mstData;
+              data.object.edate = GetParsedDate(data.object.edate)
+              data.object.sdate = GetParsedDate(data.object.sdate)
 
               if (data.object.firstVisitDate) {
                 var dateRange = data.object.firstVisitDate.split("-")
-                this.form.get('firstVisitDateFrom').setValue(dateRange[0])
-                this.form.get('firstVisitDateTo').setValue(dateRange[1])
+                this.form.get('firstVisitDateFrom').setValue(GetParsedDate(dateRange[0]))
+                this.form.get('firstVisitDateTo').setValue(GetParsedDate(dateRange[1]))
               }
 
               if (data.object.secondVisitDate) {
                 var dateRange = data.object.secondVisitDate.split("-")
-                this.form.get('secondVisitDateFrom').setValue(dateRange[0])
-                this.form.get('secondVisitDateTo').setValue(dateRange[1])
+                this.form.get('secondVisitDateFrom').setValue(GetParsedDate(dateRange[0]))
+                this.form.get('secondVisitDateTo').setValue(GetParsedDate(dateRange[1]))
               }
 
               data.object.paymentTerms?.forEach(y => {
@@ -476,6 +478,7 @@ export class AmcComponent implements OnInit {
 
   FormControlDisable() {
     this.form.get('baseCurrencyId').disable()
+    this.form.get('zerorate').disable()
 
     if (this.isDisableSite)
       this.form.get('custSite').disable()
@@ -972,7 +975,11 @@ export class AmcComponent implements OnInit {
       d[0].amount = rowAmount;
       d[0].rate = Number(data.rate)
       d[0].qty = Number(data.qty)
-      this.api.setRowData(this.instrumentList)
+      this.api.setRowData(this.instrumentList);
+
+      let zeroRate = 0;
+      this.instrumentList.forEach(x => zeroRate += x.amount);
+      this.form.get("zerorate").setValue(zeroRate);
     }
   }
 
@@ -1014,7 +1021,7 @@ export class AmcComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.form.get('billtoid').enable()
-    this.model = this.form.value;
+    this.model = this.form.getRawValue();
     this.form.get('billtoid').disable()
 
     if (this.IsCustomerView) {

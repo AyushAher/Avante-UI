@@ -22,7 +22,7 @@ function CustomerDashboardCharts() {
       data: {
         labels: ["AMC", "Service", "PO"],
         datasets: [{
-          backgroundColor: ["#ef3038", "#e03c31", "#ed1c24"],
+          backgroundColor: ["#863A6F", "#975C8D", "#FFADBC"],
           data: [poCost?.amcCost, poCost?.othrCost, poCost?.poCost],
 
         }]
@@ -87,6 +87,7 @@ function CustomerDashboardCharts() {
 function DistributorDashboardCharts() {
   setTimeout(() => {
     var lines = JSON.parse(sessionStorage.getItem('lines'));
+    console.log(lines);
     var xLineValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     var prevLineValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -161,7 +162,7 @@ function DistributorDashboardCharts() {
             lineTension: 0,
             backgroundColor: "#f8a485",
             borderColor: "#f8a4854d",
-            data: prevLineValues
+            data: PlanLineValues
           },
         ]
       },
