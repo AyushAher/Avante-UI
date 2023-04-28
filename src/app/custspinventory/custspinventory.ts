@@ -326,50 +326,43 @@ export class CustSPInventoryComponent implements OnInit {
     // stop here if form is invalid
     if (!this.form.get("partNo").value) return this.notificationService.showInfo("Please search and select a Spare Part", "Info")
     if (this.form.invalid) return;
-    this.model = this.form.value
+
+    this.model = this.form.getRawValue();
     this.model.customerId = this.user.contactId;
 
     if (this.id == null) {
       this.Service.save(this.model)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess(
-                data.resultMessage,
-                "Success"
-              );
-              this.router.navigate(["customerspinventorylist"], {
-                //relativeTo: this.activeRoute,
-                queryParams: { isNSNav: true },
-                //queryParamsHandling: 'merge'
-              });
-            }
-            this.loading = false;
-          },
+        .subscribe((data: ResultMsg) => {
+          if (data.result) {
+            this.notificationService.showSuccess(
+              data.resultMessage,
+              "Success"
+            );
+            this.router.navigate(["customerspinventorylist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
+          }
         });
     }
 
     else {
-      this.model = this.form.value;
+      this.model = this.form.getRawValue();
       this.model.id = this.id;
       this.Service.update(this.id, this.model)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            if (data.result) {
-              this.notificationService.showSuccess(
-                data.resultMessage,
-                "Success"
-              );
-              this.router.navigate(["customerspinventorylist"], {
-                //relativeTo: this.activeRoute,
-                queryParams: { isNSNav: true },
-                //queryParamsHandling: 'merge'
-              });
-            }
-            this.loading = false;
-          },
+        .subscribe((data: ResultMsg) => {
+          if (data.result) {
+            this.notificationService.showSuccess(
+              data.resultMessage,
+              "Success"
+            );
+            this.router.navigate(["customerspinventorylist"], {
+              //relativeTo: this.activeRoute,
+              queryParams: { isNSNav: true },
+              //queryParamsHandling: 'merge'
+            });
+          }
         });
     }
   }

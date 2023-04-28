@@ -315,12 +315,12 @@
                 <div *ngIf="f.alarmdetails.errors.required">Alarm No & Details is required</div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-3" *ngIf="!isAmc">
+            <div class="col-md-3 col-sm-3" *ngIf="!isAmc && !IsCustomerView">
               <label for="resolveaction">Resolve Action</label>
               <input class="form-control" formControlName="resolveaction" type="text" />
             </div>
 
-            <div class="col-md-3 col-sm-3" *ngIf="!IsEngineerView">
+            <div class="col-md-3 col-sm-3" *ngIf="IsDistributorView">
               <label for="serresolutiondate">Resolution Date</label>
               <input [ngClass]="{ 'is-invalid': f.serresolutiondate.touched && f.serresolutiondate.errors }"
                 bsDatepicker class="form-control" formControlName="serresolutiondate" type="text" />
