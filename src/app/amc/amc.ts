@@ -242,7 +242,8 @@ export class AmcComponent implements OnInit {
         estStartDate: [""],
         estEndDate: [""],
         status: [""],
-        serviceRequestId: [""]
+        serviceRequestId: [""],
+        sqNo: []
       })
     });
 
@@ -338,7 +339,7 @@ export class AmcComponent implements OnInit {
 
     this.form.get("amcItemsForm").get("serviceType").valueChanges
       .subscribe(value => {
-        let isPreventive = this.serviceType.find(x => x.listTypeItemId == value)
+        let isPreventive = this.serviceType?.find(x => x.listTypeItemId == value)
 
         if (!isPreventive || isPreventive?.itemCode != "PREV") {
           this.item.estStartDate.disable();
@@ -1091,6 +1092,12 @@ export class AmcComponent implements OnInit {
     let amcItem = (<FormGroup>this.form.get("amcItemsForm")).getRawValue();
     if (!amcItem.status) amcItem.status = this.itemStatus.find(x => x.itemCode == "AINCO")?.listTypeItemId
     amcItem.amcId = this.id;
+    if (amcItem.estEndDate < amcItem.estStartDate) return this.notificationService.showInfo("End Date should be before Start Date", "Invalid Date");
+
+    amcItem.estEndDate = this.datepipe.transform(amcItem.estEndDate, "dd/MM/YYYY")
+    amcItem.estStartDate = this.datepipe.transform(amcItem.estStartDate, "dd/MM/YYYY")
+
+    amcItem.sqNo = this.amcItems.length + 1;
 
     this.amcItemsService.SaveItem(amcItem)
       .subscribe((data: any) => {

@@ -208,11 +208,10 @@
                 <tr>
                   <th *ngIf="(hasDeleteAccess || hasUpdateAccess)&& !isCompleted && isEditMode">Action</th>
                   <th>Service Type</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th>Service Request</th>
                   <th>Est. Start Date</th>
                   <th>Est. End Date</th>
+                  <th>Status</th>
+                  <th>Service Request</th>
                 </tr>
               </thead>
               <tbody>
@@ -224,11 +223,10 @@
                     </button>
                   </td>
                   <td>{{getServiceType(item.serviceType)}}</td>
-                  <td>{{getStatus(item.status)}}</td>
-                  <td>{{item.date}}</td>
-                  <td>{{item.serviceRequestId}}</td>
                   <td>{{item.estStartDate}}</td>
                   <td>{{item.estEndDate}}</td>
+                  <td>{{getStatus(item.status)}}</td>
+                  <td>{{item.serviceRequestId}}</td>
                 </tr>
               </tbody>
               <tfoot *ngIf="hasUpdateAccess && !isCompleted" style="
@@ -260,24 +258,23 @@
                     </div>
                   </td>
 
+                  <td>
+                    <input type="text" bsDatepicker class="form-control" formControlName="estStartDate" />
+                  </td>
+
+                  <td>
+                    <input type="text" bsDatepicker class="form-control" formControlName="estEndDate" />
+                  </td>
+
                   <td style="width: 250px;">
                     <select class="form-select" formControlName="status">
-                      <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
+                      <option *ngFor="let i of itemStatus" value="{{ i.listTypeItemId }}">
                         {{ i.itemname }}
                       </option>
                     </select>
                   </td>
 
                   <td></td>
-                  <td></td>
-
-                  <td>
-                    <input type="text" class="form-control" formControlName="estStartDate" />
-                  </td>
-
-                  <td>
-                    <input type="text" class="form-control" formControlName="estEndDate" />
-                  </td>
                 </tr>
               </tfoot>
             </table>
