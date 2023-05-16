@@ -121,21 +121,6 @@
               </div>
             </div>
 
-            <div class="col-md-4 col-sm-4">
-              <label for="servicetype">Service Type<span class="text-danger">*</span></label>
-              <select id="servicetype" type="text" formControlName="servicetype" class="form-select"
-                [ngClass]="{ ' is -invalid': f.servicetype.touched && f.servicetype.errors}">
-                <option *ngFor="let i of serviceType" value="{{i.listTypeItemId}}">
-                  {{i.itemname}}
-                </option>
-              </select>
-              <div style="display: block" *ngIf="f.servicetype.touched && f.servicetype.errors"
-                class="invalid-feedback">
-                <div *ngIf="f.servicetype.errors.required">
-                  Service Type is required
-                </div>
-              </div>
-            </div>
             <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView && hasId">
               <label for="PaymentTerms">Payment Terms</label>
               <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
@@ -163,86 +148,6 @@
               </div>
             </div>
 
-            <div class="col-md-4 col-sm-4 mt-2">
-              <label for="tnc">First Visit Date<span class="text-danger">*</span></label><br />
-
-              <div class="mr-2" style="width: 47%; display: inline-block">
-                <small style="margin: 0" id="emailHelp" class="form-text text-muted">From</small>
-                <!-- <label style="font-weight: 300;" for="tnc">From<span class="text-danger">*</span></label><br> -->
-                <input type="text" formControlName="firstVisitDateFrom" placeholder="From" class="form-control"
-                  [ngClass]="{ ' is -invalid': f.firstVisitDateFrom.touched && f.firstVisitDateFrom.errors}"
-                  bsDatepicker />
-              </div>
-
-              <div class="ml-2" style="width: 47%; display: inline-block">
-                <small style="margin: 0" id="emailHelp" class="form-text text-muted">To</small>
-                <!-- <label style="font-weight: 300;" for="tnc">To<span class="text-danger">*</span></label><br> -->
-                <input type="text" formControlName="firstVisitDateTo" placeholder="To" class="form-control"
-                  [ngClass]="{ ' is -invalid': f.firstVisitDateTo.touched && (f.firstVisitDateTo.errors || ffsDateError || ftsDateError||  ffeDateError || fteDateError )}"
-                  bsDatepicker />
-              </div>
-
-              <div style="display: block"
-                *ngIf="(f.firstVisitDateFrom.touched||f.firstVisitDateTo.touched) && (f.firstVisitDateTo.errors || f.firstVisitDateFrom.errors)"
-                class="invalid-feedback">
-                <div *ngIf=" (f.firstVisitDateTo.errors.required || f.firstVisitDateFrom.errors.required)">
-                  First Visit Date is required
-                </div>
-              </div>
-              <div class="text-danger" *ngIf="ffsDateError">
-                First Visit From Date should be a date after Start Date
-              </div>
-              <div class="text-danger" *ngIf="ftsDateError">
-                First Visit To Date should be a date after Start Date
-              </div>
-              <div class="text-danger" *ngIf="ffeDateError">
-                First Visit From Date should be a date before End Date
-              </div>
-              <div class="text-danger" *ngIf="fteDateError">
-                First Visit To Date should be a date before End Date
-              </div>
-            </div>
-
-
-            <div *ngIf="!isOnCall" class="col-md-4 col-sm-4 mt-2">
-              <label for="tnc">Second Visit Date<span class="text-danger">*</span></label><br />
-
-              <div class="mr-2" style="width: 47%; display: inline-block">
-                <small style="margin: 0" id="emailHelp" class="form-text text-muted">From</small>
-                <input type="text" formControlName="secondVisitDateFrom" placeholder="From" class="form-control mr-2"
-                  [ngClass]="{ ' is -invalid': f.secondVisitDateFrom.touched && f.secondVisitDateFrom.errors}"
-                  bsDatepicker />
-
-              </div>
-
-              <div class="mr-2" style="width: 47%; display: inline-block">
-                <small style="margin: 0" id="emailHelp" class="form-text text-muted">To</small>
-                <input type="text" formControlName="secondVisitDateTo" placeholder="To" class="form-control ml-2"
-                  [ngClass]="{ ' is -invalid': f.secondVisitDateTo.touched && (f.secondVisitDateTo.errors || sfsDateError || stsDateError || steDateError || sfeDateError)}"
-                  bsDatepicker />
-
-              </div>
-              <div style="display: block"
-                *ngIf="(f.secondVisitDateFrom.touched||f.secondVisitDateTo.touched) && (f.secondVisitDateTo.errors || f.secondVisitDateFrom.errors)"
-                class="invalid-feedback">
-                <div *ngIf=" (f.secondVisitDateTo.errors.required || f.secondVisitDateFrom.errors.required)">
-                  Second Visit Date is required
-                </div>
-              </div>
-
-              <div class="text-danger" *ngIf="sfsDateError">
-                Second Visit From Date should be a date after Start Date
-              </div>
-              <div class="text-danger" *ngIf="stsDateError">
-                Second Visit To Date should be a date after Start Date
-              </div>
-              <div class="text-danger" *ngIf="steDateError">
-                Second Visit From Date should be a date before End Date
-              </div>
-              <div class="text-danger" *ngIf="sfeDateError">
-                Second Visit To Date should be a date before End Date
-              </div>
-            </div>
             <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
               <label for="zerorate">Zerorate<span class="text-danger">*</span></label>
               <br />
@@ -283,6 +188,101 @@
             </div>
           </div>
           <br />
+
+
+
+          <div *ngIf="id != null" formGroupName="amcItemsForm" class="offerRequestProccess">
+            <div class="page-title">
+              <div class="title_left">
+                <div class="row">
+                  <div class="col-md-10">
+                    <h3 style="padding: 15px 0 5px 0">AMC Items</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+            <table class="table">
+              <thead>
+                <tr>
+                  <th *ngIf="(hasDeleteAccess || hasUpdateAccess)&& !isCompleted && isEditMode">Action</th>
+                  <th>Service Type</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Service Request</th>
+                  <th>Est. Start Date</th>
+                  <th>Est. End Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of amcItems;">
+                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess) && !isCompleted && isEditMode" class="d-flex w-100">
+                    <button type="button" *ngIf="hasDeleteAccess" (click)="DeleteItem(item.id)"
+                      class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
+                      <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                    </button>
+                  </td>
+                  <td>{{getServiceType(item.serviceType)}}</td>
+                  <td>{{getStatus(item.status)}}</td>
+                  <td>{{item.date}}</td>
+                  <td>{{item.serviceRequestId}}</td>
+                  <td>{{item.estStartDate}}</td>
+                  <td>{{item.estEndDate}}</td>
+                </tr>
+              </tbody>
+              <tfoot *ngIf="hasUpdateAccess && !isCompleted" style="
+                  background: whitesmoke;
+                  border: 0.5px solid rgb(202 170 170);">
+
+                <tr>
+                  <td *ngIf="isEditMode">
+                    <div class="d-flex justify-content-center">
+                      <button type="button" *ngIf="hasUpdateAccess" (click)="onItemAdd()"
+                        style="background-color: transparent; color: #5ba146; border: none;">
+                        <i class="fas fa-save" style="font-size: 20px;"></i>
+                      </button>
+                    </div>
+                  </td>
+
+                  <td style="width: 250px">
+                    <select type="text" formControlName="serviceType" class="form-select"
+                      [ngClass]="{ 'is-invalid': item.serviceType.touched && item.serviceType.errors}">
+                      <option *ngFor="let i of serviceType" value="{{i.listTypeItemId}}">
+                        {{i.itemname}}
+                      </option>
+                    </select>
+                    <div style="display: block" *ngIf="item.serviceType.touched && item.serviceType.errors"
+                      class="invalid-feedback">
+                      <div *ngIf="item.serviceType.errors.required">
+                        Service Type is required
+                      </div>
+                    </div>
+                  </td>
+
+                  <td style="width: 250px;">
+                    <select class="form-select" formControlName="status">
+                      <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
+                        {{ i.itemname }}
+                      </option>
+                    </select>
+                  </td>
+
+                  <td></td>
+                  <td></td>
+
+                  <td>
+                    <input type="text" class="form-control" formControlName="estStartDate" />
+                  </td>
+
+                  <td>
+                    <input type="text" class="form-control" formControlName="estEndDate" />
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
 
           <div class="page-title">
             <div class="title_left">

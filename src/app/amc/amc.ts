@@ -28,6 +28,7 @@ import { AmcstagesService } from "../_services/amcstages.service";
 import { EnvService } from "../_services/env/env.service";
 import { AmcInstrumentRendererComponent } from "./amc-instrument-renderer.component";
 import { BrandService } from "../_services/brand.service";
+import { AmcItemsService } from "../_services/amc-items.service";
 
 @Component({
   selector: "app-Amc",
@@ -108,7 +109,8 @@ export class AmcComponent implements OnInit {
   fteDateError: any;
   ffeDateError: any;
   seDateError: boolean;
-
+  amcItems: any[] = [];
+  itemStatus: any[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -128,7 +130,8 @@ export class AmcComponent implements OnInit {
     private FileShareService: FileshareService,
     private environment: EnvService,
     private instrumentService: InstrumentService,
-    private brandService: BrandService
+    private brandService: BrandService,
+    private amcItemsService: AmcItemsService
   ) {
 
     this.notificationService.listen().subscribe((m: any) => {
@@ -218,7 +221,6 @@ export class AmcComponent implements OnInit {
       sdate: ["", Validators.required],
       edate: ["", Validators.required],
       project: ["", Validators.required],
-      servicetype: ["", Validators.required],
       brand: [""],
       currency: [""],
       zerorate: [0],
@@ -234,67 +236,28 @@ export class AmcComponent implements OnInit {
       baseCurrencyId: ["", Validators.required],
       payAmt: [0],
       payAmtCurrencyId: [''],
-      secondVisitDateFrom: ['', [Validators.required]],
-      secondVisitDateTo: ['', [Validators.required]],
-      firstVisitDateFrom: ['', [Validators.required]],
-      firstVisitDateTo: ['', [Validators.required]],
-    })
+      amcItemsForm: this.formBuilder.group({
+        serviceType: [""],
+        date: [""],
+        estStartDate: [""],
+        estEndDate: [""],
+        status: [""],
+        serviceRequestId: [""]
+      })
+    });
 
     this.id = this.route.snapshot.paramMap.get("id");
-
-    this.form.get("secondVisitDateFrom").valueChanges
-      .subscribe(() => this.CheckDates())
-
-    this.form.get("secondVisitDateTo").valueChanges
-      .subscribe(() => this.CheckDates())
-
-    this.form.get("firstVisitDateFrom").valueChanges
-      .subscribe(() => this.CheckDates())
-
-    this.form.get("firstVisitDateTo").valueChanges
-      .subscribe(() => this.CheckDates())
-
-    this.form.get("edate").valueChanges
-      .subscribe(() => this.CheckDates())
-
-    this.form.get("sdate").valueChanges
-      .subscribe(() => this.CheckDates())
-
-
-    this.form.get("servicetype").valueChanges
-      .subscribe((data: any) => {
-        if (this.serviceType == null) return;
-
-        this.isOnCall = this.serviceType.find(x => x.listTypeItemId == data).itemCode == "ONCAL";
-
-        if (this.isOnCall) {
-          this.form.get("secondVisitDateFrom").clearValidators();
-          this.form.get("secondVisitDateFrom").updateValueAndValidity();
-          this.form.get("secondVisitDateFrom").setValue("");
-
-          this.form.get("secondVisitDateTo").clearValidators();
-          this.form.get("secondVisitDateTo").updateValueAndValidity();
-          this.form.get("secondVisitDateTo").setValue("");
-        }
-
-        else {
-          this.form.get("secondVisitDateFrom").setValidators([Validators.required]);
-          this.form.get("secondVisitDateFrom").updateValueAndValidity();
-
-          this.form.get("secondVisitDateTo").setValidators([Validators.required]);
-          this.form.get("secondVisitDateTo").updateValueAndValidity();
-
-        }
-      })
 
     this.form.get('custSite').valueChanges
       .subscribe(() => this.InstrumentSearch())
 
 
-    this.listTypeService.getById("AMCSG").pipe(first())
-      .subscribe((data: any) => {
-        this.stagesList = data
-      })
+    this.listTypeService.getById("AMCSG")
+      .subscribe((data: any) => this.stagesList = data)
+
+    this.listTypeService.getById("AISTA")
+      .subscribe((data: any) => this.itemStatus = data)
+
     this.contactService.getCustomerSiteByContact(this.user.contactId)
       .pipe(first())
       .subscribe({
@@ -341,12 +304,12 @@ export class AmcComponent implements OnInit {
 
 
     this.listTypeService.getById("SERTY")
-      .pipe(first()).subscribe((data: ListTypeItem[]) => {
-        this.serviceType = data;
-      });
+      .subscribe((data: ListTypeItem[]) =>
+        this.serviceType = data?.filter(x => x.itemCode != "RENEW" && x.itemCode != "AMC"));
+
 
     this.brandService.GetByCompanyId()
-      .pipe(first()).subscribe((data: any) => {
+      .subscribe((data: any) => {
         this.supplierList = data.object;
 
         if (role != this.environment.distRoleCode) return;
@@ -372,7 +335,31 @@ export class AmcComponent implements OnInit {
           else this.baseAmt.nativeElement.disabled = false
       });
 
+
+    this.form.get("amcItemsForm").get("serviceType").valueChanges
+      .subscribe(value => {
+        let isPreventive = this.serviceType.find(x => x.listTypeItemId == value)
+
+        if (!isPreventive || isPreventive?.itemCode != "PREV") {
+          this.item.estStartDate.disable();
+          this.item.estEndDate.disable();
+          this.item.status.disable();
+          this.item.serviceRequestId.disable();
+          return;
+        }
+
+        this.item.estStartDate.enable();
+        this.item.estEndDate.enable();
+        this.item.status.enable();
+      })
+
     if (this.id != null) {
+      this.item.serviceType.setValidators([Validators.required])
+      this.item.serviceType.updateValueAndValidity();
+
+      this.amcItemsService.GetByAmcId(this.id)
+        .subscribe((data: any) => this.amcItems = data.object)
+
       this.Service.getById(this.id)
         .pipe(first())
         .subscribe((data: any) => {
@@ -390,18 +377,6 @@ export class AmcComponent implements OnInit {
               this.payTypes = mstData;
               data.object.edate = GetParsedDate(data.object.edate)
               data.object.sdate = GetParsedDate(data.object.sdate)
-
-              if (data.object.firstVisitDate) {
-                var dateRange = data.object.firstVisitDate.split("-")
-                this.form.get('firstVisitDateFrom').setValue(GetParsedDate(dateRange[0]))
-                this.form.get('firstVisitDateTo').setValue(GetParsedDate(dateRange[1]))
-              }
-
-              if (data.object.secondVisitDate) {
-                var dateRange = data.object.secondVisitDate.split("-")
-                this.form.get('secondVisitDateFrom').setValue(GetParsedDate(dateRange[0]))
-                this.form.get('secondVisitDateTo').setValue(GetParsedDate(dateRange[1]))
-              }
 
               data.object.paymentTerms?.forEach(y => {
                 mstData.forEach(x => {
@@ -487,7 +462,14 @@ export class AmcComponent implements OnInit {
       this.form.get('billtoid').disable()
 
     if (this.IsDistributorView)
-      this.form.get("brand").disable()
+      this.form.get("brand").disable();
+
+
+    this.item.estStartDate.disable();
+    this.item.estEndDate.disable();
+    this.item.status.disable();
+    this.item.serviceRequestId.disable();
+
   }
 
   Back() {
@@ -540,6 +522,10 @@ export class AmcComponent implements OnInit {
 
   get f() {
     return this.form.controls;
+  }
+
+  get item() {
+    return (<FormGroup>this.form.get("amcItemsForm")).controls;
   }
 
   DisableChoseFile(className) {
@@ -639,33 +625,6 @@ export class AmcComponent implements OnInit {
 
   }
 
-  CheckDates() {
-    let seDate = this.DateDiff(this.f.sdate.value, this.f.edate.value)
-    let ffsDate = this.DateDiff(this.f.sdate.value, this.f.firstVisitDateFrom.value)
-    let ftsDate = this.DateDiff(this.f.sdate.value, this.f.firstVisitDateTo.value)
-
-    let ffeDate = this.DateDiff(this.f.firstVisitDateFrom.value, this.f.edate.value)
-    let fteDate = this.DateDiff(this.f.firstVisitDateTo.value, this.f.edate.value)
-
-    let stsDate = this.DateDiff(this.f.sdate.value, this.f.secondVisitDateTo.value)
-    let sfsDate = this.DateDiff(this.f.sdate.value, this.f.secondVisitDateFrom.value)
-
-    let sfeDate = this.DateDiff(this.f.secondVisitDateFrom.value, this.f.edate.value)
-    let steDate = this.DateDiff(this.f.secondVisitDateTo.value, this.f.edate.value)
-
-    this.seDateError = seDate < 0
-    this.ffsDateError = ffsDate < 0
-    this.ftsDateError = ftsDate < 0
-    this.fteDateError = fteDate < 0
-    this.ffeDateError = ffeDate < 0
-
-    this.sfsDateError = !this.isOnCall && sfsDate < 0
-    this.stsDateError = !this.isOnCall && stsDate < 0
-    this.steDateError = !this.isOnCall && steDate < 0
-    this.sfeDateError = !this.isOnCall && sfeDate < 0
-
-  }
-
 
   onstageNameChanged(stage) {
     stage = this.stagesList.find(x => x.listTypeItemId == stage)?.itemCode
@@ -752,12 +711,7 @@ export class AmcComponent implements OnInit {
 
   GetFileList(id: string) {
     this.FileShareService.list(id)
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          this.attachments = data.object;
-        },
-      });
+      .subscribe((data: any) => this.attachments = data.object);
   }
 
   RemoveInnstrument(event) {
@@ -1039,23 +993,6 @@ export class AmcComponent implements OnInit {
       this.model.paymentTerms = ""
     }
 
-    if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value) {
-      let FirstFromToDiff = this.DateDiff(this.form.get('firstVisitDateFrom').value, this.form.get('firstVisitDateTo').value)
-      if (FirstFromToDiff <= 0) {
-        this.notificationService.showInfo("To Date Should not be greater than From Date in First Visit Date", "Info");
-        return;
-      }
-    }
-
-    if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value) {
-      let SecondFromToDiff = this.DateDiff(this.form.get('secondVisitDateFrom').value, this.form.get('secondVisitDateTo').value)
-      if (SecondFromToDiff <= 0) {
-        this.notificationService.showInfo("To Date Should not be greater than From Date in Second Visit Date", "Info");
-        return;
-      }
-    }
-
-
     let calc = this.DateDiff(this.model.sdate, this.model.edate)
 
     if (calc <= 0) {
@@ -1063,61 +1000,7 @@ export class AmcComponent implements OnInit {
       return;
     }
 
-    let ffsDate = this.DateDiff(this.model.sdate, this.model.firstVisitDateFrom)
-    let ftsDate = this.DateDiff(this.model.sdate, this.model.firstVisitDateTo)
-
-    let ffeDate = this.DateDiff(this.model.firstVisitDateFrom, this.model.edate)
-    let fteDate = this.DateDiff(this.model.firstVisitDateTo, this.model.edate)
-
-    let stsDate = this.DateDiff(this.model.sdate, this.model.secondVisitDateTo)
-    let sfsDate = this.DateDiff(this.model.sdate, this.model.secondVisitDateFrom)
-
-    let sfeDate = this.DateDiff(this.model.secondVisitDateFrom, this.model.edate)
-    let steDate = this.DateDiff(this.model.secondVisitDateTo, this.model.edate)
-
-    if (ffsDate < 0) {
-      return this.notificationService.showError("First Visit From Date should not be greater than Start Date", "Invalid Date")
-    }
-    if (ftsDate < 0) {
-      return this.notificationService.showError("First Visit To Date should not be greater than Start Date", "Invalid Date")
-    }
-    if (fteDate < 0) {
-      return this.notificationService.showError("First Visit To Date should not be greater than End Date", "Invalid Date")
-    }
-    if (ffeDate < 0) {
-      return this.notificationService.showError("First Visit From Date should not be greater than End Date", "Invalid Date")
-    }
-
-    if (!this.isOnCall) {
-      if (sfsDate < 0) {
-        return this.notificationService.showError("Second Visit From Date should not be greater than Start Date", "Invalid Date")
-      }
-      if (stsDate < 0) {
-        return this.notificationService.showError("Second Visit To Date should not be greater than Start Date", "Invalid Date")
-      }
-      if (steDate < 0) {
-        return this.notificationService.showError("Second Visit To Date should not be greater than End Date", "Invalid Date")
-      }
-      if (sfeDate < 0) {
-        return this.notificationService.showError("Second Visit From Date should not be greater than End Date", "Invalid Date")
-      }
-    }
-
     const datepipe = new DatePipe('en-US');
-
-    if (!this.isOnCall) {
-      if (this.form.get('secondVisitDateFrom').value || this.form.get('secondVisitDateTo').value) {
-        this.model.secondVisitDateFrom = datepipe.transform(GetParsedDate(this.model.secondVisitDateFrom), 'dd/MM/YYYY');
-        this.model.secondVisitDateTo = datepipe.transform(GetParsedDate(this.model.secondVisitDateTo), 'dd/MM/YYYY');
-        this.model.secondVisitDate = this.model.secondVisitDateFrom + "-" + this.model.secondVisitDateTo;
-      }
-    }
-
-    if (this.form.get('firstVisitDateFrom').value || this.form.get('firstVisitDateTo').value) {
-      this.model.firstVisitDateFrom = datepipe.transform(GetParsedDate(this.model.firstVisitDateFrom), 'dd/MM/YYYY');
-      this.model.firstVisitDateTo = datepipe.transform(GetParsedDate(this.model.firstVisitDateTo), 'dd/MM/YYYY');
-      this.model.firstVisitDate = this.model.firstVisitDateFrom + "-" + this.model.firstVisitDateTo
-    }
 
     this.model.sdate = datepipe.transform(GetParsedDate(this.model.sdate), 'dd/MM/YYYY');
     this.model.edate = datepipe.transform(GetParsedDate(this.model.edate), 'dd/MM/YYYY');
@@ -1202,5 +1085,39 @@ export class AmcComponent implements OnInit {
           }
         });
     }
+  }
+
+  onItemAdd() {
+    let amcItem = (<FormGroup>this.form.get("amcItemsForm")).getRawValue();
+    if (!amcItem.status) amcItem.status = this.itemStatus.find(x => x.itemCode == "AINCO")?.listTypeItemId
+    amcItem.amcId = this.id;
+
+    this.amcItemsService.SaveItem(amcItem)
+      .subscribe((data: any) => {
+        if (!data || !data.result) return this.notificationService.showError(data.resultMessage, "Error");
+
+        this.amcItems.push(amcItem);
+        this.form.get("amcItemsForm").reset();
+      })
+  }
+
+  DeleteItem(id) {
+    this.amcItemsService.DeleteItem(id)
+      .subscribe((data: any) => {
+        if (data && data.result) {
+          this.notificationService.showSuccess("Item Deleted Successfully", "Success")
+          this.amcItems = this.amcItems.filter(x => x.id != id);
+        }
+        else this.notificationService.showError("Some Error Occurred", "Error");
+      })
+  }
+
+
+  getServiceType(id) {
+    return this.serviceType.find(x => x.listTypeItemId == id)?.itemname;
+  }
+
+  getStatus(id) {
+    return this.itemStatus.find(x => x.listTypeItemId == id)?.itemname;
   }
 }
