@@ -226,7 +226,7 @@
                   <td>{{item.estStartDate}}</td>
                   <td>{{item.estEndDate}}</td>
                   <td>{{getStatus(item.status)}}</td>
-                  <td>{{item.serviceRequestId}}</td>
+                  <td>{{getServiceRequest(item.serviceRequestId)}}</td>
                 </tr>
               </tbody>
               <tfoot *ngIf="hasUpdateAccess && !isCompleted" style="

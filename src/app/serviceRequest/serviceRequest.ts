@@ -33,6 +33,7 @@ import {
   AlertService,
   ContactService,
   CountryService,
+  CurrencyService,
   CustomerService,
   DistributorService,
   EngActionService,
@@ -136,30 +137,35 @@ export class ServiceRequestComponent implements OnInit {
   lockRequest: boolean;
   formData: any;
 
+  lstCurrency: any[] = [];
+  baseCurrId: any;
+  isNotUnderAmc: any;
+
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
+    private actionservice: EngActionService,
     private alertService: AlertService,
-    private distributorService: DistributorService,
+    private contactService: ContactService,
     private countryService: CountryService,
     private customerService: CustomerService,
+    private distributorService: DistributorService,
+    private EngschedulerService: EngschedulerService,
+    private engcomservice: EngCommentService,
+    private environment: EnvService,
+    private fileshareService: FileshareService,
+    private formBuilder: FormBuilder,
+    private instrumentService: InstrumentService,
+    private listTypeService: ListTypeService,
+    private modalService: BsModalService,
     private notificationService: NotificationService,
     private profileService: ProfileService,
+    private route: ActivatedRoute,
+    private router: Router,
     private serviceRequestService: ServiceRequestService,
-    private fileshareService: FileshareService,
-    private uploadService: UploadService,
-    private contactService: ContactService,
-    private listTypeService: ListTypeService,
-    private instrumentService: InstrumentService,
-    private modalService: BsModalService,
-    private engcomservice: EngCommentService,
-    private actionservice: EngActionService,
-    private srAssignedHistoryService: SRAssignedHistoryService,
     private servicereportService: ServiceReportService,
-    private environment: EnvService,
-    private EngschedulerService: EngschedulerService,
+    private srAssignedHistoryService: SRAssignedHistoryService,
+    private uploadService: UploadService,
+    private currencyService: CurrencyService,
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       if (this.serviceRequestId != null) {
@@ -292,16 +298,26 @@ export class ServiceRequestComponent implements OnInit {
       isactive: [true],
       isdeleted: [false],
       isCritical: [false],
+
+      totalCost: [],
+      baseAmt: [1.00],
+      baseCurrency: [],
+      totalCostCurrency: [],
+      amcServiceQuote: [],
+
+
       engComments: this.formBuilder.group({
         nextdate: [''],
         comments: ['']
       }),
+
       assignedHistory: this.formBuilder.group({
         engineername: [''],
         assigneddate: [''],
         ticketstatus: [''],
         comments: ['']
       }),
+
       engAction: this.formBuilder.group({
         engineername: [''],
         actiontaken: [''],
@@ -310,6 +326,29 @@ export class ServiceRequestComponent implements OnInit {
         actiondate: ['']
       })
     });
+
+    this.currencyService.getAll()
+      .pipe(first()).subscribe((data: any) => {
+        this.lstCurrency = data.object
+        this.baseCurrId = data.object.find(x => x.code == this.environment.baseCurrencyCode)?.id
+        this.serviceRequestform.get("baseCurrency").setValue(this.baseCurrId)
+      })
+
+    setTimeout(() => {
+      this.serviceRequestform.get('baseAmt').setValue(1.00)
+      this.serviceRequestform.get('baseAmt').disable()
+    }, 500);
+
+    this.serviceRequestform.get('totalCostCurrency').valueChanges
+      .subscribe(value => {
+        if (!this.isEditMode) return;
+        if (value == this.serviceRequestform.get('baseCurrency').value) {
+          this.serviceRequestform.get('baseAmt').setValue(1.00)
+          this.serviceRequestform.get('baseAmt').disable()
+        }
+        else this.serviceRequestform.get('baseAmt').enable()
+      });
+
 
     this.serviceRequestform.get("siteid").valueChanges.subscribe((data: any) => {
       this.getInstrumnetsBySiteIds(data)
@@ -397,6 +436,7 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.get('statusid').setValue(this.statuslist.find(x => x.itemCode == "NTACP")?.listTypeItemId);
 
           }
+          console.log(this.statuslist);
         }
       });
 
@@ -438,7 +478,19 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequestService.getById(this.serviceRequestId)
         .subscribe({
           next: (data: any) => {
-            this.lockRequest = data.object.lockRequest
+            this.isNotUnderAmc = data.object.isNotUnderAmc;
+            this.lockRequest = data.object.lockRequest;
+
+            if (this.isNotUnderAmc && this.IsDistributorView) {
+              this.f.amcServiceQuote.setValidators([Validators.required])
+              this.f.totalCostCurrency.setValidators([Validators.required])
+              this.f.totalCost.setValidators([Validators.required])
+
+              this.f.amcServiceQuote.updateValueAndValidity()
+              this.f.totalCostCurrency.updateValueAndValidity()
+              this.f.totalCost.updateValueAndValidity()
+            }
+
             this.onServiceTypeChange(data.object.visittype);
             this.getInstrumnetsBySiteIds(data.object.siteid)
             var subreq = data.object.subrequesttypeid.split(',');
@@ -511,6 +563,13 @@ export class ServiceRequestComponent implements OnInit {
                         this.serviceRequestform.patchValue({ "machmodelname": (data.object.machmodelname) });
                         this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
                         this.serviceRequestform.patchValue({ "delayedReasons": data.object.delayedReasons });
+
+                        this.serviceRequestform.patchValue({ "totalCost": data.object.totalCost });
+                        this.serviceRequestform.patchValue({ "baseAmt": data.object.baseAmt });
+                        this.serviceRequestform.patchValue({ "baseCurrency": data.object.baseCurrency });
+                        this.serviceRequestform.patchValue({ "totalCostCurrency": data.object.totalCostCurrency });
+                        this.serviceRequestform.patchValue({ "amcServiceQuote": data.object.amcServiceQuote });
+
                         this.serviceRequestform.get("assignedto").setValue(data.object.assignedto);
 
                         this.formData = data.object;
@@ -628,6 +687,11 @@ export class ServiceRequestComponent implements OnInit {
         this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
         this.serviceRequestform.disable();
       }
+
+      setTimeout(() => {
+        this.serviceRequestform.get('baseAmt').disable()
+      }, 500);
+
     }
 
     if (this.user.userType == "site") {
@@ -690,6 +754,7 @@ export class ServiceRequestComponent implements OnInit {
         this.serviceRequestform.get('statusid').disable();
       }
 
+      this.serviceRequestform.get('baseCurrency').disable();
       this.serviceRequestform.get('requesttypeid').disable();
       this.serviceRequestform.get('subrequesttypeid').disable();
       this.serviceRequestform.get('remarks').disable();
@@ -718,6 +783,7 @@ export class ServiceRequestComponent implements OnInit {
         this.serviceRequestform.get('statusid').disable();
         this.serviceRequestform.get('custid').enable();
         this.serviceRequestform.get('siteid').enable();
+        this.serviceRequestform.get('stageid').disable();
       } else {
         if (this.user.userType?.toLocaleLowerCase() == "site") {
           this.serviceRequestform.get('siteid').disable();

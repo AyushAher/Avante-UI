@@ -413,9 +413,57 @@
               <label for="currentinstrustatus">Delayed Reason</label>
               <textarea class="form-control" formControlName="delayedReasons"></textarea>
             </div>
+          </div>
 
+          <div class="amcDetails row" *ngIf="isNotUnderAmc && IsDistributorView">
+            <div class="col-md-3 col-sm-3">
+              <label>AMC Service Quote <span class="text-danger">*</span> </label><br>
+              <input formControlName="amcServiceQuote" class="form-control"
+                [ngClass]="{ 'is-invalid': f.amcServiceQuote.touched  && f.amcServiceQuote.errors }">
+
+              <div *ngIf=" f.amcServiceQuote.touched && f.amcServiceQuote.errors" class="invalid-feedback">
+                <div *ngIf="f.amcServiceQuote.errors.required">AMC Service Quote is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-3">
+              <label>Exchange Rate</label><br>
+              <select formControlName="baseCurrency" disabled style="width: 30%;display: inline-block;"
+                class="form-select">
+                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+              </select>
+              <input formControlName="baseAmt" disabled type="number" min="0" class="form-control"
+                style="width: 68%;display: inline-block;margin-left: 5px;" />
+            </div>
+
+            <div class="col-md-3 col-sm-3">
+              <label>Cost <span class="text-danger">*</span></label><br>
+              <select formControlName="totalCostCurrency" style="width: 30%;display: inline-block;" class="form-select"
+                [ngClass]="{ 'is-invalid': f.totalCostCurrency.touched  && f.totalCostCurrency.errors }">
+                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+              </select>
+              <input formControlName="totalCost" type="number" min="0" class="form-control"
+                style="width: 68%;display: inline-block;margin-left: 5px;"
+                [ngClass]="{ 'is-invalid': f.totalCost.touched  && f.totalCost.errors }" />
+
+              <div *ngIf=" f.totalCostCurrency.touched && f.totalCostCurrency.errors" class="invalid-feedback">
+                <div *ngIf="f.totalCostCurrency.errors.required">Cost Currency is required</div>
+              </div>
+
+              <div *ngIf=" f.totalCost.touched && f.totalCost.errors" class="invalid-feedback">
+                <div *ngIf="f.totalCost.errors.required">Cost is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-3">
+              <label>Cost in USD</label><br>
+              <input [value]="(f.baseAmt.value * f.totalCost.value)" disabled type="number" min="0"
+                class="form-control" />
+            </div>
 
           </div>
+
+
           <br />
 
           <div class="" style="display: flex;justify-content: space-between" *ngIf="serviceRequestId!=null">

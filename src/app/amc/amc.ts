@@ -21,7 +21,8 @@ import {
   InstrumentService,
   ListTypeService,
   NotificationService,
-  ProfileService
+  ProfileService,
+  ServiceRequestService
 } from "../_services";
 import { AmcinstrumentService } from "../_services/amcinstrument.service";
 import { AmcstagesService } from "../_services/amcstages.service";
@@ -111,6 +112,7 @@ export class AmcComponent implements OnInit {
   seDateError: boolean;
   amcItems: any[] = [];
   itemStatus: any[];
+  lstServiceRequest: any[] = []
 
   constructor(
     private formBuilder: FormBuilder,
@@ -131,7 +133,8 @@ export class AmcComponent implements OnInit {
     private environment: EnvService,
     private instrumentService: InstrumentService,
     private brandService: BrandService,
-    private amcItemsService: AmcItemsService
+    private amcItemsService: AmcItemsService,
+    private serviceRequestService: ServiceRequestService
   ) {
 
     this.notificationService.listen().subscribe((m: any) => {
@@ -258,6 +261,9 @@ export class AmcComponent implements OnInit {
 
     this.listTypeService.getById("AISTA")
       .subscribe((data: any) => this.itemStatus = data)
+
+    this.serviceRequestService.GetServiceRequestByConId(this.user.contactId)
+      .subscribe((data: any) => this.lstServiceRequest = data.object)
 
     this.contactService.getCustomerSiteByContact(this.user.contactId)
       .pipe(first())
@@ -1126,5 +1132,9 @@ export class AmcComponent implements OnInit {
 
   getStatus(id) {
     return this.itemStatus.find(x => x.listTypeItemId == id)?.itemname;
+  }
+
+  getServiceRequest(id) {
+    return this.lstServiceRequest.find(x => x.id == id)?.serreqno;
   }
 }
