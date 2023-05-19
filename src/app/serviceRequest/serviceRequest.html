@@ -307,32 +307,24 @@
                 <div *ngIf="f.breakoccurdetailsid.errors.required">breakdownOccuranceDetails is required</div>
               </div>
             </div>
-            <div class="col-sm-3" *ngIf="!isAmc">
-              <label for="alarmdetails">Alarm No & Details<span class="text-danger" *ngIf="!isAmc">*</span></label>
-              <textarea [ngClass]="{ 'is-invalid': f.alarmdetails.touched && f.alarmdetails.errors }"
-                class="form-control" formControlName="alarmdetails" type="text" maxlength="500"></textarea>
-              <div *ngIf="f.alarmdetails.touched && f.alarmdetails.errors" class="invalid-feedback">
-                <div *ngIf="f.alarmdetails.errors.required">Alarm No & Details is required</div>
-              </div>
-            </div>
-            <div class="col-md-3 col-sm-3" *ngIf="!isAmc && !IsCustomerView">
+            <!-- <div class="col-md-3 col-sm-3" *ngIf="!isAmc && !IsCustomerView">
               <label for="resolveaction">Resolve Action</label>
               <input class="form-control" formControlName="resolveaction" type="text" />
-            </div>
+            </div> -->
 
-            <div class="col-md-3 col-sm-3" *ngIf="IsDistributorView">
+            <!-- <div class="col-md-3 col-sm-3" *ngIf="IsDistributorView">
               <label for="serresolutiondate">Resolution Date</label>
               <input [ngClass]="{ 'is-invalid': f.serresolutiondate.touched && f.serresolutiondate.errors }"
                 bsDatepicker class="form-control" formControlName="serresolutiondate" type="text" />
               <div *ngIf="f.serresolutiondate.touched && f.serresolutiondate.errors" class="invalid-feedback">
                 <div *ngIf="f.serresolutiondate.errors.required">Resolution is required</div>
               </div>
-            </div>
-            <div class="col-md-3 col-sm-3" [hidden]="IsCustomerView">
+            </div> -->
+            <!-- <div class="col-md-3 col-sm-3" [hidden]="IsCustomerView">
               <label for="requesttypeid">Request Type</label>
               <select [ngClass]="{ 'is-invalid':f.requesttypeid.touched && f.requesttypeid.errors }" class="form-select"
                 formControlName="requesttypeid">
-                <!--<option value="0">--All--</option>-->
+                <option value="0">--All--</option>
                 <option *ngFor="let req of reqtypelist" value={{req.listTypeItemId}}>
                   {{req.itemname}}
                 </option>
@@ -340,7 +332,7 @@
               <div *ngIf="f.requesttypeid.touched && f.requesttypeid.errors" class="invalid-feedback">
                 <div *ngIf="f.requesttypeid.errors.required">reqtype is required</div>
               </div>
-            </div>
+            </div> -->
             <div class="col-md-6 col-sm-6">
               <label for="subrequesttypeid">SubRequest Type<span class="text-danger">*</span></label>
               <ng-multiselect-dropdown [settings]="dropdownSettings"
@@ -353,14 +345,6 @@
               </div>
             </div>
 
-            <div class="col-sm-3">
-              <label for="remarks">Remarks</label>
-              <input [ngClass]="{ 'is-invalid': f.remarks.touched && f.remarks.errors }" class="form-control"
-                formControlName="remarks" type="text" />
-              <div *ngIf="f.remarks.touched && f.remarks.errors" class="invalid-feedback">
-                <div *ngIf="f.remarks.errors.required">remarks is required</div>
-              </div>
-            </div>
             <div class="col-sm-3">
               <label for="currentinstrustatus">Current Instrument Status<span class="text-danger">*</span></label>
               <select [ngClass]="{ 'is-invalid': f.currentinstrustatus.touched && f.currentinstrustatus.errors }"
@@ -413,10 +397,19 @@
               <label for="currentinstrustatus">Delayed Reason</label>
               <textarea class="form-control" formControlName="delayedReasons"></textarea>
             </div>
+
+            <div class="col-sm-3" *ngIf="!isAmc">
+              <label for="alarmdetails">Alarm No & Details<span class="text-danger" *ngIf="!isAmc">*</span></label>
+              <textarea [ngClass]="{ 'is-invalid': f.alarmdetails.touched && f.alarmdetails.errors }"
+                class="form-control" formControlName="alarmdetails" type="text" maxlength="500"></textarea>
+              <div *ngIf="f.alarmdetails.touched && f.alarmdetails.errors" class="invalid-feedback">
+                <div *ngIf="f.alarmdetails.errors.required">Alarm No & Details is required</div>
+              </div>
+            </div>
           </div>
 
-          <div class="amcDetails row" *ngIf="isNotUnderAmc && IsDistributorView">
-            <div class="col-md-3 col-sm-3">
+          <div class="amcDetails row">
+            <div class="col-md-3 col-sm-3" *ngIf="serviceRequestId != null">
               <label>AMC Service Quote <span class="text-danger">*</span> </label><br>
               <input formControlName="amcServiceQuote" class="form-control"
                 [ngClass]="{ 'is-invalid': f.amcServiceQuote.touched  && f.amcServiceQuote.errors }">
@@ -426,43 +419,45 @@
               </div>
             </div>
 
-            <div class="col-md-3 col-sm-3">
-              <label>Exchange Rate</label><br>
-              <select formControlName="baseCurrency" disabled style="width: 30%;display: inline-block;"
-                class="form-select">
-                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
-              </select>
-              <input formControlName="baseAmt" disabled type="number" min="0" class="form-control"
-                style="width: 68%;display: inline-block;margin-left: 5px;" />
-            </div>
-
-            <div class="col-md-3 col-sm-3">
-              <label>Cost <span class="text-danger">*</span></label><br>
-              <select formControlName="totalCostCurrency" style="width: 30%;display: inline-block;" class="form-select"
-                [ngClass]="{ 'is-invalid': f.totalCostCurrency.touched  && f.totalCostCurrency.errors }">
-                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
-              </select>
-              <input formControlName="totalCost" type="number" min="0" class="form-control"
-                style="width: 68%;display: inline-block;margin-left: 5px;"
-                [ngClass]="{ 'is-invalid': f.totalCost.touched  && f.totalCost.errors }" />
-
-              <div *ngIf=" f.totalCostCurrency.touched && f.totalCostCurrency.errors" class="invalid-feedback">
-                <div *ngIf="f.totalCostCurrency.errors.required">Cost Currency is required</div>
+            <div class="col-md-9 row" *ngIf="isNotUnderAmc && IsDistributorView">
+              <div class="col-md-4 col-sm-4">
+                <label>Exchange Rate</label><br>
+                <select formControlName="baseCurrency" disabled style="width: 30%;display: inline-block;"
+                  class="form-select">
+                  <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+                </select>
+                <input formControlName="baseAmt" disabled type="number" min="0" class="form-control"
+                  style="width: 68%;display: inline-block;margin-left: 5px;" />
               </div>
 
-              <div *ngIf=" f.totalCost.touched && f.totalCost.errors" class="invalid-feedback">
-                <div *ngIf="f.totalCost.errors.required">Cost is required</div>
-              </div>
-            </div>
+              <div class="col-md-4 col-sm-4">
+                <label>Cost <span class="text-danger">*</span></label><br>
+                <select formControlName="totalCostCurrency" style="width: 30%;display: inline-block;"
+                  class="form-select"
+                  [ngClass]="{ 'is-invalid': f.totalCostCurrency.touched  && f.totalCostCurrency.errors }">
+                  <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+                </select>
+                <input formControlName="totalCost" type="number" min="0" class="form-control"
+                  style="width: 68%;display: inline-block;margin-left: 5px;"
+                  [ngClass]="{ 'is-invalid': f.totalCost.touched  && f.totalCost.errors }" />
 
-            <div class="col-md-3 col-sm-3">
-              <label>Cost in USD</label><br>
-              <input [value]="(f.baseAmt.value * f.totalCost.value)" disabled type="number" min="0"
-                class="form-control" />
+                <div *ngIf=" f.totalCostCurrency.touched && f.totalCostCurrency.errors" class="invalid-feedback">
+                  <div *ngIf="f.totalCostCurrency.errors.required">Cost Currency is required</div>
+                </div>
+
+                <div *ngIf=" f.totalCost.touched && f.totalCost.errors" class="invalid-feedback">
+                  <div *ngIf="f.totalCost.errors.required">Cost is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-4">
+                <label>Cost in USD</label><br>
+                <input [value]="(f.baseAmt.value * f.totalCost.value)" disabled type="number" min="0"
+                  class="form-control" />
+              </div>
             </div>
 
           </div>
-
 
           <br />
 

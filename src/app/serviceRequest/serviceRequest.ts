@@ -368,8 +368,8 @@ export class ServiceRequestComponent implements OnInit {
 
 
     if (this.IsEngineerView == true) {
-      this.serviceRequestform.get('requesttypeid').setValidators([Validators.required]);
-      this.serviceRequestform.get('requesttypeid').updateValueAndValidity();
+      // this.serviceRequestform.get('requesttypeid').setValidators([Validators.required]);
+      // this.serviceRequestform.get('requesttypeid').updateValueAndValidity();
       this.serviceRequestform.get('subrequesttypeid').setValidators([Validators.required]);
       this.serviceRequestform.get('subrequesttypeid').updateValueAndValidity();
 
@@ -450,8 +450,8 @@ export class ServiceRequestComponent implements OnInit {
     this.listTypeService.getById("TRRQT").pipe(first())
       .subscribe((data: ListTypeItem[]) => {
         this.reqtypelist = data;
-        if (this.IsCustomerView)
-          this.serviceRequestform.get('requesttypeid').setValue(data.find(x => x.itemCode == 'CUSTR')?.listTypeItemId);
+        // if (this.IsCustomerView)
+        // this.serviceRequestform.get('requesttypeid').setValue(data.find(x => x.itemCode == 'CUSTR')?.listTypeItemId);
       });
 
 
@@ -558,7 +558,7 @@ export class ServiceRequestComponent implements OnInit {
                         this.serviceRequestform.patchValue({ "currentinstrustatus": data.object.currentinstrustatus });
                         this.serviceRequestform.patchValue({ "stageid": data.object.stageid });
                         this.serviceRequestform.patchValue({ "escalation": data.object.escalation });
-                        this.serviceRequestform.patchValue({ "requesttypeid": data.object.requesttypeid });
+                        // this.serviceRequestform.patchValue({ "requesttypeid": data.object.requesttypeid });
                         this.serviceRequestform.patchValue({ "remarks": data.object.remarks });
                         this.serviceRequestform.patchValue({ "machmodelname": (data.object.machmodelname) });
                         this.serviceRequestform.patchValue({ "statusid": data.object.statusid });
@@ -755,7 +755,7 @@ export class ServiceRequestComponent implements OnInit {
       }
 
       this.serviceRequestform.get('baseCurrency').disable();
-      this.serviceRequestform.get('requesttypeid').disable();
+      // this.serviceRequestform.get('requesttypeid').disable();
       this.serviceRequestform.get('subrequesttypeid').disable();
       this.serviceRequestform.get('remarks').disable();
       this.serviceRequestform.get('custid').disable();
@@ -1135,7 +1135,7 @@ export class ServiceRequestComponent implements OnInit {
       this.servicereport.customer = this.serviceRequestform.get('companyname').value;
       this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(GetParsedDate(this.serviceRequestform.get('serreqdate').value), 'yyyy-MM-dd');
       this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
-      this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + '||' + this.serviceRequestform.get('alarmdetails')?.value + '||' + this.serviceRequestform.get('remarks')?.value;
+      this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurdetailsid').value)?.itemname + '||' + this.serviceRequestform.get('alarmdetails')?.value;
 
       this.instrumentService.getAll(this.user.userId)
         .pipe(first())

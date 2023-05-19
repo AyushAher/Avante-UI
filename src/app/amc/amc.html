@@ -206,6 +206,7 @@
             <table class="table">
               <thead>
                 <tr>
+                  <th>SQ No.</th>
                   <th
                     *ngIf="IsDistributorView && (hasDeleteAccess || (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode))&& !isCompleted">
                     Action
@@ -219,6 +220,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of amcItems;">
+                  <td>{{item.sqNo}}</td>
                   <td
                     *ngIf="IsDistributorView && (hasDeleteAccess || (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)) && !isCompleted"
                     class="d-flex w-100">
@@ -241,6 +243,7 @@
                   border: 0.5px solid rgb(202 170 170);">
 
                 <tr>
+                  <td></td>
                   <td *ngIf="IsDistributorView && (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)">
                     <div class="d-flex justify-content-center">
                       <button type="button" *ngIf=" (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)"
