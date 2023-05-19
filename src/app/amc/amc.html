@@ -191,7 +191,7 @@
 
 
 
-          <div *ngIf="id != null" formGroupName="amcItemsForm" class="offerRequestProccess">
+          <div formGroupName="amcItemsForm" class="offerRequestProccess">
             <div class="page-title">
               <div class="title_left">
                 <div class="row">
@@ -206,7 +206,10 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th *ngIf="(hasDeleteAccess || hasUpdateAccess)&& !isCompleted && isEditMode">Action</th>
+                  <th
+                    *ngIf="IsDistributorView && (hasDeleteAccess || (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode))&& !isCompleted">
+                    Action
+                  </th>
                   <th>Service Type</th>
                   <th>Est. Start Date</th>
                   <th>Est. End Date</th>
@@ -216,7 +219,9 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of amcItems;">
-                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess) && !isCompleted && isEditMode" class="d-flex w-100">
+                  <td
+                    *ngIf="IsDistributorView && (hasDeleteAccess || (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)) && !isCompleted"
+                    class="d-flex w-100">
                     <button type="button" *ngIf="hasDeleteAccess" (click)="DeleteItem(item.id)"
                       class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
                       <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
@@ -229,15 +234,17 @@
                   <td>{{getServiceRequest(item.serviceRequestId)}}</td>
                 </tr>
               </tbody>
-              <tfoot *ngIf="hasUpdateAccess && !isCompleted" style="
+              <tfoot
+                *ngIf="IsDistributorView && ((hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)) && !isCompleted"
+                style="
                   background: whitesmoke;
                   border: 0.5px solid rgb(202 170 170);">
 
                 <tr>
-                  <td *ngIf="isEditMode">
+                  <td *ngIf="IsDistributorView && (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)">
                     <div class="d-flex justify-content-center">
-                      <button type="button" *ngIf="hasUpdateAccess" (click)="onItemAdd()"
-                        style="background-color: transparent; color: #5ba146; border: none;">
+                      <button type="button" *ngIf=" (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)"
+                        (click)="onItemAdd()" style="background-color: transparent; color: #5ba146; border: none;">
                         <i class="fas fa-save" style="font-size: 20px;"></i>
                       </button>
                     </div>

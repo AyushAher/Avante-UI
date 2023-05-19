@@ -260,10 +260,18 @@ export class AmcComponent implements OnInit {
       .subscribe((data: any) => this.stagesList = data)
 
     this.listTypeService.getById("AISTA")
-      .subscribe((data: any) => this.itemStatus = data)
+      .subscribe((data: any) => {
+        this.itemStatus = data
+        this.item.status.setValue(this.itemStatus.find(x => x.itemCode == "AINCO")?.listTypeItemId)
+      })
 
-    this.serviceRequestService.GetServiceRequestByConId(this.user.contactId)
-      .subscribe((data: any) => this.lstServiceRequest = data.object)
+    this.serviceRequestService.getAll(this.user.userId)
+      .subscribe((data: any) => {
+        this.lstServiceRequest = data.object.filter(x => !x.isReportGenerated)
+      })
+
+    // this.serviceRequestService.GetServiceRequestByConId(this.user.contactId)
+    //   .subscribe((data: any) => this.lstServiceRequest = data.object)
 
     this.contactService.getCustomerSiteByContact(this.user.contactId)
       .pipe(first())
@@ -352,18 +360,22 @@ export class AmcComponent implements OnInit {
           this.item.estEndDate.disable();
           this.item.status.disable();
           this.item.serviceRequestId.disable();
+
+          this.item.estStartDate.clearValidators();
+          this.item.estEndDate.clearValidators();
           return;
         }
 
         this.item.estStartDate.enable();
         this.item.estEndDate.enable();
-        this.item.status.enable();
+
+        this.item.estStartDate.setValidators([Validators.required]);
+        this.item.estEndDate.setValidators([Validators.required]);
+        this.item.estStartDate.updateValueAndValidity();
+        this.item.estEndDate.updateValueAndValidity();
       })
 
     if (this.id != null) {
-      this.item.serviceType.setValidators([Validators.required])
-      this.item.serviceType.updateValueAndValidity();
-
       this.amcItemsService.GetByAmcId(this.id)
         .subscribe((data: any) => this.amcItems = data.object)
 
@@ -477,6 +489,8 @@ export class AmcComponent implements OnInit {
     this.item.status.disable();
     this.item.serviceRequestId.disable();
 
+    this.item.estStartDate.clearValidators();
+    this.item.estEndDate.clearValidators();
   }
 
   Back() {
@@ -1095,8 +1109,13 @@ export class AmcComponent implements OnInit {
   }
 
   onItemAdd() {
-    let amcItem = (<FormGroup>this.form.get("amcItemsForm")).getRawValue();
-    if (!amcItem.status) amcItem.status = this.itemStatus.find(x => x.itemCode == "AINCO")?.listTypeItemId
+    let amcItemForm = (<FormGroup>this.form.get("amcItemsForm"))
+    let amcItem = amcItemForm.getRawValue();
+    if (amcItemForm.invalid || !amcItem.serviceType) {
+      return this.notificationService.showInfo("All fields are required!", "Invalid Fields")
+    }
+
+    amcItem.status = this.itemStatus.find(x => x.itemCode == "AINCO")?.listTypeItemId
     amcItem.amcId = this.id;
     if (amcItem.estEndDate < amcItem.estStartDate) return this.notificationService.showInfo("End Date should be before Start Date", "Invalid Date");
 
@@ -1111,6 +1130,7 @@ export class AmcComponent implements OnInit {
 
         this.amcItems.push(amcItem);
         this.form.get("amcItemsForm").reset();
+        this.item.status.setValue(this.itemStatus.find(x => x.itemCode == "AINCO")?.listTypeItemId)
       })
   }
 
