@@ -395,7 +395,7 @@ export class ServiceRequestComponent implements OnInit {
         next: (data: ListTypeItem[]) => {
           this.serviceTypeList = data;
           if (this.IsCustomerView) {
-            this.serviceTypeList = this.serviceTypeList.filter(x => x.itemCode != "PREV" && x.itemCode != "PLAN")
+            this.serviceTypeList = this.serviceTypeList.filter(x => x.itemCode != "AMC" && x.itemCode != "RENEW" && x.itemCode != "PLAN")
           }
         }
       });
@@ -566,7 +566,7 @@ export class ServiceRequestComponent implements OnInit {
 
                         this.serviceRequestform.patchValue({ "totalCost": data.object.totalCost });
                         this.serviceRequestform.patchValue({ "baseAmt": data.object.baseAmt });
-                        this.serviceRequestform.patchValue({ "baseCurrency": data.object.baseCurrency });
+                        //this.serviceRequestform.patchValue({ "baseCurrency": data.object.baseCurrency });
                         this.serviceRequestform.patchValue({ "totalCostCurrency": data.object.totalCostCurrency });
                         this.serviceRequestform.patchValue({ "amcServiceQuote": data.object.amcServiceQuote });
 
