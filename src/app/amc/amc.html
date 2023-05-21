@@ -120,12 +120,6 @@
                 <div *ngIf="f.project.errors.required">Project is required</div>
               </div>
             </div>
-            <div class="col-md-4 col-sm-4 mt-3">
-              <label for="isactive">
-                <input id="isactive" type="checkbox" formControlName="isactive">
-                Isactive
-              </label>
-            </div>
             <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView && hasId">
               <label for="PaymentTerms">Payment Terms</label>
               <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
@@ -191,6 +185,13 @@
                 <div *ngIf="f.tnc.errors.required">Comments is required</div>
               </div>
             </div>
+
+            <div class="col-md-4 col-sm-4 mt-3">
+              <label for="isactive">
+                <input id="isactive" type="checkbox" formControlName="isactive">
+                Active AMC
+              </label>
+            </div>
           </div>
           <br />
 
@@ -215,7 +216,7 @@
                     *ngIf="IsDistributorView && (hasDeleteAccess || (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode))&& !isCompleted">
                     Action
                   </th>
-                  <th>SQ No.</th>                
+                  <th>SQ No.</th>
                   <th>Service Type</th>
                   <th>Est. Start Date</th>
                   <th>Est. End Date</th>
@@ -224,7 +225,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of amcItems;">                  
+                <tr *ngFor="let item of amcItems;">
                   <td
                     *ngIf="IsDistributorView && (hasDeleteAccess || (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)) && !isCompleted"
                     class="d-flex w-100">
