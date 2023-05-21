@@ -120,7 +120,12 @@
                 <div *ngIf="f.project.errors.required">Project is required</div>
               </div>
             </div>
-
+            <div class="col-md-4 col-sm-4 mt-3">
+              <label for="isactive">
+                <input id="isactive" type="checkbox" formControlName="isactive">
+                Isactive
+              </label>
+            </div>
             <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView && hasId">
               <label for="PaymentTerms">Payment Terms</label>
               <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"

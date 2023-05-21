@@ -1,7 +1,7 @@
 export class Amc {
   id: string;
-  isactive:boolean;
-  billtoid : string;
+  isactive: boolean | string;
+  billtoid: string;
   servicequote: string;
   sqdate: string;
   sdate: string;

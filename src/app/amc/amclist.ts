@@ -76,7 +76,11 @@ export class AmcListComponent implements OnInit {
       .pipe(first()).subscribe((data: any) => {
         this.AmcList = data.object?.filter(x => !x.isCompleted)
         if (this.AmcList == null || this.AmcList.length <= 0) return;
-        this.AmcList.forEach(x => x.period = x.sdate + " - " + x.edate);
+        this.AmcList.forEach(x => {
+          x.isactive = x.isactive ? "Yes" : "No";
+          x.period = x.sdate + " - " + x.edate
+        });
+
       });
 
     this.columnDefs = this.createColumnDefs();
@@ -147,6 +151,15 @@ export class AmcListComponent implements OnInit {
         sortable: true,
         tooltipField: 'period',
       },
+      {
+        headerName: 'Is Active',
+        field: 'isactive',
+        filter: true,
+        enableSorting: true,
+        editable: false,
+        sortable: true,
+        tooltipField: 'isActive'
+      }
     ]
   }
 

@@ -394,6 +394,8 @@ export class ServiceRequestComponent implements OnInit {
       .subscribe({
         next: (data: ListTypeItem[]) => {
           this.serviceTypeList = data;
+          console.log(data);
+          
           if (this.IsCustomerView) {
             this.serviceTypeList = this.serviceTypeList.filter(x => x.itemCode != "PREV" && x.itemCode != "PLAN")
           }
@@ -566,7 +568,7 @@ export class ServiceRequestComponent implements OnInit {
 
                         this.serviceRequestform.patchValue({ "totalCost": data.object.totalCost });
                         this.serviceRequestform.patchValue({ "baseAmt": data.object.baseAmt });
-                        this.serviceRequestform.patchValue({ "baseCurrency": data.object.baseCurrency });
+                        // this.serviceRequestform.patchValue({ "baseCurrency": data.object.baseCurrency });
                         this.serviceRequestform.patchValue({ "totalCostCurrency": data.object.totalCostCurrency });
                         this.serviceRequestform.patchValue({ "amcServiceQuote": data.object.amcServiceQuote });
 
