@@ -46,6 +46,8 @@ export class ModelContentComponent implements OnInit {
   ) { }
  
 
+  get f(){return this.listvalue.controls;}
+
   ngOnInit() {
     this.user = this.accountService.userValue;
     
@@ -120,6 +122,7 @@ export class ModelContentComponent implements OnInit {
     this.isSave = true;
     this.loading = true;
 
+    this.listvalue.markAllAsTouched();
     if (this.listvalue.invalid) {
       return;
     }
@@ -134,7 +137,7 @@ export class ModelContentComponent implements OnInit {
             if (data.result) {
               this.notificationService.showSuccess(data.resultMessage, "Success");
               this.configList = data.object;
-              this.listvalue.get("configValue").setValue("");
+              this.listvalue.get("configValue").reset();//.setValue("");
             }
             else {
               
