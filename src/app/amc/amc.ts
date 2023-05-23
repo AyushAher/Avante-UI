@@ -1036,35 +1036,40 @@ export class AmcComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
-            if (data.result) {
-              {
-                this.notificationService.showSuccess(data.resultMessage, "Success");
-                if (this.instrumentList == null || this.instrumentList.length <= 0) this.router.navigate(["amclist"], {
-                  //relativeTo: this.activeRoute,
-                  queryParams: { isNSNav: true },
-                  //queryParamsHandling: 'merge'
-                });
 
-                if (this.instrumentList != null && this.instrumentList.length > 0) {
-                  this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
-                    .pipe(first())
-                    .subscribe({
-                      next: (data: ResultMsg) => {
-                        if (data.result) {
-                          this.notificationService.showSuccess(data.resultMessage, "Success");
-                          this.router.navigate(["amclist"], {
-                            //relativeTo: this.activeRoute,
-                            queryParams: { isNSNav: true },
-                            //queryParamsHandling: 'merge'
-                          });
-                        }
-                        else this.notificationService.showError(data.resultMessage, "Error");
-                      },
-                    });
-                }
-              }
+            if (!data.result) return this.notificationService.showError(data.resultMessage, "Error");
+
+            this.notificationService.showSuccess(data.resultMessage, "Success");
+
+            if ((this.amcItems == null || this.amcItems.length <= 0) &&
+              (this.instrumentList == null || this.instrumentList.length <= 0))
+              this.router.navigate(["amclist"], {
+                queryParams: { isNSNav: true },
+              });
+
+
+            if (this.amcItems != null && this.amcItems.length > 0) {
+              this.amcItems.forEach(x => {
+                x.amcId = this.id;
+                this.amcItemsService.SaveItem(x)
+                  .subscribe((data: any) => {
+                    if (!data || !data.result) return this.notificationService.showError(data.resultMessage, "Error");
+                  })
+              })
             }
-            else this.notificationService.showError(data.resultMessage, "Error");
+
+
+            if (this.instrumentList != null && this.instrumentList.length > 0) {
+              this.AmcInstrumentService.SaveAmcInstruments(this.instrumentList)
+                .subscribe((data: ResultMsg) => {
+                  if (!data.result) return this.notificationService.showError(data.resultMessage, "Error");
+
+                  this.notificationService.showSuccess(data.resultMessage, "Success");
+                  this.router.navigate(["amclist"], {
+                    queryParams: { isNSNav: true },
+                  });
+                });
+            }
           },
         });
     }
@@ -1109,6 +1114,7 @@ export class AmcComponent implements OnInit {
   }
 
   onItemAdd() {
+
     let amcItemForm = (<FormGroup>this.form.get("amcItemsForm"))
     let amcItem = amcItemForm.getRawValue();
     if (amcItemForm.invalid || !amcItem.serviceType) {
@@ -1123,6 +1129,13 @@ export class AmcComponent implements OnInit {
     amcItem.estStartDate = this.datepipe.transform(amcItem.estStartDate, "dd/MM/YYYY")
 
     amcItem.sqNo = this.amcItems.length + 1;
+
+    if (!this.hasId) {
+      this.amcItems.push(amcItem);
+      this.form.get("amcItemsForm").reset();
+      this.item.status.setValue(this.itemStatus.find(x => x.itemCode == "AINCO")?.listTypeItemId)
+      return;
+    }
 
     this.amcItemsService.SaveItem(amcItem)
       .subscribe((data: any) => {
