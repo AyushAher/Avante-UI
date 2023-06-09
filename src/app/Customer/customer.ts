@@ -233,12 +233,18 @@ export class CustomerComponent implements OnInit {
       this.customerService.save(this.customer)
         .subscribe((data: any) => {
           if (!data.result) return;
-          this.router.navigate([`/contact/${this.type}/${this.customer.id}`], {
+          this.router.navigate(['customersite', this.customer.id], {
             queryParams: {
-              isNewDistSetUp: true,
-              isNSNav: true
+              isNSNav:true,
+              isNewDist: true
             }
-          })
+          });
+          // this.router.navigate([`/contact/${this.type}/${this.customer.id}`], {
+          //   queryParams: {
+          //     isNewDistSetUp: true,
+          //     isNSNav: true
+          //   }
+          // })
         });
     }
     else {

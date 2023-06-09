@@ -206,13 +206,19 @@ export class DistributorComponent implements OnInit {
       this.distributorService.save(this.distributorModel)
         .subscribe((data: any) => {
           if (!data.result) return;
-          // sessionStorage.setItem("distributor", JSON.stringify(this.distributorModel));
-          this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
+          this.router.navigate(['distributorregion', this.distributorId], {
             queryParams: {
-              isNewDistSetUp: true,
-              isNSNav: true
+              isNSNav:true,
+              isNewDist: true
             }
-          })
+          });
+          // sessionStorage.setItem("distributor", JSON.stringify(this.distributorModel));
+          // this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
+          //   queryParams: {
+          //     isNewDistSetUp: true,
+          //     isNSNav: true
+          //   }
+          // })
         });
     }
     else {
