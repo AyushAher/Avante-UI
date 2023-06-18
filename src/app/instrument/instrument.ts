@@ -577,6 +577,7 @@ export class InstrumentComponent implements OnInit {
     this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
     this.columnDefs = this.createColumnDefsRO();
     this.notificationService.SetNavParam();
+    this.contactList = []
   }
 
   FormControlDisable() {

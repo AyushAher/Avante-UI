@@ -108,36 +108,25 @@ export class CustomerSiteComponent implements OnInit {
     this.listTypeService.getById("GPAYT")
       .subscribe((data: any) => this.PaymentTermsList = data);
 
-    if (!this.isNewParentMode) {
-      this.distributorRegionservice.getDistByCustomerId(this.customerid)
-        .pipe(first()).subscribe({
-          next: (data: any) => {
-            this.distRegions = data.object;
-          },
-        });
+    this.distributorRegionservice.getDistByCustomerId(this.customerid)
+      .subscribe((data: any) => {
 
-    }
-    else {
-      let customer = JSON.parse(sessionStorage.getItem('customer'));
+        if (!data.result || !data.object) return;
 
-      this.distributorRegionservice.getById(customer.defdistregionid)
-        .subscribe((data: any) => {
-          if (data.result && data.object) {
-            this.distRegions = [data.object];
-            this.distRegion = data.object;
-            this.customersiteform.get('regname').setValue(data.object.region)
-            this.customersiteform.get('payterms').setValue(data.object.payterms)
-          }
-        });
-    }
+        if (this.isNewParentMode) {
+          this.distRegions = [data.object];
+          this.distRegion = data.object;
+          this.customersiteform.get('regname').setValue(data.object.region)
+          this.customersiteform.get('payterms').setValue(data.object.payterms)
+        }
+        else this.distRegions = data.object
+
+      });
     this.customerService.getAll()
       .subscribe((data: any) => {
         this.customers = data.object;
         this.customer = this.customers.find(x => x.id == this.customerid);
         var customer: any = this.customer;
-        if (!customer && this.isNewParentMode) {
-          customer = JSON.parse(sessionStorage.getItem('customer'));
-        }
 
         this.customersiteform.get("custid").setValue(this.customerid)
 
@@ -146,7 +135,7 @@ export class CustomerSiteComponent implements OnInit {
           if (customer.defDistRegion && !this.csiteid) this.customersiteform.get('regname').setValue(customer.defDistRegion)
           if (customer.custname) this.customersiteform.get('custname').setValue(customer.custname)
           if (customer.defdistregionid && !this.csiteid) this.customersiteform.get('distid').setValue(customer.defdistregionid)
-
+          this.customersiteform.patchValue({ address: customer.address })
           this.countryService.getAll()
             .subscribe((data: any) => {
               this.countries = data.object;

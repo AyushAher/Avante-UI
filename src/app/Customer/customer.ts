@@ -162,7 +162,7 @@ export class CustomerComponent implements OnInit {
   }
 
   FormControlDisable() {
-    this.a.countryid.disable();
+    // this.a.countryid.disable();
     this.f.defdistid.disable();
     this.f.countryid.disable();
     this.f.code.disable();
