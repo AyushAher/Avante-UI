@@ -110,6 +110,7 @@ export class AmcComponent implements OnInit {
   fteDateError: any;
   ffeDateError: any;
   seDateError: boolean;
+  sqDateError: boolean;
   amcItems: any[] = [];
   itemStatus: any[];
   lstServiceRequest: any[] = []
@@ -196,8 +197,6 @@ export class AmcComponent implements OnInit {
       this.role = role[0]?.itemCode;
     }
 
-
-
     let role = this.role;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
 
@@ -250,7 +249,19 @@ export class AmcComponent implements OnInit {
       })
     });
 
+
+
     this.id = this.route.snapshot.paramMap.get("id");
+    
+        
+    this.form.get("sqdate").valueChanges
+    .subscribe(() => this.CheckDates())
+
+    this.form.get("edate").valueChanges
+    .subscribe(() => this.CheckDates())
+
+    this.form.get("sdate").valueChanges
+    .subscribe(() => this.CheckDates())
 
     this.form.get('custSite').valueChanges
       .subscribe(() => this.InstrumentSearch())
@@ -483,7 +494,8 @@ export class AmcComponent implements OnInit {
     if (this.IsDistributorView)
       this.form.get("brand").disable();
 
-
+      
+    this.form.get('isactive').disable();
     this.item.estStartDate.disable();
     this.item.estEndDate.disable();
     this.item.status.disable();
@@ -643,9 +655,17 @@ export class AmcComponent implements OnInit {
     initial.stageIndex = initialIndex + 1;
     beforeInitial.stageIndex = initialIndex;
     this.rowData.sort((a, b) => a.stageIndex - b.stageIndex);
-
   }
 
+  CheckDates() {
+    let seDate = this.DateDiff(this.f.sdate.value, this.f.edate.value)   ;
+    this.seDateError = seDate < 0   ;
+  
+    let sqqDateCnt = this.DateDiff(this.f.sqdate.value, new Date)   ;
+    debugger;
+    this.sqDateError = sqqDateCnt < 0   ;
+    
+  }
 
   onstageNameChanged(stage) {
     stage = this.stagesList.find(x => x.listTypeItemId == stage)?.itemCode
@@ -913,7 +933,7 @@ export class AmcComponent implements OnInit {
       filter: true,
       editable: true,
       sortable: true,
-      defaultValue: 0
+      defaultValue: 0      
     },
     {
       headerName: 'Rate',
@@ -944,8 +964,27 @@ export class AmcComponent implements OnInit {
     var data = event.data;
     event.data.modified = true;
 
+    
+
     if (this.instrumentList.filter(x => x.id == data.id).length > 0) {
       var d = this.instrumentList.filter(x => x.id == data.id);
+      
+      if( data.qty % 1 == 0.5)
+      {
+        data.qty = 0;
+        this.notificationService.showInfo("Qty cannot be in decimals.", "Info");
+      }
+      else if(data.qty < 0)
+      {
+        data.qty = 0; 
+       this.notificationService.showInfo("Qty cannot be less than 0.", "Info");
+      }
+      if(data.rate < 0)
+      {
+        data.rate = 0;
+        this.notificationService.showInfo("Rate cannot be negative.", "Info");
+      } 
+     
       var rowAmount = (Number(data.qty) * Number(data.rate));
       d[0].amount = rowAmount;
       d[0].rate = Number(data.rate)

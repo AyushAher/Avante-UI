@@ -87,6 +87,9 @@
               <div style="display: block" *ngIf="f.sqdate.touched && f.sqdate.errors" class="invalid-feedback">
                 <div *ngIf="f.sqdate.errors.required">SQ Date is required</div>
               </div>
+              <div class="text-danger" *ngIf="sqDateError">
+                SQ Date cannot be a future date.
+              </div>
             </div>
 
             <div class="col-md-4 col-sm-4">
@@ -108,7 +111,7 @@
                 <div *ngIf="f.edate.errors.required">End Date is required</div>
               </div>
               <div class="text-danger" *ngIf="seDateError">
-                End Date should be a date after Start Date
+                End Date cannot be before the Start Date.
               </div>
             </div>
 
@@ -186,9 +189,9 @@
               </div>
             </div>
 
-            <div class="col-md-4 col-sm-4 mt-3">
+            <div class="col-md-4 col-sm-4 mt-3" *ngIf="hasId">
               <label for="isactive">
-                <input id="isactive" type="checkbox" disabled formControlName="isactive">
+                <input id="isactive" type="checkbox" formControlName="isactive">
                 Active AMC
               </label>
             </div>
