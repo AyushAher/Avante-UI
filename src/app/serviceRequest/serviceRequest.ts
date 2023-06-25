@@ -814,12 +814,16 @@ export class ServiceRequestComponent implements OnInit {
 
       this.serviceRequestService.delete(this.serviceRequestId).pipe(first())
         .subscribe((data: any) => {
-          if (data.result)
+          if (data.result){
             this.router.navigate(["servicerequestlist"], {
               //relativeTo: this.activeRoute,
               queryParams: { isNSNav: true },
               //queryParamsHandling: 'merge'
             })
+          }
+          else{
+            this.notificationService.showError(data.resultMessage, "Error");
+          }
         })
     }
   }
@@ -882,7 +886,9 @@ export class ServiceRequestComponent implements OnInit {
     this.submitted = true
     this.serviceRequestform.markAllAsTouched();
     this.serviceRequestform.get('subrequesttypeid').enable();
-
+    if (this.IsEngineerView && this.serviceRequestform.get('statusid').value == "" ) {
+      return this.notificationService.showError("Status is required","Error");
+    }
     if (this.IsEngineerView && this.accepted) {
       if (!this.hasCallScheduled) {
         return this.notificationService.showError("As u have accepted the request please schedule a call to process further.", "Error")

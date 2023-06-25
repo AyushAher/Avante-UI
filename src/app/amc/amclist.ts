@@ -74,7 +74,7 @@ export class AmcListComponent implements OnInit {
 
     this.AmcService.getAll()
       .pipe(first()).subscribe((data: any) => {
-        this.AmcList = data.object?.filter(x => !x.isCompleted)
+        this.AmcList = data.object; //?.filter(x => !x.isCompleted)
         if (this.AmcList == null || this.AmcList.length <= 0) return;
         this.AmcList.forEach(x => {
           x.isactive = x.isactive ? "Yes" : "No";

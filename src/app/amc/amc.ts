@@ -196,7 +196,7 @@ export class AmcComponent implements OnInit {
       let role = JSON.parse(sessionStorage.getItem('roles'));
       this.role = role[0]?.itemCode;
     }
-
+    
     let role = this.role;
     this.listTypeService.getItemById(this.user.roleId).pipe(first()).subscribe();
 
@@ -252,7 +252,7 @@ export class AmcComponent implements OnInit {
 
 
     this.id = this.route.snapshot.paramMap.get("id");
-    
+    this.isEditMode = false;
         
     this.form.get("sqdate").valueChanges
     .subscribe(() => this.CheckDates())
@@ -333,6 +333,13 @@ export class AmcComponent implements OnInit {
       .subscribe((data: ListTypeItem[]) =>
         this.serviceType = data?.filter(x => x.itemCode != "RENEW" && x.itemCode != "AMC"));
 
+        this.listTypeService.getById("ORQPT")
+        .pipe(first())
+        .subscribe((mstData: any) => {                   
+          // this.paymentTypes = []
+           this.payTypes = mstData;
+        });
+
 
     this.brandService.GetByCompanyId()
       .subscribe((data: any) => {
@@ -393,28 +400,35 @@ export class AmcComponent implements OnInit {
       this.Service.getById(this.id)
         .pipe(first())
         .subscribe((data: any) => {
-          this.listTypeService.getById("ORQPT")
-            .pipe(first())
-            .subscribe((mstData: any) => {
-              this.isCompleted = data.object?.isCompleted
+          this.isCompleted = data.object?.isCompleted
 
               if (this.isCompleted) {
                 setInterval(() => this.form.disable(), 10);
               }
 
-              data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
-              this.paymentTypes = []
-              this.payTypes = mstData;
-              data.object.edate = GetParsedDate(data.object.edate)
-              data.object.sdate = GetParsedDate(data.object.sdate)
+         
+          // this.listTypeService.getById("ORQPT")
+          //   .pipe(first())
+          //   .subscribe((mstData: any) => {
+              // this.isCompleted = data.object?.isCompleted
 
-              data.object.paymentTerms?.forEach(y => {
-                mstData.forEach(x => {
-                  if (y == x.listTypeItemId) {
-                    this.paymentTypes.push(x)
-                  }
-                });
-              });
+              // if (this.isCompleted) {
+              //   setInterval(() => this.form.disable(), 10);
+              // }
+
+               data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
+              // this.paymentTypes = []
+              // this.payTypes = mstData;
+              // data.object.edate = GetParsedDate(data.object.edate)
+              // data.object.sdate = GetParsedDate(data.object.sdate)
+
+              // data.object.paymentTerms?.forEach(y => {
+              //   mstData.forEach(x => {
+              //     if (y == x.listTypeItemId) {
+              //       this.paymentTypes.push(x)
+              //     }
+              //   });
+              // });
 
               this.amcStagesService.getAll(this.id).pipe(first())
                 .subscribe((stageData: any) => {
@@ -435,7 +449,7 @@ export class AmcComponent implements OnInit {
                     this.InstrumentSearch();
                   }, 500);
                 })
-            })
+            //})
         });
 
       this.AmcInstrumentService.getAmcInstrumentsByAmcId(this.id)
@@ -481,7 +495,7 @@ export class AmcComponent implements OnInit {
     }
   }
 
-  FormControlDisable() {
+  FormControlDisable() {    
     this.form.get('baseCurrencyId').disable()
     this.form.get('zerorate').disable()
 

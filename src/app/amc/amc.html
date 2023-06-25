@@ -123,12 +123,18 @@
                 <div *ngIf="f.project.errors.required">Project is required</div>
               </div>
             </div>
-            <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView && hasId">
+            <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView">
               <label for="PaymentTerms">Payment Terms</label>
-              <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
+              <!-- <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
                 formControlName="paymentTerms">
                 <ng-option *ngFor="let i of payTypes" value="{{i.listTypeItemId}}">{{i.itemname}}</ng-option>
-              </ng-select>
+              </ng-select> -->
+              <select id="paymentTerms" type="text" formControlName="paymentTerms" class="form-select"
+                [ngClass]="{ ' is -invalid': f.paymentTerms.touched && f.paymentTerms.errors}">
+                <option *ngFor="let d of payTypes" value="{{d.listTypeItemId}}">
+                  {{d.itemname}}
+                </option>
+              </select>
               <div style="display: block" *ngIf="f.paymentTerms.touched && f.paymentTerms.errors"
                 class="invalid-feedback">
                 <div *ngIf="f.paymentTerms.errors.required">
@@ -247,8 +253,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th
-                    *ngIf="IsDistributorView && (hasDeleteAccess || (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode))&& !isCompleted">
+                  <th *ngIf="IsDistributorView && (hasDeleteAccess || hasUpdateAccess) && !isCompleted && isEditMode">
                     Action
                   </th>
                   <th>SQ No.</th>
@@ -261,10 +266,9 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of amcItems;">
-                  <td
-                    *ngIf="IsDistributorView && (hasDeleteAccess || (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)) && !isCompleted"
-                    class="d-flex w-100">
-                    <button type="button" *ngIf="hasDeleteAccess" (click)="DeleteItem(item.id)"
+                  <td *ngIf="IsDistributorView && (hasDeleteAccess || hasUpdateAccess) && !isCompleted && isEditMode"
+                    class="d-flex w-100" style="height:45px;">                    
+                    <button type="button" *ngIf="hasDeleteAccess && !(item.serviceRequestId)" (click)="DeleteItem(item.id)"
                       class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
                       <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
                     </button>
