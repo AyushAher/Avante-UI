@@ -81,7 +81,7 @@ export class TravelinvoiceComponent implements OnInit {
 
     this.profilePermission = this.profileService.userProfileValue;
     if (this.profilePermission != null) {
-      let profilePermission = this.profilePermission.permissions.filter((x) => x.screenCode == "TREXP");
+      let profilePermission = this.profilePermission.permissions.filter((x) => x.screenCode == "TRINV");
       if (profilePermission.length > 0) {
         this.hasReadAccess = profilePermission[0].read;
         this.hasAddAccess = profilePermission[0].create;

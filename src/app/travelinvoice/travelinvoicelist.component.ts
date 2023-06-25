@@ -35,11 +35,11 @@ export class TravelInvoiceListComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = this.accountService.userValue;
-        let role;
+        let role;      
         this.profilePermission = this.profileService.userProfileValue;
         if (this.profilePermission != null) {
             let profilePermission = this.profilePermission.permissions.filter(
-                (x) => x.screenCode == "TREXP"
+                (x) => x.screenCode == "TRINV"
             );
             if (profilePermission.length > 0) {
                 this.hasReadAccess = profilePermission[0].read;
