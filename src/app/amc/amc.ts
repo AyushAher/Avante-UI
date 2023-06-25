@@ -278,8 +278,8 @@ export class AmcComponent implements OnInit {
 
     this.serviceRequestService.getAll(this.user.userId)
       .subscribe((data: any) => {
-        this.lstServiceRequest = data.object.filter(x => !x.isReportGenerated)
-      })
+        this.lstServiceRequest = data.object.filter(x => x.isReportGenerated)
+      });
 
     // this.serviceRequestService.GetServiceRequestByConId(this.user.contactId)
     //   .subscribe((data: any) => this.lstServiceRequest = data.object)
