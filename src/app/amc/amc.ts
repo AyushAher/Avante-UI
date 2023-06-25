@@ -494,7 +494,7 @@ export class AmcComponent implements OnInit {
     if (this.IsDistributorView)
       this.form.get("brand").disable();
 
-      
+
     this.form.get('isactive').disable();
     this.item.estStartDate.disable();
     this.item.estEndDate.disable();
@@ -969,12 +969,12 @@ export class AmcComponent implements OnInit {
     if (this.instrumentList.filter(x => x.id == data.id).length > 0) {
       var d = this.instrumentList.filter(x => x.id == data.id);
       
-      if( data.qty % 1 == 0.5)
+      if( data.qty.toString().indexOf(".") !== -1)
       {
         data.qty = 0;
         this.notificationService.showInfo("Qty cannot be in decimals.", "Info");
       }
-      else if(data.qty < 0)
+      if(data.qty < 0)
       {
         data.qty = 0; 
        this.notificationService.showInfo("Qty cannot be less than 0.", "Info");
