@@ -81,7 +81,7 @@
               <input type="text" formControlName="srOf" readonly class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.srOf.errors }" />
               <div *ngIf="submitted && f.srOf.errors" class="invalid-feedback">
-                <div *ngIf="f.srOf.errors.required">of is required</div>
+                <div *ngIf="f.srOf.errors.required">OF is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
@@ -94,7 +94,7 @@
                 </option>
               </select>
               <div *ngIf="submitted && f.department.errors" class="invalid-feedback">
-                <div *ngIf="f.department.errors.required">department is required</div>
+                <div *ngIf="f.department.errors.required">Department is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
@@ -123,7 +123,7 @@
                 </option>
               </select>
               <div *ngIf="submitted && f.respInstrument.errors" class="invalid-feedback">
-                <div *ngIf="f.respInstrument.errors.required">respInstrument is required</div>
+                <div *ngIf="f.respInstrument.errors.required">Resp. for Instrument is required</div>
               </div>
             </div>
             <div class="col-md-3 col-sm-3">
@@ -131,7 +131,7 @@
               <input type="text" formControlName="labChief" class="form-control"
                 [ngClass]="{ 'is-invalid': f.labChief.touched && f.labChief.errors }" />
               <div *ngIf="f.labChief.touched && f.labChief.errors" class="invalid-feedback">
-                <div *ngIf="f.labChief.errors?.required">labChief is required</div>
+                <div *ngIf="f.labChief.errors?.required">Lab Chief is required</div>
 
               </div>
             </div>
@@ -140,14 +140,14 @@
               <input type="text" formControlName="computerarlsn" class="form-control"
                 [ngClass]="{ 'is-invalid': f.computerarlsn.touched && f.computerarlsn.errors }" />
               <div *ngIf="f.computerarlsn.touched && f.computerarlsn.errors" class="invalid-feedback">
-                <div *ngIf="f.computerarlsn.errors.required">computerArl is required</div>
+                <div *ngIf="f.computerarlsn.errors.required">Computer ARL is required</div>
               </div>
             </div>
             <div class="col-sm-3">
               <label for="instrument">Instrument</label>
               <input id="typeahead-format" type="text" formControlName="instrument" disabled class="form-control" />
               <div *ngIf="submitted && f.instrument.errors" class="invalid-feedback">
-                <div *ngIf="f.instrument.errors.required">instrument is required</div>
+                <div *ngIf="f.instrument.errors.required">Instrument is required</div>
               </div>
             </div>
             <div class="col-sm-3">
@@ -168,7 +168,7 @@
                 </option>
               </select>
               <div *ngIf="f.brandName.touched && f.brandName.errors" class="invalid-feedback">
-                <div *ngIf="f.brandName.errors.required">brandName is required</div>
+                <div *ngIf="f.brandName.errors.required">Brand Name is required</div>
               </div>
             </div>
             <div class="col-sm-3">
@@ -176,7 +176,7 @@
               <input type="text" formControlName="firmaware" class="form-control"
                 [ngClass]="{ 'is-invalid': f.firmaware.touched && f.firmaware.errors }" />
               <div *ngIf="f.firmaware.touched && f.firmaware.errors" class="invalid-feedback">
-                <div *ngIf="f.firmaware.errors.required">firmware</div>
+                <div *ngIf="f.firmaware.errors.required">Firmware is required</div>
               </div>
             </div>
           </div>
@@ -195,7 +195,7 @@
                 Installation
               </label>
               <div *ngIf="submitted && f.installation.errors" class="invalid-feedback">
-                <div *ngIf="f.installation.errors?.required">installation is required</div>
+                <div *ngIf="f.installation.errors?.required">Installation is required</div>
               </div>
             </div>
 

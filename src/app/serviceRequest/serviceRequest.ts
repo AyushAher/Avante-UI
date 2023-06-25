@@ -987,6 +987,8 @@ export class ServiceRequestComponent implements OnInit {
                   //queryParamsHandling: 'merge'
                 });
             }
+            else
+            {this.notificationService.showError(data.resultMessage, "Error");}
           },
         });
     }
