@@ -37,6 +37,7 @@ export class DistributorRegionComponent implements OnInit {
   distributorName: any;
   isNewParentMode: boolean;
   PaymentTermsList: any;
+  isprincipal: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,6 +81,7 @@ export class DistributorRegionComponent implements OnInit {
       payterms: ['', Validators.required],
       isblocked: false,
       isActive: true,
+      isprincipal: false,
       countries: ["", Validators.required],
       isdeleted: [false],
       address: this.formBuilder.group({
@@ -95,6 +97,7 @@ export class DistributorRegionComponent implements OnInit {
       }),
     });
 
+    
     this.countryService.getAll()
       .pipe(first()).subscribe((data: any) => this.countries = data.object);
 
@@ -114,10 +117,10 @@ export class DistributorRegionComponent implements OnInit {
 
     this.destributorRegionform.controls['distid'].setValue(this.distributorId, { onlySelf: true });
 
-
     if (!this.isNewParentMode && this.distributorId != null) {
       this.distributorService.getById(this.distributorId)
-        .subscribe((data: any) => {
+        .subscribe((data: any) => {                    
+          this.isprincipal = false;
           this.distributorName = data.object.distname;
           this.destributorRegionform.controls['distName'].setValue(this.distributorName, { onlySelf: true });
         })
@@ -126,14 +129,15 @@ export class DistributorRegionComponent implements OnInit {
       this.distributorService.getById(this.distributorId)
         .subscribe((data: any) => {
           if (!data.result) return;
-          data = data.object;
+          data = data.object;          
           setTimeout(() => {
             this.distributorName = data.distname;
+            this.isprincipal = true;
             this.destributorRegionform.controls['distName'].setValue(this.distributorName, { onlySelf: true });
             this.destributorRegionform.controls['distregname'].setValue(data.distname, { onlySelf: true });
             this.destributorRegionform.controls['region'].setValue(this.countries.find(x => x.id == data.address.countryid)?.formal, { onlySelf: true });
             this.destributorRegionform.controls['countries'].setValue(data.address.countryid, { onlySelf: true });
-            this.destributorRegionform.controls['payterms'].setValue(data.payterms, { onlySelf: true });
+            this.destributorRegionform.controls['payterms'].setValue(data.payterms, { onlySelf: true });            
             this.destributorRegionform.get("address").patchValue(data.address)
           }, 300);
         })
@@ -151,11 +155,15 @@ export class DistributorRegionComponent implements OnInit {
           next: (data: any) => {
             this.formData = data.object;
             this.destributorRegionform.patchValue(this.formData);
+            this.isprincipal = data.object.isPrincipal;
           },
         });
       this.destributorRegionform.disable();
     }
-    else this.isNewMode = true;
+    else {
+      this.isNewMode = true;
+      this.isprincipal = false;
+    }
 
 
     this.destributorRegionform.get("countries").valueChanges
@@ -170,6 +178,7 @@ export class DistributorRegionComponent implements OnInit {
       this.isEditMode = true;
       this.destributorRegionform.enable();
       this.destributorRegionform.get("distName").disable();
+      this.destributorRegionform.get("isprincipal").disable();
       this.router.navigate(
         ["."],
         {
@@ -240,11 +249,11 @@ export class DistributorRegionComponent implements OnInit {
     if (this.destributorRegionform.invalid) return;
 
     this.distRegion = this.destributorRegionform.value;
-
     if (this.distributorRegionId == null) {
       ``
       this.distributorRegionId = Guid.create().toString()
       this.distRegion.id = this.distributorRegionId
+      this.distRegion.isprincipal = this.isprincipal;
       this.distributorRegionService.save(this.distRegion)
         .subscribe((data: any) => {
           if (!data.result) {

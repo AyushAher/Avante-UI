@@ -9,5 +9,6 @@ export class DistributorRegion {
   payterms: string;
   isblocked: boolean;
   isActive: boolean;
+  isprincipal: boolean;
   address: Address;
 }
