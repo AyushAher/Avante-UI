@@ -163,7 +163,7 @@
                   </div>
                 </div>
 
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-6 col-sm-6" *ngIf="chkIsObsolete">
                   <label for="replacepPartNoId">Replacement Part</label>
                   <select formControlName="replacepPartNoId" class="form-select"
                     [ngClass]="{ 'is-invalid': f.replacepPartNoId.touched && f.replacepPartNoId.errors }">

@@ -71,6 +71,7 @@ export class InstrumentComponent implements OnInit {
   distibutorList: Distributor[];
   configValueList: ConfigTypeValue[];
   selectedConfigType: ConfigTypeValue[] = [];
+  engList: Contact[];
   imagePath: any;
   pdfPath: any;
   pdfFileName: string;
@@ -194,8 +195,9 @@ export class InstrumentComponent implements OnInit {
       installdt: ['', Validators.required],
       installby: ['', Validators.required],
       engname: [''],
+      engnameother: [''],
       engcontact: ['', Validators.pattern("[^a-zA-Z]*")],
-      engemail: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")]],
+      engemail: ['', Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")],
       warranty: false,
       isactive: true,
       isdeleted: [false],
@@ -266,15 +268,35 @@ export class InstrumentComponent implements OnInit {
       })
 
     this.instrumentform.get('installby').valueChanges.subscribe((data) => {
-      if (data && data == 0) {
+      if (data && data == 0) {        
         this.instrumentform.get('installbyOther').setValidators(Validators.required)
         this.instrumentform.get('installbyOther').updateValueAndValidity()
+
+        this.instrumentform.get('engnameother').setValidators([Validators.required]);
+        this.instrumentform.get('engnameother').updateValueAndValidity();
+  
+        this.instrumentform.get('engname').clearValidators();
+        this.instrumentform.get('engname').updateValueAndValidity();
+
       }
-      else {
+      else {                
+        this.instrumentform.get('engname').setValidators([Validators.required]);
+        this.instrumentform.get('engname').updateValueAndValidity();
+
+        this.instrumentform.get('engnameother').clearValidators();
+        this.instrumentform.get('engnameother').updateValueAndValidity();
+
         this.instrumentform.get('installbyOther').clearValidators
         this.instrumentform.get('installbyOther').updateValueAndValidity()
+        
+        this.distributorService.getDistributorRegionContacts(data)
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            this.engList = data.object;       
+          }
+        });
       }
-
     })
 
 
@@ -296,7 +318,7 @@ export class InstrumentComponent implements OnInit {
           }
           this.instrumentform.get('wrntystdt').setValidators([Validators.required]);
           this.instrumentform.get('wrntystdt').updateValueAndValidity();
-          this.instrumentform.get('wrntystdt').setValue(this.f.installdt.value);
+          //this.instrumentform.get('wrntystdt').setValue(this.f.installdt.value);
           this.instrumentform.get('wrntyendt').setValidators([Validators.required]);
           this.instrumentform.get('wrntyendt').updateValueAndValidity();
           this.instrumentform.get('shipdt').setValidators([Validators.required]);
@@ -592,9 +614,6 @@ export class InstrumentComponent implements OnInit {
       this.instrumentform.get('businessUnitId').disable()
       this.instrumentform.get('brandId').disable()
     }
-
-
-
   }
 
   DeleteRecord() {
@@ -692,10 +711,21 @@ export class InstrumentComponent implements OnInit {
 
     if (!serialNo || !this.instrumentform.get('custSiteId').value)
       return this.notificationService.showInfo("Please select Site and enter Serial No.", "Info");
+     
 
     this.instrumentService.searchByKeyword(serialNo, this.instrumentform.get('custSiteId').value)
       .pipe(first()).subscribe((data: any) => {
         data = data.object[0];
+
+        this.distributorService.getDistributorRegionContacts(data.installby)
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.engList = data.object;       
+        }
+      });
+
+
         this.formData = data;
         this.instrumentform.patchValue(this.formData);
         this.sparePartDetails = data?.spartParts;

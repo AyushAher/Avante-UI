@@ -119,7 +119,7 @@
           <div class="row">
             <div class="col-md-4 col-sm-4">
               <label for="installby">Installed By Distributor<span class="text-danger">*</span></label>
-              <select formControlName="installby" #installedBy class="form-select"
+              <select formControlName="installby" #installedBy class="form-select" 
                 [ngClass]="{ 'is-invalid': f.installby.touched && f.installby.errors }">
                 <option *ngFor="let config of distibutorList" value={{config.id}}>
                   {{config.distname}}
@@ -130,6 +130,7 @@
                 <div *ngIf="f.installby.errors.required">Installed By Distributor is required</div>
               </div>
             </div>
+
             <div class="col-md-4 col-sm-4" *ngIf="f.installby.value == 0">
               <label for="installbyOther">Other<span *ngIf="f.installby.value == 0" class="text-danger">*</span></label>
               <input type="text" formControlName="installbyOther" class="form-control"
@@ -137,14 +138,27 @@
               <div *ngIf="f.installbyOther.touched && f.installbyOther.errors" class="invalid-feedback">
                 <div *ngIf="f.installbyOther.errors.required">Other name is required</div>
               </div>
-
             </div>
-            <div class="col-md-4 col-sm-4">
-              <label for="engname">Engineer Name</label>
-              <input type="text" formControlName="engname" class="form-control"
-                [ngClass]="{ 'is-invalid': f.engname.touched && f.engname.errors }" />
+
+            <div class="col-md-4 col-sm-4"  *ngIf="f.installby.value != 0">
+              <label for="engname">Engineer Name<span class="text-danger">*</span></label>
+              <select formControlName="engname" #installedBy class="form-select"
+                [ngClass]="{ 'is-invalid': f.engname.touched && f.engname.errors }">
+                <option *ngFor="let c of engList" value={{c.id}}>
+                  {{c.fname}} {{c.lname}}
+                </option>               
+              </select>
               <div *ngIf="f.engname.touched && f.engname.errors" class="invalid-feedback">
                 <div *ngIf="f.engname.errors.required">Engineer Name is required</div>
+              </div>
+            </div>
+            
+            <div class="col-md-4 col-sm-4"  *ngIf="f.installby.value == 0">
+              <label for="engnameother">Engineer Name</label>
+              <input type="text" formControlName="engnameother" class="form-control" 
+              [ngClass]="{ 'is-invalid': f.engnameother.touched && f.engnameother.errors }"/>
+              <div *ngIf="f.engnameother.touched && f.engnameother.errors" class="invalid-feedback">
+                <div *ngIf="f.engnameother.errors.required">Engineer Name is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
@@ -223,13 +237,12 @@
             <div class="col-md-8">
               <div class="row">
                 <div class="col-md-6 col-sm-6">
-                  <label for="engemail">Engineer Email<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="engemail" class="form-control"
-                    [ngClass]="{ 'is-invalid': f.engemail.touched && f.engemail.errors }" />
-                  <div *ngIf="f.engemail.touched && f.engemail.errors" class="invalid-feedback">
+                  <label for="engemail">Engineer Email</label>
+                  <input type="text" formControlName="engemail" class="form-control" />
+                  <!-- <div *ngIf="f.engemail.touched && f.engemail.errors" class="invalid-feedback">
                     <div *ngIf="f.engemail.errors.required">Engineer Email is required</div>
                     <div *ngIf="f.engemail.errors.pattern">Engineer Email is invalid</div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-md-6 col-sm-6">
                   <label for=""></label>

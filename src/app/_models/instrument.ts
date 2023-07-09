@@ -14,6 +14,7 @@ export class Instrument {
   installby: string;
   installbyOther: string;
   engname: string;
+  engnameother: string;
   engcontact: string;
   engemail: string;
   warranty: string;
