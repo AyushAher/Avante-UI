@@ -67,6 +67,10 @@ export class DistributorService {
   getDistributorRegionContacts(id: string) {
     return this.http.get<Distributor>(`${this.environment.apiUrl}/Distributors/GetDistributorRegionContacts/${id}`);
   }
+  
+  getDistributorRegionEngineers(id: string) {
+    return this.http.get<Distributor>(`${this.environment.apiUrl}/Distributors/GetDistributorRegionEngineers/${id}`);
+  }
 
   GetDistributorRegionContactsByContactId(id: string) {
     return this.http.get<Distributor>(`${this.environment.apiUrl}/Distributors/GetDistributorRegionContactsByContactId/${id}`);

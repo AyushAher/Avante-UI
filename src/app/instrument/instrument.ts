@@ -289,7 +289,7 @@ export class InstrumentComponent implements OnInit {
         this.instrumentform.get('installbyOther').clearValidators
         this.instrumentform.get('installbyOther').updateValueAndValidity()
         
-        this.distributorService.getDistributorRegionContacts(data)
+        this.distributorService.getDistributorRegionEngineers(data)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
