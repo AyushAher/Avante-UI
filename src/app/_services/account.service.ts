@@ -286,6 +286,10 @@ export class AccountService {
     return this.http.post(`${this.environment.apiUrl}/user`, user);
   }
 
+  deactivateuser(user: User) {
+    return this.http.post(`${this.environment.apiUrl}/user/deactivateuser`, user);
+  }
+
   ChangePassword(changePassword: ChangePasswordModel) {
     return this.http.post(`${this.environment.apiUrl}/user/changepassword`, changePassword);
   }

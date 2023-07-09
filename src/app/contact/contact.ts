@@ -51,6 +51,7 @@ export class ContactComponent implements OnInit {
   isEditMode: any;
   isNewMode: any;
   isUser: boolean;
+  isUserActive: boolean;
   formData: { [key: string]: any; };
   parentEntity: any
   parentEntityValue: any
@@ -312,7 +313,9 @@ export class ContactComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (data: any) => {
+            debugger;
             this.isUser = data.object.isUser
+            this.isUserActive = data.object.userActive;
             this.formData = data.object;
             this.contactform.patchValue(this.formData);
             if (this.inputObj) {
@@ -450,6 +453,31 @@ export class ContactComponent implements OnInit {
     this.accountService.register(this.user).subscribe((data: any) => {
       if (data.result) {
         this.isUser = true;
+        this.isUserActive = true;   
+        this.notificationService.showSuccess(data.resultMessage, "Success");
+      }
+      else this.notificationService.showInfo(data.resultMessage, "Info")
+    })
+  }
+
+  deactivateUser() {
+    if (this.id == null) {
+      return this.notificationService.showInfo("User is not created for this contact.", "Info");
+    }
+
+    this.user = new User;
+    this.contactmodel = this.contactform.value;
+    this.user.firstName = this.contactmodel.fname,
+      this.user.lastName = this.contactmodel.lname,
+      this.user.email = this.contactmodel.pemail,
+      this.user.contactid = this.id,
+      this.user.userType = this.type
+
+
+    this.accountService.deactivateuser(this.user).subscribe((data: any) => {
+      if (data.result) {
+        this.isUser = true;
+        this.isUserActive = false;        
         this.notificationService.showSuccess(data.resultMessage, "Success");
       }
       else this.notificationService.showInfo(data.resultMessage, "Info")
