@@ -60,7 +60,6 @@
                   {{i.custregname}}
                 </option>
               </select>
-
               <div style="display: block" *ngIf="f.custSite.touched && f.custSite.errors" class="invalid-feedback">
                 <div *ngIf="f.custSite.errors.required">
                   Customer Site is required
@@ -124,19 +123,18 @@
               </div>
             </div>
             <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView">
-              <label for="PaymentTerms">Payment Terms</label>
+              <label for="PaymentTerms">Payment Terms<span class="text-danger">*</span></label>
               <!-- <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
                 formControlName="paymentTerms">
                 <ng-option *ngFor="let i of payTypes" value="{{i.listTypeItemId}}">{{i.itemname}}</ng-option>
               </ng-select> -->
-              <select id="paymentTerms" type="text" formControlName="paymentTerms" class="form-select"
+              <select id="paymentTerms" formControlName="paymentTerms" class="form-select"
                 [ngClass]="{ ' is -invalid': f.paymentTerms.touched && f.paymentTerms.errors}">
                 <option *ngFor="let d of payTypes" value="{{d.listTypeItemId}}">
                   {{d.itemname}}
                 </option>
               </select>
-              <div style="display: block" *ngIf="f.paymentTerms.touched && f.paymentTerms.errors"
-                class="invalid-feedback">
+              <div  style="display: block" *ngIf="f.paymentTerms.touched && f.paymentTerms.errors" class="invalid-feedback">
                 <div *ngIf="f.paymentTerms.errors.required">
                   Payment Terms is required
                 </div>

@@ -30,6 +30,7 @@ import { EnvService } from "../_services/env/env.service";
 import { AmcInstrumentRendererComponent } from "./amc-instrument-renderer.component";
 import { BrandService } from "../_services/brand.service";
 import { AmcItemsService } from "../_services/amc-items.service";
+//import { debug } from "console";
 
 @Component({
   selector: "app-Amc",
@@ -230,7 +231,7 @@ export class AmcComponent implements OnInit {
       custSite: ["", Validators.required],
 
       payterms: [''],
-      paymentTerms: [""],
+      paymentTerms: ["", Validators.required],
       stageName: [''],
       stageComments: [''],
       stagePaymentType: [],
@@ -333,7 +334,7 @@ export class AmcComponent implements OnInit {
       .subscribe((data: ListTypeItem[]) =>
         this.serviceType = data?.filter(x => x.itemCode != "RENEW" && x.itemCode != "AMC"));
 
-        this.listTypeService.getById("ORQPT")
+        this.listTypeService.getById("GPAYT")
         .pipe(first())
         .subscribe((mstData: any) => {                   
           // this.paymentTypes = []
@@ -419,8 +420,8 @@ export class AmcComponent implements OnInit {
                data.object.paymentTerms = data.object.paymentTerms?.split(',').filter(x => x != "");
               // this.paymentTypes = []
               // this.payTypes = mstData;
-              // data.object.edate = GetParsedDate(data.object.edate)
-              // data.object.sdate = GetParsedDate(data.object.sdate)
+              data.object.edate = GetParsedDate(data.object.edate)
+              data.object.sdate = GetParsedDate(data.object.sdate)
 
               // data.object.paymentTerms?.forEach(y => {
               //   mstData.forEach(x => {
@@ -1176,8 +1177,24 @@ export class AmcComponent implements OnInit {
 
     amcItem.status = this.itemStatus.find(x => x.itemCode == "AINCO")?.listTypeItemId
     amcItem.amcId = this.id;
-    if (amcItem.estEndDate < amcItem.estStartDate) return this.notificationService.showInfo("End Date should be before Start Date", "Invalid Date");
+    if (amcItem.estEndDate < amcItem.estStartDate) return this.notificationService.showInfo("Est. End Date should not be before Est. Start Date", "Invalid Date");
+    
+    amcItem.estEndDate = this.datepipe.transform(amcItem.estEndDate, 'yyyy-MM-dd')
+    amcItem.estStartDate = this.datepipe.transform(amcItem.estStartDate, 'yyyy-MM-dd')
 
+    debugger;
+    //datepipe.transform(GetParsedDate(this.model.sdate), 'dd/MM/YYYY');
+    let stDate = this.datepipe.transform(this.form.get('sdate').value, 'yyyy-MM-dd');
+    let edDate = this.datepipe.transform(this.form.get('edate').value, 'yyyy-MM-dd');
+
+    if(amcItem.estStartDate < stDate) {
+      return this.notificationService.showInfo("Est. Start date should be within the AMC Start and End Dates.", "Invalid Date");
+    }
+    if(amcItem.estStartDate > edDate) {return this.notificationService.showInfo("Est. Start date should be within the AMC Start and End Dates.", "Invalid Date");}
+    if(amcItem.estEndDate < stDate) {return this.notificationService.showInfo("Est. End date should be within the AMC Start and End Dates.", "Invalid Date");}
+    if(amcItem.estEndDate > edDate) {return this.notificationService.showInfo("Est. End date should be within the AMC Start and End Dates.", "Invalid Date");}
+
+    
     amcItem.estEndDate = this.datepipe.transform(amcItem.estEndDate, "dd/MM/YYYY")
     amcItem.estStartDate = this.datepipe.transform(amcItem.estStartDate, "dd/MM/YYYY")
 
