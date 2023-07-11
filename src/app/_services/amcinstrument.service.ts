@@ -26,6 +26,7 @@ export class AmcinstrumentService {
 
   
   delete(id: string) {
+    debugger;
     return this.http.delete(`${this.environment.apiUrl}/AmcInstruments/${id}`)
       .pipe(map(x => {
         return x;

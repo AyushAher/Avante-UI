@@ -26,17 +26,17 @@ export class AmcInstrumentRendererComponent implements AgRendererComponent {
     this.params = params;
   }
 
-  delete(id) {    
-    if (this.params.deleteaccess) {
-      this.AmcInstrumentService.delete(id)
-        .pipe(first())
-        .subscribe({
-          next: (data: ResultMsg) => {
-            this.notificationService.filter("itemadded");
-          }
-        });
-    }
-  }
+  // delete(id) {    
+  //   if (this.params.deleteaccess) {
+  //     this.AmcInstrumentService.delete(id)
+  //       .pipe(first())
+  //       .subscribe({
+  //         next: (data: ResultMsg) => {
+  //           this.notificationService.filter("itemadded");
+  //         }
+  //       });
+  //   }
+  // }
 
   refresh(): boolean {
     return false;

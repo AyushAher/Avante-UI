@@ -408,6 +408,8 @@ export class DashboardComponent implements OnInit {
                   this.notificationService.showSuccess(data.resultMessage, "Success")
                 }, 1000);
               }
+              else
+              {  this.notificationService.showError(data.resultMessage, "Error")}
             }
           })
       }

@@ -30,7 +30,6 @@ import { EnvService } from "../_services/env/env.service";
 import { AmcInstrumentRendererComponent } from "./amc-instrument-renderer.component";
 import { BrandService } from "../_services/brand.service";
 import { AmcItemsService } from "../_services/amc-items.service";
-//import { debug } from "console";
 
 @Component({
   selector: "app-Amc",
@@ -632,7 +631,7 @@ export class AmcComponent implements OnInit {
 
         this.processFile = null;
         this.notificationService.filter("itemadded");
-        debugger;
+        
         data.object.forEach(element => {
           element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
         });
@@ -676,10 +675,8 @@ export class AmcComponent implements OnInit {
     let seDate = this.DateDiff(this.f.sdate.value, this.f.edate.value)   ;
     this.seDateError = seDate < 0   ;
   
-    let sqqDateCnt = this.DateDiff(this.f.sqdate.value, new Date)   ;
-    debugger;
-    this.sqDateError = sqqDateCnt < 0   ;
-    
+    let sqqDateCnt = this.DateDiff(this.f.sqdate.value, new Date)   ;    
+    this.sqDateError = sqqDateCnt < 0   ;    
   }
 
   onstageNameChanged(stage) {
@@ -774,8 +771,12 @@ export class AmcComponent implements OnInit {
     var cellValue = event.value;
     var rowData = event.data;
     if (this.hasDeleteAccess) {
-
+    
       if (cellValue == rowData.id) {
+        if(!this.isNewMode && this.instrumentList.length == 1)
+        {
+          return this.notificationService.showError("You cannot delete the Instrument. AMC should have minimum of 1 Instrument added.", "Error");
+        }
         var indexOfSelectedRow = this.instrumentList.indexOf(rowData);
         this.instrumentList.splice(indexOfSelectedRow, 1)
         if (rowData.amcId == null && cellValue == rowData.id) {
@@ -791,6 +792,10 @@ export class AmcComponent implements OnInit {
                   this.notificationService.showSuccess(data.resultMessage, "Success");
                   const selectedData = event.api.getSelectedRows();
                   event.api.applyTransaction({ remove: selectedData });
+
+                  let zeroRate = 0;
+                  this.instrumentList.forEach(x => zeroRate += x.amount);
+                  this.form.get("zerorate").setValue(zeroRate);
                 }
               },
             });
@@ -979,7 +984,7 @@ export class AmcComponent implements OnInit {
     var data = event.data;
     event.data.modified = true;
 
-    
+    debugger;    
 
     if (this.instrumentList.filter(x => x.id == data.id).length > 0) {
       var d = this.instrumentList.filter(x => x.id == data.id);
@@ -1182,8 +1187,6 @@ export class AmcComponent implements OnInit {
     amcItem.estEndDate = this.datepipe.transform(amcItem.estEndDate, 'yyyy-MM-dd')
     amcItem.estStartDate = this.datepipe.transform(amcItem.estStartDate, 'yyyy-MM-dd')
 
-    debugger;
-    //datepipe.transform(GetParsedDate(this.model.sdate), 'dd/MM/YYYY');
     let stDate = this.datepipe.transform(this.form.get('sdate').value, 'yyyy-MM-dd');
     let edDate = this.datepipe.transform(this.form.get('edate').value, 'yyyy-MM-dd');
 
