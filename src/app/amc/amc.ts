@@ -152,7 +152,7 @@ export class AmcComponent implements OnInit {
             stageData.object.forEach(element => {
               element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
             });
-
+           
             this.rowData = stageData.object;
             this.totalStages = this.rowData?.length | 0;
             this.form.get('stageName').reset()
@@ -395,7 +395,9 @@ export class AmcComponent implements OnInit {
 
     if (this.id != null) {
       this.amcItemsService.GetByAmcId(this.id)
-        .subscribe((data: any) => this.amcItems = data.object)
+        .subscribe((data: any) => {
+          this.amcItems = data.object;         
+        })
 
       this.Service.getById(this.id)
         .pipe(first())
@@ -436,7 +438,7 @@ export class AmcComponent implements OnInit {
                   stageData.object?.forEach(element => {
                     element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
                   });
-
+                  
                   stageData.object?.sort((a, b) => a.stageIndex - b.stageIndex);
                   this.rowData = stageData.object;
 
@@ -485,6 +487,11 @@ export class AmcComponent implements OnInit {
           },
           queryParamsHandling: 'merge',
         });
+        
+        if(this.rowData.filter(x=>x.stage == this.stagesList.filter(x=>x.itemCode == "CONAG")[0].listTypeItemId).length > 0)
+        {
+          this.isCompleted = true;
+        }
 
       this.form.enable();
       this.FormControlDisable()
@@ -984,8 +991,6 @@ export class AmcComponent implements OnInit {
     var data = event.data;
     event.data.modified = true;
 
-    debugger;    
-
     if (this.instrumentList.filter(x => x.id == data.id).length > 0) {
       var d = this.instrumentList.filter(x => x.id == data.id);
       
@@ -1109,7 +1114,7 @@ export class AmcComponent implements OnInit {
 
             if (this.amcItems != null && this.amcItems.length > 0) {
               this.amcItems.forEach(x => {
-                x.amcId = this.id;
+                x.amcId = this.id;                
                 this.amcItemsService.SaveItem(x)
                   .subscribe((data: any) => {
                     if (!data || !data.result) return this.notificationService.showError(data.resultMessage, "Error");
@@ -1172,8 +1177,7 @@ export class AmcComponent implements OnInit {
     }
   }
 
-  onItemAdd() {
-
+  onItemAdd() {    
     let amcItemForm = (<FormGroup>this.form.get("amcItemsForm"))
     let amcItem = amcItemForm.getRawValue();
     if (amcItemForm.invalid || !amcItem.serviceType) {
@@ -1214,7 +1218,8 @@ export class AmcComponent implements OnInit {
       .subscribe((data: any) => {
         if (!data || !data.result) return this.notificationService.showError(data.resultMessage, "Error");
 
-        this.amcItems.push(amcItem);
+        //this.amcItems.push(amcItem);
+        this.getAMCItems();
         this.form.get("amcItemsForm").reset();
         this.item.status.setValue(this.itemStatus.find(x => x.itemCode == "AINCO")?.listTypeItemId)
       })
@@ -1224,13 +1229,22 @@ export class AmcComponent implements OnInit {
     this.amcItemsService.DeleteItem(id)
       .subscribe((data: any) => {
         if (data && data.result) {
-          this.notificationService.showSuccess("Item Deleted Successfully", "Success")
-          this.amcItems = this.amcItems.filter(x => x.id != id);
+          this.notificationService.showSuccess("Item Deleted Successfully", "Success");
+          //this.amcItems = this.amcItems.filter(x => x.id != id);
+          this.getAMCItems();
+  
         }
         else this.notificationService.showError("Some Error Occurred", "Error");
       })
   }
 
+  getAMCItems()
+  {
+    this.amcItemsService.GetByAmcId(this.id)
+          .subscribe((data: any) => {
+            this.amcItems = data.object;         
+          });
+  }
 
   getServiceType(id) {
     return this.serviceType.find(x => x.listTypeItemId == id)?.itemname;

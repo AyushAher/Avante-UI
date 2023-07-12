@@ -522,7 +522,8 @@ export class ServiceRequestComponent implements OnInit {
                 this.customerlist = custData.object
                 this.onCustomerChanged()
 
-                this.distributorService.getDistributorRegionContacts(data.object.distid)
+                this.distributorService.getDistributorRegionEngineers(data.object.distid)
+                //this.distributorService.getDistributorRegionContacts(data.object.distid)
                   .subscribe({
                     next: (engData: any) => {
                       this.appendList = engData.object;
@@ -779,6 +780,7 @@ export class ServiceRequestComponent implements OnInit {
         this.serviceRequestform.get('currentinstrustatus').disable();
         this.serviceRequestform.get("contactperson").disable();
         this.serviceRequestform.get("email").disable();
+        this.serviceRequestform.get('stageid').disable();
       } else if (this.IsDistributorView) {
         this.serviceRequestform.get('assignedto').enable();
         this.serviceRequestform.get('country').disable();
